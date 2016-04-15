@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Update;
 
 import java.sql.Timestamp;
 
-public interface AmcFundBookAttachMapper {
+public interface ProductDemoAttachMapper {
 
     /**
      * 存款 <br>

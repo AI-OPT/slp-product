@@ -8,5 +8,5 @@ package com.ai.slp.product.service.business.interfaces;
  * @author liutong
  *
  */
-public interface IAccountFeeFundBusiSV {
+public interface IDemoBusiSV {
 }
