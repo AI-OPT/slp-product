@@ -1,6 +1,8 @@
 package com.ai.slp.product.api.normproduct.param;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 标准品详情信息<br>
@@ -30,6 +32,20 @@ public class NormProductInfoResponse extends NormProductBase {
      * 操作时间
      */
     private Date operTime;
+
+    /**
+     * 关键属性集合,包括属性对应标准品属性值集合
+     */
+    private Map<AttrDefResponse,List<NormProductAttrValResponse>> keyAttrs;
+    /**
+     * 非关键属性集合,包括属性对应标准品属性值集合
+     */
+    private Map<AttrDefResponse,List<NormProductAttrValResponse>> nonKeyAttrs;
+
+    /**
+     * 销售属性集合,包括属性对应标准品属性值集合
+     */
+    private Map<AttrDefResponse,List<NormProductAttrValResponse>> saleAttrs;
 
     public String getCreateUserName() {
         return createUserName;
@@ -61,5 +77,29 @@ public class NormProductInfoResponse extends NormProductBase {
 
     public void setOperTime(Date operTime) {
         this.operTime = operTime;
+    }
+
+    public Map<AttrDefResponse, List<NormProductAttrValResponse>> getKeyAttrs() {
+        return keyAttrs;
+    }
+
+    public void setKeyAttrs(Map<AttrDefResponse, List<NormProductAttrValResponse>> keyAttrs) {
+        this.keyAttrs = keyAttrs;
+    }
+
+    public Map<AttrDefResponse, List<NormProductAttrValResponse>> getNonKeyAttrs() {
+        return nonKeyAttrs;
+    }
+
+    public void setNonKeyAttrs(Map<AttrDefResponse, List<NormProductAttrValResponse>> nonKeyAttrs) {
+        this.nonKeyAttrs = nonKeyAttrs;
+    }
+
+    public Map<AttrDefResponse, List<NormProductAttrValResponse>> getSaleAttrs() {
+        return saleAttrs;
+    }
+
+    public void setSaleAttrs(Map<AttrDefResponse, List<NormProductAttrValResponse>> saleAttrs) {
+        this.saleAttrs = saleAttrs;
     }
 }

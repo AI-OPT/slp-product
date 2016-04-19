@@ -15,42 +15,62 @@ import java.util.Date;
  */
 public abstract class NormProductBase extends BaseInfo {
     /**
-     * 类目ID
+     * 类目ID<br>
+     *     不能为空
      */
-    @NotNull(message = "类目ID不能为空", groups = { INormProductSV.QueryNormProduct.class })
+    @NotNull(message = "类目ID不能为空",
+            groups = { INormProductSV.QueryNormProduct.class
+                    ,INormProductSV.SaveProductInfo.class
+                    ,INormProductSV.UpdateProductInfo.class
+            })
     private Long catId;
 
     /**
      * 标准品ID
      */
+    @NotNull(message = "标准品ID不能为空",
+            groups = { INormProductSV.UpdateProductInfo.class })
     private String productId;
 
     /**
      * 标准品名称
      */
+    @NotNull(message = "类目ID不能为空",
+            groups = { INormProductSV.SaveProductInfo.class
+                    ,INormProductSV.UpdateProductInfo.class })
     private String productName;
 
     /**
      * 标准品状态
      * 0:全部;1可上架;2不可上架;3待处理;4废弃
      */
-    @NotNull(message = "标准品状态不能为空", groups = { INormProductSV.QueryInvalidProduct.class })
+    @NotNull(message = "标准品状态不能为空",
+            groups = { INormProductSV.QueryInvalidProduct.class
+                    ,INormProductSV.SaveProductInfo.class
+                    ,INormProductSV.UpdateProductInfo.class
+            })
     private String productStatus;
 
     /**
      * 标准品类型
      * 0:全部;1实物;2虚拟
      */
+    @NotNull(message = "标准品类型不能为空",
+            groups = { INormProductSV.SaveProductInfo.class,INormProductSV.UpdateProductInfo.class })
     private String productType;
 
     /**
-     * 创建时间
+     * 创建时间<br>
+     * 创建时赋值,更新时不进行操作
      */
     private Date createTime;
 
     /**
-     * 创建人ID
+     * 创建人ID<br>
+     * 添加时不能为空,更新时不进行操作
      */
+    @NotNull(message = "创建人ID不能为空",
+            groups = { INormProductSV.SaveProductInfo.class})
     private Long createUserId;
 
     public Long getCatId() {

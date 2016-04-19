@@ -2,10 +2,9 @@ package com.ai.slp.product.api.normproduct.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.normproduct.param.InvalidNormProductResponse;
-import com.ai.slp.product.api.normproduct.param.NormProductRequest;
-import com.ai.slp.product.api.normproduct.param.NormProductResponse;
+import com.ai.slp.product.api.normproduct.param.*;
 
 /**
  * 标准品处理接口<br>
@@ -46,4 +45,60 @@ public interface INormProductSV {
         throws BusinessException,SystemException;
     @interface QueryInvalidProduct {}
 
+    /**
+     * 查询指定标准品标识的标准品信息. <br>
+     *
+     * @param productId 标准品标识
+     * @return 标准品详细信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0102
+     */
+    public NormProductInfoResponse queryProducById(String productId)
+            throws BusinessException,SystemException;
+
+    /**
+     * 添加标准品信息. <br>
+     *
+     * @param productInfoRequest 标准品信息
+     * @return 标准品保存结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0103
+     */
+    public BaseResponse saveProductInfo(SaveProductInfoRequest productInfoRequest)
+            throws BusinessException,SystemException;
+    @interface SaveProductInfo {}
+
+    /**
+     * 更新标准品信息. <br>
+     *
+     * @param productInfoRequest 标准品信息
+     * @return 标准品更新结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0104
+     */
+    public BaseResponse updateProductInfo(SaveProductInfoRequest productInfoRequest)
+            throws BusinessException,SystemException;
+    @interface UpdateProductInfo {}
+
+    /**
+     * 废弃标准品. <br>
+     *
+     * @param productId 标准品标识
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0105
+     */
+    public BaseResponse discardProduct(String productId) throws BusinessException,SystemException;
 }

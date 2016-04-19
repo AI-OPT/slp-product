@@ -12,15 +12,16 @@ import java.util.Date;
 public class NormProductRequest extends NormProductBase {
 
     /**
-     * 请求查询的页码
+     * 请求查询的页码<br>
      *  默认为1
      */
     private Integer pageNo = 1;
 
     /**
-     * 每页显示条数
+     * 每页显示条数<br>
+     * 默认为20
      */
-    private Integer pageSize;
+    private Integer pageSize = 20;
 
     /**
      * 创建时间范围的开始时间
