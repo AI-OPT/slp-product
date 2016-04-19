@@ -58,7 +58,7 @@ public interface IProductCatSvc {
 	 * @ApiDocMethod
 	 * @ApiCode PRODUCT_0202
 	 */
-	public BaseResponse delete(String productCatId) throws BusinessException, SystemException;
+	public BaseResponse delete(ProductCatRequest productCatRequest) throws BusinessException, SystemException;
 	@interface Delete {}
 
 }
