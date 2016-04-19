@@ -48,7 +48,7 @@ public interface INormProductSV {
     /**
      * 查询指定标准品标识的标准品信息. <br>
      *
-     * @param productId 标准品标识
+     * @param invalidRequest 标准品查询条件
      * @return 标准品详细信息
      * @throws BusinessException
      * @throws SystemException
@@ -56,8 +56,9 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0102
      */
-    public NormProductInfoResponse queryProducById(String productId)
+    public NormProductInfoResponse queryProducById(SimpleProductRequest invalidRequest)
             throws BusinessException,SystemException;
+    @interface QueryProducById {}
 
     /**
      * 添加标准品信息. <br>
@@ -92,7 +93,7 @@ public interface INormProductSV {
     /**
      * 废弃标准品. <br>
      *
-     * @param productId 标准品标识
+     * @param invalidRequest 标准品废弃请求参数
      * @return 操作结果
      * @throws BusinessException
      * @throws SystemException
@@ -100,5 +101,6 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0105
      */
-    public BaseResponse discardProduct(String productId) throws BusinessException,SystemException;
+    public BaseResponse discardProduct(SimpleProductRequest invalidRequest) throws BusinessException,SystemException;
+    @interface DiscardProduct {}
 }
