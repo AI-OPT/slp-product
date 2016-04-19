@@ -9,7 +9,7 @@ import com.ai.opt.base.vo.BaseResponse;
  * 
  * Date: 2016年4月19日<br>
  * Copyright (c) 2016 asiainfo.com <br>
- * @author Onle
+ * @author lipeng
  */
 public class ProductCatResponse extends BaseResponse{
 
@@ -33,21 +33,6 @@ public class ProductCatResponse extends BaseResponse{
 	 */
 	private String isLeaf;
 
-	/**
-	 * 状态:STATE
-	 */
-	private String state;
-	
-	/**
-	 * 操作人：OPER_ID
-	 */
-	private Long operId;
-	
-	/**
-	 * 操作时间：OPER_TIME
-	 */
-	private Date operTime;
-
 	public Long getProductCatId() {
 		return productCatId;
 	}
@@ -64,28 +49,20 @@ public class ProductCatResponse extends BaseResponse{
 		this.productCatName = productCatName;
 	}
 
-	public String getState() {
-		return state;
+	public Long getParentProductCatId() {
+		return parentProductCatId;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setParentProductCatId(Long parentProductCatId) {
+		this.parentProductCatId = parentProductCatId;
 	}
 
-	public Long getOperId() {
-		return operId;
+	public String getIsLeaf() {
+		return isLeaf;
 	}
 
-	public void setOperId(Long operId) {
-		this.operId = operId;
-	}
-
-	public Date getOperTime() {
-		return operTime;
-	}
-
-	public void setOperTime(Date operTime) {
-		this.operTime = operTime;
+	public void setIsLeaf(String isLeaf) {
+		this.isLeaf = isLeaf;
 	}
 	
 	
