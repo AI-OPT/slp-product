@@ -24,6 +24,11 @@ public class NormProductRequest extends NormProductBase {
     private Integer pageSize = 20;
 
     /**
+     * 添加人账户名
+     */
+    private String createUserName;
+
+    /**
      * 创建时间范围的开始时间
      */
     private Date createStartTime;
@@ -88,5 +93,13 @@ public class NormProductRequest extends NormProductBase {
 
     public void setDiscardEndTime(Date discardEndTime) {
         this.discardEndTime = discardEndTime;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
     }
 }
