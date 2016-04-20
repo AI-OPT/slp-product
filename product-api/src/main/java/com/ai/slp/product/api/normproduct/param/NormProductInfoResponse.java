@@ -37,10 +37,6 @@ public class NormProductInfoResponse extends NormProductBase {
      * 关键属性集合,包括属性对应标准品属性值集合
      */
     private Map<AttrDefResponse,List<NormProductAttrValResponse>> keyAttrs;
-    /**
-     * 非关键属性集合,包括属性对应标准品属性值集合
-     */
-    private Map<AttrDefResponse,List<NormProductAttrValResponse>> nonKeyAttrs;
 
     /**
      * 销售属性集合,包括属性对应标准品属性值集合
@@ -86,15 +82,6 @@ public class NormProductInfoResponse extends NormProductBase {
     public void setKeyAttrs(Map<AttrDefResponse, List<NormProductAttrValResponse>> keyAttrs) {
         this.keyAttrs = keyAttrs;
     }
-
-    public Map<AttrDefResponse, List<NormProductAttrValResponse>> getNonKeyAttrs() {
-        return nonKeyAttrs;
-    }
-
-    public void setNonKeyAttrs(Map<AttrDefResponse, List<NormProductAttrValResponse>> nonKeyAttrs) {
-        this.nonKeyAttrs = nonKeyAttrs;
-    }
-
     public Map<AttrDefResponse, List<NormProductAttrValResponse>> getSaleAttrs() {
         return saleAttrs;
     }
