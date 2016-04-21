@@ -15,13 +15,15 @@ import java.util.Date;
 public class STOStorageGroup extends StorageGroupStatus {
 
     /**
-     * 标准品标识
+     * 标准品标识<br>
+     * 设置为null,则不进行更新操作
      */
     @NotNull(message = "标准品标识不能为空",
-            groups = { INormProductStorageSV.InstallStorage.class })
+            groups = { INormProductStorageSV.InstallStorage.class})
     private String prodId;
     /**
-     * 库存组名称
+     * 库存组名称<br>
+     * 设置为null,则不进行更新操作
      */
     @NotNull(message = "库存组名称不能为空",
             groups = { INormProductStorageSV.InstallStorage.class })
@@ -31,14 +33,15 @@ public class STOStorageGroup extends StorageGroupStatus {
      */
     private Long serialNumber;
     /**
-     * 创建者ID
+     * 创建者ID<br>
+     * 更新时,直接忽略
      */
     @NotNull(message = "创建者ID不能为空",
             groups = { INormProductStorageSV.InstallStorage.class })
     private Long createId;
     /**
-     * 创建时间
-     * 添加时若没有设置,则采用服务接收时间
+     * 创建时间<br>
+     * 更新时,直接忽略
      */
     private Date createTime;
 

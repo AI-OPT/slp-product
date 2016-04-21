@@ -154,4 +154,19 @@ public interface INormProductStorageSV {
             throws BusinessException,SystemException;
     @interface ChargeStoragePriority{}
 
+    /**
+     * 更新库存组信息
+     *
+     * @param storageGroup 库存组信息
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_0309
+     */
+    public BaseResponse updateStorageGroup(STOStorageGroup storageGroup)
+        throws BusinessException,SystemException;
+    @interface UpdateStorageGroup{}
+
 }

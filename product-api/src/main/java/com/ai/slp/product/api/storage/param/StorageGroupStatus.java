@@ -17,11 +17,13 @@ public class StorageGroupStatus extends BaseInfo {
     /**
      * 库存组标识
      */
+    @NotNull(message = "库存组标识不能为空",
+            groups = { INormProductStorageSV.UpdateStorageGroup.class})
     private Long groupId;
     /**
      * 状态<br>
-     * 添加时使用停用状态
-     * 0:全部,在查询时使用
+     * 添加时使用停用状态,更新时直接忽略
+     * 0:全部,
      */
     @NotNull(message = "库存组状态不能为空",
             groups = { INormProductStorageSV.ChargeStorageGroupStatus.class
@@ -33,7 +35,8 @@ public class StorageGroupStatus extends BaseInfo {
      * 进行变更时,不能为空
      */
     @NotNull(message = "操作者不能为空",
-            groups = { INormProductStorageSV.ChargeStorageGroupStatus.class })
+            groups = { INormProductStorageSV.ChargeStorageGroupStatus.class,
+                    INormProductStorageSV.UpdateStorageGroup.class})
     private Long operId;
     /**
      * 操作时间<br>
