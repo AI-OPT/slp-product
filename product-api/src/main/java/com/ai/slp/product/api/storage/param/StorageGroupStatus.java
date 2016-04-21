@@ -21,9 +21,12 @@ public class StorageGroupStatus extends BaseInfo {
     /**
      * 状态<br>
      * 添加时使用停用状态
+     * 0:全部,在查询时使用
      */
     @NotNull(message = "库存组状态不能为空",
-            groups = { INormProductStorageSV.ChargeStorageGroupStatus.class })
+            groups = { INormProductStorageSV.ChargeStorageGroupStatus.class
+                    ,INormProductStorageSV.QueryGroupList.class
+            })
     private String state;
     /**
      * 操作者ID<br>
@@ -35,8 +38,8 @@ public class StorageGroupStatus extends BaseInfo {
     /**
      * 操作时间<br>
      * 若不填写,则设置接收时间
+     * 查询时,使用操作时间范围的属性
      */
-
     private Date operTime;
 
     public Long getGroupId() {

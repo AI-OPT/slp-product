@@ -28,7 +28,7 @@ public class STOStorageGroup4List extends StorageGroupStatus {
     /**
      * 操作人名称
      */
-    private String operUser;
+    private String operName;
     /**
      * 组内库存量
      */
@@ -70,12 +70,12 @@ public class STOStorageGroup4List extends StorageGroupStatus {
         this.serialNumber = serialNumber;
     }
 
-    public String getOperUser() {
-        return operUser;
+    public String getOperName() {
+        return operName;
     }
 
-    public void setOperUser(String operUser) {
-        this.operUser = operUser;
+    public void setOperName(String operName) {
+        this.operName = operName;
     }
 
     public long getStorageTotal() {
