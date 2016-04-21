@@ -1,9 +1,8 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.sun.jdi.connect.Connector;
-
 import java.util.Date;
+
+import com.ai.opt.base.vo.BaseInfo;
 
 /**
  * 属性定义信息<br>
@@ -21,6 +20,10 @@ public class AttrDefResponse extends BaseInfo {
      * 属性组ID
      */
     private Long attrGroupId;
+    /**
+     * 商品类目ID
+     */
+    private long productCatId;
     /**
      * 属性名称
      */

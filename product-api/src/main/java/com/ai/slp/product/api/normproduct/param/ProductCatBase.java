@@ -6,25 +6,26 @@ import com.ai.opt.base.vo.BaseInfo;
 
 /**
  * 商品类目基础信息<br>
- *
- * Date: 2016年4月18日 <br>
+ * 
+ * Date: 2016年4月19日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
+ * 
  * @author lipeng
  */
 public class ProductCatBase extends BaseInfo {
 
 	/**
-	 * 状态:STATE
+	 * 状态
 	 */
 	private String state;
 	
 	/**
-	 * 操作人：OPER_ID
+	 * 操作人
 	 */
-	private Long operId;
+	private long operId;
 	
 	/**
-	 * 操作时间：OPER_TIME
+	 * 操作时间
 	 */
 	private Date operTime;
 
@@ -36,11 +37,11 @@ public class ProductCatBase extends BaseInfo {
 		this.state = state;
 	}
 
-	public Long getOperId() {
+	public long getOperId() {
 		return operId;
 	}
 
-	public void setOperId(Long operId) {
+	public void setOperId(long operId) {
 		this.operId = operId;
 	}
 
