@@ -2,7 +2,6 @@ package com.ai.slp.product.api.prodsupply.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.BaseInfo;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.prodsupply.param.ProdSupplyForNorm;

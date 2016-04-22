@@ -30,6 +30,14 @@ public class STOStorageGroupQuery extends StorageGroupStatus {
      * 查询中操作时间的结束值
      */
     private Date operTimeEnd;
+    /**
+     * 创建时间范围开始时间
+     */
+    private Date createTimeStart;
+    /**
+     * 创建时间范围结束时间
+     */
+    private Date createTimeEnd;
 
     public String getProdId() {
         return prodId;
@@ -69,5 +77,21 @@ public class STOStorageGroupQuery extends StorageGroupStatus {
 
     public void setOperTimeEnd(Date operTimeEnd) {
         this.operTimeEnd = operTimeEnd;
+    }
+
+    public Date getCreateTimeStart() {
+        return createTimeStart;
+    }
+
+    public void setCreateTimeStart(Date createTimeStart) {
+        this.createTimeStart = createTimeStart;
+    }
+
+    public Date getCreateTimeEnd() {
+        return createTimeEnd;
+    }
+
+    public void setCreateTimeEnd(Date createTimeEnd) {
+        this.createTimeEnd = createTimeEnd;
     }
 }

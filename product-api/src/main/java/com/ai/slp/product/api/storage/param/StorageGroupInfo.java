@@ -29,6 +29,14 @@ public class StorageGroupInfo extends STOStorageGroup {
      */
     private String createName;
     /**
+     * 最低销售价
+     */
+    private Long lowSalePrice;
+    /**
+     * 最高销售价
+     */
+    private Long highSalePrice;
+    /**
      * 优先级顺序库存集合
      */
     private Map<Integer,List<STOStorage>> storageList;
@@ -71,5 +79,21 @@ public class StorageGroupInfo extends STOStorageGroup {
 
     public void setStorageList(Map<Integer, List<STOStorage>> storageList) {
         this.storageList = storageList;
+    }
+
+    public Long getLowSalePrice() {
+        return lowSalePrice;
+    }
+
+    public void setLowSalePrice(Long lowSalePrice) {
+        this.lowSalePrice = lowSalePrice;
+    }
+
+    public Long getHighSalePrice() {
+        return highSalePrice;
+    }
+
+    public void setHighSalePrice(Long highSalePrice) {
+        this.highSalePrice = highSalePrice;
     }
 }
