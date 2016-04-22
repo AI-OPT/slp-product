@@ -18,7 +18,7 @@ public class ProductCatParam extends ProductCatBase {
 	 * 商品类目标识
 	 */
     @NotNull(message = "类目ID不能为空", groups = { IProductCatSV.DeleteProductCat.class })
-	private long productCatId;
+	private String productCatId;
 
 	/**
 	 * 商品类目名称
@@ -35,11 +35,25 @@ public class ProductCatParam extends ProductCatBase {
 	 */
 	private String isLeaf;
 
-    public long getProductCatId() {
+	/**
+	 * 首字母
+	 */
+	private String firstLetter;
+	
+	/**
+	 * 类目的级别
+	 */
+	private long catLevel;
+	/**
+	 * 序列号-用于移动排序
+	 */
+	private long serialNumber;
+	
+    public String getProductCatId() {
         return productCatId;
     }
 
-    public void setProductCatId(long productCatId) {
+    public void setProductCatId(String productCatId) {
         this.productCatId = productCatId;
     }
 

@@ -45,7 +45,7 @@ public class AttrDefResponse extends BaseInfo {
      */
     private Boolean isNecessary;
     /**
-     * 序列号
+     * 序列号-用于排序
      */
     private Long serialNumber;
     /**

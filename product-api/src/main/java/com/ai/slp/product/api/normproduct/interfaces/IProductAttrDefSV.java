@@ -76,7 +76,7 @@ public interface IProductAttrDefSV {
     @interface DeleteProductAttr{}
     
     /**
-     * 属性值查询
+     * 属性的属性值查询
      * 
      * @param productAttrDefParam
      * @return 符合条件的属性集合

@@ -7,6 +7,8 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.normproduct.param.AttrDefResponse;
 import com.ai.slp.product.api.normproduct.param.ProductAttrDef;
+import com.ai.slp.product.api.normproduct.param.ProductAttrVal;
+import com.ai.slp.product.api.normproduct.param.ProductAttrValParam;
 import com.ai.slp.product.api.normproduct.param.ProductCatInfo;
 import com.ai.slp.product.api.normproduct.param.ProductCatParam;
 
@@ -70,8 +72,21 @@ public interface IProductCatSV {
      * @author lipeng
      * @ApiCode PROCAT_0103
      */
-    public List<ProductAttrDef> queryProductCatVal(ProductCatParam productCatParam) throws BusinessException, SystemException;
-    @interface QueryProductCatVal {}
+    public List<ProductAttrDef> queryProductCatAttr(ProductCatParam productCatParam) throws BusinessException, SystemException;
+    @interface QsueryProductCatAttr {}
+    
+    
+    /**
+     * 商品类目属性的属性值查询
+     * 
+     * @return 类目属性值集合
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng
+    *  @ApiCode PROCAT_0104
+     */
+    public List<ProductAttrVal> queryProductCatAttrVal() throws BusinessException, SystemException;
+    @interface QueryProductCatAttrVal {}
     
     /**
      * 商品类目属性添加<br>
@@ -81,8 +96,20 @@ public interface IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0104
+    *  @ApiCode PROCAT_0105
      */
-    public BaseResponse addProductCatVal(List<AttrDefResponse> lspad) throws BusinessException, SystemException;
-    @interface AddProductCatVal {}
+    public BaseResponse addProductCatAttr(List<AttrDefResponse> lspad) throws BusinessException, SystemException;
+    @interface AddProductCatAttr {}
+    
+    /**
+     * 商品类目属性值删除
+     * 
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng
+    *  @ApiCode PROCAT_0106
+     */
+    public BaseResponse deleteProductCatAttrVal(ProductAttrValParam productAttrValParam) throws BusinessException, SystemException;
+    @interface DeleteProductCatAttrVal {}
 }

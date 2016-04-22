@@ -15,7 +15,7 @@ public class ProductCatInfo extends BaseResponse{
 	/**
 	 * 商品类目标识
 	 */
-	private long productCatId;
+	private String productCatId;
 	
 	/**
 	 * 名称
@@ -32,11 +32,25 @@ public class ProductCatInfo extends BaseResponse{
 	 */
 	private String isLeaf;
 
-    public long getProductCatId() {
+    /**
+     * 首字母
+     */
+    private String firstLetter;
+    
+    /**
+     * 类目的级别
+     */
+    private long catLevel;
+    /**
+     * 序列号-用于移动排序
+     */
+    private long serialNumber;
+	
+    public String getProductCatId() {
         return productCatId;
     }
 
-    public void setProductCatId(long productCatId) {
+    public void setProductCatId(String productCatId) {
         this.productCatId = productCatId;
     }
 

@@ -37,7 +37,7 @@ public class ProductAttrDef extends BaseResponse {
      * 属性值数量
      */
     private int attrValNum;
-
+    
     /**
      * 操作人ID
      */
