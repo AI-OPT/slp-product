@@ -16,11 +16,12 @@ public class ProductCatBase extends BaseInfo {
 
 	/**
 	 * 状态
+	 * 1有效0无效
 	 */
 	private String state;
 	
 	/**
-	 * 操作人
+	 * 操作人ID
 	 */
 	private long operId;
 	
