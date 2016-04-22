@@ -34,7 +34,7 @@ public class SaveProductInfoRequest extends NormProductBase {
      * 有效周期<br>
      * 若有效期类型为"灵活有效期",则不能为空
      */
-    private Long activeCycle;
+    private Integer activeCycle;
     /**
      * 单位<br>
      * 若有效期类型为"灵活有效期",则不能为空
@@ -89,11 +89,11 @@ public class SaveProductInfoRequest extends NormProductBase {
         this.inActiveTime = inActiveTime;
     }
 
-    public Long getActiveCycle() {
+    public Integer getActiveCycle() {
         return activeCycle;
     }
 
-    public void setActiveCycle(Long activeCycle) {
+    public void setActiveCycle(Integer activeCycle) {
         this.activeCycle = activeCycle;
     }
 

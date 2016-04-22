@@ -101,6 +101,22 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0105
      */
-    public BaseResponse discardProduct(SimpleProductRequest invalidRequest) throws BusinessException,SystemException;
+    public BaseResponse discardProduct(SimpleProductRequest invalidRequest)
+            throws BusinessException,SystemException;
     @interface DiscardProduct {}
+
+    /**
+     * 更新标准品市场价. <br>
+     *
+     * @param marketPrice 标准品市场价
+     * @return 更新结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0106
+     */
+    public BaseResponse updateMarketPrice(MarketPrice4Update marketPrice)
+            throws BusinessException,SystemException;
+    @interface UpdateMarketPrice{}
 }

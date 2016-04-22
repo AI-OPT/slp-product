@@ -16,23 +16,42 @@ public class NormProductInfoResponse extends NormProductBase {
     /**
      * 创建者名称
      */
-    private String createUserName;
+    private String createName;
 
     /**
      * 操作人
      */
-    private Long operUserId;
+    private Long operId;
+    /**
+     * 市场价
+     */
+    private Long marketPrice;
 
     /**
      * 操作人名称
      */
-    private String operUserName;
+    private String operName;
 
     /**
      * 操作时间
      */
     private Date operTime;
-
+    /**
+     * 生效时间
+     */
+    private Date activeTime;
+    /**
+     * 失效时间
+     */
+    private Date inactiveTime;
+    /**
+     * 有效周期
+     */
+    private Integer activeCycle;
+    /**
+     * 单位
+     */
+    private String unit;
     /**
      * 关键属性集合,包括属性对应标准品属性值集合
      */
@@ -43,28 +62,68 @@ public class NormProductInfoResponse extends NormProductBase {
      */
     private Map<AttrDefResponse,List<NormProductAttrValResponse>> saleAttrs;
 
-    public String getCreateUserName() {
-        return createUserName;
+    public String getCreateName() {
+        return createName;
     }
 
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
+    public void setCreateName(String createName) {
+        this.createName = createName;
     }
 
-    public Long getOperUserId() {
-        return operUserId;
+    public Long getOperId() {
+        return operId;
     }
 
-    public void setOperUserId(Long operUserId) {
-        this.operUserId = operUserId;
+    public void setOperId(Long operId) {
+        this.operId = operId;
     }
 
-    public String getOperUserName() {
-        return operUserName;
+    public String getOperName() {
+        return operName;
     }
 
-    public void setOperUserName(String operUserName) {
-        this.operUserName = operUserName;
+    public void setOperName(String operName) {
+        this.operName = operName;
+    }
+
+    public Date getActiveTime() {
+        return activeTime;
+    }
+
+    public void setActiveTime(Date activeTime) {
+        this.activeTime = activeTime;
+    }
+
+    public Date getInactiveTime() {
+        return inactiveTime;
+    }
+
+    public void setInactiveTime(Date inactiveTime) {
+        this.inactiveTime = inactiveTime;
+    }
+
+    public Integer getActiveCycle() {
+        return activeCycle;
+    }
+
+    public void setActiveCycle(Integer activeCycle) {
+        this.activeCycle = activeCycle;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public Long getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(Long marketPrice) {
+        this.marketPrice = marketPrice;
     }
 
     public Date getOperTime() {

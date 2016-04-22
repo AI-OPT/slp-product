@@ -1,5 +1,7 @@
 package com.ai.slp.product.api.storage.param;
 
+import java.util.Date;
+
 /**
  * 虚拟库存组列表信息<br>
  *
@@ -37,6 +39,14 @@ public class STOStorageGroup4List extends StorageGroupStatus {
      * 组内库存数量
      */
     private int storageNum;
+    /**
+     * 生成日期
+     */
+    private Date createTime;
+    /**
+     * 最低销售价
+     */
+    private Long lowSalePrice;
 
     public String getProdId() {
         return prodId;
@@ -92,5 +102,21 @@ public class STOStorageGroup4List extends StorageGroupStatus {
 
     public void setStorageNum(int storageNum) {
         this.storageNum = storageNum;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Long getLowSalePrice() {
+        return lowSalePrice;
+    }
+
+    public void setLowSalePrice(Long lowSalePrice) {
+        this.lowSalePrice = lowSalePrice;
     }
 }

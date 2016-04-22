@@ -169,4 +169,18 @@ public interface INormProductStorageSV {
         throws BusinessException,SystemException;
     @interface UpdateStorageGroup{}
 
+    /**
+     * 更新库存组销售价信息
+     *
+     * @param salePrice 库存组销售价信息
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_0310
+     */
+    public BaseResponse updateStorageGroupSalePrice(StorageGroupSalePrice salePrice)
+            throws BusinessException,SystemException;
+    @interface UpdateStorageGroupSalePrice{}
 }

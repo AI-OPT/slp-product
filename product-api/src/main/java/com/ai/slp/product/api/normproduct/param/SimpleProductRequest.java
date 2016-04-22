@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * 标准品废弃请求细心<br>
+ * 标准品废弃请求信息<br>
  *
  * Date: 2016年4月19日 <br>
  * Copyright (c) 2016 asiainfo.com <br>

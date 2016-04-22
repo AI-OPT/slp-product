@@ -39,6 +39,10 @@ public class NormProductResponse extends BaseResponse {
      * 0:全部;1实物;2虚拟
      */
     private String productType;
+    /**
+     * 市场价
+     */
+    private Long marketPrice;
 
     /**
      * 创建时间
@@ -48,7 +52,15 @@ public class NormProductResponse extends BaseResponse {
     /**
      * 创建人ID
      */
-    private Long createUserId;
+    private Long createId;
+    /**
+     * 操作者ID
+     */
+    private Long operId;
+    /**
+     * 操作时间
+     */
+    private Date operTime;
     /**
      * 类目名称
      */
@@ -67,7 +79,11 @@ public class NormProductResponse extends BaseResponse {
     /**
      * 创建者名称
      */
-    private String createUserName;
+    private String createName;
+    /**
+     * 操作者名称
+     */
+    private String operName;
 
     public Long getCatId() {
         return catId;
@@ -117,20 +133,44 @@ public class NormProductResponse extends BaseResponse {
         this.createTime = createTime;
     }
 
-    public Long getCreateUserId() {
-        return createUserId;
+    public Long getCreateId() {
+        return createId;
     }
 
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateId(Long createId) {
+        this.createId = createId;
     }
 
-    public String getCreateUserName() {
-        return createUserName;
+    public Long getMarketPrice() {
+        return marketPrice;
     }
 
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
+    public void setMarketPrice(Long marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public Long getOperId() {
+        return operId;
+    }
+
+    public void setOperId(Long operId) {
+        this.operId = operId;
+    }
+
+    public Date getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Date operTime) {
+        this.operTime = operTime;
     }
 
     public String getCatName() {
@@ -155,5 +195,13 @@ public class NormProductResponse extends BaseResponse {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public String getOperName() {
+        return operName;
+    }
+
+    public void setOperName(String operName) {
+        this.operName = operName;
     }
 }
