@@ -15,9 +15,11 @@ import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
 public class ProductCatParam extends ProductCatBase {
 	
 	/**
-	 * 商品类目标识
+	 * 商品类目ID
 	 */
-    @NotNull(message = "类目ID不能为空", groups = { IProductCatSV.DeleteProductCat.class })
+    @NotNull(message = "类目ID不能为空", 
+            groups = { IProductCatSV.DeleteProductCat.class,
+                    IProductCatSV.QsueryProductCatAttr.class })
 	private String productCatId;
 
 	/**
@@ -41,9 +43,10 @@ public class ProductCatParam extends ProductCatBase {
 	private String firstLetter;
 	
 	/**
-	 * 类目的级别
+	 * 类目的级别-标识是几级类目
 	 */
 	private long catLevel;
+	
 	/**
 	 * 序列号-用于移动排序
 	 */

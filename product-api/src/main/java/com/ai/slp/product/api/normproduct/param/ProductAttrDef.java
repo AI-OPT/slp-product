@@ -39,6 +39,23 @@ public class ProductAttrDef extends BaseResponse {
     private int attrValNum;
     
     /**
+     * 是否上传照片
+     * Y是N否
+     */
+    private char isPicture;
+    
+    /**
+     * 是否必填
+     * Y是N否
+     */
+    private char isNecessary;
+    
+    /**
+     * 序列号
+     */
+    private long serialNumber;
+    
+    /**
      * 操作人ID
      */
     private long operId;
