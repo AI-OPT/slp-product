@@ -11,7 +11,7 @@ package com.ai.slp.product.api.normproduct.param;
 public class ProAttrGroupParam extends ProductCatBase {
     
     /**
-     * 属性组ID
+     * 类目属性组ID
      */
     private long attrGroupId;
     
@@ -29,7 +29,12 @@ public class ProAttrGroupParam extends ProductCatBase {
      * logo地址
      */
     private String logoURL;
-
+    
+    /**
+     * 属性数量-通过属性组ID在商品属性定义表中统计
+     */
+    private long attrNum;
+    
     public long getAttrGroupId() {
         return attrGroupId;
     }
