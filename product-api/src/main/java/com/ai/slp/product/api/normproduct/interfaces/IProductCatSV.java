@@ -23,7 +23,7 @@ public interface IProductCatSV {
     /**
      * 商品类目查询<br>
      * 
-     * @param productCatRequest
+     * @param productCatParam
      * @return 商品类目集合
      * @throws BusinessException
      * @throws SystemException
@@ -50,7 +50,7 @@ public interface IProductCatSV {
 	/**
 	 * 商品类目删除<br>
 	 * 
-	 * @param productCatRequest
+	 * @param productCatParam
 	 * @return 服务返回基本信息
 	 * @throws BusinessException
 	 * @throws SystemException
@@ -63,7 +63,7 @@ public interface IProductCatSV {
 	/**
      * 商品类目属性查询<br>
      * 
-     * @param productCatRequest
+     * @param productCatParam
      * @return 符合条件的属性集合
      * @throws BusinessException
      * @throws SystemException
@@ -76,7 +76,7 @@ public interface IProductCatSV {
     /**
      * 商品类目属性添加<br>
      * 
-     * @param productCatRequest
+     * @param lspad
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
