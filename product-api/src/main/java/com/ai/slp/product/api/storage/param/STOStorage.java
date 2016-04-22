@@ -43,6 +43,12 @@ public class STOStorage extends StorageStatus{
     @Min(value = 0,message = "预警库存量不能小于0",
             groups = {INormProductStorageSV.SaveStorage.class})
     private long warnNum;
+    /**
+     * 优先级
+     */
+    @Min(value = 0,message = "优先级不能小于0",
+            groups = {INormProductStorageSV.SaveStorage.class})
+    private int priorityNumber;
 
     /**
      * 生效时间
@@ -83,6 +89,14 @@ public class STOStorage extends StorageStatus{
 
     public void setWarnNum(long warnNum) {
         this.warnNum = warnNum;
+    }
+
+    public int getPriorityNumber() {
+        return priorityNumber;
+    }
+
+    public void setPriorityNumber(int priorityNumber) {
+        this.priorityNumber = priorityNumber;
     }
 
     public Date getActiveTime() {
