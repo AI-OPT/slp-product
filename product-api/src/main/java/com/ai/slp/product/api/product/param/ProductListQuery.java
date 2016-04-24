@@ -46,6 +46,10 @@ public class ProductListQuery extends BaseInfo {
      *标准品标识
      */
     private Long normProdId;
+    /**
+     * 标准品名称
+     */
+    private String normProdName;
 
     public String getCatId() {
         return catId;
@@ -101,5 +105,13 @@ public class ProductListQuery extends BaseInfo {
 
     public void setNormProdId(Long normProdId) {
         this.normProdId = normProdId;
+    }
+
+    public String getNormProdName() {
+        return normProdName;
+    }
+
+    public void setNormProdName(String normProdName) {
+        this.normProdName = normProdName;
     }
 }

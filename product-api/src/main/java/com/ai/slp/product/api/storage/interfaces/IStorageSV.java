@@ -214,4 +214,19 @@ public interface IStorageSV {
     public List<StorageGroupInfo> queryGroupByProdIdForSalePrice(StorageGroupInfoQuery infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupByProdIdForSalePrice{}
+
+    /**
+     * 批量更新库存销售价<br>
+     *
+     * @param salePriceList 库存批量销售价信息
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_0313
+     */
+    public BaseResponse updateMultiStorageSalePrice(List<STOStorageSalePrice> salePriceList)
+            throws BusinessException,SystemException;
+    @interface UpdateMultiStorageSalePrice{}
 }
