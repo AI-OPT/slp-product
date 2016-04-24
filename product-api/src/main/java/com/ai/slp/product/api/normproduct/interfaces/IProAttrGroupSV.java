@@ -47,7 +47,7 @@ public interface IProAttrGroupSV {
      */
     public BaseResponse addProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
             throws BusinessException, SystemException;
-    @interface AddProAttrGroup{}
+    @interface AddProAttrGroup {}
     
     /**
      * 修改类目分组
@@ -78,7 +78,7 @@ public interface IProAttrGroupSV {
     @interface DeleteProAttrGroup{}
     
     /**
-     * 类目组内属性查询
+     * 类目组内属性查询：仅在本类目组内查询，加类目属性组ID为必须条件
      * 
      * @param proAttrGroupParam
      * @return 符合条件的商品属性集合
@@ -106,7 +106,7 @@ public interface IProAttrGroupSV {
     @interface AddGroupAttr {}
     
     /**
-     * 类目组内属性添加
+     * 类目组内属性删除
      * 
      * @param listProAttrVal
      * @return 服务返回基本信息

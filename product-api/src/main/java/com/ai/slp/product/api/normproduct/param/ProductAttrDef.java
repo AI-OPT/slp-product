@@ -34,7 +34,7 @@ public class ProductAttrDef extends BaseResponse {
     private String valueWay;
     
     /**
-     * 属性值数量
+     * 属性值数量-通过在标准品属性值表中统计有次属性ID的属性值的数量
      */
     private int attrValNum;
     
@@ -43,6 +43,12 @@ public class ProductAttrDef extends BaseResponse {
      * Y是N否
      */
     private char isPicture;
+    
+    /**
+     * 是否允许用户自定义属性值
+     */
+    //TODO一期不做
+    private char isCustom;
     
     /**
      * 是否必填
@@ -81,12 +87,60 @@ public class ProductAttrDef extends BaseResponse {
         this.attrName = attrName;
     }
 
+    public String getAttrType() {
+        return attrType;
+    }
+
+    public void setAttrType(String attrType) {
+        this.attrType = attrType;
+    }
+
     public String getValueWay() {
         return valueWay;
     }
 
     public void setValueWay(String valueWay) {
         this.valueWay = valueWay;
+    }
+
+    public int getAttrValNum() {
+        return attrValNum;
+    }
+
+    public void setAttrValNum(int attrValNum) {
+        this.attrValNum = attrValNum;
+    }
+
+    public char getIsPicture() {
+        return isPicture;
+    }
+
+    public void setIsPicture(char isPicture) {
+        this.isPicture = isPicture;
+    }
+
+    public char getIsCustom() {
+        return isCustom;
+    }
+
+    public void setIsCustom(char isCustom) {
+        this.isCustom = isCustom;
+    }
+
+    public char getIsNecessary() {
+        return isNecessary;
+    }
+
+    public void setIsNecessary(char isNecessary) {
+        this.isNecessary = isNecessary;
+    }
+
+    public long getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(long serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public long getOperId() {
@@ -104,6 +158,5 @@ public class ProductAttrDef extends BaseResponse {
     public void setOperTime(Date operTime) {
         this.operTime = operTime;
     }
-    
-    
+
 }

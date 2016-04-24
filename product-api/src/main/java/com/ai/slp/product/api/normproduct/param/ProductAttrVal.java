@@ -1,5 +1,7 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import java.util.Date;
+
 import com.ai.opt.base.vo.BaseResponse;
 
 /**
@@ -27,6 +29,16 @@ public class ProductAttrVal extends BaseResponse {
      */
     private String firstLetter;
 
+    /**
+     * 操作人ID
+     */
+    private long operId;
+    
+    /**
+     * 操作时间
+     */
+    private Date operTime;
+
     public long getAttrvalueDefId() {
         return attrvalueDefId;
     }
@@ -50,5 +62,22 @@ public class ProductAttrVal extends BaseResponse {
     public void setFirstLetter(String firstLetter) {
         this.firstLetter = firstLetter;
     }
+
+    public long getOperId() {
+        return operId;
+    }
+
+    public void setOperId(long operId) {
+        this.operId = operId;
+    }
+
+    public Date getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Date operTime) {
+        this.operTime = operTime;
+    }
+
 
 }
