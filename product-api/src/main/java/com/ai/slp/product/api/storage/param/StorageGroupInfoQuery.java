@@ -1,7 +1,7 @@
 package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.INormProductStorageSV;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 import javax.validation.constraints.NotNull;
 
@@ -19,14 +19,14 @@ public class StorageGroupInfoQuery extends BaseInfo {
      * 在根据库存组查询时,不能为空.其他情况不使用
      */
     @NotNull(message = "库存组标识不能为空",
-            groups = { INormProductStorageSV.QueryGroupInfoById.class })
+            groups = { IStorageSV.QueryGroupInfoById.class })
     private long groupId;
     /**
      * 标准品标识
      * 在根据标准品标识查询时,不能为空.其他情况忽略
      */
     @NotNull(message = "标准品标识不能为空",
-            groups = { INormProductStorageSV.QueryGroupInfoByProductId.class })
+            groups = { IStorageSV.QueryGroupInfoByProductId.class })
     private String productId;
 
     public long getGroupId() {

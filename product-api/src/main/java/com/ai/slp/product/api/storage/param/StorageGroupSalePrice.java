@@ -1,7 +1,7 @@
 package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.INormProductStorageSV;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -20,16 +20,16 @@ public class StorageGroupSalePrice extends BaseInfo {
      * 库存组标识
      */
     @NotNull(message = "库存组标识不能为空",
-            groups = { INormProductStorageSV.UpdateStorageGroupSalePrice.class})
+            groups = { IStorageSV.UpdateStorageGroupSalePrice.class})
     private Long groupId;
 
     /**
      * 最低销售价
      */
     @NotNull(message = "最低销售价不能为空",
-            groups = { INormProductStorageSV.UpdateStorageGroupSalePrice.class})
+            groups = { IStorageSV.UpdateStorageGroupSalePrice.class})
     @Min(value = 0,message = "最低销售价不能小于0",
-            groups = { INormProductStorageSV.UpdateStorageGroupSalePrice.class})
+            groups = { IStorageSV.UpdateStorageGroupSalePrice.class})
     private Long lowSalePrice;
     /**
      * 最高销售价
@@ -41,7 +41,7 @@ public class StorageGroupSalePrice extends BaseInfo {
      * 进行变更时,不能为空
      */
     @NotNull(message = "操作者不能为空",
-            groups = { INormProductStorageSV.UpdateStorageGroupSalePrice.class})
+            groups = { IStorageSV.UpdateStorageGroupSalePrice.class})
     private Long operId;
     /**
      * 操作时间<br>

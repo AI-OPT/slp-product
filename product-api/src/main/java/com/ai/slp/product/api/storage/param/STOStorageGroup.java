@@ -1,6 +1,6 @@
 package com.ai.slp.product.api.storage.param;
 
-import com.ai.slp.product.api.storage.interfaces.INormProductStorageSV;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -19,14 +19,14 @@ public class STOStorageGroup extends StorageGroupStatus {
      * 设置为null,则不进行更新操作
      */
     @NotNull(message = "标准品标识不能为空",
-            groups = { INormProductStorageSV.InstallStorage.class})
+            groups = { IStorageSV.InstallStorage.class})
     private String prodId;
     /**
      * 库存组名称<br>
      * 设置为null,则不进行更新操作
      */
     @NotNull(message = "库存组名称不能为空",
-            groups = { INormProductStorageSV.InstallStorage.class })
+            groups = { IStorageSV.InstallStorage.class })
     private String groupName;
     /**
      * 序列号
@@ -37,7 +37,7 @@ public class STOStorageGroup extends StorageGroupStatus {
      * 更新时,直接忽略
      */
     @NotNull(message = "创建者ID不能为空",
-            groups = { INormProductStorageSV.InstallStorage.class })
+            groups = { IStorageSV.InstallStorage.class })
     private Long createId;
     /**
      * 创建时间<br>

@@ -1,6 +1,6 @@
 package com.ai.slp.product.api.storage.param;
 
-import com.ai.slp.product.api.storage.interfaces.INormProductStorageSV;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
@@ -19,35 +19,35 @@ public class STOStorage extends StorageStatus{
      * 库存名称
      */
     @NotNull(message = "库存名称不能为空",
-            groups = { INormProductStorageSV.SaveStorage.class })
+            groups = { IStorageSV.SaveStorage.class })
     @Length(max = 300,message = "库存名称长度不允许超过300",
-            groups = {INormProductStorageSV.SaveStorage.class})
+            groups = {IStorageSV.SaveStorage.class})
     private String storageName;
 
     /**
      * 库存组id
      */
     @NotNull(message = "库存组标识不能为空",
-            groups = { INormProductStorageSV.SaveStorage.class })
+            groups = { IStorageSV.SaveStorage.class })
     private Long groupId;
 
     /**
      * 虚拟库存量
      */
     @Min(value = 0,message = "虚拟库存量不能小于0",
-            groups = {INormProductStorageSV.SaveStorage.class})
+            groups = {IStorageSV.SaveStorage.class})
     private long totalNum;
     /**
      * 预警库存量
      */
     @Min(value = 0,message = "预警库存量不能小于0",
-            groups = {INormProductStorageSV.SaveStorage.class})
+            groups = {IStorageSV.SaveStorage.class})
     private long warnNum;
     /**
      * 优先级
      */
     @Min(value = 0,message = "优先级不能小于0",
-            groups = {INormProductStorageSV.SaveStorage.class})
+            groups = {IStorageSV.SaveStorage.class})
     private int priorityNumber;
     /**
      * 销售价

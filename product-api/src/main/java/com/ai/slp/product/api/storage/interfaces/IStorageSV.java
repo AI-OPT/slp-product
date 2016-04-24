@@ -15,7 +15,7 @@ import java.util.List;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public interface INormProductStorageSV {
+public interface IStorageSV {
 
     /**
      * 添加标准品库存组<br>
@@ -58,7 +58,7 @@ public interface INormProductStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0302
      */
-    public List<StorageGroupInfo> queryGroupInfoByProductId(StorageGroupInfoQuery infoQuery)
+    public List<StorageGroupInfo> queryGroupInfoByNormProId(StorageGroupInfoQuery infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupInfoByProductId{}
 

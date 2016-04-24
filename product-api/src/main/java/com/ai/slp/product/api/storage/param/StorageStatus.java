@@ -1,7 +1,7 @@
 package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.INormProductStorageSV;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -19,7 +19,7 @@ public class StorageStatus extends BaseInfo {
      * 在保存时,若包含标识则进行更新操作,否则进行添加操作
      */
     @NotNull(message = "库存标识不能为空",
-            groups = { INormProductStorageSV.ChargeStorageStatus.class })
+            groups = { IStorageSV.ChargeStorageStatus.class })
     private String storageId;
 
     /**
@@ -27,13 +27,13 @@ public class StorageStatus extends BaseInfo {
      * 添加库存时,必须为停用状态
      */
     @NotNull(message = "库存状态不能为空",
-            groups = { INormProductStorageSV.ChargeStorageStatus.class })
+            groups = { IStorageSV.ChargeStorageStatus.class })
     private String status;
     /**
      * 操作人ID
      */
     @NotNull(message = "操作人不能为空",
-            groups = { INormProductStorageSV.ChargeStorageStatus.class })
+            groups = { IStorageSV.ChargeStorageStatus.class })
     private Long operId;
     /**
      * 操作时间<br>

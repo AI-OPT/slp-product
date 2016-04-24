@@ -1,7 +1,7 @@
 package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.INormProductStorageSV;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -18,7 +18,7 @@ public class StorageGroupStatus extends BaseInfo {
      * 库存组标识
      */
     @NotNull(message = "库存组标识不能为空",
-            groups = { INormProductStorageSV.UpdateStorageGroup.class})
+            groups = { IStorageSV.UpdateStorageGroup.class})
     private Long groupId;
     /**
      * 状态<br>
@@ -26,8 +26,8 @@ public class StorageGroupStatus extends BaseInfo {
      * 0:全部,
      */
     @NotNull(message = "库存组状态不能为空",
-            groups = { INormProductStorageSV.ChargeStorageGroupStatus.class
-                    ,INormProductStorageSV.QueryGroupList.class
+            groups = { IStorageSV.ChargeStorageGroupStatus.class
+                    ,IStorageSV.QueryGroupList.class
             })
     private String state;
     /**
@@ -35,8 +35,8 @@ public class StorageGroupStatus extends BaseInfo {
      * 进行变更时,不能为空
      */
     @NotNull(message = "操作者不能为空",
-            groups = { INormProductStorageSV.ChargeStorageGroupStatus.class,
-                    INormProductStorageSV.UpdateStorageGroup.class})
+            groups = { IStorageSV.ChargeStorageGroupStatus.class,
+                    IStorageSV.UpdateStorageGroup.class})
     private Long operId;
     /**
      * 操作时间<br>
