@@ -183,4 +183,35 @@ public interface INormProductStorageSV {
     public BaseResponse updateStorageGroupSalePrice(StorageGroupSalePrice salePrice)
             throws BusinessException,SystemException;
     @interface UpdateStorageGroupSalePrice{}
+
+    /**
+     * 查询标准品库存组列表,适用于添加商城商品销售价<br>
+     *  库存组不包括废弃状态的
+     *
+     * @param groupQuery 库存组查询信息对象
+     * @return 库存组列表
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_0311
+     */
+    public PageInfo<STOStorageGroup4SaleList> queryGroupListForSalePrice(STOStorageGroupQuery groupQuery)
+            throws BusinessException,SystemException;
+    @interface QueryGroupListForSalePrice{}
+
+    /**
+     * 根据标准品标识查询库存组信息<br>
+     *  库存组不包括废弃状态的
+     * @param infoQuery 库存组对象查询条件
+     * @return 查询到的库存组信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_0312
+     */
+    public List<StorageGroupInfo> queryGroupByProdIdForSalePrice(StorageGroupInfoQuery infoQuery)
+            throws BusinessException,SystemException;
+    @interface QueryGroupByProdIdForSalePrice{}
 }

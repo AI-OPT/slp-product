@@ -49,4 +49,44 @@ public class StorageGroupSalePrice extends BaseInfo {
      * 查询时,使用操作时间范围的属性
      */
     private Date operTime;
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    public Long getLowSalePrice() {
+        return lowSalePrice;
+    }
+
+    public void setLowSalePrice(Long lowSalePrice) {
+        this.lowSalePrice = lowSalePrice;
+    }
+
+    public Long getHighSalePrice() {
+        return highSalePrice;
+    }
+
+    public void setHighSalePrice(Long highSalePrice) {
+        this.highSalePrice = highSalePrice;
+    }
+
+    public Long getOperId() {
+        return operId;
+    }
+
+    public void setOperId(Long operId) {
+        this.operId = operId;
+    }
+
+    public Date getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Date operTime) {
+        this.operTime = operTime;
+    }
 }

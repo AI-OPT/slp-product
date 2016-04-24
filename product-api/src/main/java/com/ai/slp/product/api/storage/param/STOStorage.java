@@ -49,6 +49,11 @@ public class STOStorage extends StorageStatus{
     @Min(value = 0,message = "优先级不能小于0",
             groups = {INormProductStorageSV.SaveStorage.class})
     private int priorityNumber;
+    /**
+     * 销售价
+     * 在查询时,忽略此字段
+     */
+    private Long salePrice;
 
     /**
      * 生效时间
@@ -113,5 +118,13 @@ public class STOStorage extends StorageStatus{
 
     public void setInactiveTime(Date inactiveTime) {
         this.inactiveTime = inactiveTime;
+    }
+
+    public Long getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(Long salePrice) {
+        this.salePrice = salePrice;
     }
 }
