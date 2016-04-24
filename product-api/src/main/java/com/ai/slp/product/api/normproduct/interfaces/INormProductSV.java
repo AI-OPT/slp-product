@@ -24,7 +24,7 @@ public interface INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0100
+     * @ApiCode NORM_PRODUCT_0100
      */
     public PageInfo<NormProductResponse> queryNormProduct(NormProductRequest productRequest)
             throws BusinessException,SystemException;
@@ -39,7 +39,7 @@ public interface INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0101
+     * @ApiCode NORM_PRODUCT_0101
      */
     public PageInfo<InvalidNormProductResponse> queryInvalidProduct(NormProductRequest productRequest)
         throws BusinessException,SystemException;
@@ -54,7 +54,7 @@ public interface INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0102
+     * @ApiCode NORM_PRODUCT_0102
      */
     public NormProductInfoResponse queryProducById(SimpleProductRequest invalidRequest)
             throws BusinessException,SystemException;
@@ -69,7 +69,7 @@ public interface INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0103
+     * @ApiCode NORM_PRODUCT_0103
      */
     public BaseResponse saveProductInfo(SaveProductInfoRequest productInfoRequest)
             throws BusinessException,SystemException;
@@ -84,7 +84,7 @@ public interface INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0104
+     * @ApiCode NORM_PRODUCT_0104
      */
     public BaseResponse updateProductInfo(SaveProductInfoRequest productInfoRequest)
             throws BusinessException,SystemException;
@@ -99,7 +99,7 @@ public interface INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0105
+     * @ApiCode NORM_PRODUCT_0105
      */
     public BaseResponse discardProduct(SimpleProductRequest invalidRequest)
             throws BusinessException,SystemException;
@@ -114,7 +114,7 @@ public interface INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0106
+     * @ApiCode NORM_PRODUCT_0106
      */
     public BaseResponse updateMarketPrice(MarketPrice4Update marketPrice)
             throws BusinessException,SystemException;

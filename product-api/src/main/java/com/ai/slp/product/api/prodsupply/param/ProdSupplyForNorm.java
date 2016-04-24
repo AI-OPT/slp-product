@@ -53,14 +53,6 @@ public class ProdSupplyForNorm extends BaseInfo {
      */
     private String sellerName;
     /**
-     * 品牌
-     */
-    private String brand;
-    /**
-     * 规格型号
-     */
-    private String model;
-    /**
      * 标准品类型
      * 0:全部;1实物;2虚拟
      */
@@ -148,22 +140,6 @@ public class ProdSupplyForNorm extends BaseInfo {
 
     public void setSellerName(String sellerName) {
         this.sellerName = sellerName;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
     }
 
     public String getProductType() {
