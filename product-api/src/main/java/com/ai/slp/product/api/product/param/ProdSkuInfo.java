@@ -14,7 +14,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class ProSkuInfo extends BaseInfo {
+public class ProdSkuInfo extends BaseInfo {
     /**
      * sku单品标识
      * 在商城商品库存管理中,会根据标识进行更新操作

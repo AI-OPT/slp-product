@@ -15,7 +15,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class ProSkuSalPrice extends BaseInfo {
+public class ProdSkuSalPrice extends BaseInfo {
     /**
      * sku单品标识
      */

@@ -57,7 +57,7 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0102
      */
-    public BaseResponse updateMultSKUSalePrice(List<ProSkuSalPrice> skuSalPrices)
+    public BaseResponse updateMultSKUSalePrice(List<ProdSkuSalPrice> skuSalPrices)
             throws BusinessException,SystemException;
     @interface UpdateMultSKUSalePrice{}
 
@@ -72,7 +72,22 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0103
      */
-    public BaseResponse saveMultSKUInfo(List<ProSkuInfo> skuInfoList)
+    public BaseResponse saveMultSKUInfo(List<ProdSkuInfo> skuInfoList)
             throws BusinessException,SystemException;
     @interface SaveMultSKUInfo{}
+
+    /**
+     * 查询单个商城商品下的sku集合信息
+     *
+     * @param query sku销售价
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0104
+     */
+    public SkuSetForProduct querySkuSetForProduct(SkuSetForProductQuery query)
+            throws BusinessException,SystemException;
+    @interface QuerySkuSetForProduct{}
 }
