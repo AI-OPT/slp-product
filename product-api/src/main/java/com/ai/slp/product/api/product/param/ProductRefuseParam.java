@@ -33,7 +33,7 @@ public class ProductRefuseParam extends ProductBase{
     private String productType;
     
     /**
-     * 上架类型
+     * 上架类型 1审核通过后立即上架 2审核通过后放入仓库 3定时上架
      */
     private String upshelfType;
     
@@ -46,16 +46,16 @@ public class ProductRefuseParam extends ProductBase{
      * 下架时间
      */
     private Date downTime;
+
+    /**
+     * 最高销售价
+     */
+    private double highSalePrice;
     
     /**
-     * 最高价格
+     * 最低销售价
      */
-    private double highPrice;
-    
-    /**
-     * 最低价格
-     */
-    private double floorPrice;
+    private double lowSalePrice;
     
     /**
      * 商品名称
@@ -123,20 +123,20 @@ public class ProductRefuseParam extends ProductBase{
         this.downTime = downTime;
     }
 
-    public double getHighPrice() {
-        return highPrice;
+    public double getHighSalePrice() {
+        return highSalePrice;
     }
 
-    public void setHighPrice(double highPrice) {
-        this.highPrice = highPrice;
+    public void setHighSalePrice(double highSalePrice) {
+        this.highSalePrice = highSalePrice;
     }
 
-    public double getFloorPrice() {
-        return floorPrice;
+    public double getLowSalePrice() {
+        return lowSalePrice;
     }
 
-    public void setFloorPrice(double floorPrice) {
-        this.floorPrice = floorPrice;
+    public void setLowSalePrice(double lowSalePrice) {
+        this.lowSalePrice = lowSalePrice;
     }
 
     public String getProdName() {

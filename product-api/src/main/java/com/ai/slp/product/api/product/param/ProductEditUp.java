@@ -11,7 +11,7 @@ import com.ai.opt.base.vo.BaseResponse;
  * 
  * @author lipeng
  */
-public class Product extends BaseResponse{
+public class ProductEditUp extends BaseResponse{
     
     /**
      * 商品ID

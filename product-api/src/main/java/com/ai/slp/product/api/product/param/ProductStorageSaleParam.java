@@ -2,21 +2,29 @@ package com.ai.slp.product.api.product.param;
 
 import java.sql.Date;
 
+import com.ai.opt.base.vo.BaseInfo;
+
 /**
- * 商品管理审核中查询参数
+ * 商品管理售中与仓库商品
  * 
  * Date: 2016年4月25日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
  * @author lipeng
  */
-public class ProductCheckingParam extends ProductBase {
+public class ProductStorageSaleParam extends BaseInfo{
+    
+
+    /**
+     * 商品名称
+     */
+    private String prodName;
     
     /**
-     * 上架类型 1审核通过后立即上架 2审核通过后放入仓库 3定时上架
+     * 商品ID
      */
-    private String upshelfType;
-    
+    private String prodId;
+
     /**
      * 上架时间
      */
@@ -36,12 +44,12 @@ public class ProductCheckingParam extends ProductBase {
      * 商品类目名称
      */
     private String productCatName;
-    
+
     /**
      * 商品类型
      */
     private String productType;
-
+    
     /**
      * 最高销售价
      */
@@ -53,21 +61,44 @@ public class ProductCheckingParam extends ProductBase {
     private double lowSalePrice;
     
     /**
-     * 商品名称
+     * 最高销量
      */
-    private String prodName;
+    private long highSaleNum;
     
     /**
-     * 商品ID
+     * 最低销量
      */
-    private String prodId;
+    private long lowSaleNum;
+    
+    /**
+     * 剩余最大库存量
+     */
+    private long highStorageNum;
+    
+    /**
+     * 剩余最小库存量
+     */
+    private long lowStorageNum;
+    
+    /**
+     * 下架状态
+     */
+    private String downState;
 
-    public String getUpshelfType() {
-        return upshelfType;
+    public String getProdName() {
+        return prodName;
     }
 
-    public void setUpshelfType(String upshelfType) {
-        this.upshelfType = upshelfType;
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
+    }
+
+    public String getProdId() {
+        return prodId;
+    }
+
+    public void setProdId(String prodId) {
+        this.prodId = prodId;
     }
 
     public Date getUpTime() {
@@ -126,21 +157,44 @@ public class ProductCheckingParam extends ProductBase {
         this.lowSalePrice = lowSalePrice;
     }
 
-    public String getProdName() {
-        return prodName;
+    public long getHighSaleNum() {
+        return highSaleNum;
     }
 
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
+    public void setHighSaleNum(long highSaleNum) {
+        this.highSaleNum = highSaleNum;
     }
 
-    public String getProdId() {
-        return prodId;
+    public long getLowSaleNum() {
+        return lowSaleNum;
     }
 
-    public void setProdId(String prodId) {
-        this.prodId = prodId;
+    public void setLowSaleNum(long lowSaleNum) {
+        this.lowSaleNum = lowSaleNum;
     }
-    
+
+    public long getHighStorageNum() {
+        return highStorageNum;
+    }
+
+    public void setHighStorageNum(long highStorageNum) {
+        this.highStorageNum = highStorageNum;
+    }
+
+    public long getLowStorageNum() {
+        return lowStorageNum;
+    }
+
+    public void setLowStorageNum(long lowStorageNum) {
+        this.lowStorageNum = lowStorageNum;
+    }
+
+    public String getDownState() {
+        return downState;
+    }
+
+    public void setDownState(String downState) {
+        this.downState = downState;
+    }
     
 }

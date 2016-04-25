@@ -9,11 +9,7 @@ package com.ai.slp.product.api.product.param;
  * @author lipeng
  */
 public class ProductEditParam extends ProductBase{
-    /**
-     * 状态
-     * 1未编辑2已编辑
-     */
-    private String state;
+    
     /**
      * 商品名称
      */
@@ -34,20 +30,17 @@ public class ProductEditParam extends ProductBase{
      * 商品类型
      */
     private String productType;
+
     /**
-     * 最高价格
+     * 最高销售价
      */
-    private double highPrice;
+    private double highSalePrice;
+    
     /**
-     * 最低价格
+     * 最低销售价
      */
-    private double floorPrice;
-    public String getState() {
-        return state;
-    }
-    public void setState(String state) {
-        this.state = state;
-    }
+    private double lowSalePrice;
+    
     public String getProdName() {
         return prodName;
     }
@@ -78,17 +71,17 @@ public class ProductEditParam extends ProductBase{
     public void setProductType(String productType) {
         this.productType = productType;
     }
-    public double getHighPrice() {
-        return highPrice;
+    public double getHighSalePrice() {
+        return highSalePrice;
     }
-    public void setHighPrice(double highPrice) {
-        this.highPrice = highPrice;
+    public void setHighSalePrice(double highSalePrice) {
+        this.highSalePrice = highSalePrice;
     }
-    public double getFloorPrice() {
-        return floorPrice;
+    public double getLowSalePrice() {
+        return lowSalePrice;
     }
-    public void setFloorPrice(double floorPrice) {
-        this.floorPrice = floorPrice;
+    public void setLowSalePrice(double lowSalePrice) {
+        this.lowSalePrice = lowSalePrice;
     }
     
     
