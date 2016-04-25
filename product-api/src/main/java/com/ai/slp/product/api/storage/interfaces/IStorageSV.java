@@ -185,7 +185,7 @@ public interface IStorageSV {
     @interface UpdateStorageGroupSalePrice{}
 
     /**
-     * 查询标准品库存组列表,适用于添加商城商品销售价<br>
+     * 查询标准品列表,包含标准品的库存组,适用于商城商品定销售价<br>
      *  库存组不包括废弃状态的
      *
      * @param groupQuery 库存组查询信息对象

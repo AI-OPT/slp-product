@@ -19,6 +19,8 @@ public class ProSkuSalPrice extends BaseInfo {
     /**
      * sku单品标识
      */
+    @NotNull(message = "SKU单品标识不能为空",
+            groups = { IProductSV.UpdateMultSKUSalePrice.class })
     private String skuId;
     /**
      * 销售价

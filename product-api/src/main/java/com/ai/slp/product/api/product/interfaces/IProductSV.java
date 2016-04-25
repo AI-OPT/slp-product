@@ -60,4 +60,19 @@ public interface IProductSV {
     public BaseResponse updateMultSKUSalePrice(List<ProSkuSalPrice> skuSalPrices)
             throws BusinessException,SystemException;
     @interface UpdateMultSKUSalePrice{}
+
+    /**
+     * 批量保存SKU信息<br>
+     *
+     * @param skuInfoList sku销售价
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0103
+     */
+    public BaseResponse saveMultSKUInfo(List<ProSkuInfo> skuInfoList)
+            throws BusinessException,SystemException;
+    @interface SaveMultSKUInfo{}
 }
