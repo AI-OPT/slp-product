@@ -16,8 +16,13 @@ import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
  */
 public interface IProductStorageSaleSV {
     
+    //TODO待上架是什么状态？
     /**
-     * 查询仓库中的全部商品
+     * 查询仓库中的全部商品<br>
+     * 不判断状态返回所有商品<br>
+     * 根据状态不同返回不同类型的集合：<br>
+     * 5在售61售罄下架62废弃下架<br>
+     * 待上架
      * 
      * @param productStorageSaleParam
      * @return 商品管理售中与仓库商品返回类集合
@@ -28,59 +33,6 @@ public interface IProductStorageSaleSV {
      */
     public PageInfo<ProductStorageSale> queryStorageProduct(ProductStorageSaleParam productStorageSaleParam)throws BusinessException,SystemException;
     @interface QueryStorageProduct {}
-    
-
-    /**
-     * 查询仓库中售罄下架商品
-     * 
-     * @param productStorageSaleParam
-     * @return 商品管理售中与仓库商品返回类集合
-     * @throws BusinessException
-     * @throws SystemException
-     * @author lipeng
-    *  @ApiCode PROMAN_0201
-     */
-    public PageInfo<ProductStorageSale> querySoldOutDownProduct(ProductStorageSaleParam productStorageSaleParam)throws BusinessException,SystemException;
-    @interface QuerySoldOutDownProduct {}
-    
-    /**
-     * 查询仓库中待上架商品
-     * 
-     * @param productStorageSaleParam
-     * @return 商品管理售中与仓库商品返回类集合
-     * @throws BusinessException
-     * @throws SystemException
-     * @author lipeng
-    *  @ApiCode PROMAN_0202
-     */
-    public PageInfo<ProductStorageSale> queryWaitUpProduct(ProductStorageSaleParam productStorageSaleParam)throws BusinessException,SystemException;
-    @interface QueryWaitUpProduct {}
-    
-    /**
-     * 查询仓库中废弃下架商品
-     * 
-     * @param productStorageSaleParam
-     * @return 商品管理售中与仓库商品返回类集合
-     * @throws BusinessException
-     * @throws SystemException
-     * @author lipeng
-    *  @ApiCode PROMAN_0203
-     */
-    public PageInfo<ProductStorageSale> queryDisDownProduct(ProductStorageSaleParam productStorageSaleParam)throws BusinessException,SystemException;
-    @interface QueryDisDownProduct {}
-    
-    /**
-     * 查询仓库中售中商品
-     * 
-     * @param productStorageSaleParam
-     * @return 商品管理售中与仓库商品返回类集合
-     * @throws BusinessException
-     * @throws SystemException
-     * @author lipeng
-    *  @ApiCode PROMAN_0203
-     */
-    public PageInfo<ProductStorageSale> querySaleingProduct(ProductStorageSaleParam productStorageSaleParam)throws BusinessException,SystemException;
-    @interface QuerySaleingProduct {}
     
     
 }

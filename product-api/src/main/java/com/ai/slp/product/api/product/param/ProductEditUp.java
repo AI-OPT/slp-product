@@ -24,7 +24,7 @@ public class ProductEditUp extends BaseResponse{
     private String productCatId;
     
     /**
-     * 商品类目名称
+     * 类目名称
      */
     private String productCatName;
     
@@ -46,7 +46,7 @@ public class ProductEditUp extends BaseResponse{
     /**
      * 价格
      */
-    private double salePrice;
+    private long salePrice;
     
     /**
      * 总库存
@@ -55,25 +55,29 @@ public class ProductEditUp extends BaseResponse{
     
     /**
      * 状态
-     * 1未编辑2已编辑3审核中4审核未通过
-     * 5在售6仓库中（审核通过放入）61售罄下架62自动下架7停用8废弃
+     * 0
+     * 1未编辑2已编辑
+     * 3审核中4审核未通过
+     * 5在售
+     * 6仓库中（审核通过放入） 61售罄下架62废弃下架63自动下架
+     * 7停用8废弃
      */
     private String state;
     
     /**
-     * 生成时间-待编辑
+     * 申请优先级:1优先0普通
+     */
+    private int priorityNumber;
+    
+    /**
+     * 优先理由
+     */
+    private String priorityReason;
+    
+    /**
+     * 生成时间-排序按时间升序
      */
     private Date creatTime;
-    
-    /**
-     * 拒绝时间-被拒绝
-     */
-    private Date refuseTime;
-    
-    /**
-     * 提交时间-审核中即提交审核的时间
-     */
-    private Date checkTime;
     
     /**
      * 申请优先
@@ -138,11 +142,11 @@ public class ProductEditUp extends BaseResponse{
         this.prodName = prodName;
     }
 
-    public double getSalePrice() {
+    public long getSalePrice() {
         return salePrice;
     }
 
-    public void setSalePrice(double salePrice) {
+    public void setSalePrice(long salePrice) {
         this.salePrice = salePrice;
     }
 
@@ -162,28 +166,28 @@ public class ProductEditUp extends BaseResponse{
         this.state = state;
     }
 
+    public int getPriorityNumber() {
+        return priorityNumber;
+    }
+
+    public void setPriorityNumber(int priorityNumber) {
+        this.priorityNumber = priorityNumber;
+    }
+
+    public String getPriorityReason() {
+        return priorityReason;
+    }
+
+    public void setPriorityReason(String priorityReason) {
+        this.priorityReason = priorityReason;
+    }
+
     public Date getCreatTime() {
         return creatTime;
     }
 
     public void setCreatTime(Date creatTime) {
         this.creatTime = creatTime;
-    }
-
-    public Date getRefuseTime() {
-        return refuseTime;
-    }
-
-    public void setRefuseTime(Date refuseTime) {
-        this.refuseTime = refuseTime;
-    }
-
-    public Date getCheckTime() {
-        return checkTime;
-    }
-
-    public void setCheckTime(Date checkTime) {
-        this.checkTime = checkTime;
     }
 
     public String getPrecedence() {
@@ -209,6 +213,6 @@ public class ProductEditUp extends BaseResponse{
     public void setRefuseDes(String refuseDes) {
         this.refuseDes = refuseDes;
     }
-    
+
     
 }

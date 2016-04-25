@@ -12,7 +12,7 @@ import com.ai.opt.base.vo.BaseInfo;
  * 
  * @author lipeng
  */
-public class ProductStorageSaleParam extends BaseInfo{
+public class ProductStorageSaleParam extends ProductBase{
     
 
     /**
@@ -26,39 +26,34 @@ public class ProductStorageSaleParam extends BaseInfo{
     private String prodId;
 
     /**
-     * 上架时间
+     * 上架起始时间
      */
-    private Date upTime;
+    private Date upBeginTime;
     
     /**
-     * 下架时间
+     * 上架截止时间
      */
-    private Date downTime;
+    private Date upEndTime;
 
     /**
      * 商品类目ID
      */
     private String productCatId;
-    
-    /**
-     * 商品类目名称
-     */
-    private String productCatName;
 
     /**
-     * 商品类型
+     * 商品类型:实物、虚拟
      */
     private String productType;
     
     /**
      * 最高销售价
      */
-    private double highSalePrice;
+    private long highSalePrice;
     
     /**
      * 最低销售价
      */
-    private double lowSalePrice;
+    private long lowSalePrice;
     
     /**
      * 最高销量
@@ -79,11 +74,6 @@ public class ProductStorageSaleParam extends BaseInfo{
      * 剩余最小库存量
      */
     private long lowStorageNum;
-    
-    /**
-     * 下架状态
-     */
-    private String downState;
 
     public String getProdName() {
         return prodName;
@@ -101,20 +91,20 @@ public class ProductStorageSaleParam extends BaseInfo{
         this.prodId = prodId;
     }
 
-    public Date getUpTime() {
-        return upTime;
+    public Date getUpBeginTime() {
+        return upBeginTime;
     }
 
-    public void setUpTime(Date upTime) {
-        this.upTime = upTime;
+    public void setUpBeginTime(Date upBeginTime) {
+        this.upBeginTime = upBeginTime;
     }
 
-    public Date getDownTime() {
-        return downTime;
+    public Date getUpEndTime() {
+        return upEndTime;
     }
 
-    public void setDownTime(Date downTime) {
-        this.downTime = downTime;
+    public void setUpEndTime(Date upEndTime) {
+        this.upEndTime = upEndTime;
     }
 
     public String getProductCatId() {
@@ -125,14 +115,6 @@ public class ProductStorageSaleParam extends BaseInfo{
         this.productCatId = productCatId;
     }
 
-    public String getProductCatName() {
-        return productCatName;
-    }
-
-    public void setProductCatName(String productCatName) {
-        this.productCatName = productCatName;
-    }
-
     public String getProductType() {
         return productType;
     }
@@ -141,19 +123,19 @@ public class ProductStorageSaleParam extends BaseInfo{
         this.productType = productType;
     }
 
-    public double getHighSalePrice() {
+    public long getHighSalePrice() {
         return highSalePrice;
     }
 
-    public void setHighSalePrice(double highSalePrice) {
+    public void setHighSalePrice(long highSalePrice) {
         this.highSalePrice = highSalePrice;
     }
 
-    public double getLowSalePrice() {
+    public long getLowSalePrice() {
         return lowSalePrice;
     }
 
-    public void setLowSalePrice(double lowSalePrice) {
+    public void setLowSalePrice(long lowSalePrice) {
         this.lowSalePrice = lowSalePrice;
     }
 
@@ -189,12 +171,6 @@ public class ProductStorageSaleParam extends BaseInfo{
         this.lowStorageNum = lowStorageNum;
     }
 
-    public String getDownState() {
-        return downState;
-    }
-
-    public void setDownState(String downState) {
-        this.downState = downState;
-    }
+    
     
 }

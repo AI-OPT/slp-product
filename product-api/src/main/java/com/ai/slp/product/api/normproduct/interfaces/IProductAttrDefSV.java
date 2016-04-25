@@ -32,9 +32,23 @@ public interface IProductAttrDefSV {
      * @author lipeng
     *  @ApiCode PROCAT_0200
      */
-    public PageInfo<ProductAttrDef> queryProductAttr(ProductAttrDefParam productAttrDefParam)
+    public PageInfo<ProductAttrDef> queryProductAttrs(ProductAttrDefParam productAttrDefParam)
             throws BusinessException, SystemException;
-    @interface QueryProductAttr{}
+    @interface QueryProductAttrs {}
+    
+    /**
+     * 单个属性查询
+     * 
+     * @param productAttr
+     * @return 通过ID查询单个属性
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng
+    *  @ApiCode PROCAT_0208
+     */
+    public ProductAttrDef queryProductAttr(ProductAttr productAttr)
+            throws BusinessException, SystemException;
+    @interface QueryProductAttr {}
     
     /**
      * 属性添加
@@ -88,9 +102,23 @@ public interface IProductAttrDefSV {
      * @author lipeng
     *  @ApiCode PROCAT_0204
      */
-    public PageInfo<ProductAttrVal> queryProductAttrVal(ProductAttr productAttr)
+    public PageInfo<ProductAttrVal> queryProductAttrValues(ProductAttr productAttr)
             throws BusinessException, SystemException;
-    @interface QueryProductAttrVal{}
+    @interface QueryProductAttrValues {}
+    
+    /**
+     * 单个属性值查询
+     * 
+     * @param ProductAttrValParam
+     * @return 符合条件的单个属性值
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng
+    *  @ApiCode
+     */
+    public ProductAttrVal queryProductAttrVal(ProductAttrValParam ProductAttrValParam)
+            throws BusinessException, SystemException;
+    @interface QueryProductAttrVal {}
     
     /**
      * 属性值添加
