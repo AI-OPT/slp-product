@@ -16,6 +16,11 @@ public class ProductRefuseParam extends ProductBase{
      * 拒绝原因-被拒绝参数
      */
     private String refuseReason;
+    
+    /**
+     * 拒绝描述-被拒绝参数
+     */
+    private String refuseDes;
 
     /**
      * 商品类目ID

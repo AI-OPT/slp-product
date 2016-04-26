@@ -80,11 +80,6 @@ public class ProductEditUp extends BaseResponse{
     private Date creatTime;
     
     /**
-     * 申请优先
-     */
-    private String precedence;
-    
-    /**
      * 拒绝原因-被拒绝参数
      */
     private String refuseReason;
@@ -188,14 +183,6 @@ public class ProductEditUp extends BaseResponse{
 
     public void setCreatTime(Date creatTime) {
         this.creatTime = creatTime;
-    }
-
-    public String getPrecedence() {
-        return precedence;
-    }
-
-    public void setPrecedence(String precedence) {
-        this.precedence = precedence;
     }
 
     public String getRefuseReason() {

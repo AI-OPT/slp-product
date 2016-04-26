@@ -16,13 +16,12 @@ import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
  */
 public interface IProductStorageSaleSV {
     
-    //TODO待上架是什么状态？
     /**
      * 查询仓库中的全部商品<br>
      * 不判断状态返回所有商品<br>
      * 根据状态不同返回不同类型的集合：<br>
      * 5在售61售罄下架62废弃下架<br>
-     * 待上架
+     * 待上架:6仓库中（审核通过放入） 61售罄下架 定时上架-通过上架类型判断<br>
      * 
      * @param productStorageSaleParam
      * @return 商品管理售中与仓库商品返回类集合

@@ -1,10 +1,9 @@
 package com.ai.slp.product.api.product.param;
 
+import javax.validation.constraints.NotNull;
+
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
-import com.sun.javafx.beans.annotations.NonNull;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 商城商品查询对象<br>
