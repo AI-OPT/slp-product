@@ -30,6 +30,10 @@ public class ProductInfo extends BaseInfo {
      */
     private String productType;
     /**
+     * 商品买点
+     */
+    private String sellPoint;
+    /**
      * 生效时间
      */
     private Date activeTime;
@@ -126,5 +130,13 @@ public class ProductInfo extends BaseInfo {
 
     public void setSaleAttrs(Map<AttrDefResponse, List<NormProductAttrValResponse>> saleAttrs) {
         this.saleAttrs = saleAttrs;
+    }
+
+    public String getSellPoint() {
+        return sellPoint;
+    }
+
+    public void setSellPoint(String sellPoint) {
+        this.sellPoint = sellPoint;
     }
 }

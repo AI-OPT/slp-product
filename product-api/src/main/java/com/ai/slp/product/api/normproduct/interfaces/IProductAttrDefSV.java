@@ -133,5 +133,5 @@ public interface IProductAttrDefSV {
     public BaseResponse deleteProductAttrVal(ProductAttrValParam productAttrValParam)
             throws BusinessException, SystemException;
     @interface DeleteProductAttrVal{}
-    
+
 }
