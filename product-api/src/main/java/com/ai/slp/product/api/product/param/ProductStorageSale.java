@@ -60,24 +60,15 @@ public class ProductStorageSale extends BaseResponse{
     private long saleNum;
 
     /**
-     * 下架状态
+     * 状态
+     * 0
+     * 1未编辑2已编辑
+     * 3审核中4审核未通过
+     * 5在售
+     * 6仓库中（审核通过放入） 61售罄下架62废弃下架63自动下架
+     * 7停用8废弃
      */
-    private String downState;
-    
-    /**
-     * 下架时间
-     */
-    private Date downTime;
-    
-    /**
-     * 上架时间
-     */
-    private Date upTime;
-    
-    /**
-     * 废弃时间
-     */
-    private Date disTime;
+    private String state;
 
     public String getProdName() {
         return prodName;
@@ -151,38 +142,13 @@ public class ProductStorageSale extends BaseResponse{
         this.saleNum = saleNum;
     }
 
-    public String getDownState() {
-        return downState;
+    public String getState() {
+        return state;
     }
 
-    public void setDownState(String downState) {
-        this.downState = downState;
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public Date getDownTime() {
-        return downTime;
-    }
-
-    public void setDownTime(Date downTime) {
-        this.downTime = downTime;
-    }
-
-    public Date getUpTime() {
-        return upTime;
-    }
-
-    public void setUpTime(Date upTime) {
-        this.upTime = upTime;
-    }
-
-    public Date getDisTime() {
-        return disTime;
-    }
-
-    public void setDisTime(Date disTime) {
-        this.disTime = disTime;
-    }
-    
-    
     
 }

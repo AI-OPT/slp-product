@@ -19,10 +19,6 @@ public class ProductEditParam extends ProductBase{
      */
     private String prodId;
     /**
-     * 商品类目名称
-     */
-    private String productCatName;
-    /**
      * 商品类目ID
      */
     private String productCatId;
@@ -34,12 +30,12 @@ public class ProductEditParam extends ProductBase{
     /**
      * 最高销售价
      */
-    private double highSalePrice;
+    private long highSalePrice;
     
     /**
      * 最低销售价
      */
-    private double lowSalePrice;
+    private long lowSalePrice;
     
     public String getProdName() {
         return prodName;
@@ -53,12 +49,6 @@ public class ProductEditParam extends ProductBase{
     public void setProdId(String prodId) {
         this.prodId = prodId;
     }
-    public String getProductCatName() {
-        return productCatName;
-    }
-    public void setProductCatName(String productCatName) {
-        this.productCatName = productCatName;
-    }
     public String getProductCatId() {
         return productCatId;
     }
@@ -71,16 +61,16 @@ public class ProductEditParam extends ProductBase{
     public void setProductType(String productType) {
         this.productType = productType;
     }
-    public double getHighSalePrice() {
+    public long getHighSalePrice() {
         return highSalePrice;
     }
-    public void setHighSalePrice(double highSalePrice) {
+    public void setHighSalePrice(long highSalePrice) {
         this.highSalePrice = highSalePrice;
     }
-    public double getLowSalePrice() {
+    public long getLowSalePrice() {
         return lowSalePrice;
     }
-    public void setLowSalePrice(double lowSalePrice) {
+    public void setLowSalePrice(long lowSalePrice) {
         this.lowSalePrice = lowSalePrice;
     }
     

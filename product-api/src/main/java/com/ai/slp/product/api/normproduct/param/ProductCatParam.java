@@ -52,6 +52,30 @@ public class ProductCatParam extends ProductCatBase {
 	 */
 	private long serialNumber;
 	
+    public String getFirstLetter() {
+        return firstLetter;
+    }
+
+    public void setFirstLetter(String firstLetter) {
+        this.firstLetter = firstLetter;
+    }
+
+    public long getCatLevel() {
+        return catLevel;
+    }
+
+    public void setCatLevel(long catLevel) {
+        this.catLevel = catLevel;
+    }
+
+    public long getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(long serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
     public String getProductCatId() {
         return productCatId;
     }

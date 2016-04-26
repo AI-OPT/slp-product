@@ -18,24 +18,19 @@ public class ProductCheckingParam extends ProductBase {
     private String upshelfType;
     
     /**
-     * 上架时间
+     * 上架起始时间
      */
-    private Date upTime;
+    private Date upStartTime;
     
     /**
-     * 下架时间
+     * 上架截止时间
      */
-    private Date downTime;
+    private Date upEndTime;
 
     /**
      * 商品类目ID
      */
     private String productCatId;
-    
-    /**
-     * 商品类目名称
-     */
-    private String productCatName;
     
     /**
      * 商品类型
@@ -45,12 +40,12 @@ public class ProductCheckingParam extends ProductBase {
     /**
      * 最高销售价
      */
-    private double highSalePrice;
+    private long highSalePrice;
     
     /**
      * 最低销售价
      */
-    private double lowSalePrice;
+    private long lowSalePrice;
     
     /**
      * 商品名称
@@ -70,20 +65,20 @@ public class ProductCheckingParam extends ProductBase {
         this.upshelfType = upshelfType;
     }
 
-    public Date getUpTime() {
-        return upTime;
+    public Date getUpStartTime() {
+        return upStartTime;
     }
 
-    public void setUpTime(Date upTime) {
-        this.upTime = upTime;
+    public void setUpStartTime(Date upStartTime) {
+        this.upStartTime = upStartTime;
     }
 
-    public Date getDownTime() {
-        return downTime;
+    public Date getUpEndTime() {
+        return upEndTime;
     }
 
-    public void setDownTime(Date downTime) {
-        this.downTime = downTime;
+    public void setUpEndTime(Date upEndTime) {
+        this.upEndTime = upEndTime;
     }
 
     public String getProductCatId() {
@@ -94,14 +89,6 @@ public class ProductCheckingParam extends ProductBase {
         this.productCatId = productCatId;
     }
 
-    public String getProductCatName() {
-        return productCatName;
-    }
-
-    public void setProductCatName(String productCatName) {
-        this.productCatName = productCatName;
-    }
-
     public String getProductType() {
         return productType;
     }
@@ -110,19 +97,19 @@ public class ProductCheckingParam extends ProductBase {
         this.productType = productType;
     }
 
-    public double getHighSalePrice() {
+    public long getHighSalePrice() {
         return highSalePrice;
     }
 
-    public void setHighSalePrice(double highSalePrice) {
+    public void setHighSalePrice(long highSalePrice) {
         this.highSalePrice = highSalePrice;
     }
 
-    public double getLowSalePrice() {
+    public long getLowSalePrice() {
         return lowSalePrice;
     }
 
-    public void setLowSalePrice(double lowSalePrice) {
+    public void setLowSalePrice(long lowSalePrice) {
         this.lowSalePrice = lowSalePrice;
     }
 
@@ -141,6 +128,6 @@ public class ProductCheckingParam extends ProductBase {
     public void setProdId(String prodId) {
         this.prodId = prodId;
     }
-    
+
     
 }

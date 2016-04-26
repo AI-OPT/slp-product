@@ -16,10 +16,12 @@ import com.ai.slp.product.api.product.param.ProductRefuseParam;
  * 
  * @author lipeng
  */
-public interface IProductManageSV {
+public interface IProductEditUpSV {
     
     /**
-     * 商品管理查询商品编辑状态
+     * 商品管理查询商品编辑状态<br>
+     * 状态 1未编辑2已编辑<br>
+     * 按生成时间排序<br>
      * 
      * @param productEditParam
      * @return 满足条件的商品集合
@@ -32,7 +34,8 @@ public interface IProductManageSV {
     @interface QueryProductEdit {}
     
     /**
-     * 商品管理查询商品被拒绝信息-与商品审核中查询共用
+     * 商品管理查询商品被拒绝信息-与商品审核中查询共用<br>
+     * 拒绝时间为操作时间<br>
      * 
      * @param productRefuseParam
      * @return 满足条件的商品集合
@@ -45,7 +48,9 @@ public interface IProductManageSV {
     @interface QueryProductRefuse {}
     
     /**
-     * 商品管理查询商品审核状态-与商品审核中查询共用
+     * 商品管理查询商品审核状态-与商品审核中查询共用<br>
+     * 状态：3审核中<br>
+     * 提交时间为操作时间<br>
      * 
      * @param productCheckingParam
      * @return 满足条件的商品集合

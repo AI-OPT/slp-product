@@ -15,8 +15,13 @@ import com.ai.opt.base.vo.BaseInfo;
 public class ProductBase extends BaseInfo{
     
     /**
-     * 状态 1未编辑2已编辑3审核中4审核未通过
-     * 5在售6仓库中（审核通过放入）61售罄下架62自动下架7停用8废弃
+     * 状态
+     * 0
+     * 1未编辑2已编辑
+     * 3审核中4审核未通过
+     * 5在售
+     * 6仓库中（审核通过放入） 61售罄下架62废弃下架63自动下架
+     * 7停用8废弃
      */
     private String state;
     
