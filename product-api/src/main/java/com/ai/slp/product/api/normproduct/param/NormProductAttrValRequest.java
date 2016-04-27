@@ -56,4 +56,60 @@ public class NormProductAttrValRequest extends BaseInfo {
      * 为空时,则使用服务端接收时间
      */
     private Date operTime;
+
+    public Long getProductAttrValId() {
+        return productAttrValId;
+    }
+
+    public void setProductAttrValId(Long productAttrValId) {
+        this.productAttrValId = productAttrValId;
+    }
+
+    public Long getAttrId() {
+        return attrId;
+    }
+
+    public void setAttrId(Long attrId) {
+        this.attrId = attrId;
+    }
+
+    public Long getAttrValId() {
+        return attrValId;
+    }
+
+    public void setAttrValId(Long attrValId) {
+        this.attrValId = attrValId;
+    }
+
+    public String getAttrVal() {
+        return attrVal;
+    }
+
+    public void setAttrVal(String attrVal) {
+        this.attrVal = attrVal;
+    }
+
+    public String getAttrVal2() {
+        return attrVal2;
+    }
+
+    public void setAttrVal2(String attrVal2) {
+        this.attrVal2 = attrVal2;
+    }
+
+    public Long getOperId() {
+        return operId;
+    }
+
+    public void setOperId(Long operId) {
+        this.operId = operId;
+    }
+
+    public Date getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Date operTime) {
+        this.operTime = operTime;
+    }
 }

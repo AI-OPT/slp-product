@@ -16,31 +16,6 @@ import java.util.List;
 public class NormProductSaveRequest extends NormProductBase {
 
     /**
-     * 有效期类型<br>
-     * 1:固定有效期;2:灵活有效期
-     */
-    private String activeType;
-    /**
-     * 生效时间<br>
-     * 若有效期类型为"固定有效期",则不能为空
-     */
-    private Date activeTime;
-    /**
-     * 失效时间<br>
-     * 若有效期类型为"固定有效期",则不能为空
-     */
-    private Date inActiveTime;
-    /**
-     * 有效周期<br>
-     * 若有效期类型为"灵活有效期",则不能为空
-     */
-    private Integer activeCycle;
-    /**
-     * 单位<br>
-     * 若有效期类型为"灵活有效期",则不能为空
-     */
-    private String unit;
-    /**
      * 操作人ID<br>
      * 更新时不能为空
      */
@@ -63,46 +38,6 @@ public class NormProductSaveRequest extends NormProductBase {
 
     public void setAttrValList(List<NormProductAttrValRequest> attrValList) {
         this.attrValList = attrValList;
-    }
-
-    public String getActiveType() {
-        return activeType;
-    }
-
-    public void setActiveType(String activeType) {
-        this.activeType = activeType;
-    }
-
-    public Date getActiveTime() {
-        return activeTime;
-    }
-
-    public void setActiveTime(Date activeTime) {
-        this.activeTime = activeTime;
-    }
-
-    public Date getInActiveTime() {
-        return inActiveTime;
-    }
-
-    public void setInActiveTime(Date inActiveTime) {
-        this.inActiveTime = inActiveTime;
-    }
-
-    public Integer getActiveCycle() {
-        return activeCycle;
-    }
-
-    public void setActiveCycle(Integer activeCycle) {
-        this.activeCycle = activeCycle;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
     }
 
     public Long getOperId() {

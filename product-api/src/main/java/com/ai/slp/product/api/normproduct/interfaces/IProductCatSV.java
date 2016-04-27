@@ -130,6 +130,7 @@ public interface IProductCatSV {
 	 */
 	public Map<ProductAttrDef,List<ProductAttrVal>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
 		throws BusinessException,SystemException;
+	@interface QueryAttrByCatAndType{}
 
 	/**
 	 * 查询指定标准品下某种类型的属性集合<br>
@@ -144,4 +145,5 @@ public interface IProductCatSV {
 	 */
 	public Map<ProductAttrDef,List<ProductAttrVal>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
 			throws BusinessException,SystemException;
+	@interface QueryAttrByNormProduct{}
 }
