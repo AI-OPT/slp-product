@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.StandedProdAttrMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.StandedProdAttr" >
+    <id column="STANDED_PROD_ATTR_ID" property="standedProdAttrId" jdbcType="DECIMAL" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
+    <result column="ATTR_ID" property="attrId" jdbcType="DECIMAL" />
+    <result column="ATTRVALUE_DEF_ID" property="attrvalueDefId" jdbcType="VARCHAR" />
+    <result column="ATTR_VALUE_NAME" property="attrValueName" jdbcType="VARCHAR" />
+    <result column="ATTR_VALUE_NAME2" property="attrValueName2" jdbcType="VARCHAR" />
+    <result column="SERIAL_NUMBER" property="serialNumber" jdbcType="DECIMAL" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    STANDED_PROD_ATTR_ID, TENANT_ID, STANDED_PROD_ID, ATTR_ID, ATTRVALUE_DEF_ID, ATTR_VALUE_NAME, 
+    ATTR_VALUE_NAME2, SERIAL_NUMBER, STATE, OPER_ID, OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from standed_prod_attr
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from standed_prod_attr
+    where STANDED_PROD_ATTR_ID = #{standedProdAttrId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from standed_prod_attr
+    where STANDED_PROD_ATTR_ID = #{standedProdAttrId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria" >
+    delete from standed_prod_attr
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProdAttr" >
+    insert into standed_prod_attr (STANDED_PROD_ATTR_ID, TENANT_ID, STANDED_PROD_ID, 
+      ATTR_ID, ATTRVALUE_DEF_ID, ATTR_VALUE_NAME, 
+      ATTR_VALUE_NAME2, SERIAL_NUMBER, STATE, 
+      OPER_ID, OPER_TIME)
+    values (#{standedProdAttrId,jdbcType=DECIMAL}, #{tenantId,jdbcType=VARCHAR}, #{standedProdId,jdbcType=VARCHAR}, 
+      #{attrId,jdbcType=DECIMAL}, #{attrvalueDefId,jdbcType=VARCHAR}, #{attrValueName,jdbcType=VARCHAR}, 
+      #{attrValueName2,jdbcType=VARCHAR}, #{serialNumber,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, 
+      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProdAttr" >
+    insert into standed_prod_attr
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="standedProdAttrId != null" >
+        STANDED_PROD_ATTR_ID,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID,
+      </if>
+      <if test="attrId != null" >
+        ATTR_ID,
+      </if>
+      <if test="attrvalueDefId != null" >
+        ATTRVALUE_DEF_ID,
+      </if>
+      <if test="attrValueName != null" >
+        ATTR_VALUE_NAME,
+      </if>
+      <if test="attrValueName2 != null" >
+        ATTR_VALUE_NAME2,
+      </if>
+      <if test="serialNumber != null" >
+        SERIAL_NUMBER,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="standedProdAttrId != null" >
+        #{standedProdAttrId,jdbcType=DECIMAL},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProdId != null" >
+        #{standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrId != null" >
+        #{attrId,jdbcType=DECIMAL},
+      </if>
+      <if test="attrvalueDefId != null" >
+        #{attrvalueDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrValueName != null" >
+        #{attrValueName,jdbcType=VARCHAR},
+      </if>
+      <if test="attrValueName2 != null" >
+        #{attrValueName2,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria" resultType="java.lang.Integer" >
+    select count(*) from standed_prod_attr
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update standed_prod_attr
+    <set >
+      <if test="record.standedProdAttrId != null" >
+        STANDED_PROD_ATTR_ID = #{record.standedProdAttrId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.standedProdId != null" >
+        STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attrId != null" >
+        ATTR_ID = #{record.attrId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.attrvalueDefId != null" >
+        ATTRVALUE_DEF_ID = #{record.attrvalueDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attrValueName != null" >
+        ATTR_VALUE_NAME = #{record.attrValueName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attrValueName2 != null" >
+        ATTR_VALUE_NAME2 = #{record.attrValueName2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update standed_prod_attr
+    set STANDED_PROD_ATTR_ID = #{record.standedProdAttrId,jdbcType=DECIMAL},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
+      ATTR_ID = #{record.attrId,jdbcType=DECIMAL},
+      ATTRVALUE_DEF_ID = #{record.attrvalueDefId,jdbcType=VARCHAR},
+      ATTR_VALUE_NAME = #{record.attrValueName,jdbcType=VARCHAR},
+      ATTR_VALUE_NAME2 = #{record.attrValueName2,jdbcType=VARCHAR},
+      SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProdAttr" >
+    update standed_prod_attr
+    <set >
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrId != null" >
+        ATTR_ID = #{attrId,jdbcType=DECIMAL},
+      </if>
+      <if test="attrvalueDefId != null" >
+        ATTRVALUE_DEF_ID = #{attrvalueDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrValueName != null" >
+        ATTR_VALUE_NAME = #{attrValueName,jdbcType=VARCHAR},
+      </if>
+      <if test="attrValueName2 != null" >
+        ATTR_VALUE_NAME2 = #{attrValueName2,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where STANDED_PROD_ATTR_ID = #{standedProdAttrId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProdAttr" >
+    update standed_prod_attr
+    set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
+      ATTR_ID = #{attrId,jdbcType=DECIMAL},
+      ATTRVALUE_DEF_ID = #{attrvalueDefId,jdbcType=VARCHAR},
+      ATTR_VALUE_NAME = #{attrValueName,jdbcType=VARCHAR},
+      ATTR_VALUE_NAME2 = #{attrValueName2,jdbcType=VARCHAR},
+      SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
+      STATE = #{state,jdbcType=VARCHAR},
+      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where STANDED_PROD_ATTR_ID = #{standedProdAttrId,jdbcType=DECIMAL}
+  </update>
+</mapper>

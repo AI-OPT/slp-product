@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.StandedProductMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.StandedProduct" >
+    <id column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="PRODUCT_CAT_ID" property="productCatId" jdbcType="VARCHAR" />
+    <result column="STANDED_PRODUCT_NAME" property="standedProductName" jdbcType="VARCHAR" />
+    <result column="PRODUCT_TYPE" property="productType" jdbcType="VARCHAR" />
+    <result column="MARKET_PRICE" property="marketPrice" jdbcType="DECIMAL" />
+    <result column="ACTIVE_TYPE" property="activeType" jdbcType="CHAR" />
+    <result column="ACTIVE_TIME" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="INACTIVE_TIME" property="inactiveTime" jdbcType="TIMESTAMP" />
+    <result column="ACTIVE_CYCLE" property="activeCycle" jdbcType="DECIMAL" />
+    <result column="UNIT" property="unit" jdbcType="CHAR" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="CREATE_ID" property="createId" jdbcType="DECIMAL" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    STANDED_PROD_ID, TENANT_ID, PRODUCT_CAT_ID, STANDED_PRODUCT_NAME, PRODUCT_TYPE, MARKET_PRICE, 
+    ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, ACTIVE_CYCLE, UNIT, STATE, CREATE_ID, CREATE_TIME, 
+    OPER_ID, OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from standed_product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from standed_product
+    where STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from standed_product
+    where STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductCriteria" >
+    delete from standed_product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProduct" >
+    insert into standed_product (STANDED_PROD_ID, TENANT_ID, PRODUCT_CAT_ID, 
+      STANDED_PRODUCT_NAME, PRODUCT_TYPE, MARKET_PRICE, 
+      ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, 
+      ACTIVE_CYCLE, UNIT, STATE, 
+      CREATE_ID, CREATE_TIME, OPER_ID, 
+      OPER_TIME)
+    values (#{standedProdId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{productCatId,jdbcType=VARCHAR}, 
+      #{standedProductName,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, #{marketPrice,jdbcType=DECIMAL}, 
+      #{activeType,jdbcType=CHAR}, #{activeTime,jdbcType=TIMESTAMP}, #{inactiveTime,jdbcType=TIMESTAMP}, 
+      #{activeCycle,jdbcType=DECIMAL}, #{unit,jdbcType=CHAR}, #{state,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{operId,jdbcType=DECIMAL}, 
+      #{operTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProduct" >
+    insert into standed_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
+      <if test="productCatId != null" >
+        PRODUCT_CAT_ID,
+      </if>
+      <if test="standedProductName != null" >
+        STANDED_PRODUCT_NAME,
+      </if>
+      <if test="productType != null" >
+        PRODUCT_TYPE,
+      </if>
+      <if test="marketPrice != null" >
+        MARKET_PRICE,
+      </if>
+      <if test="activeType != null" >
+        ACTIVE_TYPE,
+      </if>
+      <if test="activeTime != null" >
+        ACTIVE_TIME,
+      </if>
+      <if test="inactiveTime != null" >
+        INACTIVE_TIME,
+      </if>
+      <if test="activeCycle != null" >
+        ACTIVE_CYCLE,
+      </if>
+      <if test="unit != null" >
+        UNIT,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="standedProdId != null" >
+        #{standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="productCatId != null" >
+        #{productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProductName != null" >
+        #{standedProductName,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="marketPrice != null" >
+        #{marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="activeType != null" >
+        #{activeType,jdbcType=CHAR},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inactiveTime != null" >
+        #{inactiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeCycle != null" >
+        #{activeCycle,jdbcType=DECIMAL},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=CHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductCriteria" resultType="java.lang.Integer" >
+    select count(*) from standed_product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update standed_product
+    <set >
+      <if test="record.standedProdId != null" >
+        STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productCatId != null" >
+        PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.standedProductName != null" >
+        STANDED_PRODUCT_NAME = #{record.standedProductName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productType != null" >
+        PRODUCT_TYPE = #{record.productType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.marketPrice != null" >
+        MARKET_PRICE = #{record.marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.activeType != null" >
+        ACTIVE_TYPE = #{record.activeType,jdbcType=CHAR},
+      </if>
+      <if test="record.activeTime != null" >
+        ACTIVE_TIME = #{record.activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.inactiveTime != null" >
+        INACTIVE_TIME = #{record.inactiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.activeCycle != null" >
+        ACTIVE_CYCLE = #{record.activeCycle,jdbcType=DECIMAL},
+      </if>
+      <if test="record.unit != null" >
+        UNIT = #{record.unit,jdbcType=CHAR},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createId != null" >
+        CREATE_ID = #{record.createId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update standed_product
+    set STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
+      STANDED_PRODUCT_NAME = #{record.standedProductName,jdbcType=VARCHAR},
+      PRODUCT_TYPE = #{record.productType,jdbcType=VARCHAR},
+      MARKET_PRICE = #{record.marketPrice,jdbcType=DECIMAL},
+      ACTIVE_TYPE = #{record.activeType,jdbcType=CHAR},
+      ACTIVE_TIME = #{record.activeTime,jdbcType=TIMESTAMP},
+      INACTIVE_TIME = #{record.inactiveTime,jdbcType=TIMESTAMP},
+      ACTIVE_CYCLE = #{record.activeCycle,jdbcType=DECIMAL},
+      UNIT = #{record.unit,jdbcType=CHAR},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      CREATE_ID = #{record.createId,jdbcType=DECIMAL},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProduct" >
+    update standed_product
+    <set >
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="productCatId != null" >
+        PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProductName != null" >
+        STANDED_PRODUCT_NAME = #{standedProductName,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="marketPrice != null" >
+        MARKET_PRICE = #{marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="activeType != null" >
+        ACTIVE_TYPE = #{activeType,jdbcType=CHAR},
+      </if>
+      <if test="activeTime != null" >
+        ACTIVE_TIME = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inactiveTime != null" >
+        INACTIVE_TIME = #{inactiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeCycle != null" >
+        ACTIVE_CYCLE = #{activeCycle,jdbcType=DECIMAL},
+      </if>
+      <if test="unit != null" >
+        UNIT = #{unit,jdbcType=CHAR},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProduct" >
+    update standed_product
+    set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
+      STANDED_PRODUCT_NAME = #{standedProductName,jdbcType=VARCHAR},
+      PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+      MARKET_PRICE = #{marketPrice,jdbcType=DECIMAL},
+      ACTIVE_TYPE = #{activeType,jdbcType=CHAR},
+      ACTIVE_TIME = #{activeTime,jdbcType=TIMESTAMP},
+      INACTIVE_TIME = #{inactiveTime,jdbcType=TIMESTAMP},
+      ACTIVE_CYCLE = #{activeCycle,jdbcType=DECIMAL},
+      UNIT = #{unit,jdbcType=CHAR},
+      STATE = #{state,jdbcType=VARCHAR},
+      CREATE_ID = #{createId,jdbcType=DECIMAL},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR}
+  </update>
+</mapper>
