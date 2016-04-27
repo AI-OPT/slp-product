@@ -6,12 +6,16 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.interfaces.IProdAttrDefSV;
 import com.ai.slp.product.api.normproduct.param.*;
+import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * Created by jackieliu on 16/4/27.
  */
+@Service
+@Component
 public class IProdAttrDefSVImpl implements IProdAttrDefSV {
     @Override
     public PageInfo<ProductAttrDef> queryProductAttrs(ProductAttrDefParam productAttrDefParam) throws BusinessException, SystemException {

@@ -15,4 +15,22 @@ public interface IProdAttrDefAtomSV {
      */
     public int installObj(ProdAttrDef prodAttrDef);
 
+    /**
+     * 根据标识查询商品属性
+     *
+     * @param tenantId 租户id
+     * @param attrId 属性标识
+     * @return
+     */
+    public ProdAttrDef selectById(String tenantId,Long attrId);
+
+    /**
+     * 删除指定标识的商品属性
+     *
+     * @param tenantId 租户id
+     * @param attrId 商品属性标识
+     * @return
+     */
+    public int deleteById(String tenantId,Long attrId);
+
 }

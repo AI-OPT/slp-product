@@ -2,6 +2,7 @@ package com.ai.slp.product.service.atom;
 
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +23,29 @@ public class IProdAttrDefAtomSVTest {
 
     @Test
     public void installTest(){
+        String tenantId = "SLP";
+        long attrId = 123125l;
         ProdAttrDef prodAttrDef = new ProdAttrDef();
-        prodAttrDef.setTenantId("SLP");
-        prodAttrDef.setAttrId(123125l);
+        prodAttrDef.setTenantId(tenantId);
+        prodAttrDef.setAttrId(attrId);
         prodAttrDef.setAttrName("测试属性");
         prodAttrDef.setFirstLetter("C");
         prodAttrDef.setOperId(1l);
         prodAttrDef.setOperTime(new Timestamp(System.currentTimeMillis()));
         prodAttrDef.setState("1");
         prodAttrDef.setValueWay("1");
-        prodAttrDefAtomSV.installObj(prodAttrDef);
+        int ret = prodAttrDefAtomSV.installObj(prodAttrDef);
+        Assert.assertEquals(1,ret);
+        //查询验证是否存在
+        ProdAttrDef selRet = prodAttrDefAtomSV.selectById(tenantId,attrId);
+        Assert.assertNotNull(selRet);
+        Assert.assertEquals(attrId,selRet.getAttrId().longValue());
+        //删除
+        prodAttrDefAtomSV.deleteById(tenantId,attrId);
+
+        //查询验证是否存在
+        selRet = prodAttrDefAtomSV.selectById(tenantId,attrId);
+        Assert.assertNull(selRet);
     }
+
 }
