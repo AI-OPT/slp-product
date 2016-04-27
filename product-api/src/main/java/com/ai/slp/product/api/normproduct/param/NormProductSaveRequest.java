@@ -13,7 +13,7 @@ import java.util.List;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class SaveProductInfoRequest extends NormProductBase {
+public class NormProductSaveRequest extends NormProductBase {
 
     /**
      * 有效期类型<br>

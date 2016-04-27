@@ -1,12 +1,10 @@
 package com.ai.slp.product.api.product.param;
 
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.param.AttrDefResponse;
-import com.ai.slp.product.api.normproduct.param.NormProductAttrValResponse;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 商城商品详情中对象<br>
@@ -49,16 +47,19 @@ public class ProductInfo extends BaseInfo {
      * 周期
      */
     private String unit;
+    /**
+     * 上架类型
+     */
+    private String upshelfType;
+    /**
+     * 上架时间,若上架类型为定时上架时,才有效
+     */
+    private Date upTime;
 
     /**
-     * 关键属性集合,包括属性对应标准品属性值集合
+     * 属性与属性值对应关系
      */
-    private Map<AttrDefResponse,List<NormProductAttrValResponse>> keyAttrs;
-
-    /**
-     * 销售属性集合,包括属性对应标准品属性值集合
-     */
-    private Map<AttrDefResponse,List<NormProductAttrValResponse>> saleAttrs;
+    private Map<Long,Set<Long>> attrAndValueIds;
 
     public String getProductId() {
         return productId;
@@ -116,20 +117,12 @@ public class ProductInfo extends BaseInfo {
         this.unit = unit;
     }
 
-    public Map<AttrDefResponse, List<NormProductAttrValResponse>> getKeyAttrs() {
-        return keyAttrs;
+    public Map<Long, Set<Long>> getAttrAndValueIds() {
+        return attrAndValueIds;
     }
 
-    public void setKeyAttrs(Map<AttrDefResponse, List<NormProductAttrValResponse>> keyAttrs) {
-        this.keyAttrs = keyAttrs;
-    }
-
-    public Map<AttrDefResponse, List<NormProductAttrValResponse>> getSaleAttrs() {
-        return saleAttrs;
-    }
-
-    public void setSaleAttrs(Map<AttrDefResponse, List<NormProductAttrValResponse>> saleAttrs) {
-        this.saleAttrs = saleAttrs;
+    public void setAttrAndValueIds(Map<Long, Set<Long>> attrAndValueIds) {
+        this.attrAndValueIds = attrAndValueIds;
     }
 
     public String getSellPoint() {
@@ -138,5 +131,21 @@ public class ProductInfo extends BaseInfo {
 
     public void setSellPoint(String sellPoint) {
         this.sellPoint = sellPoint;
+    }
+
+    public String getUpshelfType() {
+        return upshelfType;
+    }
+
+    public void setUpshelfType(String upshelfType) {
+        this.upshelfType = upshelfType;
+    }
+
+    public Date getUpTime() {
+        return upTime;
+    }
+
+    public void setUpTime(Date upTime) {
+        this.upTime = upTime;
     }
 }

@@ -3,10 +3,7 @@ package com.ai.slp.product.api.product.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.product.param.ProductEditUp;
-import com.ai.slp.product.api.product.param.ProductCheckingParam;
-import com.ai.slp.product.api.product.param.ProductEditParam;
-import com.ai.slp.product.api.product.param.ProductRefuseParam;
+import com.ai.slp.product.api.product.param.*;
 
 /**
  * 商品管理接口
@@ -61,4 +58,21 @@ public interface IProductEditUpSV {
      */
     public PageInfo<ProductEditUp> queryProductCheck(ProductCheckingParam productCheckingParam) throws BusinessException, SystemException;
     @interface QueryProductCheck {}
+
+    /**
+     * 查询单个商品的受众信息<br>
+     *
+     * @param productInfoQuery 单个商品的标识信息
+     * @return 单个商品的受众信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PROMAN_0103
+     */
+    public AudiencesSetOfProduct queryAudiencesOfProduct(ProductInfoQuery productInfoQuery)
+        throws BusinessException,SystemException;
+    @interface QueryAudiencesOfProduct{}
+
+    //查询目标区域
+
 }

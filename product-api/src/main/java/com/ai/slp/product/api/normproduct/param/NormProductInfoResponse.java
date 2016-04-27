@@ -3,6 +3,7 @@ package com.ai.slp.product.api.normproduct.param;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 标准品详情信息<br>
@@ -53,14 +54,9 @@ public class NormProductInfoResponse extends NormProductBase {
      */
     private String unit;
     /**
-     * 关键属性集合,包括属性对应标准品属性值集合
+     * 属性与属性值对应关系
      */
-    private Map<AttrDefResponse,List<NormProductAttrValResponse>> keyAttrs;
-
-    /**
-     * 销售属性集合,包括属性对应标准品属性值集合
-     */
-    private Map<AttrDefResponse,List<NormProductAttrValResponse>> saleAttrs;
+    private Map<Long,Set<Long>> attrAndValueIds;
 
     public String getCreateName() {
         return createName;
@@ -134,18 +130,11 @@ public class NormProductInfoResponse extends NormProductBase {
         this.operTime = operTime;
     }
 
-    public Map<AttrDefResponse, List<NormProductAttrValResponse>> getKeyAttrs() {
-        return keyAttrs;
+    public Map<Long, Set<Long>> getAttrAndValueIds() {
+        return attrAndValueIds;
     }
 
-    public void setKeyAttrs(Map<AttrDefResponse, List<NormProductAttrValResponse>> keyAttrs) {
-        this.keyAttrs = keyAttrs;
-    }
-    public Map<AttrDefResponse, List<NormProductAttrValResponse>> getSaleAttrs() {
-        return saleAttrs;
-    }
-
-    public void setSaleAttrs(Map<AttrDefResponse, List<NormProductAttrValResponse>> saleAttrs) {
-        this.saleAttrs = saleAttrs;
+    public void setAttrAndValueIds(Map<Long, Set<Long>> attrAndValueIds) {
+        this.attrAndValueIds = attrAndValueIds;
     }
 }

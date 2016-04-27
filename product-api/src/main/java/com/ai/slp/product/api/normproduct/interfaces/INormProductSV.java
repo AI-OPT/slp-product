@@ -71,7 +71,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0103
      */
-    public BaseResponse saveProductInfo(SaveProductInfoRequest productInfoRequest)
+    public BaseResponse saveProductInfo(NormProductSaveRequest productInfoRequest)
             throws BusinessException,SystemException;
     @interface SaveProductInfo {}
 
@@ -86,7 +86,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0104
      */
-    public BaseResponse updateProductInfo(SaveProductInfoRequest productInfoRequest)
+    public BaseResponse updateProductInfo(NormProductSaveRequest productInfoRequest)
             throws BusinessException,SystemException;
     @interface UpdateProductInfo {}
 

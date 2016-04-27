@@ -1,16 +1,12 @@
 package com.ai.slp.product.api.normproduct.interfaces;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.slp.product.api.normproduct.param.AttrDefResponse;
-import com.ai.slp.product.api.normproduct.param.ProductAttrDef;
-import com.ai.slp.product.api.normproduct.param.ProductAttrVal;
-import com.ai.slp.product.api.normproduct.param.ProductAttrValParam;
-import com.ai.slp.product.api.normproduct.param.ProductCatInfo;
-import com.ai.slp.product.api.normproduct.param.ProductCatParam;
+import com.ai.slp.product.api.normproduct.param.*;
 
 /**
  * 商品类目管理接口<br>
@@ -120,4 +116,32 @@ public interface IProductCatSV {
      */
     public BaseResponse deleteProductCatAttrVal(ProductAttrValParam productAttrValParam) throws BusinessException, SystemException;
     @interface DeleteProductCatAttrVal {}
+
+	/**
+	 * 查询指定类目下某种类型的属性集合<br>
+	 * 类型分为:关键属性,销售属性,非关键属性
+	 *
+	 * @param attrQuery 查询类目信息
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiCode PROCAT_0107
+	 */
+	public Map<ProductAttrDef,List<ProductAttrVal>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
+		throws BusinessException,SystemException;
+
+	/**
+	 * 查询指定标准品下某种类型的属性集合<br>
+	 * 类型分为:关键属性,销售属性
+	 *
+	 * @param attrQuery 查询标准品信息
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiCode PROCAT_0108
+	 */
+	public Map<ProductAttrDef,List<ProductAttrVal>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
+			throws BusinessException,SystemException;
 }
