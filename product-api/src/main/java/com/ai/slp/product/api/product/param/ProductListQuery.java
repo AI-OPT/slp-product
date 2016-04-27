@@ -2,6 +2,7 @@ package com.ai.slp.product.api.product.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
+import com.sun.javafx.beans.annotations.NonNull;
 
 import javax.validation.constraints.NotNull;
 
