@@ -2,11 +2,9 @@ package com.ai.slp.product.api.product.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.product.param.ProductEditUp;
-import com.ai.slp.product.api.product.param.ProductCheckingParam;
-import com.ai.slp.product.api.product.param.ProductEditParam;
-import com.ai.slp.product.api.product.param.ProductRefuseParam;
+import com.ai.slp.product.api.product.param.*;
 
 /**
  * 商品管理接口
@@ -61,4 +59,49 @@ public interface IProductEditUpSV {
      */
     public PageInfo<ProductEditUp> queryProductCheck(ProductCheckingParam productCheckingParam) throws BusinessException, SystemException;
     @interface QueryProductCheck {}
+
+    /**
+     * 审核通过调用方法<br>
+     * 通过上架类型 1审核通过后立即上架 2审核通过后放入仓库 3定时上架<br>
+     * 判断改变为哪种状态<br>
+     *
+     * @param productCheckParam
+     * @return 基本信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng
+     *  @ApiCode PROMAN_0103
+     */
+    public BaseResponse passProductCheck(ProductCheckParam productCheckParam) throws BusinessException, SystemException;
+    @interface PassProductCheck {}
+
+    /**
+     * 审核拒绝调用方法<br>
+     * 拒绝后把拒绝类型和原因存入销售商品流程日志表<br>
+     *
+     * @param productCheckParam
+     * @return 基本信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng
+     *  @ApiCode PROMAN_0104
+     */
+    public BaseResponse refuseProductCheck(ProductCheckParam productCheckParam) throws BusinessException, SystemException;
+    @interface RefuseProductCheck {}
+
+    /**
+     * 查询单个商品的受众信息<br>
+     *
+     * @param productInfoQuery 单个商品的标识信息
+     * @return 单个商品的受众信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PROMAN_0105
+     */
+    public AudiencesSetOfProduct queryAudiencesOfProduct(ProductInfoQuery productInfoQuery)
+            throws BusinessException,SystemException;
+    @interface QueryAudiencesOfProduct{}
+
+
 }

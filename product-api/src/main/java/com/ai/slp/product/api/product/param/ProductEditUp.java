@@ -78,7 +78,11 @@ public class ProductEditUp extends BaseResponse{
      * 生成时间-排序按时间升序
      */
     private Date creatTime;
-    
+    /**
+     * 申请优先
+     */
+    private String precedence;
+
     /**
      * 拒绝原因-被拒绝参数
      */
@@ -201,5 +205,11 @@ public class ProductEditUp extends BaseResponse{
         this.refuseDes = refuseDes;
     }
 
-    
+    public String getPrecedence() {
+        return precedence;
+    }
+
+    public void setPrecedence(String precedence) {
+        this.precedence = precedence;
+    }
 }

@@ -55,6 +55,10 @@ public class ProductInfo extends BaseInfo {
      * 上架时间,若上架类型为定时上架时,才有效
      */
     private Date upTime;
+    /**
+     * 是否全国范围销售
+     */
+    private String isSaleNationwide;
 
     /**
      * 属性与属性值对应关系
@@ -147,5 +151,13 @@ public class ProductInfo extends BaseInfo {
 
     public void setUpTime(Date upTime) {
         this.upTime = upTime;
+    }
+
+    public String getIsSaleNationwide() {
+        return isSaleNationwide;
+    }
+
+    public void setIsSaleNationwide(String isSaleNationwide) {
+        this.isSaleNationwide = isSaleNationwide;
     }
 }
