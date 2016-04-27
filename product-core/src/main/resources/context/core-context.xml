@@ -25,10 +25,28 @@
         </property>
     </bean>    
     
-	<!-- 配置数据源 -->
-	<bean id="dataSource" class="com.ai.opt.sdk.datasource.OptHikariDataSource">
-		 <constructor-arg name="dataSourceName" value="slp-product-db"/>
-	</bean>
+	<!-- 配置数据源 ccs -->
+	<!--<bean id="dataSource" class="com.ai.opt.sdk.datasource.OptHikariDataSource">-->
+		 <!--<constructor-arg name="dataSourceName" value="slp-product-db"/>-->
+	<!--</bean>-->
+
+    <!-- 配置数据源 properties文件 -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <!-- 控制自动提交行为 default：true -->
+        <property name="autoCommit" value="${jdbc.autoCommit}"/>
+        <!--最大连接超时时间 default：30秒-->
+        <property name="connectionTimeout" value="${jdbc.connectionTimeout}"/>
+        <!--最大空闲超时时间 default：10分钟   -->
+        <property name="idleTimeout" value="${jdbc.idleTimeout}"/>
+        <!--连接池中一个连接的最大生命周期 default：30分钟-->
+        <property name="maxLifetime" value="${jdbc.maxLifetime}"/>
+        <!-- 连接池最大的连接数 -->
+        <property name="maximumPoolSize" value="${jdbc.maximumPoolSize}"/>
+    </bean>
 
 	<bean id="seqDataSourceLoader"
 		class="com.ai.opt.sdk.sequence.datasource.SeqDataSourceLoader"
@@ -39,7 +57,7 @@
 	<!-- 配置myBatis的sqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="mapperLocations" value="classpath*:mybatis/mapper/amc/*.xml"/>
+        <property name="mapperLocations" value="classpath*:mybatis/mapper/*.xml"/>
     </bean>
     
     <!-- 扫描Mapper,需要添加mybatis前缀绑定 -->

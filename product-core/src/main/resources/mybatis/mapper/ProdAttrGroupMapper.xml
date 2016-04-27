@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.ProdAttrGroupMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.ProdAttrGroup" >
+    <id column="ATTR_GROUP_ID" property="attrGroupId" jdbcType="DECIMAL" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="PRODUCT_CAT_ID" property="productCatId" jdbcType="VARCHAR" />
+    <result column="ATTR_GROUP_NAME" property="attrGroupName" jdbcType="VARCHAR" />
+    <result column="LOGO_URL" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ATTR_GROUP_ID, TENANT_ID, PRODUCT_CAT_ID, ATTR_GROUP_NAME, LOGO_URL, STATE, OPER_ID, 
+    OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.ProdAttrGroupCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from prod_attr_group
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from prod_attr_group
+    where ATTR_GROUP_ID = #{attrGroupId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from prod_attr_group
+    where ATTR_GROUP_ID = #{attrGroupId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProdAttrGroupCriteria" >
+    delete from prod_attr_group
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.ProdAttrGroup" >
+    insert into prod_attr_group (ATTR_GROUP_ID, TENANT_ID, PRODUCT_CAT_ID, 
+      ATTR_GROUP_NAME, LOGO_URL, STATE, 
+      OPER_ID, OPER_TIME)
+    values (#{attrGroupId,jdbcType=DECIMAL}, #{tenantId,jdbcType=VARCHAR}, #{productCatId,jdbcType=VARCHAR}, 
+      #{attrGroupName,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
+      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProdAttrGroup" >
+    insert into prod_attr_group
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="attrGroupId != null" >
+        ATTR_GROUP_ID,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
+      <if test="productCatId != null" >
+        PRODUCT_CAT_ID,
+      </if>
+      <if test="attrGroupName != null" >
+        ATTR_GROUP_NAME,
+      </if>
+      <if test="logoUrl != null" >
+        LOGO_URL,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="attrGroupId != null" >
+        #{attrGroupId,jdbcType=DECIMAL},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="productCatId != null" >
+        #{productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrGroupName != null" >
+        #{attrGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null" >
+        #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProdAttrGroupCriteria" resultType="java.lang.Integer" >
+    select count(*) from prod_attr_group
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update prod_attr_group
+    <set >
+      <if test="record.attrGroupId != null" >
+        ATTR_GROUP_ID = #{record.attrGroupId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productCatId != null" >
+        PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attrGroupName != null" >
+        ATTR_GROUP_NAME = #{record.attrGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logoUrl != null" >
+        LOGO_URL = #{record.logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update prod_attr_group
+    set ATTR_GROUP_ID = #{record.attrGroupId,jdbcType=DECIMAL},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
+      ATTR_GROUP_NAME = #{record.attrGroupName,jdbcType=VARCHAR},
+      LOGO_URL = #{record.logoUrl,jdbcType=VARCHAR},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProdAttrGroup" >
+    update prod_attr_group
+    <set >
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="productCatId != null" >
+        PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrGroupName != null" >
+        ATTR_GROUP_NAME = #{attrGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null" >
+        LOGO_URL = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ATTR_GROUP_ID = #{attrGroupId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.ProdAttrGroup" >
+    update prod_attr_group
+    set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
+      ATTR_GROUP_NAME = #{attrGroupName,jdbcType=VARCHAR},
+      LOGO_URL = #{logoUrl,jdbcType=VARCHAR},
+      STATE = #{state,jdbcType=VARCHAR},
+      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where ATTR_GROUP_ID = #{attrGroupId,jdbcType=DECIMAL}
+  </update>
+</mapper>

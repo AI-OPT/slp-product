@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.ProductCatMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.ProductCat" >
+    <id column="PRODUCT_CAT_ID" property="productCatId" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="PRODUCT_CAT_NAME" property="productCatName" jdbcType="VARCHAR" />
+    <result column="PARENT_PRODUCT_CAT_ID" property="parentProductCatId" jdbcType="DECIMAL" />
+    <result column="FIRST_LETTER" property="firstLetter" jdbcType="VARCHAR" />
+    <result column="CAT_LEVEL" property="catLevel" jdbcType="DECIMAL" />
+    <result column="IS_CHILD" property="isChild" jdbcType="CHAR" />
+    <result column="SERIAL_NUMBER" property="serialNumber" jdbcType="DECIMAL" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    PRODUCT_CAT_ID, TENANT_ID, PRODUCT_CAT_NAME, PARENT_PRODUCT_CAT_ID, FIRST_LETTER, 
+    CAT_LEVEL, IS_CHILD, SERIAL_NUMBER, STATE, OPER_ID, OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCatCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from product_cat
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_cat
+    where PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from product_cat
+    where PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCatCriteria" >
+    delete from product_cat
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCat" >
+    insert into product_cat (PRODUCT_CAT_ID, TENANT_ID, PRODUCT_CAT_NAME, 
+      PARENT_PRODUCT_CAT_ID, FIRST_LETTER, CAT_LEVEL, 
+      IS_CHILD, SERIAL_NUMBER, STATE, 
+      OPER_ID, OPER_TIME)
+    values (#{productCatId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{productCatName,jdbcType=VARCHAR}, 
+      #{parentProductCatId,jdbcType=DECIMAL}, #{firstLetter,jdbcType=VARCHAR}, #{catLevel,jdbcType=DECIMAL}, 
+      #{isChild,jdbcType=CHAR}, #{serialNumber,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, 
+      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCat" >
+    insert into product_cat
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productCatId != null" >
+        PRODUCT_CAT_ID,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
+      <if test="productCatName != null" >
+        PRODUCT_CAT_NAME,
+      </if>
+      <if test="parentProductCatId != null" >
+        PARENT_PRODUCT_CAT_ID,
+      </if>
+      <if test="firstLetter != null" >
+        FIRST_LETTER,
+      </if>
+      <if test="catLevel != null" >
+        CAT_LEVEL,
+      </if>
+      <if test="isChild != null" >
+        IS_CHILD,
+      </if>
+      <if test="serialNumber != null" >
+        SERIAL_NUMBER,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productCatId != null" >
+        #{productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="productCatName != null" >
+        #{productCatName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentProductCatId != null" >
+        #{parentProductCatId,jdbcType=DECIMAL},
+      </if>
+      <if test="firstLetter != null" >
+        #{firstLetter,jdbcType=VARCHAR},
+      </if>
+      <if test="catLevel != null" >
+        #{catLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="isChild != null" >
+        #{isChild,jdbcType=CHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCatCriteria" resultType="java.lang.Integer" >
+    select count(*) from product_cat
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update product_cat
+    <set >
+      <if test="record.productCatId != null" >
+        PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productCatName != null" >
+        PRODUCT_CAT_NAME = #{record.productCatName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentProductCatId != null" >
+        PARENT_PRODUCT_CAT_ID = #{record.parentProductCatId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.firstLetter != null" >
+        FIRST_LETTER = #{record.firstLetter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.catLevel != null" >
+        CAT_LEVEL = #{record.catLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="record.isChild != null" >
+        IS_CHILD = #{record.isChild,jdbcType=CHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update product_cat
+    set PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      PRODUCT_CAT_NAME = #{record.productCatName,jdbcType=VARCHAR},
+      PARENT_PRODUCT_CAT_ID = #{record.parentProductCatId,jdbcType=DECIMAL},
+      FIRST_LETTER = #{record.firstLetter,jdbcType=VARCHAR},
+      CAT_LEVEL = #{record.catLevel,jdbcType=DECIMAL},
+      IS_CHILD = #{record.isChild,jdbcType=CHAR},
+      SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCat" >
+    update product_cat
+    <set >
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="productCatName != null" >
+        PRODUCT_CAT_NAME = #{productCatName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentProductCatId != null" >
+        PARENT_PRODUCT_CAT_ID = #{parentProductCatId,jdbcType=DECIMAL},
+      </if>
+      <if test="firstLetter != null" >
+        FIRST_LETTER = #{firstLetter,jdbcType=VARCHAR},
+      </if>
+      <if test="catLevel != null" >
+        CAT_LEVEL = #{catLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="isChild != null" >
+        IS_CHILD = #{isChild,jdbcType=CHAR},
+      </if>
+      <if test="serialNumber != null" >
+        SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCat" >
+    update product_cat
+    set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      PRODUCT_CAT_NAME = #{productCatName,jdbcType=VARCHAR},
+      PARENT_PRODUCT_CAT_ID = #{parentProductCatId,jdbcType=DECIMAL},
+      FIRST_LETTER = #{firstLetter,jdbcType=VARCHAR},
+      CAT_LEVEL = #{catLevel,jdbcType=DECIMAL},
+      IS_CHILD = #{isChild,jdbcType=CHAR},
+      SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
+      STATE = #{state,jdbcType=VARCHAR},
+      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR}
+  </update>
+</mapper>
