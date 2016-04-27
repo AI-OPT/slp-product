@@ -32,6 +32,12 @@ public interface IStandedProductAtomSV {
      */
     public int deleteObj(String tenantId,String standedProdId);
 
-
+    /**
+     * 查询租户下的某个标准品
+     *
+     * @param tenantId
+     * @param standedProdId
+     * @return
+     */
     public StandedProduct selectById(String tenantId,String standedProdId);
 }

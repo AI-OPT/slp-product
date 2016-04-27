@@ -14,5 +14,4 @@ public interface IStandedProductLogAtomSV {
      */
     public int insert(StandedProductLog productLog);
 
-
 }

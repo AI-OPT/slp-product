@@ -56,7 +56,8 @@ public abstract class NormProductBase extends BaseInfo {
      * 0:全部;1实物;2虚拟
      */
     @NotNull(message = "标准品类型不能为空",
-            groups = { INormProductSV.SaveProductInfo.class,INormProductSV.UpdateProductInfo.class })
+            groups = { INormProductSV.SaveProductInfo.class,
+                    INormProductSV.UpdateProductInfo.class })
     private String productType;
 
     /**
@@ -71,7 +72,7 @@ public abstract class NormProductBase extends BaseInfo {
      */
     @NotNull(message = "创建人ID不能为空",
             groups = { INormProductSV.SaveProductInfo.class})
-    private Long createUserId;
+    private Long createId;
 
     public Long getCatId() {
         return catId;
@@ -121,11 +122,11 @@ public abstract class NormProductBase extends BaseInfo {
         this.createTime = createTime;
     }
 
-    public Long getcreateUserId() {
-        return createUserId;
+    public Long getCreateId() {
+        return createId;
     }
 
-    public void setcreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateId(Long createId) {
+        this.createId = createId;
     }
 }
