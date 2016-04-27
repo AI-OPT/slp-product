@@ -4,7 +4,14 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.product.param.AudiencesSetOfProduct;
+import com.ai.slp.product.api.product.param.ProductCheckParam;
+import com.ai.slp.product.api.product.param.ProductCheckingParam;
+import com.ai.slp.product.api.product.param.ProductEditParam;
+import com.ai.slp.product.api.product.param.ProductEditUp;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.ProductPriorityParam;
+import com.ai.slp.product.api.product.param.ProductRefuseParam;
 
 /**
  * 商品管理接口
@@ -61,9 +68,11 @@ public interface IProductEditUpSV {
     @interface QueryProductCheck {}
 
     /**
-     * 审核通过调用方法<br>
+     * 审核调用方法<br>
      * 通过上架类型 1审核通过后立即上架 2审核通过后放入仓库 3定时上架<br>
      * 判断改变为哪种状态<br>
+     * 销售商品状态 4审核未通过<br>
+     * 拒绝后把拒绝类型和原因存入销售商品流程日志表<br>
      *
      * @param productCheckParam
      * @return 基本信息
@@ -72,22 +81,22 @@ public interface IProductEditUpSV {
      * @author lipeng
      *  @ApiCode PROMAN_0103
      */
-    public BaseResponse passProductCheck(ProductCheckParam productCheckParam) throws BusinessException, SystemException;
-    @interface PassProductCheck {}
+    public BaseResponse productCheck(ProductCheckParam productCheckParam) throws BusinessException, SystemException;
+    @interface ProductCheck {}
 
     /**
-     * 审核拒绝调用方法<br>
-     * 拒绝后把拒绝类型和原因存入销售商品流程日志表<br>
+     * 商品申请优先审核调用方法<br>
      *
-     * @param productCheckParam
+     * @param productPriorityParam
      * @return 基本信息
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
      *  @ApiCode PROMAN_0104
      */
-    public BaseResponse refuseProductCheck(ProductCheckParam productCheckParam) throws BusinessException, SystemException;
-    @interface RefuseProductCheck {}
+    public BaseResponse productPriority(ProductPriorityParam productPriorityParam) throws BusinessException, SystemException;
+    @interface ProductPriority {}
+    
 
     /**
      * 查询单个商品的受众信息<br>
@@ -105,3 +114,10 @@ public interface IProductEditUpSV {
 
 
 }
+
+
+
+
+
+
+

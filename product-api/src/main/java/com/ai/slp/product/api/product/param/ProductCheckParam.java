@@ -29,4 +29,38 @@ public class ProductCheckParam extends ProductBase {
      * 拒绝描述-被拒绝参数
      */
     private String refuseDes;
+
+    public String getProdId() {
+        return prodId;
+    }
+
+    public void setProdId(String prodId) {
+        this.prodId = prodId;
+    }
+
+    public String getUpshelfType() {
+        return upshelfType;
+    }
+
+    public void setUpshelfType(String upshelfType) {
+        this.upshelfType = upshelfType;
+    }
+
+    public String getRefuseReason() {
+        return refuseReason;
+    }
+
+    public void setRefuseReason(String refuseReason) {
+        this.refuseReason = refuseReason;
+    }
+
+    public String getRefuseDes() {
+        return refuseDes;
+    }
+
+    public void setRefuseDes(String refuseDes) {
+        this.refuseDes = refuseDes;
+    }
+    
+    
 }
