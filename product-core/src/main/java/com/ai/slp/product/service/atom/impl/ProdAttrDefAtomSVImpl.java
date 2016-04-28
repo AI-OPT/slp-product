@@ -1,10 +1,10 @@
 package com.ai.slp.product.service.atom.impl;
 
-import com.ai.opt.sdk.sequence.util.SeqUtil;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDefCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrDefMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
+import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +18,14 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     @Autowired
     ProdAttrDefMapper prodAttrDefMapper;
 
+    //获取序列号
+    @Autowired
+    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
+
     @Override
     public int installObj(ProdAttrDef productAttr) {
-        productAttr.setAttrId(SeqUtil.getNewId(""));
+        productAttr.setAttrId(
+                sequenceCreditAtomSV.getSeqByName(ISysSequenceCreditAtomSV.PROD_ATTR_ID));
         return prodAttrDefMapper.insertSelective(productAttr);
     }
 
