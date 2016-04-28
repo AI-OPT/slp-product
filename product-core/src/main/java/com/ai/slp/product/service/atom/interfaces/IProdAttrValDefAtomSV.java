@@ -10,7 +10,7 @@ import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
  * 
  * @author lipeng
  */
-public interface IAttrValDefAtomSV {
+public interface IProdAttrValDefAtomSV {
     /**
      * 依据属性ID查询商品属性值
      * 
