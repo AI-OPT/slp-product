@@ -45,7 +45,7 @@ public interface IProductCatSV {
 	*  @ApiCode PROCAT_0101
 	 */
 	public BaseResponse addProductCat(List<ProductCatParam> pcpList) throws BusinessException, SystemException;
-	@interface AddOrUpdateProductCat {}
+	@interface AddProductCat {}
 	
 	/**
 	 * 商品类目修改<br>
@@ -86,7 +86,7 @@ public interface IProductCatSV {
      * @ApiCode PROCAT_0104
      */
     public List<ProductAttrDef> queryProductCatAttr(ProductCatParam productCatParam) throws BusinessException, SystemException;
-    @interface QsueryProductCatAttr {}
+    @interface QueryProductCatAttr {}
     
     
     /**

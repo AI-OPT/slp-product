@@ -19,12 +19,14 @@ public class ProductCatParam extends ProductCatBase {
 	 */
     @NotNull(message = "类目ID不能为空", 
             groups = { IProductCatSV.DeleteProductCat.class,
-                    IProductCatSV.QsueryProductCatAttr.class })
+                    IProductCatSV.UpdateProductCat.class })
 	private String productCatId;
 
 	/**
 	 * 商品类目名称
 	 */
+    @NotNull(message = "名称不能为空", 
+            groups = { IProductCatSV.AddProductCat.class})
 	private String productCatName;
 	
 	/**
@@ -35,13 +37,15 @@ public class ProductCatParam extends ProductCatBase {
     /**
      * 是否有子分类
      */
+	@NotNull(message = "名称不能为空", 
+            groups = { IProductCatSV.AddProductCat.class})
     private String isChild;
 
 	/**
 	 * 首字母
 	 */
 	private String firstLetter;
-	 /**
+	/**
      * 类目的级别-用于判断是类目(一级)还是子类目
      */
     private long catLevel;
