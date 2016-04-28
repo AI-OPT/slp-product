@@ -1,28 +1,46 @@
 package com.ai.slp.product.service.atom.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
+import com.ai.slp.product.dao.mapper.bo.ProductCatCriteria;
+import com.ai.slp.product.dao.mapper.interfaces.ProductCatMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 
+@Component
 public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
 
+    @Autowired
+    ProductCatMapper productCatMapper;
+    
     @Override
     public ProductCat selectById(String tenantId, String productCatId) {
-        return null;
+        ProductCatCriteria example = new ProductCatCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId);
+        List<ProductCat> productCatList = productCatMapper.selectByExample(example);
+        if(productCatList == null || productCatList.isEmpty())
+            return null;
+        return productCatList.get(0);
     }
 
     @Override
     public int insertProductCat(ProductCat productCat) {
-        return 0;
+        return productCatMapper.insertSelective(productCat);
     }
 
     @Override
     public int updateProductCat(ProductCat productCat) {
-        return 0;
+        return productCatMapper.updateByPrimaryKeySelective(productCat);
     }
 
     @Override
     public int deleteProductCat(String tenantId, String productCatId) {
-        return 0;
+        ProductCatCriteria example = new ProductCatCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId);
+        return productCatMapper.deleteByExample(example);
     }
 
 }
