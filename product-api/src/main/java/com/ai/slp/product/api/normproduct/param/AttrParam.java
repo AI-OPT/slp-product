@@ -1,14 +1,24 @@
 package com.ai.slp.product.api.normproduct.param;
 
-public class ProductAttr extends ProductCatBase{
+import javax.validation.constraints.NotNull;
+
+import com.ai.slp.product.api.normproduct.interfaces.IAttrAndValDefSV;
+import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
+
+public class AttrParam extends ProductCatBase{
     /**
      * 属性ID
      */
+    @NotNull(message = "属性ID不能为空", 
+            groups = { IAttrAndValDefSV.UpdateAttr.class,
+                    IAttrAndValDefSV.DeleteAttr.class})
     private long attrId;
 
     /**
      * 属性名称
      */
+    @NotNull(message = "属性名称不能为空", 
+            groups = { IAttrAndValDefSV.AddAttr.class})
     private String attrName;
 
     /**

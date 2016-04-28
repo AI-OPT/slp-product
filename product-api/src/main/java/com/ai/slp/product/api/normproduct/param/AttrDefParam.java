@@ -8,7 +8,7 @@ package com.ai.slp.product.api.normproduct.param;
  * 
  * @author lipeng
  */
-public class ProductAttrDefParam extends ProductCatBase {
+public class AttrDefParam extends ProductCatBase {
 	
 	/**
      * 请求查询的页码

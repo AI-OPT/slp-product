@@ -12,7 +12,7 @@ import com.ai.opt.base.vo.BaseResponse;
  * 
  * @author lipeng
  */
-public class ProductAttrVal extends BaseResponse {
+public class AttrValInfo extends BaseResponse {
 
     /**
      * 属性值ID

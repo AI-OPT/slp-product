@@ -6,11 +6,11 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.normproduct.param.ProductAttr;
-import com.ai.slp.product.api.normproduct.param.ProductAttrDef;
-import com.ai.slp.product.api.normproduct.param.ProductAttrDefParam;
-import com.ai.slp.product.api.normproduct.param.ProductAttrVal;
-import com.ai.slp.product.api.normproduct.param.ProductAttrValParam;
+import com.ai.slp.product.api.normproduct.param.AttrParam;
+import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
+import com.ai.slp.product.api.normproduct.param.AttrDefParam;
+import com.ai.slp.product.api.normproduct.param.AttrValInfo;
+import com.ai.slp.product.api.normproduct.param.AttrValParam;
 
 /**
  * 属性及属性值管理接口
@@ -20,146 +20,146 @@ import com.ai.slp.product.api.normproduct.param.ProductAttrValParam;
  * 
  * @author lipeng
  */
-public interface IProdAttrDefSV {
+public interface IAttrAndValDefSV {
     
     /**
      * 属性查询
      * 
-     * @param productAttrDefParam
+     * @param attrDefParam
      * @return 符合页数的属性集合
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0200
      */
-    public PageInfo<ProductAttrDef> queryProductAttrs(ProductAttrDefParam productAttrDefParam)
+    public PageInfo<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException;
-    @interface QueryProductAttrs {}
+    @interface QueryAttrs {}
     
     /**
      * 单个属性查询
      * 
-     * @param productAttr
+     * @param attrParam
      * @return 通过ID查询单个属性
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0208
      */
-    public ProductAttrDef queryProductAttr(ProductAttr productAttr)
+    public AttrDefInfo queryAttr(AttrParam attrParam)
             throws BusinessException, SystemException;
-    @interface QueryProductAttr {}
+    @interface QueryAttr {}
     
     /**
      * 属性添加
      * 
-     * @param productAttrList
+     * @param attrParamList
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0201
      */
-    public BaseResponse addProductAttr(List<ProductAttr> productAttrList) 
+    public BaseResponse addAttr(List<AttrParam> attrParamList) 
             throws BusinessException, SystemException;
-    @interface AddProductAttr{}
+    @interface AddAttr{}
     
     /**
      * 属性修改
      * 
-     * @param productAttr
+     * @param attrParam
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0202
      */
-    public BaseResponse updateProductAttr(ProductAttr productAttr) 
+    public BaseResponse updateAttr(AttrParam attrParam) 
             throws BusinessException, SystemException;
-    @interface UpdateProductAttr{}
+    @interface UpdateAttr{}
     
     /**
      * 属性删除
      * 
-     * @param productAttrDefParam
+     * @param attrParam
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0203
      */
-    public BaseResponse deleteProductAttr(ProductAttr productAttr)
+    public BaseResponse deleteAttr(AttrParam attrParam)
             throws BusinessException, SystemException;
-    @interface DeleteProductAttr{}
+    @interface DeleteAttr{}
     
     /**
      * 属性的属性值查询
      * 
-     * @param productAttr
+     * @param attrParam
      * @return 符合条件的属性集合
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0204
      */
-    public PageInfo<ProductAttrVal> queryProductAttrValues(ProductAttr productAttr)
+    public PageInfo<AttrValInfo> queryAttrValues(AttrParam attrParam)
             throws BusinessException, SystemException;
-    @interface QueryProductAttrValues {}
+    @interface QueryAttrValues {}
     
     /**
      * 单个属性值查询
      * 
-     * @param ProductAttrValParam
+     * @param attrValParam
      * @return 符合条件的单个属性值
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode
      */
-    public ProductAttrVal queryProductAttrVal(ProductAttrValParam ProductAttrValParam)
+    public AttrValInfo queryAttrVal(AttrValParam attrValParam)
             throws BusinessException, SystemException;
-    @interface QueryProductAttrVal {}
+    @interface QueryAttrVal {}
     
     /**
      * 属性值添加
      * 
-     * @param productAttrValParamList
+     * @param attrValParamList
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0205
      */
-    public BaseResponse addProductAttrVal(List<ProductAttrValParam> productAttrValParamList)
+    public BaseResponse addAttrVal(List<AttrValParam> attrValParamList)
             throws BusinessException, SystemException;
-    @interface AddProductAttrVal{}
+    @interface AddAttrVal{}
     
     /**
      * 属性值修改
      * 
-     * @param productAttrValParam
+     * @param attrValParam
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0206
      */
-    public BaseResponse updateProductAttrVal(ProductAttrValParam productAttrValParam)
+    public BaseResponse updateAttrVal(AttrValParam attrValParam)
             throws BusinessException, SystemException;
-    @interface UpdateProductAttrVal{}
+    @interface UpdateAttrVal {}
     
     /**
      * 属性值删除
      * 
-     * @param productAttrValParam
+     * @param attrValParam
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0207
      */
-    public BaseResponse deleteProductAttrVal(ProductAttrValParam productAttrValParam)
+    public BaseResponse deleteAttrVal(AttrValParam attrValParam)
             throws BusinessException, SystemException;
-    @interface DeleteProductAttrVal{}
+    @interface DeleteAttrVal {}
 
 }
