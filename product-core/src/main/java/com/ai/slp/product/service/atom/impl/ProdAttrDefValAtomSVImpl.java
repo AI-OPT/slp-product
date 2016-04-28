@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
-import com.ai.slp.product.service.atom.interfaces.IProdAttrDefValAtomSV;
+import com.ai.slp.product.service.atom.interfaces.AttrValDefAtomSV;
 
 /**
  * Date: 2016年4月28日 <br>
@@ -17,7 +17,7 @@ import com.ai.slp.product.service.atom.interfaces.IProdAttrDefValAtomSV;
  * @author lipeng
  */
 @Component
-public class ProdAttrDefValAtomSVImpl implements IProdAttrDefValAtomSV{
+public class ProdAttrDefValAtomSVImpl implements AttrValDefAtomSV{
     @Autowired
     ProdAttrvalueDefMapper prodAttrvalueDefMapper;
 
