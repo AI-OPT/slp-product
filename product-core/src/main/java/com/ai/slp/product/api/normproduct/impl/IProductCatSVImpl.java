@@ -17,23 +17,34 @@ import java.util.Map;
 @Service
 @Component
 public class IProductCatSVImpl implements IProductCatSV {
+
     @Override
-    public List<ProductCatInfo> queryProductCat(ProductCatParam productCatParam) throws BusinessException, SystemException {
+    public List<ProductCatInfo> queryProductCat(ProductCatParam productCatParam)
+            throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public BaseResponse addOrUpdateProductCat(List<ProductCatParam> pcpList) throws BusinessException, SystemException {
+    public BaseResponse addProductCat(List<ProductCatParam> pcpList)
+            throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public BaseResponse deleteProductCat(ProductCatParam productCatParam) throws BusinessException, SystemException {
+    public BaseResponse updateProductCat(ProductCatParam productCatParam)
+            throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public List<ProductAttrDef> queryProductCatAttr(ProductCatParam productCatParam) throws BusinessException, SystemException {
+    public BaseResponse deleteProductCat(ProductCatParam productCatParam)
+            throws BusinessException, SystemException {
+        return null;
+    }
+
+    @Override
+    public List<ProductAttrDef> queryProductCatAttr(ProductCatParam productCatParam)
+            throws BusinessException, SystemException {
         return null;
     }
 
@@ -43,22 +54,26 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     @Override
-    public BaseResponse addProductCatAttr(List<AttrDefResponse> lspad) throws BusinessException, SystemException {
+    public BaseResponse addProductCatAttr(List<AttrDefResponse> lspad)
+            throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public BaseResponse deleteProductCatAttrVal(ProductAttrValParam productAttrValParam) throws BusinessException, SystemException {
+    public BaseResponse deleteProductCatAttrVal(ProductAttrValParam productAttrValParam)
+            throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public Map<ProductAttrDef, List<ProductAttrVal>> queryAttrByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
+    public Map<ProductAttrDef, List<ProductAttrVal>> queryAttrByCatAndType(
+            AttrQueryForCat attrQuery) throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public Map<ProductAttrDef, List<ProductAttrVal>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
+    public Map<ProductAttrDef, List<ProductAttrVal>> queryAttrByNormProduct(
+            AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
         return null;
     }
 }
