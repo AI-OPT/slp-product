@@ -43,13 +43,13 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     @Override
-    public List<ProductAttrDef> queryProductCatAttr(ProductCatParam productCatParam)
+    public List<AttrDefInfo> queryProductCatAttr(ProductCatParam productCatParam)
             throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public List<ProductAttrVal> queryProductCatAttrVal() throws BusinessException, SystemException {
+    public List<AttrValInfo> queryProductCatAttrVal() throws BusinessException, SystemException {
         return null;
     }
 
@@ -60,20 +60,21 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     @Override
-    public BaseResponse deleteProductCatAttrVal(ProductAttrValParam productAttrValParam)
+    public BaseResponse deleteProductCatAttrVal(AttrValParam productAttrValParam)
             throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public Map<ProductAttrDef, List<ProductAttrVal>> queryAttrByCatAndType(
-            AttrQueryForCat attrQuery) throws BusinessException, SystemException {
+    public Map<AttrDefInfo, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
+            throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public Map<ProductAttrDef, List<ProductAttrVal>> queryAttrByNormProduct(
+    public Map<AttrDefInfo, List<AttrValInfo>> queryAttrByNormProduct(
             AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
         return null;
     }
+
 }

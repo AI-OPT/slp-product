@@ -8,8 +8,8 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.param.ProAttrGroup;
 import com.ai.slp.product.api.normproduct.param.ProAttrGroupParam;
-import com.ai.slp.product.api.normproduct.param.ProductAttrDef;
-import com.ai.slp.product.api.normproduct.param.ProductAttrValParam;
+import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
+import com.ai.slp.product.api.normproduct.param.AttrValParam;
 
 /**
  * 类目属性组接口
@@ -19,7 +19,7 @@ import com.ai.slp.product.api.normproduct.param.ProductAttrValParam;
  * 
  * @author lipeng
  */
-public interface IProdAttrGroupSV {
+public interface ICatAttrGroupSV {
     
     /**
      * 查询类目分组
@@ -87,7 +87,7 @@ public interface IProdAttrGroupSV {
      * @author lipeng
     *  @ApiCode PROCAT_0305
      */
-    public List<ProductAttrDef> queryGroupAttr(ProAttrGroupParam proAttrGroupParam)
+    public List<AttrDefInfo> queryGroupAttr(ProAttrGroupParam proAttrGroupParam)
             throws BusinessException, SystemException; 
     @interface QueryGroupAttr {}
     
@@ -101,7 +101,7 @@ public interface IProdAttrGroupSV {
      * @author lipeng
     *  @ApiCode PROCAT_0306
      */
-    public BaseResponse addGroupAttr(List<ProductAttrValParam> listProAttrVal)
+    public BaseResponse addGroupAttr(List<AttrValParam> listProAttrVal)
             throws BusinessException, SystemException; 
     @interface AddGroupAttr {}
     
@@ -115,7 +115,7 @@ public interface IProdAttrGroupSV {
      * @author lipeng
     *  @ApiCode PROCAT_0307
      */
-    public BaseResponse deleteGroupAttr(List<ProductAttrValParam> listProAttrVal)
+    public BaseResponse deleteGroupAttr(List<AttrValParam> listProAttrVal)
             throws BusinessException, SystemException; 
     @interface DeleteGroupAttr {}
     

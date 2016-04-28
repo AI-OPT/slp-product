@@ -11,7 +11,7 @@ import com.ai.opt.base.vo.BaseResponse;
  * 
  * @author lipeng
  */
-public class ProductAttrDef extends BaseResponse {
+public class AttrDefInfo extends BaseResponse {
     
     /**
      * 属性ID

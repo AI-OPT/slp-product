@@ -85,7 +85,7 @@ public interface IProductCatSV {
      * @author lipeng
      * @ApiCode PROCAT_0104
      */
-    public List<ProductAttrDef> queryProductCatAttr(ProductCatParam productCatParam) throws BusinessException, SystemException;
+    public List<AttrDefInfo> queryProductCatAttr(ProductCatParam productCatParam) throws BusinessException, SystemException;
     @interface QueryProductCatAttr {}
     
     
@@ -98,7 +98,7 @@ public interface IProductCatSV {
      * @author lipeng
     *  @ApiCode PROCAT_0105
      */
-    public List<ProductAttrVal> queryProductCatAttrVal() throws BusinessException, SystemException;
+    public List<AttrValInfo> queryProductCatAttrVal() throws BusinessException, SystemException;
     @interface QueryProductCatAttrVal {}
     
     /**
@@ -123,7 +123,7 @@ public interface IProductCatSV {
      * @author lipeng
     *  @ApiCode PROCAT_0107
      */
-    public BaseResponse deleteProductCatAttrVal(ProductAttrValParam productAttrValParam) throws BusinessException, SystemException;
+    public BaseResponse deleteProductCatAttrVal(AttrValParam productAttrValParam) throws BusinessException, SystemException;
     @interface DeleteProductCatAttrVal {}
 
 	/**
@@ -137,7 +137,7 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PROCAT_0108
 	 */
-	public Map<ProductAttrDef,List<ProductAttrVal>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
+	public Map<AttrDefInfo,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
 		throws BusinessException,SystemException;
 	@interface QueryAttrByCatAndType{}
 
@@ -152,7 +152,7 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PROCAT_0109
 	 */
-	public Map<ProductAttrDef,List<ProductAttrVal>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
+	public Map<AttrDefInfo,List<AttrValInfo>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
 			throws BusinessException,SystemException;
 	@interface QueryAttrByNormProduct{}
 }

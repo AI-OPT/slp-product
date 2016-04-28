@@ -2,7 +2,7 @@ package com.ai.slp.product.api.normproduct.param;
 
 import javax.validation.constraints.NotNull;
 
-import com.ai.slp.product.api.normproduct.interfaces.IProdAttrDefSV;
+import com.ai.slp.product.api.normproduct.interfaces.IAttrAndValDefSV;
 
 /**
  * 属性值定义请求参数<br>
@@ -12,14 +12,14 @@ import com.ai.slp.product.api.normproduct.interfaces.IProdAttrDefSV;
  * 
  * @author lipeng
  */
-public class ProductAttrValParam extends ProductCatBase {
+public class AttrValParam extends ProductCatBase {
 	
 	/**
 	 * 属性ID
 	 */
     @NotNull(message = "属性ID不能为空",
-            groups = {IProdAttrDefSV.DeleteProductAttrVal.class,
-                    IProdAttrDefSV.UpdateProductAttrVal.class})
+            groups = {IAttrAndValDefSV.DeleteAttrVal.class,
+                    IAttrAndValDefSV.UpdateAttrVal.class})
 	private long attrId;
 	
 	/**
@@ -31,7 +31,7 @@ public class ProductAttrValParam extends ProductCatBase {
 	 * 属性值名称
 	 */
 	@NotNull(message = "属性值不能为空",
-	        groups = {IProdAttrDefSV.AddProductAttrVal.class})
+	        groups = {IAttrAndValDefSV.AddAttrVal.class})
 	private String attrValueName;
 	
 	/**
