@@ -25,14 +25,6 @@ public interface IStandedProductAtomSV {
     public int updateObj(StandedProduct standedProduct);
 
     /**
-     * 删除标准品信息
-     * @param tenantId
-     * @param standedProdId
-     * @return
-     */
-    public int deleteObj(String tenantId,String standedProdId);
-
-    /**
      * 查询租户下的某个标准品
      *
      * @param tenantId

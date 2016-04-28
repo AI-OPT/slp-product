@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * 属性定义原子操作
  * Created by jackieliu on 16/4/27.
  */
 @Component
@@ -25,7 +26,7 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     @Override
     public int installObj(ProdAttrDef productAttr) {
         productAttr.setAttrId(
-                sequenceCreditAtomSV.getSeqByName(ISysSequenceCreditAtomSV.PROD_ATTR_ID));
+                sequenceCreditAtomSV.get6SeqByName());
         return prodAttrDefMapper.insertSelective(productAttr);
     }
 
