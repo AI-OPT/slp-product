@@ -16,7 +16,7 @@ public class NormProductResponse extends BaseResponse {
     /**
      * 类目ID
      */
-    private Long catId;
+    private String catId;
 
     /**
      * 标准品ID
@@ -32,7 +32,7 @@ public class NormProductResponse extends BaseResponse {
      * 标准品状态
      * 0:全部;1可上架;2不可上架;3待处理;4废弃
      */
-    private String productStatus;
+    private String state;
 
     /**
      * 标准品类型
@@ -75,11 +75,11 @@ public class NormProductResponse extends BaseResponse {
      */
     private String operName;
 
-    public Long getCatId() {
+    public String getCatId() {
         return catId;
     }
 
-    public void setCatId(Long catId) {
+    public void setCatId(String catId) {
         this.catId = catId;
     }
 
@@ -99,12 +99,12 @@ public class NormProductResponse extends BaseResponse {
         this.productName = productName;
     }
 
-    public String getProductStatus() {
-        return productStatus;
+    public String getState() {
+        return state;
     }
 
-    public void setProductStatus(String productStatus) {
-        this.productStatus = productStatus;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getProductType() {

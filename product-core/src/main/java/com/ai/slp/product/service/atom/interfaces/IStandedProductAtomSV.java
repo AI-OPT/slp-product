@@ -1,6 +1,8 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
+import com.ai.slp.product.vo.StandedProdPageQueryVo;
 
 /**
  * 对标准品的原子操作
@@ -32,4 +34,10 @@ public interface IStandedProductAtomSV {
      * @return
      */
     public StandedProduct selectById(String tenantId,String standedProdId);
+
+    /**
+     * 根据条件进行分页查寻
+     * @return
+     */
+    public PageInfo<StandedProduct> queryForPage(StandedProdPageQueryVo request);
 }

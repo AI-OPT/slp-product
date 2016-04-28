@@ -31,21 +31,6 @@ public interface INormProductSV {
     @interface QueryNormProduct {}
 
     /**
-     * 废弃标准品列表查询. <br>
-     *
-     * @param productRequest 查询条件
-     * @return 符合条件的废弃标准品信息集合
-     * @throws BusinessException
-     * @throws SystemException
-     * @author liutong5
-     * @ApiDocMethod
-     * @ApiCode NORM_PRODUCT_0101
-     */
-    public PageInfo<InvalidNormProductResponse> queryInvalidProduct(NormProductRequest productRequest)
-        throws BusinessException,SystemException;
-    @interface QueryInvalidProduct {}
-
-    /**
      * 查询指定标准品标识的标准品信息. <br>
      *
      * @param invalidRequest 标准品查询条件
@@ -71,7 +56,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0103
      */
-    public BaseResponse saveProductInfo(NormProductSaveRequest productInfoRequest)
+    public BaseResponse createProductInfo(NormProductSaveRequest productInfoRequest)
             throws BusinessException,SystemException;
     @interface SaveProductInfo {}
 

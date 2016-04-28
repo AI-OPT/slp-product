@@ -1,7 +1,12 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.param.NormProductInfoResponse;
+import com.ai.slp.product.api.normproduct.param.NormProductRequest;
+import com.ai.slp.product.api.normproduct.param.NormProductResponse;
 import com.ai.slp.product.api.normproduct.param.NormProductSaveRequest;
+
+import java.util.Date;
 
 /**
  * 对标准品的相关操作
@@ -30,4 +35,20 @@ public interface INormProductBusiSV {
      * @return
      */
     public NormProductInfoResponse queryById(String tenantId,String productId);
+
+    /**
+     * 分页查询
+     *
+     * @return
+     */
+    public PageInfo<NormProductResponse> queryForPage(NormProductRequest productRequest);
+
+    /**
+     * 废弃标准品
+     * @param tenantId 租户id
+     * @param productId 标准品标识
+     * @param operId 操作者id
+     * @param operTime 操作时间,可以为空
+     */
+    public void discardProduct(String tenantId,String productId,Long operId,Date operTime);
 }

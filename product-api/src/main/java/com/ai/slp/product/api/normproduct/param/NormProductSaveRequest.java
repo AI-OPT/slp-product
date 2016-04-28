@@ -16,6 +16,21 @@ import java.util.List;
 public class NormProductSaveRequest extends NormProductBase {
 
     /**
+     * 创建时间<br>
+     * 创建时赋值,更新时不进行操作<br>
+     *     若为空,更新时则填充服务接收时间
+     */
+    private Date createTime;
+
+    /**
+     * 创建人ID<br>
+     * 添加时不能为空,更新时不进行操作
+     */
+    @NotNull(message = "创建人ID不能为空",
+            groups = { INormProductSV.SaveProductInfo.class})
+    private Long createId;
+
+    /**
      * 操作人ID<br>
      * 更新时不能为空
      */
@@ -54,5 +69,21 @@ public class NormProductSaveRequest extends NormProductBase {
 
     public void setOperTime(Date operTime) {
         this.operTime = operTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
     }
 }

@@ -27,12 +27,7 @@ public class INormProductSVImpl implements INormProductSV {
 
     @Override
     public PageInfo<NormProductResponse> queryNormProduct(NormProductRequest productRequest) throws BusinessException, SystemException {
-        return null;
-    }
-
-    @Override
-    public PageInfo<InvalidNormProductResponse> queryInvalidProduct(NormProductRequest productRequest) throws BusinessException, SystemException {
-        return null;
+        return normProductBusiSV.queryForPage(productRequest);
     }
 
     @Override
@@ -41,11 +36,8 @@ public class INormProductSVImpl implements INormProductSV {
     }
 
     @Override
-    public BaseResponse saveProductInfo(NormProductSaveRequest productInfoRequest) throws BusinessException, SystemException {
-        if (productInfoRequest.getProductId() == null)
-            normProductBusiSV.installNormProd(productInfoRequest);
-        else
-            normProductBusiSV.updateNormProd(productInfoRequest);
+    public BaseResponse createProductInfo(NormProductSaveRequest productInfoRequest) throws BusinessException, SystemException {
+        normProductBusiSV.installNormProd(productInfoRequest);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);
@@ -56,12 +48,28 @@ public class INormProductSVImpl implements INormProductSV {
 
     @Override
     public BaseResponse updateProductInfo(NormProductSaveRequest productInfoRequest) throws BusinessException, SystemException {
-        return null;
+        if (productInfoRequest.getProductId()==null)
+            throw new BusinessException("","标准品标识不能为空");
+        normProductBusiSV.updateNormProd(productInfoRequest);
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode("");
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     @Override
     public BaseResponse discardProduct(SimpleProductRequest invalidRequest) throws BusinessException, SystemException {
-        return null;
+        normProductBusiSV.discardProduct(
+                invalidRequest.getTenantId(),invalidRequest.getProductId(),
+                invalidRequest.getOperId(),invalidRequest.getOperTime());
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode("");
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     @Override

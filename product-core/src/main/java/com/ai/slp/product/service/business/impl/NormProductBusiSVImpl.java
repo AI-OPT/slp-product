@@ -1,11 +1,10 @@
 package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.DateUtil;
-import com.ai.slp.product.api.normproduct.param.NormProductAttrValRequest;
-import com.ai.slp.product.api.normproduct.param.NormProductInfoResponse;
-import com.ai.slp.product.api.normproduct.param.NormProductSaveRequest;
+import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.constants.StandedProdAttrConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
@@ -18,6 +17,7 @@ import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.vo.StandedProdPageQueryVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,6 +130,37 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         return response;
     }
 
+    @Override
+    public PageInfo<NormProductResponse> queryForPage(NormProductRequest productRequest) {
+        StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
+        BeanUtils.copyProperties(pageQueryVo,productRequest);
+        //查询结果
+        PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
+        //接口输出接口
+        PageInfo<NormProductResponse> normProdPageInfo = new PageInfo<NormProductResponse>();
+        BeanUtils.copyProperties(normProdPageInfo,productPageInfo);
+        //添加结果集
+        List<StandedProduct> productList = productPageInfo.getResult();
+        List<NormProductResponse> normProductList = new ArrayList<NormProductResponse>();
+        normProdPageInfo.setResult(normProductList);
+        for (StandedProduct standedProduct:productList){
+            NormProductResponse normProduct = new NormProductResponse();
+            BeanUtils.copyProperties(normProduct,standedProduct);
+//            normProduct.setCreateName(""); //TODO...
+//            normProduct.setOperTime(""); //TODO...
+            //TODO... 获取类目名称
+            normProduct.setCatId(standedProduct.getProductCatId());
+            normProduct.setProductId(standedProduct.getStandedProdId());
+            normProduct.setProductName(standedProduct.getStandedProductName());
+            normProductList.add(normProduct);
+        }
+        return normProdPageInfo;
+    }
+
+    @Override
+    public void discardProduct(String tenantId, String productId, Long operId, Date operTime) {
+
+    }
 
 
 }

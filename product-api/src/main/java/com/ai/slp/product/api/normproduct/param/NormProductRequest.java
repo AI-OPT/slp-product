@@ -24,9 +24,9 @@ public class NormProductRequest extends NormProductBase {
     private Integer pageSize = 20;
 
     /**
-     * 操作人账户名
+     * 操作人账户标识
      */
-    private String operName;
+    private Long operId;
 
     /**
      * 创建时间范围的开始时间
@@ -39,13 +39,13 @@ public class NormProductRequest extends NormProductBase {
     private Date createEndTime;
 
     /**
-     * 废弃时间范围的开始时间
+     * 操作/废弃时间范围的开始时间
      */
-    private Date discardStartTime;
+    private Date operStartTime;
     /**
-     * 废弃时间范围的截止时间
+     * 操作/废弃时间范围的截止时间
      */
-    private Date discardEndTime;
+    private Date operEndTime;
 
     public Integer getPageNo() {
         return pageNo;
@@ -79,27 +79,27 @@ public class NormProductRequest extends NormProductBase {
         this.createEndTime = createEndTime;
     }
 
-    public Date getDiscardStartTime() {
-        return discardStartTime;
+    public Date getOperStartTime() {
+        return operStartTime;
     }
 
-    public void setDiscardStartTime(Date discardStartTime) {
-        this.discardStartTime = discardStartTime;
+    public void setOperStartTime(Date operStartTime) {
+        this.operStartTime = operStartTime;
     }
 
-    public Date getDiscardEndTime() {
-        return discardEndTime;
+    public Date getOperEndTime() {
+        return operEndTime;
     }
 
-    public void setDiscardEndTime(Date discardEndTime) {
-        this.discardEndTime = discardEndTime;
+    public void setOperEndTime(Date operEndTime) {
+        this.operEndTime = operEndTime;
     }
 
-    public String getOperName() {
-        return operName;
+    public Long getOperId() {
+        return operId;
     }
 
-    public void setOperName(String operName) {
-        this.operName = operName;
+    public void setOperId(Long operId) {
+        this.operId = operId;
     }
 }
