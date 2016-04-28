@@ -1,7 +1,10 @@
 package com.ai.slp.product.service.business.impl;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.api.normproduct.param.NormProductAttrValRequest;
+import com.ai.slp.product.api.normproduct.param.NormProductInfoResponse;
 import com.ai.slp.product.api.normproduct.param.NormProductSaveRequest;
 import com.ai.slp.product.constants.StandedProdAttrConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
@@ -21,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by jackieliu on 16/4/27.
@@ -47,13 +50,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     public String installNormProd(NormProductSaveRequest normProdct) {
         //添加标准品
         StandedProduct standedProduct = new StandedProduct();
-        standedProduct.setTenantId(normProdct.getTenantId());
-        standedProduct.setProductCatId(normProdct.getCatId());
+        BeanUtils.copyProperties(standedProduct,normProdct);
         standedProduct.setStandedProductName(normProdct.getProductName());
-        standedProduct.setProductType(normProdct.getProductType());
-        standedProduct.setState(normProdct.getProductStatus());
-        standedProduct.setCreateId(normProdct.getCreateId());
-        standedProduct.setCreateTime(DateUtils.toTimeStamp(normProdct.getCreateTime()));
+        if (normProdct.getCreateTime()!=null)
+            standedProduct.setCreateTime(DateUtils.toTimeStamp(normProdct.getCreateTime()));
         //添加成功,添加标准品日志
         if (standedProductAtomSV.installObj(standedProduct)>0){
             StandedProductLog productLog = new StandedProductLog();
@@ -65,11 +65,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         for (NormProductAttrValRequest attrValReq:attrValList){
             StandedProdAttr prodAttr = new StandedProdAttr();
             BeanUtils.copyProperties(prodAttr,attrValReq);
-            prodAttr.setStandedProdId(standedProduct.getStandedProdId());
             prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
             prodAttr.setAttrValueName(attrValReq.getAttrVal());
             prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
-            prodAttr.setState(StandedProdAttrConstants.STATE_ACTIVE);
+            prodAttr.setState(StandedProdAttrConstants.STATE_ACTIVE);//设置为有效
             if (attrValReq.getOperTime()!=null)
                 prodAttr.setOperTime(DateUtils.toTimeStamp(attrValReq.getOperTime()));
             //添加成功,添加日志
@@ -88,6 +87,49 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
      */
     @Override
     public void updateNormProd(NormProductSaveRequest normProdct) {
+        //若状态是否由可用变更为不可用,则需要检查库存组是否全部都已经停用,
 
     }
+
+    /**
+     * 查询指定标准品信息
+     *
+     * @param tenantId  租户id
+     * @param productId 标准品标识
+     * @return
+     */
+    @Override
+    public NormProductInfoResponse queryById(String tenantId, String productId) {
+        StandedProduct product = standedProductAtomSV.selectById(tenantId,productId);
+        if (product==null) {
+            logger.warn("租户[{0}]下不存在标识[{1}]的标准品",tenantId,productId);
+            throw new BusinessException("", "未找到对应标准品信息,租户id="+tenantId+",标准品标识="+productId);
+        }
+        NormProductInfoResponse response = new NormProductInfoResponse();
+        //标准品信息填充返回值
+        BeanUtils.copyProperties(response,product);
+        response.setProductId(product.getStandedProdId());
+        response.setProductName(product.getStandedProductName());
+        response.setCreateName("");//TODO... 获取创建者名称
+        response.setOperName("");//TODO... 获取操作者名称
+//        response.setCreateTime(product.getCreateTime());
+//        response.setOperTime(product.getOperTime());
+        Map<Long,Set<String>> attrAndValueIds = new HashMap<>();
+        //查询属性信息
+        List<StandedProdAttr> attrList = standedProdAttrAtomSV.queryByNormProduct(tenantId,productId);
+        for (StandedProdAttr prodAttr:attrList){
+            Set<String> attrVal = attrAndValueIds.get(prodAttr.getAttrId());
+            if (attrVal == null) {
+                attrVal = new HashSet<>();
+            }
+            attrVal.add(prodAttr.getAttrvalueDefId());
+            if (!attrAndValueIds.containsKey(prodAttr.getAttrId()))
+                attrAndValueIds.put(prodAttr.getAttrId(),attrVal);
+        }
+        response.setAttrAndValueIds(attrAndValueIds);
+        return response;
+    }
+
+
+
 }

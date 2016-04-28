@@ -1,78 +1,75 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import com.ai.opt.base.vo.BaseResponse;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * 标准品信息的基础信息<br>
+ * 标准品信息的基础信息,用于返回信息<br>
  *
  * Date: 2016年4月18日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public abstract class NormProductBase extends BaseInfo {
+public class NormProductBaseResponse extends BaseResponse {
+    /**
+     * 租户Id，必填
+     */
+    private String tenantId;
+    /**
+     * 租户密码，可选
+     */
+    private String tenantPwd;
+
     /**
      * 类目ID<br>
-     *     不能为空
      */
-    @NotNull(message = "类目ID不能为空",
-            groups = { INormProductSV.QueryNormProduct.class
-                    ,INormProductSV.SaveProductInfo.class
-                    ,INormProductSV.UpdateProductInfo.class
-            })
     private String productCatId;
 
     /**
      * 标准品ID
      */
-    @NotNull(message = "标准品ID不能为空",
-            groups = { INormProductSV.UpdateProductInfo.class })
     private String productId;
 
     /**
      * 标准品名称
      */
-    @NotNull(message = "类目ID不能为空",
-            groups = { INormProductSV.SaveProductInfo.class
-                    ,INormProductSV.UpdateProductInfo.class })
     private String productName;
 
     /**
      * 标准品状态
-     * 0:全部;1可上架;2不可上架;3待处理;4废弃
+     * 0:废弃;1:可使用;2:不可使用
      */
-    @NotNull(message = "标准品状态不能为空",
-            groups = { INormProductSV.QueryInvalidProduct.class
-                    ,INormProductSV.SaveProductInfo.class
-                    ,INormProductSV.UpdateProductInfo.class
-            })
     private String state;
 
     /**
      * 标准品类型
-     * 0:全部;1实物;2虚拟
+     * 1实物;2虚拟
      */
-    @NotNull(message = "标准品类型不能为空",
-            groups = { INormProductSV.SaveProductInfo.class,
-                    INormProductSV.UpdateProductInfo.class })
     private String productType;
 
     /**
      * 创建时间<br>
-     * 创建时赋值,更新时不进行操作
      */
     private Date createTime;
 
     /**
      * 创建人ID<br>
-     * 添加时不能为空,更新时不进行操作
      */
-    @NotNull(message = "创建人ID不能为空",
-            groups = { INormProductSV.SaveProductInfo.class})
     private Long createId;
+
+    public String getTenantId() {
+        return tenantId;
+    }
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+    public String getTenantPwd() {
+        return tenantPwd;
+    }
+    public void setTenantPwd(String tenantPwd) {
+        this.tenantPwd = tenantPwd;
+    }
 
     public String getProductCatId() {
         return productCatId;

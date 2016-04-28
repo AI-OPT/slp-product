@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.slp.product.api.normproduct.param.NormProductInfoResponse;
 import com.ai.slp.product.api.normproduct.param.NormProductSaveRequest;
 
 /**
@@ -21,4 +22,12 @@ public interface INormProductBusiSV {
      * @param normProdct
      */
     public void updateNormProd(NormProductSaveRequest normProdct);
+
+    /**
+     * 查询指定的标准品嘻嘻
+     * @param tenantId  租户id
+     * @param productId 标准品标识
+     * @return
+     */
+    public NormProductInfoResponse queryById(String tenantId,String productId);
 }

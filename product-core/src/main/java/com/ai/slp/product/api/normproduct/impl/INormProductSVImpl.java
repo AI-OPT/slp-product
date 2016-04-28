@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by jackieliu on 16/4/27.
  */
-@Service
+@Service(validation = "true")
 @Component
 public class INormProductSVImpl implements INormProductSV {
     private static Logger logger = LoggerFactory.getLogger(INormProductSVImpl.class);
@@ -37,7 +37,7 @@ public class INormProductSVImpl implements INormProductSV {
 
     @Override
     public NormProductInfoResponse queryProducById(SimpleProductRequest invalidRequest) throws BusinessException, SystemException {
-        return null;
+        return normProductBusiSV.queryById(invalidRequest.getTenantId(),invalidRequest.getProductId());
     }
 
     @Override

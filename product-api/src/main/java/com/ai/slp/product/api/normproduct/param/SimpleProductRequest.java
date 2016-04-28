@@ -27,7 +27,7 @@ public class SimpleProductRequest extends BaseInfo {
      */
     @NotNull(message = "操作人ID不能为空",
             groups = { INormProductSV.DiscardProduct.class })
-    private Long operUserId;
+    private Long operId;
 
     /**
      * 操作时间
@@ -42,12 +42,12 @@ public class SimpleProductRequest extends BaseInfo {
         this.productId = productId;
     }
 
-    public Long getOperUserId() {
-        return operUserId;
+    public Long getOperId() {
+        return operId;
     }
 
-    public void setOperUserId(Long operUserId) {
-        this.operUserId = operUserId;
+    public void setOperId(Long operId) {
+        this.operId = operId;
     }
 
     public Date getOperTime() {
