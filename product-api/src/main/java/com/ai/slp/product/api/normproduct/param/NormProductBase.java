@@ -23,7 +23,7 @@ public abstract class NormProductBase extends BaseInfo {
                     ,INormProductSV.SaveProductInfo.class
                     ,INormProductSV.UpdateProductInfo.class
             })
-    private Long catId;
+    private String catId;
 
     /**
      * 标准品ID
@@ -74,11 +74,11 @@ public abstract class NormProductBase extends BaseInfo {
             groups = { INormProductSV.SaveProductInfo.class})
     private Long createId;
 
-    public Long getCatId() {
+    public String getCatId() {
         return catId;
     }
 
-    public void setCatId(Long catId) {
+    public void setCatId(String catId) {
         this.catId = catId;
     }
 

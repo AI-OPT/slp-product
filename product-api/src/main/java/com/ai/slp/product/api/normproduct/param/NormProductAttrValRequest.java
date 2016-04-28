@@ -31,7 +31,7 @@ public class NormProductAttrValRequest extends BaseInfo {
      * 属性值id<br>
      * 与属性值两者不能全部为空
      */
-    private Long attrValId;
+    private String attrValId;
     
     /**
      * 属性值<br>
@@ -43,6 +43,10 @@ public class NormProductAttrValRequest extends BaseInfo {
      * 属性值2,用于范围型属性值
      */
     private String attrVal2;
+    /**
+     * 序列号
+     */
+    private Short serialNumber;
     
     /**
      * 操作人ID<br>
@@ -73,11 +77,11 @@ public class NormProductAttrValRequest extends BaseInfo {
         this.attrId = attrId;
     }
 
-    public Long getAttrValId() {
+    public String getAttrValId() {
         return attrValId;
     }
 
-    public void setAttrValId(Long attrValId) {
+    public void setAttrValId(String attrValId) {
         this.attrValId = attrValId;
     }
 
@@ -111,5 +115,13 @@ public class NormProductAttrValRequest extends BaseInfo {
 
     public void setOperTime(Date operTime) {
         this.operTime = operTime;
+    }
+
+    public Short getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Short serialNumber) {
+        this.serialNumber = serialNumber;
     }
 }
