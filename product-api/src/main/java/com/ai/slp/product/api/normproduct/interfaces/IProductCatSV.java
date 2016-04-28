@@ -35,11 +35,7 @@ public interface IProductCatSV {
 	@interface QueryProductCat {}
 
 	/**
-	 * 商品类目保存和修改<br>
-	 * 编辑类目时，操作中的按钮为“添加子分类”<br>
-	 * 如是叶子类目，点击时需判断<br>
-	 * 如果该类目下已关联类目属性，则需提示，请先删除类目属性才能添加下一级类目<br>
-	 * 如没有类目属性，点击出现下一级类目添加框<br>
+	 * 商品类目保存<br>
 	 * 
 	 * @param pcrList
 	 * @return 服务返回基本信息
@@ -48,8 +44,21 @@ public interface IProductCatSV {
 	 * @author lipeng
 	*  @ApiCode PROCAT_0101
 	 */
-	public BaseResponse addOrUpdateProductCat(List<ProductCatParam> pcpList) throws BusinessException, SystemException;
+	public BaseResponse addProductCat(List<ProductCatParam> pcpList) throws BusinessException, SystemException;
 	@interface AddOrUpdateProductCat {}
+	
+	/**
+	 * 商品类目修改<br>
+	 * 
+	 * @param productCatParam
+	 * @return 服务返回基本信息
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author lipeng
+	*  @ApiCode PROCAT_0102
+	 */
+	public BaseResponse updateProductCat(ProductCatParam productCatParam) throws BusinessException, SystemException;
+	@interface UpdateProductCat {}
 
 	/**
 	 * 商品类目删除<br>
@@ -61,7 +70,7 @@ public interface IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng
-	*  @ApiCode PROCAT_0102
+	*  @ApiCode PROCAT_0103
 	 */
 	public BaseResponse deleteProductCat(ProductCatParam productCatParam) throws BusinessException, SystemException;
 	@interface DeleteProductCat {}
@@ -74,7 +83,7 @@ public interface IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-     * @ApiCode PROCAT_0103
+     * @ApiCode PROCAT_0104
      */
     public List<ProductAttrDef> queryProductCatAttr(ProductCatParam productCatParam) throws BusinessException, SystemException;
     @interface QsueryProductCatAttr {}
@@ -87,7 +96,7 @@ public interface IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0104
+    *  @ApiCode PROCAT_0105
      */
     public List<ProductAttrVal> queryProductCatAttrVal() throws BusinessException, SystemException;
     @interface QueryProductCatAttrVal {}
@@ -100,7 +109,7 @@ public interface IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0105
+    *  @ApiCode PROCAT_0106
      */
     public BaseResponse addProductCatAttr(List<AttrDefResponse> lspad) throws BusinessException, SystemException;
     @interface AddProductCatAttr {}
@@ -112,7 +121,7 @@ public interface IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0106
+    *  @ApiCode PROCAT_0107
      */
     public BaseResponse deleteProductCatAttrVal(ProductAttrValParam productAttrValParam) throws BusinessException, SystemException;
     @interface DeleteProductCatAttrVal {}
@@ -126,7 +135,7 @@ public interface IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author liutong5
-	 * @ApiCode PROCAT_0107
+	 * @ApiCode PROCAT_0108
 	 */
 	public Map<ProductAttrDef,List<ProductAttrVal>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
 		throws BusinessException,SystemException;
@@ -141,7 +150,7 @@ public interface IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author liutong5
-	 * @ApiCode PROCAT_0108
+	 * @ApiCode PROCAT_0109
 	 */
 	public Map<ProductAttrDef,List<ProductAttrVal>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
 			throws BusinessException,SystemException;

@@ -28,9 +28,9 @@ public class ProductCatInfo extends BaseResponse{
 	private long parentProductCatId;
 	
 	/**
-	 * 是否叶子节点
+	 * 是否有子分类
 	 */
-	private String isLeaf;
+	private String isChild;
 
     /**
      * 首字母
@@ -38,45 +38,56 @@ public class ProductCatInfo extends BaseResponse{
     private String firstLetter;
     
     /**
-     * 类目的级别
+     * 类目的级别-用于判断是类目(一级)还是子类目
      */
     private long catLevel;
     /**
-     * 序列号-用于移动排序
+     * 序列号-用于排序
      */
     private long serialNumber;
-	
     public String getProductCatId() {
         return productCatId;
     }
-
     public void setProductCatId(String productCatId) {
         this.productCatId = productCatId;
     }
-
     public String getProductCatName() {
         return productCatName;
     }
-
     public void setProductCatName(String productCatName) {
         this.productCatName = productCatName;
     }
-
     public long getParentProductCatId() {
         return parentProductCatId;
     }
-
     public void setParentProductCatId(long parentProductCatId) {
         this.parentProductCatId = parentProductCatId;
     }
-
-    public String getIsLeaf() {
-        return isLeaf;
+    public String getIsChild() {
+        return isChild;
     }
-
-    public void setIsLeaf(String isLeaf) {
-        this.isLeaf = isLeaf;
+    public void setIsChild(String isChild) {
+        this.isChild = isChild;
     }
+    public String getFirstLetter() {
+        return firstLetter;
+    }
+    public void setFirstLetter(String firstLetter) {
+        this.firstLetter = firstLetter;
+    }
+    public long getCatLevel() {
+        return catLevel;
+    }
+    public void setCatLevel(long catLevel) {
+        this.catLevel = catLevel;
+    }
+    public long getSerialNumber() {
+        return serialNumber;
+    }
+    public void setSerialNumber(long serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+	
 
 	
 }
