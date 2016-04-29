@@ -9,7 +9,9 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDefCriteria;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrDefMapper;
+import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 
@@ -21,6 +23,9 @@ import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     @Autowired
     ProdAttrDefMapper prodAttrDefMapper;
+    
+    @Autowired
+    ProdAttrvalueDefMapper prodAttrvalueDefMapper;
 
     //获取序列号
     @Autowired
@@ -59,8 +64,9 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
             request.andAttrNameEqualTo(attrDefParam.getAttrName());
         if(attrDefParam.getValueWay() != null)
             request.andValueWayEqualTo(attrDefParam.getValueWay());
-        if(attrDefParam.getOperId()+"" != null)
+        if(String.valueOf(attrDefParam.getOperId()) != null)
             request.andOperIdEqualTo(attrDefParam.getOperId());
+            
         PageInfo<ProdAttrDef> pageInfo = new PageInfo<ProdAttrDef>();
         if(attrDefParam.getPageNo() != null && attrDefParam.getPageSize() != null){
             example.setLimitStart((attrDefParam.getPageNo()-1) * attrDefParam.getPageSize());
@@ -72,4 +78,13 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
             
         return pageInfo;
     }
+
+    @Override
+    public int selectAttrvalNum(String tenantId, Long attrId) {
+        ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId);
+        return prodAttrvalueDefMapper.countByExample(example);
+    }
+    
+    
 }

@@ -21,6 +21,13 @@ public interface IAttrAndAttrvalBusiSV {
      */
     public AttrDefInfo selectAttrById(String tenantId,Long attrId);
     
+    /**
+     * 分页查询属性
+     * 
+     * @param attrDefParam
+     * @return
+     * @author lipeng
+     */
     public PageInfo<AttrDefInfo> selectAttrs(AttrDefParam attrDefParam);
     
 }
