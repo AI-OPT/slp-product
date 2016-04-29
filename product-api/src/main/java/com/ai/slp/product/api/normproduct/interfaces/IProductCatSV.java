@@ -33,9 +33,9 @@ public interface IProductCatSV {
 	@interface QueryProductCat {}
 
 	/**
-	 * 商品类目保存<br>
+	 * 商品类目批量添加<br>
 	 * 
-	 * @param pcrList
+	 * @param pcpList
 	 * @return 服务返回基本信息
 	 * @throws BusinessException
 	 * @throws SystemException

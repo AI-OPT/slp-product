@@ -16,4 +16,6 @@ public interface IProductCatBusiSV {
      * @return
      */
     public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery);
+
+
 }

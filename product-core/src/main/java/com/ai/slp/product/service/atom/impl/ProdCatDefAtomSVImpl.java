@@ -22,7 +22,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     ProductCatMapper productCatMapper;
 
     @Override
-    public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,
+    public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,Long parentProductCatId,
             String tenantId, String productCatId, String productCatName, String isChild) {
         ProductCatCriteria example = new ProductCatCriteria();
         ProductCatCriteria.Criteria criteria = example.createCriteria();
@@ -32,6 +32,8 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
             criteria.andProductCatIdLike("%"+productCatId+"%");
         if (StringUtils.isNotBlank(productCatName))
             criteria.andProductCatNameLike("%"+productCatName+"%");
+        if (parentProductCatId!=null)
+            criteria.andParentProductCatIdEqualTo(parentProductCatId);
         if (StringUtils.isNotBlank(isChild))
             criteria.andIsChildEqualTo(isChild);
         PageInfo<ProductCat> pageInfo = new PageInfo<>();

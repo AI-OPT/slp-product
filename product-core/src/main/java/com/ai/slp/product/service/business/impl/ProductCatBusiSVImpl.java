@@ -27,7 +27,8 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     @Override
     public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
         PageInfo<ProductCat> catInfoPageInfo = prodCatDefAtomSV.queryForPage(
-                pageQuery.getPageNo(),pageQuery.getPageSize(),pageQuery.getTenantId(),pageQuery.getProductCatId(),
+                pageQuery.getPageNo(),pageQuery.getPageSize(),pageQuery.getParentProductCatId(),
+                pageQuery.getTenantId(),pageQuery.getProductCatId(),
                 pageQuery.getProductCatName(),pageQuery.getIsChild()
         );
         PageInfoWrapper<ProductCatInfo> pageInfoWrapper = new PageInfoWrapper<>();

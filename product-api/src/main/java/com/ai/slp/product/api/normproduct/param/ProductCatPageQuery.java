@@ -23,6 +23,11 @@ public class ProductCatPageQuery extends BaseInfo {
     private Integer pageSize =20;
 
     /**
+     * 父类目
+     */
+    private Long parentProductCatId;
+
+    /**
      * 商品类目ID
      */
     private String productCatId;
@@ -75,5 +80,13 @@ public class ProductCatPageQuery extends BaseInfo {
 
     public void setIsChild(String isChild) {
         this.isChild = isChild;
+    }
+
+    public Long getParentProductCatId() {
+        return parentProductCatId;
+    }
+
+    public void setParentProductCatId(Long parentProductCatId) {
+        this.parentProductCatId = parentProductCatId;
     }
 }
