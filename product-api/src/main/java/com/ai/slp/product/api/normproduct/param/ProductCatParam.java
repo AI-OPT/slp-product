@@ -28,6 +28,17 @@ public class ProductCatParam extends ProductCatBase {
     @NotNull(message = "名称不能为空", 
             groups = { IProductCatSV.AddProductCat.class})
 	private String productCatName;
+    
+    /**
+     * 请求查询的页码
+     * 默认为1
+     */
+    private Integer pageNo = 1;
+
+    /**
+     * 每页显示条数
+     */
+    private Integer pageSize =20;
 	
 	/**
 	 * 父类目

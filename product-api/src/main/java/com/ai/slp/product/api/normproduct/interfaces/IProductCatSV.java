@@ -6,6 +6,7 @@ import java.util.Map;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.param.*;
 
 /**
@@ -19,7 +20,7 @@ import com.ai.slp.product.api.normproduct.param.*;
 public interface IProductCatSV {
 
     /**
-     * 商品类目查询<br>
+     * 商品类目分页查询<br>
      * 第一次打开页面时只显示一级类目列表<br>
      * 点扩展符号"+"显示对应父类目下的下级类目列表<br>
      * 
@@ -30,7 +31,7 @@ public interface IProductCatSV {
      * @author lipeng
     *  @ApiCode PROCAT_0100
      */
-	public List<ProductCatInfo> queryProductCat(ProductCatParam productCatParam)
+	public PageInfo<ProductCatInfo> queryProductCat(ProductCatParam productCatParam)
 			throws BusinessException, SystemException;
 	@interface QueryProductCat {}
 

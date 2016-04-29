@@ -19,7 +19,7 @@ public class AttrDefParam extends ProductCatBase {
     /**
      * 每页显示条数
      */
-    private Integer pageSize;
+    private Integer pageSize =20;
 
 	/**
 	 * 属性ID
