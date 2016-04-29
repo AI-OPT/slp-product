@@ -1,9 +1,13 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
+
+import java.util.Date;
 
 /**
  * 商品类目请求参数<br>
