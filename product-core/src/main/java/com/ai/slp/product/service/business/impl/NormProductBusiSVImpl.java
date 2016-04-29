@@ -6,15 +6,13 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.constants.StandedProdAttrConstants;
+import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
 import com.ai.slp.product.dao.mapper.interfaces.StandedProdAttrLogMapper;
-import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.StandedProdPageQueryVo;
@@ -41,8 +39,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     IStandedProdAttrAtomSV standedProdAttrAtomSV;
     @Autowired
     IStandedProdAttrLogAtomSV standedProdAttrLogAtomSV;
+    @Autowired
+    IStorageGroupAtomSV storageGroupAtomSV;
+
     /**
      * 添加标准品
+     *
      * @param normProdct
      * @return 添加成功后的标准品的标识
      */
@@ -50,31 +52,31 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     public String installNormProd(NormProductSaveRequest normProdct) {
         //添加标准品
         StandedProduct standedProduct = new StandedProduct();
-        BeanUtils.copyProperties(standedProduct,normProdct);
+        BeanUtils.copyProperties(standedProduct, normProdct);
         standedProduct.setStandedProductName(normProdct.getProductName());
-        if (normProdct.getCreateTime()!=null)
+        if (normProdct.getCreateTime() != null)
             standedProduct.setCreateTime(DateUtils.toTimeStamp(normProdct.getCreateTime()));
         //添加成功,添加标准品日志
-        if (standedProductAtomSV.installObj(standedProduct)>0){
+        if (standedProductAtomSV.installObj(standedProduct) > 0) {
             StandedProductLog productLog = new StandedProductLog();
-            BeanUtils.copyProperties(productLog,standedProduct);
+            BeanUtils.copyProperties(productLog, standedProduct);
             standedProductLogAtomSV.insert(productLog);
         }
         //添加标准品属性值
         List<NormProductAttrValRequest> attrValList = normProdct.getAttrValList();
-        for (NormProductAttrValRequest attrValReq:attrValList){
+        for (NormProductAttrValRequest attrValReq : attrValList) {
             StandedProdAttr prodAttr = new StandedProdAttr();
-            BeanUtils.copyProperties(prodAttr,attrValReq);
+            BeanUtils.copyProperties(prodAttr, attrValReq);
             prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
             prodAttr.setAttrValueName(attrValReq.getAttrVal());
             prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
             prodAttr.setState(StandedProdAttrConstants.STATE_ACTIVE);//设置为有效
-            if (attrValReq.getOperTime()!=null)
+            if (attrValReq.getOperTime() != null)
                 prodAttr.setOperTime(DateUtils.toTimeStamp(attrValReq.getOperTime()));
             //添加成功,添加日志
-            if (standedProdAttrAtomSV.installObj(prodAttr)>0){
+            if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
                 StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
-                BeanUtils.copyProperties(prodAttrLog,prodAttr);
+                BeanUtils.copyProperties(prodAttrLog, prodAttr);
                 standedProdAttrLogAtomSV.installObj(prodAttrLog);
             }
         }
@@ -83,13 +85,50 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
     /**
      * 更新标准品
+     *
      * @param normProdct
      */
     @Override
     public void updateNormProd(NormProductSaveRequest normProdct) {
-        //若状态是否由可用变更为不可用,则需要检查库存组是否全部都已经停用,
+        String tenantId = normProdct.getTenantId(), productId = normProdct.getProductId();
+        //查询是否存在
+        StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
+        if (standedProduct == null)
+            throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
+        /*
+        总共有6种状态变化,
+        1.不允许变更为废弃状态;2.已废弃标准品不允许变更状态;3.可用变为不可用,需要检查.
+         */
+        //状态变更
+        if (normProdct.getState().equals(standedProduct.getState())) {
+            //变更为废弃
+            if (StandedProductConstants.STATUS_DISCARD.equals(normProdct.getState()))
+                throw new BusinessException("", "不允许变更为[废弃]状态,请使用废弃接口");
+            //废弃状态下不允许变更为其他状态
+            else if (StandedProductConstants.STATUS_DISCARD.equals(standedProduct.getState()))
+                throw new BusinessException("", "不允许将[废弃]状态变更为其他状态");
+            //将可用变为不可用
+            else if (StandedProductConstants.STATUS_ACTIVE.equals(standedProduct.getState())
+                    && StandedProductConstants.STATUS_INACTIVE.equals(normProdct)) {
+                //检查是否有启用状态库存组
+                int groupNum = storageGroupAtomSV.queryCountActive(tenantId, productId);
+                if (groupNum > 0)
+                    throw new BusinessException("", "该标准品下存在[" + groupNum + "]个启用的库存组,不允许变更为不可用");
+            }
+        }
+        //变更信息
+        standedProduct.setStandedProductName(normProdct.getProductName());
+        standedProduct.setProductType(normProdct.getProductType());
+        standedProduct.setState(normProdct.getState());
+        if (standedProductAtomSV.updateObj(standedProduct)>0){
+            StandedProductLog productLog = new StandedProductLog();
+            BeanUtils.copyProperties(productLog, standedProduct);
+            standedProductLogAtomSV.insert(productLog);
+        }
+        //变更属性值. 1.将原来属性值设置为不可用;2,启用新的属性值.
 
     }
+
 
     /**
      * 查询指定标准品信息
@@ -110,8 +149,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         BeanUtils.copyProperties(response,product);
         response.setProductId(product.getStandedProdId());
         response.setProductName(product.getStandedProductName());
-        response.setCreateName("");//TODO... 获取创建者名称
-        response.setOperName("");//TODO... 获取操作者名称
+//        response.setCreateName("");//TODO... 获取创建者名称
+//        response.setOperName("");//TODO... 获取操作者名称
 //        response.setCreateTime(product.getCreateTime());
 //        response.setOperTime(product.getOperTime());
         Map<Long,Set<String>> attrAndValueIds = new HashMap<>();
@@ -159,8 +198,22 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
     @Override
     public void discardProduct(String tenantId, String productId, Long operId, Date operTime) {
-
+        StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,productId);
+        if (standedProduct==null)
+            throw  new BusinessException("","不存在指定标准品,租户ID:"+tenantId+",标准品标识:"+productId);
+        //查询没有废弃的库存组
+        int noDiscardNum = storageGroupAtomSV.queryCountNoDiscard(tenantId,productId);
+        if (noDiscardNum>0)
+            throw new BusinessException("","该标准品下存在["+noDiscardNum+"]个未废弃库存组");
+        standedProduct.setOperId(operId);
+        standedProduct.setOperTime(operTime==null?null:DateUtils.toTimeStamp(operTime));
+        standedProduct.setState(StandedProductConstants.STATUS_DISCARD);//设置废弃
+        //添加日志
+        if (standedProductAtomSV.updateObj(standedProduct)>0){
+            StandedProductLog productLog = new StandedProductLog();
+            BeanUtils.copyProperties(productLog,standedProduct);
+            standedProductLogAtomSV.insert(productLog);
+        }
     }
-
 
 }

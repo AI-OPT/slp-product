@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.atom.impl;
 
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.constants.StandedProdAttrConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
@@ -50,7 +51,7 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
     }
 
     /**
-     * 查询租户下的某个标准品的所有属性值
+     * 查询租户下的某个标准品的所有属性值,只查询有效的
      * @param tenantId
      * @param standedId
      * @return
@@ -60,7 +61,9 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
         if (StringUtils.isBlank(tenantId)||StringUtils.isBlank(standedId))
             return new ArrayList<StandedProdAttr>();
         StandedProdAttrCriteria example = new StandedProdAttrCriteria();
-        example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedId);
+        example.createCriteria()
+                .andTenantIdEqualTo(tenantId)
+                .andStandedProdIdEqualTo(standedId).andStateEqualTo(StandedProdAttrConstants.STATE_ACTIVE);
         return prodAttrMapper.selectByExample(example);
     }
 }
