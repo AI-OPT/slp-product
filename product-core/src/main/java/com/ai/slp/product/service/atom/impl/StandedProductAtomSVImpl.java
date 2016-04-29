@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * 标准品原子操作
  * Created by jackieliu on 16/4/28.
  */
 @Component
@@ -45,11 +46,17 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
     public int updateObj(StandedProduct standedProduct) {
         if (standedProduct==null)
             return 0;
+        //不允许更新创建人,创建时间,所属类目
         standedProduct.setCreateTime(null);
         standedProduct.setCreateId(null);
+        standedProduct.setProductCatId(null);
         if (standedProduct.getOperTime()==null)
             standedProduct.setOperTime(DateUtil.getSysDate());
-        return productMapper.updateByPrimaryKeySelective(standedProduct);
+        StandedProductCriteria example = new StandedProductCriteria();
+        example.createCriteria()
+                .andTenantIdEqualTo(standedProduct.getTenantId())
+                .andStandedProdIdEqualTo(standedProduct.getStandedProdId());
+        return productMapper.updateByExampleSelective(standedProduct,example);
     }
 
     @Override

@@ -62,6 +62,7 @@ public interface INormProductSV {
 
     /**
      * 更新标准品信息. <br>
+     * 不允许变更为废弃状态,要进行废弃操作,请使用废弃接口.
      *
      * @param productInfoRequest 标准品信息
      * @return 标准品更新结果
