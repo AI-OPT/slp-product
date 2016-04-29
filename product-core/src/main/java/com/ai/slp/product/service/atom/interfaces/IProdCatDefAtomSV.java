@@ -19,7 +19,8 @@ public interface IProdCatDefAtomSV {
      * 根据条件进行分页查寻
      * @return
      */
-    public PageInfo<StandedProduct> queryForPage(StandedProdPageQueryVo request);
+    public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,
+            String tenantId,String productCatId,String productCatName,String isChild);
 
     /**
      * 商品类目查询

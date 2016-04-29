@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.normproduct.param.PageInfoWrapper;
 import com.ai.slp.product.api.normproduct.param.ProductCatInfo;
 import com.ai.slp.product.api.normproduct.param.ProductCatParam;
 
@@ -15,5 +15,5 @@ public interface IProductCatBusiSV {
      * @param productCatParam 查询条件
      * @return
      */
-    public PageInfo<ProductCatInfo> queryProductCat(ProductCatParam productCatParam);
+    public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatParam productCatParam);
 }

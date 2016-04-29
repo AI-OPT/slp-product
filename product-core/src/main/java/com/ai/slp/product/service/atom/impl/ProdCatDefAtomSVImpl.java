@@ -3,8 +3,7 @@ package com.ai.slp.product.service.atom.impl;
 import java.util.List;
 
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.vo.StandedProdPageQueryVo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +12,9 @@ import com.ai.slp.product.dao.mapper.bo.ProductCatCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProductCatMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 
+/**
+ * 类目操作
+ */
 @Component
 public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
 
@@ -20,8 +22,29 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     ProductCatMapper productCatMapper;
 
     @Override
-    public PageInfo<StandedProduct> queryForPage(StandedProdPageQueryVo request) {
-        return null;
+    public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,
+            String tenantId, String productCatId, String productCatName, String isChild) {
+        ProductCatCriteria example = new ProductCatCriteria();
+        ProductCatCriteria.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(tenantId))
+            criteria.andTenantIdEqualTo(tenantId);
+        if (StringUtils.isNotBlank(productCatId))
+            criteria.andProductCatIdLike("%"+productCatId+"%");
+        if (StringUtils.isNotBlank(productCatName))
+            criteria.andProductCatNameLike("%"+productCatName+"%");
+        if (StringUtils.isNotBlank(isChild))
+            criteria.andIsChildEqualTo(isChild);
+        PageInfo<ProductCat> pageInfo = new PageInfo<>();
+        //设置总数
+        pageInfo.setCount(productCatMapper.countByExample(example));
+        if (pageNo != null && pageSize != null) {
+            example.setLimitStart((pageNo - 1) * pageSize);
+            example.setLimitEnd(pageSize);
+        }
+        pageInfo.setPageNo(pageNo);
+        pageInfo.setPageSize(pageSize);
+        pageInfo.setResult(productCatMapper.selectByExample(example));
+        return pageInfo;
     }
 
     @Override

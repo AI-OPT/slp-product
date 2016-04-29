@@ -6,7 +6,9 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
 import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,12 +21,13 @@ import java.util.Map;
 @Service
 @Component
 public class IProductCatSVImpl implements IProductCatSV {
+    @Autowired
+    IProductCatBusiSV productCatBusiSV;
 
     @Override
     public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatParam productCatParam)
             throws BusinessException, SystemException {
-
-        return null;
+        return productCatBusiSV.queryProductCat(productCatParam);
     }
 
     @Override
