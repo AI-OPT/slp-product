@@ -1,5 +1,9 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import java.sql.Date;
+
+import com.ai.opt.base.vo.BaseInfo;
+
 /**
  * 增加类目的类目属性参数
  * 
@@ -8,7 +12,7 @@ package com.ai.slp.product.api.normproduct.param;
  * 
  * @author lipeng
  */
-public class AddCatAttrParam extends ProductCatBase{
+public class AddCatAttrParam extends BaseInfo{
 
     /**
      * 属性ID
@@ -34,6 +38,49 @@ public class AddCatAttrParam extends ProductCatBase{
      * 序列号-用于排序
      */
     private long serialNumber;
+    
+
+    /**
+     * 状态
+     * 1有效0无效
+     */
+    private String state;
+    
+    /**
+     * 操作人ID
+     */
+    private long operId;
+    
+    /**
+     * 操作时间
+     */
+    private Date operTime;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public long getOperId() {
+        return operId;
+    }
+
+    public void setOperId(long operId) {
+        this.operId = operId;
+    }
+
+    public Date getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Date operTime) {
+        this.operTime = operTime;
+    }
+    
+    
 
     public long getAttrId() {
         return attrId;
