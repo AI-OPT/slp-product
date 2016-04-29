@@ -19,6 +19,8 @@ public class ProdAttrDef {
 
     private Timestamp operTime;
 
+    private String isAllowCustom;
+
     public Long getAttrId() {
         return attrId;
     }
@@ -81,5 +83,13 @@ public class ProdAttrDef {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public String getIsAllowCustom() {
+        return isAllowCustom;
+    }
+
+    public void setIsAllowCustom(String isAllowCustom) {
+        this.isAllowCustom = isAllowCustom == null ? null : isAllowCustom.trim();
     }
 }

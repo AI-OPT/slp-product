@@ -10,6 +10,7 @@
     <result column="STATE" property="state" jdbcType="VARCHAR" />
     <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+    <result column="IS_ALLOW_CUSTOM" property="isAllowCustom" jdbcType="CHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ATTR_ID, TENANT_ID, ATTR_NAME, FIRST_LETTER, VALUE_WAY, STATE, OPER_ID, OPER_TIME
+    ATTR_ID, TENANT_ID, ATTR_NAME, FIRST_LETTER, VALUE_WAY, STATE, OPER_ID, OPER_TIME, 
+    IS_ALLOW_CUSTOM
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.ProdAttrDefCriteria" >
     select
@@ -109,10 +111,12 @@
   <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.ProdAttrDef" >
     insert into prod_attr_def (ATTR_ID, TENANT_ID, ATTR_NAME, 
       FIRST_LETTER, VALUE_WAY, STATE, 
-      OPER_ID, OPER_TIME)
+      OPER_ID, OPER_TIME, IS_ALLOW_CUSTOM
+      )
     values (#{attrId,jdbcType=DECIMAL}, #{tenantId,jdbcType=VARCHAR}, #{attrName,jdbcType=VARCHAR}, 
       #{firstLetter,jdbcType=VARCHAR}, #{valueWay,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
-      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP})
+      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}, #{isAllowCustom,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProdAttrDef" >
     insert into prod_attr_def
@@ -141,6 +145,9 @@
       <if test="operTime != null" >
         OPER_TIME,
       </if>
+      <if test="isAllowCustom != null" >
+        IS_ALLOW_CUSTOM,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="attrId != null" >
@@ -166,6 +173,9 @@
       </if>
       <if test="operTime != null" >
         #{operTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isAllowCustom != null" >
+        #{isAllowCustom,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -202,6 +212,9 @@
       <if test="record.operTime != null" >
         OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.isAllowCustom != null" >
+        IS_ALLOW_CUSTOM = #{record.isAllowCustom,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -216,7 +229,8 @@
       VALUE_WAY = #{record.valueWay,jdbcType=VARCHAR},
       STATE = #{record.state,jdbcType=VARCHAR},
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
-      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      IS_ALLOW_CUSTOM = #{record.isAllowCustom,jdbcType=CHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -245,6 +259,9 @@
       <if test="operTime != null" >
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="isAllowCustom != null" >
+        IS_ALLOW_CUSTOM = #{isAllowCustom,jdbcType=CHAR},
+      </if>
     </set>
     where ATTR_ID = #{attrId,jdbcType=DECIMAL}
   </update>
@@ -256,7 +273,8 @@
       VALUE_WAY = #{valueWay,jdbcType=VARCHAR},
       STATE = #{state,jdbcType=VARCHAR},
       OPER_ID = #{operId,jdbcType=DECIMAL},
-      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      IS_ALLOW_CUSTOM = #{isAllowCustom,jdbcType=CHAR}
     where ATTR_ID = #{attrId,jdbcType=DECIMAL}
   </update>
 </mapper>

@@ -654,6 +654,76 @@ public class ProdAttrDefCriteria {
             addCriterion("OPER_TIME not between", value1, value2, "operTime");
             return (Criteria) this;
         }
+
+        public Criteria andIsAllowCustomIsNull() {
+            addCriterion("IS_ALLOW_CUSTOM is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomIsNotNull() {
+            addCriterion("IS_ALLOW_CUSTOM is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomEqualTo(String value) {
+            addCriterion("IS_ALLOW_CUSTOM =", value, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomNotEqualTo(String value) {
+            addCriterion("IS_ALLOW_CUSTOM <>", value, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomGreaterThan(String value) {
+            addCriterion("IS_ALLOW_CUSTOM >", value, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomGreaterThanOrEqualTo(String value) {
+            addCriterion("IS_ALLOW_CUSTOM >=", value, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomLessThan(String value) {
+            addCriterion("IS_ALLOW_CUSTOM <", value, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomLessThanOrEqualTo(String value) {
+            addCriterion("IS_ALLOW_CUSTOM <=", value, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomLike(String value) {
+            addCriterion("IS_ALLOW_CUSTOM like", value, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomNotLike(String value) {
+            addCriterion("IS_ALLOW_CUSTOM not like", value, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomIn(List<String> values) {
+            addCriterion("IS_ALLOW_CUSTOM in", values, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomNotIn(List<String> values) {
+            addCriterion("IS_ALLOW_CUSTOM not in", values, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomBetween(String value1, String value2) {
+            addCriterion("IS_ALLOW_CUSTOM between", value1, value2, "isAllowCustom");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowCustomNotBetween(String value1, String value2) {
+            addCriterion("IS_ALLOW_CUSTOM not between", value1, value2, "isAllowCustom");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
