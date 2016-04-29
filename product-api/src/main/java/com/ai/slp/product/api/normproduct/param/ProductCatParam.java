@@ -30,7 +30,7 @@ public class ProductCatParam extends ProductCatBase {
     @NotNull(message = "名称不能为空", 
             groups = { IProductCatSV.AddProductCat.class})
 	private String productCatName;
-	
+
 	/**
 	 * 父类目
 	 */
@@ -99,7 +99,4 @@ public class ProductCatParam extends ProductCatBase {
     public void setSerialNumber(long serialNumber) {
         this.serialNumber = serialNumber;
     }
-	
-
-
 }

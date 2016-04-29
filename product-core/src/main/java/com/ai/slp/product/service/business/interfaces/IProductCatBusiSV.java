@@ -2,7 +2,7 @@ package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.slp.product.api.normproduct.param.PageInfoWrapper;
 import com.ai.slp.product.api.normproduct.param.ProductCatInfo;
-import com.ai.slp.product.api.normproduct.param.ProductCatParam;
+import com.ai.slp.product.api.normproduct.param.ProductCatPageQuery;
 
 /**
  * 商品类目
@@ -12,8 +12,8 @@ public interface IProductCatBusiSV {
     /**
      * 商品类目分页查询
      *
-     * @param productCatParam 查询条件
+     * @param pageQuery 查询条件
      * @return
      */
-    public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatParam productCatParam);
+    public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery);
 }

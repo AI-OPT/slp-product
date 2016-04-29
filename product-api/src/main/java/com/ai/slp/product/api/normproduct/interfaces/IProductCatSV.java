@@ -21,14 +21,14 @@ public interface IProductCatSV {
     /**
      * 商品类目分页查询<br>
      * 
-     * @param productCatParam
+     * @param pageQuery
      * @return 商品类目查询条件
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0100
      */
-	public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatParam productCatParam)
+	public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery)
 			throws BusinessException, SystemException;
 	@interface QueryProductCat {}
 

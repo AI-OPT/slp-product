@@ -1,14 +1,17 @@
 package com.ai.slp.product.service.atom.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDefCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrDefMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 属性定义原子操作
@@ -43,5 +46,30 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId);
         return prodAttrDefMapper.deleteByExample(example);
+    }
+
+    @Override
+    public PageInfo<ProdAttrDef> selectPageAttrs(AttrDefParam attrDefParam) {
+        ProdAttrDefCriteria example = new ProdAttrDefCriteria();
+        ProdAttrDefCriteria.Criteria request = example.createCriteria();
+        request.andTenantIdEqualTo(attrDefParam.getTenantId());
+        if(attrDefParam.getAttrId() != null)
+            request.andAttrIdEqualTo(attrDefParam.getAttrId());
+        if(attrDefParam.getAttrName() != null)
+            request.andAttrNameEqualTo(attrDefParam.getAttrName());
+        if(attrDefParam.getValueWay() != null)
+            request.andValueWayEqualTo(attrDefParam.getValueWay());
+        if(attrDefParam.getOperId()+"" != null)
+            request.andOperIdEqualTo(attrDefParam.getOperId());
+        PageInfo<ProdAttrDef> pageInfo = new PageInfo<ProdAttrDef>();
+        if(attrDefParam.getPageNo() != null && attrDefParam.getPageSize() != null){
+            example.setLimitStart((attrDefParam.getPageNo()-1) * attrDefParam.getPageSize());
+            example.setLimitEnd(attrDefParam.getPageSize());
+        }
+        pageInfo.setPageNo(attrDefParam.getPageNo());
+        pageInfo.setPageSize(attrDefParam.getPageSize());
+        pageInfo.setResult(prodAttrDefMapper.selectByExample(example));
+            
+        return pageInfo;
     }
 }

@@ -29,6 +29,11 @@ public class AttrDefInfo extends BaseResponse {
     private String attrType;
     
     /**
+     *属性名称首字母大写
+     */
+    private String firstLetter;
+    
+    /**
      * 值输入方式
      */
     private String valueWay;
@@ -47,8 +52,7 @@ public class AttrDefInfo extends BaseResponse {
     /**
      * 是否允许用户自定义属性值
      */
-    //TODO一期不做
-    private char isCustom;
+    private String isAllowCustom;
     
     /**
      * 是否必填
@@ -70,6 +74,14 @@ public class AttrDefInfo extends BaseResponse {
      * 操作时间
      */
     private Date operTime;
+
+    public String getFirstLetter() {
+        return firstLetter;
+    }
+
+    public void setFirstLetter(String firstLetter) {
+        this.firstLetter = firstLetter;
+    }
 
     public long getAttrId() {
         return attrId;
@@ -119,12 +131,13 @@ public class AttrDefInfo extends BaseResponse {
         this.isPicture = isPicture;
     }
 
-    public char getIsCustom() {
-        return isCustom;
+
+    public String getIsAllowCustom() {
+        return isAllowCustom;
     }
 
-    public void setIsCustom(char isCustom) {
-        this.isCustom = isCustom;
+    public void setIsAllowCustom(String isAllowCustom) {
+        this.isAllowCustom = isAllowCustom;
     }
 
     public char getIsNecessary() {
