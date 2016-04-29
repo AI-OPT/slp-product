@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 
 /**
@@ -32,5 +34,14 @@ public interface IProdAttrDefAtomSV {
      * @return
      */
     public int deleteById(String tenantId,Long attrId);
+    
+    /**
+     * 分页查询属性
+     * 
+     * @param attrDefParam
+     * @return
+     * @author lipeng
+     */
+    public PageInfo<ProdAttrDef> selectPageAttrs(AttrDefParam attrDefParam);
 
 }
