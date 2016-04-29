@@ -77,4 +77,10 @@ public class IProductCatSVImpl implements IProductCatSV {
         return null;
     }
 
+    @Override
+    public BaseResponse addAttrForCatAndType(AddCatAttrParam addCatAttrParam)
+            throws BusinessException, SystemException {
+        return null;
+    }
+
 }

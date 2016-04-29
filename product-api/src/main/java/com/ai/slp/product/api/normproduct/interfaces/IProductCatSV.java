@@ -140,7 +140,21 @@ public interface IProductCatSV {
 	public Map<AttrDefInfo,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
 		throws BusinessException,SystemException;
 	@interface QueryAttrByCatAndType{}
-
+	
+	/**
+	 * 依据商品类目和属性类型添加类目属性<br>
+	 * 类型分为:关键属性,销售属性,非关键属性
+	 * 
+	 * @param addCatAttrParam
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author lipeng
+	*  @ApiCode
+	 */
+	public BaseResponse addAttrForCatAndType(AddCatAttrParam addCatAttrParam) throws BusinessException,SystemException;
+	@interface AddAttrForCatAndType {}
+	
 	/**
 	 * 查询指定标准品下某种类型的属性集合<br>
 	 * 类型分为:关键属性,销售属性
