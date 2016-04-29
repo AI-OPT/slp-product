@@ -3,6 +3,7 @@ package com.ai.slp.product.api.normproduct.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 商品类目接口实现
  * Created by jackieliu on 16/4/28.
  */
 @Service
@@ -19,8 +21,9 @@ import java.util.Map;
 public class IProductCatSVImpl implements IProductCatSV {
 
     @Override
-    public List<ProductCatInfo> queryProductCat(ProductCatParam productCatParam)
+    public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatParam productCatParam)
             throws BusinessException, SystemException {
+
         return null;
     }
 

@@ -2,6 +2,9 @@ package com.ai.slp.product.service.atom.impl;
 
 import java.util.List;
 
+import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
+import com.ai.slp.product.vo.StandedProdPageQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +18,12 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
 
     @Autowired
     ProductCatMapper productCatMapper;
-    
+
+    @Override
+    public PageInfo<StandedProduct> queryForPage(StandedProdPageQueryVo request) {
+        return null;
+    }
+
     @Override
     public ProductCat selectById(String tenantId, String productCatId) {
         ProductCatCriteria example = new ProductCatCriteria();

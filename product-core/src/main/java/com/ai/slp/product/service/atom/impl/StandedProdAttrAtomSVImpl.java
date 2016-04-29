@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 标准品属性值
@@ -50,6 +52,8 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
         return 0;
     }
 
+
+
     /**
      * 查询租户下的某个标准品的所有属性值,只查询有效的
      * @param tenantId
@@ -66,4 +70,30 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
                 .andStandedProdIdEqualTo(standedId).andStateEqualTo(StandedProdAttrConstants.STATE_ACTIVE);
         return prodAttrMapper.selectByExample(example);
     }
+
+    @Override
+    public Map<Long, StandedProdAttr> queryMapByNormProduct(String tenantId, String standedId) {
+        List<StandedProdAttr> attrs = queryByNormProduct(tenantId,standedId);
+        Map<Long,StandedProdAttr> attrMap = new HashMap<>();
+        for (StandedProdAttr prodAttr:attrs){
+            attrMap.put(prodAttr.getStandedProdAttrId(),prodAttr);
+        }
+        return attrMap;
+    }
+
+    @Override
+    public int updateInactiveByNormProduct(String tenantId, String standedId,Long operId) {
+        StandedProdAttr prodAttr = new StandedProdAttr();
+        prodAttr.setState(StandedProdAttrConstants.STATE_INACTIVE);
+        prodAttr.setOperId(operId);
+        prodAttr.setOperTime(DateUtils.currTimeStamp());
+        StandedProdAttrCriteria example = new StandedProdAttrCriteria();
+        example.createCriteria()
+                .andTenantIdEqualTo(tenantId)
+                .andStandedProdIdEqualTo(standedId)
+                .andStateEqualTo(StandedProdAttrConstants.STATE_ACTIVE);
+
+        return prodAttrMapper.updateByExampleSelective(prodAttr,example);
+    }
+
 }

@@ -19,18 +19,16 @@ import com.ai.slp.product.api.normproduct.param.*;
 public interface IProductCatSV {
 
     /**
-     * 商品类目查询<br>
-     * 第一次打开页面时只显示一级类目列表<br>
-     * 点扩展符号"+"显示对应父类目下的下级类目列表<br>
+     * 商品类目分页查询<br>
      * 
      * @param productCatParam
-     * @return 商品类目集合
+     * @return 商品类目查询条件
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode PROCAT_0100
      */
-	public List<ProductCatInfo> queryProductCat(ProductCatParam productCatParam)
+	public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatParam productCatParam)
 			throws BusinessException, SystemException;
 	@interface QueryProductCat {}
 

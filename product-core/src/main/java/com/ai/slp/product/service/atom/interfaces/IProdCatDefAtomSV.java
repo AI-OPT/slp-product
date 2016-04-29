@@ -1,6 +1,9 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
+import com.ai.slp.product.vo.StandedProdPageQueryVo;
 
 /**
  * 商品类目操作
@@ -11,7 +14,13 @@ import com.ai.slp.product.dao.mapper.bo.ProductCat;
  * @author lipeng
  */
 public interface IProdCatDefAtomSV {
-    
+
+    /**
+     * 根据条件进行分页查寻
+     * @return
+     */
+    public PageInfo<StandedProduct> queryForPage(StandedProdPageQueryVo request);
+
     /**
      * 商品类目查询
      * 

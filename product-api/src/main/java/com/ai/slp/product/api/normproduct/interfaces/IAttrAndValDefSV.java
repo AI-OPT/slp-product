@@ -5,12 +5,7 @@ import java.util.List;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.normproduct.param.AttrParam;
-import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
-import com.ai.slp.product.api.normproduct.param.AttrDefParam;
-import com.ai.slp.product.api.normproduct.param.AttrValInfo;
-import com.ai.slp.product.api.normproduct.param.AttrValParam;
+import com.ai.slp.product.api.normproduct.param.*;
 
 /**
  * 属性及属性值管理接口
@@ -32,7 +27,7 @@ public interface IAttrAndValDefSV {
      * @author lipeng
     *  @ApiCode PROCAT_0200
      */
-    public PageInfo<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
+    public PageInfoWrapper<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException;
     @interface QueryAttrs {}
     
@@ -102,7 +97,7 @@ public interface IAttrAndValDefSV {
      * @author lipeng
     *  @ApiCode PROCAT_0204
      */
-    public PageInfo<AttrValInfo> queryAttrValues(AttrParam attrParam)
+    public PageInfoWrapper<AttrValInfo> queryAttrValues(AttrParam attrParam)
             throws BusinessException, SystemException;
     @interface QueryAttrValues {}
     

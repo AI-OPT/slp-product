@@ -19,7 +19,7 @@ import java.util.List;
 public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
 
     @Override
-    public PageInfo<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
+    public PageInfoWrapper<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException {
         return null;
     }
@@ -46,7 +46,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public PageInfo<AttrValInfo> queryAttrValues(AttrParam attrParam)
+    public PageInfoWrapper<AttrValInfo> queryAttrValues(AttrParam attrParam)
             throws BusinessException, SystemException {
         return null;
     }

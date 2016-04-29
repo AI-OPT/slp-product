@@ -1,5 +1,7 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
@@ -52,6 +54,8 @@ public class ProductCatParam extends ProductCatBase {
     /**
      * 序列号-用于排序
      */
+    @Min(value = 0,message = "排序号不能小于0",groups = {IProductCatSV.AddProductCat.class})
+    @Max(value = 10000,message = "排序号不能大于10000",groups = {IProductCatSV.AddProductCat.class})
     private long serialNumber;
     public String getProductCatId() {
         return productCatId;

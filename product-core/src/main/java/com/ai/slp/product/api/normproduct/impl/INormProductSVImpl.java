@@ -28,7 +28,7 @@ public class INormProductSVImpl implements INormProductSV {
     INormProductBusiSV normProductBusiSV;
 
     @Override
-    public PageInfo<NormProductResponse> queryNormProduct(NormProductRequest productRequest) throws BusinessException, SystemException {
+    public PageInfoWrapper<NormProductResponse> queryNormProduct(NormProductRequest productRequest) throws BusinessException, SystemException {
         return normProductBusiSV.queryForPage(productRequest);
     }
 

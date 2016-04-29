@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -64,15 +65,19 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         }
         //添加标准品属性值
         List<NormProductAttrValRequest> attrValList = normProdct.getAttrValList();
+        Timestamp nowTime = DateUtils.currTimeStamp();
         for (NormProductAttrValRequest attrValReq : attrValList) {
             StandedProdAttr prodAttr = new StandedProdAttr();
             BeanUtils.copyProperties(prodAttr, attrValReq);
+            prodAttr.setTenantId(normProdct.getTenantId());
             prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
             prodAttr.setAttrValueName(attrValReq.getAttrVal());
             prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
             prodAttr.setState(StandedProdAttrConstants.STATE_ACTIVE);//设置为有效
             if (attrValReq.getOperTime() != null)
                 prodAttr.setOperTime(DateUtils.toTimeStamp(attrValReq.getOperTime()));
+            else
+                prodAttr.setOperTime(nowTime);
             //添加成功,添加日志
             if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
                 StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
@@ -170,13 +175,13 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     }
 
     @Override
-    public PageInfo<NormProductResponse> queryForPage(NormProductRequest productRequest) {
+    public PageInfoWrapper<NormProductResponse> queryForPage(NormProductRequest productRequest) {
         StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
         BeanUtils.copyProperties(pageQueryVo,productRequest);
         //查询结果
         PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
         //接口输出接口
-        PageInfo<NormProductResponse> normProdPageInfo = new PageInfo<NormProductResponse>();
+        PageInfoWrapper<NormProductResponse> normProdPageInfo = new PageInfoWrapper<NormProductResponse>();
         BeanUtils.copyProperties(normProdPageInfo,productPageInfo);
         //添加结果集
         List<StandedProduct> productList = productPageInfo.getResult();
@@ -214,6 +219,38 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             BeanUtils.copyProperties(productLog,standedProduct);
             standedProductLogAtomSV.insert(productLog);
         }
+    }
+
+    /**
+     * 更新标准品的属性值
+     */
+    private void updateStandedProdAttr(NormProductSaveRequest normProdct){
+        //TODO... 待实现
+//        List<NormProductAttrValRequest> attrValList = normProdct.getAttrValList();
+//        Map<Long,StandedProdAttr> prodAttrList = standedProdAttrAtomSV.queryMapByNormProduct(
+//                normProdct.getTenantId(),normProdct.getProductId());
+//
+//        //使原来的属性值为无效
+//        standedProdAttrAtomSV.updateInactiveByNormProduct(
+//                normProdct.getTenantId(),normProdct.getProductId(),normProdct.getOperId());
+//        for (NormProductAttrValRequest attrValReq : attrValList) {
+//            //查询属性值是否已存在
+//
+//            StandedProdAttr prodAttr = new StandedProdAttr();
+//            BeanUtils.copyProperties(prodAttr, attrValReq);
+//            prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
+//            prodAttr.setAttrValueName(attrValReq.getAttrVal());
+//            prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
+//            prodAttr.setState(StandedProdAttrConstants.STATE_ACTIVE);//设置为有效
+//            if (attrValReq.getOperTime() != null)
+//                prodAttr.setOperTime(DateUtils.toTimeStamp(attrValReq.getOperTime()));
+//            //添加成功,添加日志
+//            if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
+//                StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
+//                BeanUtils.copyProperties(prodAttrLog, prodAttr);
+//                standedProdAttrLogAtomSV.installObj(prodAttrLog);
+//            }
+//        }
     }
 
 }

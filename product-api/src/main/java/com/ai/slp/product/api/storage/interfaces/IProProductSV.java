@@ -2,7 +2,7 @@ package com.ai.slp.product.api.storage.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.storage.param.PageInfoWrapper;
 import com.ai.slp.product.api.storage.param.ProProduct;
 import com.ai.slp.product.api.storage.param.ProProductParam;
 
@@ -26,7 +26,7 @@ public interface IProProductSV {
      * @author lipeng
     *  @ApiCode PROPRO_0100
      */
-    public PageInfo<ProProduct> queryProProducts(ProProductParam proProductParam)
+    public PageInfoWrapper<ProProduct> queryProProducts(ProProductParam proProductParam)
             throws BusinessException, SystemException;
     @interface QueryProProducts {}
     

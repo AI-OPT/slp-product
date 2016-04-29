@@ -3,15 +3,7 @@ package com.ai.slp.product.api.product.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.product.param.AudiencesSetOfProduct;
-import com.ai.slp.product.api.product.param.ProductCheckParam;
-import com.ai.slp.product.api.product.param.ProductCheckingParam;
-import com.ai.slp.product.api.product.param.ProductEditParam;
-import com.ai.slp.product.api.product.param.ProductEditUp;
-import com.ai.slp.product.api.product.param.ProductInfoQuery;
-import com.ai.slp.product.api.product.param.ProductPriorityParam;
-import com.ai.slp.product.api.product.param.ProductRefuseParam;
+import com.ai.slp.product.api.product.param.*;
 
 /**
  * 商品管理接口
@@ -35,7 +27,7 @@ public interface IProductEditUpSV {
      * @author lipeng
     *  @ApiCode PROMAN_0100
      */
-    public PageInfo<ProductEditUp> queryProductEdit(ProductEditParam productEditParam) throws BusinessException, SystemException;
+    public PageInfoWrapper<ProductEditUp> queryProductEdit(ProductEditParam productEditParam) throws BusinessException, SystemException;
     @interface QueryProductEdit {}
     
     /**
@@ -49,7 +41,7 @@ public interface IProductEditUpSV {
      * @author lipeng
     *  @ApiCode PROMAN_0101
      */
-    public PageInfo<ProductEditUp> queryProductRefuse(ProductRefuseParam productRefuseParam) throws BusinessException, SystemException;
+    public PageInfoWrapper<ProductEditUp> queryProductRefuse(ProductRefuseParam productRefuseParam) throws BusinessException, SystemException;
     @interface QueryProductRefuse {}
     
     /**
@@ -64,7 +56,7 @@ public interface IProductEditUpSV {
      * @author lipeng
     *  @ApiCode PROMAN_0102
      */
-    public PageInfo<ProductEditUp> queryProductCheck(ProductCheckingParam productCheckingParam) throws BusinessException, SystemException;
+    public PageInfoWrapper<ProductEditUp> queryProductCheck(ProductCheckingParam productCheckingParam) throws BusinessException, SystemException;
     @interface QueryProductCheck {}
 
     /**

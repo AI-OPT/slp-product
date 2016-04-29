@@ -5,11 +5,7 @@ import java.util.List;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.normproduct.param.ProAttrGroup;
-import com.ai.slp.product.api.normproduct.param.ProAttrGroupParam;
-import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
-import com.ai.slp.product.api.normproduct.param.AttrValParam;
+import com.ai.slp.product.api.normproduct.param.*;
 
 /**
  * 类目属性组接口
@@ -31,7 +27,7 @@ public interface ICatAttrGroupSV {
      * @author lipeng
     *  @ApiCode PROCAT_0301
      */
-    public PageInfo<ProAttrGroup> queryProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
+    public PageInfoWrapper<ProAttrGroup> queryProAttrGroup(ProAttrGroupParam proAttrGroupParam)
             throws BusinessException, SystemException;
     @interface QueryProAttrGroup{}
     

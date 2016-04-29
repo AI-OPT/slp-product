@@ -3,7 +3,6 @@ package com.ai.slp.product.api.product.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.product.param.*;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0100
      */
-    public PageInfo<Product4List> queryProductList(ProductListQuery productQuery)
+    public PageInfoWrapper<Product4List> queryProductList(ProductListQuery productQuery)
         throws BusinessException,SystemException;
     @interface QueryProductList{}
 

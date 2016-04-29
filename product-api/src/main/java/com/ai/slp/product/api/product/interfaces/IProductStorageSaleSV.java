@@ -2,7 +2,7 @@ package com.ai.slp.product.api.product.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.product.param.PageInfoWrapper;
 import com.ai.slp.product.api.product.param.ProductStorageSale;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 
@@ -30,7 +30,7 @@ public interface IProductStorageSaleSV {
      * @author lipeng
     *  @ApiCode PROMAN_0200
      */
-    public PageInfo<ProductStorageSale> queryStorageProduct(ProductStorageSaleParam productStorageSaleParam)throws BusinessException,SystemException;
+    public PageInfoWrapper<ProductStorageSale> queryStorageProduct(ProductStorageSaleParam productStorageSaleParam)throws BusinessException,SystemException;
     @interface QueryStorageProduct {}
     
     
