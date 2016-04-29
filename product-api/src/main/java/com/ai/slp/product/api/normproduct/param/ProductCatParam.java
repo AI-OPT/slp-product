@@ -1,9 +1,8 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
 
 /**
@@ -14,7 +13,7 @@ import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
  * 
  * @author lipeng
  */
-public class ProductCatParam extends ProductCatBase {
+public class ProductCatParam extends BaseInfo {
 	
 	/**
 	 * 商品类目ID
@@ -57,6 +56,48 @@ public class ProductCatParam extends ProductCatBase {
     @Min(value = 0,message = "排序号不能小于0",groups = {IProductCatSV.AddProductCat.class})
     @Max(value = 10000,message = "排序号不能大于10000",groups = {IProductCatSV.AddProductCat.class})
     private long serialNumber;
+
+    /**
+     * 状态
+     * 1有效0无效
+     */
+    private String state;
+
+    /**
+     * 操作人ID
+     */
+    private long operId;
+
+    /**
+     * 操作时间
+     */
+    private Date operTime;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public long getOperId() {
+        return operId;
+    }
+
+    public void setOperId(long operId) {
+        this.operId = operId;
+    }
+
+    public Date getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Date operTime) {
+        this.operTime = operTime;
+    }
+
+
     public String getProductCatId() {
         return productCatId;
     }
