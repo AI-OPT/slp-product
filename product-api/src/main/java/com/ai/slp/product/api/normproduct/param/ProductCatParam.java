@@ -39,12 +39,12 @@ public class ProductCatParam extends BaseInfo {
 	/**
 	 * 父类目
 	 */
-	private long parentProductCatId;
+	private Long parentProductCatId;
 
     /**
      * 是否有子分类
      */
-	@NotNull(message = "名称不能为空", 
+	@NotNull(message = "请确定是否有子分类",
             groups = { IProductCatSV.AddProductCat.class,
                     IProductCatSV.UpdateProductCat.class})
     private String isChild;
@@ -121,10 +121,10 @@ public class ProductCatParam extends BaseInfo {
     public void setProductCatName(String productCatName) {
         this.productCatName = productCatName;
     }
-    public long getParentProductCatId() {
+    public Long getParentProductCatId() {
         return parentProductCatId;
     }
-    public void setParentProductCatId(long parentProductCatId) {
+    public void setParentProductCatId(Long parentProductCatId) {
         this.parentProductCatId = parentProductCatId;
     }
     public String getIsChild() {
