@@ -40,4 +40,12 @@ public interface IStandedProductAtomSV {
      * @return
      */
     public PageInfo<StandedProduct> queryForPage(StandedProdPageQueryVo request);
+
+    /**
+     * 查询类目下标准品数量
+     *
+     * @param catId
+     * @return
+     */
+    public int queryByCatId(String catId);
 }

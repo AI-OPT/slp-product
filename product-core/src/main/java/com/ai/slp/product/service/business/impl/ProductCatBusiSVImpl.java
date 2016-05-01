@@ -7,8 +7,11 @@ import com.ai.slp.product.api.normproduct.param.PageInfoWrapper;
 import com.ai.slp.product.api.normproduct.param.ProductCatInfo;
 import com.ai.slp.product.api.normproduct.param.ProductCatPageQuery;
 import com.ai.slp.product.api.normproduct.param.ProductCatParam;
+import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
-import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
+import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,12 @@ import java.util.List;
 public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     @Autowired
     IProdCatDefAtomSV prodCatDefAtomSV;
+    @Autowired
+    IProdCatAttrAtomSV prodCatAttrAtomSV;
+    @Autowired
+    IStandedProductAtomSV productAtomSV;
+    @Autowired
+    IProdCatAttrValAtomSV prodCatAttrValAtomSV;
 
     @Override
     public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
@@ -77,8 +86,54 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     public void updateByCatId(ProductCatParam catParam) {
         if (catParam==null)
             throw new BusinessException("","请求信息为空,无法更新");
-        ProductCat productCat = new ProductCat();
+        //查询分类
+        ProductCat productCat = prodCatDefAtomSV.selectById(catParam.getTenantId(),catParam.getProductCatId());
+        if (productCat==null)
+            throw new BusinessException("","没有找到对应的类目信息,租户id:"+catParam.getTenantId()
+                    +",类目标识:"+catParam.getProductCatId());
+        //判断是否变更了"是否有子分类"选项
+        if (!productCat.getIsChild().equals(catParam.getIsChild())){
+            //想把有改成无
+            if (ProductCatConstants.HAS_CHILD.equals(productCat.getIsChild())
+                    && ProductCatConstants.NO_CHILD.equals(catParam.getIsChild())){
+                //判断是否有子类目
+                if (prodCatDefAtomSV.queryOfParent(productCat.getParentProductCatId())>0)
+                    throw new BusinessException("","此类目下存在子类目,无法变更为[无子分类]");
+            }else{
+                //判断是否有关联属性
+                List<ProdCatAttr> catAttrList =
+                        prodCatAttrAtomSV.queryNumByCatId(productCat.getTenantId(),productCat.getProductCatId());
+                if (catAttrList!=null && catAttrList.size()>0){
+                    throw new BusinessException("","此类目已关联属性,无法变更为[有子分类]");
+                }
+            }
+        }
         BeanUtils.copyProperties(productCat,catParam);
         prodCatDefAtomSV.updateProductCat(productCat);
+    }
+
+    @Override
+    public void deleteByCatId(String tenantId, String productCatId) {
+        //查询是否存在类目
+        ProductCat productCat = prodCatDefAtomSV.selectById(tenantId,productCatId);
+        if (productCat==null)
+            throw new BusinessException("","未找到要删除类目,租户id:"+tenantId+",类目标识:"+productCatId);
+        //判断是否关联了标准品
+        if (productAtomSV.queryByCatId(productCatId)>0)
+            throw new BusinessException("","已关联了标准品，不可删除");
+        //判断是否有子类目
+        if (prodCatDefAtomSV.queryOfParent(Long.parseLong(productCatId))>0)
+            throw new BusinessException("","此类目下存在子类目,不可删除");
+        List<ProdCatAttr> catAttrList =
+                prodCatAttrAtomSV.queryNumByCatId(tenantId,productCatId);
+        //删除属性对应关系
+        if (catAttrList!=null && catAttrList.size()>0){
+            for (ProdCatAttr catAttr:catAttrList){
+                prodCatAttrValAtomSV.deleteByCat(tenantId,catAttr.getCatAttrId());
+                prodCatAttrAtomSV.deleteByCatId(catAttr.getCatAttrId());
+            }
+        }
+        //删除类目
+        prodCatDefAtomSV.deleteProductCat(tenantId,productCatId);
     }
 }

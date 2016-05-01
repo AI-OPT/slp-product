@@ -120,4 +120,11 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
         pageInfo.setResult(productMapper.selectByExample(example));
         return pageInfo;
     }
+
+    @Override
+    public int queryByCatId(String catId) {
+        StandedProductCriteria example = new StandedProductCriteria();
+        example.createCriteria().andProductCatIdEqualTo(catId);
+        return productMapper.countByExample(example);
+    }
 }

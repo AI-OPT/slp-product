@@ -40,4 +40,11 @@ public interface IProductCatBusiSV {
      * @param catParam
      */
     public void updateByCatId(ProductCatParam catParam);
+
+    /**
+     * 删除指定类目
+     * @param tenantId
+     * @param productCatId
+     */
+    public void deleteByCatId(String tenantId,String productCatId);
 }

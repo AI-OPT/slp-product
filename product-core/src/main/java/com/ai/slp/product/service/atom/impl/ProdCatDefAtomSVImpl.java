@@ -107,4 +107,11 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         return productCatMapper.deleteByExample(example);
     }
 
+    @Override
+    public int queryOfParent(Long parentCatId) {
+        ProductCatCriteria example = new ProductCatCriteria();
+        example.createCriteria().andParentProductCatIdEqualTo(parentCatId);
+        return productCatMapper.countByExample(example);
+    }
+
 }

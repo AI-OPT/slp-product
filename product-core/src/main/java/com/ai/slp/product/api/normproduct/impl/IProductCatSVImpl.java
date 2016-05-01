@@ -67,7 +67,15 @@ public class IProductCatSVImpl implements IProductCatSV {
 
     @Override
     public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
-        return null;
+        if (StringUtils.isBlank(catUniqueReq.getTenantId()))
+            throw new BusinessException("","缺少租户id,无法删除类目");
+        productCatBusiSV.deleteByCatId(catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setResultCode("");
+        responseHeader.setIsSuccess(true);
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     @Override
