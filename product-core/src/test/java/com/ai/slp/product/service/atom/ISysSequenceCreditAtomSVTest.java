@@ -18,6 +18,6 @@ public class ISysSequenceCreditAtomSVTest {
 
     @Test
     public void genSeqTest(){
-        System.out.println(sequenceCreditAtomSV.getSeqByName(ISysSequenceCreditAtomSV.PROD_ATTR_ID));
+        System.out.println(sequenceCreditAtomSV.getSeqByName());
     }
 }

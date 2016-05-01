@@ -133,12 +133,8 @@ public class ProductCatParam extends BaseInfo {
         this.firstLetter = firstLetter;
     }
 
-    public Short getCatLevel() {
+    public short getCatLevel() {
         return catLevel;
-    }
-
-    public void setCatLevel(Short catLevel) {
-        this.catLevel = catLevel;
     }
 
     public void setCatLevel(short catLevel) {

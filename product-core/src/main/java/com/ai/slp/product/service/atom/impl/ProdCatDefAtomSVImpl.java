@@ -3,6 +3,8 @@ package com.ai.slp.product.service.atom.impl;
 import java.util.List;
 
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
+import com.ai.slp.product.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,8 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
 
     @Autowired
     ProductCatMapper productCatMapper;
+    @Autowired
+    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
 
     @Override
     public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,Long parentProductCatId,
@@ -61,6 +65,11 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
 
     @Override
     public int insertProductCat(ProductCat productCat) {
+        if (productCat==null)
+            return 0;
+        productCat.setProductCatId(sequenceCreditAtomSV.get6SeqByName()+"");
+        if (productCat.getOperTime()==null)
+            productCat.setOperTime(DateUtils.currTimeStamp());
         return productCatMapper.insertSelective(productCat);
     }
 

@@ -5,6 +5,7 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.normproduct.param.PageInfoWrapper;
 import com.ai.slp.product.api.normproduct.param.ProductCatInfo;
 import com.ai.slp.product.api.normproduct.param.ProductCatPageQuery;
+import com.ai.slp.product.api.normproduct.param.ProductCatParam;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
@@ -46,5 +47,16 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             catInfoList.add(productCatInfo);
         }
         return pageInfoWrapper;
+    }
+
+    @Override
+    public void addCatList(List<ProductCatParam> pcpList) {
+        if (pcpList==null || pcpList.isEmpty())
+            return;
+        for(ProductCatParam catParam:pcpList){
+            ProductCat productCat = new ProductCat();
+            BeanUtils.copyProperties(productCat,catParam);
+            prodCatDefAtomSV.insertProductCat(productCat);
+        }
     }
 }

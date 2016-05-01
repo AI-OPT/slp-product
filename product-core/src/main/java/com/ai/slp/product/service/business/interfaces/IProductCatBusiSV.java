@@ -3,6 +3,9 @@ package com.ai.slp.product.service.business.interfaces;
 import com.ai.slp.product.api.normproduct.param.PageInfoWrapper;
 import com.ai.slp.product.api.normproduct.param.ProductCatInfo;
 import com.ai.slp.product.api.normproduct.param.ProductCatPageQuery;
+import com.ai.slp.product.api.normproduct.param.ProductCatParam;
+
+import java.util.List;
 
 /**
  * 商品类目
@@ -17,5 +20,9 @@ public interface IProductCatBusiSV {
      */
     public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery);
 
-
+    /**
+     * 批量添加类目
+     * @param pcpList
+     */
+    public void addCatList(List<ProductCatParam> pcpList);
 }

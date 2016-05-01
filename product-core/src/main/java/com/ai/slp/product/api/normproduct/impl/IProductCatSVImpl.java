@@ -40,7 +40,15 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse addProductCat(List<ProductCatParam> pcpList)
             throws BusinessException, SystemException {
-        return null;
+        if (pcpList!=null && pcpList.size()>0){
+            productCatBusiSV.addCatList(pcpList);
+        }
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setResultCode("");
+        responseHeader.setIsSuccess(true);
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     @Override
