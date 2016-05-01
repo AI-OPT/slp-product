@@ -43,5 +43,15 @@ public interface IProdAttrDefAtomSV {
      * @author lipeng
      */
     public PageInfo<ProdAttrDef> selectPageAttrs(AttrDefParam attrDefParam);
+    
+    /**
+     * 通过属性信息查询拥有属性值数量
+     * 
+     * @param tenantId
+     * @param attrId
+     * @return
+     * @author lipeng
+     */
+    public int selectAttrvalNum(String tenantId,Long attrId);
 
 }
