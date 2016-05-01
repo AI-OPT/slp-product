@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.normproduct.param;
 
 import com.ai.opt.base.vo.BaseInfo;
+import com.ai.opt.base.vo.BaseResponse;
 
 import java.util.Date;
 
@@ -11,7 +12,11 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class NormProductAttrValResponse extends BaseInfo {
+public class NormProductAttrValResponse extends BaseResponse {
+    /**
+     * 租户Id，必填
+     */
+    private String tenantId;
     /**
      * 标准品属性值ID
      */
@@ -52,6 +57,14 @@ public class NormProductAttrValResponse extends BaseInfo {
      * 操作时间
      */
     private Date operTime;
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
     public Long getProductAttrValId() {
         return productAttrValId;

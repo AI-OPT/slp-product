@@ -25,7 +25,7 @@ public interface ICatAttrGroupSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0301
+    *  @ApiCode ATTR_GROUP_0301
      */
     public PageInfoWrapper<ProAttrGroup> queryProAttrGroup(ProAttrGroupParam proAttrGroupParam)
             throws BusinessException, SystemException;
@@ -39,7 +39,7 @@ public interface ICatAttrGroupSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0302
+    *  @ApiCode ATTR_GROUP_0302
      */
     public BaseResponse addProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
             throws BusinessException, SystemException;
@@ -53,7 +53,7 @@ public interface ICatAttrGroupSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0303
+    *  @ApiCode ATTR_GROUP_0303
      */
     public BaseResponse updateProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
             throws BusinessException, SystemException;
@@ -67,7 +67,7 @@ public interface ICatAttrGroupSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0304
+    *  @ApiCode ATTR_GROUP_0304
      */
     public BaseResponse deleteProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
             throws BusinessException, SystemException;
@@ -81,7 +81,7 @@ public interface ICatAttrGroupSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0305
+    *  @ApiCode ATTR_GROUP_0305
      */
     public List<AttrDefInfo> queryGroupAttr(ProAttrGroupParam proAttrGroupParam)
             throws BusinessException, SystemException; 
@@ -95,7 +95,7 @@ public interface ICatAttrGroupSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0306
+    *  @ApiCode ATTR_GROUP_0306
      */
     public BaseResponse addGroupAttr(List<AttrValParam> listProAttrVal)
             throws BusinessException, SystemException; 
@@ -109,7 +109,7 @@ public interface ICatAttrGroupSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0307
+    *  @ApiCode ATTR_GROUP_0307
      */
     public BaseResponse deleteGroupAttr(List<AttrValParam> listProAttrVal)
             throws BusinessException, SystemException; 

@@ -24,7 +24,7 @@ public interface IWarnReceiveStaffSV {
      * @return 预警人集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author liutong5
      * @ApiCode WARN_RECE_0100
      */
     public List<WarnReceiveStaff> queryByObjectIdOfStorage(String objectId)
@@ -37,7 +37,7 @@ public interface IWarnReceiveStaffSV {
      * @return 操作结果
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author liutong5
      * @ApiCode WARN_RECE_0101
      */
     public BaseInfo installWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
@@ -52,7 +52,7 @@ public interface IWarnReceiveStaffSV {
      * @return 操作结果
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author liutong5
      * @ApiCode WARN_RECE_0102
      */
     public BaseInfo deleteWarnReceiveStaff(List<WarnReceiveStaffOper> operList)

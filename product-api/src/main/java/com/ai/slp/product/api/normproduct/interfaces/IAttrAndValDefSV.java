@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.normproduct.interfaces;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
@@ -25,7 +26,7 @@ public interface IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0200
+    *  @ApiCode ATTR_VAL_0200
      */
     public PageInfoWrapper<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException;
@@ -39,7 +40,7 @@ public interface IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0208
+    *  @ApiCode ATTR_VAL_0208
      */
     public AttrDefInfo queryAttr(AttrParam attrParam)
             throws BusinessException, SystemException;
@@ -53,7 +54,7 @@ public interface IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0201
+    *  @ApiCode ATTR_VAL_0201
      */
     public BaseResponse addAttr(List<AttrParam> attrParamList) 
             throws BusinessException, SystemException;
@@ -67,7 +68,7 @@ public interface IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0202
+    *  @ApiCode ATTR_VAL_0202
      */
     public BaseResponse updateAttr(AttrParam attrParam) 
             throws BusinessException, SystemException;
@@ -81,7 +82,7 @@ public interface IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0203
+    *  @ApiCode ATTR_VAL_0203
      */
     public BaseResponse deleteAttr(AttrParam attrParam)
             throws BusinessException, SystemException;
@@ -95,25 +96,11 @@ public interface IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0204
+    *  @ApiCode ATTR_VAL_0204
      */
     public PageInfoWrapper<AttrValInfo> queryAttrValues(AttrParam attrParam)
             throws BusinessException, SystemException;
     @interface QueryAttrValues {}
-    
-    /**
-     * 单个属性值查询
-     * 
-     * @param attrValParam
-     * @return 符合条件的单个属性值
-     * @throws BusinessException
-     * @throws SystemException
-     * @author lipeng
-    *  @ApiCode
-     */
-    public AttrValInfo queryAttrVal(AttrValParam attrValParam)
-            throws BusinessException, SystemException;
-    @interface QueryAttrVal {}
     
     /**
      * 属性值添加
@@ -123,7 +110,7 @@ public interface IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0205
+    *  @ApiCode ATTR_VAL_0205
      */
     public BaseResponse addAttrVal(List<AttrValParam> attrValParamList)
             throws BusinessException, SystemException;
@@ -137,7 +124,7 @@ public interface IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0206
+    *  @ApiCode ATTR_VAL_0206
      */
     public BaseResponse updateAttrVal(AttrValParam attrValParam)
             throws BusinessException, SystemException;
@@ -151,10 +138,53 @@ public interface IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0207
+    *  @ApiCode ATTR_VAL_0207
      */
     public BaseResponse deleteAttrVal(AttrValParam attrValParam)
             throws BusinessException, SystemException;
     @interface DeleteAttrVal {}
 
+    /**
+     * 单个属性值查询
+     *
+     * @param attrValParam
+     * @return 符合条件的单个属性值
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng
+     * @ApiCode ATTR_VAL_0208
+     */
+    public AttrValInfo queryAttrVal(AttrValParam attrValParam)
+            throws BusinessException, SystemException;
+    @interface QueryAttrVal {}
+
+    /**
+     * 查询指定类目下某种类型的属性集合<br>
+     * 类型分为:关键属性,销售属性,非关键属性
+     *
+     * @param attrQuery 查询类目信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode ATTR_VAL_0209
+     */
+    public Map<AttrDefInfo,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
+            throws BusinessException,SystemException;
+    @interface QueryAttrByCatAndType{}
+
+    /**
+     * 查询指定标准品下某种类型的属性集合<br>
+     * 类型分为:关键属性,销售属性
+     *
+     * @param attrQuery 查询标准品信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode ATTR_VAL_0210
+     */
+    public Map<AttrDefInfo,List<AttrValInfo>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
+            throws BusinessException,SystemException;
+    @interface QueryAttrByNormProduct{}
 }

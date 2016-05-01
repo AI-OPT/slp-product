@@ -40,7 +40,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0102
      */
-    public NormProductInfoResponse queryProducById(SimpleProductRequest invalidRequest)
+    public NormProductInfoResponse queryProducById(NormProductUniqueReq invalidRequest)
             throws BusinessException,SystemException;
     @interface QueryProducById {}
 
@@ -86,7 +86,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0105
      */
-    public BaseResponse discardProduct(SimpleProductRequest invalidRequest)
+    public BaseResponse discardProduct(NormProductUniqueReq invalidRequest)
             throws BusinessException,SystemException;
     @interface DiscardProduct {}
 

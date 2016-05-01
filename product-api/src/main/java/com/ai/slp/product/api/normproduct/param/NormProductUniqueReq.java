@@ -13,7 +13,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class SimpleProductRequest extends BaseInfo {
+public class NormProductUniqueReq extends BaseInfo {
     /**
      * 标准品ID
      * 执行废弃操作和按照id查询时,均不能为空

@@ -26,7 +26,7 @@ public interface IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0100
+    *  @ApiCode PRODUCT_CAT_0100
      */
 	public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery)
 			throws BusinessException, SystemException;
@@ -40,7 +40,7 @@ public interface IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng
-	*  @ApiCode PROCAT_0101
+	*  @ApiCode PRODUCT_CAT_0101
 	 */
 	public BaseResponse addProductCat(List<ProductCatParam> pcpList) throws BusinessException, SystemException;
 	@interface AddProductCat {}
@@ -53,7 +53,7 @@ public interface IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng
-	*  @ApiCode PROCAT_0102
+	*  @ApiCode PRODUCT_CAT_0102
 	 */
 	public BaseResponse updateProductCat(ProductCatParam productCatParam) throws BusinessException, SystemException;
 	@interface UpdateProductCat {}
@@ -63,27 +63,27 @@ public interface IProductCatSV {
 	 * 删除类目时，需要判断是否已经有关联的标准品（包括废弃状态的）<br>
 	 * 类目一旦删除，其下包含的子类目一并删除，与选择好的属性、属性值解除关联关系<br>
 	 * 
-	 * @param productCatParam
+	 * @param catUniqueReq
 	 * @return 服务返回基本信息
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng
-	*  @ApiCode PROCAT_0103
+	*  @ApiCode PRODUCT_CAT_0103
 	 */
-	public BaseResponse deleteProductCat(ProductCatParam productCatParam) throws BusinessException, SystemException;
+	public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException;
 	@interface DeleteProductCat {}
 	
 	/**
      * 商品类目属性查询<br>
      * 
-     * @param productCatParam
+     * @param catUniqueReq
      * @return 符合条件的属性集合
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-     * @ApiCode PROCAT_0104
+     * @ApiCode PRODUCT_CAT_0104
      */
-    public List<AttrDefInfo> queryProductCatAttr(ProductCatParam productCatParam) throws BusinessException, SystemException;
+    public List<AttrDefInfo> queryProductCatAttr(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException;
     @interface QueryProductCatAttr {}
     
     
@@ -94,7 +94,7 @@ public interface IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0105
+    *  @ApiCode PRODUCT_CAT_0105
      */
     public List<AttrValInfo> queryProductCatAttrVal() throws BusinessException, SystemException;
     @interface QueryProductCatAttrVal {}
@@ -107,7 +107,7 @@ public interface IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0106
+    *  @ApiCode PRODUCT_CAT_0106
      */
     public BaseResponse addProductCatAttr(List<AttrDefResponse> lspad) throws BusinessException, SystemException;
     @interface AddProductCatAttr {}
@@ -119,26 +119,11 @@ public interface IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
-    *  @ApiCode PROCAT_0107
+    *  @ApiCode PRODUCT_CAT_0107
      */
     public BaseResponse deleteProductCatAttrVal(AttrValParam productAttrValParam) throws BusinessException, SystemException;
     @interface DeleteProductCatAttrVal {}
 
-	/**
-	 * 查询指定类目下某种类型的属性集合<br>
-	 * 类型分为:关键属性,销售属性,非关键属性
-	 *
-	 * @param attrQuery 查询类目信息
-	 * @return
-	 * @throws BusinessException
-	 * @throws SystemException
-	 * @author liutong5
-	 * @ApiCode PROCAT_0108
-	 */
-	public Map<AttrDefInfo,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
-		throws BusinessException,SystemException;
-	@interface QueryAttrByCatAndType{}
-	
 	/**
 	 * 依据商品类目和属性类型添加类目属性<br>
 	 * 类型分为:关键属性,销售属性,非关键属性
@@ -148,23 +133,22 @@ public interface IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng
-	*  @ApiCode
+	 *  @ApiCode PRODUCT_CAT_0108
 	 */
 	public BaseResponse addAttrForCatAndType(AddCatAttrParam addCatAttrParam) throws BusinessException,SystemException;
 	@interface AddAttrForCatAndType {}
-	
+
 	/**
-	 * 查询指定标准品下某种类型的属性集合<br>
-	 * 类型分为:关键属性,销售属性
+	 * 查询指定标识的类目信息
 	 *
-	 * @param attrQuery 查询标准品信息
+	 * @param catUniqueReq
 	 * @return
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author liutong5
-	 * @ApiCode PROCAT_0109
+	 * @ApiCode PRODUCT_CAT_0109
 	 */
-	public Map<AttrDefInfo,List<AttrValInfo>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
+	public ProductCatInfo queryByCatId(ProductCatUniqueReq catUniqueReq)
 			throws BusinessException,SystemException;
-	@interface QueryAttrByNormProduct{}
+	@interface QueryByCatId{}
 }

@@ -25,7 +25,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0300
+     * @ApiCode STORAGE_0100
      */
     public BaseResponse installStorage(STOStorageGroup storageGroup)
         throws BusinessException,SystemException;
@@ -40,7 +40,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0301
+     * @ApiCode STORAGE_0101
      */
     public StorageGroupInfo queryGroupInfoById(StorageGroupInfoQuery infoQuery)
             throws BusinessException,SystemException;
@@ -55,7 +55,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0302
+     * @ApiCode STORAGE_0102
      */
     public List<StorageGroupInfo> queryGroupInfoByNormProId(StorageGroupInfoQuery infoQuery)
             throws BusinessException,SystemException;
@@ -71,7 +71,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0303
+     * @ApiCode STORAGE_0103
      */
     public BaseResponse chargeStorageGroupStatus(StorageGroupStatus groupStatus)
             throws BusinessException,SystemException;
@@ -86,7 +86,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0304
+     * @ApiCode STORAGE_0104
      */
     public PageInfoWrapper<STOStorageGroup4List> queryGroupList(STOStorageGroupQuery groupQuery)
             throws BusinessException,SystemException;
@@ -101,7 +101,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0305
+     * @ApiCode STORAGE_0105
      */
     public BaseResponse saveStorage(STOStorage stoStorage)
             throws BusinessException,SystemException;
@@ -116,7 +116,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0306
+     * @ApiCode STORAGE_0106
      */
     public STOStorage queryStorageById(String storageId)
             throws BusinessException,SystemException;
@@ -132,7 +132,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0307
+     * @ApiCode STORAGE_0107
      */
     public BaseResponse chargeStorageStatus(StorageStatus storageStatus)
             throws BusinessException,SystemException;
@@ -147,7 +147,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0308
+     * @ApiCode STORAGE_0108
      */
     public BaseResponse chargeStoragePriority(StoragePriorityCharge priorityCharge)
             throws BusinessException,SystemException;
@@ -162,7 +162,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0309
+     * @ApiCode STORAGE_0109
      */
     public BaseResponse updateStorageGroup(STOStorageGroup storageGroup)
         throws BusinessException,SystemException;
@@ -177,7 +177,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0310
+     * @ApiCode STORAGE_0110
      */
     public BaseResponse updateStorageGroupSalePrice(StorageGroupSalePrice salePrice)
             throws BusinessException,SystemException;
@@ -193,7 +193,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0311
+     * @ApiCode STORAGE_0111
      */
     public PageInfoWrapper<STOStorageGroup4SaleList> queryGroupListForSalePrice(STOStorageGroupQuery groupQuery)
             throws BusinessException,SystemException;
@@ -208,7 +208,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0312
+     * @ApiCode STORAGE_0112
      */
     public List<StorageGroupInfo> queryGroupByProdIdForSalePrice(StorageGroupInfoQuery infoQuery)
             throws BusinessException,SystemException;
@@ -223,7 +223,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_0313
+     * @ApiCode STORAGE_0113
      */
     public BaseResponse updateMultiStorageSalePrice(List<STOStorageSalePrice> salePriceList)
             throws BusinessException,SystemException;

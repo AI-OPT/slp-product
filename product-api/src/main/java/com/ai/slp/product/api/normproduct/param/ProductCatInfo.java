@@ -25,7 +25,7 @@ public class ProductCatInfo extends BaseResponse{
 	/**
 	 * 父类目
 	 */
-	private long parentProductCatId;
+	private Long parentProductCatId;
 	
 	/**
 	 * 是否有子分类
@@ -40,11 +40,12 @@ public class ProductCatInfo extends BaseResponse{
     /**
      * 类目的级别-用于判断是类目(一级)还是子类目
      */
-    private long catLevel;
+    private short catLevel;
     /**
      * 序列号-用于排序
      */
-    private long serialNumber;
+    private short serialNumber;
+
     public String getProductCatId() {
         return productCatId;
     }
@@ -60,7 +61,7 @@ public class ProductCatInfo extends BaseResponse{
     public long getParentProductCatId() {
         return parentProductCatId;
     }
-    public void setParentProductCatId(long parentProductCatId) {
+    public void setParentProductCatId(Long parentProductCatId) {
         this.parentProductCatId = parentProductCatId;
     }
     public String getIsChild() {
@@ -75,19 +76,20 @@ public class ProductCatInfo extends BaseResponse{
     public void setFirstLetter(String firstLetter) {
         this.firstLetter = firstLetter;
     }
-    public long getCatLevel() {
+
+    public short getCatLevel() {
         return catLevel;
     }
-    public void setCatLevel(long catLevel) {
+
+    public void setCatLevel(short catLevel) {
         this.catLevel = catLevel;
     }
-    public long getSerialNumber() {
+
+    public short getSerialNumber() {
         return serialNumber;
     }
-    public void setSerialNumber(long serialNumber) {
+
+    public void setSerialNumber(short serialNumber) {
         this.serialNumber = serialNumber;
     }
-	
-
-	
 }
