@@ -25,4 +25,13 @@ public interface IProductCatBusiSV {
      * @param pcpList
      */
     public void addCatList(List<ProductCatParam> pcpList);
+
+    /**
+     * 查询指定类目详细信息
+     *
+     * @param tenantId 租户id
+     * @param productCatId 类目标识
+     * @return
+     */
+    public ProductCatInfo queryByCatId(String tenantId,String productCatId);
 }

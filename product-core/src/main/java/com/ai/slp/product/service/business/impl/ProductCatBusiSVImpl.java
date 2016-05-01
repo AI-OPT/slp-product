@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.impl;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.normproduct.param.PageInfoWrapper;
@@ -9,6 +10,7 @@ import com.ai.slp.product.api.normproduct.param.ProductCatParam;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,5 +60,16 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             BeanUtils.copyProperties(productCat,catParam);
             prodCatDefAtomSV.insertProductCat(productCat);
         }
+    }
+
+    @Override
+    public ProductCatInfo queryByCatId(String tenantId, String productCatId) {
+        ProductCatInfo productCatInfo = null;
+        ProductCat productCat = prodCatDefAtomSV.selectById(tenantId,productCatId);
+        if (productCat!=null){
+            productCatInfo = new ProductCatInfo();
+            BeanUtils.copyProperties(productCatInfo,productCat);
+        }
+        return productCatInfo;
     }
 }

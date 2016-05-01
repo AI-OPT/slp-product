@@ -10,6 +10,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jackieliu on 16/4/27.
@@ -54,6 +55,16 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     @Override
     public AttrValInfo queryAttrVal(AttrValParam attrValParam)
             throws BusinessException, SystemException {
+        return null;
+    }
+
+    @Override
+    public Map<AttrDefInfo, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
+        return null;
+    }
+
+    @Override
+    public Map<AttrDefInfo, List<AttrValInfo>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
         return null;
     }
 

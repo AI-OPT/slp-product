@@ -3,6 +3,7 @@ package com.ai.slp.product.service.atom.impl;
 import java.util.List;
 
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
@@ -56,7 +57,9 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     @Override
     public ProductCat selectById(String tenantId, String productCatId) {
         ProductCatCriteria example = new ProductCatCriteria();
-        example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId);
+        example.createCriteria()
+                .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         List<ProductCat> productCatList = productCatMapper.selectByExample(example);
         if(productCatList == null || productCatList.isEmpty())
             return null;

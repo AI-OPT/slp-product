@@ -3,7 +3,6 @@ package com.ai.slp.product.api.normproduct.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.*;
@@ -33,7 +32,7 @@ public class INormProductSVImpl implements INormProductSV {
     }
 
     @Override
-    public NormProductInfoResponse queryProducById(SimpleProductRequest invalidRequest) throws BusinessException, SystemException {
+    public NormProductInfoResponse queryProducById(NormProductUniqueReq invalidRequest) throws BusinessException, SystemException {
         return normProductBusiSV.queryById(invalidRequest.getTenantId(),invalidRequest.getProductId());
     }
 
@@ -63,7 +62,7 @@ public class INormProductSVImpl implements INormProductSV {
     }
 
     @Override
-    public BaseResponse discardProduct(SimpleProductRequest invalidRequest) throws BusinessException, SystemException {
+    public BaseResponse discardProduct(NormProductUniqueReq invalidRequest) throws BusinessException, SystemException {
         normProductBusiSV.discardProduct(
                 invalidRequest.getTenantId(),invalidRequest.getProductId(),
                 invalidRequest.getOperId(),invalidRequest.getOperTime());

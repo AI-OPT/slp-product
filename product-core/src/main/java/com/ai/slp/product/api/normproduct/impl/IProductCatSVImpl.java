@@ -58,14 +58,12 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     @Override
-    public BaseResponse deleteProductCat(ProductCatParam productCatParam)
-            throws BusinessException, SystemException {
+    public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public List<AttrDefInfo> queryProductCatAttr(ProductCatParam productCatParam)
-            throws BusinessException, SystemException {
+    public List<AttrDefInfo> queryProductCatAttr(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
         return null;
     }
 
@@ -87,21 +85,18 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     @Override
-    public Map<AttrDefInfo, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
-            throws BusinessException, SystemException {
-        return null;
-    }
-
-    @Override
-    public Map<AttrDefInfo, List<AttrValInfo>> queryAttrByNormProduct(
-            AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
-        return null;
-    }
-
-    @Override
     public BaseResponse addAttrForCatAndType(AddCatAttrParam addCatAttrParam)
             throws BusinessException, SystemException {
         return null;
+    }
+
+    @Override
+    public ProductCatInfo queryByCatId(ProductCatUniqueReq catUniqueReq)
+            throws BusinessException, SystemException {
+        String tenantId = catUniqueReq.getTenantId(),catId = catUniqueReq.getProductCatId();
+        if (StringUtils.isBlank(tenantId) || StringUtils.isBlank(catId))
+            throw new BusinessException("","租户id和类目标识不能为空");
+        return productCatBusiSV.queryByCatId(tenantId,catId);
     }
 
 }
