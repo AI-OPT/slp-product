@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -53,13 +54,13 @@ public class ProductCatParam extends BaseInfo {
 	/**
      * 类目的级别-用于判断是类目(一级)还是子类目
      */
-    private long catLevel;
+    private short catLevel;
     /**
      * 序列号-用于排序
      */
     @Min(value = 0,message = "排序号不能小于0",groups = {IProductCatSV.AddProductCat.class})
     @Max(value = 10000,message = "排序号不能大于10000",groups = {IProductCatSV.AddProductCat.class})
-    private long serialNumber;
+    private short serialNumber;
 
     /**
      * 状态
@@ -75,7 +76,7 @@ public class ProductCatParam extends BaseInfo {
     /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
     public String getState() {
         return state;
@@ -93,14 +94,13 @@ public class ProductCatParam extends BaseInfo {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
-
 
     public String getProductCatId() {
         return productCatId;
@@ -132,16 +132,24 @@ public class ProductCatParam extends BaseInfo {
     public void setFirstLetter(String firstLetter) {
         this.firstLetter = firstLetter;
     }
-    public long getCatLevel() {
+
+    public Short getCatLevel() {
         return catLevel;
     }
-    public void setCatLevel(long catLevel) {
+
+    public void setCatLevel(Short catLevel) {
         this.catLevel = catLevel;
     }
-    public long getSerialNumber() {
+
+    public void setCatLevel(short catLevel) {
+        this.catLevel = catLevel;
+    }
+
+    public short getSerialNumber() {
         return serialNumber;
     }
-    public void setSerialNumber(long serialNumber) {
+
+    public void setSerialNumber(short serialNumber) {
         this.serialNumber = serialNumber;
     }
 }
