@@ -32,7 +32,8 @@ public class ProductCatParam extends BaseInfo {
 	 * 商品类目名称
 	 */
     @NotNull(message = "名称不能为空", 
-            groups = { IProductCatSV.AddProductCat.class})
+            groups = { IProductCatSV.AddProductCat.class,
+                    IProductCatSV.UpdateProductCat.class})
 	private String productCatName;
 
 	/**
@@ -44,7 +45,8 @@ public class ProductCatParam extends BaseInfo {
      * 是否有子分类
      */
 	@NotNull(message = "名称不能为空", 
-            groups = { IProductCatSV.AddProductCat.class})
+            groups = { IProductCatSV.AddProductCat.class,
+                    IProductCatSV.UpdateProductCat.class})
     private String isChild;
 
 	/**
@@ -58,8 +60,10 @@ public class ProductCatParam extends BaseInfo {
     /**
      * 序列号-用于排序
      */
-    @Min(value = 0,message = "排序号不能小于0",groups = {IProductCatSV.AddProductCat.class})
-    @Max(value = 10000,message = "排序号不能大于10000",groups = {IProductCatSV.AddProductCat.class})
+    @Min(value = 0,message = "排序号不能小于0",groups = {
+            IProductCatSV.AddProductCat.class,IProductCatSV.UpdateProductCat.class})
+    @Max(value = 10000,message = "排序号不能大于10000",groups = {
+            IProductCatSV.AddProductCat.class,IProductCatSV.UpdateProductCat.class})
     private short serialNumber;
 
     /**
@@ -71,6 +75,9 @@ public class ProductCatParam extends BaseInfo {
     /**
      * 操作人ID
      */
+    @NotNull(message = "操作人ID不能为空",
+            groups = { IProductCatSV.AddProductCat.class,
+                    IProductCatSV.UpdateProductCat.class})
     private long operId;
 
     /**

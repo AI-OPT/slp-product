@@ -72,4 +72,13 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         }
         return productCatInfo;
     }
+
+    @Override
+    public void updateByCatId(ProductCatParam catParam) {
+        if (catParam==null)
+            throw new BusinessException("","请求信息为空,无法更新");
+        ProductCat productCat = new ProductCat();
+        BeanUtils.copyProperties(productCat,catParam);
+        prodCatDefAtomSV.updateProductCat(productCat);
+    }
 }

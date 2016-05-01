@@ -54,7 +54,15 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse updateProductCat(ProductCatParam productCatParam)
             throws BusinessException, SystemException {
-        return null;
+        if (StringUtils.isBlank(productCatParam.getTenantId()))
+            throw new BusinessException("","租户id不能为空");
+        productCatBusiSV.updateByCatId(productCatParam);
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setResultCode("");
+        responseHeader.setIsSuccess(true);
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     @Override

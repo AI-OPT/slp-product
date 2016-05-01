@@ -34,4 +34,10 @@ public interface IProductCatBusiSV {
      * @return
      */
     public ProductCatInfo queryByCatId(String tenantId,String productCatId);
+
+    /**
+     * 更新类目信息
+     * @param catParam
+     */
+    public void updateByCatId(ProductCatParam catParam);
 }

@@ -2,6 +2,7 @@ package com.ai.slp.product.service.atom.impl;
 
 import java.util.List;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
@@ -21,6 +22,7 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 @Component
 public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
 
+
     @Autowired
     ProductCatMapper productCatMapper;
     @Autowired
@@ -31,6 +33,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
             String tenantId, String productCatId, String productCatName, String isChild) {
         ProductCatCriteria example = new ProductCatCriteria();
         ProductCatCriteria.Criteria criteria = example.createCriteria();
+        criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         if (StringUtils.isNotBlank(tenantId))
             criteria.andTenantIdEqualTo(tenantId);
         if (StringUtils.isNotBlank(productCatId))
@@ -73,12 +76,28 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         productCat.setProductCatId(sequenceCreditAtomSV.get6SeqByName()+"");
         if (productCat.getOperTime()==null)
             productCat.setOperTime(DateUtils.currTimeStamp());
+        productCat.setState(CommonSatesConstants.STATE_ACTIVE);
         return productCatMapper.insertSelective(productCat);
     }
 
     @Override
     public int updateProductCat(ProductCat productCat) {
-        return productCatMapper.updateByPrimaryKeySelective(productCat);
+        if (productCat==null )
+            return 0;
+        if (StringUtils.isBlank(productCat.getTenantId())
+                || StringUtils.isBlank(productCat.getProductCatId())) {
+            throw new BusinessException("", "参数不完整,无法更新,租户ID:" +productCat.getTenantId()
+                    +",类目标识:"+productCat.getProductCatId());
+        }
+        ProductCatCriteria example = new ProductCatCriteria();
+        example.createCriteria().andTenantIdEqualTo(productCat.getTenantId())
+                .andProductCatIdEqualTo(productCat.getProductCatId());
+        if (productCat.getOperTime()==null)
+            productCat.setOperTime(DateUtils.currTimeStamp());
+        productCat.setCatLevel(null);//不允许更新等级
+        productCat.setParentProductCatId(null);//不允许更新父类目
+        productCat.setState(null);//不允许更新状态
+        return productCatMapper.updateByExampleSelective(productCat,example);
     }
 
     @Override
