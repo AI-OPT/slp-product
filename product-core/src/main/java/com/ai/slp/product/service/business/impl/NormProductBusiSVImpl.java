@@ -3,7 +3,6 @@ package com.ai.slp.product.service.business.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.constants.StandedProdAttrConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
@@ -11,7 +10,6 @@ import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
-import com.ai.slp.product.dao.mapper.interfaces.StandedProdAttrLogMapper;
 import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.util.DateUtils;
@@ -50,7 +48,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
      * @return 添加成功后的标准品的标识
      */
     @Override
-    public String installNormProd(NormProductSaveRequest normProdct) {
+    public String installNormProd(NormProdSaveRequest normProdct) {
         //添加标准品
         StandedProduct standedProduct = new StandedProduct();
         BeanUtils.copyProperties(standedProduct, normProdct);
@@ -64,9 +62,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             standedProductLogAtomSV.insert(productLog);
         }
         //添加标准品属性值
-        List<NormProductAttrValRequest> attrValList = normProdct.getAttrValList();
+        List<NormProdAttrValRequest> attrValList = normProdct.getAttrValList();
         Timestamp nowTime = DateUtils.currTimeStamp();
-        for (NormProductAttrValRequest attrValReq : attrValList) {
+        for (NormProdAttrValRequest attrValReq : attrValList) {
             StandedProdAttr prodAttr = new StandedProdAttr();
             BeanUtils.copyProperties(prodAttr, attrValReq);
             prodAttr.setTenantId(normProdct.getTenantId());
@@ -94,7 +92,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
      * @param normProdct
      */
     @Override
-    public void updateNormProd(NormProductSaveRequest normProdct) {
+    public void updateNormProd(NormProdSaveRequest normProdct) {
         String tenantId = normProdct.getTenantId(), productId = normProdct.getProductId();
         //查询是否存在
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
@@ -143,13 +141,13 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
      * @return
      */
     @Override
-    public NormProductInfoResponse queryById(String tenantId, String productId) {
+    public NormProdInfoResponse queryById(String tenantId, String productId) {
         StandedProduct product = standedProductAtomSV.selectById(tenantId,productId);
         if (product==null) {
             logger.warn("租户[{0}]下不存在标识[{1}]的标准品",tenantId,productId);
             throw new BusinessException("", "未找到对应标准品信息,租户id="+tenantId+",标准品标识="+productId);
         }
-        NormProductInfoResponse response = new NormProductInfoResponse();
+        NormProdInfoResponse response = new NormProdInfoResponse();
         //标准品信息填充返回值
         BeanUtils.copyProperties(response,product);
         response.setProductId(product.getStandedProdId());
@@ -175,20 +173,20 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     }
 
     @Override
-    public PageInfoWrapper<NormProductResponse> queryForPage(NormProductRequest productRequest) {
+    public PageInfoWrapper<NormProdResponse> queryForPage(NormProdRequest productRequest) {
         StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
         BeanUtils.copyProperties(pageQueryVo,productRequest);
         //查询结果
         PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
         //接口输出接口
-        PageInfoWrapper<NormProductResponse> normProdPageInfo = new PageInfoWrapper<NormProductResponse>();
+        PageInfoWrapper<NormProdResponse> normProdPageInfo = new PageInfoWrapper<NormProdResponse>();
         BeanUtils.copyProperties(normProdPageInfo,productPageInfo);
         //添加结果集
         List<StandedProduct> productList = productPageInfo.getResult();
-        List<NormProductResponse> normProductList = new ArrayList<NormProductResponse>();
+        List<NormProdResponse> normProductList = new ArrayList<NormProdResponse>();
         normProdPageInfo.setResult(normProductList);
         for (StandedProduct standedProduct:productList){
-            NormProductResponse normProduct = new NormProductResponse();
+            NormProdResponse normProduct = new NormProdResponse();
             BeanUtils.copyProperties(normProduct,standedProduct);
 //            normProduct.setCreateName(""); //TODO...
 //            normProduct.setOperTime(""); //TODO...
@@ -224,7 +222,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     /**
      * 更新标准品的属性值
      */
-    private void updateStandedProdAttr(NormProductSaveRequest normProdct){
+    private void updateStandedProdAttr(NormProdSaveRequest normProdct){
         //TODO... 待实现
 //        List<NormProductAttrValRequest> attrValList = normProdct.getAttrValList();
 //        Map<Long,StandedProdAttr> prodAttrList = standedProdAttrAtomSV.queryMapByNormProduct(

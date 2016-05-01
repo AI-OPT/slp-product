@@ -1,6 +1,5 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.param.*;
 
 import java.util.Date;
@@ -16,14 +15,14 @@ public interface INormProductBusiSV {
      *
      * @param normProdct
      */
-    public String installNormProd(NormProductSaveRequest normProdct);
+    public String installNormProd(NormProdSaveRequest normProdct);
 
     /**
      * 更新标准品,包括属性值
      *
      * @param normProdct
      */
-    public void updateNormProd(NormProductSaveRequest normProdct);
+    public void updateNormProd(NormProdSaveRequest normProdct);
 
     /**
      * 查询指定的标准品嘻嘻
@@ -31,14 +30,14 @@ public interface INormProductBusiSV {
      * @param productId 标准品标识
      * @return
      */
-    public NormProductInfoResponse queryById(String tenantId,String productId);
+    public NormProdInfoResponse queryById(String tenantId, String productId);
 
     /**
      * 分页查询
      *
      * @return
      */
-    public PageInfoWrapper<NormProductResponse> queryForPage(NormProductRequest productRequest);
+    public PageInfoWrapper<NormProdResponse> queryForPage(NormProdRequest productRequest);
 
     /**
      * 废弃标准品

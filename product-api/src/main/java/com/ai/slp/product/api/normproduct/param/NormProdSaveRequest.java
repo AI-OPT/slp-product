@@ -13,7 +13,7 @@ import java.util.List;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class NormProductSaveRequest extends NormProductBase {
+public class NormProdSaveRequest extends NormProductBase {
 
     /**
      * 创建时间<br>
@@ -45,13 +45,13 @@ public class NormProductSaveRequest extends NormProductBase {
     /**
      * 标准品属性值集合
      */
-    private List<NormProductAttrValRequest> attrValList;
+    private List<NormProdAttrValRequest> attrValList;
 
-    public List<NormProductAttrValRequest> getAttrValList() {
+    public List<NormProdAttrValRequest> getAttrValList() {
         return attrValList;
     }
 
-    public void setAttrValList(List<NormProductAttrValRequest> attrValList) {
+    public void setAttrValList(List<NormProdAttrValRequest> attrValList) {
         this.attrValList = attrValList;
     }
 

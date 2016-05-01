@@ -2,7 +2,6 @@ package com.ai.slp.product.service.atom.impl;
 
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.DateUtil;
-import com.ai.slp.product.api.normproduct.param.NormProductRequest;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.StandedProductCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.StandedProductMapper;

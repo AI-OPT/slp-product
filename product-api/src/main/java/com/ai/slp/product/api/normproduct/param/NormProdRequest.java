@@ -9,7 +9,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class NormProductRequest extends NormProductBase {
+public class NormProdRequest extends NormProductBase {
 
     /**
      * 请求查询的页码<br>

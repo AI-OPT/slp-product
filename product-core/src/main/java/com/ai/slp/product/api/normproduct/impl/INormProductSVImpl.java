@@ -27,17 +27,17 @@ public class INormProductSVImpl implements INormProductSV {
     INormProductBusiSV normProductBusiSV;
 
     @Override
-    public PageInfoWrapper<NormProductResponse> queryNormProduct(NormProductRequest productRequest) throws BusinessException, SystemException {
+    public PageInfoWrapper<NormProdResponse> queryNormProduct(NormProdRequest productRequest) throws BusinessException, SystemException {
         return normProductBusiSV.queryForPage(productRequest);
     }
 
     @Override
-    public NormProductInfoResponse queryProducById(NormProductUniqueReq invalidRequest) throws BusinessException, SystemException {
+    public NormProdInfoResponse queryProducById(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
         return normProductBusiSV.queryById(invalidRequest.getTenantId(),invalidRequest.getProductId());
     }
 
     @Override
-    public BaseResponse createProductInfo(NormProductSaveRequest productInfoRequest) throws BusinessException, SystemException {
+    public BaseResponse createProductInfo(NormProdSaveRequest productInfoRequest) throws BusinessException, SystemException {
         normProductBusiSV.installNormProd(productInfoRequest);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
@@ -48,7 +48,7 @@ public class INormProductSVImpl implements INormProductSV {
     }
 
     @Override
-    public BaseResponse updateProductInfo(NormProductSaveRequest productInfoRequest) throws BusinessException, SystemException {
+    public BaseResponse updateProductInfo(NormProdSaveRequest productInfoRequest) throws BusinessException, SystemException {
         if (StringUtils.isBlank(productInfoRequest.getTenantId())
                 || StringUtils.isBlank(productInfoRequest.getProductId()))
             throw new BusinessException("","租户标识和标准品标识均不能为空");
@@ -62,7 +62,7 @@ public class INormProductSVImpl implements INormProductSV {
     }
 
     @Override
-    public BaseResponse discardProduct(NormProductUniqueReq invalidRequest) throws BusinessException, SystemException {
+    public BaseResponse discardProduct(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
         normProductBusiSV.discardProduct(
                 invalidRequest.getTenantId(),invalidRequest.getProductId(),
                 invalidRequest.getOperId(),invalidRequest.getOperTime());

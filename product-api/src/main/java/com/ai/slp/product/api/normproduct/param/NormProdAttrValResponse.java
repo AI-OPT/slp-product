@@ -12,7 +12,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class NormProductAttrValResponse extends BaseResponse {
+public class NormProdAttrValResponse extends BaseResponse {
     /**
      * 租户Id，必填
      */

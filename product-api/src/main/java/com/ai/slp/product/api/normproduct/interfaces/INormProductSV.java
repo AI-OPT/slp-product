@@ -25,7 +25,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0100
      */
-    public PageInfoWrapper<NormProductResponse> queryNormProduct(NormProductRequest productRequest)
+    public PageInfoWrapper<NormProdResponse> queryNormProduct(NormProdRequest productRequest)
             throws BusinessException,SystemException;
     @interface QueryNormProduct {}
 
@@ -40,7 +40,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0102
      */
-    public NormProductInfoResponse queryProducById(NormProductUniqueReq invalidRequest)
+    public NormProdInfoResponse queryProducById(NormProdUniqueReq invalidRequest)
             throws BusinessException,SystemException;
     @interface QueryProducById {}
 
@@ -55,7 +55,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0103
      */
-    public BaseResponse createProductInfo(NormProductSaveRequest productInfoRequest)
+    public BaseResponse createProductInfo(NormProdSaveRequest productInfoRequest)
             throws BusinessException,SystemException;
     @interface SaveProductInfo {}
 
@@ -71,7 +71,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0104
      */
-    public BaseResponse updateProductInfo(NormProductSaveRequest productInfoRequest)
+    public BaseResponse updateProductInfo(NormProdSaveRequest productInfoRequest)
             throws BusinessException,SystemException;
     @interface UpdateProductInfo {}
 
@@ -86,7 +86,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0105
      */
-    public BaseResponse discardProduct(NormProductUniqueReq invalidRequest)
+    public BaseResponse discardProduct(NormProdUniqueReq invalidRequest)
             throws BusinessException,SystemException;
     @interface DiscardProduct {}
 

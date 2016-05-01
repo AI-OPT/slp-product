@@ -11,7 +11,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public abstract class NormProductBaseResponse extends BaseResponse {
+public abstract class NormProdBaseResponse extends BaseResponse {
     /**
      * 租户Id，必填
      */

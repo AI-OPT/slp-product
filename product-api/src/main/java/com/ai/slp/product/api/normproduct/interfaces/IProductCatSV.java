@@ -1,7 +1,6 @@
 package com.ai.slp.product.api.normproduct.interfaces;
 
 import java.util.List;
-import java.util.Map;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
@@ -135,7 +134,7 @@ public interface IProductCatSV {
 	 * @author lipeng
 	 *  @ApiCode PRODUCT_CAT_0108
 	 */
-	public BaseResponse addAttrForCatAndType(AddCatAttrParam addCatAttrParam) throws BusinessException,SystemException;
+	public BaseResponse addAttrForCatAndType(ProdCatAttrAddParam addCatAttrParam) throws BusinessException,SystemException;
 	@interface AddAttrForCatAndType {}
 
 	/**

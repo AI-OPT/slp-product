@@ -3,7 +3,6 @@ package com.ai.slp.product.api.normproduct.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
 import com.ai.slp.product.api.normproduct.param.*;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by jackieliu on 16/4/28.
@@ -101,7 +99,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     @Override
-    public BaseResponse addAttrForCatAndType(AddCatAttrParam addCatAttrParam)
+    public BaseResponse addAttrForCatAndType(ProdCatAttrAddParam addCatAttrParam)
             throws BusinessException, SystemException {
         return null;
     }

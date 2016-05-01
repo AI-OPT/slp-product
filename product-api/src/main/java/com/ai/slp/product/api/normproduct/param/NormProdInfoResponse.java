@@ -11,7 +11,7 @@ import java.util.Set;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class NormProductInfoResponse extends NormProductBaseResponse {
+public class NormProdInfoResponse extends NormProdBaseResponse {
 
     /**
      * 创建者名称

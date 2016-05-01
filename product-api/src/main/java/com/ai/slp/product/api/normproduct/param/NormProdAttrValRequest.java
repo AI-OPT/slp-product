@@ -13,7 +13,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class NormProductAttrValRequest extends BaseInfo {
+public class NormProdAttrValRequest extends BaseInfo {
     
     /**
      * 标准品属性值ID
