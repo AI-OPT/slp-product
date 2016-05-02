@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.normproduct.param;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import com.ai.opt.base.vo.BaseInfo;
 
@@ -20,11 +21,6 @@ public class ProdCatAttrAddParam extends BaseInfo{
     private long attrId;
     
     /**
-     * 租户ID
-     */
-    private String tenantId;
-    
-    /**
      * 商品类目ID
      */
     private String productCatId;
@@ -39,7 +35,6 @@ public class ProdCatAttrAddParam extends BaseInfo{
      */
     private long serialNumber;
     
-
     /**
      * 状态
      * 1有效0无效
@@ -54,7 +49,7 @@ public class ProdCatAttrAddParam extends BaseInfo{
     /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
     public String getState() {
         return state;
@@ -72,30 +67,12 @@ public class ProdCatAttrAddParam extends BaseInfo{
         this.operId = operId;
     }
 
-    public Date getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Date operTime) {
-        this.operTime = operTime;
-    }
-    
-    
-
     public long getAttrId() {
         return attrId;
     }
 
     public void setAttrId(long attrId) {
         this.attrId = attrId;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
     }
 
     public String getProductCatId() {
@@ -121,6 +98,12 @@ public class ProdCatAttrAddParam extends BaseInfo{
     public void setSerialNumber(long serialNumber) {
         this.serialNumber = serialNumber;
     }
-    
-    
+
+    public Timestamp getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Timestamp operTime) {
+        this.operTime = operTime;
+    }
 }

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jackieliu on 16/4/28.
@@ -127,6 +128,24 @@ public class IProductCatSVImpl implements IProductCatSV {
     public List<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),"");
         return productCatBusiSV.queryLinkOfCatById(catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
+    }
+
+    /**
+     * 查询指定类目下某种类型的属性集合<br>
+     * 类型分为:关键属性,销售属性,非关键属性
+     *
+     * @param attrQuery 查询类目信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PRODUCT_CAT_0111
+     */
+    @Override
+    public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
+            throws BusinessException, SystemException {
+
+        return null;
     }
 
 }

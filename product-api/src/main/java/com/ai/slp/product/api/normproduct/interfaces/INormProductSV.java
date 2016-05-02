@@ -6,6 +6,9 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 标准品处理接口<br>
  *
@@ -105,4 +108,21 @@ public interface INormProductSV {
     public BaseResponse updateMarketPrice(MarketPrice4Update marketPrice)
             throws BusinessException,SystemException;
     @interface UpdateMarketPrice{}
+
+
+
+    /**
+     * 查询指定标准品下某种类型的属性集合<br>
+     * 类型分为:关键属性,销售属性
+     *
+     * @param attrQuery 查询标准品信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode ATTR_VAL_0210
+     */
+    public Map<ProdCatAttrDef,List<ProductAttrValDef>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
+            throws BusinessException,SystemException;
+    @interface QueryAttrByNormProduct{}
 }

@@ -159,33 +159,4 @@ public interface IAttrAndValDefSV {
             throws BusinessException, SystemException;
     @interface QueryAttrVal {}
 
-    /**
-     * 查询指定类目下某种类型的属性集合<br>
-     * 类型分为:关键属性,销售属性,非关键属性
-     *
-     * @param attrQuery 查询类目信息
-     * @return
-     * @throws BusinessException
-     * @throws SystemException
-     * @author liutong5
-     * @ApiCode ATTR_VAL_0209
-     */
-    public Map<AttrDefInfo,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
-            throws BusinessException,SystemException;
-    @interface QueryAttrByCatAndType{}
-
-    /**
-     * 查询指定标准品下某种类型的属性集合<br>
-     * 类型分为:关键属性,销售属性
-     *
-     * @param attrQuery 查询标准品信息
-     * @return
-     * @throws BusinessException
-     * @throws SystemException
-     * @author liutong5
-     * @ApiCode ATTR_VAL_0210
-     */
-    public Map<AttrDefInfo,List<AttrValInfo>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
-            throws BusinessException,SystemException;
-    @interface QueryAttrByNormProduct{}
 }

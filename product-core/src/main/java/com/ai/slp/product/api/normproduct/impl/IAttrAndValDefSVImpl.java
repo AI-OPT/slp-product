@@ -59,16 +59,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public Map<AttrDefInfo, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
-        return null;
-    }
-
-    @Override
-    public Map<AttrDefInfo, List<AttrValInfo>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
-        return null;
-    }
-
-    @Override
     public BaseResponse addAttrVal(List<AttrValParam> attrValParamList)
             throws BusinessException, SystemException {
         return null;

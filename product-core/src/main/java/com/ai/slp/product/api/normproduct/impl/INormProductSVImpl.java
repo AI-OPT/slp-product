@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 标准品接口
  * Created by jackieliu on 16/4/27.
@@ -77,6 +80,22 @@ public class INormProductSVImpl implements INormProductSV {
 
     @Override
     public BaseResponse updateMarketPrice(MarketPrice4Update marketPrice) throws BusinessException, SystemException {
+        return null;
+    }
+
+    /**
+     * 查询指定标准品下某种类型的属性集合<br>
+     * 类型分为:关键属性,销售属性
+     *
+     * @param attrQuery 查询标准品信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode ATTR_VAL_0210
+     */
+    @Override
+    public Map<ProdCatAttrDef, List<ProductAttrValDef>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
         return null;
     }
 }
