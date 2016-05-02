@@ -47,13 +47,13 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public PageInfoWrapper<AttrValInfo> queryAttrValues(AttrParam attrParam)
+    public PageInfoWrapper<AttrValInfo> queryAttrValues(AttrValPageQuery pageQuery)
             throws BusinessException, SystemException {
         return null;
     }
 
     @Override
-    public AttrValInfo queryAttrVal(AttrValParam attrValParam)
+    public AttrValInfo queryAttrVal(AttrValUniqueReq attrValParam)
             throws BusinessException, SystemException {
         return null;
     }
@@ -81,7 +81,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public BaseResponse deleteAttrVal(AttrValParam attrValParam)
+    public BaseResponse deleteAttrVal(AttrValUniqueReq attrValParam)
             throws BusinessException, SystemException {
         return null;
     }

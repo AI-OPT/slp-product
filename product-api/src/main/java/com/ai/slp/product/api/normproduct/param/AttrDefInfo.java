@@ -22,11 +22,6 @@ public class AttrDefInfo extends BaseResponse {
      * 属性名称
      */
     private String attrName;
-
-    /**
-     * 属性类型
-     */
-    private String attrType;
     
     /**
      *属性名称首字母大写
@@ -42,28 +37,11 @@ public class AttrDefInfo extends BaseResponse {
      * 属性值数量-通过在标准品属性值表中统计有次属性ID的属性值的数量
      */
     private int attrValNum;
-    
-    /**
-     * 是否上传照片
-     * Y是N否
-     */
-    private char isPicture;
-    
+
     /**
      * 是否允许用户自定义属性值
      */
     private String isAllowCustom;
-    
-    /**
-     * 是否必填
-     * Y是N否
-     */
-    private char isNecessary;
-    
-    /**
-     * 序列号
-     */
-    private long serialNumber;
     
     /**
      * 操作人ID
@@ -99,14 +77,6 @@ public class AttrDefInfo extends BaseResponse {
         this.attrName = attrName;
     }
 
-    public String getAttrType() {
-        return attrType;
-    }
-
-    public void setAttrType(String attrType) {
-        this.attrType = attrType;
-    }
-
     public String getValueWay() {
         return valueWay;
     }
@@ -123,37 +93,12 @@ public class AttrDefInfo extends BaseResponse {
         this.attrValNum = attrValNum;
     }
 
-    public char getIsPicture() {
-        return isPicture;
-    }
-
-    public void setIsPicture(char isPicture) {
-        this.isPicture = isPicture;
-    }
-
-
     public String getIsAllowCustom() {
         return isAllowCustom;
     }
 
     public void setIsAllowCustom(String isAllowCustom) {
         this.isAllowCustom = isAllowCustom;
-    }
-
-    public char getIsNecessary() {
-        return isNecessary;
-    }
-
-    public void setIsNecessary(char isNecessary) {
-        this.isNecessary = isNecessary;
-    }
-
-    public long getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(long serialNumber) {
-        this.serialNumber = serialNumber;
     }
 
     public long getOperId() {

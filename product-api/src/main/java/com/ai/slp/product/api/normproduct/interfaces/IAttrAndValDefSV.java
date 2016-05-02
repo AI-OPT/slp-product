@@ -91,14 +91,14 @@ public interface IAttrAndValDefSV {
     /**
      * 属性的属性值查询
      * 
-     * @param attrParam
+     * @param pageQuery
      * @return 符合条件的属性集合
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode ATTR_VAL_0204
      */
-    public PageInfoWrapper<AttrValInfo> queryAttrValues(AttrParam attrParam)
+    public PageInfoWrapper<AttrValInfo> queryAttrValues(AttrValPageQuery pageQuery)
             throws BusinessException, SystemException;
     @interface QueryAttrValues {}
     
@@ -140,7 +140,7 @@ public interface IAttrAndValDefSV {
      * @author lipeng
     *  @ApiCode ATTR_VAL_0207
      */
-    public BaseResponse deleteAttrVal(AttrValParam attrValParam)
+    public BaseResponse deleteAttrVal(AttrValUniqueReq attrValParam)
             throws BusinessException, SystemException;
     @interface DeleteAttrVal {}
 
@@ -154,7 +154,7 @@ public interface IAttrAndValDefSV {
      * @author lipeng
      * @ApiCode ATTR_VAL_0208
      */
-    public AttrValInfo queryAttrVal(AttrValParam attrValParam)
+    public AttrValInfo queryAttrVal(AttrValUniqueReq attrValParam)
             throws BusinessException, SystemException;
     @interface QueryAttrVal {}
 

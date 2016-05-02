@@ -82,8 +82,6 @@ public class AttrValParam extends BaseInfo {
         this.operTime = operTime;
     }
     
-    
-
 	public Long getAttrId() {
 		return attrId;
 	}
@@ -115,6 +113,5 @@ public class AttrValParam extends BaseInfo {
 	public void setFirstLetter(String firstLetter) {
 		this.firstLetter = firstLetter;
 	}
-	
 	
 }

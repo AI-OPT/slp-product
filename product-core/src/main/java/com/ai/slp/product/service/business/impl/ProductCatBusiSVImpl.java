@@ -93,7 +93,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                     +",类目标识:"+catParam.getProductCatId());
         //判断是否变更了"是否有子分类"选项
         if (!productCat.getIsChild().equals(catParam.getIsChild())){
-            //想把有改成无
+            //若把有改成无
             if (ProductCatConstants.HAS_CHILD.equals(productCat.getIsChild())
                     && ProductCatConstants.NO_CHILD.equals(catParam.getIsChild())){
                 //判断是否有子类目
@@ -129,7 +129,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         //删除属性对应关系
         if (catAttrList!=null && catAttrList.size()>0){
             for (ProdCatAttr catAttr:catAttrList){
+                //删除类目下属性与属性值的对应关系
                 prodCatAttrValAtomSV.deleteByCat(tenantId,catAttr.getCatAttrId());
+                //删除类目与属性对应关系
                 prodCatAttrAtomSV.deleteByCatId(catAttr.getCatAttrId());
             }
         }

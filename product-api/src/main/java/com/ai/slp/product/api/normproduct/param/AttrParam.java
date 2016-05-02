@@ -47,12 +47,23 @@ public class AttrParam extends BaseInfo{
     /**
      * 操作人ID
      */
+    @NotNull(message = "操作人ID不能为空",
+            groups = { IAttrAndValDefSV.UpdateAttr.class,
+                    IAttrAndValDefSV.DeleteAttr.class})
     private long operId;
     
     /**
      * 操作时间
      */
     private Date operTime;
+
+    public long getAttrId() {
+        return attrId;
+    }
+
+    public void setAttrId(long attrId) {
+        this.attrId = attrId;
+    }
 
     public String getState() {
         return state;
@@ -78,8 +89,6 @@ public class AttrParam extends BaseInfo{
         this.operTime = operTime;
     }
     
-    
-
     public String getAttrName() {
         return attrName;
     }
