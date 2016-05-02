@@ -8,6 +8,7 @@ import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
+import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,7 @@ public class IProductCatSVImpl implements IProductCatSV {
 
     @Override
     public PageInfoForRes<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) throws BusinessException, SystemException {
-        if (StringUtils.isBlank(pageQuery.getTenantId()))
-            throw new BusinessException("","租户id不能为空");
+        CommonCheckUtils.checkTenantId(pageQuery.getTenantId(),"");
         PageInfoForRes<ProductCatInfo> catInfoPageInfoWrapper = productCatBusiSV.queryProductCat(pageQuery);
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setResultCode("");
@@ -53,8 +53,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse updateProductCat(ProductCatParam productCatParam)
             throws BusinessException, SystemException {
-        if (StringUtils.isBlank(productCatParam.getTenantId()))
-            throw new BusinessException("","租户id不能为空");
+        CommonCheckUtils.checkTenantId(productCatParam.getTenantId(),"");
         productCatBusiSV.updateByCatId(productCatParam);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
@@ -66,8 +65,7 @@ public class IProductCatSVImpl implements IProductCatSV {
 
     @Override
     public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
-        if (StringUtils.isBlank(catUniqueReq.getTenantId()))
-            throw new BusinessException("","缺少租户id,无法删除类目");
+        CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),"");
         productCatBusiSV.deleteByCatId(catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
@@ -109,8 +107,9 @@ public class IProductCatSVImpl implements IProductCatSV {
     public ProductCatInfo queryByCatId(ProductCatUniqueReq catUniqueReq)
             throws BusinessException, SystemException {
         String tenantId = catUniqueReq.getTenantId(),catId = catUniqueReq.getProductCatId();
-        if (StringUtils.isBlank(tenantId) || StringUtils.isBlank(catId))
-            throw new BusinessException("","租户id和类目标识不能为空");
+        CommonCheckUtils.checkTenantId(tenantId,"");
+        if (StringUtils.isBlank(catId))
+            throw new BusinessException("","类目标识不能为空");
         return productCatBusiSV.queryByCatId(tenantId,catId);
     }
 
@@ -126,7 +125,8 @@ public class IProductCatSVImpl implements IProductCatSV {
      */
     @Override
     public List<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),"");
+        return productCatBusiSV.queryLinkOfCatById(catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
     }
 
 }

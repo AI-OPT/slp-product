@@ -159,10 +159,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         if (catInfo.getParentProductCatId()==null){
             catInfoList.add(catInfo);
             return;
-        }
         //若不是跟类目,则继续查询
-        if (catInfo!=null && catInfo.getParentProductCatId()!=null)
+        }else
             queryCatFoLinkById(catInfoList,tenantId,productCatId);
-        catInfoList.add(catInfo);
+            catInfoList.add(catInfo);
     }
 }
