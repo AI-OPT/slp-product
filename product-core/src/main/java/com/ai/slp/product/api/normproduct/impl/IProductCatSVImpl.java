@@ -144,8 +144,9 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
             throws BusinessException, SystemException {
-
-        return null;
+        CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
+        return productCatBusiSV.querAttrOfCatByIdAndType(
+                attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
     }
 
 }

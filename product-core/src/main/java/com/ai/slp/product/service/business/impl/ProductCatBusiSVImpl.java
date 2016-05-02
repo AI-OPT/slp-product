@@ -6,18 +6,20 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.constants.ProductCatConstants;
-import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
+import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jackieliu on 16/4/29.
@@ -33,6 +35,8 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     IStandedProductAtomSV productAtomSV;
     @Autowired
     IProdCatAttrValAtomSV prodCatAttrValAtomSV;
+    @Autowired
+    IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
 
     @Override
     public PageInfoForRes<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
@@ -150,6 +154,38 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         queryCatFoLinkById(catInfoList,tenantId,productCatId);
         return catInfoList;
     }
+
+    /**
+     * @param tenantId
+     * @param productCatId
+     * @param attrType
+     * @return
+     */
+    @Override
+    public Map<ProdCatAttrDef, List<AttrValInfo>> querAttrOfCatByIdAndType(
+            String tenantId, String productCatId, String attrType) {
+        Map<ProdCatAttrDef, List<AttrValInfo>> catAttrDefListMap = new HashMap<>();
+        //查询类目属性集合
+        List<ProdCatAttrAttch> attrAttchList = catAttrAttachAtomSV.queryAttrOfByIdAndType(
+                tenantId,productCatId,attrType);
+        //查询属性对应的属性值
+        for (ProdCatAttrAttch attrAttch:attrAttchList){
+            ProdCatAttrDef catAttrDef = new ProdCatAttrDef();
+            BeanUtils.copyProperties(catAttrDef,attrAttch);
+            //查询属性对应的属性值
+            List<ProdAttrvalueDef> catAttrValList =
+                    catAttrAttachAtomSV.queryValListByCatAttr(tenantId,attrAttch.getCatAttrId());
+            List<AttrValInfo> valInfoList = new ArrayList<>();
+            catAttrDefListMap.put(catAttrDef,valInfoList);
+            for (ProdAttrvalueDef attrvalueDef:catAttrValList){
+                AttrValInfo attrValInfo = new AttrValInfo();
+                BeanUtils.copyProperties(attrValInfo,attrvalueDef);
+                valInfoList.add(attrValInfo);
+            }
+        }
+        return catAttrDefListMap;
+    }
+
 
     private void queryCatFoLinkById(List<ProductCatInfo> catInfoList,String tenantId, String productCatId){
         ProductCatInfo catInfo = queryByCatId(tenantId,productCatId);

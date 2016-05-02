@@ -1,5 +1,6 @@
 package com.ai.slp.product.dao.mapper.attach;
 
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
@@ -36,6 +37,26 @@ public interface ProdCatAttrAttachMapper {
             })
     @Select("SELECT ca.tenant_id,ca.attr_id,ad.attr_name,ad.first_letter,ad.value_way,ca.state,ca.cat_attr_id,ca.product_cat_id,ca.attr_type,ca.is_picture,ca.is_necessary,ca.serial_number " +
             "FROM prod_cat_attr ca LEFT JOIN prod_attr_def ad WHER ON ca.attr_id = ad.attr_id WHERE ca.tenant_id=#{tenantId} " +
-            "AND ca.product_cat_id = #{productCatId} AND ca.attr_type = #{attrType}")
+            "AND ca.product_cat_id = #{productCatId} AND ca.attr_type = #{attrType} order by serial_number desc")
     List<ProdCatAttrAttch> selectCatAttr(@Param("tenantId")String tenantId,@Param("productCatId")String productCatId,@Param("attrType")String attrType);
+
+    /**
+     * 根据类目下指定属性的属性值
+     *
+     * @param catAttrId
+     * @return
+     */
+    @Results({@Result(id = true,property = "attrvalueDefId",column = "attvalue_def_id",javaType = String.class),
+            @Result(property="tenantId",column="tenant_id",javaType=String.class,jdbcType= JdbcType.VARBINARY),
+            @Result(property ="attrId",column = "attr_id",javaType = Long.class,jdbcType = JdbcType.DECIMAL),
+            @Result(property ="attrValueId",column = "attr_value_id",javaType = String.class,jdbcType = JdbcType.VARCHAR),
+            @Result(property ="valueWay",column = "attr_value_name",javaType = String.class,jdbcType = JdbcType.VARCHAR),
+            @Result(property ="firstLetter",column = "first_letter",javaType = String.class,jdbcType = JdbcType.VARCHAR),
+            @Result(property ="state",column = "state",javaType = String.class,jdbcType = JdbcType.VARCHAR),
+            @Result(property ="serialNumber",column = "serial_number",javaType = Short.class,jdbcType = JdbcType.NUMERIC),
+    })
+    @Select("SELECT pcav.tenant_id,pcav.attvalue_def_id,pad.attr_id,pad.attr_value_id,pad.attr_value_name,pad.first_letter,pcav.state,pad.serial_number " +
+            "FROM prod_cat_attr_value pcav LEFT JOIN prod_attrvalue_def pad WHER ON pcav.attrvalue_def_id = pad.attrvalue_def_id WHERE pcav.tenant_id=#{tenantId} " +
+            "AND pcav.cat_attr_id = #{catAttrId}")
+    List<ProdAttrvalueDef> selectCatAttrVal(@Param("tenantId")String tenantId,@Param("catAttrId")String catAttrId);
 }

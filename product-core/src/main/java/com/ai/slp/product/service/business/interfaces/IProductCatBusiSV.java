@@ -4,6 +4,7 @@ import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商品类目
@@ -54,4 +55,14 @@ public interface IProductCatBusiSV {
      * @return
      */
     public List<ProductCatInfo> queryLinkOfCatById(String tenantId,String productCatId);
+
+    /**
+     *
+     * @param tenantId
+     * @param productCatId
+     * @param attrType
+     * @return
+     */
+    public Map<ProdCatAttrDef, List<AttrValInfo>> querAttrOfCatByIdAndType(
+            String tenantId,String productCatId,String attrType);
 }

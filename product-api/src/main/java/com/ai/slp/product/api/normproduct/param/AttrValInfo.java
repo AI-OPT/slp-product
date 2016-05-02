@@ -13,11 +13,14 @@ import com.ai.opt.base.vo.BaseResponse;
  * @author lipeng
  */
 public class AttrValInfo extends BaseResponse {
-
+    /**
+     * 租户id
+     */
+    private String tenantId;
     /**
      * 属性值ID
      */
-    private long attrvalueDefId;
+    private String attrvalueDefId;
     
     /**
      * 属性值名称
@@ -39,11 +42,19 @@ public class AttrValInfo extends BaseResponse {
      */
     private Date operTime;
 
-    public long getAttrvalueDefId() {
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getAttrvalueDefId() {
         return attrvalueDefId;
     }
 
-    public void setAttrvalueDefId(long attrvalueDefId) {
+    public void setAttrvalueDefId(String attrvalueDefId) {
         this.attrvalueDefId = attrvalueDefId;
     }
 

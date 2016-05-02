@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.atom.interfaces;
 
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 
 import java.util.List;
 
@@ -19,4 +20,13 @@ public interface IProdCatAttrAttachAtomSV {
      * @return
      */
     public List<ProdCatAttrAttch> queryAttrOfByIdAndType(String tenantId,String catId,String attrType);
+
+    /**
+     * 查询类目关联属性的属性值
+     *
+     * @param tenantId 租户id
+     * @param catAttrId 类目属性关联id
+     * @return
+     */
+    public List<ProdAttrvalueDef> queryValListByCatAttr(String tenantId, String catAttrId);
 }
