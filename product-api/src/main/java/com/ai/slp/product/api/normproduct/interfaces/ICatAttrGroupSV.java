@@ -5,6 +5,7 @@ import java.util.List;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 
 /**
@@ -27,7 +28,7 @@ public interface ICatAttrGroupSV {
      * @author lipeng
     *  @ApiCode ATTR_GROUP_0301
      */
-    public PageInfoWrapper<ProAttrGroup> queryProAttrGroup(ProAttrGroupParam proAttrGroupParam)
+    public PageInfoForRes<ProAttrGroup> queryProAttrGroup(ProAttrGroupParam proAttrGroupParam)
             throws BusinessException, SystemException;
     @interface QueryProAttrGroup{}
     

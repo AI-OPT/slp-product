@@ -3,7 +3,7 @@ package com.ai.slp.product.api.normproduct.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.interfaces.IAttrAndValDefSV;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
 
     @Override
-    public PageInfoWrapper<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
+    public PageInfoForRes<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException {
         return null;
     }
@@ -47,7 +47,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public PageInfoWrapper<AttrValInfo> queryAttrValues(AttrValPageQuery pageQuery)
+    public PageInfoForRes<AttrValInfo> queryAttrValues(AttrValPageQuery pageQuery)
             throws BusinessException, SystemException {
         return null;
     }

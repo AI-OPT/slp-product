@@ -58,7 +58,7 @@ public class ProductCatInfo extends BaseResponse{
     public void setProductCatName(String productCatName) {
         this.productCatName = productCatName;
     }
-    public long getParentProductCatId() {
+    public Long getParentProductCatId() {
         return parentProductCatId;
     }
     public void setParentProductCatId(Long parentProductCatId) {

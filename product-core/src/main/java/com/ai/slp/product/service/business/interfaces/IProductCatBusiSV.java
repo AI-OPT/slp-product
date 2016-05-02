@@ -1,9 +1,7 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import com.ai.slp.product.api.normproduct.param.PageInfoWrapper;
-import com.ai.slp.product.api.normproduct.param.ProductCatInfo;
-import com.ai.slp.product.api.normproduct.param.ProductCatPageQuery;
-import com.ai.slp.product.api.normproduct.param.ProductCatParam;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.slp.product.api.normproduct.param.*;
 
 import java.util.List;
 
@@ -18,7 +16,7 @@ public interface IProductCatBusiSV {
      * @param pageQuery 查询条件
      * @return
      */
-    public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery);
+    public PageInfoForRes<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery);
 
     /**
      * 批量添加类目
@@ -47,4 +45,13 @@ public interface IProductCatBusiSV {
      * @param productCatId
      */
     public void deleteByCatId(String tenantId,String productCatId);
+
+    /**
+     * 查询类目的类目链
+     *
+     * @param tenantId
+     * @param productCatId
+     * @return
+     */
+    public List<ProductCatInfo> queryLinkOfCatById(String tenantId,String productCatId);
 }

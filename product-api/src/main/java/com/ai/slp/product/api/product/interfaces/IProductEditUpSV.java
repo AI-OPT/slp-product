@@ -3,6 +3,7 @@ package com.ai.slp.product.api.product.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.product.param.*;
 
 /**
@@ -27,7 +28,7 @@ public interface IProductEditUpSV {
      * @author lipeng
     *  @ApiCode PROMAN_0100
      */
-    public PageInfoWrapper<ProductEditUp> queryProductEdit(ProductEditParam productEditParam) throws BusinessException, SystemException;
+    public PageInfoForRes<ProductEditUp> queryProductEdit(ProductEditParam productEditParam) throws BusinessException, SystemException;
     @interface QueryProductEdit {}
     
     /**
@@ -41,7 +42,7 @@ public interface IProductEditUpSV {
      * @author lipeng
     *  @ApiCode PROMAN_0101
      */
-    public PageInfoWrapper<ProductEditUp> queryProductRefuse(ProductRefuseParam productRefuseParam) throws BusinessException, SystemException;
+    public PageInfoForRes<ProductEditUp> queryProductRefuse(ProductRefuseParam productRefuseParam) throws BusinessException, SystemException;
     @interface QueryProductRefuse {}
     
     /**
@@ -56,7 +57,7 @@ public interface IProductEditUpSV {
      * @author lipeng
     *  @ApiCode PROMAN_0102
      */
-    public PageInfoWrapper<ProductEditUp> queryProductCheck(ProductCheckingParam productCheckingParam) throws BusinessException, SystemException;
+    public PageInfoForRes<ProductEditUp> queryProductCheck(ProductCheckingParam productCheckingParam) throws BusinessException, SystemException;
     @interface QueryProductCheck {}
 
     /**
@@ -73,7 +74,8 @@ public interface IProductEditUpSV {
      * @author lipeng
      *  @ApiCode PROMAN_0103
      */
-    public BaseResponse productCheck(ProductCheckParam productCheckParam) throws BusinessException, SystemException;
+    public BaseResponse productCheck(ProductCheckParam productCheckParam)
+            throws BusinessException, SystemException;
     @interface ProductCheck {}
 
     /**
@@ -86,7 +88,8 @@ public interface IProductEditUpSV {
      * @author lipeng
      *  @ApiCode PROMAN_0104
      */
-    public BaseResponse productPriority(ProductPriorityParam productPriorityParam) throws BusinessException, SystemException;
+    public BaseResponse productPriority(ProductPriorityParam productPriorityParam)
+            throws BusinessException, SystemException;
     @interface ProductPriority {}
     
 

@@ -3,10 +3,8 @@ package com.ai.slp.product.service.business.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.normproduct.param.PageInfoWrapper;
-import com.ai.slp.product.api.normproduct.param.ProductCatInfo;
-import com.ai.slp.product.api.normproduct.param.ProductCatPageQuery;
-import com.ai.slp.product.api.normproduct.param.ProductCatParam;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
@@ -37,13 +35,13 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     IProdCatAttrValAtomSV prodCatAttrValAtomSV;
 
     @Override
-    public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
+    public PageInfoForRes<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
         PageInfo<ProductCat> catInfoPageInfo = prodCatDefAtomSV.queryForPage(
                 pageQuery.getPageNo(),pageQuery.getPageSize(),pageQuery.getParentProductCatId(),
                 pageQuery.getTenantId(),pageQuery.getProductCatId(),
                 pageQuery.getProductCatName(),pageQuery.getIsChild()
         );
-        PageInfoWrapper<ProductCatInfo> pageInfoWrapper = new PageInfoWrapper<>();
+        PageInfoForRes<ProductCatInfo> pageInfoWrapper = new PageInfoForRes<>();
         pageInfoWrapper.setCount(catInfoPageInfo.getCount());
         pageInfoWrapper.setPageSize(catInfoPageInfo.getPageSize());
         pageInfoWrapper.setPageCount(catInfoPageInfo.getPageCount());
@@ -137,5 +135,34 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         }
         //删除类目
         prodCatDefAtomSV.deleteProductCat(tenantId,productCatId);
+    }
+
+    /**
+     * 查询类目的类目链
+     *
+     * @param tenantId
+     * @param productCatId
+     * @return
+     */
+    @Override
+    public List<ProductCatInfo> queryLinkOfCatById(String tenantId, String productCatId) {
+        List<ProductCatInfo> catInfoList = new ArrayList<ProductCatInfo>();
+        queryCatFoLinkById(catInfoList,tenantId,productCatId);
+        return catInfoList;
+    }
+
+    private void queryCatFoLinkById(List<ProductCatInfo> catInfoList,String tenantId, String productCatId){
+        ProductCatInfo catInfo = queryByCatId(tenantId,productCatId);
+        if (catInfo==null)
+            return;
+        //已经达到根目录
+        if (catInfo.getParentProductCatId()==null){
+            catInfoList.add(catInfo);
+            return;
+        }
+        //若不是跟类目,则继续查询
+        if (catInfo!=null && catInfo.getParentProductCatId()!=null)
+            queryCatFoLinkById(catInfoList,tenantId,productCatId);
+        catInfoList.add(catInfo);
     }
 }

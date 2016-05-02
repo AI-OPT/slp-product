@@ -3,6 +3,7 @@ package com.ai.slp.product.api.storage.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.storage.param.*;
 
 import java.util.List;
@@ -88,7 +89,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0104
      */
-    public PageInfoWrapper<STOStorageGroup4List> queryGroupList(STOStorageGroupQuery groupQuery)
+    public PageInfoForRes<STOStorageGroup4List> queryGroupList(STOStorageGroupQuery groupQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupList{}
 
@@ -195,7 +196,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0111
      */
-    public PageInfoWrapper<STOStorageGroup4SaleList> queryGroupListForSalePrice(STOStorageGroupQuery groupQuery)
+    public PageInfoForRes<STOStorageGroup4SaleList> queryGroupListForSalePrice(STOStorageGroupQuery groupQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupListForSalePrice{}
 

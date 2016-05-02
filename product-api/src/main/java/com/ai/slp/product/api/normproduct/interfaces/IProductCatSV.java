@@ -5,6 +5,7 @@ import java.util.List;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 
 /**
@@ -27,7 +28,7 @@ public interface IProductCatSV {
      * @author lipeng
     *  @ApiCode PRODUCT_CAT_0100
      */
-	public PageInfoWrapper<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery)
+	public PageInfoForRes<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery)
 			throws BusinessException, SystemException;
 	@interface QueryProductCat {}
 
@@ -150,4 +151,18 @@ public interface IProductCatSV {
 	public ProductCatInfo queryByCatId(ProductCatUniqueReq catUniqueReq)
 			throws BusinessException,SystemException;
 	@interface QueryByCatId{}
+
+	/**
+	 * 查询类目的类目链
+	 *
+	 * @param catUniqueReq
+	 * @return 从当前类目一直到根类目的类目链
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiCode PRODUCT_CAT_0110
+	 */
+	public List<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq)
+			throws BusinessException,SystemException;
+	@interface QueryLinkOfCatById{}
 }

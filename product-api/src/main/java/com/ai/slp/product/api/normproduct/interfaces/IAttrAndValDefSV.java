@@ -6,6 +6,7 @@ import java.util.Map;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 
 /**
@@ -28,7 +29,7 @@ public interface IAttrAndValDefSV {
      * @author lipeng
     *  @ApiCode ATTR_VAL_0200
      */
-    public PageInfoWrapper<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
+    public PageInfoForRes<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException;
     @interface QueryAttrs {}
     
@@ -98,7 +99,7 @@ public interface IAttrAndValDefSV {
      * @author lipeng
     *  @ApiCode ATTR_VAL_0204
      */
-    public PageInfoWrapper<AttrValInfo> queryAttrValues(AttrValPageQuery pageQuery)
+    public PageInfoForRes<AttrValInfo> queryAttrValues(AttrValPageQuery pageQuery)
             throws BusinessException, SystemException;
     @interface QueryAttrValues {}
     

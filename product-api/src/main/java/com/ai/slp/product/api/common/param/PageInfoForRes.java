@@ -1,4 +1,4 @@
-package com.ai.slp.product.api.product.param;
+package com.ai.slp.product.api.common.param;
 
 import com.ai.opt.base.vo.BaseResponse;
 
@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author liutong5
  */
-public class PageInfoWrapper<T> extends BaseResponse {
+public class PageInfoForRes<T> extends BaseResponse {
     /**
      * 请求查询的页码
      */

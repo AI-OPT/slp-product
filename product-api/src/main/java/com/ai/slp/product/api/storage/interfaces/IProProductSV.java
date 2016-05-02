@@ -2,9 +2,8 @@ package com.ai.slp.product.api.storage.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.slp.product.api.storage.param.PageInfoWrapper;
-import com.ai.slp.product.api.storage.param.ProProduct;
-import com.ai.slp.product.api.storage.param.ProProductParam;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.slp.product.api.storage.param.*;
 
 /**
  * 商城商品库存管理
@@ -26,7 +25,7 @@ public interface IProProductSV {
      * @author lipeng
     *  @ApiCode PROPRO_0100
      */
-    public PageInfoWrapper<ProProduct> queryProProducts(ProProductParam proProductParam)
+    public PageInfoForRes<ProProduct> queryProProducts(ProProductParam proProductParam)
             throws BusinessException, SystemException;
     @interface QueryProProducts {}
     

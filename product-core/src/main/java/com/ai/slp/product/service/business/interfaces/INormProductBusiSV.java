@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 
 import java.util.Date;
@@ -37,7 +38,7 @@ public interface INormProductBusiSV {
      *
      * @return
      */
-    public PageInfoWrapper<NormProdResponse> queryForPage(NormProdRequest productRequest);
+    public PageInfoForRes<NormProdResponse> queryForPage(NormProdRequest productRequest);
 
     /**
      * 废弃标准品

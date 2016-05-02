@@ -3,6 +3,7 @@ package com.ai.slp.product.api.normproduct.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 
 /**
@@ -25,7 +26,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0100
      */
-    public PageInfoWrapper<NormProdResponse> queryNormProduct(NormProdRequest productRequest)
+    public PageInfoForRes<NormProdResponse> queryNormProduct(NormProdRequest productRequest)
             throws BusinessException,SystemException;
     @interface QueryNormProduct {}
 

@@ -3,6 +3,7 @@ package com.ai.slp.product.service.business.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.constants.StandedProdAttrConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
@@ -173,13 +174,13 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     }
 
     @Override
-    public PageInfoWrapper<NormProdResponse> queryForPage(NormProdRequest productRequest) {
+    public PageInfoForRes<NormProdResponse> queryForPage(NormProdRequest productRequest) {
         StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
         BeanUtils.copyProperties(pageQueryVo,productRequest);
         //查询结果
         PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
         //接口输出接口
-        PageInfoWrapper<NormProdResponse> normProdPageInfo = new PageInfoWrapper<NormProdResponse>();
+        PageInfoForRes<NormProdResponse> normProdPageInfo = new PageInfoForRes<NormProdResponse>();
         BeanUtils.copyProperties(normProdPageInfo,productPageInfo);
         //添加结果集
         List<StandedProduct> productList = productPageInfo.getResult();

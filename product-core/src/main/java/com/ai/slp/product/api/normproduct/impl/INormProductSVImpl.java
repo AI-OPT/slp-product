@@ -4,6 +4,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
@@ -27,7 +28,7 @@ public class INormProductSVImpl implements INormProductSV {
     INormProductBusiSV normProductBusiSV;
 
     @Override
-    public PageInfoWrapper<NormProdResponse> queryNormProduct(NormProdRequest productRequest) throws BusinessException, SystemException {
+    public PageInfoForRes<NormProdResponse> queryNormProduct(NormProdRequest productRequest) throws BusinessException, SystemException {
         return normProductBusiSV.queryForPage(productRequest);
     }
 
