@@ -172,4 +172,18 @@ public interface IProductCatSV {
 			throws BusinessException,SystemException;
 	@interface QueryAttrByCatAndType{}
 
+	/**
+	 * 根据名称或首字母查询
+	 *
+	 * @param catQuery 类目查询信息
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiCode PRODUCT_CAT_0112
+     */
+	public List<ProductCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery)
+			throws BusinessException,SystemException;
+	@interface QueryCatByNameOrFirst{}
+
 }

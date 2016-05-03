@@ -249,6 +249,34 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         }
     }
 
+    /**
+     * 根据名称或首字母查询类目信息
+     *
+     * @param query
+     * @return
+     */
+    @Override
+    public List<ProductCatInfo> queryByNameOrFirst(ProductCatQuery query) {
+        //判断是名称还是首字母
+        String queryVal = query.getQueryVal();
+        boolean isName = true;
+        //查询内容长度为1,且为字母,则按字母进行查询
+        if (queryVal.length()==1
+                && Character.isLetter(queryVal.charAt(0))){
+            queryVal = queryVal.substring(0,1);
+            isName = false;
+        }
+        List<ProductCatInfo> catInfoList = new ArrayList<>();
+        List<ProductCat> catList = prodCatDefAtomSV.queryByNameOrFirst(
+                query.getTenantId(),query.getParentProductCatId(),queryVal,isName);
+        for (ProductCat cat:catList){
+            ProductCatInfo catInfo = new ProductCatInfo();
+            BeanUtils.copyProperties(catInfo,cat);
+            catInfoList.add(catInfo);
+        }
+        return catInfoList;
+    }
+
 
     private void queryCatFoLinkById(List<ProductCatInfo> catInfoList,String tenantId, String productCatId){
         ProductCatInfo catInfo = queryByCatId(tenantId,productCatId);

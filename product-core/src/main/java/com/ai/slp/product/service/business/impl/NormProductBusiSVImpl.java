@@ -88,10 +88,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             prodAttr.setAttrValueName(attrValReq.getAttrVal());
             prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
             prodAttr.setState(CommonSatesConstants.STATE_ACTIVE);//设置为有效
-            if (attrValReq.getOperTime() != null)
-                prodAttr.setOperTime(DateUtils.toTimeStamp(attrValReq.getOperTime()));
-            else
-                prodAttr.setOperTime(nowTime);
+            prodAttr.setOperTime(DateUtils.toTimeStamp(attrValReq.getOperTime()));
             //添加成功,添加日志
             if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
                 StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
