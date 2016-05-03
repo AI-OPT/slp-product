@@ -25,7 +25,7 @@ public class AttrValUniqueReq extends BaseInfo{
     @NotNull(message = "属性值ID不能为空",
             groups = {IAttrAndValDefSV.QueryAttrVal.class,
                     IAttrAndValDefSV.DeleteAttrVal.class})
-    private Long attrvalueDefId;
+    private String attrvalueDefId;
     /**
      * 操作人ID
      */
@@ -46,11 +46,11 @@ public class AttrValUniqueReq extends BaseInfo{
         this.attrId = attrId;
     }
 
-    public Long getAttrvalueDefId() {
+    public String getAttrvalueDefId() {
         return attrvalueDefId;
     }
 
-    public void setAttrvalueDefId(Long attrvalueDefId) {
+    public void setAttrvalueDefId(String attrvalueDefId) {
         this.attrvalueDefId = attrvalueDefId;
     }
 

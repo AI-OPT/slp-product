@@ -7,17 +7,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.api.normproduct.param.AttrParam;
+import com.ai.slp.product.api.normproduct.param.AttrValInfo;
+import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
+import com.ai.slp.product.api.normproduct.param.AttrValParam;
+import com.ai.slp.product.api.normproduct.param.AttrValUniqueReq;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
 
 public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Autowired 
     IProdAttrDefAtomSV prodAttrDefAtomSV;
+    @Autowired
+    IProdAttrValDefAtomSV prodAttrValDefAtomSV;
     
     @Override
     public AttrDefInfo selectAttrById(String tenantId, Long attrId) {
@@ -38,7 +47,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public PageInfo<AttrDefInfo> selectAttrs(AttrDefParam attrDefParam) {
+    public PageInfoForRes<AttrDefInfo> selectAttrs(AttrDefParam attrDefParam) {
         PageInfo<ProdAttrDef> pageInfo = prodAttrDefAtomSV.selectPageAttrs(attrDefParam);
         List<ProdAttrDef> prodAttrDefList = pageInfo.getResult();
         List<AttrDefInfo> attrDefInfoList = new ArrayList<AttrDefInfo>();
@@ -58,7 +67,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             
             attrDefInfoList.add(attrDefInfo);
         }
-        PageInfo<AttrDefInfo> AttrDefInfoPage = new PageInfo<>();
+        PageInfoForRes<AttrDefInfo> AttrDefInfoPage = new PageInfoForRes<>();
         AttrDefInfoPage.setResult(attrDefInfoList);
         AttrDefInfoPage.setPageNo(pageInfo.getPageNo());;
         AttrDefInfoPage.setPageSize(pageInfo.getPageSize());
@@ -83,6 +92,8 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     public int deleteAttr(String tenantId, Long attrId) {
         if(tenantId == null || attrId == null) 
                 throw new BusinessException("","未找到指定的属性信息，租户ID="+tenantId+",属性标识="+attrId);
+        //TODU 通过属性标识下所有属性信息
+//        prodAttrValDefAtomSV.deleteProdAttrVal(tenantId, attrValueId);
         return prodAttrDefAtomSV.deleteById(tenantId, attrId);
     }
 
@@ -106,5 +117,89 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             
         return count;
     }
+
+    @Override
+    public PageInfoForRes<AttrValInfo> selectAttrvals(AttrValPageQuery attrValPageQuery) {
+        PageInfo<ProdAttrvalueDef> attrValPage = prodAttrValDefAtomSV.selectAttrValPage(attrValPageQuery);
+        List<ProdAttrvalueDef> attrValList = attrValPage.getResult();
+        List<AttrValInfo> attrValInfoList = new ArrayList<AttrValInfo>();
+        for(ProdAttrvalueDef attrVal : attrValList){
+            AttrValInfo attrValInfo = new AttrValInfo();
+            attrValInfo.setAttrvalueDefId(attrVal.getAttrvalueDefId());
+            attrValInfo.setAttrValueName(attrVal.getAttrValueName());
+            attrValInfo.setFirstLetter(attrVal.getFirstLetter());
+            attrValInfo.setOperTime(attrVal.getOperTime());
+            attrValInfo.setOperId(attrVal.getOperId());
+            
+            attrValInfoList.add(attrValInfo);
+        }
+        PageInfoForRes<AttrValInfo> attrValInfo = new PageInfoForRes<AttrValInfo>();
+        attrValInfo.setResult(attrValInfoList);
+        attrValInfo.setPageNo(attrValPage.getPageNo());
+        attrValInfo.setPageSize(attrValPage.getPageSize());
+        
+        return attrValInfo;
+    }
+
+    @Override
+    public AttrValInfo queryAttrVal(AttrValUniqueReq attrValParam) {
+        String attrvalueDefId = attrValParam.getAttrvalueDefId();
+        String tenantId = attrValParam.getTenantId();
+        ProdAttrvalueDef prodAttrvalueDef = prodAttrValDefAtomSV.selectById(tenantId, attrvalueDefId);
+        
+        AttrValInfo attrValInfo = new AttrValInfo();
+        attrValInfo.setAttrvalueDefId(attrvalueDefId);
+        attrValInfo.setTenantId(tenantId);
+        attrValInfo.setAttrValueName(prodAttrvalueDef.getAttrValueName());
+        attrValInfo.setFirstLetter(prodAttrvalueDef.getFirstLetter());
+        
+        return attrValInfo;
+    }
+
+    @Override
+    public int deleteAttrVal(AttrValUniqueReq attrValUniqueReq) {
+        String tenantId = attrValUniqueReq.getTenantId();
+        String attrValueId = attrValUniqueReq.getAttrvalueDefId();
+        if(tenantId == null || attrValueId == null) 
+            throw new BusinessException("","未找到指定的属性信息，租户ID="+attrValUniqueReq.getTenantId()+",属性标识="+attrValUniqueReq.getAttrvalueDefId());
+        return prodAttrValDefAtomSV.deleteProdAttrVal(tenantId, attrValueId);
+    }
+
+    @Override
+    public int updateAttrVal(AttrValParam attrValParam) {
+        ProdAttrvalueDef prodAttrvalueDef = new ProdAttrvalueDef();
+        prodAttrvalueDef.setAttrId(attrValParam.getAttrId());
+        prodAttrvalueDef.setAttrvalueDefId(attrValParam.getAttrvalueDefId());
+        prodAttrvalueDef.setAttrValueName(attrValParam.getAttrValueName());
+        prodAttrvalueDef.setFirstLetter(attrValParam.getFirstLetter());
+        prodAttrvalueDef.setOperId(attrValParam.getOperId());
+        prodAttrvalueDef.setTenantId(attrValParam.getTenantId());
+        
+        return prodAttrValDefAtomSV.updateProdAttrVal(prodAttrvalueDef);
+    }
+
+    @Override
+    public int insertAttrVal(List<AttrValParam> attrValParamList) {
+        int count = 0;
+        for(AttrValParam attrValParam : attrValParamList){
+            ProdAttrvalueDef prodAttrvalueDef = new ProdAttrvalueDef();
+            
+            prodAttrvalueDef.setAttrId(attrValParam.getAttrId());
+            prodAttrvalueDef.setAttrvalueDefId(attrValParam.getAttrvalueDefId());
+            prodAttrvalueDef.setAttrValueName(attrValParam.getAttrValueName());
+            prodAttrvalueDef.setFirstLetter(attrValParam.getFirstLetter());
+            prodAttrvalueDef.setOperId(attrValParam.getOperId());
+            //设置状态有效：1有效，0无效。
+            prodAttrvalueDef.setState("1");
+            int ok = prodAttrValDefAtomSV.insertProdAttrVal(prodAttrvalueDef);
+            if(ok == 0)
+                throw new BusinessException("","添加属性值失败，属性值名称="+attrValParam.getAttrValueName());
+            count ++;
+        }
+        return count;
+    }
+    
+    
+    
 
 }

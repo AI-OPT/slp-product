@@ -3,9 +3,15 @@ package com.ai.slp.product.service.business.interfaces;
 import java.util.List;
 
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.api.normproduct.param.AttrParam;
+import com.ai.slp.product.api.normproduct.param.AttrValInfo;
+import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
+import com.ai.slp.product.api.normproduct.param.AttrValParam;
+import com.ai.slp.product.api.normproduct.param.AttrValUniqueReq;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 
 /**
  * 属性与属性值的相关操作
@@ -31,7 +37,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @return
      * @author lipeng
      */
-    public PageInfo<AttrDefInfo> selectAttrs(AttrDefParam attrDefParam);
+    public PageInfoForRes<AttrDefInfo> selectAttrs(AttrDefParam attrDefParam);
     
     /**
      * 修改属性信息
@@ -60,4 +66,50 @@ public interface IAttrAndAttrvalBusiSV {
      * @author lipeng
      */
     public int insertAttr(List<AttrParam> attrParamList);
+    
+    /**
+     * 分页查询属性值
+     * 
+     * @param attrValPageQuery
+     * @return
+     * @author lipeng
+     */
+    public PageInfoForRes<AttrValInfo> selectAttrvals(AttrValPageQuery attrValPageQuery);
+    
+    /**
+     * 查询属性值
+     * 
+     * @param attrValParam
+     * @return
+     * @author lipeng
+     */
+    public AttrValInfo queryAttrVal(AttrValUniqueReq attrValParam);
+    
+    /**
+     * 删除属性值
+     * 
+     * @param tenantId
+     * @param attrValueId
+     * @return
+     * @author lipeng
+     */
+    public int deleteAttrVal(AttrValUniqueReq attrValUniqueReq);
+    
+    /**
+     * 修改属性值信息
+     * 
+     * @param attrValParam
+     * @return
+     * @author lipeng
+     */
+    public int updateAttrVal(AttrValParam attrValParam);
+    
+    /**
+     * 插入(新增)属性值信息
+     * 
+     * @param attrValParamList
+     * @return
+     * @author lipeng
+     */
+    public int insertAttrVal(List<AttrValParam> attrValParamList);
 }

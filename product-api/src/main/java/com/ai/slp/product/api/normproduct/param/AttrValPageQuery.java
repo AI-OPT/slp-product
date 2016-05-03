@@ -17,18 +17,59 @@ public class AttrValPageQuery extends BaseInfo{
     /**
      * 属性值ID
      */
-    private Long attrvalueDefId;
+    private String attrvalueDefId;
+    
+    /**
+     *属性标识
+     */
+    private Long attrId;
+    
+
+    /**
+     * 请求查询的页码
+     * 默认为1
+     */
+    private Integer pageNo = 1;
+
+    /**
+     * 每页显示条数
+     */
+    private Integer pageSize =20;
 
     /**
      * 属性值名称
      */
     private String attrValueName;
 
-    public Long getAttrvalueDefId() {
+    public Integer getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(Integer pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Long getAttrId() {
+        return attrId;
+    }
+
+    public void setAttrId(Long attrId) {
+        this.attrId = attrId;
+    }
+
+    public String getAttrvalueDefId() {
         return attrvalueDefId;
     }
 
-    public void setAttrvalueDefId(Long attrvalueDefId) {
+    public void setAttrvalueDefId(String attrvalueDefId) {
         this.attrvalueDefId = attrvalueDefId;
     }
 
