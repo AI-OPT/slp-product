@@ -61,6 +61,19 @@ public interface IProductCatSV {
 	@interface UpdateProductCat {}
 
 	/**
+	 * 商品类目属性添加<br>
+	 *
+	 * @param lspad
+	 * @return 服务返回基本信息
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author lipeng
+	 * @ApiCode PRODUCT_CAT_0103
+	 */
+	public BaseResponse addProductCatAttr(List<AttrDefResponse> lspad) throws BusinessException, SystemException;
+	@interface AddProductCatAttr {}
+
+	/**
 	 * 商品类目删除<br>
 	 * 删除类目时，需要判断是否已经有关联的标准品（包括废弃状态的）<br>
 	 * 类目一旦删除，其下包含的子类目一并删除，与选择好的属性、属性值解除关联关系<br>
@@ -70,52 +83,28 @@ public interface IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng
-	*  @ApiCode PRODUCT_CAT_0103
+	*  @ApiCode PRODUCT_CAT_0104
 	 */
 	public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException;
 	@interface DeleteProductCat {}
-	
+
 	/**
-     * 商品类目属性查询<br>
-     * 
-     * @param catUniqueReq
-     * @return 符合条件的属性集合
-     * @throws BusinessException
-     * @throws SystemException
-     * @author lipeng
-     * @ApiCode PRODUCT_CAT_0104
-     */
-    public List<AttrDefInfo> queryProductCatAttr(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException;
-    @interface QueryProductCatAttr {}
-    
-    
-    /**
-     * 商品类目属性的属性值查询
-     * 
-     * @return 类目属性值集合
-     * @throws BusinessException
-     * @throws SystemException
-     * @author lipeng
-    *  @ApiCode PRODUCT_CAT_0105
-     */
-    public List<AttrValInfo> queryProductCatAttrVal() throws BusinessException, SystemException;
-    @interface QueryProductCatAttrVal {}
+	 * 查询指定类目下某种类型的属性标识和属性值标识的集合<br>
+	 * 类型分为:关键属性,销售属性,非关键属性
+	 *
+	 * @param attrQuery
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiCode PRODUCT_CAT_0105
+	 */
+	public Map<Long,Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery)
+			throws BusinessException,SystemException;
+	@interface QueryAttrAndValIdByCatAndType{}
     
     /**
-     * 商品类目属性添加<br>
-     * 
-     * @param lspad
-     * @return 服务返回基本信息
-     * @throws BusinessException
-     * @throws SystemException
-     * @author lipeng
-    *  @ApiCode PRODUCT_CAT_0106
-     */
-    public BaseResponse addProductCatAttr(List<AttrDefResponse> lspad) throws BusinessException, SystemException;
-    @interface AddProductCatAttr {}
-    
-    /**
-     * 商品类目属性属性值删除
+     * 删除商品类目属性或属性值
      * 
      * @return
      * @throws BusinessException
@@ -123,7 +112,7 @@ public interface IProductCatSV {
      * @author lipeng
     *  @ApiCode PRODUCT_CAT_0107
      */
-    public BaseResponse deleteProductCatAttrVal(AttrValParam productAttrValParam) throws BusinessException, SystemException;
+    public BaseResponse deleteProductCatAttrVal(ProdCatAttrVal catAttrVal) throws BusinessException, SystemException;
     @interface DeleteProductCatAttrVal {}
 
 	/**
@@ -183,18 +172,4 @@ public interface IProductCatSV {
 			throws BusinessException,SystemException;
 	@interface QueryAttrByCatAndType{}
 
-	/**
-	 * 查询指定类目下某种类型的属性标识和属性值标识的集合<br>
-	 * 类型分为:关键属性,销售属性,非关键属性
-	 *
-	 * @param attrQuery
-	 * @return
-	 * @throws BusinessException
-	 * @throws SystemException
-	 * @author liutong5
-	 * @ApiCode PRODUCT_CAT_0112
-     */
-	public Map<Long,Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery)
-			throws BusinessException,SystemException;
-	@interface QueryAttrAndValIdByCatAndType{}
 }

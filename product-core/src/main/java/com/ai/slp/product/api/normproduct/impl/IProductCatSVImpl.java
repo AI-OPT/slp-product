@@ -68,7 +68,8 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),"");
-        productCatBusiSV.deleteByCatId(catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
+        productCatBusiSV.deleteByCatId(catUniqueReq.getTenantId(),catUniqueReq.getProductCatId(),
+                catUniqueReq.getOperId(),catUniqueReq.getOperTime());
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setResultCode("");
@@ -78,23 +79,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     @Override
-    public List<AttrDefInfo> queryProductCatAttr(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
-        return null;
-    }
-
-    @Override
-    public List<AttrValInfo> queryProductCatAttrVal() throws BusinessException, SystemException {
-        return null;
-    }
-
-    @Override
     public BaseResponse addProductCatAttr(List<AttrDefResponse> lspad)
-            throws BusinessException, SystemException {
-        return null;
-    }
-
-    @Override
-    public BaseResponse deleteProductCatAttrVal(AttrValParam productAttrValParam)
             throws BusinessException, SystemException {
         return null;
     }
@@ -103,6 +88,19 @@ public class IProductCatSVImpl implements IProductCatSV {
     public BaseResponse addAttrForCatAndType(ProdCatAttrAddParam addCatAttrParam)
             throws BusinessException, SystemException {
         return null;
+    }
+
+    @Override
+    public BaseResponse deleteProductCatAttrVal(ProdCatAttrVal productAttrValParam)
+            throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(productAttrValParam.getTenantId(),"");
+        productCatBusiSV.deleteAttrOrVa(productAttrValParam);
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setResultCode("");
+        responseHeader.setIsSuccess(true);
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     @Override

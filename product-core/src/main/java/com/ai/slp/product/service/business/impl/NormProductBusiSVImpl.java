@@ -5,6 +5,7 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.StandedProdAttrConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
@@ -72,7 +73,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
             prodAttr.setAttrValueName(attrValReq.getAttrVal());
             prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
-            prodAttr.setState(StandedProdAttrConstants.STATE_ACTIVE);//设置为有效
+            prodAttr.setState(CommonSatesConstants.STATE_ACTIVE);//设置为有效
             if (attrValReq.getOperTime() != null)
                 prodAttr.setOperTime(DateUtils.toTimeStamp(attrValReq.getOperTime()));
             else

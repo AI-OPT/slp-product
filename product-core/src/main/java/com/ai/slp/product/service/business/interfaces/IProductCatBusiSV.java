@@ -3,6 +3,7 @@ package com.ai.slp.product.service.business.interfaces;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,7 +47,7 @@ public interface IProductCatBusiSV {
      * @param tenantId
      * @param productCatId
      */
-    public void deleteByCatId(String tenantId,String productCatId);
+    public void deleteByCatId(String tenantId, String productCatId, Long operId, Timestamp operTime);
 
     /**
      * 查询类目的类目链
@@ -77,4 +78,10 @@ public interface IProductCatBusiSV {
      */
     public Map<Long,Set<String>> queryAttrAndValIdByCatIdAndType(
             String tenantId,String productCatId,String attrType);
+
+    /**
+     * 删除类目的属性或属性值关联
+     * @param catAttrVal
+     */
+    public void deleteAttrOrVa(ProdCatAttrVal catAttrVal);
 }

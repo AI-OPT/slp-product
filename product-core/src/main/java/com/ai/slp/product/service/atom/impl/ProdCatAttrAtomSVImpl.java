@@ -1,8 +1,10 @@
 package com.ai.slp.product.service.atom.impl;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
@@ -41,14 +43,36 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     }
 
     /**
-     * 删除指定类目属性关系
+     * 删除类目的指定属性
      *
+     * @param tenantId
      * @param catId
+     * @param attrId
+     * @param operId
+     * @param operTime
      * @return
      */
     @Override
-    public int deleteByCatId(String catId) {
-        return prodCatAttrMapper.deleteByPrimaryKey(catId);
+    public int deleteByCatAttrId(String tenantId, String catId, Long attrId, Long operId, Timestamp operTime) {
+        ProdCatAttr prodCatAttr = new ProdCatAttr();
+        prodCatAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+        prodCatAttr.setOperId(operId);
+        prodCatAttr.setOperTime(operTime!=null?operTime: DateUtils.currTimeStamp());
+        ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andProductCatIdEqualTo(catId);
+        return prodCatAttrMapper.updateByExampleSelective(prodCatAttr,example);
+    }
+
+
+    @Override
+    public int deleteByCatId(String tenantId,String catAttrId,Long operId, Timestamp operTime) {
+        ProdCatAttr prodCatAttr = new ProdCatAttr();
+        prodCatAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+        prodCatAttr.setOperId(operId);
+        prodCatAttr.setOperTime(operTime!=null?operTime: DateUtils.currTimeStamp());
+        ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdEqualTo(catAttrId);
+        return prodCatAttrMapper.updateByExampleSelective(prodCatAttr,example);
     }
 
     /**

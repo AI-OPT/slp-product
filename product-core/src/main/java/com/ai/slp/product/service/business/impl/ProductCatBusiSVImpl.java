@@ -13,10 +13,13 @@ import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StreamUtils;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -115,7 +118,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     }
 
     @Override
-    public void deleteByCatId(String tenantId, String productCatId) {
+    public void deleteByCatId(String tenantId, String productCatId,Long operId, Timestamp operTime) {
         //查询是否存在类目
         ProductCat productCat = prodCatDefAtomSV.selectById(tenantId,productCatId);
         if (productCat==null)
@@ -132,9 +135,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         if (catAttrList!=null && catAttrList.size()>0){
             for (ProdCatAttr catAttr:catAttrList){
                 //删除类目下属性与属性值的对应关系
-                prodCatAttrValAtomSV.deleteByCat(tenantId,catAttr.getCatAttrId());
+                prodCatAttrValAtomSV.deleteByCat(tenantId,catAttr.getCatAttrId(),operId,operTime);
                 //删除类目与属性对应关系
-                prodCatAttrAtomSV.deleteByCatId(catAttr.getCatAttrId());
+                prodCatAttrAtomSV.deleteByCatId(tenantId,catAttr.getCatAttrId(),operId,operTime);
             }
         }
         //删除类目
@@ -215,6 +218,35 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             }
         }
         return idMap;
+    }
+
+    /**
+     * 删除类目的属性或属性值关联
+     *
+     * @param catAttrVal
+     */
+    @Override
+    public void deleteAttrOrVa(ProdCatAttrVal catAttrVal) {
+        //若删除未关键属性或销售属性,需要检查是否关联标准品
+        if (ProductCatConstants.ATTR_TYPE_KEY.equals(catAttrVal.getAttrType())
+                || ProductCatConstants.ATTR_TYPE_SALE.equals(catAttrVal.getAttrType())) {
+            int prodNum = prodAttrAtomSV.queryProdNumOfAttr(catAttrVal.getTenantId(), catAttrVal.getAttrId());
+            if (prodNum > 0)
+                throw new BusinessException("", "此属性已关联标准品,不允许删除");
+        }
+        //属性值不为空,表示只删除单个属性值
+        if (StringUtils.isNotBlank(catAttrVal.getAttrvalueDefId())){
+            //删除属性值
+            prodCatAttrValAtomSV.deleteValByAttr(catAttrVal.getTenantId(),catAttrVal.getCatAttrId(),
+                    catAttrVal.getAttrvalueDefId(),catAttrVal.getOperId(),catAttrVal.getOperTime());
+        }else{//删除整个属性值
+            //删除关联属性值
+            prodCatAttrValAtomSV.deleteByCat(catAttrVal.getTenantId(),catAttrVal.getCatAttrId(),
+                    catAttrVal.getOperId(),catAttrVal.getOperTime());
+            //删除关联属性
+            prodCatAttrAtomSV.deleteByCatAttrId(catAttrVal.getTenantId(),catAttrVal.getProductCatId(),
+                    catAttrVal.getAttrId(),catAttrVal.getOperId(),catAttrVal.getOperTime());
+        }
     }
 
 

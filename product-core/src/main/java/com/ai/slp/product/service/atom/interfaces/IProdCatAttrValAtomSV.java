@@ -2,6 +2,7 @@ package com.ai.slp.product.service.atom.interfaces;
 
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -21,7 +22,19 @@ public interface IProdCatAttrValAtomSV {
      * @param catAttrId
      * @return
      */
-    public int deleteByCat(String tenantId,String catAttrId);
+    public int deleteByCat(String tenantId,String catAttrId,Long operId, Timestamp operTime);
+
+    /**
+     * 删除类目属性下的一个属性值
+     *
+     * @param tenantId
+     * @param catAttrId
+     * @param attrValId
+     * @param operId
+     * @param operTime
+     * @return
+     */
+    public int deleteValByAttr(String tenantId,String catAttrId,String attrValId,Long operId, Timestamp operTime);
 
     /**
      * 查询类目属性关系对应的属性值

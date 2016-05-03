@@ -13,5 +13,5 @@ public final class CommonSatesConstants {
     /**
      * 无效
      */
-    public static final String STATE_INFACTIVE = "0";
+    public static final String STATE_INACTIVE = "0";
 }

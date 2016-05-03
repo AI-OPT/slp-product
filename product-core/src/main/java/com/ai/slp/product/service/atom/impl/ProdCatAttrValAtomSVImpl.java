@@ -5,9 +5,11 @@ import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValueCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrValueMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrValAtomSV;
+import com.ai.slp.product.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -25,10 +27,36 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
      * @return
      */
     @Override
-    public int deleteByCat(String tenantId, String catAttrId) {
+    public int deleteByCat(String tenantId, String catAttrId, Long operId, Timestamp operTime) {
         ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdEqualTo(catAttrId);
-        return attrValueMapper.deleteByExample(example);
+        ProdCatAttrValue attrValue = new ProdCatAttrValue();
+        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setOperId(operId);
+        attrValue.setOperTime(operTime!=null?operTime: DateUtils.currTimeStamp());
+        return attrValueMapper.updateByExampleSelective(attrValue,example);
+    }
+
+    /**
+     * 删除类目属性下的一个属性值
+     *
+     * @param tenantId
+     * @param catAttrId
+     * @param attrValId
+     * @param operId
+     * @param operTime
+     * @return
+     */
+    @Override
+    public int deleteValByAttr(String tenantId, String catAttrId, String attrValId, Long operId, Timestamp operTime) {
+        ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andCatAttrIdEqualTo(catAttrId).andAttrvalueDefIdGreaterThan(attrValId);
+        ProdCatAttrValue attrValue = new ProdCatAttrValue();
+        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setOperId(operId);
+        attrValue.setOperTime(operTime!=null?operTime: DateUtils.currTimeStamp());
+        return attrValueMapper.updateByExampleSelective(attrValue,example);
     }
 
     /**

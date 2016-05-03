@@ -21,7 +21,6 @@ public class ProductCatUniqueReq extends BaseInfo {
     @NotNull(message = "类目标识不能为空",groups = {
             IProductCatSV.QueryByCatId.class,
             IProductCatSV.DeleteProductCat.class,
-            IProductCatSV.QueryProductCatAttr.class,
             IProductCatSV.QueryLinkOfCatById.class
     })
     private String productCatId;
