@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 
 /**
@@ -45,4 +47,14 @@ public interface IProdAttrValDefAtomSV {
      * @author lipeng
      */
     public int deleteProdAttrVal(String tenantId,String attrValueId);
+    
+    /**
+     * 根据属性信息分页查询属性值信息
+     * 
+     * @param tenantId
+     * @param attrId
+     * @return
+     * @author lipeng
+     */
+    public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrValPageQuery attrValPageQuery);
 }

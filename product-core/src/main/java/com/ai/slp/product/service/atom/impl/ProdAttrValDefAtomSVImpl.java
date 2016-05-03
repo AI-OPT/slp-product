@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
@@ -48,6 +50,27 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andAttrValueIdEqualTo(attrValueId);
         return prodAttrvalueDefMapper.deleteByExample(example);
+    }
+
+
+    @Override
+    public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrValPageQuery attrValPageQuery) {
+        ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
+        ProdAttrvalueDefCriteria.Criteria param = example.createCriteria();
+        param.andAttrIdEqualTo(attrValPageQuery.getAttrId()).andTenantIdEqualTo(attrValPageQuery.getTenantId());
+        if(attrValPageQuery.getAttrValueName() != null)
+            param.andAttrValueNameEqualTo(attrValPageQuery.getAttrValueName());
+        if(attrValPageQuery.getAttrvalueDefId() != null)
+            param.andAttrvalueDefIdEqualTo(attrValPageQuery.getAttrvalueDefId());
+        example.setLimitStart((attrValPageQuery.getPageNo()-1)*attrValPageQuery.getPageSize());
+        example.setLimitEnd(attrValPageQuery.getPageSize());
+        
+        PageInfo<ProdAttrvalueDef> attrValPage = new PageInfo<ProdAttrvalueDef>();
+        attrValPage.setPageSize(attrValPageQuery.getPageSize());
+        attrValPage.setPageNo(attrValPageQuery.getPageNo());
+        attrValPage.setResult(prodAttrvalueDefMapper.selectByExample(example));
+        
+        return attrValPage;
     }
     
     

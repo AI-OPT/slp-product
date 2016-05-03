@@ -28,7 +28,7 @@ public class AttrValParam extends BaseInfo {
 	/**
 	 * 属性值ID
 	 */
-	private long attrvalueDefId;
+	private String attrvalueDefId;
 	
 	/**
 	 * 属性值名称
@@ -90,11 +90,11 @@ public class AttrValParam extends BaseInfo {
 		this.attrId = attrId;
 	}
 
-	public Long getAttrvalueDefId() {
+	public String getAttrvalueDefId() {
 		return attrvalueDefId;
 	}
 
-	public void setAttrvalueDefId(Long attrvalueDefId) {
+	public void setAttrvalueDefId(String attrvalueDefId) {
 		this.attrvalueDefId = attrvalueDefId;
 	}
 
