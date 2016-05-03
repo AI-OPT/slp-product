@@ -3,6 +3,7 @@ package com.ai.slp.product.api.normproduct.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.slp.product.api.common.param.MapForRes;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.interfaces.IAttrAndValDefSV;
 import com.ai.slp.product.api.normproduct.param.*;
@@ -72,6 +73,12 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
 
     @Override
     public BaseResponse deleteAttrVal(AttrValUniqueReq attrValParam)
+            throws BusinessException, SystemException {
+        return null;
+    }
+
+    @Override
+    public MapForRes<AttrDef, List<AttrValDef>> queryAttrAndAttVals()
             throws BusinessException, SystemException {
         return null;
     }
