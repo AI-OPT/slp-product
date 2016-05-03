@@ -1,29 +1,43 @@
 package com.ai.slp.product.service.business.impl;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.vo.PageInfo;
-import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
-import com.ai.slp.product.api.normproduct.param.*;
-import com.ai.slp.product.constants.CommonSatesConstants;
-import com.ai.slp.product.constants.StandedProdAttrConstants;
-import com.ai.slp.product.constants.StandedProductConstants;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
-import com.ai.slp.product.service.atom.interfaces.*;
-import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
-import com.ai.slp.product.util.DateUtils;
-import com.ai.slp.product.vo.StandedProdPageQueryVo;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.*;
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.slp.product.api.normproduct.param.NormProdAttrValRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
+import com.ai.slp.product.api.normproduct.param.NormProdRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdResponse;
+import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
+import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.StandedProductConstants;
+import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
+import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
+import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
+import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProductLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
+import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.vo.StandedProdPageQueryVo;
 
 /**
  * Created by jackieliu on 16/4/27.

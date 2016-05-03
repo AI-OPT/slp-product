@@ -1,13 +1,21 @@
 package com.ai.slp.product.api.normproduct.interfaces;
 
 import java.util.List;
-import java.util.Map;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.slp.product.api.common.param.MapForRes;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
-import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.api.normproduct.param.AttrDef;
+import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
+import com.ai.slp.product.api.normproduct.param.AttrDefParam;
+import com.ai.slp.product.api.normproduct.param.AttrParam;
+import com.ai.slp.product.api.normproduct.param.AttrValDef;
+import com.ai.slp.product.api.normproduct.param.AttrValInfo;
+import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
+import com.ai.slp.product.api.normproduct.param.AttrValParam;
+import com.ai.slp.product.api.normproduct.param.AttrValUniqueReq;
 
 /**
  * 属性及属性值管理接口
@@ -159,4 +167,7 @@ public interface IAttrAndValDefSV {
             throws BusinessException, SystemException;
     @interface QueryAttrVal {}
 
+    public MapForRes<AttrDef,List<AttrValDef>> queryAttrAndAttVals() 
+            throws BusinessException, SystemException;
+    @interface QueryAttrAndAttVals {}
 }
