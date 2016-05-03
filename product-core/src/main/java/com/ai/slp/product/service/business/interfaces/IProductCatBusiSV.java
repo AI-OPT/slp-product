@@ -76,6 +76,5 @@ public interface IProductCatBusiSV {
      * @return
      */
     public Map<Long,Set<String>> queryAttrAndValIdByCatIdAndType(
-            String tenantId,String productCatId,String attrType
-    );
+            String tenantId,String productCatId,String attrType);
 }

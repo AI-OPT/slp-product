@@ -17,6 +17,8 @@ public class ProdCatAttrValue {
 
     private Timestamp operTime;
 
+    private Short serialNumber;
+
     public String getCatAttrValueId() {
         return catAttrValueId;
     }
@@ -71,5 +73,13 @@ public class ProdCatAttrValue {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public Short getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Short serialNumber) {
+        this.serialNumber = serialNumber;
     }
 }

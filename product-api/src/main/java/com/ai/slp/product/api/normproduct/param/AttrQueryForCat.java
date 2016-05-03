@@ -17,13 +17,17 @@ public class AttrQueryForCat extends BaseInfo {
     /**
      * 类目标识
      */
-    @NotNull(message = "类目标识不能为空",groups = {IProductCatSV.QueryAttrByCatAndType.class})
+    @NotNull(message = "类目标识不能为空",groups = {
+            IProductCatSV.QueryAttrByCatAndType.class,
+            IProductCatSV.QueryAttrAndValIdByCatAndType.class})
     private String productCatId;
     /**
      * 属性类型<br>
      * 1关键属性;2销售属性;3非关键属性
      */
-    @NotNull(message = "属性类型不能为空",groups = {IProductCatSV.QueryAttrByCatAndType.class})
+    @NotNull(message = "属性类型不能为空",groups = {
+            IProductCatSV.QueryAttrByCatAndType.class,
+            IProductCatSV.QueryAttrAndValIdByCatAndType.class})
     private String attrType;
 
     public String getProductCatId() {

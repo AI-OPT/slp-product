@@ -594,6 +594,66 @@ public class ProdCatAttrValueCriteria {
             addCriterion("OPER_TIME not between", value1, value2, "operTime");
             return (Criteria) this;
         }
+
+        public Criteria andSerialNumberIsNull() {
+            addCriterion("SERIAL_NUMBER is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberIsNotNull() {
+            addCriterion("SERIAL_NUMBER is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberEqualTo(Short value) {
+            addCriterion("SERIAL_NUMBER =", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberNotEqualTo(Short value) {
+            addCriterion("SERIAL_NUMBER <>", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberGreaterThan(Short value) {
+            addCriterion("SERIAL_NUMBER >", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberGreaterThanOrEqualTo(Short value) {
+            addCriterion("SERIAL_NUMBER >=", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberLessThan(Short value) {
+            addCriterion("SERIAL_NUMBER <", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberLessThanOrEqualTo(Short value) {
+            addCriterion("SERIAL_NUMBER <=", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberIn(List<Short> values) {
+            addCriterion("SERIAL_NUMBER in", values, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberNotIn(List<Short> values) {
+            addCriterion("SERIAL_NUMBER not in", values, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberBetween(Short value1, Short value2) {
+            addCriterion("SERIAL_NUMBER between", value1, value2, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberNotBetween(Short value1, Short value2) {
+            addCriterion("SERIAL_NUMBER not between", value1, value2, "serialNumber");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

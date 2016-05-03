@@ -37,7 +37,7 @@ public interface ProdCatAttrAttachMapper {
             })
     @Select("SELECT ca.tenant_id,ca.attr_id,ad.attr_name,ad.first_letter,ad.value_way,ca.state,ca.cat_attr_id,ca.product_cat_id,ca.attr_type,ca.is_picture,ca.is_necessary,ca.serial_number " +
             "FROM prod_cat_attr ca LEFT JOIN prod_attr_def ad WHER ON ca.attr_id = ad.attr_id WHERE ca.tenant_id=#{tenantId} " +
-            "AND ca.product_cat_id = #{productCatId} AND ca.attr_type = #{attrType} order by serial_number desc")
+            "AND ca.product_cat_id = #{productCatId} AND ca.attr_type = #{attrType} order by ca.serial_number")
     List<ProdCatAttrAttch> selectCatAttr(@Param("tenantId")String tenantId,@Param("productCatId")String productCatId,@Param("attrType")String attrType);
 
     /**
@@ -55,8 +55,8 @@ public interface ProdCatAttrAttachMapper {
             @Result(property ="state",column = "state",javaType = String.class,jdbcType = JdbcType.VARCHAR),
             @Result(property ="serialNumber",column = "serial_number",javaType = Short.class,jdbcType = JdbcType.NUMERIC),
     })
-    @Select("SELECT pcav.tenant_id,pcav.attvalue_def_id,pad.attr_id,pad.attr_value_id,pad.attr_value_name,pad.first_letter,pcav.state,pad.serial_number " +
+    @Select("SELECT pcav.tenant_id,pcav.attvalue_def_id,pad.attr_id,pad.attr_value_id,pad.attr_value_name,pad.first_letter,pcav.state,pcav.serial_number " +
             "FROM prod_cat_attr_value pcav LEFT JOIN prod_attrvalue_def pad WHER ON pcav.attrvalue_def_id = pad.attrvalue_def_id WHERE pcav.tenant_id=#{tenantId} " +
-            "AND pcav.cat_attr_id = #{catAttrId}")
+            "AND pcav.cat_attr_id = #{catAttrId} order by pcav.serial_number")
     List<ProdAttrvalueDef> selectCatAttrVal(@Param("tenantId")String tenantId,@Param("catAttrId")String catAttrId);
 }
