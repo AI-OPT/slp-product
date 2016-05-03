@@ -28,7 +28,7 @@ public class AttrDefParam extends BaseInfo {
 	/**
 	 * 属性ID
 	 */
-	private long attrId;
+	private Long attrId;
 	
 	/**
 	 * 属性名称

@@ -20,7 +20,11 @@ import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional
 public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Autowired 
@@ -40,7 +44,6 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         if(prodAttrDef.getFirstLetter() != null)
             attrDefInfo.setFirstLetter(prodAttrDef.getFirstLetter());
         attrDefInfo.setValueWay(prodAttrDef.getValueWay());
-        prodAttrDef.setIsAllowCustom("N");//用户自定义输入统一设置为否
         attrDefInfo.setIsAllowCustom(prodAttrDef.getIsAllowCustom());//一期不做 Y是 N否
         
         return attrDefInfo;
