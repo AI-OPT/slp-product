@@ -60,4 +60,14 @@ public interface IStandedProdAttrAtomSV {
      */
     public int queryProdNumOfAttr(String tenantId,Long attrId);
 
+    /**
+     * 查询指定标准品下某个属性的属性值
+     *
+     * @param tenantId
+     * @param standedId
+     * @param attrId
+     * @return
+     */
+    public List<StandedProdAttr> queryAttrVal(String tenantId,String standedId,Long attrId);
+
 }

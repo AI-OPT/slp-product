@@ -4,6 +4,8 @@ import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 对标准品的相关操作
@@ -48,4 +50,14 @@ public interface INormProductBusiSV {
      * @param operTime 操作时间,可以为空
      */
     public void discardProduct(String tenantId,String productId,Long operId,Date operTime);
+
+    /**
+     * 查询标准品下指定类型的属性及属性值信息
+     *
+     * @param tenantId
+     * @param productId
+     * @param attrType
+     * @return
+     */
+    public Map<ProdCatAttrDef, List<ProductAttrValDef>> queryAttrOfProduct(String tenantId,String productId,String attrType);
 }

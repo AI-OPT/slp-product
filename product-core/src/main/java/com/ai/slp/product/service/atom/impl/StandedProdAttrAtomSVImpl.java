@@ -1,6 +1,5 @@
 package com.ai.slp.product.service.atom.impl;
 
-import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria;
@@ -109,6 +108,26 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
                 .andAttrIdEqualTo(attrId)
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return prodAttrMapper.countByExample(example);
+    }
+
+    /**
+     * 查询指定标准品下某个属性的属性值
+     *
+     * @param tenantId
+     * @param standedId
+     * @param attrId
+     * @return
+     */
+    @Override
+    public List<StandedProdAttr> queryAttrVal(String tenantId, String standedId, Long attrId) {
+        StandedProdAttrCriteria example = new StandedProdAttrCriteria();
+        example.setOrderByClause("SERIAL_NUMBER ");
+        example.createCriteria()
+                .andTenantIdEqualTo(tenantId)
+                .andStandedProdIdEqualTo(standedId)
+                .andAttrIdEqualTo(attrId)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        return prodAttrMapper.selectByExample(example);
     }
 
 }

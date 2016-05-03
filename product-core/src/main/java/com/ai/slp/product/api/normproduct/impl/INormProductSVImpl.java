@@ -7,7 +7,9 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
+import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -96,6 +98,7 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public Map<ProdCatAttrDef, List<ProductAttrValDef>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
+        return normProductBusiSV.queryAttrOfProduct(attrQuery.getTenantId(),attrQuery.getProductId(),attrQuery.getAttrType());
     }
 }
