@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
@@ -57,4 +59,12 @@ public interface IProdAttrValDefAtomSV {
      * @author lipeng
      */
     public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrValPageQuery attrValPageQuery);
+
+    /**
+     * 查询属性对应的所有有效属性值
+     * 
+     * @return
+     * @author lipeng
+     */
+    public List<ProdAttrvalueDef> selectAttrValForAttr(Long attrId);
 }

@@ -3,10 +3,13 @@ package com.ai.slp.product.service.business.interfaces;
 import java.util.List;
 
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.common.param.MapForRes;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.slp.product.api.normproduct.param.AttrDef;
 import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.api.normproduct.param.AttrParam;
+import com.ai.slp.product.api.normproduct.param.AttrValDef;
 import com.ai.slp.product.api.normproduct.param.AttrValInfo;
 import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
 import com.ai.slp.product.api.normproduct.param.AttrValParam;
@@ -112,4 +115,12 @@ public interface IAttrAndAttrvalBusiSV {
      * @author lipeng
      */
     public int insertAttrVal(List<AttrValParam> attrValParamList);
+    
+    /**
+     * 查询所有的属性和属性值
+     * 
+     * @return 由属性对象对应的属性值List的Map
+     * @author lipeng
+     */
+    public MapForRes<AttrDef, List<AttrValDef>> queryAttrAndAttVals();
 }

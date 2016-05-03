@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.api.common.param.MapForRes;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.slp.product.api.normproduct.param.AttrDef;
 import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.api.normproduct.param.AttrParam;
+import com.ai.slp.product.api.normproduct.param.AttrValDef;
 import com.ai.slp.product.api.normproduct.param.AttrValInfo;
 import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
 import com.ai.slp.product.api.normproduct.param.AttrValParam;
@@ -20,8 +26,6 @@ import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -200,6 +204,26 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             count ++;
         }
         return count;
+    }
+
+    @Override
+    public MapForRes<AttrDef, List<AttrValDef>> queryAttrAndAttVals() {
+        MapForRes<AttrDef, List<AttrValDef>> attrAndValues = new MapForRes<>();
+        List<ProdAttrDef> prodAttrList = prodAttrDefAtomSV.selectAllAttrs();
+        for(ProdAttrDef prodAttr : prodAttrList){
+            AttrDef attrDef = new AttrDef();
+            BeanUtils.copyProperties(attrDef, prodAttr);
+            //属性值集合
+            List<ProdAttrvalueDef> prodAttrValList = prodAttrValDefAtomSV.selectAttrValForAttr(prodAttr.getAttrId());
+            List<AttrValDef> attrValList = new ArrayList<AttrValDef>();
+            for(ProdAttrvalueDef prodAttrVal : prodAttrValList){
+                AttrValDef attrVal = new AttrValDef();
+                BeanUtils.copyProperties(prodAttrVal, prodAttrVal);
+                attrValList.add(attrVal);
+            }
+            attrAndValues.put(attrDef, attrValList);
+        }
+        return attrAndValues;
     }
     
     

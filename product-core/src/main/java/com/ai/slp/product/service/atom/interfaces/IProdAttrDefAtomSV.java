@@ -1,8 +1,11 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 
 /**
  * 商品属性操作
@@ -62,5 +65,14 @@ public interface IProdAttrDefAtomSV {
      * @author lipeng
      */
     public int  updateAttr(ProdAttrDef prodAttrDef);
+    
+    /**
+     * 查询所有有效属性
+     * 
+     * @return
+     * @author lipeng
+     */
+    public List<ProdAttrDef> selectAllAttrs();
+    
 
 }

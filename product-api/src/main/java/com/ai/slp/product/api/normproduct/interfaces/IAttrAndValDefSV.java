@@ -167,6 +167,15 @@ public interface IAttrAndValDefSV {
             throws BusinessException, SystemException;
     @interface QueryAttrVal {}
 
+    /**
+     * 查询所有的属性和属性值
+     * 
+     * @return 由属性对象对应的属性值List的Map
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng
+    *  @ApiCode ATTR_VAL_0209
+     */
     public MapForRes<AttrDef,List<AttrValDef>> queryAttrAndAttVals() 
             throws BusinessException, SystemException;
     @interface QueryAttrAndAttVals {}
