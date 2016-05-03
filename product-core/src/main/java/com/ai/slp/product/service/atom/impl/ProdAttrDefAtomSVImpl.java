@@ -9,6 +9,7 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDefCriteria;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrDefMapper;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
@@ -91,5 +92,14 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         return prodAttrDefMapper.updateByPrimaryKeySelective(prodAttrDef);
     }
 
+    @Override
+    public List<ProdAttrDef> selectAllAttrs() {
+        ProdAttrDefCriteria example = new ProdAttrDefCriteria();
+         example.createCriteria().andStateEqualTo("1");
+         List<ProdAttrDef> prodAttrList = prodAttrDefMapper.selectByExample(example);
+         return prodAttrList;
+    }
+
+    
     
 }

@@ -73,7 +73,14 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         return attrValPage;
     }
     
-    
+    @Override
+    public List<ProdAttrvalueDef> selectAttrValForAttr(Long attrId) {
+        ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
+        example.createCriteria().andAttrIdEqualTo(attrId).andStateEqualTo("1");
+        List<ProdAttrvalueDef> prodAttrValList = prodAttrvalueDefMapper.selectByExample(example);
+        return prodAttrValList;
+    }
+
 
     
 }
