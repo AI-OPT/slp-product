@@ -1,5 +1,9 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
+
+import java.util.List;
+
 /**
  * 商品类目属性值操作
  *
@@ -18,4 +22,13 @@ public interface IProdCatAttrValAtomSV {
      * @return
      */
     public int deleteByCat(String tenantId,String catAttrId);
+
+    /**
+     * 查询类目属性关系对应的属性值
+     *
+     * @param tenantId
+     * @param catAttrId
+     * @return
+     */
+    public List<ProdCatAttrValue> queryByCatAttrId(String tenantId,String catAttrId);
 }

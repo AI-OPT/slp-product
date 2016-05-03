@@ -51,4 +51,13 @@ public interface IStandedProdAttrAtomSV {
      */
     public int updateInactiveByNormProduct(String tenantId,String standedId,Long operId);
 
+    /**
+     * 查询某个属性关联标准品的数量
+     *
+     * @param tenantId
+     * @param attrId
+     * @return
+     */
+    public int queryProdNumOfAttr(String tenantId,Long attrId);
+
 }

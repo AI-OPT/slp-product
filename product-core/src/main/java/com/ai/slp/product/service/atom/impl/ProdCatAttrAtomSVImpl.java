@@ -33,7 +33,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     }
 
     @Override
-    public List<ProdCatAttr> queryNumByCatId(String tenantId, String catId) {
+    public List<ProdCatAttr> queryAttrsByCatId(String tenantId, String catId) {
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
@@ -49,6 +49,23 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     @Override
     public int deleteByCatId(String catId) {
         return prodCatAttrMapper.deleteByPrimaryKey(catId);
+    }
+
+    /**
+     * 查询类目下某个类型的属性
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrType
+     * @return
+     */
+    @Override
+    public List<ProdCatAttr> queryAttrOfCatByIdAndType(String tenantId, String catId, String attrType) {
+        ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
+                .andAttrTypeEqualTo(attrType)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        return prodCatAttrMapper.selectByExample(example);
     }
 
 }

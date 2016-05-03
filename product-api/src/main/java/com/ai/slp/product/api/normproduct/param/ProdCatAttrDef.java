@@ -48,6 +48,10 @@ public class ProdCatAttrDef extends BaseInfo {
      */
     private String isPicture;
     /**
+     * 是否已关联标准品
+     */
+    private Boolean hasProduct;
+    /**
      * 是否必填
      */
     private String isNecessary;
@@ -134,5 +138,13 @@ public class ProdCatAttrDef extends BaseInfo {
 
     public void setSerialNumber(Short serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public Boolean getHasProduct() {
+        return hasProduct;
+    }
+
+    public void setHasProduct(Boolean hasProduct) {
+        this.hasProduct = hasProduct;
     }
 }

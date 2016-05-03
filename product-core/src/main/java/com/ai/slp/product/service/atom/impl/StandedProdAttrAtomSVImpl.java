@@ -96,4 +96,21 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
         return prodAttrMapper.updateByExampleSelective(prodAttr,example);
     }
 
+    /**
+     * 查询某个属性关联标准品的数量
+     *
+     * @param tenantId
+     * @param attrId
+     * @return
+     */
+    @Override
+    public int queryProdNumOfAttr(String tenantId, Long attrId) {
+        StandedProdAttrCriteria example = new StandedProdAttrCriteria();
+        example.createCriteria()
+                .andTenantIdEqualTo(tenantId)
+                .andAttrIdEqualTo(attrId)
+                .andStateEqualTo(StandedProdAttrConstants.STATE_ACTIVE);
+        return prodAttrMapper.countByExample(example);
+    }
+
 }

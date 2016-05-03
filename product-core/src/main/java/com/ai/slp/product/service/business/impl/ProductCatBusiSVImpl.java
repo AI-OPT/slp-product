@@ -9,6 +9,7 @@ import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
@@ -16,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by jackieliu on 16/4/29.
@@ -37,6 +35,8 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     IProdCatAttrValAtomSV prodCatAttrValAtomSV;
     @Autowired
     IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
+    @Autowired
+    IStandedProdAttrAtomSV prodAttrAtomSV;
 
     @Override
     public PageInfoForRes<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
@@ -104,7 +104,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             }else{
                 //判断是否有关联属性
                 List<ProdCatAttr> catAttrList =
-                        prodCatAttrAtomSV.queryNumByCatId(productCat.getTenantId(),productCat.getProductCatId());
+                        prodCatAttrAtomSV.queryAttrsByCatId(productCat.getTenantId(),productCat.getProductCatId());
                 if (catAttrList!=null && catAttrList.size()>0){
                     throw new BusinessException("","此类目已关联属性,无法变更为[有子分类]");
                 }
@@ -127,7 +127,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         if (prodCatDefAtomSV.queryOfParent(Long.parseLong(productCatId))>0)
             throw new BusinessException("","此类目下存在子类目,不可删除");
         List<ProdCatAttr> catAttrList =
-                prodCatAttrAtomSV.queryNumByCatId(tenantId,productCatId);
+                prodCatAttrAtomSV.queryAttrsByCatId(tenantId,productCatId);
         //删除属性对应关系
         if (catAttrList!=null && catAttrList.size()>0){
             for (ProdCatAttr catAttr:catAttrList){
@@ -172,6 +172,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         for (ProdCatAttrAttch attrAttch:attrAttchList){
             ProdCatAttrDef catAttrDef = new ProdCatAttrDef();
             BeanUtils.copyProperties(catAttrDef,attrAttch);
+            //查询此属性是否关联标准品
+            int prodNum = prodAttrAtomSV.queryProdNumOfAttr(tenantId,attrAttch.getAttrId());
+            catAttrDef.setHasProduct(prodNum>0?true:false);
             //查询属性对应的属性值
             List<ProdAttrvalueDef> catAttrValList =
                     catAttrAttachAtomSV.queryValListByCatAttr(tenantId,attrAttch.getCatAttrId());
@@ -184,6 +187,34 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             }
         }
         return catAttrDefListMap;
+    }
+
+    /**
+     * 查询类目下某个类型的属性标识和属性值标识集合
+     *
+     * @param tenantId
+     * @param productCatId
+     * @param attrType
+     * @return
+     */
+    @Override
+    public Map<Long, Set<String>> queryAttrAndValIdByCatIdAndType(String tenantId, String productCatId, String attrType) {
+        Map<Long,Set<String>> idMap = new HashMap<>();
+        //查询类目和属性的关联关系
+        List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId,productCatId,attrType);
+        for (ProdCatAttr catAttr:catAttrList){
+            Set<String> attrValIds = idMap.get(catAttr.getAttrId());
+            if (attrValIds==null){
+                attrValIds = new HashSet<>();
+                idMap.put(catAttr.getAttrId(),attrValIds);
+            }
+            //查询关联关系对应属性值集合
+            List<ProdCatAttrValue> attrValueList = prodCatAttrValAtomSV.queryByCatAttrId(tenantId,catAttr.getCatAttrId());
+            for (ProdCatAttrValue attrValue:attrValueList){
+                attrValIds.add(attrValue.getAttrvalueDefId());
+            }
+        }
+        return idMap;
     }
 
 

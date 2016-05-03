@@ -2,6 +2,7 @@ package com.ai.slp.product.api.normproduct.interfaces;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
@@ -181,4 +182,19 @@ public interface IProductCatSV {
 	public Map<ProdCatAttrDef,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
 			throws BusinessException,SystemException;
 	@interface QueryAttrByCatAndType{}
+
+	/**
+	 * 查询指定类目下某种类型的属性标识和属性值标识的集合<br>
+	 * 类型分为:关键属性,销售属性,非关键属性
+	 *
+	 * @param attrQuery
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiCode PRODUCT_CAT_0112
+     */
+	public Map<Long,Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery)
+			throws BusinessException,SystemException;
+	@interface QueryAttrAndValIdByCatAndType{}
 }

@@ -23,7 +23,7 @@ public interface IProdCatAttrAtomSV {
      * @author lipeng
     *  @ApiCode
      */
-    public ProdCatAttr selectById( String tenantId,String productCatId);
+    public ProdCatAttr selectById(String tenantId,String productCatId);
     
     /**
      * 添加类目属性
@@ -42,7 +42,7 @@ public interface IProdCatAttrAtomSV {
      * @param catId
      * @return
      */
-    public List<ProdCatAttr> queryNumByCatId(String tenantId, String catId);
+    public List<ProdCatAttr> queryAttrsByCatId(String tenantId, String catId);
 
     /**
      * 删除指定类目属性关系
@@ -50,4 +50,14 @@ public interface IProdCatAttrAtomSV {
      * @return
      */
     public int deleteByCatId(String catId);
+
+    /**
+     * 查询类目下某个类型的属性
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrType
+     * @return
+     */
+    public List<ProdCatAttr> queryAttrOfCatByIdAndType(String tenantId, String catId,String attrType);
 }

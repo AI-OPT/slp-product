@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by jackieliu on 16/4/28.
@@ -147,6 +148,22 @@ public class IProductCatSVImpl implements IProductCatSV {
         CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
         return productCatBusiSV.querAttrOfCatByIdAndType(
                 attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
+    }
+
+    /**
+     * 查询指定类目下某种类型的属性标识和属性值标识的集合<br>
+     * 类型分为:关键属性,销售属性,非关键属性
+     *
+     * @param attrQuery
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PRODUCT_CAT_0112
+     */
+    @Override
+    public Map<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
+        return null;
     }
 
 }

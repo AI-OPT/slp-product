@@ -5,6 +5,7 @@ import com.ai.slp.product.api.normproduct.param.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 商品类目
@@ -65,4 +66,16 @@ public interface IProductCatBusiSV {
      */
     public Map<ProdCatAttrDef, List<AttrValInfo>> querAttrOfCatByIdAndType(
             String tenantId,String productCatId,String attrType);
+
+    /**
+     * 查询类目下某个类型的属性标识和属性值标识集合
+     *
+     * @param tenantId
+     * @param productCatId
+     * @param attrType
+     * @return
+     */
+    public Map<Long,Set<String>> queryAttrAndValIdByCatIdAndType(
+            String tenantId,String productCatId,String attrType
+    );
 }
