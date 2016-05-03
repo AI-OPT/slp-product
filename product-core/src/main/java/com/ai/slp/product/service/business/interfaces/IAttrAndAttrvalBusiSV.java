@@ -1,8 +1,11 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefParam;
+import com.ai.slp.product.api.normproduct.param.AttrParam;
 
 /**
  * 属性与属性值的相关操作
@@ -30,4 +33,31 @@ public interface IAttrAndAttrvalBusiSV {
      */
     public PageInfo<AttrDefInfo> selectAttrs(AttrDefParam attrDefParam);
     
+    /**
+     * 修改属性信息
+     * 
+     * @param attrDefParam
+     * @return
+     * @author lipeng
+     */
+    public int updateAttr(AttrParam attrParam);
+    
+    /**
+     * 删除属性信息
+     * 
+     * @param tenantId
+     * @param attrId
+     * @return
+     * @author lipeng
+     */
+    public int deleteAttr(String tenantId,Long attrId);
+    
+    /**
+     * 新增属性
+     * 
+     * @param attrParamList
+     * @return
+     * @author lipeng
+     */
+    public int insertAttr(List<AttrParam> attrParamList);
 }

@@ -9,9 +9,9 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefParam;
+import com.ai.slp.product.api.normproduct.param.AttrParam;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
 
 public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
@@ -64,6 +64,47 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         AttrDefInfoPage.setPageSize(pageInfo.getPageSize());
         
         return AttrDefInfoPage;
+    }
+
+    @Override
+    public int updateAttr(AttrParam attrParam) {
+        ProdAttrDef prodAttrDef = new ProdAttrDef();
+        prodAttrDef.setAttrId(attrParam.getAttrId());
+        prodAttrDef.setOperId(attrParam.getOperId());
+        prodAttrDef.setAttrName(attrParam.getAttrName());
+        if(attrParam.getFirstLetter() != null)
+            prodAttrDef.setFirstLetter(attrParam.getFirstLetter());
+        prodAttrDef.setValueWay(attrParam.getValueWay());
+        prodAttrDef.setIsAllowCustom(attrParam.getIsCustom());
+        return prodAttrDefAtomSV.updateAttr(prodAttrDef);
+    }
+
+    @Override
+    public int deleteAttr(String tenantId, Long attrId) {
+        if(tenantId == null || attrId == null) 
+                throw new BusinessException("","未找到指定的属性信息，租户ID="+tenantId+",属性标识="+attrId);
+        return prodAttrDefAtomSV.deleteById(tenantId, attrId);
+    }
+
+    @Override
+    public int insertAttr(List<AttrParam> attrParamList) {
+        int count = 0;
+        for(AttrParam attrParam : attrParamList){
+            ProdAttrDef prodAttrDef = new ProdAttrDef();
+            prodAttrDef.setAttrId(attrParam.getAttrId());
+            prodAttrDef.setOperId(attrParam.getOperId());
+            prodAttrDef.setAttrName(attrParam.getAttrName());
+            if(attrParam.getFirstLetter() != null)
+                prodAttrDef.setFirstLetter(attrParam.getFirstLetter());
+            prodAttrDef.setValueWay(attrParam.getValueWay());
+            prodAttrDef.setIsAllowCustom(attrParam.getIsCustom());
+            int ok = prodAttrDefAtomSV.installObj(prodAttrDef);
+            if(ok == 0)
+                throw new BusinessException("","添加属性失败，属性名称="+attrParam.getAttrName());
+            count++;
+        }
+            
+        return count;
     }
 
 }
