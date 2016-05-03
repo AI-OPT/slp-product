@@ -85,6 +85,11 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId);
         return prodAttrvalueDefMapper.countByExample(example);
     }
-    
+
+    @Override
+    public int updateAttr(ProdAttrDef prodAttrDef) {
+        return prodAttrDefMapper.updateByPrimaryKeySelective(prodAttrDef);
+    }
+
     
 }

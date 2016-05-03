@@ -53,5 +53,14 @@ public interface IProdAttrDefAtomSV {
      * @author lipeng
      */
     public int selectAttrvalNum(String tenantId,Long attrId);
+    
+    /**
+     * 修改属性信息
+     * 
+     * @param attrDefParam
+     * @return
+     * @author lipeng
+     */
+    public int  updateAttr(ProdAttrDef prodAttrDef);
 
 }

@@ -36,7 +36,7 @@ public class AttrParam extends BaseInfo{
     /**
      * 是否允许用户自定义属性值
      */
-    private char isCustom;
+    private String isCustom;
 
     /**
      * 状态
@@ -113,11 +113,11 @@ public class AttrParam extends BaseInfo{
         this.firstLetter = firstLetter;
     }
 
-    public char getIsCustom() {
+    public String getIsCustom() {
         return isCustom;
     }
 
-    public void setIsCustom(char isCustom) {
+    public void setIsCustom(String isCustom) {
         this.isCustom = isCustom;
     }
     
