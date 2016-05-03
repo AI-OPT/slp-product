@@ -149,6 +149,22 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     /**
+     * 根据名称或首字母查询
+     *
+     * @param catQuery 类目查询信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PRODUCT_CAT_0112
+     */
+    @Override
+    public List<ProductCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery) throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(catQuery.getTenantId(),"");
+        return productCatBusiSV.queryByNameOrFirst(catQuery);
+    }
+
+    /**
      * 查询指定类目下某种类型的属性标识和属性值标识的集合<br>
      * 类型分为:关键属性,销售属性,非关键属性
      *

@@ -84,4 +84,12 @@ public interface IProductCatBusiSV {
      * @param catAttrVal
      */
     public void deleteAttrOrVa(ProdCatAttrVal catAttrVal);
+
+    /**
+     * 根据名称或首字母查询类目信息
+     *
+     * @param query
+     * @return
+     */
+    public List<ProductCatInfo> queryByNameOrFirst(ProductCatQuery query);
 }

@@ -114,4 +114,31 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         return productCatMapper.countByExample(example);
     }
 
+    /**
+     * 根据名称或首字母查询
+     *
+     * @param tenantId
+     * @param parentCatId
+     * @param query
+     * @param isName
+     * @return
+     */
+    @Override
+    public List<ProductCat> queryByNameOrFirst(String tenantId, Long parentCatId, String query, Boolean isName) {
+        ProductCatCriteria example = new ProductCatCriteria();
+        example.setOrderByClause("SERIAL_NUMBER ");
+        ProductCatCriteria.Criteria criteria = example.createCriteria();
+        criteria.andTenantIdEqualTo(tenantId)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        if (parentCatId!=null)
+            criteria.andParentProductCatIdEqualTo(parentCatId);
+
+        if (isName)
+            criteria.andProductCatNameLike("%"+query+"%");
+        else
+            criteria.andFirstLetterEqualTo(query);
+
+        return productCatMapper.selectByExample(example);
+    }
+
 }

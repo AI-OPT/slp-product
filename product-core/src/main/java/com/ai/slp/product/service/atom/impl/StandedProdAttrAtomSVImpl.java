@@ -1,12 +1,8 @@
 package com.ai.slp.product.service.atom.impl;
 
-import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.constants.CommonSatesConstants;
-import com.ai.slp.product.constants.StandedProdAttrConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
-import com.ai.slp.product.dao.mapper.interfaces.StandedProdAttrLogMapper;
 import com.ai.slp.product.dao.mapper.interfaces.StandedProdAttrMapper;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;

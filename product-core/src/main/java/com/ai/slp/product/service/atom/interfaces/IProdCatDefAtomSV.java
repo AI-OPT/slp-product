@@ -3,6 +3,8 @@ package com.ai.slp.product.service.atom.interfaces;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 
+import java.util.List;
+
 /**
  * 商品类目操作
  * 
@@ -66,5 +68,14 @@ public interface IProdCatDefAtomSV {
      */
     public int queryOfParent(Long parentCatId);
 
-
+    /**
+     * 根据名称或首字母查询
+     *
+     * @param tenantId
+     * @param parentCatId
+     * @param query
+     * @param isName
+     * @return
+     */
+    public List<ProductCat> queryByNameOrFirst(String tenantId,Long parentCatId,String query,Boolean isName);
 }
