@@ -261,7 +261,8 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         String queryVal = query.getQueryVal();
         boolean isName = true;
         //查询内容长度为1,且为字母,则按字母进行查询
-        if (queryVal.length()==1
+        if (StringUtils.isNotBlank(queryVal)
+                && queryVal.length()==1
                 && Character.isLetter(queryVal.charAt(0))){
             queryVal = queryVal.substring(0,1);
             isName = false;

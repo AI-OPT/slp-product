@@ -133,10 +133,11 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         if (parentCatId!=null)
             criteria.andParentProductCatIdEqualTo(parentCatId);
 
-        if (isName)
-            criteria.andProductCatNameLike("%"+query+"%");
-        else
-            criteria.andFirstLetterEqualTo(query);
+        if (StringUtils.isNotBlank(query))
+            if (isName)
+                criteria.andProductCatNameLike("%" + query + "%");
+            else
+                criteria.andFirstLetterEqualTo(query);
 
         return productCatMapper.selectByExample(example);
     }

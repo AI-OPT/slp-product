@@ -18,7 +18,6 @@ public class ProductCatQuery extends BaseInfo {
      * 查询内容,类目名或首字母<br>
      *
      */
-    @NotNull(message = "查询内容不能为空",groups = {IProductCatSV.QueryCatByNameOrFirst.class})
     private String queryVal;
 
     /**
