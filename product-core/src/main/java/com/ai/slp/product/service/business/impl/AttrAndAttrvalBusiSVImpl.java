@@ -55,31 +55,31 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Override
     public PageInfoForRes<AttrDefInfo> selectAttrs(AttrDefParam attrDefParam) {
-        PageInfo<ProdAttrDef> pageInfo = prodAttrDefAtomSV.selectPageAttrs(attrDefParam);
-        List<ProdAttrDef> prodAttrDefList = pageInfo.getResult();
+//        PageInfo<ProdAttrDef> pageInfo = prodAttrDefAtomSV.selectPageAttrs(attrDefParam);
+//        List<ProdAttrDef> prodAttrDefList = pageInfo.getResult();
         List<AttrDefInfo> attrDefInfoList = new ArrayList<AttrDefInfo>();
-        for(ProdAttrDef prodAttrDef : prodAttrDefList){
-            String tenantId = prodAttrDef.getTenantId();
-            Long attrId = prodAttrDef.getAttrId();
-            AttrDefInfo attrDefInfo = new AttrDefInfo();
-            
-            attrDefInfo.setAttrId(attrId);
-            attrDefInfo.setAttrName(prodAttrDef.getAttrName());
-            attrDefInfo.setValueWay(prodAttrDef.getValueWay());
-            attrDefInfo.setAttrValNum(prodAttrDefAtomSV.selectAttrvalNum(tenantId,attrId));
-            prodAttrDef.setIsAllowCustom("N");//用户自定义输入统一设置为否
-            attrDefInfo.setIsAllowCustom(prodAttrDef.getIsAllowCustom());
-            attrDefInfo.setOperTime(prodAttrDef.getOperTime());
-            attrDefInfo.setOperId(prodAttrDef.getOperId());
-            
-            attrDefInfoList.add(attrDefInfo);
-        }
-        PageInfoForRes<AttrDefInfo> AttrDefInfoPage = new PageInfoForRes<>();
-        AttrDefInfoPage.setResult(attrDefInfoList);
-        AttrDefInfoPage.setPageNo(pageInfo.getPageNo());;
-        AttrDefInfoPage.setPageSize(pageInfo.getPageSize());
-        
-        return AttrDefInfoPage;
+//        for(ProdAttrDef prodAttrDef : prodAttrDefList){
+//            String tenantId = prodAttrDef.getTenantId();
+//            Long attrId = prodAttrDef.getAttrId();
+//            AttrDefInfo attrDefInfo = new AttrDefInfo();
+//            
+//            attrDefInfo.setAttrId(attrId);
+//            attrDefInfo.setAttrName(prodAttrDef.getAttrName());
+//            attrDefInfo.setValueWay(prodAttrDef.getValueWay());
+//            attrDefInfo.setAttrValNum(prodAttrDefAtomSV.selectAttrvalNum(tenantId,attrId));
+//            prodAttrDef.setIsAllowCustom("N");//用户自定义输入统一设置为否
+//            attrDefInfo.setIsAllowCustom(prodAttrDef.getIsAllowCustom());
+//            attrDefInfo.setOperTime(prodAttrDef.getOperTime());
+//            attrDefInfo.setOperId(prodAttrDef.getOperId());
+//            
+//            attrDefInfoList.add(attrDefInfo);
+//        }
+//        PageInfoForRes<AttrDefInfo> AttrDefInfoPage = new PageInfoForRes<>();
+//        AttrDefInfoPage.setResult(attrDefInfoList);
+//        AttrDefInfoPage.setPageNo(pageInfo.getPageNo());;
+//        AttrDefInfoPage.setPageSize(pageInfo.getPageSize());
+//        
+        return null;
     }
 
     @Override
@@ -127,25 +127,25 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Override
     public PageInfoForRes<AttrValInfo> selectAttrvals(AttrValPageQuery attrValPageQuery) {
-        PageInfo<ProdAttrvalueDef> attrValPage = prodAttrValDefAtomSV.selectAttrValPage(attrValPageQuery);
-        List<ProdAttrvalueDef> attrValList = attrValPage.getResult();
-        List<AttrValInfo> attrValInfoList = new ArrayList<AttrValInfo>();
-        for(ProdAttrvalueDef attrVal : attrValList){
-            AttrValInfo attrValInfo = new AttrValInfo();
-            attrValInfo.setAttrvalueDefId(attrVal.getAttrvalueDefId());
-            attrValInfo.setAttrValueName(attrVal.getAttrValueName());
-            attrValInfo.setFirstLetter(attrVal.getFirstLetter());
-            attrValInfo.setOperTime(attrVal.getOperTime());
-            attrValInfo.setOperId(attrVal.getOperId());
-            
-            attrValInfoList.add(attrValInfo);
-        }
-        PageInfoForRes<AttrValInfo> attrValInfo = new PageInfoForRes<AttrValInfo>();
-        attrValInfo.setResult(attrValInfoList);
-        attrValInfo.setPageNo(attrValPage.getPageNo());
-        attrValInfo.setPageSize(attrValPage.getPageSize());
+//        PageInfo<ProdAttrvalueDef> attrValPage = prodAttrValDefAtomSV.selectAttrValPage(attrValPageQuery);
+//        List<ProdAttrvalueDef> attrValList = attrValPage.getResult();
+//        List<AttrValInfo> attrValInfoList = new ArrayList<AttrValInfo>();
+//        for(ProdAttrvalueDef attrVal : attrValList){
+//            AttrValInfo attrValInfo = new AttrValInfo();
+//            attrValInfo.setAttrvalueDefId(attrVal.getAttrvalueDefId());
+//            attrValInfo.setAttrValueName(attrVal.getAttrValueName());
+//            attrValInfo.setFirstLetter(attrVal.getFirstLetter());
+//            attrValInfo.setOperTime(attrVal.getOperTime());
+//            attrValInfo.setOperId(attrVal.getOperId());
+//            
+//            attrValInfoList.add(attrValInfo);
+//        }
+//        PageInfoForRes<AttrValInfo> attrValInfo = new PageInfoForRes<AttrValInfo>();
+//        attrValInfo.setResult(attrValInfoList);
+//        attrValInfo.setPageNo(attrValPage.getPageNo());
+//        attrValInfo.setPageSize(attrValPage.getPageSize());
         
-        return attrValInfo;
+        return null;
     }
 
     @Override
@@ -156,7 +156,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         
         AttrValInfo attrValInfo = new AttrValInfo();
         attrValInfo.setAttrvalueDefId(attrvalueDefId);
-        attrValInfo.setTenantId(tenantId);
+//        attrValInfo.setTenantId(tenantId);
         attrValInfo.setAttrValueName(prodAttrvalueDef.getAttrValueName());
         attrValInfo.setFirstLetter(prodAttrvalueDef.getFirstLetter());
         
