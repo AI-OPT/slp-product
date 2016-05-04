@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.ProdPriceLogMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.ProdPriceLog" >
+    <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
+    <result column="OBJ_TYPE" property="objType" jdbcType="VARCHAR" />
+    <result column="OBJ_ID" property="objId" jdbcType="VARCHAR" />
+    <result column="UPDATE_PRICE" property="updatePrice" jdbcType="DECIMAL" />
+    <result column="UPDATE_PEICE2" property="updatePeice2" jdbcType="DECIMAL" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    LOG_ID, OBJ_TYPE, OBJ_ID, UPDATE_PRICE, UPDATE_PEICE2, OPER_ID, OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.ProdPriceLogCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from prod_price_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from prod_price_log
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from prod_price_log
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProdPriceLogCriteria" >
+    delete from prod_price_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.ProdPriceLog" >
+    insert into prod_price_log (LOG_ID, OBJ_TYPE, OBJ_ID, 
+      UPDATE_PRICE, UPDATE_PEICE2, OPER_ID, 
+      OPER_TIME)
+    values (#{logId,jdbcType=VARCHAR}, #{objType,jdbcType=VARCHAR}, #{objId,jdbcType=VARCHAR}, 
+      #{updatePrice,jdbcType=DECIMAL}, #{updatePeice2,jdbcType=DECIMAL}, #{operId,jdbcType=DECIMAL}, 
+      #{operTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProdPriceLog" >
+    insert into prod_price_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        LOG_ID,
+      </if>
+      <if test="objType != null" >
+        OBJ_TYPE,
+      </if>
+      <if test="objId != null" >
+        OBJ_ID,
+      </if>
+      <if test="updatePrice != null" >
+        UPDATE_PRICE,
+      </if>
+      <if test="updatePeice2 != null" >
+        UPDATE_PEICE2,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        #{logId,jdbcType=VARCHAR},
+      </if>
+      <if test="objType != null" >
+        #{objType,jdbcType=VARCHAR},
+      </if>
+      <if test="objId != null" >
+        #{objId,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePrice != null" >
+        #{updatePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="updatePeice2 != null" >
+        #{updatePeice2,jdbcType=DECIMAL},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProdPriceLogCriteria" resultType="java.lang.Integer" >
+    select count(*) from prod_price_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update prod_price_log
+    <set >
+      <if test="record.logId != null" >
+        LOG_ID = #{record.logId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.objType != null" >
+        OBJ_TYPE = #{record.objType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.objId != null" >
+        OBJ_ID = #{record.objId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatePrice != null" >
+        UPDATE_PRICE = #{record.updatePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.updatePeice2 != null" >
+        UPDATE_PEICE2 = #{record.updatePeice2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update prod_price_log
+    set LOG_ID = #{record.logId,jdbcType=VARCHAR},
+      OBJ_TYPE = #{record.objType,jdbcType=VARCHAR},
+      OBJ_ID = #{record.objId,jdbcType=VARCHAR},
+      UPDATE_PRICE = #{record.updatePrice,jdbcType=DECIMAL},
+      UPDATE_PEICE2 = #{record.updatePeice2,jdbcType=DECIMAL},
+      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProdPriceLog" >
+    update prod_price_log
+    <set >
+      <if test="objType != null" >
+        OBJ_TYPE = #{objType,jdbcType=VARCHAR},
+      </if>
+      <if test="objId != null" >
+        OBJ_ID = #{objId,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePrice != null" >
+        UPDATE_PRICE = #{updatePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="updatePeice2 != null" >
+        UPDATE_PEICE2 = #{updatePeice2,jdbcType=DECIMAL},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.ProdPriceLog" >
+    update prod_price_log
+    set OBJ_TYPE = #{objType,jdbcType=VARCHAR},
+      OBJ_ID = #{objId,jdbcType=VARCHAR},
+      UPDATE_PRICE = #{updatePrice,jdbcType=DECIMAL},
+      UPDATE_PEICE2 = #{updatePeice2,jdbcType=DECIMAL},
+      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+</mapper>
