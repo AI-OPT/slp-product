@@ -1,22 +1,18 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
-import com.ai.opt.base.vo.BaseResponse;
-
 /**
- * 属性值返回参数
+ * 属性值分页查询返回参数
  * 
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
  * @author lipeng
  */
-public class AttrValInfo extends BaseResponse {
-    /**
-     * 租户id
-     */
-    private String tenantId;
+public class AttrValInfo {
+
     /**
      * 属性值ID
      */
@@ -28,7 +24,7 @@ public class AttrValInfo extends BaseResponse {
     private String attrValueName;
     
     /**
-     * 首字母
+     * 属性值首字母
      */
     private String firstLetter;
 
@@ -38,16 +34,21 @@ public class AttrValInfo extends BaseResponse {
     private long operId;
     
     /**
+     *操作人
+     */
+    private String oper;
+    
+    /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
-    public String getTenantId() {
-        return tenantId;
+    public String getOper() {
+        return oper;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public void setOper(String oper) {
+        this.oper = oper;
     }
 
     public String getAttrvalueDefId() {
@@ -82,11 +83,11 @@ public class AttrValInfo extends BaseResponse {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
 

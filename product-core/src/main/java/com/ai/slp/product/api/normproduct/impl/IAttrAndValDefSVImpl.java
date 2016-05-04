@@ -27,7 +27,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public AttrDefInfo queryAttr(AttrParam attrParam) throws BusinessException, SystemException {
+    public AttrInfo queryAttr(AttrPam attrPam) throws BusinessException, SystemException {
         return null;
     }
 
@@ -43,18 +43,12 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public BaseResponse deleteAttr(AttrParam attrParam) throws BusinessException, SystemException {
+    public BaseResponse deleteAttr(AttrPam attrPam) throws BusinessException, SystemException {
         return null;
     }
 
     @Override
     public PageInfoForRes<AttrValInfo> queryAttrValues(AttrValPageQuery pageQuery)
-            throws BusinessException, SystemException {
-        return null;
-    }
-
-    @Override
-    public AttrValInfo queryAttrVal(AttrValUniqueReq attrValParam)
             throws BusinessException, SystemException {
         return null;
     }
@@ -78,8 +72,15 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public MapForRes<AttrDef, List<AttrValDef>> queryAttrAndAttVals()
+    public AttrVal queryAttrVal(AttrValUniqueReq attrValParam)
             throws BusinessException, SystemException {
         return null;
     }
+
+    @Override
+    public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVal()
+            throws BusinessException, SystemException {
+        return null;
+    }
+
 }

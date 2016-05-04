@@ -65,8 +65,6 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
             request.andAttrNameEqualTo(attrDefParam.getAttrName());
         if(attrDefParam.getValueWay() != null)
             request.andValueWayEqualTo(attrDefParam.getValueWay());
-        if(String.valueOf(attrDefParam.getOperId()) != null)
-            request.andOperIdEqualTo(attrDefParam.getOperId());
             
         PageInfo<ProdAttrDef> pageInfo = new PageInfo<ProdAttrDef>();
         if(attrDefParam.getPageNo() != null && attrDefParam.getPageSize() != null){
