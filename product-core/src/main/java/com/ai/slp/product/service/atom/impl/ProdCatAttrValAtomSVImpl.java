@@ -105,4 +105,34 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
             attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.insert(attrValue);
     }
+
+    /**
+     * 根据唯一标识查询类目与属性值的关联
+     *
+     * @param tenantId
+     * @param catAttrValId
+     * @return
+     */
+    @Override
+    public ProdCatAttrValue selectById(String tenantId, String catAttrValId) {
+        ProdCatAttrValue attrValue = attrValueMapper.selectByPrimaryKey(catAttrValId);
+        //若唯一标识正确,但租户id不符合,则返回空
+        if (attrValue!=null
+                && !tenantId.equals(attrValue.getTenantId()))
+            attrValue = null;
+        return attrValue;
+    }
+
+    /**
+     * 更新类目对应的属性值
+     *
+     * @param attrValue
+     * @return
+     */
+    @Override
+    public int update(ProdCatAttrValue attrValue) {
+        if (attrValue.getOperTime() == null)
+            attrValue.setOperTime(DateUtils.currTimeStamp());
+        return attrValueMapper.updateByPrimaryKey(attrValue);
+    }
 }

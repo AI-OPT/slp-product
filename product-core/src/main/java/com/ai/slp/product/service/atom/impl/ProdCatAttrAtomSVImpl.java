@@ -120,4 +120,17 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         return attrList==null||attrList.isEmpty()?null:attrList.get(0);
     }
 
+    /**
+     * 更新类目的指定属性
+     *
+     * @param prodCatAttr
+     * @return
+     */
+    @Override
+    public int update(ProdCatAttr prodCatAttr) {
+        if (prodCatAttr.getOperTime()==null)
+            prodCatAttr.setOperTime(DateUtils.currTimeStamp());
+        return prodCatAttrMapper.updateByPrimaryKey(prodCatAttr);
+    }
+
 }

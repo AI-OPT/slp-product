@@ -85,4 +85,12 @@ public interface IProdCatAttrAtomSV {
      * @return
      */
     public ProdCatAttr queryByCatIdAndTypeAndAttrId(String tenantId, String catId,Long attrId,String attrType);
+
+    /**
+     * 更新类目的指定属性
+     *
+     * @param prodCatAttr
+     * @return
+     */
+    public int update(ProdCatAttr prodCatAttr);
 }

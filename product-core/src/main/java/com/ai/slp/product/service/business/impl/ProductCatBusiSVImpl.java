@@ -15,6 +15,8 @@ import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,7 @@ import java.util.*;
 @Service
 @Transactional
 public class ProductCatBusiSVImpl implements IProductCatBusiSV {
+    private static Logger logger = LoggerFactory.getLogger(ProductCatBusiSVImpl.class);
     @Autowired
     IProdCatDefAtomSV prodCatDefAtomSV;
     @Autowired
@@ -333,6 +336,63 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 prodCatAttrValAtomSV.installCatAttrVal(catAttrValue);
             }
         }
+    }
+
+    /**
+     * 更新类目属性和属性值
+     *
+     * @param updateParams
+     * @return 更新成功条目数
+     */
+    @Override
+    public int updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams) {
+        //成功数量
+        int successNum = 0;
+
+        for (ProdCatAttrUpdateParam updateParam:updateParams){
+            String tenantId = updateParam.getTenantId();
+            if (StringUtils.isBlank(tenantId)){
+                logger.warn("租户id不能为空\r\n"+updateParam.toString());
+                continue;
+            }
+
+            switch (updateParam.getObjType()){
+                //更新属性
+                case "1":
+                    //查询属性
+                    ProdCatAttr prodCatAttr = prodCatAttrAtomSV.selectById(tenantId,updateParam.getUpdateObjId());
+                    if (prodCatAttr==null) {
+                        logger.warn("未找到指定的类目[属性]关联\r\n" + updateParam.toString());
+                        continue;
+                    }
+                    prodCatAttr.setSerialNumber(updateParam.getSerialNumber());
+                    prodCatAttr.setIsPicture(updateParam.getIsPicture());
+                    prodCatAttr.setOperId(updateParam.getOperId());
+                    prodCatAttr.setOperTime(updateParam.getOperTime());
+                    prodCatAttrAtomSV.update(prodCatAttr);
+                    successNum++;
+                    break;
+                //更新属性值
+                case "2":
+                    //查询属性值
+                    ProdCatAttrValue attrVal = prodCatAttrValAtomSV.selectById(tenantId,updateParam.getUpdateObjId());
+                    if (attrVal==null) {
+                        logger.warn("未找到指定的类目[属性值]关系\r\n" + updateParam.toString());
+                        continue;
+                    }
+                    attrVal.setSerialNumber(updateParam.getSerialNumber());
+                    attrVal.setOperId(updateParam.getOperId());
+                    attrVal.setOperTime(updateParam.getOperTime());
+                    prodCatAttrValAtomSV.update(attrVal);
+                    successNum++;
+                    break;
+                //未知类型
+                default:
+                    logger.warn("未知更新类型:\r\n"+updateParam.toString());
+            }
+
+        }
+        return successNum;
     }
 
 

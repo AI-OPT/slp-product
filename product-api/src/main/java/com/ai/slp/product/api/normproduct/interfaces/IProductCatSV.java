@@ -173,4 +173,18 @@ public interface IProductCatSV {
 			throws BusinessException,SystemException;
 	@interface QueryCatByNameOrFirst{}
 
+	/**
+	 * 更新类目属性信息
+	 *
+	 * @param updateParams 类目属性和属性值信息
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiCode PRODUCT_CAT_0113
+	 */
+	public BaseResponse updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams)
+			throws BusinessException,SystemException;
+	@interface UpdateCatAttrAndVal{}
+
 }

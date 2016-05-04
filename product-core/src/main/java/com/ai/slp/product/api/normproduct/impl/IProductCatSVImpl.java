@@ -86,7 +86,13 @@ public class IProductCatSVImpl implements IProductCatSV {
         if (addCatAttrParam.getAttrAndVal().isEmpty()){
             throw new BusinessException("","添加属性相关信息为空,不执行添加操作");
         }
-        return null;
+        productCatBusiSV.addAttrAndValOfAttrType(addCatAttrParam);
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setResultCode("");
+        responseHeader.setIsSuccess(true);
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     @Override
@@ -164,6 +170,28 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     /**
+     * 更新类目属性信息
+     *
+     * @param updateParams 类目属性和属性值信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PRODUCT_CAT_0113
+     */
+    @Override
+    public BaseResponse updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams) throws BusinessException, SystemException {
+        int successNum = productCatBusiSV.updateCatAttrAndVal(updateParams);
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setResultCode("");
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultMessage("总共["+updateParams.size()+"]条,更新成功["+successNum+"]条");
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
+    }
+
+    /**
      * 查询指定类目下某种类型的属性标识和属性值标识的集合<br>
      * 类型分为:关键属性,销售属性,非关键属性
      *
@@ -172,7 +200,7 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode PRODUCT_CAT_0112
+     * @ApiCode PRODUCT_CAT_0105
      */
     @Override
     public Map<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {

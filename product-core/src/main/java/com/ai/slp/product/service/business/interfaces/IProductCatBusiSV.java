@@ -99,4 +99,12 @@ public interface IProductCatBusiSV {
      * @param addCatAttrParam
      */
     public void addAttrAndValOfAttrType(ProdCatAttrAddParam addCatAttrParam);
+
+    /**
+     * 更新类目属性和属性值
+     *
+     * @param updateParams
+     * @return 更新成功条目数
+     */
+    public int updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams);
 }

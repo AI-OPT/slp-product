@@ -61,4 +61,21 @@ public interface IProdCatAttrValAtomSV {
      * @return
      */
     public int installCatAttrVal(ProdCatAttrValue attrValue);
+
+    /**
+     * 根据唯一标识查询类目与属性值的关联
+     *
+     * @param tenantId
+     * @param catAttrValId
+     * @return
+     */
+    public ProdCatAttrValue selectById(String tenantId,String catAttrValId);
+
+    /**
+     * 更新类目对应的属性值
+     *
+     * @param attrValue
+     * @return
+     */
+    public int update(ProdCatAttrValue attrValue);
 }
