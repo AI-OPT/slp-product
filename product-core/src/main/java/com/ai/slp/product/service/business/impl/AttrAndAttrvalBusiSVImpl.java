@@ -18,6 +18,7 @@ import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.api.normproduct.param.AttrInfo;
 import com.ai.slp.product.api.normproduct.param.AttrPam;
 import com.ai.slp.product.api.normproduct.param.AttrParam;
+import com.ai.slp.product.api.normproduct.param.AttrVal;
 import com.ai.slp.product.api.normproduct.param.AttrValDef;
 import com.ai.slp.product.api.normproduct.param.AttrValInfo;
 import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
@@ -30,7 +31,6 @@ import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
-import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
 
 @Service
@@ -50,7 +50,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     IStandedProdAttrAtomSV standedProdAttrAtomSV;
 
     @Override
-    public AttrInfo selectAttrById(String tenantId, Long attrId) {
+    public AttrInfo queryAttrById(String tenantId, Long attrId) {
         ProdAttrDef prodAttrDef = prodAttrDefAtomSV.selectById(tenantId, attrId);
         if (prodAttrDef == null)
             throw new BusinessException("", "未找到指定的属性信息，租户ID=" + tenantId + ",属性标识=" + attrId);
@@ -64,7 +64,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public PageInfoForRes<AttrDefInfo> selectAttrs(AttrDefParam attrDefParam) {
+    public PageInfoForRes<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam) {
         AttrAndValPageQueryVo attrAndValPageQueryVo = new AttrAndValPageQueryVo();
         BeanUtils.copyProperties(attrAndValPageQueryVo, attrDefParam);
         PageInfo<ProdAttrDef> pageInfo = prodAttrDefAtomSV.selectPageAttrs(attrAndValPageQueryVo);
@@ -111,7 +111,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public int insertAttr(List<AttrParam> attrParamList) {
+    public int addAttr(List<AttrParam> attrParamList) {
         int count = 0;
         for (AttrParam attrParam : attrParamList) {
             ProdAttrDef prodAttrDef = new ProdAttrDef();
@@ -127,7 +127,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public PageInfoForRes<AttrValInfo> selectAttrvals(AttrValPageQuery attrValPageQuery) {
+    public PageInfoForRes<AttrValInfo> queryAttrvals(AttrValPageQuery attrValPageQuery) {
         AttrAndValPageQueryVo attrAndValPageQueryVo = new AttrAndValPageQueryVo();
         BeanUtils.copyProperties(attrAndValPageQueryVo, attrValPageQuery);
         PageInfo<ProdAttrvalueDef> attrValPage = prodAttrValDefAtomSV
@@ -149,14 +149,14 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public AttrValInfo queryAttrVal(AttrValUniqueReq attrValParam) {
+    public AttrVal queryAttrVal(AttrValUniqueReq attrValParam) {
         ProdAttrvalueDef prodAttrvalueDef = prodAttrValDefAtomSV
                 .selectById(attrValParam.getTenantId(), attrValParam.getAttrvalueDefId());
 
-        AttrValInfo attrValInfo = new AttrValInfo();
-        BeanUtils.copyProperties(attrValInfo, prodAttrvalueDef);
+        AttrVal attrVal = new AttrVal();
+        BeanUtils.copyProperties(attrVal, prodAttrvalueDef);
 
-        return attrValInfo;
+        return attrVal;
     }
 
     @Override
@@ -183,7 +183,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public int insertAttrVal(List<AttrValParam> attrValParamList) {
+    public int addAttrVal(List<AttrValParam> attrValParamList) {
         int count = 0;
         for (AttrValParam attrValParam : attrValParamList) {
             ProdAttrvalueDef prodAttrvalueDef = new ProdAttrvalueDef();
@@ -197,7 +197,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public MapForRes<AttrDef, List<AttrValDef>> queryAttrAndAttVals(String tenantId) {
+    public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId) {
         MapForRes<AttrDef, List<AttrValDef>> attrAndValues = new MapForRes<>();
 
         List<ProdAttrDef> prodAttrList = prodAttrDefAtomSV.selectAllAttrs(tenantId);

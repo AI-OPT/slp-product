@@ -2,7 +2,6 @@ package com.ai.slp.product.service.business.interfaces;
 
 import java.util.List;
 
-import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.common.param.MapForRes;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.AttrDef;
@@ -11,6 +10,7 @@ import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.api.normproduct.param.AttrInfo;
 import com.ai.slp.product.api.normproduct.param.AttrPam;
 import com.ai.slp.product.api.normproduct.param.AttrParam;
+import com.ai.slp.product.api.normproduct.param.AttrVal;
 import com.ai.slp.product.api.normproduct.param.AttrValDef;
 import com.ai.slp.product.api.normproduct.param.AttrValInfo;
 import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
@@ -34,7 +34,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @return
      * @author lipeng
      */
-    public PageInfoForRes<AttrDefInfo> selectAttrs(AttrDefParam attrDefParam);
+    public PageInfoForRes<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam);
     
     /**
      * 查询指定的属性信息
@@ -42,7 +42,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @return
      * @author lipeng
      */
-    public AttrInfo selectAttrById(String tenantId,Long attrId);
+    public AttrInfo queryAttrById(String tenantId,Long attrId);
     
     /**
      * 新增属性
@@ -51,7 +51,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @return
      * @author lipeng
      */
-    public int insertAttr(List<AttrParam> attrParamList);
+    public int addAttr(List<AttrParam> attrParamList);
     
     /**
      * 修改属性信息
@@ -79,7 +79,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @return
      * @author lipeng
      */
-    public PageInfoForRes<AttrValInfo> selectAttrvals(AttrValPageQuery attrValPageQuery);
+    public PageInfoForRes<AttrValInfo> queryAttrvals(AttrValPageQuery attrValPageQuery);
 
     /**
      * 插入(新增)属性值信息
@@ -88,7 +88,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @return
      * @author lipeng
      */
-    public int insertAttrVal(List<AttrValParam> attrValParamList);
+    public int addAttrVal(List<AttrValParam> attrValParamList);
 
     /**
      * 修改属性值信息
@@ -116,7 +116,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @return
      * @author lipeng
      */
-    public AttrValInfo queryAttrVal(AttrValUniqueReq attrValParam);
+    public AttrVal queryAttrVal(AttrValUniqueReq attrValUniqueReq);
    
     
     /**
@@ -125,5 +125,5 @@ public interface IAttrAndAttrvalBusiSV {
      * @return 由属性对象对应的属性值List的Map
      * @author lipeng
      */
-    public MapForRes<AttrDef, List<AttrValDef>> queryAttrAndAttVals(String tenantId);
+    public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId);
 }
