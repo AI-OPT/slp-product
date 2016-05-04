@@ -23,7 +23,7 @@ public class AttrParam extends BaseInfo{
      */
     @NotNull(message = "属性ID不能为空", 
             groups = { IAttrAndValDefSV.UpdateAttr.class})
-    private long attrId;
+    private Long attrId;
 
     /**
      * 属性名称

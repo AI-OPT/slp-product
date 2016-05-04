@@ -108,9 +108,9 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     }
 
     @Override
-    public List<ProdAttrDef> selectAllAttrs(BaseInfo baseInfo) {
+    public List<ProdAttrDef> selectAllAttrs(String tenantId) {
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
-        example.createCriteria().andTenantIdEqualTo(baseInfo.getTenantId()).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         List<ProdAttrDef> prodAttrList = prodAttrDefMapper.selectByExample(example);
         return prodAttrList;
     }

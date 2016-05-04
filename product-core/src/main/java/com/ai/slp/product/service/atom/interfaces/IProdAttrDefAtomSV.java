@@ -73,7 +73,7 @@ public interface IProdAttrDefAtomSV {
      * @return
      * @author lipeng
      */
-    public List<ProdAttrDef> selectAllAttrs(BaseInfo baseInfo);
+    public List<ProdAttrDef> selectAllAttrs(String tenantId);
     
 
 }

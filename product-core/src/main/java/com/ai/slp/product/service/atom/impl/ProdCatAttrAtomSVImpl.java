@@ -133,4 +133,12 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         return prodCatAttrMapper.updateByPrimaryKey(prodCatAttr);
     }
 
+    @Override
+    public int selectCatNumByAttrId(String tenantId, Long attrId) {
+        ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).
+        andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        return prodCatAttrMapper.countByExample(example);
+    }
+
 }

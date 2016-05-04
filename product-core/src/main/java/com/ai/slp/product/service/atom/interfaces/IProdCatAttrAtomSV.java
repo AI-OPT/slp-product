@@ -93,4 +93,15 @@ public interface IProdCatAttrAtomSV {
      * @return
      */
     public int update(ProdCatAttr prodCatAttr);
+    
+    /**
+     * 通过属性ID查询关联类目数量
+     * 
+     * @param tenantId
+     * @param attrId
+     * @return
+     * @author lipeng
+    *  @ApiCode
+     */
+    public int selectCatNumByAttrId(String tenantId, Long attrId );
 }
