@@ -7,6 +7,14 @@ import javax.validation.constraints.NotNull;
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.IAttrAndValDefSV;
 
+/**
+ * 增加修改属性参数 
+ * 
+ * Date: 2016年5月4日 <br>
+ * Copyright (c) 2016 asiainfo.com <br>
+ * 
+ * @author lipeng
+ */
 public class AttrParam extends BaseInfo{
     /**
      * 属性ID
@@ -37,12 +45,6 @@ public class AttrParam extends BaseInfo{
      * 是否允许用户自定义属性值
      */
     private String isCustom;
-
-    /**
-     * 状态
-     * 1有效0无效
-     */
-    private String state;
     
     /**
      * 操作人ID
@@ -63,14 +65,6 @@ public class AttrParam extends BaseInfo{
 
     public void setAttrId(long attrId) {
         this.attrId = attrId;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public long getOperId() {

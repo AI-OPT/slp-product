@@ -4,14 +4,14 @@ import java.util.Date;
 
 import com.ai.opt.base.vo.BaseResponse;
 /**
- * 属性返回参数
+ * 属性分页查询返回参数
  * 
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
  * @author lipeng
  */
-public class AttrDefInfo extends BaseResponse {
+public class AttrDefInfo {
     
     /**
      * 属性ID
@@ -34,7 +34,7 @@ public class AttrDefInfo extends BaseResponse {
     private String valueWay;
     
     /**
-     * 属性值数量-通过在标准品属性值表中统计有次属性ID的属性值的数量
+     * 属性值数量-通过在标准品属性值表中统计有此属性ID的有效属性值的数量
      */
     private int attrValNum;
 
@@ -44,9 +44,14 @@ public class AttrDefInfo extends BaseResponse {
     private String isAllowCustom;
     
     /**
+     *操作人
+     */
+    private String oper;
+    
+    /**
      * 操作人ID
      */
-    private long operId;
+    private Long operId;
     
     /**
      * 操作时间
@@ -101,11 +106,11 @@ public class AttrDefInfo extends BaseResponse {
         this.isAllowCustom = isAllowCustom;
     }
 
-    public long getOperId() {
+    public Long getOperId() {
         return operId;
     }
 
-    public void setOperId(long operId) {
+    public void setOperId(Long operId) {
         this.operId = operId;
     }
 
@@ -115,6 +120,14 @@ public class AttrDefInfo extends BaseResponse {
 
     public void setOperTime(Date operTime) {
         this.operTime = operTime;
+    }
+
+    public String getOper() {
+        return oper;
+    }
+
+    public void setOper(String oper) {
+        this.oper = oper;
     }
 
 }

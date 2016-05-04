@@ -14,22 +14,27 @@ public class AttrValDef {
      *租户ID
      */
     private String tenantId;
+    
     /**
      *属性值标识
      */
     private String attrvalueDefId;
+    
     /**
      *属性标识
      */
     private Long attrId;
+    
     /**
      *属性值名字
      */
     private String attrValueName;
+    
     /**
-     *首字母
+     *属性值首字母
      */
     private String firstLetter;
+    
     public String getTenantId() {
         return tenantId;
     }

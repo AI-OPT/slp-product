@@ -1,53 +1,46 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import com.ai.opt.base.vo.BaseResponse;
+
 /**
- * 查询属性和属性值的MAP集合的返回属性类型
+ * 单个属性查询返回参数
  * 
- * Date: 2016年5月3日 <br>
+ * Date: 2016年5月4日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
  * @author lipeng
  */
-public class AttrDef {
-    
+public class AttrInfo extends BaseResponse{
     /**
-     *租户ID
+     * 属性ID
      */
-    private String tenantId;
+    private long attrId;
     
     /**
-     *属性标识
-     */
-    private Long attrId;
-    
-    /**
-     *属性名称
+     * 属性名称
      */
     private String attrName;
     
     /**
-     *属性首字母
+     *属性名称首字母大写
      */
     private String firstLetter;
     
     /**
-     *值输入方式
+     * 值输入方式
      */
     private String valueWay;
+    
+    /**
+     * 是否允许用户自定义属性值
+     */
+    private String isAllowCustom;
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public Long getAttrId() {
+    public long getAttrId() {
         return attrId;
     }
 
-    public void setAttrId(Long attrId) {
+    public void setAttrId(long attrId) {
         this.attrId = attrId;
     }
 
@@ -73,6 +66,14 @@ public class AttrDef {
 
     public void setValueWay(String valueWay) {
         this.valueWay = valueWay;
+    }
+
+    public String getIsAllowCustom() {
+        return isAllowCustom;
+    }
+
+    public void setIsAllowCustom(String isAllowCustom) {
+        this.isAllowCustom = isAllowCustom;
     }
     
     

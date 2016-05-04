@@ -8,7 +8,7 @@ import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.IAttrAndValDefSV;
 
 /**
- * 属性值定义请求参数<br>
+ * 属性值添加修改请求参数<br>
  * 
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
@@ -41,12 +41,6 @@ public class AttrValParam extends BaseInfo {
 	 * 首字母
 	 */
 	private String firstLetter;
-
-    /**
-     * 状态
-     * 1有效0无效
-     */
-    private String state;
     
     /**
      * 操作人ID
@@ -58,13 +52,6 @@ public class AttrValParam extends BaseInfo {
      */
     private Date operTime;
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
 
     public long getOperId() {
         return operId;
