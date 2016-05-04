@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.product.Product" >
+    <id column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="PRODUCT_CAT_ID" property="productCatId" jdbcType="VARCHAR" />
+    <result column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
+    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="DECIMAL" />
+    <result column="PRODUCT_TYPE" property="productType" jdbcType="VARCHAR" />
+    <result column="PROD_NAME" property="prodName" jdbcType="VARCHAR" />
+    <result column="PRODUCT_SELL_POINT" property="productSellPoint" jdbcType="VARCHAR" />
+    <result column="ACTIVE_TYPE" property="activeType" jdbcType="CHAR" />
+    <result column="ACTIVE_TIME" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="INACTIVE_TIME" property="inactiveTime" jdbcType="TIMESTAMP" />
+    <result column="ACTIVE_CYCLE" property="activeCycle" jdbcType="DECIMAL" />
+    <result column="UNIT" property="unit" jdbcType="CHAR" />
+    <result column="PRO_DETAIL_CONTENT" property="proDetailContent" jdbcType="VARCHAR" />
+    <result column="IS_SALE_ATTR" property="isSaleAttr" jdbcType="CHAR" />
+    <result column="IS_SALE_NATIONWIDE" property="isSaleNationwide" jdbcType="CHAR" />
+    <result column="IS_REPLACE_SELL" property="isReplaceSell" jdbcType="CHAR" />
+    <result column="IS_INVOICE" property="isInvoice" jdbcType="CHAR" />
+    <result column="INVOICE_TYPE" property="invoiceType" jdbcType="VARCHAR" />
+    <result column="AFTER_SALE" property="afterSale" jdbcType="VARCHAR" />
+    <result column="UPSHELF_TYPE" property="upshelfType" jdbcType="VARCHAR" />
+    <result column="UP_TIME" property="upTime" jdbcType="TIMESTAMP" />
+    <result column="DOWN_TIME" property="downTime" jdbcType="TIMESTAMP" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    PROD_ID, TENANT_ID, PRODUCT_CAT_ID, STANDED_PROD_ID, STORAGE_GROUP_ID, PRODUCT_TYPE, 
+    PROD_NAME, PRODUCT_SELL_POINT, ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, ACTIVE_CYCLE, 
+    UNIT, PRO_DETAIL_CONTENT, IS_SALE_ATTR, IS_SALE_NATIONWIDE, IS_REPLACE_SELL, IS_INVOICE, 
+    INVOICE_TYPE, AFTER_SALE, UPSHELF_TYPE, UP_TIME, DOWN_TIME, CREATE_TIME, STATE, OPER_ID, 
+    OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from product
+    where PROD_ID = #{prodId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from product
+    where PROD_ID = #{prodId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductCriteria" >
+    delete from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
+    insert into product (PROD_ID, TENANT_ID, PRODUCT_CAT_ID, 
+      STANDED_PROD_ID, STORAGE_GROUP_ID, PRODUCT_TYPE, 
+      PROD_NAME, PRODUCT_SELL_POINT, ACTIVE_TYPE, 
+      ACTIVE_TIME, INACTIVE_TIME, ACTIVE_CYCLE, 
+      UNIT, PRO_DETAIL_CONTENT, IS_SALE_ATTR, 
+      IS_SALE_NATIONWIDE, IS_REPLACE_SELL, IS_INVOICE, 
+      INVOICE_TYPE, AFTER_SALE, UPSHELF_TYPE, 
+      UP_TIME, DOWN_TIME, CREATE_TIME, 
+      STATE, OPER_ID, OPER_TIME
+      )
+    values (#{prodId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{productCatId,jdbcType=VARCHAR}, 
+      #{standedProdId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=DECIMAL}, #{productType,jdbcType=VARCHAR}, 
+      #{prodName,jdbcType=VARCHAR}, #{productSellPoint,jdbcType=VARCHAR}, #{activeType,jdbcType=CHAR}, 
+      #{activeTime,jdbcType=TIMESTAMP}, #{inactiveTime,jdbcType=TIMESTAMP}, #{activeCycle,jdbcType=DECIMAL}, 
+      #{unit,jdbcType=CHAR}, #{proDetailContent,jdbcType=VARCHAR}, #{isSaleAttr,jdbcType=CHAR}, 
+      #{isSaleNationwide,jdbcType=CHAR}, #{isReplaceSell,jdbcType=CHAR}, #{isInvoice,jdbcType=CHAR}, 
+      #{invoiceType,jdbcType=VARCHAR}, #{afterSale,jdbcType=VARCHAR}, #{upshelfType,jdbcType=VARCHAR}, 
+      #{upTime,jdbcType=TIMESTAMP}, #{downTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prodId != null" >
+        PROD_ID,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
+      <if test="productCatId != null" >
+        PRODUCT_CAT_ID,
+      </if>
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID,
+      </if>
+      <if test="storageGroupId != null" >
+        STORAGE_GROUP_ID,
+      </if>
+      <if test="productType != null" >
+        PRODUCT_TYPE,
+      </if>
+      <if test="prodName != null" >
+        PROD_NAME,
+      </if>
+      <if test="productSellPoint != null" >
+        PRODUCT_SELL_POINT,
+      </if>
+      <if test="activeType != null" >
+        ACTIVE_TYPE,
+      </if>
+      <if test="activeTime != null" >
+        ACTIVE_TIME,
+      </if>
+      <if test="inactiveTime != null" >
+        INACTIVE_TIME,
+      </if>
+      <if test="activeCycle != null" >
+        ACTIVE_CYCLE,
+      </if>
+      <if test="unit != null" >
+        UNIT,
+      </if>
+      <if test="proDetailContent != null" >
+        PRO_DETAIL_CONTENT,
+      </if>
+      <if test="isSaleAttr != null" >
+        IS_SALE_ATTR,
+      </if>
+      <if test="isSaleNationwide != null" >
+        IS_SALE_NATIONWIDE,
+      </if>
+      <if test="isReplaceSell != null" >
+        IS_REPLACE_SELL,
+      </if>
+      <if test="isInvoice != null" >
+        IS_INVOICE,
+      </if>
+      <if test="invoiceType != null" >
+        INVOICE_TYPE,
+      </if>
+      <if test="afterSale != null" >
+        AFTER_SALE,
+      </if>
+      <if test="upshelfType != null" >
+        UPSHELF_TYPE,
+      </if>
+      <if test="upTime != null" >
+        UP_TIME,
+      </if>
+      <if test="downTime != null" >
+        DOWN_TIME,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prodId != null" >
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="productCatId != null" >
+        #{productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProdId != null" >
+        #{standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="storageGroupId != null" >
+        #{storageGroupId,jdbcType=DECIMAL},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="prodName != null" >
+        #{prodName,jdbcType=VARCHAR},
+      </if>
+      <if test="productSellPoint != null" >
+        #{productSellPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="activeType != null" >
+        #{activeType,jdbcType=CHAR},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inactiveTime != null" >
+        #{inactiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeCycle != null" >
+        #{activeCycle,jdbcType=DECIMAL},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=CHAR},
+      </if>
+      <if test="proDetailContent != null" >
+        #{proDetailContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isSaleAttr != null" >
+        #{isSaleAttr,jdbcType=CHAR},
+      </if>
+      <if test="isSaleNationwide != null" >
+        #{isSaleNationwide,jdbcType=CHAR},
+      </if>
+      <if test="isReplaceSell != null" >
+        #{isReplaceSell,jdbcType=CHAR},
+      </if>
+      <if test="isInvoice != null" >
+        #{isInvoice,jdbcType=CHAR},
+      </if>
+      <if test="invoiceType != null" >
+        #{invoiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="afterSale != null" >
+        #{afterSale,jdbcType=VARCHAR},
+      </if>
+      <if test="upshelfType != null" >
+        #{upshelfType,jdbcType=VARCHAR},
+      </if>
+      <if test="upTime != null" >
+        #{upTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="downTime != null" >
+        #{downTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductCriteria" resultType="java.lang.Integer" >
+    select count(*) from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update product
+    <set >
+      <if test="record.prodId != null" >
+        PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productCatId != null" >
+        PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.standedProdId != null" >
+        STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storageGroupId != null" >
+        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productType != null" >
+        PRODUCT_TYPE = #{record.productType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodName != null" >
+        PROD_NAME = #{record.prodName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productSellPoint != null" >
+        PRODUCT_SELL_POINT = #{record.productSellPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activeType != null" >
+        ACTIVE_TYPE = #{record.activeType,jdbcType=CHAR},
+      </if>
+      <if test="record.activeTime != null" >
+        ACTIVE_TIME = #{record.activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.inactiveTime != null" >
+        INACTIVE_TIME = #{record.inactiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.activeCycle != null" >
+        ACTIVE_CYCLE = #{record.activeCycle,jdbcType=DECIMAL},
+      </if>
+      <if test="record.unit != null" >
+        UNIT = #{record.unit,jdbcType=CHAR},
+      </if>
+      <if test="record.proDetailContent != null" >
+        PRO_DETAIL_CONTENT = #{record.proDetailContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isSaleAttr != null" >
+        IS_SALE_ATTR = #{record.isSaleAttr,jdbcType=CHAR},
+      </if>
+      <if test="record.isSaleNationwide != null" >
+        IS_SALE_NATIONWIDE = #{record.isSaleNationwide,jdbcType=CHAR},
+      </if>
+      <if test="record.isReplaceSell != null" >
+        IS_REPLACE_SELL = #{record.isReplaceSell,jdbcType=CHAR},
+      </if>
+      <if test="record.isInvoice != null" >
+        IS_INVOICE = #{record.isInvoice,jdbcType=CHAR},
+      </if>
+      <if test="record.invoiceType != null" >
+        INVOICE_TYPE = #{record.invoiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.afterSale != null" >
+        AFTER_SALE = #{record.afterSale,jdbcType=VARCHAR},
+      </if>
+      <if test="record.upshelfType != null" >
+        UPSHELF_TYPE = #{record.upshelfType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.upTime != null" >
+        UP_TIME = #{record.upTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.downTime != null" >
+        DOWN_TIME = #{record.downTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update product
+    set PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
+      STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
+      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+      PRODUCT_TYPE = #{record.productType,jdbcType=VARCHAR},
+      PROD_NAME = #{record.prodName,jdbcType=VARCHAR},
+      PRODUCT_SELL_POINT = #{record.productSellPoint,jdbcType=VARCHAR},
+      ACTIVE_TYPE = #{record.activeType,jdbcType=CHAR},
+      ACTIVE_TIME = #{record.activeTime,jdbcType=TIMESTAMP},
+      INACTIVE_TIME = #{record.inactiveTime,jdbcType=TIMESTAMP},
+      ACTIVE_CYCLE = #{record.activeCycle,jdbcType=DECIMAL},
+      UNIT = #{record.unit,jdbcType=CHAR},
+      PRO_DETAIL_CONTENT = #{record.proDetailContent,jdbcType=VARCHAR},
+      IS_SALE_ATTR = #{record.isSaleAttr,jdbcType=CHAR},
+      IS_SALE_NATIONWIDE = #{record.isSaleNationwide,jdbcType=CHAR},
+      IS_REPLACE_SELL = #{record.isReplaceSell,jdbcType=CHAR},
+      IS_INVOICE = #{record.isInvoice,jdbcType=CHAR},
+      INVOICE_TYPE = #{record.invoiceType,jdbcType=VARCHAR},
+      AFTER_SALE = #{record.afterSale,jdbcType=VARCHAR},
+      UPSHELF_TYPE = #{record.upshelfType,jdbcType=VARCHAR},
+      UP_TIME = #{record.upTime,jdbcType=TIMESTAMP},
+      DOWN_TIME = #{record.downTime,jdbcType=TIMESTAMP},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
+    update product
+    <set >
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="productCatId != null" >
+        PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="storageGroupId != null" >
+        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+      </if>
+      <if test="productType != null" >
+        PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="prodName != null" >
+        PROD_NAME = #{prodName,jdbcType=VARCHAR},
+      </if>
+      <if test="productSellPoint != null" >
+        PRODUCT_SELL_POINT = #{productSellPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="activeType != null" >
+        ACTIVE_TYPE = #{activeType,jdbcType=CHAR},
+      </if>
+      <if test="activeTime != null" >
+        ACTIVE_TIME = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inactiveTime != null" >
+        INACTIVE_TIME = #{inactiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeCycle != null" >
+        ACTIVE_CYCLE = #{activeCycle,jdbcType=DECIMAL},
+      </if>
+      <if test="unit != null" >
+        UNIT = #{unit,jdbcType=CHAR},
+      </if>
+      <if test="proDetailContent != null" >
+        PRO_DETAIL_CONTENT = #{proDetailContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isSaleAttr != null" >
+        IS_SALE_ATTR = #{isSaleAttr,jdbcType=CHAR},
+      </if>
+      <if test="isSaleNationwide != null" >
+        IS_SALE_NATIONWIDE = #{isSaleNationwide,jdbcType=CHAR},
+      </if>
+      <if test="isReplaceSell != null" >
+        IS_REPLACE_SELL = #{isReplaceSell,jdbcType=CHAR},
+      </if>
+      <if test="isInvoice != null" >
+        IS_INVOICE = #{isInvoice,jdbcType=CHAR},
+      </if>
+      <if test="invoiceType != null" >
+        INVOICE_TYPE = #{invoiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="afterSale != null" >
+        AFTER_SALE = #{afterSale,jdbcType=VARCHAR},
+      </if>
+      <if test="upshelfType != null" >
+        UPSHELF_TYPE = #{upshelfType,jdbcType=VARCHAR},
+      </if>
+      <if test="upTime != null" >
+        UP_TIME = #{upTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="downTime != null" >
+        DOWN_TIME = #{downTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where PROD_ID = #{prodId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
+    update product
+    set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
+      STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
+      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+      PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+      PROD_NAME = #{prodName,jdbcType=VARCHAR},
+      PRODUCT_SELL_POINT = #{productSellPoint,jdbcType=VARCHAR},
+      ACTIVE_TYPE = #{activeType,jdbcType=CHAR},
+      ACTIVE_TIME = #{activeTime,jdbcType=TIMESTAMP},
+      INACTIVE_TIME = #{inactiveTime,jdbcType=TIMESTAMP},
+      ACTIVE_CYCLE = #{activeCycle,jdbcType=DECIMAL},
+      UNIT = #{unit,jdbcType=CHAR},
+      PRO_DETAIL_CONTENT = #{proDetailContent,jdbcType=VARCHAR},
+      IS_SALE_ATTR = #{isSaleAttr,jdbcType=CHAR},
+      IS_SALE_NATIONWIDE = #{isSaleNationwide,jdbcType=CHAR},
+      IS_REPLACE_SELL = #{isReplaceSell,jdbcType=CHAR},
+      IS_INVOICE = #{isInvoice,jdbcType=CHAR},
+      INVOICE_TYPE = #{invoiceType,jdbcType=VARCHAR},
+      AFTER_SALE = #{afterSale,jdbcType=VARCHAR},
+      UPSHELF_TYPE = #{upshelfType,jdbcType=VARCHAR},
+      UP_TIME = #{upTime,jdbcType=TIMESTAMP},
+      DOWN_TIME = #{downTime,jdbcType=TIMESTAMP},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      STATE = #{state,jdbcType=VARCHAR},
+      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where PROD_ID = #{prodId,jdbcType=VARCHAR}
+  </update>
+</mapper>

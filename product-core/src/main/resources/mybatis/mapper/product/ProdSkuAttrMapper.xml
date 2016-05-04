@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.product.ProdSkuAttrMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr" >
+    <id column="SKU_ATTR_ID" property="skuAttrId" jdbcType="DECIMAL" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="SKU_ID" property="skuId" jdbcType="VARCHAR" />
+    <result column="ATTR_ID" property="attrId" jdbcType="DECIMAL" />
+    <result column="ATTRVALUE_DEF_ID" property="attrvalueDefId" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    SKU_ATTR_ID, TENANT_ID, PROD_ID, SKU_ID, ATTR_ID, ATTRVALUE_DEF_ID, STATE, OPER_ID, 
+    OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttrCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from prod_sku_attr
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from prod_sku_attr
+    where SKU_ATTR_ID = #{skuAttrId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from prod_sku_attr
+    where SKU_ATTR_ID = #{skuAttrId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttrCriteria" >
+    delete from prod_sku_attr
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr" >
+    insert into prod_sku_attr (SKU_ATTR_ID, TENANT_ID, PROD_ID, 
+      SKU_ID, ATTR_ID, ATTRVALUE_DEF_ID, 
+      STATE, OPER_ID, OPER_TIME
+      )
+    values (#{skuAttrId,jdbcType=DECIMAL}, #{tenantId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, 
+      #{skuId,jdbcType=VARCHAR}, #{attrId,jdbcType=DECIMAL}, #{attrvalueDefId,jdbcType=VARCHAR}, 
+      #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr" >
+    insert into prod_sku_attr
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="skuAttrId != null" >
+        SKU_ATTR_ID,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
+      <if test="prodId != null" >
+        PROD_ID,
+      </if>
+      <if test="skuId != null" >
+        SKU_ID,
+      </if>
+      <if test="attrId != null" >
+        ATTR_ID,
+      </if>
+      <if test="attrvalueDefId != null" >
+        ATTRVALUE_DEF_ID,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="skuAttrId != null" >
+        #{skuAttrId,jdbcType=DECIMAL},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null" >
+        #{skuId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrId != null" >
+        #{attrId,jdbcType=DECIMAL},
+      </if>
+      <if test="attrvalueDefId != null" >
+        #{attrvalueDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttrCriteria" resultType="java.lang.Integer" >
+    select count(*) from prod_sku_attr
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update prod_sku_attr
+    <set >
+      <if test="record.skuAttrId != null" >
+        SKU_ATTR_ID = #{record.skuAttrId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null" >
+        PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuId != null" >
+        SKU_ID = #{record.skuId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attrId != null" >
+        ATTR_ID = #{record.attrId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.attrvalueDefId != null" >
+        ATTRVALUE_DEF_ID = #{record.attrvalueDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update prod_sku_attr
+    set SKU_ATTR_ID = #{record.skuAttrId,jdbcType=DECIMAL},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      SKU_ID = #{record.skuId,jdbcType=VARCHAR},
+      ATTR_ID = #{record.attrId,jdbcType=DECIMAL},
+      ATTRVALUE_DEF_ID = #{record.attrvalueDefId,jdbcType=VARCHAR},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr" >
+    update prod_sku_attr
+    <set >
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        PROD_ID = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null" >
+        SKU_ID = #{skuId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrId != null" >
+        ATTR_ID = #{attrId,jdbcType=DECIMAL},
+      </if>
+      <if test="attrvalueDefId != null" >
+        ATTRVALUE_DEF_ID = #{attrvalueDefId,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where SKU_ATTR_ID = #{skuAttrId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr" >
+    update prod_sku_attr
+    set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      PROD_ID = #{prodId,jdbcType=VARCHAR},
+      SKU_ID = #{skuId,jdbcType=VARCHAR},
+      ATTR_ID = #{attrId,jdbcType=DECIMAL},
+      ATTRVALUE_DEF_ID = #{attrvalueDefId,jdbcType=VARCHAR},
+      STATE = #{state,jdbcType=VARCHAR},
+      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where SKU_ATTR_ID = #{skuAttrId,jdbcType=DECIMAL}
+  </update>
+</mapper>
