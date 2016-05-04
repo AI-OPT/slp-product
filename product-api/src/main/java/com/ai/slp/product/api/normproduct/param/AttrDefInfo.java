@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import com.ai.opt.base.vo.BaseResponse;
@@ -56,7 +57,7 @@ public class AttrDefInfo {
     /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
     public String getFirstLetter() {
         return firstLetter;
@@ -114,11 +115,11 @@ public class AttrDefInfo {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
 

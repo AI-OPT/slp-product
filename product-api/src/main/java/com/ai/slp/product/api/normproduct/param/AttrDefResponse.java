@@ -1,6 +1,6 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import com.ai.opt.base.vo.BaseInfo;
 
@@ -59,13 +59,13 @@ public class AttrDefResponse extends BaseInfo {
     /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
 

@@ -1,6 +1,6 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.validation.constraints.NotNull;
 
@@ -50,7 +50,7 @@ public class AttrValParam extends BaseInfo {
     /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
 
     public long getOperId() {
@@ -61,11 +61,11 @@ public class AttrValParam extends BaseInfo {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
     

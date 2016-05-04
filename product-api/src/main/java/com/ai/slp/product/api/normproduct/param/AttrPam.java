@@ -1,6 +1,6 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import com.ai.opt.base.vo.BaseInfo;
 
@@ -24,6 +24,25 @@ public class AttrPam extends BaseInfo {
     /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
+    
+    public long getAttrId() {
+        return attrId;
+    }
+    public void setAttrId(long attrId) {
+        this.attrId = attrId;
+    }
+    public long getOperId() {
+        return operId;
+    }
+    public void setOperId(long operId) {
+        this.operId = operId;
+    }
+    public Timestamp getOperTime() {
+        return operTime;
+    }
+    public void setOperTime(Timestamp operTime) {
+        this.operTime = operTime;
+    }
 
 }

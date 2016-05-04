@@ -1,8 +1,7 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import java.sql.Timestamp;
 import java.util.Date;
-
-import com.ai.opt.base.vo.BaseResponse;
 
 /**
  * 属性值分页查询返回参数
@@ -42,7 +41,7 @@ public class AttrValInfo {
     /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
     public String getOper() {
         return oper;
@@ -84,11 +83,11 @@ public class AttrValInfo {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
 
