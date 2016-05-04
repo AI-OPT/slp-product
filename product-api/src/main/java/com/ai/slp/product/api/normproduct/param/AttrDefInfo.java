@@ -45,7 +45,7 @@ public class AttrDefInfo {
     private String isAllowCustom;
     
     /**
-     *操作人
+     *操作人-通过操作人ID调用永华数据查询
      */
     private String oper;
     

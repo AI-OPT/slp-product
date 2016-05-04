@@ -2,7 +2,10 @@ package com.ai.slp.product.api.normproduct.param;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotNull;
+
 import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.normproduct.interfaces.IAttrAndValDefSV;
 
 /**
  * 单个属性查询删除参数
@@ -14,12 +17,15 @@ import com.ai.opt.base.vo.BaseInfo;
  */
 public class AttrPam extends BaseInfo {
     /**
-     * 属性ID
+     * 属性标识
      */
+    @NotNull(message = "属性ID不能为空", groups = { IAttrAndValDefSV.QueryAttr.class,
+            IAttrAndValDefSV.DeleteAttr.class})
     private long attrId;
     /**
      * 操作人ID
      */
+    @NotNull(message = "操作人ID不能为空", groups = { IAttrAndValDefSV.DeleteAttr.class})
     private long operId;
     /**
      * 操作时间

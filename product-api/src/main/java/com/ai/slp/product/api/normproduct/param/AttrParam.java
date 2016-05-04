@@ -17,19 +17,20 @@ import com.ai.slp.product.api.normproduct.interfaces.IAttrAndValDefSV;
  * @author lipeng
  */
 public class AttrParam extends BaseInfo{
+    
     /**
-     * 属性ID
+     * 属性标识
      */
     @NotNull(message = "属性ID不能为空", 
-            groups = { IAttrAndValDefSV.UpdateAttr.class,
-                    IAttrAndValDefSV.DeleteAttr.class})
+            groups = { IAttrAndValDefSV.UpdateAttr.class})
     private long attrId;
 
     /**
      * 属性名称
      */
     @NotNull(message = "属性名称不能为空", 
-            groups = { IAttrAndValDefSV.AddAttr.class})
+            groups = { IAttrAndValDefSV.AddAttr.class,
+                    IAttrAndValDefSV.UpdateAttr.class})
     private String attrName;
 
     /**
@@ -52,7 +53,8 @@ public class AttrParam extends BaseInfo{
      */
     @NotNull(message = "操作人ID不能为空",
             groups = { IAttrAndValDefSV.UpdateAttr.class,
-                    IAttrAndValDefSV.DeleteAttr.class})
+                    IAttrAndValDefSV.DeleteAttr.class,
+                    IAttrAndValDefSV.AddAttr.class})
     private long operId;
     
     /**

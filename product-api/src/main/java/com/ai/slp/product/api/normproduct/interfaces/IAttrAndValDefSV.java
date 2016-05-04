@@ -145,28 +145,28 @@ public interface IAttrAndValDefSV {
     /**
      * 属性值删除
      * 
-     * @param attrValParam
+     * @param attrValUniqueReq
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
     *  @ApiCode ATTR_VAL_0208
      */
-    public BaseResponse deleteAttrVal(AttrValUniqueReq attrValParam)
+    public BaseResponse deleteAttrVal(AttrValUniqueReq attrValUniqueReq)
             throws BusinessException, SystemException;
     @interface DeleteAttrVal {}
 
     /**
      * 单个属性值查询
      *
-     * @param attrValParam
+     * @param attrValUniqueReq
      * @return 符合条件的单个属性值信息
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng
      * @ApiCode ATTR_VAL_0209
      */
-    public AttrVal queryAttrVal(AttrValUniqueReq attrValParam)
+    public AttrVal queryAttrVal(AttrValUniqueReq attrValUniqueReq)
             throws BusinessException, SystemException;
     @interface QueryAttrVal {}
 
