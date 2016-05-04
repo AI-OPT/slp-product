@@ -147,6 +147,8 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         if (parentCatId!=null)
             criteria.andParentProductCatIdEqualTo(parentCatId);
+        else
+            criteria.andParentProductCatIdIsNull();
 
         if (StringUtils.isNotBlank(query))
             if (isName)
