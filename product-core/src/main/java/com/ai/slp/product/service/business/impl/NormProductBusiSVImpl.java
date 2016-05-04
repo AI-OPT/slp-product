@@ -1,13 +1,7 @@
 package com.ai.slp.product.service.business.impl;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
@@ -36,6 +30,7 @@ import com.ai.slp.product.vo.StandedProdPageQueryVo;
 @Transactional
 public class NormProductBusiSVImpl implements INormProductBusiSV {
     private static Logger logger = LoggerFactory.getLogger(NormProductBusiSVImpl.class);
+    private static String ATTR_LINE_VAL = "||";
     @Autowired
     IStandedProductAtomSV standedProductAtomSV;
     @Autowired
@@ -279,30 +274,77 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         //
         List<NormProdAttrValRequest> attrValList = normProdct.getAttrValList();
         //查询原来的属性值
-        Map<Long,StandedProdAttr> prodAttrList = standedProdAttrAtomSV.queryMapByNormProduct(
-                normProdct.getTenantId(),normProdct.getProductId());
+        Map<String,StandedProdAttr> oldAttrValMap = queryOldProdAttr(normProdct.getTenantId(),normProdct.getProductId());
 
-        //使原来的属性值为无效
-//        standedProdAttrAtomSV.updateInactiveByNormProduct(
-//                normProdct.getTenantId(),normProdct.getProductId(),normProdct.getOperId());
-//        for (NormProductAttrValRequest attrValReq : attrValList) {
-//            //查询属性值是否已存在
-//
-//            StandedProdAttr prodAttr = new StandedProdAttr();
-//            BeanUtils.copyProperties(prodAttr, attrValReq);
-//            prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
-//            prodAttr.setAttrValueName(attrValReq.getAttrVal());
-//            prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
-//            prodAttr.setState(StandedProdAttrConstants.STATE_ACTIVE);//设置为有效
-//            if (attrValReq.getOperTime() != null)
-//                prodAttr.setOperTime(DateUtils.toTimeStamp(attrValReq.getOperTime()));
-//            //添加成功,添加日志
-//            if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
-//                StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
-//                BeanUtils.copyProperties(prodAttrLog, prodAttr);
-//                standedProdAttrLogAtomSV.installObj(prodAttrLog);
-//            }
-//        }
+        for (NormProdAttrValRequest attrValReq : attrValList) {
+            //查询属性值是否已存在
+            String attrKey = attrValReq.getAttrId()+ATTR_LINE_VAL+attrValReq.getAttrValId();
+            StandedProdAttr prodAttr = oldAttrValMap.get(attrKey);
+            int upNum = 0;
+            //如果已经存在,则进行更新
+            if (prodAttr!=null){
+                prodAttr.setAttrValueName(attrValReq.getAttrVal());
+                prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
+                prodAttr.setSerialNumber(attrValReq.getSerialNumber());
+                prodAttr.setOperId(attrValReq.getOperId());
+                prodAttr.setOperTime(attrValReq.getOperTime());
+                upNum = standedProdAttrAtomSV.updateObj(prodAttr);
+            }else {
+                prodAttr = new StandedProdAttr();
+                BeanUtils.copyProperties(prodAttr, attrValReq);
+                prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
+                prodAttr.setAttrValueName(attrValReq.getAttrVal());
+                prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
+                prodAttr.setState(CommonSatesConstants.STATE_ACTIVE);//设置为有效
+                upNum = standedProdAttrAtomSV.installObj(prodAttr);
+            }
+            oldAttrValMap.remove(attrKey);
+            //添加日志
+            if (upNum > 0) {
+                StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
+                BeanUtils.copyProperties(prodAttrLog, prodAttr);
+                standedProdAttrLogAtomSV.installObj(prodAttrLog);
+            }
+        }
+        //将未更新属性值设置为无效.
+        loseActiveAttr(oldAttrValMap.values(),normProdct.getOperId());
+    }
+
+    /**
+     * 获取标准品已关联属性值
+     *
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    private Map<String,StandedProdAttr> queryOldProdAttr(String tenantId,String productId){
+        List<StandedProdAttr> prodAttrList = standedProdAttrAtomSV.queryByNormProduct(
+                tenantId,productId);
+        Map<String,StandedProdAttr> oldAttrMap = new HashMap<>();
+        for (StandedProdAttr prodAttr:prodAttrList){
+            oldAttrMap.put(prodAttr.getAttrId()+ATTR_LINE_VAL+prodAttr.getAttrvalueDefId(),prodAttr);
+        }
+        return oldAttrMap;
+    }
+
+    /**
+     * 将为涉及的属性值设置为失效
+     *
+     * @param oldAttrValList
+     */
+    private void loseActiveAttr(Collection<StandedProdAttr> oldAttrValList, Long operId){
+        if (oldAttrValList==null || oldAttrValList.isEmpty())
+            return;
+        for (StandedProdAttr prodAttr:oldAttrValList){
+            prodAttr.setOperId(operId);
+            prodAttr.setOperTime(DateUtils.currTimeStamp());
+            prodAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+            if (standedProdAttrAtomSV.updateObj(prodAttr)>0){
+                StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
+                BeanUtils.copyProperties(prodAttrLog, prodAttr);
+                standedProdAttrLogAtomSV.installObj(prodAttrLog);
+            }
+        }
     }
 
 }

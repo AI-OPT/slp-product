@@ -4,6 +4,7 @@ import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -59,7 +60,7 @@ public class NormProdAttrValRequest extends BaseInfo {
      * 操作时间<br>
      * 为空时,则使用服务端接收时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
     public Long getProductAttrValId() {
         return productAttrValId;
@@ -109,11 +110,11 @@ public class NormProdAttrValRequest extends BaseInfo {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
 
