@@ -4,7 +4,6 @@ import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * 标准品信息的基础信息<br>

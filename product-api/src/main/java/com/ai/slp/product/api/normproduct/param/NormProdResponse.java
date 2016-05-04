@@ -2,7 +2,7 @@ package com.ai.slp.product.api.normproduct.param;
 
 import com.ai.opt.base.vo.BaseResponse;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * 标准品查询返回信息<br>
@@ -47,7 +47,7 @@ public class NormProdResponse extends BaseResponse {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private Timestamp createTime;
 
     /**
      * 创建人ID
@@ -60,7 +60,7 @@ public class NormProdResponse extends BaseResponse {
     /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
     /**
      * 类目名称
      */
@@ -115,14 +115,6 @@ public class NormProdResponse extends BaseResponse {
         this.productType = productType;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public Long getCreateId() {
         return createId;
     }
@@ -155,14 +147,6 @@ public class NormProdResponse extends BaseResponse {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Date operTime) {
-        this.operTime = operTime;
-    }
-
     public String getCatName() {
         return catName;
     }
@@ -177,5 +161,21 @@ public class NormProdResponse extends BaseResponse {
 
     public void setOperName(String operName) {
         this.operName = operName;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+    }
+
+    public Timestamp getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Timestamp operTime) {
+        this.operTime = operTime;
     }
 }

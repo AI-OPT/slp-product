@@ -3,7 +3,6 @@ package com.ai.slp.product.api.normproduct.param;
 import com.ai.opt.base.vo.BaseResponse;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * 标准品信息的基础信息,用于返回信息<br>

@@ -6,7 +6,7 @@ import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * 标准品市场价更新请求<br>
@@ -40,7 +40,7 @@ public class MarketPrice4Update extends BaseInfo {
      * 操作时间<br>
      * 若为空,更新时则填充服务接收时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
     public String getProductId() {
         return productId;
@@ -66,11 +66,11 @@ public class MarketPrice4Update extends BaseInfo {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
 }

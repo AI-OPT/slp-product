@@ -1,7 +1,6 @@
 package com.ai.slp.product.api.normproduct.param;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * 属性值分页查询返回参数

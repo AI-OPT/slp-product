@@ -3,7 +3,7 @@ package com.ai.slp.product.api.normproduct.param;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ public class NormProdSaveRequest extends NormProductBase {
      * 创建时赋值,更新时不进行操作<br>
      *     若为空,更新时则填充服务接收时间
      */
-    private Date createTime;
+    private Timestamp createTime;
 
     /**
      * 创建人ID<br>
@@ -41,7 +41,7 @@ public class NormProdSaveRequest extends NormProductBase {
      * 操作时间<br>
      * 若为空,更新时则填充服务接收时间
      */
-    private Date operTime;
+    private Timestamp operTime;
     /**
      * 标准品属性值集合
      */
@@ -63,20 +63,20 @@ public class NormProdSaveRequest extends NormProductBase {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Date operTime) {
-        this.operTime = operTime;
-    }
-
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    public Timestamp getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Timestamp operTime) {
+        this.operTime = operTime;
     }
 
     public Long getCreateId() {

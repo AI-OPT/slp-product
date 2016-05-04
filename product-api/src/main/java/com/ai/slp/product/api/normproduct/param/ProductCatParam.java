@@ -8,7 +8,6 @@ import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * 商品类目请求参数<br>

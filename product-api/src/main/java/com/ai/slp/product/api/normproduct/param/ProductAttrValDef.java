@@ -1,10 +1,8 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import com.ai.opt.base.vo.BaseInfo;
 import com.ai.opt.base.vo.BaseResponse;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * 标准品属性值返回信息<br>

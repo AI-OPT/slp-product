@@ -5,7 +5,6 @@ import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * 标准品属性值请求信息<br>
