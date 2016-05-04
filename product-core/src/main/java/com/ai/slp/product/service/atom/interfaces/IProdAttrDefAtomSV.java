@@ -1,11 +1,12 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import java.sql.Timestamp;
 import java.util.List;
 
+import com.ai.opt.base.vo.BaseInfo;
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.normproduct.param.AttrDefParam;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
-import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
+import com.ai.slp.product.vo.AttrAndValPageQueryVo;
 
 /**
  * 商品属性操作
@@ -36,16 +37,16 @@ public interface IProdAttrDefAtomSV {
      * @param attrId 商品属性标识
      * @return
      */
-    public int deleteById(String tenantId,Long attrId);
+    public int deleteById(String tenantId,Long attrId, Long operId, Timestamp operTime);
     
     /**
      * 分页查询属性
      * 
-     * @param attrDefParam
+     * @param attrAndValPageQueryVo
      * @return
      * @author lipeng
      */
-    public PageInfo<ProdAttrDef> selectPageAttrs(AttrDefParam attrDefParam);
+    public PageInfo<ProdAttrDef> selectPageAttrs(AttrAndValPageQueryVo attrAndValPageQueryVo);
     
     /**
      * 通过属性信息查询拥有属性值数量
@@ -72,7 +73,7 @@ public interface IProdAttrDefAtomSV {
      * @return
      * @author lipeng
      */
-    public List<ProdAttrDef> selectAllAttrs();
+    public List<ProdAttrDef> selectAllAttrs(BaseInfo baseInfo);
     
 
 }
