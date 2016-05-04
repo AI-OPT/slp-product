@@ -1,7 +1,7 @@
-package com.ai.slp.product.dao.mapper.interfaces;
+package com.ai.slp.product.dao.mapper.interfaces.storage;
 
-import com.ai.slp.product.dao.mapper.bo.StorageGroupLog;
-import com.ai.slp.product.dao.mapper.bo.StorageGroupLogCriteria;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLogCriteria;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.StorageGroupLogMapper" >
-  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.StorageGroupLog" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.storage.StorageGroupLogMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog" >
     <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="DECIMAL" />
@@ -77,7 +77,7 @@
     LOG_ID, TENANT_ID, STORAGE_GROUP_ID, STANDED_PROD_ID, ROUTE_GROUP_ID, STORAGE_GROUP_NAME, 
     LOW_SALE_PRICE, HIGH_SALE_PRICE, SERIAL_NUMBER, STATE, OPER_ID, OPER_TIME
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.StorageGroupLogCriteria" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLogCriteria" >
     select
     <if test="distinct" >
       distinct
@@ -105,13 +105,13 @@
     delete from storage_group_log
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.StorageGroupLogCriteria" >
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLogCriteria" >
     delete from storage_group_log
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.StorageGroupLog" >
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog" >
     insert into storage_group_log (LOG_ID, TENANT_ID, STORAGE_GROUP_ID, 
       STANDED_PROD_ID, ROUTE_GROUP_ID, STORAGE_GROUP_NAME, 
       LOW_SALE_PRICE, HIGH_SALE_PRICE, SERIAL_NUMBER, 
@@ -123,7 +123,7 @@
       #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.StorageGroupLog" >
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog" >
     insert into storage_group_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="logId != null" >
@@ -202,7 +202,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.StorageGroupLogCriteria" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLogCriteria" resultType="java.lang.Integer" >
     select count(*) from storage_group_log
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -270,7 +270,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.StorageGroupLog" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog" >
     update storage_group_log
     <set >
       <if test="tenantId != null" >
@@ -309,7 +309,7 @@
     </set>
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.StorageGroupLog" >
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog" >
     update storage_group_log
     set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},

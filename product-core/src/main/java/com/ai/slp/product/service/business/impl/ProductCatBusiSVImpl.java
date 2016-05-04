@@ -311,9 +311,12 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catAttr.setState(CommonSatesConstants.STATE_ACTIVE);
                 catAttr.setOperId(addCatAttrParam.getOperId());
                 catAttr.setOperTime(operTime);
-                //设置是否必填,关键属性为必填,其他为非必填
-                catAttr.setIsNecessary(
-                        ProductCatConstants.ATTR_TYPE_KEY.equals(attrType)?"Y":"N");
+                //设置是否必填,关键属性和销售属性为必填,其他为非必填
+                if (ProductCatConstants.ATTR_TYPE_KEY.equals(attrType)
+                        || ProductCatConstants.ATTR_TYPE_SALE.equals(attrType))
+                    catAttr.setIsNecessary("Y");
+                else
+                    catAttr.setIsNecessary("N");
                 prodCatAttrAtomSV.insertProdCatAttr(catAttr);
             }
             //添加属性值

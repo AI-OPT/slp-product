@@ -1,10 +1,10 @@
-package com.ai.slp.product.dao.mapper.bo;
+package com.ai.slp.product.dao.mapper.bo.storage;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StorageGroupLogCriteria {
+public class StorageGroupCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -15,7 +15,7 @@ public class StorageGroupLogCriteria {
 
     protected Integer limitEnd;
 
-    public StorageGroupLogCriteria() {
+    public StorageGroupCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -125,73 +125,63 @@ public class StorageGroupLogCriteria {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andLogIdIsNull() {
-            addCriterion("LOG_ID is null");
+        public Criteria andStorageGroupIdIsNull() {
+            addCriterion("STORAGE_GROUP_ID is null");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdIsNotNull() {
-            addCriterion("LOG_ID is not null");
+        public Criteria andStorageGroupIdIsNotNull() {
+            addCriterion("STORAGE_GROUP_ID is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdEqualTo(String value) {
-            addCriterion("LOG_ID =", value, "logId");
+        public Criteria andStorageGroupIdEqualTo(Long value) {
+            addCriterion("STORAGE_GROUP_ID =", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdNotEqualTo(String value) {
-            addCriterion("LOG_ID <>", value, "logId");
+        public Criteria andStorageGroupIdNotEqualTo(Long value) {
+            addCriterion("STORAGE_GROUP_ID <>", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdGreaterThan(String value) {
-            addCriterion("LOG_ID >", value, "logId");
+        public Criteria andStorageGroupIdGreaterThan(Long value) {
+            addCriterion("STORAGE_GROUP_ID >", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdGreaterThanOrEqualTo(String value) {
-            addCriterion("LOG_ID >=", value, "logId");
+        public Criteria andStorageGroupIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("STORAGE_GROUP_ID >=", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdLessThan(String value) {
-            addCriterion("LOG_ID <", value, "logId");
+        public Criteria andStorageGroupIdLessThan(Long value) {
+            addCriterion("STORAGE_GROUP_ID <", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdLessThanOrEqualTo(String value) {
-            addCriterion("LOG_ID <=", value, "logId");
+        public Criteria andStorageGroupIdLessThanOrEqualTo(Long value) {
+            addCriterion("STORAGE_GROUP_ID <=", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdLike(String value) {
-            addCriterion("LOG_ID like", value, "logId");
+        public Criteria andStorageGroupIdIn(List<Long> values) {
+            addCriterion("STORAGE_GROUP_ID in", values, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdNotLike(String value) {
-            addCriterion("LOG_ID not like", value, "logId");
+        public Criteria andStorageGroupIdNotIn(List<Long> values) {
+            addCriterion("STORAGE_GROUP_ID not in", values, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdIn(List<String> values) {
-            addCriterion("LOG_ID in", values, "logId");
+        public Criteria andStorageGroupIdBetween(Long value1, Long value2) {
+            addCriterion("STORAGE_GROUP_ID between", value1, value2, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andLogIdNotIn(List<String> values) {
-            addCriterion("LOG_ID not in", values, "logId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLogIdBetween(String value1, String value2) {
-            addCriterion("LOG_ID between", value1, value2, "logId");
-            return (Criteria) this;
-        }
-
-        public Criteria andLogIdNotBetween(String value1, String value2) {
-            addCriterion("LOG_ID not between", value1, value2, "logId");
+        public Criteria andStorageGroupIdNotBetween(Long value1, Long value2) {
+            addCriterion("STORAGE_GROUP_ID not between", value1, value2, "storageGroupId");
             return (Criteria) this;
         }
 
@@ -262,66 +252,6 @@ public class StorageGroupLogCriteria {
 
         public Criteria andTenantIdNotBetween(String value1, String value2) {
             addCriterion("TENANT_ID not between", value1, value2, "tenantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdIsNull() {
-            addCriterion("STORAGE_GROUP_ID is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdIsNotNull() {
-            addCriterion("STORAGE_GROUP_ID is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdEqualTo(Long value) {
-            addCriterion("STORAGE_GROUP_ID =", value, "storageGroupId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdNotEqualTo(Long value) {
-            addCriterion("STORAGE_GROUP_ID <>", value, "storageGroupId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdGreaterThan(Long value) {
-            addCriterion("STORAGE_GROUP_ID >", value, "storageGroupId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("STORAGE_GROUP_ID >=", value, "storageGroupId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdLessThan(Long value) {
-            addCriterion("STORAGE_GROUP_ID <", value, "storageGroupId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdLessThanOrEqualTo(Long value) {
-            addCriterion("STORAGE_GROUP_ID <=", value, "storageGroupId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdIn(List<Long> values) {
-            addCriterion("STORAGE_GROUP_ID in", values, "storageGroupId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdNotIn(List<Long> values) {
-            addCriterion("STORAGE_GROUP_ID not in", values, "storageGroupId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdBetween(Long value1, Long value2) {
-            addCriterion("STORAGE_GROUP_ID between", value1, value2, "storageGroupId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStorageGroupIdNotBetween(Long value1, Long value2) {
-            addCriterion("STORAGE_GROUP_ID not between", value1, value2, "storageGroupId");
             return (Criteria) this;
         }
 
@@ -522,6 +452,76 @@ public class StorageGroupLogCriteria {
 
         public Criteria andStorageGroupNameNotBetween(String value1, String value2) {
             addCriterion("STORAGE_GROUP_NAME not between", value1, value2, "storageGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrIsNull() {
+            addCriterion("IS_SALE_ATTR is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrIsNotNull() {
+            addCriterion("IS_SALE_ATTR is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrEqualTo(String value) {
+            addCriterion("IS_SALE_ATTR =", value, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrNotEqualTo(String value) {
+            addCriterion("IS_SALE_ATTR <>", value, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrGreaterThan(String value) {
+            addCriterion("IS_SALE_ATTR >", value, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrGreaterThanOrEqualTo(String value) {
+            addCriterion("IS_SALE_ATTR >=", value, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrLessThan(String value) {
+            addCriterion("IS_SALE_ATTR <", value, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrLessThanOrEqualTo(String value) {
+            addCriterion("IS_SALE_ATTR <=", value, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrLike(String value) {
+            addCriterion("IS_SALE_ATTR like", value, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrNotLike(String value) {
+            addCriterion("IS_SALE_ATTR not like", value, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrIn(List<String> values) {
+            addCriterion("IS_SALE_ATTR in", values, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrNotIn(List<String> values) {
+            addCriterion("IS_SALE_ATTR not in", values, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrBetween(String value1, String value2) {
+            addCriterion("IS_SALE_ATTR between", value1, value2, "isSaleAttr");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSaleAttrNotBetween(String value1, String value2) {
+            addCriterion("IS_SALE_ATTR not between", value1, value2, "isSaleAttr");
             return (Criteria) this;
         }
 
@@ -772,6 +772,126 @@ public class StorageGroupLogCriteria {
 
         public Criteria andStateNotBetween(String value1, String value2) {
             addCriterion("STATE not between", value1, value2, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdIsNull() {
+            addCriterion("CREATE_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdIsNotNull() {
+            addCriterion("CREATE_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdEqualTo(Long value) {
+            addCriterion("CREATE_ID =", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdNotEqualTo(Long value) {
+            addCriterion("CREATE_ID <>", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdGreaterThan(Long value) {
+            addCriterion("CREATE_ID >", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("CREATE_ID >=", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdLessThan(Long value) {
+            addCriterion("CREATE_ID <", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdLessThanOrEqualTo(Long value) {
+            addCriterion("CREATE_ID <=", value, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdIn(List<Long> values) {
+            addCriterion("CREATE_ID in", values, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdNotIn(List<Long> values) {
+            addCriterion("CREATE_ID not in", values, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdBetween(Long value1, Long value2) {
+            addCriterion("CREATE_ID between", value1, value2, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateIdNotBetween(Long value1, Long value2) {
+            addCriterion("CREATE_ID not between", value1, value2, "createId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("CREATE_TIME is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("CREATE_TIME is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeEqualTo(Timestamp value) {
+            addCriterion("CREATE_TIME =", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotEqualTo(Timestamp value) {
+            addCriterion("CREATE_TIME <>", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThan(Timestamp value) {
+            addCriterion("CREATE_TIME >", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThanOrEqualTo(Timestamp value) {
+            addCriterion("CREATE_TIME >=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThan(Timestamp value) {
+            addCriterion("CREATE_TIME <", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThanOrEqualTo(Timestamp value) {
+            addCriterion("CREATE_TIME <=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIn(List<Timestamp> values) {
+            addCriterion("CREATE_TIME in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotIn(List<Timestamp> values) {
+            addCriterion("CREATE_TIME not in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("CREATE_TIME between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("CREATE_TIME not between", value1, value2, "createTime");
             return (Criteria) this;
         }
 

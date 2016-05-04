@@ -23,7 +23,7 @@ public class StorageGroupStatus extends BaseInfo {
     /**
      * 状态<br>
      * 添加时使用停用状态,更新时直接忽略
-     * 0:全部,
+     * NULL:全部,
      */
     @NotNull(message = "库存组状态不能为空",
             groups = { IStorageSV.ChargeStorageGroupStatus.class

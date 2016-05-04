@@ -1,8 +1,8 @@
 package com.ai.slp.product.service.atom.impl;
 
 import com.ai.slp.product.constants.StorageAndGroupConstants;
-import com.ai.slp.product.dao.mapper.bo.StorageGroupCriteria;
-import com.ai.slp.product.dao.mapper.interfaces.StorageGroupMapper;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupCriteria;
+import com.ai.slp.product.dao.mapper.interfaces.storage.StorageGroupMapper;
 import com.ai.slp.product.service.atom.interfaces.IStorageGroupAtomSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

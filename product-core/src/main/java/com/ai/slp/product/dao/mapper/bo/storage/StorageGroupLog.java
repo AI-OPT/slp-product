@@ -1,4 +1,4 @@
-package com.ai.slp.product.dao.mapper.bo;
+package com.ai.slp.product.dao.mapper.bo.storage;
 
 import java.sql.Timestamp;
 

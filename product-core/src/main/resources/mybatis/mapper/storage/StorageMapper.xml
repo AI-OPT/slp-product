@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.Storage" >
+    <id column="STORAGE_ID" property="storageId" jdbcType="VARCHAR" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="DECIMAL" />
+    <result column="STORAGE_NAME" property="storageName" jdbcType="VARCHAR" />
+    <result column="IS_SALE_ATTR" property="isSaleAttr" jdbcType="CHAR" />
+    <result column="SALE_PRICE" property="salePrice" jdbcType="DECIMAL" />
+    <result column="TOTAL_NUM" property="totalNum" jdbcType="DECIMAL" />
+    <result column="USABLE_NUM" property="usableNum" jdbcType="DECIMAL" />
+    <result column="WARN_NUM" property="warnNum" jdbcType="DECIMAL" />
+    <result column="ACTIVE_TIME" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="INACTIVE_TIME" property="inactiveTime" jdbcType="TIMESTAMP" />
+    <result column="PRIORITY_NUMBER" property="priorityNumber" jdbcType="DECIMAL" />
+    <result column="SERIAL_NUMBER" property="serialNumber" jdbcType="DECIMAL" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    STORAGE_ID, PROD_ID, STORAGE_GROUP_ID, STORAGE_NAME, IS_SALE_ATTR, SALE_PRICE, TOTAL_NUM, 
+    USABLE_NUM, WARN_NUM, ACTIVE_TIME, INACTIVE_TIME, PRIORITY_NUMBER, SERIAL_NUMBER, 
+    STATE, OPER_ID, OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from storage
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from storage
+    where STORAGE_ID = #{storageId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from storage
+    where STORAGE_ID = #{storageId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria" >
+    delete from storage
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.storage.Storage" >
+    insert into storage (STORAGE_ID, PROD_ID, STORAGE_GROUP_ID, 
+      STORAGE_NAME, IS_SALE_ATTR, SALE_PRICE, 
+      TOTAL_NUM, USABLE_NUM, WARN_NUM, 
+      ACTIVE_TIME, INACTIVE_TIME, PRIORITY_NUMBER, 
+      SERIAL_NUMBER, STATE, OPER_ID, 
+      OPER_TIME)
+    values (#{storageId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=DECIMAL}, 
+      #{storageName,jdbcType=VARCHAR}, #{isSaleAttr,jdbcType=CHAR}, #{salePrice,jdbcType=DECIMAL}, 
+      #{totalNum,jdbcType=DECIMAL}, #{usableNum,jdbcType=DECIMAL}, #{warnNum,jdbcType=DECIMAL}, 
+      #{activeTime,jdbcType=TIMESTAMP}, #{inactiveTime,jdbcType=TIMESTAMP}, #{priorityNumber,jdbcType=DECIMAL}, 
+      #{serialNumber,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, 
+      #{operTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.Storage" >
+    insert into storage
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="storageId != null" >
+        STORAGE_ID,
+      </if>
+      <if test="prodId != null" >
+        PROD_ID,
+      </if>
+      <if test="storageGroupId != null" >
+        STORAGE_GROUP_ID,
+      </if>
+      <if test="storageName != null" >
+        STORAGE_NAME,
+      </if>
+      <if test="isSaleAttr != null" >
+        IS_SALE_ATTR,
+      </if>
+      <if test="salePrice != null" >
+        SALE_PRICE,
+      </if>
+      <if test="totalNum != null" >
+        TOTAL_NUM,
+      </if>
+      <if test="usableNum != null" >
+        USABLE_NUM,
+      </if>
+      <if test="warnNum != null" >
+        WARN_NUM,
+      </if>
+      <if test="activeTime != null" >
+        ACTIVE_TIME,
+      </if>
+      <if test="inactiveTime != null" >
+        INACTIVE_TIME,
+      </if>
+      <if test="priorityNumber != null" >
+        PRIORITY_NUMBER,
+      </if>
+      <if test="serialNumber != null" >
+        SERIAL_NUMBER,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="storageId != null" >
+        #{storageId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="storageGroupId != null" >
+        #{storageGroupId,jdbcType=DECIMAL},
+      </if>
+      <if test="storageName != null" >
+        #{storageName,jdbcType=VARCHAR},
+      </if>
+      <if test="isSaleAttr != null" >
+        #{isSaleAttr,jdbcType=CHAR},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalNum != null" >
+        #{totalNum,jdbcType=DECIMAL},
+      </if>
+      <if test="usableNum != null" >
+        #{usableNum,jdbcType=DECIMAL},
+      </if>
+      <if test="warnNum != null" >
+        #{warnNum,jdbcType=DECIMAL},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inactiveTime != null" >
+        #{inactiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="priorityNumber != null" >
+        #{priorityNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria" resultType="java.lang.Integer" >
+    select count(*) from storage
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update storage
+    <set >
+      <if test="record.storageId != null" >
+        STORAGE_ID = #{record.storageId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null" >
+        PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storageGroupId != null" >
+        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.storageName != null" >
+        STORAGE_NAME = #{record.storageName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isSaleAttr != null" >
+        IS_SALE_ATTR = #{record.isSaleAttr,jdbcType=CHAR},
+      </if>
+      <if test="record.salePrice != null" >
+        SALE_PRICE = #{record.salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalNum != null" >
+        TOTAL_NUM = #{record.totalNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.usableNum != null" >
+        USABLE_NUM = #{record.usableNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.warnNum != null" >
+        WARN_NUM = #{record.warnNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.activeTime != null" >
+        ACTIVE_TIME = #{record.activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.inactiveTime != null" >
+        INACTIVE_TIME = #{record.inactiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.priorityNumber != null" >
+        PRIORITY_NUMBER = #{record.priorityNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.serialNumber != null" >
+        SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update storage
+    set STORAGE_ID = #{record.storageId,jdbcType=VARCHAR},
+      PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+      STORAGE_NAME = #{record.storageName,jdbcType=VARCHAR},
+      IS_SALE_ATTR = #{record.isSaleAttr,jdbcType=CHAR},
+      SALE_PRICE = #{record.salePrice,jdbcType=DECIMAL},
+      TOTAL_NUM = #{record.totalNum,jdbcType=DECIMAL},
+      USABLE_NUM = #{record.usableNum,jdbcType=DECIMAL},
+      WARN_NUM = #{record.warnNum,jdbcType=DECIMAL},
+      ACTIVE_TIME = #{record.activeTime,jdbcType=TIMESTAMP},
+      INACTIVE_TIME = #{record.inactiveTime,jdbcType=TIMESTAMP},
+      PRIORITY_NUMBER = #{record.priorityNumber,jdbcType=DECIMAL},
+      SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.Storage" >
+    update storage
+    <set >
+      <if test="prodId != null" >
+        PROD_ID = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="storageGroupId != null" >
+        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+      </if>
+      <if test="storageName != null" >
+        STORAGE_NAME = #{storageName,jdbcType=VARCHAR},
+      </if>
+      <if test="isSaleAttr != null" >
+        IS_SALE_ATTR = #{isSaleAttr,jdbcType=CHAR},
+      </if>
+      <if test="salePrice != null" >
+        SALE_PRICE = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalNum != null" >
+        TOTAL_NUM = #{totalNum,jdbcType=DECIMAL},
+      </if>
+      <if test="usableNum != null" >
+        USABLE_NUM = #{usableNum,jdbcType=DECIMAL},
+      </if>
+      <if test="warnNum != null" >
+        WARN_NUM = #{warnNum,jdbcType=DECIMAL},
+      </if>
+      <if test="activeTime != null" >
+        ACTIVE_TIME = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inactiveTime != null" >
+        INACTIVE_TIME = #{inactiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="priorityNumber != null" >
+        PRIORITY_NUMBER = #{priorityNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="serialNumber != null" >
+        SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where STORAGE_ID = #{storageId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.storage.Storage" >
+    update storage
+    set PROD_ID = #{prodId,jdbcType=VARCHAR},
+      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+      STORAGE_NAME = #{storageName,jdbcType=VARCHAR},
+      IS_SALE_ATTR = #{isSaleAttr,jdbcType=CHAR},
+      SALE_PRICE = #{salePrice,jdbcType=DECIMAL},
+      TOTAL_NUM = #{totalNum,jdbcType=DECIMAL},
+      USABLE_NUM = #{usableNum,jdbcType=DECIMAL},
+      WARN_NUM = #{warnNum,jdbcType=DECIMAL},
+      ACTIVE_TIME = #{activeTime,jdbcType=TIMESTAMP},
+      INACTIVE_TIME = #{inactiveTime,jdbcType=TIMESTAMP},
+      PRIORITY_NUMBER = #{priorityNumber,jdbcType=DECIMAL},
+      SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
+      STATE = #{state,jdbcType=VARCHAR},
+      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where STORAGE_ID = #{storageId,jdbcType=VARCHAR}
+  </update>
+</mapper>
