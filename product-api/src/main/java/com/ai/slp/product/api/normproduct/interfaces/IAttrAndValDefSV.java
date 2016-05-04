@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseInfo;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.common.param.MapForRes;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
@@ -101,7 +102,7 @@ public interface IAttrAndValDefSV {
     @interface DeleteAttr{}
     
     /**
-     * 属性的属性值查询
+     * 属性的属性值分页查询
      * 
      * @param pageQuery
      * @return 符合条件的属性集合
@@ -179,7 +180,7 @@ public interface IAttrAndValDefSV {
      * @author lipeng
     *  @ApiCode ATTR_VAL_0210
      */
-    public MapForRes<AttrDef,List<AttrValDef>> queryAllAttrAndVal() 
+    public MapForRes<AttrDef,List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo) 
             throws BusinessException, SystemException;
     @interface QueryAllAttrAndVal {}
 }

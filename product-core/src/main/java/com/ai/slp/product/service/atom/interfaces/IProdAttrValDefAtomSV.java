@@ -1,10 +1,11 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
+import com.ai.slp.product.vo.AttrAndValPageQueryVo;
 
 /**
  * 属性值操作
@@ -16,14 +17,14 @@ import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
  */
 public interface IProdAttrValDefAtomSV {
     /**
-     * 依据属性ID查询商品属性值
+     * 依据属性值ID查询商品属性值
      * 
      * @param tenantId 租户ID
-     * @param attrValueId 属性值ID
+     * @param attrvalueDefId 属性值ID
      * @return 商品属性值对象
      * @author lipeng
      */
-    public ProdAttrvalueDef selectById(String tenantId,String attrValueId);
+    public ProdAttrvalueDef selectById(String tenantId,String attrvalueDefId);
     /**
      * 添加属性值
      * 
@@ -44,21 +45,20 @@ public interface IProdAttrValDefAtomSV {
      * 删除属性值
      * 
      * @param tenantId
-     * @param attrValueId
+     * @param attrvalueDefId
      * @return
      * @author lipeng
      */
-    public int deleteProdAttrVal(String tenantId,String attrValueId);
+    public int deleteProdAttrVal(String tenantId,String attrvalueDefId, Long operId, Timestamp operTime);
     
     /**
-     * 根据属性信息分页查询属性值信息
+     * 根据信息分页查询属性值信息
      * 
-     * @param tenantId
-     * @param attrId
+     * @param attrAndValPageQueryVo
      * @return
      * @author lipeng
      */
-    public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrValPageQuery attrValPageQuery);
+    public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrAndValPageQueryVo attrAndValPageQueryVo);
 
     /**
      * 查询属性对应的所有有效属性值
@@ -66,5 +66,5 @@ public interface IProdAttrValDefAtomSV {
      * @return
      * @author lipeng
      */
-    public List<ProdAttrvalueDef> selectAttrValForAttr(Long attrId);
+    public List<ProdAttrvalueDef> selectAttrValForAttr(String tenantId, Long attrId);
 }
