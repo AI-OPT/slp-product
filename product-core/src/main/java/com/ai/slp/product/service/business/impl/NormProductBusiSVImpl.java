@@ -45,6 +45,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
     @Autowired
     IProdAttrValDefAtomSV attrValDefAtomSV;
+    @Autowired
+    IProdCatDefAtomSV catDefAtomSV;
 
     /**
      * 添加标准品
@@ -156,8 +158,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         response.setProductName(product.getStandedProductName());
 //        response.setCreateName("");//TODO... 获取创建者名称
 //        response.setOperName("");//TODO... 获取操作者名称
-//        response.setCreateTime(product.getCreateTime());
-//        response.setOperTime(product.getOperTime());
         Map<Long,Set<String>> attrAndValueIds = new HashMap<>();
         //查询属性信息
         List<StandedProdAttr> attrList = standedProdAttrAtomSV.queryByNormProduct(tenantId,productId);
@@ -190,9 +190,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         for (StandedProduct standedProduct:productList){
             NormProdResponse normProduct = new NormProdResponse();
             BeanUtils.copyProperties(normProduct,standedProduct);
-//            normProduct.setCreateName(""); //TODO...
-//            normProduct.setOperTime(""); //TODO...
-            //TODO... 获取类目名称
+//            normProduct.setCreateName(""); //TODO... 创建者账户名
+//            normProduct.setOperTime(""); //TODO... 操作者账号名
+            ProductCat productCat = catDefAtomSV.selectAllStateById(
+                    standedProduct.getTenantId(),standedProduct.getProductCatId());
+            if (productCat!=null)
+                normProduct.setCatName(productCat.getProductCatName());
             normProduct.setCatId(standedProduct.getProductCatId());
             normProduct.setProductId(standedProduct.getStandedProdId());
             normProduct.setProductName(standedProduct.getStandedProductName());

@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class NormProdInfoResponse extends NormProdBaseResponse {
     /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
     /**
      * 属性与属性值对应关系
@@ -74,11 +75,11 @@ public class NormProdInfoResponse extends NormProdBaseResponse {
         this.marketPrice = marketPrice;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
 

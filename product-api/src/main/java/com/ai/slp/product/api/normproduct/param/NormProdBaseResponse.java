@@ -2,6 +2,7 @@ package com.ai.slp.product.api.normproduct.param;
 
 import com.ai.opt.base.vo.BaseResponse;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -51,7 +52,7 @@ public abstract class NormProdBaseResponse extends BaseResponse {
     /**
      * 创建时间<br>
      */
-    private Date createTime;
+    private Timestamp createTime;
 
     /**
      * 创建人ID<br>
@@ -111,11 +112,11 @@ public abstract class NormProdBaseResponse extends BaseResponse {
         this.productType = productType;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 

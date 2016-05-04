@@ -23,7 +23,7 @@ public interface IProdCatDefAtomSV {
             String tenantId,String productCatId,String productCatName,String isChild);
 
     /**
-     * 商品类目查询
+     * 商品类目查询,仅返回状态为有效的类目
      * 
      * @param tenantId 租户ID
      * @param productCatId 商品类目标识
@@ -31,6 +31,15 @@ public interface IProdCatDefAtomSV {
      * @author lipeng
      */
     public ProductCat selectById(String tenantId,String productCatId);
+
+    /**
+     * 查询类目信息,包括所有状态
+     *
+     * @param tenantId
+     * @param productCatId
+     * @return
+     */
+    public ProductCat selectAllStateById(String tenantId,String productCatId);
     
     /**
      * 商品类目添加

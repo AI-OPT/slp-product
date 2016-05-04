@@ -21,8 +21,6 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
  */
 @Component
 public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
-
-
     @Autowired
     ProductCatMapper productCatMapper;
     @Autowired
@@ -67,6 +65,23 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         if(productCatList == null || productCatList.isEmpty())
             return null;
         return productCatList.get(0);
+    }
+
+    /**
+     * 查询类目信息,包括所有状态
+     *
+     * @param tenantId
+     * @param productCatId
+     * @return
+     */
+    @Override
+    public ProductCat selectAllStateById(String tenantId, String productCatId) {
+        ProductCatCriteria example = new ProductCatCriteria();
+        example.createCriteria()
+                .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId);
+        List<ProductCat> productCatList = productCatMapper.selectByExample(example);
+
+        return productCatList==null || productCatList.isEmpty()?null:productCatList.get(0);
     }
 
     @Override
