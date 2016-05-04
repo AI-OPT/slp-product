@@ -61,19 +61,6 @@ public interface IProductCatSV {
 	@interface UpdateProductCat {}
 
 	/**
-	 * 商品类目属性添加<br>
-	 *
-	 * @param lspad
-	 * @return 服务返回基本信息
-	 * @throws BusinessException
-	 * @throws SystemException
-	 * @author lipeng
-	 * @ApiCode PRODUCT_CAT_0103
-	 */
-	public BaseResponse addProductCatAttr(List<AttrDefResponse> lspad) throws BusinessException, SystemException;
-	@interface AddProductCatAttr {}
-
-	/**
 	 * 商品类目删除<br>
 	 * 删除类目时，需要判断是否已经有关联的标准品（包括废弃状态的）<br>
 	 * 类目一旦删除，其下包含的子类目一并删除，与选择好的属性、属性值解除关联关系<br>
@@ -124,7 +111,7 @@ public interface IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng
-	 *  @ApiCode PRODUCT_CAT_0108
+	 * @ApiCode PRODUCT_CAT_0108
 	 */
 	public BaseResponse addAttrForCatAndType(ProdCatAttrAddParam addCatAttrParam) throws BusinessException,SystemException;
 	@interface AddAttrForCatAndType {}

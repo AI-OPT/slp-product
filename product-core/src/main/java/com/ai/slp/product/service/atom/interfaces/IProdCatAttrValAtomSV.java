@@ -44,4 +44,21 @@ public interface IProdCatAttrValAtomSV {
      * @return
      */
     public List<ProdCatAttrValue> queryByCatAttrId(String tenantId,String catAttrId);
+
+    /**
+     * 查询指定关系和属性值的属性值信息
+     *
+     * @param tenantId
+     * @param catAttrId
+     * @param valId
+     * @return
+     */
+    public ProdCatAttrValue queryByCatAndCatAttrId(String tenantId,String catAttrId,String valId);
+
+    /**
+     * 添加类目属性值关系
+     * @param attrValue
+     * @return
+     */
+    public int installCatAttrVal(ProdCatAttrValue attrValue);
 }

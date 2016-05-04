@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.dao.mapper.bo.ProductCatCriteria;
+import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,6 +20,8 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
 
     @Autowired
     ProdCatAttrMapper prodCatAttrMapper;
+    @Autowired
+    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
     
     @Override
     public ProdCatAttr selectById(String tenantId, String productCatId) {
@@ -31,6 +35,9 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
 
     @Override
     public int insertProdCatAttr(ProdCatAttr prodCatAttr) {
+        if (prodCatAttr.getOperTime()==null)
+            prodCatAttr.setOperTime(DateUtils.currTimeStamp());
+        prodCatAttr.setCatAttrId(sequenceCreditAtomSV.getSeqByName()+"");
         return prodCatAttrMapper.insertSelective(prodCatAttr);
     }
 
@@ -90,6 +97,27 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
                 .andAttrTypeEqualTo(attrType)
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return prodCatAttrMapper.selectByExample(example);
+    }
+
+    /**
+     * 查询类目下指定属性类型和属性标识的关联信息
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrId
+     * @param attrType
+     * @return
+     */
+    @Override
+    public ProdCatAttr queryByCatIdAndTypeAndAttrId(String tenantId, String catId, Long attrId, String attrType) {
+        ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andProductCatIdEqualTo(catId)
+                .andAttrIdEqualTo(attrId)
+                .andAttrTypeEqualTo(attrType)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        List<ProdCatAttr> attrList = prodCatAttrMapper.selectByExample(example);
+        return attrList==null||attrList.isEmpty()?null:attrList.get(0);
     }
 
 }

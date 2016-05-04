@@ -1,9 +1,13 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Map;
+import java.util.Set;
 
 import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.normproduct.interfaces.IProductCatSV;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 增加类目的类目属性参数
@@ -12,51 +16,49 @@ import com.ai.opt.base.vo.BaseInfo;
  * Copyright (c) 2016 asiainfo.com <br>
  * 
  * @author lipeng
+ * update liutong5 at 2016/05/04
  */
 public class ProdCatAttrAddParam extends BaseInfo{
-
-    /**
-     * 属性ID
-     */
-    private long attrId;
-    
     /**
      * 商品类目ID
      */
+    @NotNull(message = "商品类目标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
     private String productCatId;
-    
     /**
-     * 是否上传图片
+     * 属性类型,包括关键属性 非关键属性 销售属性
      */
-    private String isPicture;
-    
-    /**
-     * 序列号-用于排序
-     */
-    private long serialNumber;
-    
-    /**
-     * 状态
-     * 1有效0无效
-     */
-    private String state;
-    
+    @NotNull(message = "属性类型不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
+    private String attrType;
     /**
      * 操作人ID
      */
+    @NotNull(message = "操作人标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
     private long operId;
     
     /**
      * 操作时间
      */
     private Timestamp operTime;
+    /**
+     * 属性及对应属性值<br>
+     * K:属性标识,V:属性值标识的集合
+     */
+    private Map<Long,Set<String>> attrAndVal;
 
-    public String getState() {
-        return state;
+    public String getProductCatId() {
+        return productCatId;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setProductCatId(String productCatId) {
+        this.productCatId = productCatId;
+    }
+
+    public String getAttrType() {
+        return attrType;
+    }
+
+    public void setAttrType(String attrType) {
+        this.attrType = attrType;
     }
 
     public long getOperId() {
@@ -67,43 +69,19 @@ public class ProdCatAttrAddParam extends BaseInfo{
         this.operId = operId;
     }
 
-    public long getAttrId() {
-        return attrId;
-    }
-
-    public void setAttrId(long attrId) {
-        this.attrId = attrId;
-    }
-
-    public String getProductCatId() {
-        return productCatId;
-    }
-
-    public void setProductCatId(String productCatId) {
-        this.productCatId = productCatId;
-    }
-
-    public String getIsPicture() {
-        return isPicture;
-    }
-
-    public void setIsPicture(String isPicture) {
-        this.isPicture = isPicture;
-    }
-
-    public long getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(long serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
     public Timestamp getOperTime() {
         return operTime;
     }
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public Map<Long, Set<String>> getAttrAndVal() {
+        return attrAndVal;
+    }
+
+    public void setAttrAndVal(Map<Long, Set<String>> attrAndVal) {
+        this.attrAndVal = attrAndVal;
     }
 }

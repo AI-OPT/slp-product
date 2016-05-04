@@ -5,6 +5,7 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
@@ -276,6 +277,62 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             catInfoList.add(catInfo);
         }
         return catInfoList;
+    }
+
+    /**
+     * 类目添加指定属性类型的属性和属性值
+     *
+     * @param addCatAttrParam
+     */
+    @Override
+    public void addAttrAndValOfAttrType(ProdCatAttrAddParam addCatAttrParam) {
+        //查询类目是否存在
+        String tenantId = addCatAttrParam.getTenantId();
+        String catId = addCatAttrParam.getProductCatId();
+        if (prodCatDefAtomSV.selectById(tenantId,catId)==null){
+            throw new BusinessException("","未找到指定类目信息,租户ID:"+tenantId+",类目标识:"+catId);
+        }
+        String attrType = addCatAttrParam.getAttrType();
+        Timestamp operTime = addCatAttrParam.getOperTime();
+        Map<Long,Set<String>> attrAndVal = addCatAttrParam.getAttrAndVal();
+        for (Long attId:attrAndVal.keySet()){
+            //检查是否已经关联
+            ProdCatAttr catAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(tenantId,catId,attId,attrType);
+            if (catAttr==null){
+                catAttr = new ProdCatAttr();
+                catAttr.setTenantId(tenantId);
+                catAttr.setProductCatId(catId);
+                catAttr.setAttrId(attId);
+                catAttr.setAttrType(attrType);
+                catAttr.setSerialNumber((short)0);
+                catAttr.setState(CommonSatesConstants.STATE_ACTIVE);
+                catAttr.setOperId(addCatAttrParam.getOperId());
+                catAttr.setOperTime(operTime);
+                prodCatAttrAtomSV.insertProdCatAttr(catAttr);
+            }
+            //添加属性值
+            Set<String> attrValSet = attrAndVal.get(attId);
+            for (String valId:attrValSet){
+                //检查关联关系是否已经存在
+                ProdCatAttrValue catAttrValue = null;
+                if (catAttr!=null){
+                    catAttrValue = prodCatAttrValAtomSV.queryByCatAndCatAttrId(
+                            tenantId,catAttr.getCatAttrId(),valId);
+                    if (catAttrValue!=null)
+                        continue;
+                }
+                //添加属性值
+                catAttrValue = new ProdCatAttrValue();
+                catAttrValue.setTenantId(tenantId);
+                catAttrValue.setAttrvalueDefId(valId);
+                catAttrValue.setCatAttrId(catAttr.getCatAttrId());
+                catAttrValue.setSerialNumber((short)0);
+                catAttrValue.setState(CommonSatesConstants.STATE_ACTIVE);
+                catAttrValue.setOperId(addCatAttrParam.getOperId());
+                catAttrValue.setOperTime(operTime);
+                prodCatAttrValAtomSV.installCatAttrVal(catAttrValue);
+            }
+        }
     }
 
 

@@ -276,12 +276,13 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
      * 更新标准品的属性值
      */
     private void updateStandedProdAttr(NormProdSaveRequest normProdct){
-        //TODO... 待实现
-//        List<NormProductAttrValRequest> attrValList = normProdct.getAttrValList();
-//        Map<Long,StandedProdAttr> prodAttrList = standedProdAttrAtomSV.queryMapByNormProduct(
-//                normProdct.getTenantId(),normProdct.getProductId());
-//
-//        //使原来的属性值为无效
+        //
+        List<NormProdAttrValRequest> attrValList = normProdct.getAttrValList();
+        //查询原来的属性值
+        Map<Long,StandedProdAttr> prodAttrList = standedProdAttrAtomSV.queryMapByNormProduct(
+                normProdct.getTenantId(),normProdct.getProductId());
+
+        //使原来的属性值为无效
 //        standedProdAttrAtomSV.updateInactiveByNormProduct(
 //                normProdct.getTenantId(),normProdct.getProductId(),normProdct.getOperId());
 //        for (NormProductAttrValRequest attrValReq : attrValList) {

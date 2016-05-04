@@ -73,4 +73,36 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return attrValueMapper.selectByExample(example);
     }
+
+    /**
+     * 查询指定关系和属性值的属性值信息
+     *
+     * @param tenantId
+     * @param catAttrId
+     * @param valId
+     * @return
+     */
+    @Override
+    public ProdCatAttrValue queryByCatAndCatAttrId(String tenantId, String catAttrId, String valId) {
+        ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andCatAttrIdEqualTo(catAttrId)
+                .andAttrvalueDefIdEqualTo(valId)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        List<ProdCatAttrValue> valueList = attrValueMapper.selectByExample(example);
+        return valueList==null||valueList.isEmpty()?null:valueList.get(0);
+    }
+
+    /**
+     * 添加类目属性值关系
+     *
+     * @param attrValue
+     * @return
+     */
+    @Override
+    public int installCatAttrVal(ProdCatAttrValue attrValue) {
+        if (attrValue.getOperTime()==null)
+            attrValue.setOperTime(DateUtils.currTimeStamp());
+        return attrValueMapper.insert(attrValue);
+    }
 }

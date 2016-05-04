@@ -23,7 +23,7 @@ public class AttrDefResponse extends BaseInfo {
     /**
      * 商品类目ID
      */
-    private long productCatId;
+    private String productCatId;
     /**
      * 属性名称
      */
@@ -147,5 +147,13 @@ public class AttrDefResponse extends BaseInfo {
 
     public void setOperId(Long operId) {
         this.operId = operId;
+    }
+
+    public String getProductCatId() {
+        return productCatId;
+    }
+
+    public void setProductCatId(String productCatId) {
+        this.productCatId = productCatId;
     }
 }

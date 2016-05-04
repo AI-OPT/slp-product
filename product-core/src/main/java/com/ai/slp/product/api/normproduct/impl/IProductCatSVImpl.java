@@ -79,14 +79,13 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     @Override
-    public BaseResponse addProductCatAttr(List<AttrDefResponse> lspad)
-            throws BusinessException, SystemException {
-        return null;
-    }
-
-    @Override
     public BaseResponse addAttrForCatAndType(ProdCatAttrAddParam addCatAttrParam)
             throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(addCatAttrParam.getTenantId(),"");
+        //检查要添加内容是否为空
+        if (addCatAttrParam.getAttrAndVal().isEmpty()){
+            throw new BusinessException("","添加属性相关信息为空,不执行添加操作");
+        }
         return null;
     }
 

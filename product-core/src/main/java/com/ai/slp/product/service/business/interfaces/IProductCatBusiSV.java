@@ -92,4 +92,11 @@ public interface IProductCatBusiSV {
      * @return
      */
     public List<ProductCatInfo> queryByNameOrFirst(ProductCatQuery query);
+
+    /**
+     * 类目添加指定属性类型的属性和属性值
+     *
+     * @param addCatAttrParam
+     */
+    public void addAttrAndValOfAttrType(ProdCatAttrAddParam addCatAttrParam);
 }

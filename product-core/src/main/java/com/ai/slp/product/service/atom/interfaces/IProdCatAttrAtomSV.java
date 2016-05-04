@@ -74,4 +74,15 @@ public interface IProdCatAttrAtomSV {
      * @return
      */
     public List<ProdCatAttr> queryAttrOfCatByIdAndType(String tenantId, String catId,String attrType);
+
+    /**
+     * 查询类目下指定属性类型和属性标识的关联信息
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrId
+     * @param attrType
+     * @return
+     */
+    public ProdCatAttr queryByCatIdAndTypeAndAttrId(String tenantId, String catId,Long attrId,String attrType);
 }
