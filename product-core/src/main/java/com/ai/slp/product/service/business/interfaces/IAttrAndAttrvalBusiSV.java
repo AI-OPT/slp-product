@@ -8,6 +8,7 @@ import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.AttrDef;
 import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
 import com.ai.slp.product.api.normproduct.param.AttrDefParam;
+import com.ai.slp.product.api.normproduct.param.AttrPam;
 import com.ai.slp.product.api.normproduct.param.AttrParam;
 import com.ai.slp.product.api.normproduct.param.AttrValDef;
 import com.ai.slp.product.api.normproduct.param.AttrValInfo;
@@ -59,7 +60,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @return
      * @author lipeng
      */
-    public int deleteAttr(String tenantId,Long attrId);
+    public int deleteAttr(AttrPam attrPam);
     
     /**
      * 新增属性
