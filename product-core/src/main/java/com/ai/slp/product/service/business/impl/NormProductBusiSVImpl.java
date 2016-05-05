@@ -1,19 +1,13 @@
 package com.ai.slp.product.service.business.impl;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.*;
 import com.ai.slp.product.service.atom.interfaces.*;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,32 +18,8 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
-import com.ai.slp.product.api.normproduct.param.MarketPrice4Update;
-import com.ai.slp.product.api.normproduct.param.NormProdAttrValRequest;
-import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
-import com.ai.slp.product.api.normproduct.param.NormProdRequest;
-import com.ai.slp.product.api.normproduct.param.NormProdResponse;
-import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
-import com.ai.slp.product.api.normproduct.param.ProdCatAttrDef;
-import com.ai.slp.product.api.normproduct.param.ProductAttrValDef;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
-import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
-import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-import com.ai.slp.product.dao.mapper.bo.ProductCat;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
-import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStorageGroupAtomSV;
-import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.StandedProdPageQueryVo;
@@ -78,8 +48,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     IProdAttrValDefAtomSV attrValDefAtomSV;
     @Autowired
     IProdCatDefAtomSV catDefAtomSV;
-    @Autowired
-    ISysSequenceCreditAtomSV sysSequenceCreditAtomSV;
 
     /**
      * 添加标准品
@@ -166,7 +134,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             standedProductLogAtomSV.insert(productLog);
         }
         //变更属性值. 1.将原来属性值设置为不可用;2,启用新的属性值.
-
+        updateStandedProdAttr(normProdct);
     }
 
 
@@ -385,9 +353,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
     @Override
     public int updateMarketPrice(MarketPrice4Update marketPrice) {
-        //判断租户是否存在
-        if(marketPrice.getTenantId() == null)
-            throw new BusinessException("", "找不到指定的租户信息!");
         StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
                 marketPrice.getProductId());
         //判断此租户下是否存在次标准品
@@ -404,8 +369,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         if(count > 0){
             StandedProductLog standedProductLog = new StandedProductLog();
             BeanUtils.copyProperties(standedProductLog, standedProduct);
-            //生成日志ID
-            standedProductLog.setLogId(sysSequenceCreditAtomSV.SEQ_LEN_DEF_ID);
             standedProductLogAtomSV.insert(standedProductLog);
         }
         return count;
