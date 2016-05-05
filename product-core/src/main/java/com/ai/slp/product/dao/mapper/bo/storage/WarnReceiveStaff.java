@@ -3,7 +3,9 @@ package com.ai.slp.product.dao.mapper.bo.storage;
 import java.sql.Timestamp;
 
 public class WarnReceiveStaff {
-    private Long warnReceiveStaffId;
+    private String warnReceiveStaffId;
+
+    private String tenantId;
 
     private String obiectType;
 
@@ -21,12 +23,20 @@ public class WarnReceiveStaff {
 
     private Timestamp operTime;
 
-    public Long getWarnReceiveStaffId() {
+    public String getWarnReceiveStaffId() {
         return warnReceiveStaffId;
     }
 
-    public void setWarnReceiveStaffId(Long warnReceiveStaffId) {
-        this.warnReceiveStaffId = warnReceiveStaffId;
+    public void setWarnReceiveStaffId(String warnReceiveStaffId) {
+        this.warnReceiveStaffId = warnReceiveStaffId == null ? null : warnReceiveStaffId.trim();
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId == null ? null : tenantId.trim();
     }
 
     public String getObiectType() {

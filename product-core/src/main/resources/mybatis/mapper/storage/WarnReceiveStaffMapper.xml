@@ -2,14 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ai.slp.product.dao.mapper.interfaces.storage.WarnReceiveStaffMapper" >
   <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaff" >
-    <id column="WARN_RECEIVE_STAFF_ID" property="warnReceiveStaffId" jdbcType="DECIMAL" />
+    <id column="WARN_RECEIVE_STAFF_ID" property="warnReceiveStaffId" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="OBIECT_TYPE" property="obiectType" jdbcType="VARCHAR" />
     <result column="OBJECT_ID" property="objectId" jdbcType="VARCHAR" />
-    <result column="STAFF_ID" property="staffId" jdbcType="DECIMAL" />
+    <result column="STAFF_ID" property="staffId" jdbcType="BIGINT" />
     <result column="WARNING_TYPE" property="warningType" jdbcType="VARCHAR" />
     <result column="WARNING_CONTENT" property="warningContent" jdbcType="VARCHAR" />
     <result column="STATE" property="state" jdbcType="VARCHAR" />
-    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_ID" property="operId" jdbcType="BIGINT" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -71,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    WARN_RECEIVE_STAFF_ID, OBIECT_TYPE, OBJECT_ID, STAFF_ID, WARNING_TYPE, WARNING_CONTENT, 
-    STATE, OPER_ID, OPER_TIME
+    WARN_RECEIVE_STAFF_ID, TENANT_ID, OBIECT_TYPE, OBJECT_ID, STAFF_ID, WARNING_TYPE, 
+    WARNING_CONTENT, STATE, OPER_ID, OPER_TIME
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaffCriteria" >
     select
@@ -92,15 +93,15 @@
       limit #{limitStart} , #{limitEnd}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from warn_receive_staff
-    where WARN_RECEIVE_STAFF_ID = #{warnReceiveStaffId,jdbcType=DECIMAL}
+    where WARN_RECEIVE_STAFF_ID = #{warnReceiveStaffId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from warn_receive_staff
-    where WARN_RECEIVE_STAFF_ID = #{warnReceiveStaffId,jdbcType=DECIMAL}
+    where WARN_RECEIVE_STAFF_ID = #{warnReceiveStaffId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaffCriteria" >
     delete from warn_receive_staff
@@ -109,20 +110,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaff" >
-    insert into warn_receive_staff (WARN_RECEIVE_STAFF_ID, OBIECT_TYPE, OBJECT_ID, 
-      STAFF_ID, WARNING_TYPE, WARNING_CONTENT, 
-      STATE, OPER_ID, OPER_TIME
-      )
-    values (#{warnReceiveStaffId,jdbcType=DECIMAL}, #{obiectType,jdbcType=VARCHAR}, #{objectId,jdbcType=VARCHAR}, 
-      #{staffId,jdbcType=DECIMAL}, #{warningType,jdbcType=VARCHAR}, #{warningContent,jdbcType=VARCHAR}, 
-      #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}
-      )
+    insert into warn_receive_staff (WARN_RECEIVE_STAFF_ID, TENANT_ID, OBIECT_TYPE, 
+      OBJECT_ID, STAFF_ID, WARNING_TYPE, 
+      WARNING_CONTENT, STATE, OPER_ID, 
+      OPER_TIME)
+    values (#{warnReceiveStaffId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{obiectType,jdbcType=VARCHAR}, 
+      #{objectId,jdbcType=VARCHAR}, #{staffId,jdbcType=BIGINT}, #{warningType,jdbcType=VARCHAR}, 
+      #{warningContent,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{operId,jdbcType=BIGINT}, 
+      #{operTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaff" >
     insert into warn_receive_staff
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="warnReceiveStaffId != null" >
         WARN_RECEIVE_STAFF_ID,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
       </if>
       <if test="obiectType != null" >
         OBIECT_TYPE,
@@ -151,7 +155,10 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="warnReceiveStaffId != null" >
-        #{warnReceiveStaffId,jdbcType=DECIMAL},
+        #{warnReceiveStaffId,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
       </if>
       <if test="obiectType != null" >
         #{obiectType,jdbcType=VARCHAR},
@@ -160,7 +167,7 @@
         #{objectId,jdbcType=VARCHAR},
       </if>
       <if test="staffId != null" >
-        #{staffId,jdbcType=DECIMAL},
+        #{staffId,jdbcType=BIGINT},
       </if>
       <if test="warningType != null" >
         #{warningType,jdbcType=VARCHAR},
@@ -172,7 +179,7 @@
         #{state,jdbcType=VARCHAR},
       </if>
       <if test="operId != null" >
-        #{operId,jdbcType=DECIMAL},
+        #{operId,jdbcType=BIGINT},
       </if>
       <if test="operTime != null" >
         #{operTime,jdbcType=TIMESTAMP},
@@ -189,7 +196,10 @@
     update warn_receive_staff
     <set >
       <if test="record.warnReceiveStaffId != null" >
-        WARN_RECEIVE_STAFF_ID = #{record.warnReceiveStaffId,jdbcType=DECIMAL},
+        WARN_RECEIVE_STAFF_ID = #{record.warnReceiveStaffId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       </if>
       <if test="record.obiectType != null" >
         OBIECT_TYPE = #{record.obiectType,jdbcType=VARCHAR},
@@ -198,7 +208,7 @@
         OBJECT_ID = #{record.objectId,jdbcType=VARCHAR},
       </if>
       <if test="record.staffId != null" >
-        STAFF_ID = #{record.staffId,jdbcType=DECIMAL},
+        STAFF_ID = #{record.staffId,jdbcType=BIGINT},
       </if>
       <if test="record.warningType != null" >
         WARNING_TYPE = #{record.warningType,jdbcType=VARCHAR},
@@ -210,7 +220,7 @@
         STATE = #{record.state,jdbcType=VARCHAR},
       </if>
       <if test="record.operId != null" >
-        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+        OPER_ID = #{record.operId,jdbcType=BIGINT},
       </if>
       <if test="record.operTime != null" >
         OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
@@ -222,14 +232,15 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update warn_receive_staff
-    set WARN_RECEIVE_STAFF_ID = #{record.warnReceiveStaffId,jdbcType=DECIMAL},
+    set WARN_RECEIVE_STAFF_ID = #{record.warnReceiveStaffId,jdbcType=VARCHAR},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       OBIECT_TYPE = #{record.obiectType,jdbcType=VARCHAR},
       OBJECT_ID = #{record.objectId,jdbcType=VARCHAR},
-      STAFF_ID = #{record.staffId,jdbcType=DECIMAL},
+      STAFF_ID = #{record.staffId,jdbcType=BIGINT},
       WARNING_TYPE = #{record.warningType,jdbcType=VARCHAR},
       WARNING_CONTENT = #{record.warningContent,jdbcType=VARCHAR},
       STATE = #{record.state,jdbcType=VARCHAR},
-      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_ID = #{record.operId,jdbcType=BIGINT},
       OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -238,6 +249,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaff" >
     update warn_receive_staff
     <set >
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
       <if test="obiectType != null" >
         OBIECT_TYPE = #{obiectType,jdbcType=VARCHAR},
       </if>
@@ -245,7 +259,7 @@
         OBJECT_ID = #{objectId,jdbcType=VARCHAR},
       </if>
       <if test="staffId != null" >
-        STAFF_ID = #{staffId,jdbcType=DECIMAL},
+        STAFF_ID = #{staffId,jdbcType=BIGINT},
       </if>
       <if test="warningType != null" >
         WARNING_TYPE = #{warningType,jdbcType=VARCHAR},
@@ -257,24 +271,25 @@
         STATE = #{state,jdbcType=VARCHAR},
       </if>
       <if test="operId != null" >
-        OPER_ID = #{operId,jdbcType=DECIMAL},
+        OPER_ID = #{operId,jdbcType=BIGINT},
       </if>
       <if test="operTime != null" >
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where WARN_RECEIVE_STAFF_ID = #{warnReceiveStaffId,jdbcType=DECIMAL}
+    where WARN_RECEIVE_STAFF_ID = #{warnReceiveStaffId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaff" >
     update warn_receive_staff
-    set OBIECT_TYPE = #{obiectType,jdbcType=VARCHAR},
+    set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      OBIECT_TYPE = #{obiectType,jdbcType=VARCHAR},
       OBJECT_ID = #{objectId,jdbcType=VARCHAR},
-      STAFF_ID = #{staffId,jdbcType=DECIMAL},
+      STAFF_ID = #{staffId,jdbcType=BIGINT},
       WARNING_TYPE = #{warningType,jdbcType=VARCHAR},
       WARNING_CONTENT = #{warningContent,jdbcType=VARCHAR},
       STATE = #{state,jdbcType=VARCHAR},
-      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_ID = #{operId,jdbcType=BIGINT},
       OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
-    where WARN_RECEIVE_STAFF_ID = #{warnReceiveStaffId,jdbcType=DECIMAL}
+    where WARN_RECEIVE_STAFF_ID = #{warnReceiveStaffId,jdbcType=VARCHAR}
   </update>
 </mapper>

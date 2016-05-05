@@ -135,53 +135,133 @@ public class WarnReceiveStaffCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andWarnReceiveStaffIdEqualTo(Long value) {
+        public Criteria andWarnReceiveStaffIdEqualTo(String value) {
             addCriterion("WARN_RECEIVE_STAFF_ID =", value, "warnReceiveStaffId");
             return (Criteria) this;
         }
 
-        public Criteria andWarnReceiveStaffIdNotEqualTo(Long value) {
+        public Criteria andWarnReceiveStaffIdNotEqualTo(String value) {
             addCriterion("WARN_RECEIVE_STAFF_ID <>", value, "warnReceiveStaffId");
             return (Criteria) this;
         }
 
-        public Criteria andWarnReceiveStaffIdGreaterThan(Long value) {
+        public Criteria andWarnReceiveStaffIdGreaterThan(String value) {
             addCriterion("WARN_RECEIVE_STAFF_ID >", value, "warnReceiveStaffId");
             return (Criteria) this;
         }
 
-        public Criteria andWarnReceiveStaffIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andWarnReceiveStaffIdGreaterThanOrEqualTo(String value) {
             addCriterion("WARN_RECEIVE_STAFF_ID >=", value, "warnReceiveStaffId");
             return (Criteria) this;
         }
 
-        public Criteria andWarnReceiveStaffIdLessThan(Long value) {
+        public Criteria andWarnReceiveStaffIdLessThan(String value) {
             addCriterion("WARN_RECEIVE_STAFF_ID <", value, "warnReceiveStaffId");
             return (Criteria) this;
         }
 
-        public Criteria andWarnReceiveStaffIdLessThanOrEqualTo(Long value) {
+        public Criteria andWarnReceiveStaffIdLessThanOrEqualTo(String value) {
             addCriterion("WARN_RECEIVE_STAFF_ID <=", value, "warnReceiveStaffId");
             return (Criteria) this;
         }
 
-        public Criteria andWarnReceiveStaffIdIn(List<Long> values) {
+        public Criteria andWarnReceiveStaffIdLike(String value) {
+            addCriterion("WARN_RECEIVE_STAFF_ID like", value, "warnReceiveStaffId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarnReceiveStaffIdNotLike(String value) {
+            addCriterion("WARN_RECEIVE_STAFF_ID not like", value, "warnReceiveStaffId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarnReceiveStaffIdIn(List<String> values) {
             addCriterion("WARN_RECEIVE_STAFF_ID in", values, "warnReceiveStaffId");
             return (Criteria) this;
         }
 
-        public Criteria andWarnReceiveStaffIdNotIn(List<Long> values) {
+        public Criteria andWarnReceiveStaffIdNotIn(List<String> values) {
             addCriterion("WARN_RECEIVE_STAFF_ID not in", values, "warnReceiveStaffId");
             return (Criteria) this;
         }
 
-        public Criteria andWarnReceiveStaffIdBetween(Long value1, Long value2) {
+        public Criteria andWarnReceiveStaffIdBetween(String value1, String value2) {
             addCriterion("WARN_RECEIVE_STAFF_ID between", value1, value2, "warnReceiveStaffId");
             return (Criteria) this;
         }
 
-        public Criteria andWarnReceiveStaffIdNotBetween(Long value1, Long value2) {
+        public Criteria andWarnReceiveStaffIdNotBetween(String value1, String value2) {
             addCriterion("WARN_RECEIVE_STAFF_ID not between", value1, value2, "warnReceiveStaffId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdIsNull() {
+            addCriterion("TENANT_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdIsNotNull() {
+            addCriterion("TENANT_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdEqualTo(String value) {
+            addCriterion("TENANT_ID =", value, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdNotEqualTo(String value) {
+            addCriterion("TENANT_ID <>", value, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdGreaterThan(String value) {
+            addCriterion("TENANT_ID >", value, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdGreaterThanOrEqualTo(String value) {
+            addCriterion("TENANT_ID >=", value, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdLessThan(String value) {
+            addCriterion("TENANT_ID <", value, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdLessThanOrEqualTo(String value) {
+            addCriterion("TENANT_ID <=", value, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdLike(String value) {
+            addCriterion("TENANT_ID like", value, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdNotLike(String value) {
+            addCriterion("TENANT_ID not like", value, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdIn(List<String> values) {
+            addCriterion("TENANT_ID in", values, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdNotIn(List<String> values) {
+            addCriterion("TENANT_ID not in", values, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdBetween(String value1, String value2) {
+            addCriterion("TENANT_ID between", value1, value2, "tenantId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTenantIdNotBetween(String value1, String value2) {
+            addCriterion("TENANT_ID not between", value1, value2, "tenantId");
             return (Criteria) this;
         }
 

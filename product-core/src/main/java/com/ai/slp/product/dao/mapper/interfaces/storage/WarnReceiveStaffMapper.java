@@ -10,7 +10,7 @@ public interface WarnReceiveStaffMapper {
 
     int deleteByExample(WarnReceiveStaffCriteria example);
 
-    int deleteByPrimaryKey(Long warnReceiveStaffId);
+    int deleteByPrimaryKey(String warnReceiveStaffId);
 
     int insert(WarnReceiveStaff record);
 
@@ -18,7 +18,7 @@ public interface WarnReceiveStaffMapper {
 
     List<WarnReceiveStaff> selectByExample(WarnReceiveStaffCriteria example);
 
-    WarnReceiveStaff selectByPrimaryKey(Long warnReceiveStaffId);
+    WarnReceiveStaff selectByPrimaryKey(String warnReceiveStaffId);
 
     int updateByExampleSelective(@Param("record") WarnReceiveStaff record, @Param("example") WarnReceiveStaffCriteria example);
 
