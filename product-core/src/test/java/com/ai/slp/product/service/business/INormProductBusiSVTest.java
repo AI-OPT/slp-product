@@ -1,6 +1,9 @@
 package com.ai.slp.product.service.business;
 
+import com.ai.slp.product.api.normproduct.param.MarketPrice4Update;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
+import com.ai.slp.product.util.DateUtils;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,15 @@ public class INormProductBusiSVTest {
 
     @Test
     public void updateMarketPrice(){
+        MarketPrice4Update marketPrice4Update = new MarketPrice4Update();
+        marketPrice4Update.setMarketPrice(123123124L);
+        marketPrice4Update.setProductId("2");
+        marketPrice4Update.setOperId(2L);
+        marketPrice4Update.setOperTime(DateUtils.currTimeStamp());
+        marketPrice4Update.setTenantId("2");
+        int count = normProductBusiSV.updateMarketPrice(marketPrice4Update);
+        System.out.println(count);
+        
 
     }
 }
