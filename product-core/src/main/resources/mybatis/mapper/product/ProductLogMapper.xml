@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.product.ProdProductLogMapper" >
-  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.product.ProdProductLog" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.product.ProductLogMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.product.ProductLog" >
     <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
     <result column="PRODUCT_CAT_ID" property="productCatId" jdbcType="VARCHAR" />
     <result column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
-    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="DECIMAL" />
+    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="VARCHAR" />
     <result column="PRODUCT_TYPE" property="productType" jdbcType="VARCHAR" />
     <result column="PROD_NAME" property="prodName" jdbcType="VARCHAR" />
     <result column="PRODUCT_SELL_POINT" property="productSellPoint" jdbcType="VARCHAR" />
@@ -96,14 +96,14 @@
     INVOICE_TYPE, AFTER_SALE, UPSHELF_TYPE, UP_TIME, DOWN_TIME, CREATE_TIME, STATE, OPER_ID, 
     OPER_TIME
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdProductLogCriteria" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLogCriteria" >
     select
     <if test="distinct" >
       distinct
     </if>
     'false' as QUERYID,
     <include refid="Base_Column_List" />
-    from prod_product_log
+    from product_log
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -117,21 +117,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from prod_product_log
+    from product_log
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from prod_product_log
+    delete from product_log
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdProductLogCriteria" >
-    delete from prod_product_log
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLogCriteria" >
+    delete from product_log
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdProductLog" >
-    insert into prod_product_log (LOG_ID, TENANT_ID, PROD_ID, 
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLog" >
+    insert into product_log (LOG_ID, TENANT_ID, PROD_ID, 
       PRODUCT_CAT_ID, STANDED_PROD_ID, STORAGE_GROUP_ID, 
       PRODUCT_TYPE, PROD_NAME, PRODUCT_SELL_POINT, 
       ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, 
@@ -142,7 +142,7 @@
       CREATE_TIME, STATE, OPER_ID, 
       OPER_TIME)
     values (#{logId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, 
-      #{productCatId,jdbcType=VARCHAR}, #{standedProdId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=DECIMAL}, 
+      #{productCatId,jdbcType=VARCHAR}, #{standedProdId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=VARCHAR}, 
       #{productType,jdbcType=VARCHAR}, #{prodName,jdbcType=VARCHAR}, #{productSellPoint,jdbcType=VARCHAR}, 
       #{activeType,jdbcType=CHAR}, #{activeTime,jdbcType=TIMESTAMP}, #{inactiveTime,jdbcType=TIMESTAMP}, 
       #{activeCycle,jdbcType=DECIMAL}, #{unit,jdbcType=CHAR}, #{proDetailContent,jdbcType=VARCHAR}, 
@@ -152,8 +152,8 @@
       #{createTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, 
       #{operTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdProductLog" >
-    insert into prod_product_log
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLog" >
+    insert into product_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="logId != null" >
         LOG_ID,
@@ -257,7 +257,7 @@
         #{standedProdId,jdbcType=VARCHAR},
       </if>
       <if test="storageGroupId != null" >
-        #{storageGroupId,jdbcType=DECIMAL},
+        #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="productType != null" >
         #{productType,jdbcType=VARCHAR},
@@ -327,14 +327,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdProductLogCriteria" resultType="java.lang.Integer" >
-    select count(*) from prod_product_log
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLogCriteria" resultType="java.lang.Integer" >
+    select count(*) from product_log
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update prod_product_log
+    update product_log
     <set >
       <if test="record.logId != null" >
         LOG_ID = #{record.logId,jdbcType=VARCHAR},
@@ -352,7 +352,7 @@
         STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
       </if>
       <if test="record.storageGroupId != null" >
-        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.productType != null" >
         PRODUCT_TYPE = #{record.productType,jdbcType=VARCHAR},
@@ -426,13 +426,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update prod_product_log
+    update product_log
     set LOG_ID = #{record.logId,jdbcType=VARCHAR},
       TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       PROD_ID = #{record.prodId,jdbcType=VARCHAR},
       PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
       STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       PRODUCT_TYPE = #{record.productType,jdbcType=VARCHAR},
       PROD_NAME = #{record.prodName,jdbcType=VARCHAR},
       PRODUCT_SELL_POINT = #{record.productSellPoint,jdbcType=VARCHAR},
@@ -459,8 +459,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdProductLog" >
-    update prod_product_log
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLog" >
+    update product_log
     <set >
       <if test="tenantId != null" >
         TENANT_ID = #{tenantId,jdbcType=VARCHAR},
@@ -475,7 +475,7 @@
         STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
       </if>
       <if test="storageGroupId != null" >
-        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="productType != null" >
         PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
@@ -546,13 +546,13 @@
     </set>
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdProductLog" >
-    update prod_product_log
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLog" >
+    update product_log
     set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       PROD_ID = #{prodId,jdbcType=VARCHAR},
       PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
       STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
       PROD_NAME = #{prodName,jdbcType=VARCHAR},
       PRODUCT_SELL_POINT = #{productSellPoint,jdbcType=VARCHAR},

@@ -2,7 +2,7 @@ package com.ai.slp.product.dao.mapper.bo.product;
 
 import java.sql.Timestamp;
 
-public class ProdProductLog {
+public class ProductLog {
     private String logId;
 
     private String tenantId;
@@ -13,7 +13,7 @@ public class ProdProductLog {
 
     private String standedProdId;
 
-    private Long storageGroupId;
+    private String storageGroupId;
 
     private String productType;
 
@@ -99,12 +99,12 @@ public class ProdProductLog {
         this.standedProdId = standedProdId == null ? null : standedProdId.trim();
     }
 
-    public Long getStorageGroupId() {
+    public String getStorageGroupId() {
         return storageGroupId;
     }
 
-    public void setStorageGroupId(Long storageGroupId) {
-        this.storageGroupId = storageGroupId;
+    public void setStorageGroupId(String storageGroupId) {
+        this.storageGroupId = storageGroupId == null ? null : storageGroupId.trim();
     }
 
     public String getProductType() {

@@ -23,7 +23,7 @@ public class MarketPrice4Update extends BaseInfo {
             groups = { INormProductSV.UpdateMarketPrice.class })
     private String productId;
     /**
-     * 市场价
+     * 市场价,单位:厘
      */
     @Min(value = 0,message = "市场价格不能小于0",
             groups = { INormProductSV.UpdateMarketPrice.class })
