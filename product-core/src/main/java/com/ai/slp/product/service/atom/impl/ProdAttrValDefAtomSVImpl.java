@@ -97,6 +97,7 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
     @Override
     public List<ProdAttrvalueDef> selectAttrValForAttr(String tenantId, Long attrId) {
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
+        example.setOrderByClause("firstLetter");
         example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         List<ProdAttrvalueDef> prodAttrValList = prodAttrvalueDefMapper.selectByExample(example);
         return prodAttrValList;
