@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -125,5 +126,17 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
         StandedProductCriteria example = new StandedProductCriteria();
         example.createCriteria().andProductCatIdEqualTo(catId);
         return productMapper.countByExample(example);
+    }
+
+    @Override
+    public int updateMarketPrice(String tenantId, String standedProductId, long marketPrice, Long operId,
+            Timestamp operTime) {
+        StandedProductCriteria example = new StandedProductCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProductId);
+        StandedProduct standedProduct = new StandedProduct();
+        standedProduct.setMarketPrice(marketPrice);
+        standedProduct.setOperId(operId);
+        standedProduct.setOperTime(operTime == null ? DateUtils.currTimeStamp() : operTime);
+        return productMapper.updateByExampleSelective(standedProduct, example);
     }
 }
