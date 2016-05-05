@@ -48,6 +48,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     IProdAttrValDefAtomSV attrValDefAtomSV;
     @Autowired
     IProdCatDefAtomSV catDefAtomSV;
+    @Autowired
+    IProdPriceLogAtomSV prodPriceLogAtomSV;
 
     /**
      * 添加标准品
@@ -359,18 +361,25 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         if(standedProduct == null)
             throw new BusinessException("", "找不到指定的租户="+marketPrice.getTenantId()+
                     "下的标准品="+marketPrice.getProductId()+"信息");
-        if(marketPrice.getOperTime() == null)
-            marketPrice.setOperTime(DateUtils.currTimeStamp());
         //更新市场价格信息
         int count = standedProductAtomSV.updateMarketPrice(marketPrice.getTenantId(),
                         marketPrice.getProductId(), marketPrice.getMarketPrice(),
                         marketPrice.getOperId(), marketPrice.getOperTime());
-        //更行日志
         if(count > 0){
+            //更行标准品日志
             StandedProductLog standedProductLog = new StandedProductLog();
             BeanUtils.copyProperties(standedProductLog, standedProduct);
             standedProductLogAtomSV.insert(standedProductLog);
+            //更新价格类日志
+            ProdPriceLog prodPriceLog = new ProdPriceLog();
+            BeanUtils.copyProperties(prodPriceLog,standedProduct);
+            //设置对象类型为标准品-SA
+            prodPriceLog.setObjType("SA");
+            prodPriceLog.setObjId(standedProduct.getStandedProdId());
+            prodPriceLog.setUpdatePrice(standedProduct.getMarketPrice());
+            prodPriceLogAtomSV.insert(prodPriceLog);
         }
+        
         return count;
     }
 

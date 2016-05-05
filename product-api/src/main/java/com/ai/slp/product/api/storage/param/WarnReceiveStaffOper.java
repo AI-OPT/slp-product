@@ -24,7 +24,7 @@ public class WarnReceiveStaffOper extends BaseInfo {
      * 预警对象标识
      */
     @NotNull(message = "预警对象标识不能为空",
-            groups = {IWarnReceiveStaffSV.deleteWarnReceiveStaff.class,
+            groups = {IWarnReceiveStaffSV.DeleteWarnReceiveStaff.class,
                     IWarnReceiveStaffSV.InstallWarnReceiveStaff.class
             })
     private String objectId;
@@ -33,7 +33,7 @@ public class WarnReceiveStaffOper extends BaseInfo {
      * 11:库存预警
      */
     @NotNull(message = "预警对象类型不能为空",
-            groups = {IWarnReceiveStaffSV.deleteWarnReceiveStaff.class,
+            groups = {IWarnReceiveStaffSV.DeleteWarnReceiveStaff.class,
                     IWarnReceiveStaffSV.InstallWarnReceiveStaff.class
             })
     private String objectType;
