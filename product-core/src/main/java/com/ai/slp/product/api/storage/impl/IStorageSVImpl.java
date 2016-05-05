@@ -37,7 +37,7 @@ public class IStorageSVImpl implements IStorageSV {
     @Override
     public BaseResponse installStorageGroup(STOStorageGroup storageGroup) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(storageGroup.getTenantId(),"");
-        groupBusiSV.installGroup(storageGroup);
+        groupBusiSV.addGroup(storageGroup);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);

@@ -18,6 +18,7 @@ import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupLogAtomSV;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +43,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
     @Autowired
     IStorageGroupLogAtomSV storageGroupLogAtomSV;
     @Autowired
-    IProductAtomSV productAtomSV;
-    @Autowired
-    IProductLogAtomSV productLogAtomSV;
-    @Autowired
-    IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
+    IProductBusiSV productBusiSV;
     /**
      * 添加库存组
      *
@@ -54,7 +51,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @return
      */
     @Override
-    public int installGroup(STOStorageGroup storageGroup) {
+    public int addGroup(STOStorageGroup storageGroup) {
         //查询标准品是否有销售属性
         String tenantId = storageGroup.getTenantId();
         String standedProdId = storageGroup.getProdId();
@@ -74,28 +71,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             BeanUtils.copyProperties(groupLog,groupLog);
             storageGroupLogAtomSV.install(groupLog);
         }
-        //查询类目是否有销售属性
-        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
-                tenantId,standedProduct.getProductCatId(), ProductCatConstants.ATTR_TYPE_SALE);
-
-        //添加商品,商品名称同标准品名称
-        Product product = new Product();
-        product.setTenantId(tenantId);
-        product.setProductCatId(standedProduct.getProductCatId());
-        product.setStandedProdId(standedProdId);
-        product.setStorageGroupId(group.getStorageGroupId());
-        product.setProductType(standedProduct.getProductType());
-        product.setProdName(standedProduct.getStandedProductName());//使用标准品名称设置为商品名称
-        product.setIsSaleAttr(catAttrAttches==null||catAttrAttches.isEmpty()?"N":"Y");
-        product.setCreateTime(storageGroup.getCreateTime());
-        product.setState(ProductConstants.STATE_ADD);//新增状态
-        product.setOperId(group.getCreateId());
-        product.setOperTime(storageGroup.getOperTime());
-        if (productAtomSV.installProduct(product)>0){
-            ProductLog productLog = new ProductLog();
-            BeanUtils.copyProperties(productLog,product);
-            productLogAtomSV.install(productLog);
-        }
+        //添加商品
+        productBusiSV.addProductWithStorageGroup(group,storageGroup.getOperId(),storageGroup.getCreateTime());
         return installNum;
     }
 
