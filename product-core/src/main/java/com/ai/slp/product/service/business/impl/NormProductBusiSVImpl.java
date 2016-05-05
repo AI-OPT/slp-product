@@ -7,6 +7,7 @@ import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.*;
 import com.ai.slp.product.service.atom.interfaces.*;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

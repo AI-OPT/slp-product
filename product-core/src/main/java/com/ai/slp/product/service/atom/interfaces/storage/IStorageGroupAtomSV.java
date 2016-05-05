@@ -1,4 +1,4 @@
-package com.ai.slp.product.service.atom.interfaces;
+package com.ai.slp.product.service.atom.interfaces.storage;
 
 /**
  * 库存组原子操作
