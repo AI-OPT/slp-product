@@ -167,14 +167,16 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             BeanUtils.copyProperties(stoStorage,storage);
             stoStorage.setGroupId(storage.getStorageGroupId());
             stoStorageList.add(stoStorage);
-            if (activePriority==null
-                    && (StorageConstants.GROUP_STATE_ACTIVE.equals(storage.getState())
-                    || StorageConstants.GROUP_STATE_AUTO_ACTIVE.equals(storage.getState()))){
-                activePriority = storage.getPriorityNumber();
-                storageTotal += storage.getTotalNum();
-            } else if(activePriority == storage.getPriorityNumber()
-                    && (StorageConstants.GROUP_STATE_ACTIVE.equals(storage.getState())
-                    || StorageConstants.GROUP_STATE_AUTO_ACTIVE.equals(storage.getState()))){
+            //如果库存为启用状态
+            if (StorageConstants.GROUP_STATE_ACTIVE.equals(storage.getState())
+                    || StorageConstants.GROUP_STATE_AUTO_ACTIVE.equals(storage.getState())){
+                //若为设置启用优先级,则设置第一个启用库存的优先级为启用优先级
+                if (activePriority==null)
+                    activePriority = storage.getPriorityNumber();
+                //若库存优先级与启用优先级不一致,则直接跳过
+                if(activePriority != storage.getPriorityNumber())
+                    continue;
+                //添加库存总量
                 storageTotal += storage.getTotalNum();
             }
         }
