@@ -5,7 +5,7 @@ package com.ai.slp.product.constants;
  *
  * Created by jackieliu on 16/4/29.
  */
-public final class StorageAndGroupConstants {
+public final class StorageConstants {
     /**
      * 启用
      */

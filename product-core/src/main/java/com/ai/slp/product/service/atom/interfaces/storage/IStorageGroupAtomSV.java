@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.atom.interfaces.storage;
 
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+
 /**
  * 库存组原子操作
  *
@@ -23,4 +25,12 @@ public interface IStorageGroupAtomSV {
      * @return
      */
     public int queryCountActive(String tenantId,String standedProdId);
+
+    /**
+     * 添加库存组信息
+     *
+     * @param group
+     * @return
+     */
+    public int installGroup(StorageGroup group);
 }

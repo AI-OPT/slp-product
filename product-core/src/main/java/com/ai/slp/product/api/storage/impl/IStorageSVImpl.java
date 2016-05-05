@@ -3,10 +3,14 @@ package com.ai.slp.product.api.storage.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,6 +21,8 @@ import java.util.List;
 @Service
 @Component
 public class IStorageSVImpl implements IStorageSV {
+    @Autowired
+    IStorageGroupBusiSV groupBusiSV;
     /**
      * 添加标准品库存组<br>
      *
@@ -30,7 +36,14 @@ public class IStorageSVImpl implements IStorageSV {
      */
     @Override
     public BaseResponse installStorage(STOStorageGroup storageGroup) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(storageGroup.getTenantId(),"");
+        groupBusiSV.installGroup(storageGroup);
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode("");
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     /**

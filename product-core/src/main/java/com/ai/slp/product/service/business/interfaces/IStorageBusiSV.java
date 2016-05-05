@@ -6,4 +6,5 @@ package com.ai.slp.product.service.business.interfaces;
  */
 
 public interface IStorageBusiSV {
+
 }

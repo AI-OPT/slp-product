@@ -1,9 +1,13 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
-import com.ai.slp.product.constants.StorageAndGroupConstants;
+import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupCriteria;
+import com.ai.slp.product.dao.mapper.interfaces.SysSequenceCreditMapper;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageGroupMapper;
+import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +22,8 @@ import java.util.List;
 public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
     @Autowired
     StorageGroupMapper groupMapper;
+    @Autowired
+    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
 
     /**
      * 没有废弃的库存组数量
@@ -29,8 +35,8 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
     public int queryCountNoDiscard(String tenantId, String standedProdId) {
         StorageGroupCriteria example = new StorageGroupCriteria();
         List<String> discard = new ArrayList<>();
-        discard.add(StorageAndGroupConstants.GROUP_STATE_DISCARD);
-        discard.add(StorageAndGroupConstants.GROUP_STATE_AUTO_DISCARD);
+        discard.add(StorageConstants.GROUP_STATE_DISCARD);
+        discard.add(StorageConstants.GROUP_STATE_AUTO_DISCARD);
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId)
                 .andStandedProdIdEqualTo(standedProdId)
@@ -48,12 +54,28 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
     public int queryCountActive(String tenantId, String standedProdId) {
         StorageGroupCriteria example = new StorageGroupCriteria();
         List<String> stateList = new ArrayList<>();
-        stateList.add(StorageAndGroupConstants.GROUP_STATE_ACTIVE);
-        stateList.add(StorageAndGroupConstants.GROUP_STATE_AUTO_ACTIVE);
+        stateList.add(StorageConstants.GROUP_STATE_ACTIVE);
+        stateList.add(StorageConstants.GROUP_STATE_AUTO_ACTIVE);
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId)
                 .andStandedProdIdEqualTo(standedProdId)
                 .andStateIn(stateList);
         return groupMapper.countByExample(example);
+    }
+
+    /**
+     * 添加库存组信息
+     *
+     * @param group
+     * @return
+     */
+    @Override
+    public int installGroup(StorageGroup group) {
+        group.setStorageGroupId(sequenceCreditAtomSV.gen12SeqByName());
+        if (group.getCreateTime()==null)
+            group.setCreateTime(DateUtils.currTimeStamp());
+        group.setOperTime(group.getCreateTime());
+        group.setOperId(group.getCreateId());
+        return groupMapper.insert(group);
     }
 }

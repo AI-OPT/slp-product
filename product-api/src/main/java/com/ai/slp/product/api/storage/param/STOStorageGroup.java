@@ -3,6 +3,7 @@ package com.ai.slp.product.api.storage.param;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -43,7 +44,7 @@ public class STOStorageGroup extends StorageGroupStatus {
      * 创建时间<br>
      * 更新时,直接忽略
      */
-    private Date createTime;
+    private Timestamp createTime;
 
     public String getProdId() {
         return prodId;
@@ -77,11 +78,11 @@ public class STOStorageGroup extends StorageGroupStatus {
         this.createId = createId;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 }

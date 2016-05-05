@@ -4,6 +4,7 @@ import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -43,7 +44,7 @@ public class StorageGroupStatus extends BaseInfo {
      * 若不填写,则设置接收时间
      * 查询时,使用操作时间范围的属性
      */
-    private Date operTime;
+    private Timestamp operTime;
 
     public Long getGroupId() {
         return groupId;
@@ -69,11 +70,11 @@ public class StorageGroupStatus extends BaseInfo {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
 }
