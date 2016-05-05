@@ -4,10 +4,12 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
@@ -86,10 +88,14 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         product.setProdName(standedProduct.getStandedProductName());//使用标准品名称设置为商品名称
         product.setIsSaleAttr(catAttrAttches==null||catAttrAttches.isEmpty()?"N":"Y");
         product.setCreateTime(storageGroup.getCreateTime());
-//        product.setState();
+        product.setState(ProductConstants.STATE_ADD);//新增状态
         product.setOperId(group.getCreateId());
         product.setOperTime(storageGroup.getOperTime());
-        productAtomSV.installProduct(product);
+        if (productAtomSV.installProduct(product)>0){
+            ProductLog productLog = new ProductLog();
+            BeanUtils.copyProperties(productLog,product);
+            productLogAtomSV.install(productLog);
+        }
         return installNum;
     }
 }

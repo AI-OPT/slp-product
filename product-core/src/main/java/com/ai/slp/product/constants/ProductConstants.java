@@ -34,6 +34,24 @@ public final class ProductConstants {
      * 审核拒绝
      */
     public static final String STATE_REJECT = "4";
-
-    public static final String STATE_SALING = "5";
+    /**
+     * 销售中
+     */
+    public static final String STATE_IN_SALE = "5";
+    /**
+     * 仓库中,(审核通过,手动下架后状态)
+     */
+    public static final String STATE_IN_STORE = "6";
+    /**
+     * 售罄下架
+     */
+    public static final String STATE_SALE_OUT = "61";
+    /**
+     * 停用下架
+     */
+    public static final String STATE_STOP = "62";
+    /**
+     * 废弃
+     */
+    public static final String STATE_DISCARD = "7";
 }
