@@ -82,7 +82,13 @@ public class INormProductSVImpl implements INormProductSV {
 
     @Override
     public BaseResponse updateMarketPrice(MarketPrice4Update marketPrice) throws BusinessException, SystemException {
-        return null;
+        normProductBusiSV.updateMarketPrice(marketPrice);
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode("");
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     /**
