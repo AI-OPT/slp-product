@@ -35,4 +35,13 @@ public interface IStorageGroupBusiSV {
      * @return
      */
     public List<StorageGroupInfo> queryGroupInfoByNormProId(String tenantId,String productId);
+
+    /**
+     * 查询单个库存组的信息
+     *
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    public StorageGroupInfo queryGroupInfoByGroupId(String tenantId,Long groupId);
 }

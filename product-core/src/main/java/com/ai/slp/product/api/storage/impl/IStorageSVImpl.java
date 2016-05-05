@@ -59,7 +59,8 @@ public class IStorageSVImpl implements IStorageSV {
      */
     @Override
     public StorageGroupInfo queryGroupInfoById(StorageGroupInfoQuery infoQuery) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(infoQuery.getTenantId(),"");
+        return groupBusiSV.queryGroupInfoByGroupId(infoQuery.getTenantId(),infoQuery.getGroupId());
     }
 
     /**

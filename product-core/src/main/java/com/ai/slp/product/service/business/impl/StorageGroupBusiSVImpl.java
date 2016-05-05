@@ -136,6 +136,28 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
     }
 
     /**
+     * 查询单个库存组的信息
+     *
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    @Override
+    public StorageGroupInfo queryGroupInfoByGroupId(String tenantId, Long groupId) {
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
+        if (storageGroup == null) {
+            logger.warn("租户ID:" + tenantId + ",库存组标识:" + groupId);
+            throw new BusinessException("", "未找到对应的标准品信息,租户ID:" + tenantId + ",库存组标识:" + groupId);
+        }
+        StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,storageGroup.getStandedProdId());
+        if (standedProduct==null) {
+            logger.warn("租户ID:" + tenantId + ",库存组标识:" + groupId);
+            throw new BusinessException("", "未找到对应的标准品信息,租户ID:" + tenantId + ",标准品标识:" + storageGroup.getStandedProdId());
+        }
+        return genStorageGroupInfo(storageGroup,standedProduct);
+    }
+
+    /**
      * 根据库存组信息产生接口返回库存组信息,包括库存组下的库存信息
      * @param group
      * @return
