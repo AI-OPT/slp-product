@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.interfaces.storage;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaff;
@@ -27,11 +28,11 @@ public interface IWarnReceiveStaffAtomSV {
      * 批量查询预警人信息
      * 
      * @param tenantId 租户ID
-     * @param storageId 库存标识
+     * @param storageId 预警对象标识(现指库存标识)
      * @return
      * @author lipeng
      */
-    public List<WarnReceiveStaff> selectWarnRecList(String tenantId,String storageId);
+    public List<WarnReceiveStaff> selectWarnRecList(String tenantId,String objectId);
     
     /**
      * 新增预警接受人(单个)
@@ -59,6 +60,6 @@ public interface IWarnReceiveStaffAtomSV {
      * @return
      * @author lipeng
      */
-    public int deleteWarnReceiveStaff(String tenantId,String warnReceiveStaffId);
+    public int deleteWarnReceiveStaff(String tenantId,String warnReceiveStaffId,long operId,Timestamp operTime);
     
 }

@@ -6,7 +6,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.storage.param.WarnReceStafForQuery;
-import com.ai.slp.product.api.storage.param.WarnReceiveStaff;
+import com.ai.slp.product.api.storage.param.WarnReceStaff;
 import com.ai.slp.product.api.storage.param.WarnReceiveStaffOper;
 
 /**
@@ -28,7 +28,7 @@ public interface IWarnReceiveStaffSV {
      * @author liutong5
      * @ApiCode WARN_RECE_0100
      */
-    public List<WarnReceiveStaff> queryByObjectIdOfStorage(WarnReceStafForQuery warnReceStafForQuery)
+    public List<WarnReceStaff> queryByObjectIdOfStorage(WarnReceStafForQuery warnReceStafForQuery)
             throws BusinessException,SystemException;
     @interface QueryByObjectIdOfStorage {}
 

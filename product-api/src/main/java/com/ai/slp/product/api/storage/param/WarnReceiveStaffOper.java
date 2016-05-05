@@ -4,6 +4,8 @@ import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IWarnReceiveStaffSV;
 
 import javax.validation.constraints.NotNull;
+
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -19,7 +21,7 @@ public class WarnReceiveStaffOper extends BaseInfo {
      * 进行添加时,等同于预警接收人标识
      * 作为查询结果时,等同于预警标识
      */
-    private long id;
+    private String id;
     /**
      * 预警对象标识
      */
@@ -44,13 +46,13 @@ public class WarnReceiveStaffOper extends BaseInfo {
     /**
      * 操作时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -78,11 +80,11 @@ public class WarnReceiveStaffOper extends BaseInfo {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
 }
