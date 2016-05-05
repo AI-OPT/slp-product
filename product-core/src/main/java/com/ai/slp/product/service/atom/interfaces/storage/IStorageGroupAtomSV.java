@@ -33,4 +33,21 @@ public interface IStorageGroupAtomSV {
      * @return
      */
     public int installGroup(StorageGroup group);
+
+    /**
+     * 查询指定标识的库存组
+     *
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    public StorageGroup queryByGroupId(String tenantId,Long groupId);
+
+    /**
+     * 更新指定库存组标识的库存组信息
+     *
+     * @param group
+     * @return
+     */
+    public int updateById(StorageGroup group);
 }

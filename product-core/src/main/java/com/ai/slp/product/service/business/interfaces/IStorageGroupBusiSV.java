@@ -15,4 +15,12 @@ public interface IStorageGroupBusiSV {
      * @return
      */
     public int installGroup(STOStorageGroup storageGroup);
+
+    /**
+     * 更新库存组
+     *
+     * @param storageGroup
+     * @return
+     */
+    public int updateGroup(STOStorageGroup storageGroup);
 }

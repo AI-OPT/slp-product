@@ -98,4 +98,33 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         }
         return installNum;
     }
+
+    /**
+     * 更新库存组
+     *
+     * @param storageGroup
+     * @return
+     */
+    @Override
+    public int updateGroup(STOStorageGroup storageGroup) {
+        //查询库存组是否存在
+        StorageGroup group = storageGroupAtomSV.queryByGroupId(
+                storageGroup.getTenantId(),storageGroup.getGroupId());
+        if (group == null)
+            throw new BusinessException("","要更新库存组信息不存在,租户ID:"+storageGroup.getTenantId()
+            +",库存组标识:"+storageGroup.getGroupId());
+        //设置可更新信息
+        group.setStorageGroupName(storageGroup.getGroupName());
+        group.setSerialNumber(storageGroup.getSerialNumber());
+        group.setOperId(storageGroup.getOperId());
+        group.setOperTime(storageGroup.getOperTime());
+        int updateNum = storageGroupAtomSV.updateById(group);
+        //添加库存组日志
+        if (updateNum>0){
+            StorageGroupLog groupLog = new StorageGroupLog();
+            BeanUtils.copyProperties(groupLog,groupLog);
+            storageGroupLogAtomSV.install(groupLog);
+        }
+        return updateNum;
+    }
 }

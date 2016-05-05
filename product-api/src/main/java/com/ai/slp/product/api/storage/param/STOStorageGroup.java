@@ -32,7 +32,7 @@ public class STOStorageGroup extends StorageGroupStatus {
     /**
      * 序列号
      */
-    private Long serialNumber;
+    private Short serialNumber;
     /**
      * 创建者ID<br>
      * 更新时,直接忽略
@@ -62,11 +62,11 @@ public class STOStorageGroup extends StorageGroupStatus {
         this.groupName = groupName;
     }
 
-    public Long getSerialNumber() {
+    public Short getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(Long serialNumber) {
+    public void setSerialNumber(Short serialNumber) {
         this.serialNumber = serialNumber;
     }
 

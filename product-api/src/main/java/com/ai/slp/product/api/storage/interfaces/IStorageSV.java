@@ -28,7 +28,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0100
      */
-    public BaseResponse installStorage(STOStorageGroup storageGroup)
+    public BaseResponse installStorageGroup(STOStorageGroup storageGroup)
         throws BusinessException,SystemException;
     @interface InstallStorage{}
 

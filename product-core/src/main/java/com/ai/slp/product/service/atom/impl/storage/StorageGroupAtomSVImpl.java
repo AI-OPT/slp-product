@@ -78,4 +78,32 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
         group.setOperId(group.getCreateId());
         return groupMapper.insert(group);
     }
+
+    /**
+     * 查询指定标识的库存组
+     *
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    @Override
+    public StorageGroup queryByGroupId(String tenantId, Long groupId) {
+        StorageGroupCriteria example = new StorageGroupCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andStorageGroupIdEqualTo(groupId);
+        List<StorageGroup> groupList = groupMapper.selectByExample(example);
+        return groupList==null || groupList.isEmpty()?null:groupList.get(0);
+    }
+
+    /**
+     * 更新指定库存组标识的库存组信息
+     *
+     * @param group
+     * @return
+     */
+    @Override
+    public int updateById(StorageGroup group) {
+        if (group.getOperTime()==null)
+            group.setOperTime(DateUtils.currTimeStamp());
+        return groupMapper.updateByPrimaryKey(group);
+    }
 }
