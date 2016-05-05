@@ -9,7 +9,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class WarnReceiveStaff extends WarnReceiveStaffOper {
+public class WarnReceStaff extends WarnReceiveStaffOper {
 
     /**
      * 预警人id
