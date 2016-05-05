@@ -60,4 +60,14 @@ public interface INormProductBusiSV {
      * @return
      */
     public Map<ProdCatAttrDef, List<ProductAttrValDef>> queryAttrOfProduct(String tenantId,String productId,String attrType);
+    
+    /**
+     * 更新标准品的市场价
+     * 
+     * @param marketPrice
+     * @return
+     * @author lipeng
+    *  @ApiCode
+     */
+    public int updateMarketPrice(MarketPrice4Update marketPrice);
 }
