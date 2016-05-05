@@ -39,7 +39,7 @@ public class StorageGroupInfo extends STOStorageGroup {
     /**
      * 优先级顺序库存集合
      */
-    private Map<Integer,List<STOStorage>> storageList;
+    private Map<Short,List<STOStorage>> storageList;
 
     public String getProdName() {
         return prodName;
@@ -73,11 +73,11 @@ public class StorageGroupInfo extends STOStorageGroup {
         this.createName = createName;
     }
 
-    public Map<Integer, List<STOStorage>> getStorageList() {
+    public Map<Short, List<STOStorage>> getStorageList() {
         return storageList;
     }
 
-    public void setStorageList(Map<Integer, List<STOStorage>> storageList) {
+    public void setStorageList(Map<Short, List<STOStorage>> storageList) {
         this.storageList = storageList;
     }
 

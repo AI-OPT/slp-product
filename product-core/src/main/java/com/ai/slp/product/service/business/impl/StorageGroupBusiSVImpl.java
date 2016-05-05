@@ -2,7 +2,9 @@ package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.api.storage.param.STOStorage;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
+import com.ai.slp.product.api.storage.param.StorageGroupInfo;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -10,12 +12,14 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
@@ -26,7 +30,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 库存组操作
@@ -44,6 +51,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
     IStorageGroupLogAtomSV storageGroupLogAtomSV;
     @Autowired
     IProductBusiSV productBusiSV;
+    @Autowired
+    IStorageAtomSV storageAtomSV;
     /**
      * 添加库存组
      *
@@ -103,5 +112,74 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             storageGroupLogAtomSV.install(groupLog);
         }
         return updateNum;
+    }
+
+    /**
+     * 查询指定标准品下的库存组信息,包括库存信息
+     *
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    @Override
+    public List<StorageGroupInfo> queryGroupInfoByNormProId(String tenantId, String productId) {
+        StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,productId);
+        if (standedProduct==null)
+            throw new BusinessException("","未找到对应的标准品信息,租户ID:"+tenantId+",标准品标识:"+productId);
+        //查询出标准品下的所有库存组,创建时间倒序
+        List<StorageGroupInfo> groupInfoList = new ArrayList<>();
+        List<StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId,productId);
+        for (StorageGroup storageGroup: groupList){
+            groupInfoList.add(genStorageGroupInfo(storageGroup,standedProduct));
+        }
+        return groupInfoList;
+    }
+
+    /**
+     * 根据库存组信息产生接口返回库存组信息,包括库存组下的库存信息
+     * @param group
+     * @return
+     */
+    private StorageGroupInfo genStorageGroupInfo(StorageGroup group,StandedProduct standedProduct){
+        StorageGroupInfo groupInfo = new StorageGroupInfo();
+        BeanUtils.copyProperties(groupInfo,group);
+        //填充库存组信息
+        groupInfo.setGroupId(group.getStorageGroupId());
+        groupInfo.setGroupName(group.getStorageGroupName());
+        groupInfo.setProdId(group.getStandedProdId());
+        groupInfo.setProdName(standedProduct.getStandedProductName());
+        //库存总量
+        Map<Short,List<STOStorage>> storageMap = new HashMap<>();
+        //====填充库存集合信息
+        //当前启用的优先级
+        Short activePriority = null;
+        //库存组库存总量
+        long storageTotal = 0;
+        //查询库存组的库存集合
+        List<Storage> storageList = storageAtomSV.queryOfGroup(group.getTenantId(),group.getStorageGroupId());
+        for (Storage storage:storageList){
+            List<STOStorage> stoStorageList = storageMap.get(storage.getPriorityNumber());
+            if (stoStorageList==null){
+                stoStorageList = new ArrayList<>();
+                storageMap.put(storage.getPriorityNumber(),stoStorageList);
+            }
+            STOStorage stoStorage = new STOStorage();
+            BeanUtils.copyProperties(stoStorage,storage);
+            stoStorage.setGroupId(storage.getStorageGroupId());
+            stoStorageList.add(stoStorage);
+            if (activePriority==null
+                    && (StorageConstants.GROUP_STATE_ACTIVE.equals(storage.getState())
+                    || StorageConstants.GROUP_STATE_AUTO_ACTIVE.equals(storage.getState()))){
+                activePriority = storage.getPriorityNumber();
+                storageTotal += storage.getTotalNum();
+            } else if(activePriority == storage.getPriorityNumber()
+                    && (StorageConstants.GROUP_STATE_ACTIVE.equals(storage.getState())
+                    || StorageConstants.GROUP_STATE_AUTO_ACTIVE.equals(storage.getState()))){
+                storageTotal += storage.getTotalNum();
+            }
+        }
+        groupInfo.setStorageTotal(storageTotal);
+        groupInfo.setStorageList(storageMap);
+        return groupInfo;
     }
 }

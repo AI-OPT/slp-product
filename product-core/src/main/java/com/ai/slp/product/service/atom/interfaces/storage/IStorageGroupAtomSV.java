@@ -2,6 +2,8 @@ package com.ai.slp.product.service.atom.interfaces.storage;
 
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
+import java.util.List;
+
 /**
  * 库存组原子操作
  *
@@ -50,4 +52,13 @@ public interface IStorageGroupAtomSV {
      * @return
      */
     public int updateById(StorageGroup group);
+
+    /**
+     * 查询某个标准品下的库存组列表,创建时间倒序显示
+     *
+     * @param tenantId
+     * @param standedProdId
+     * @return
+     */
+    public List<StorageGroup> queryOfStandedProd(String tenantId,String standedProdId);
 }

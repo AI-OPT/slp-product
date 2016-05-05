@@ -1,6 +1,9 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
+import com.ai.slp.product.api.storage.param.StorageGroupInfo;
+
+import java.util.List;
 
 /**
  * 库存组业务操作
@@ -23,4 +26,13 @@ public interface IStorageGroupBusiSV {
      * @return
      */
     public int updateGroup(STOStorageGroup storageGroup);
+
+    /**
+     * 查询指定标准品下的库存组信息,包括库存信息
+     *
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    public List<StorageGroupInfo> queryGroupInfoByNormProId(String tenantId,String productId);
 }

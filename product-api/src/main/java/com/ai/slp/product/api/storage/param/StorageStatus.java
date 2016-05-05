@@ -4,7 +4,7 @@ import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * 虚拟库存状态变更<br>
@@ -28,7 +28,7 @@ public class StorageStatus extends BaseInfo {
      */
     @NotNull(message = "库存状态不能为空",
             groups = { IStorageSV.ChargeStorageStatus.class })
-    private String status;
+    private String state;
     /**
      * 操作人ID
      */
@@ -39,7 +39,7 @@ public class StorageStatus extends BaseInfo {
      * 操作时间<br>
      * 若不填写,则设置接收时间
      */
-    private Date operTime;
+    private Timestamp operTime;
 
     public String getStorageId() {
         return storageId;
@@ -49,12 +49,12 @@ public class StorageStatus extends BaseInfo {
         this.storageId = storageId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getState() {
+        return state;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public Long getOperId() {
@@ -65,11 +65,11 @@ public class StorageStatus extends BaseInfo {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
+    public Timestamp getOperTime() {
         return operTime;
     }
 
-    public void setOperTime(Date operTime) {
+    public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
 }

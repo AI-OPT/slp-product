@@ -5,7 +5,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * 虚拟库存信息<br>
@@ -36,19 +36,19 @@ public class STOStorage extends StorageStatus{
      */
     @Min(value = 0,message = "虚拟库存量不能小于0",
             groups = {IStorageSV.SaveStorage.class})
-    private long totalNum;
+    private Long totalNum;
     /**
      * 预警库存量
      */
     @Min(value = 0,message = "预警库存量不能小于0",
             groups = {IStorageSV.SaveStorage.class})
-    private long warnNum;
+    private Long warnNum;
     /**
      * 优先级
      */
     @Min(value = 0,message = "优先级不能小于0",
             groups = {IStorageSV.SaveStorage.class})
-    private int priorityNumber;
+    private Short priorityNumber;
     /**
      * 销售价
      * 在查询时,忽略此字段
@@ -58,11 +58,11 @@ public class STOStorage extends StorageStatus{
     /**
      * 生效时间
      */
-    private Date activeTime;
+    private Timestamp activeTime;
     /**
      * 失效时间
      */
-    private Date inactiveTime;
+    private Timestamp inactiveTime;
 
     public String getStorageName() {
         return storageName;
@@ -80,44 +80,44 @@ public class STOStorage extends StorageStatus{
         this.groupId = groupId;
     }
 
-    public long getTotalNum() {
+    public Long getTotalNum() {
         return totalNum;
     }
 
-    public void setTotalNum(long totalNum) {
-        this.totalNum = totalNum;
-    }
-
-    public long getWarnNum() {
-        return warnNum;
-    }
-
-    public void setWarnNum(long warnNum) {
-        this.warnNum = warnNum;
-    }
-
-    public int getPriorityNumber() {
+    public Short getPriorityNumber() {
         return priorityNumber;
     }
 
-    public void setPriorityNumber(int priorityNumber) {
+    public void setPriorityNumber(Short priorityNumber) {
         this.priorityNumber = priorityNumber;
     }
 
-    public Date getActiveTime() {
+    public Timestamp getActiveTime() {
         return activeTime;
     }
 
-    public void setActiveTime(Date activeTime) {
+    public void setActiveTime(Timestamp activeTime) {
         this.activeTime = activeTime;
     }
 
-    public Date getInactiveTime() {
+    public Timestamp getInactiveTime() {
         return inactiveTime;
     }
 
-    public void setInactiveTime(Date inactiveTime) {
+    public void setInactiveTime(Timestamp inactiveTime) {
         this.inactiveTime = inactiveTime;
+    }
+
+    public void setTotalNum(Long totalNum) {
+        this.totalNum = totalNum;
+    }
+
+    public Long getWarnNum() {
+        return warnNum;
+    }
+
+    public void setWarnNum(Long warnNum) {
+        this.warnNum = warnNum;
     }
 
     public Long getSalePrice() {

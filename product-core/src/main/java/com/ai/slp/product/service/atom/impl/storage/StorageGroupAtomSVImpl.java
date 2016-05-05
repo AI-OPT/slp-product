@@ -106,4 +106,19 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
             group.setOperTime(DateUtils.currTimeStamp());
         return groupMapper.updateByPrimaryKey(group);
     }
+
+    /**
+     * 查询某个标准品下的库存组列表,创建时间倒序显示
+     *
+     * @param tenantId
+     * @param standedProdId
+     * @return
+     */
+    @Override
+    public List<StorageGroup> queryOfStandedProd(String tenantId, String standedProdId) {
+        StorageGroupCriteria example = new StorageGroupCriteria();
+        example.setOrderByClause(" CREATE_TIME desc");
+        example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
+        return groupMapper.selectByExample(example);
+    }
 }
