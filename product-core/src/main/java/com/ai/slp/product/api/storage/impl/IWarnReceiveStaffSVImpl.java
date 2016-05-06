@@ -2,6 +2,7 @@ package com.ai.slp.product.api.storage.impl;
 
 import java.util.List;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.opt.base.exception.BusinessException;
@@ -14,7 +15,10 @@ import com.ai.slp.product.api.storage.param.WarnReceStaff;
 import com.ai.slp.product.api.storage.param.WarnReceiveStaffOper;
 import com.ai.slp.product.service.business.interfaces.IWarnReceiveStaffBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
+import org.springframework.stereotype.Component;
 
+@Service
+@Component
 public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
     
     @Autowired

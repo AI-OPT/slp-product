@@ -12,7 +12,9 @@ import com.ai.slp.product.dao.mapper.interfaces.storage.WarnReceiveStaffMapper;
 import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IWarnReceiveStaffAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
 
     @Autowired

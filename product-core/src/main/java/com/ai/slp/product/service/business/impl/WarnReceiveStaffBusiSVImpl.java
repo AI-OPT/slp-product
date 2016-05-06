@@ -13,7 +13,11 @@ import com.ai.slp.product.api.storage.param.WarnReceiveStaffOper;
 import com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaff;
 import com.ai.slp.product.service.atom.interfaces.storage.IWarnReceiveStaffAtomSV;
 import com.ai.slp.product.service.business.interfaces.IWarnReceiveStaffBusiSV;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional
 public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
     
     @Autowired
