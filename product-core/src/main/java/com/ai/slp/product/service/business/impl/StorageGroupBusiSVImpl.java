@@ -99,6 +99,11 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         if (group == null)
             throw new BusinessException("","要更新库存组信息不存在,租户ID:"+storageGroup.getTenantId()
             +",库存组标识:"+storageGroup.getGroupId());
+        //已废弃,不允许变更
+        if (StorageConstants.GROUP_STATE_DISCARD.equals(group.getState())
+                || StorageConstants.GROUP_STATE_AUTO_DISCARD.equals(group.getState())){
+            throw new BusinessException("","库存组已经废弃,不允许更新信息");
+        }
         //设置可更新信息
         group.setStorageGroupName(storageGroup.getGroupName());
         group.setSerialNumber(storageGroup.getSerialNumber());
