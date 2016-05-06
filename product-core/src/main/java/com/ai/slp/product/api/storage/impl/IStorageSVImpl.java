@@ -214,7 +214,14 @@ public class IStorageSVImpl implements IStorageSV {
      */
     @Override
     public BaseResponse updateStorageGroupSalePrice(StorageGroupSalePrice salePrice) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(salePrice.getTenantId(),"");
+        groupBusiSV.updateStorageGroupPrice(salePrice);
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode("");
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     /**

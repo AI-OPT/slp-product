@@ -121,4 +121,11 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
         example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
         return groupMapper.selectByExample(example);
     }
+    
+    @Override
+    public int updateStorGroupPrice(StorageGroup storageGroup) {
+        if(storageGroup.getOperTime() == null)
+            storageGroup.setOperTime(DateUtils.currTimeStamp());
+        return groupMapper.updateByPrimaryKeySelective(storageGroup);
+    }
 }

@@ -45,6 +45,7 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
     public int insertWarnReceiveStaff(WarnReceiveStaff warnReceiveStaff) {
         if(warnReceiveStaff.getOperTime()==null)
             warnReceiveStaff.setOperTime(DateUtils.currTimeStamp());
+        warnReceiveStaff.setWarnReceiveStaffId(sysSequenceCreditAtomSV.getSeqByName()+"");
         return warnReceiveStaffMapper.insert(warnReceiveStaff);
     }
 

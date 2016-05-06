@@ -1,7 +1,9 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.api.storage.param.StorageGroupInfo;
+import com.ai.slp.product.api.storage.param.StorageGroupSalePrice;
 
 import java.util.List;
 
@@ -44,4 +46,13 @@ public interface IStorageGroupBusiSV {
      * @return
      */
     public StorageGroupInfo queryGroupInfoByGroupId(String tenantId,Long groupId);
+    
+    /**
+     * 更新库存组价格信息
+     * @param salePrice
+     * @return
+     * @author lipeng
+    *  @ApiCode
+     */
+    public int updateStorageGroupPrice(StorageGroupSalePrice salePrice);
 }

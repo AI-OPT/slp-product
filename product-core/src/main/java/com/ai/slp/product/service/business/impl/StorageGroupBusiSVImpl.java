@@ -1,39 +1,35 @@
 package com.ai.slp.product.service.business.impl;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.storage.param.STOStorage;
-import com.ai.slp.product.api.storage.param.STOStorageGroup;
-import com.ai.slp.product.api.storage.param.StorageGroupInfo;
-import com.ai.slp.product.constants.ProductCatConstants;
-import com.ai.slp.product.constants.ProductConstants;
-import com.ai.slp.product.constants.StorageConstants;
-import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
-import com.ai.slp.product.dao.mapper.bo.storage.Storage;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupLogAtomSV;
-import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.api.storage.param.STOStorage;
+import com.ai.slp.product.api.storage.param.STOStorageGroup;
+import com.ai.slp.product.api.storage.param.StorageGroupInfo;
+import com.ai.slp.product.api.storage.param.StorageGroupSalePrice;
+import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
+import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupLogAtomSV;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 
 /**
  * 库存组操作
@@ -53,6 +49,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
     IProductBusiSV productBusiSV;
     @Autowired
     IStorageAtomSV storageAtomSV;
+    @Autowired
+    IProdPriceLogAtomSV prodPriceLogAtomSV;
     /**
      * 添加库存组
      *
@@ -99,6 +97,11 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         if (group == null)
             throw new BusinessException("","要更新库存组信息不存在,租户ID:"+storageGroup.getTenantId()
             +",库存组标识:"+storageGroup.getGroupId());
+        //已废弃,不允许变更
+        if (StorageConstants.GROUP_STATE_DISCARD.equals(group.getState())
+                || StorageConstants.GROUP_STATE_AUTO_DISCARD.equals(group.getState())){
+            throw new BusinessException("","库存组已经废弃,不允许更新信息");
+        }
         //设置可更新信息
         group.setStorageGroupName(storageGroup.getGroupName());
         group.setSerialNumber(storageGroup.getSerialNumber());
@@ -205,5 +208,32 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         groupInfo.setStorageTotal(storageTotal);
         groupInfo.setStorageList(storageMap);
         return groupInfo;
+    }
+
+    @Override
+    public int updateStorageGroupPrice(StorageGroupSalePrice salePrice) {
+        if(salePrice == null)
+            return 0;
+        if(salePrice.getGroupId() == null || salePrice.getOperId() == null)
+            throw new BusinessException("", "找不到指定的库存组="+salePrice.getGroupId()+",和操作人="+salePrice.getOperId());
+        //判断库存是否废弃
+        if(storageGroupAtomSV.queryByGroupId(salePrice.getTenantId(), salePrice.getGroupId()).getState().equals("3"))
+            throw new BusinessException("", "废弃状态的库存组不能更新价格信息");
+        //填充价格等基本信息
+        StorageGroup storageGroup = new StorageGroup();
+        BeanUtils.copyProperties(storageGroup, salePrice);
+        int updateNum = storageGroupAtomSV.updateStorGroupPrice(storageGroup);
+        if(updateNum > 0){
+            ProdPriceLog prodPriceLog = new ProdPriceLog();
+            BeanUtils.copyProperties(prodPriceLog, storageGroup);
+//            prodPriceLog.setObjId(storageGroup.getStorageGroupId());
+            //设置类型为库存组
+            prodPriceLog.setObjType("SG");
+            prodPriceLog.setUpdatePrice(storageGroup.getLowSalePrice());
+            if(storageGroup.getHighSalePrice() != null)
+                prodPriceLog.setUpdatePeice2(storageGroup.getHighSalePrice());
+            prodPriceLogAtomSV.insert(prodPriceLog);
+        }
+        return storageGroupAtomSV.updateStorGroupPrice(storageGroup);
     }
 }

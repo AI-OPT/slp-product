@@ -61,4 +61,13 @@ public interface IStorageGroupAtomSV {
      * @return
      */
     public List<StorageGroup> queryOfStandedProd(String tenantId,String standedProdId);
+    
+    /**
+     * 更新库存组的最低最高销售价
+     * 
+     * @param storageGroup
+     * @return
+     * @author lipeng
+     */
+    public int updateStorGroupPrice(StorageGroup storageGroup);
 }
