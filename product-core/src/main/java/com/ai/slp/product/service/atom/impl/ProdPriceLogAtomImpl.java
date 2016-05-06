@@ -6,7 +6,9 @@ import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.interfaces.ProdPriceLogMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProdPriceLogAtomImpl implements IProdPriceLogAtomSV {
 
     @Autowired

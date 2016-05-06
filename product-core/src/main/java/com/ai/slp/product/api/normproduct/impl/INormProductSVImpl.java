@@ -104,7 +104,7 @@ public class INormProductSVImpl implements INormProductSV {
      * @ApiCode ATTR_VAL_0210
      */
     @Override
-    public Map<ProdCatAttrDef, List<ProductAttrValDef>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
+    public AttrMapOfNormProd queryAttrByNormProduct(AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
         return normProductBusiSV.queryAttrOfProduct(attrQuery.getTenantId(),attrQuery.getProductId(),attrQuery.getAttrType());
     }

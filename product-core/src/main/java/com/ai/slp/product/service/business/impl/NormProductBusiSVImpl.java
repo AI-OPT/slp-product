@@ -236,20 +236,24 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
      * @return
      */
     @Override
-    public Map<ProdCatAttrDef, List<ProductAttrValDef>> queryAttrOfProduct(String tenantId, String productId, String attrType) {
+    public AttrMapOfNormProd queryAttrOfProduct(String tenantId, String productId, String attrType) {
         //查询标准品信息
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,productId);
         if (standedProduct==null)
             throw new BusinessException("","未找到对应标准品信息,租户ID:"+tenantId+",标准品标识:"+productId);
-        Map<ProdCatAttrDef, List<ProductAttrValDef>> attrDefMap = new HashMap<>();
+        AttrMapOfNormProd attrMapOfNormProd = new AttrMapOfNormProd();
+        Map<Long,List<Long>> attrAndValMap = new HashMap<>();
+        Map<Long,ProdCatAttrDef> attrDefMap = new HashMap<>();
+        Map<Long,ProductAttrValDef> attrValDefMap = new HashMap<>();
         //查询对应类目属性
         List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,standedProduct.getProductCatId(),attrType);
         //查询标准品对应属性的属性值
         for (ProdCatAttrAttch catAttrAttch:catAttrAttches){
             ProdCatAttrDef catAttrDef = new ProdCatAttrDef();
             BeanUtils.copyProperties(catAttrDef,catAttrAttch);
-            List<ProductAttrValDef> attrValDefList = new ArrayList<>();
-            attrDefMap.put(catAttrDef,attrValDefList);
+            List<Long> attrValDefList = new ArrayList<>();
+            attrAndValMap.put(catAttrDef.getAttrId(),attrValDefList);
+            attrDefMap.put(catAttrDef.getAttrId(),catAttrDef);
             //查询属性值
             List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(
                     tenantId,productId,catAttrAttch.getAttrId());
@@ -266,11 +270,14 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
                     if (attrvalueDef!=null)
                         valDef.setAttrVal(attrvalueDef.getAttrValueName());
                 }
-                attrValDefList.add(valDef);
+                attrValDefMap.put(valDef.getProductAttrValId(),valDef);
+                attrValDefList.add(valDef.getProductAttrValId());
             }
         }
-
-        return attrDefMap;
+        attrMapOfNormProd.setAttrAndVal(attrAndValMap);
+        attrMapOfNormProd.setAttrDefMap(attrDefMap);
+        attrMapOfNormProd.setAttrValDefMap(attrValDefMap);
+        return attrMapOfNormProd;
     }
 
     /**

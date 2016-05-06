@@ -122,7 +122,7 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiCode ATTR_VAL_0210
      */
-    public Map<ProdCatAttrDef,List<ProductAttrValDef>> queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
+    public AttrMapOfNormProd queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
             throws BusinessException,SystemException;
     @interface QueryAttrByNormProduct{}
 }

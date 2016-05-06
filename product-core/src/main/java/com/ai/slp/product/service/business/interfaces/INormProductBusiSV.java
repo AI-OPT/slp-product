@@ -59,7 +59,7 @@ public interface INormProductBusiSV {
      * @param attrType
      * @return
      */
-    public Map<ProdCatAttrDef, List<ProductAttrValDef>> queryAttrOfProduct(String tenantId,String productId,String attrType);
+    public AttrMapOfNormProd queryAttrOfProduct(String tenantId,String productId,String attrType);
     
     /**
      * 更新标准品的市场价
