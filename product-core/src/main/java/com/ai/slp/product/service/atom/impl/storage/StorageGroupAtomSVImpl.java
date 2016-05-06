@@ -122,6 +122,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
         return groupMapper.selectByExample(example);
     }
     
+    /**
+     * 修改库存组价格信息
+     */
     @Override
     public int updateStorGroupPrice(StorageGroup storageGroup) {
         if(storageGroup.getOperTime() == null)

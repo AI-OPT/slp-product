@@ -223,6 +223,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         StorageGroup storageGroup = new StorageGroup();
         BeanUtils.copyProperties(storageGroup, salePrice);
         int updateNum = storageGroupAtomSV.updateStorGroupPrice(storageGroup);
+        //写入日志信息
         if(updateNum > 0){
             ProdPriceLog prodPriceLog = new ProdPriceLog();
             BeanUtils.copyProperties(prodPriceLog, storageGroup);
