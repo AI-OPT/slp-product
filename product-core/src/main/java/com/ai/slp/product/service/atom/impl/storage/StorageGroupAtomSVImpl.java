@@ -71,7 +71,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
      */
     @Override
     public int installGroup(StorageGroup group) {
-        group.setStorageGroupId(sequenceCreditAtomSV.gen12SeqByName());
+        group.setStorageGroupId(sequenceCreditAtomSV.gen12SeqByName()+"");
         if (group.getCreateTime()==null)
             group.setCreateTime(DateUtils.currTimeStamp());
         group.setOperTime(group.getCreateTime());
@@ -87,7 +87,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
      * @return
      */
     @Override
-    public StorageGroup queryByGroupId(String tenantId, Long groupId) {
+    public StorageGroup queryByGroupId(String tenantId, String groupId) {
         StorageGroupCriteria example = new StorageGroupCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andStorageGroupIdEqualTo(groupId);
         List<StorageGroup> groupList = groupMapper.selectByExample(example);

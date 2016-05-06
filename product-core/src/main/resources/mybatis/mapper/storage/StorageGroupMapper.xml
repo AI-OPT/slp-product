@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ai.slp.product.dao.mapper.interfaces.storage.StorageGroupMapper" >
   <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.StorageGroup" >
-    <id column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="DECIMAL" />
+    <id column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="VARCHAR" />
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
     <result column="ROUTE_GROUP_ID" property="routeGroupId" jdbcType="DECIMAL" />
@@ -98,15 +98,15 @@
       limit #{limitStart} , #{limitEnd}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from storage_group
-    where STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL}
+    where STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from storage_group
-    where STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL}
+    where STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupCriteria" >
     delete from storage_group
@@ -120,7 +120,7 @@
       LOW_SALE_PRICE, HIGH_SALE_PRICE, SERIAL_NUMBER, 
       STATE, CREATE_ID, CREATE_TIME, 
       OPER_ID, OPER_TIME)
-    values (#{storageGroupId,jdbcType=DECIMAL}, #{tenantId,jdbcType=VARCHAR}, #{standedProdId,jdbcType=VARCHAR}, 
+    values (#{storageGroupId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{standedProdId,jdbcType=VARCHAR}, 
       #{routeGroupId,jdbcType=DECIMAL}, #{storageGroupName,jdbcType=VARCHAR}, #{isSaleAttr,jdbcType=CHAR}, 
       #{lowSalePrice,jdbcType=DECIMAL}, #{highSalePrice,jdbcType=DECIMAL}, #{serialNumber,jdbcType=DECIMAL}, 
       #{state,jdbcType=VARCHAR}, #{createId,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
@@ -174,7 +174,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="storageGroupId != null" >
-        #{storageGroupId,jdbcType=DECIMAL},
+        #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="tenantId != null" >
         #{tenantId,jdbcType=VARCHAR},
@@ -227,7 +227,7 @@
     update storage_group
     <set >
       <if test="record.storageGroupId != null" >
-        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.tenantId != null" >
         TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
@@ -275,7 +275,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update storage_group
-    set STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+    set STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
       ROUTE_GROUP_ID = #{record.routeGroupId,jdbcType=DECIMAL},
@@ -336,7 +336,7 @@
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL}
+    where STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroup" >
     update storage_group
@@ -353,6 +353,6 @@
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       OPER_ID = #{operId,jdbcType=DECIMAL},
       OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
-    where STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL}
+    where STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR}
   </update>
 </mapper>

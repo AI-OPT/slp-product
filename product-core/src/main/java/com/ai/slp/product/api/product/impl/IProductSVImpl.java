@@ -1,7 +1,99 @@
 package com.ai.slp.product.api.product.impl;
 
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseResponse;
+import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.slp.product.api.product.interfaces.IProductSV;
+import com.ai.slp.product.api.product.param.*;
+
+import java.util.List;
+
 /**
  * Created by jackieliu on 16/4/27.
  */
-public class IProductSVImpl {
+public class IProductSVImpl implements IProductSV {
+    /**
+     * 查询商品列表<br>
+     *
+     * @param productQuery 查询对象
+     * @return 商品信息列表
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0100
+     */
+    @Override
+    public PageInfoForRes<Product4List> queryProductList(ProductListQuery productQuery) throws BusinessException, SystemException {
+        return null;
+    }
+
+    /**
+     * 根据商品标识查询商品详情<br>
+     *
+     * @param productInfoQuery 查询对象
+     * @return 商品信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0101
+     */
+    @Override
+    public ProductInfo queryProductById(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
+        return null;
+    }
+
+    /**
+     * 批量更新SKU销售价<br>
+     *
+     * @param skuSalPrices sku销售价结婚
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0102
+     */
+    @Override
+    public BaseResponse updateMultSKUSalePrice(List<ProdSkuSalPrice> skuSalPrices) throws BusinessException, SystemException {
+        return null;
+    }
+
+    /**
+     * 批量保存SKU信息<br>
+     *
+     * @param skuInfoList sku销售价
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0103
+     */
+    @Override
+    public BaseResponse saveMultSKUInfo(List<ProdSkuInfo> skuInfoList) throws BusinessException, SystemException {
+        return null;
+    }
+
+    /**
+     * 查询单个商城商品下的sku集合信息
+     *
+     * @param query sku销售价
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0104
+     */
+    @Override
+    public SkuSetForProduct querySkuSetForProduct(SkuSetForProductQuery query) throws BusinessException, SystemException {
+        //获取商品下所有SKU信息
+
+        //获取所有SKU的属性值列表
+
+        return null;
+    }
 }

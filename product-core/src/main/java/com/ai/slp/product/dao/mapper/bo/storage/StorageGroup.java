@@ -3,7 +3,7 @@ package com.ai.slp.product.dao.mapper.bo.storage;
 import java.sql.Timestamp;
 
 public class StorageGroup {
-    private Long storageGroupId;
+    private String storageGroupId;
 
     private String tenantId;
 
@@ -31,12 +31,12 @@ public class StorageGroup {
 
     private Timestamp operTime;
 
-    public Long getStorageGroupId() {
+    public String getStorageGroupId() {
         return storageGroupId;
     }
 
-    public void setStorageGroupId(Long storageGroupId) {
-        this.storageGroupId = storageGroupId;
+    public void setStorageGroupId(String storageGroupId) {
+        this.storageGroupId = storageGroupId == null ? null : storageGroupId.trim();
     }
 
     public String getTenantId() {

@@ -29,7 +29,7 @@ public class STOStorage extends StorageStatus{
      */
     @NotNull(message = "库存组标识不能为空",
             groups = { IStorageSV.SaveStorage.class })
-    private Long groupId;
+    private String groupId;
 
     /**
      * 虚拟库存量
@@ -72,11 +72,11 @@ public class STOStorage extends StorageStatus{
         this.storageName = storageName;
     }
 
-    public Long getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Long groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 

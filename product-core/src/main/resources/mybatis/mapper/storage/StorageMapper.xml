@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.Storage" >
     <id column="STORAGE_ID" property="storageId" jdbcType="VARCHAR" />
     <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
-    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="DECIMAL" />
+    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="VARCHAR" />
     <result column="STORAGE_NAME" property="storageName" jdbcType="VARCHAR" />
     <result column="IS_SALE_ATTR" property="isSaleAttr" jdbcType="CHAR" />
     <result column="SALE_PRICE" property="salePrice" jdbcType="DECIMAL" />
@@ -123,7 +123,7 @@
       ACTIVE_TIME, INACTIVE_TIME, PRIORITY_NUMBER, 
       SERIAL_NUMBER, STATE, OPER_ID, 
       OPER_TIME)
-    values (#{storageId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=DECIMAL}, 
+    values (#{storageId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=VARCHAR}, 
       #{storageName,jdbcType=VARCHAR}, #{isSaleAttr,jdbcType=CHAR}, #{salePrice,jdbcType=DECIMAL}, 
       #{totalNum,jdbcType=DECIMAL}, #{usableNum,jdbcType=DECIMAL}, #{warnNum,jdbcType=DECIMAL}, 
       #{activeTime,jdbcType=TIMESTAMP}, #{inactiveTime,jdbcType=TIMESTAMP}, #{priorityNumber,jdbcType=DECIMAL}, 
@@ -190,7 +190,7 @@
         #{prodId,jdbcType=VARCHAR},
       </if>
       <if test="storageGroupId != null" >
-        #{storageGroupId,jdbcType=DECIMAL},
+        #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="storageName != null" >
         #{storageName,jdbcType=VARCHAR},
@@ -249,7 +249,7 @@
         PROD_ID = #{record.prodId,jdbcType=VARCHAR},
       </if>
       <if test="record.storageGroupId != null" >
-        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.storageName != null" >
         STORAGE_NAME = #{record.storageName,jdbcType=VARCHAR},
@@ -299,7 +299,7 @@
     update storage
     set STORAGE_ID = #{record.storageId,jdbcType=VARCHAR},
       PROD_ID = #{record.prodId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       STORAGE_NAME = #{record.storageName,jdbcType=VARCHAR},
       IS_SALE_ATTR = #{record.isSaleAttr,jdbcType=CHAR},
       SALE_PRICE = #{record.salePrice,jdbcType=DECIMAL},
@@ -324,7 +324,7 @@
         PROD_ID = #{prodId,jdbcType=VARCHAR},
       </if>
       <if test="storageGroupId != null" >
-        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="storageName != null" >
         STORAGE_NAME = #{storageName,jdbcType=VARCHAR},
@@ -371,7 +371,7 @@
   <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.storage.Storage" >
     update storage
     set PROD_ID = #{prodId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       STORAGE_NAME = #{storageName,jdbcType=VARCHAR},
       IS_SALE_ATTR = #{isSaleAttr,jdbcType=CHAR},
       SALE_PRICE = #{salePrice,jdbcType=DECIMAL},

@@ -275,52 +275,62 @@ public class StorageGroupLogCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdEqualTo(Long value) {
+        public Criteria andStorageGroupIdEqualTo(String value) {
             addCriterion("STORAGE_GROUP_ID =", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdNotEqualTo(Long value) {
+        public Criteria andStorageGroupIdNotEqualTo(String value) {
             addCriterion("STORAGE_GROUP_ID <>", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdGreaterThan(Long value) {
+        public Criteria andStorageGroupIdGreaterThan(String value) {
             addCriterion("STORAGE_GROUP_ID >", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andStorageGroupIdGreaterThanOrEqualTo(String value) {
             addCriterion("STORAGE_GROUP_ID >=", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdLessThan(Long value) {
+        public Criteria andStorageGroupIdLessThan(String value) {
             addCriterion("STORAGE_GROUP_ID <", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdLessThanOrEqualTo(Long value) {
+        public Criteria andStorageGroupIdLessThanOrEqualTo(String value) {
             addCriterion("STORAGE_GROUP_ID <=", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdIn(List<Long> values) {
+        public Criteria andStorageGroupIdLike(String value) {
+            addCriterion("STORAGE_GROUP_ID like", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdNotLike(String value) {
+            addCriterion("STORAGE_GROUP_ID not like", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdIn(List<String> values) {
             addCriterion("STORAGE_GROUP_ID in", values, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdNotIn(List<Long> values) {
+        public Criteria andStorageGroupIdNotIn(List<String> values) {
             addCriterion("STORAGE_GROUP_ID not in", values, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdBetween(Long value1, Long value2) {
+        public Criteria andStorageGroupIdBetween(String value1, String value2) {
             addCriterion("STORAGE_GROUP_ID between", value1, value2, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdNotBetween(Long value1, Long value2) {
+        public Criteria andStorageGroupIdNotBetween(String value1, String value2) {
             addCriterion("STORAGE_GROUP_ID not between", value1, value2, "storageGroupId");
             return (Criteria) this;
         }

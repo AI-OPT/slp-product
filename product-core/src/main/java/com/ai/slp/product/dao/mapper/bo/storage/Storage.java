@@ -7,7 +7,7 @@ public class Storage {
 
     private String prodId;
 
-    private Long storageGroupId;
+    private String storageGroupId;
 
     private String storageName;
 
@@ -51,12 +51,12 @@ public class Storage {
         this.prodId = prodId == null ? null : prodId.trim();
     }
 
-    public Long getStorageGroupId() {
+    public String getStorageGroupId() {
         return storageGroupId;
     }
 
-    public void setStorageGroupId(Long storageGroupId) {
-        this.storageGroupId = storageGroupId;
+    public void setStorageGroupId(String storageGroupId) {
+        this.storageGroupId = storageGroupId == null ? null : storageGroupId.trim();
     }
 
     public String getStorageName() {

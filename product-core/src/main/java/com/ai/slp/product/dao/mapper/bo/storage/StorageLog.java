@@ -9,7 +9,7 @@ public class StorageLog {
 
     private Long routeGroupId;
 
-    private Long storageGroupId;
+    private String storageGroupId;
 
     private String prodId;
 
@@ -59,12 +59,12 @@ public class StorageLog {
         this.routeGroupId = routeGroupId;
     }
 
-    public Long getStorageGroupId() {
+    public String getStorageGroupId() {
         return storageGroupId;
     }
 
-    public void setStorageGroupId(Long storageGroupId) {
-        this.storageGroupId = storageGroupId;
+    public void setStorageGroupId(String storageGroupId) {
+        this.storageGroupId = storageGroupId == null ? null : storageGroupId.trim();
     }
 
     public String getProdId() {

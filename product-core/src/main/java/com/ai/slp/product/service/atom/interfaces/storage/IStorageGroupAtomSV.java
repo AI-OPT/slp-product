@@ -43,7 +43,7 @@ public interface IStorageGroupAtomSV {
      * @param groupId
      * @return
      */
-    public StorageGroup queryByGroupId(String tenantId,Long groupId);
+    public StorageGroup queryByGroupId(String tenantId,String groupId);
 
     /**
      * 更新指定库存组标识的库存组信息

@@ -6,7 +6,7 @@
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="PRODUCT_CAT_ID" property="productCatId" jdbcType="VARCHAR" />
     <result column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
-    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="DECIMAL" />
+    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="VARCHAR" />
     <result column="PRODUCT_TYPE" property="productType" jdbcType="VARCHAR" />
     <result column="PROD_NAME" property="prodName" jdbcType="VARCHAR" />
     <result column="PRODUCT_SELL_POINT" property="productSellPoint" jdbcType="VARCHAR" />
@@ -141,7 +141,7 @@
       STATE, OPER_ID, OPER_TIME
       )
     values (#{prodId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{productCatId,jdbcType=VARCHAR}, 
-      #{standedProdId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=DECIMAL}, #{productType,jdbcType=VARCHAR}, 
+      #{standedProdId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, 
       #{prodName,jdbcType=VARCHAR}, #{productSellPoint,jdbcType=VARCHAR}, #{activeType,jdbcType=CHAR}, 
       #{activeTime,jdbcType=TIMESTAMP}, #{inactiveTime,jdbcType=TIMESTAMP}, #{activeCycle,jdbcType=DECIMAL}, 
       #{unit,jdbcType=CHAR}, #{proDetailContent,jdbcType=VARCHAR}, #{isSaleAttr,jdbcType=CHAR}, 
@@ -250,7 +250,7 @@
         #{standedProdId,jdbcType=VARCHAR},
       </if>
       <if test="storageGroupId != null" >
-        #{storageGroupId,jdbcType=DECIMAL},
+        #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="productType != null" >
         #{productType,jdbcType=VARCHAR},
@@ -342,7 +342,7 @@
         STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
       </if>
       <if test="record.storageGroupId != null" >
-        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.productType != null" >
         PRODUCT_TYPE = #{record.productType,jdbcType=VARCHAR},
@@ -421,7 +421,7 @@
       TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
       STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       PRODUCT_TYPE = #{record.productType,jdbcType=VARCHAR},
       PROD_NAME = #{record.prodName,jdbcType=VARCHAR},
       PRODUCT_SELL_POINT = #{record.productSellPoint,jdbcType=VARCHAR},
@@ -461,7 +461,7 @@
         STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
       </if>
       <if test="storageGroupId != null" >
-        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="productType != null" >
         PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
@@ -537,7 +537,7 @@
     set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
       STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
       PROD_NAME = #{prodName,jdbcType=VARCHAR},
       PRODUCT_SELL_POINT = #{productSellPoint,jdbcType=VARCHAR},
