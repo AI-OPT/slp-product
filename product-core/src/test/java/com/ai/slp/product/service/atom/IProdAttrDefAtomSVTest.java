@@ -41,7 +41,7 @@ public class IProdAttrDefAtomSVTest {
         Assert.assertNotNull(selRet);
         Assert.assertEquals(attrId,selRet.getAttrId().longValue());
         //删除
-        prodAttrDefAtomSV.deleteById(tenantId,attrId,1l,null);
+        prodAttrDefAtomSV.deleteById(tenantId,attrId,1l);
 
         //查询验证是否存在
         selRet = prodAttrDefAtomSV.selectById(tenantId,attrId);

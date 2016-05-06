@@ -52,11 +52,11 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     }
 
     @Override
-    public int deleteById(String tenantId, Long attrId, Long operId, Timestamp operTime) {
+    public int deleteById(String tenantId, Long attrId, Long operId) {
         ProdAttrDef prodAttrDef = new ProdAttrDef();
         prodAttrDef.setState(CommonSatesConstants.STATE_INACTIVE);
         prodAttrDef.setOperId(operId);
-        prodAttrDef.setOperTime(operTime != null ? operTime : DateUtils.currTimeStamp());
+        prodAttrDef.setOperTime(DateUtils.currTimeStamp());
         
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId);

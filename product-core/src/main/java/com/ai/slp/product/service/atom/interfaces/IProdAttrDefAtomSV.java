@@ -37,7 +37,7 @@ public interface IProdAttrDefAtomSV {
      * @param attrId 商品属性标识
      * @return
      */
-    public int deleteById(String tenantId,Long attrId, Long operId, Timestamp operTime);
+    public int deleteById(String tenantId,Long attrId, Long operId);
     
     /**
      * 分页查询属性

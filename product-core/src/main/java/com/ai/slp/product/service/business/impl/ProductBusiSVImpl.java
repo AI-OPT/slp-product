@@ -42,8 +42,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @return
      */
     @Override
-    public int addProductWithStorageGroup(
-            StorageGroup group, Long operId, Timestamp operTime) {
+    public int addProductWithStorageGroup(StorageGroup group, Long operId) {
         //查询库存组对应的标准品
         String tenantId = group.getTenantId();
         String standedProdId = group.getStandedProdId();
@@ -64,7 +63,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         product.setProductType(standedProduct.getProductType());
         product.setProdName(standedProduct.getStandedProductName());//使用标准品名称设置为商品名称
         product.setIsSaleAttr(catAttrAttches==null||catAttrAttches.isEmpty()?"N":"Y");
-        product.setCreateTime(operTime);
         product.setState(ProductConstants.STATE_ADD);//新增状态
         product.setOperId(group.getCreateId());
         int installNum = productAtomSV.installProduct(product);

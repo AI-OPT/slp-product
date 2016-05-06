@@ -67,11 +67,11 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
     }
 
     @Override
-    public int deleteWarnReceiveStaff(String tenantId, String warnReceiveStaffId, Long operId,Timestamp operTime) {
+    public int deleteWarnReceiveStaff(String tenantId, String warnReceiveStaffId, Long operId) {
         WarnReceiveStaff warnReceiveStaff = new WarnReceiveStaff();
         warnReceiveStaff.setState(CommonSatesConstants.STATE_INACTIVE);
         warnReceiveStaff.setOperId(operId);
-        warnReceiveStaff.setOperTime(operTime == null ? DateUtils.currTimeStamp() : operTime);
+        warnReceiveStaff.setOperTime(DateUtils.currTimeStamp());
         WarnReceiveStaffCriteria example = new WarnReceiveStaffCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andWarnReceiveStaffIdEqualTo(warnReceiveStaffId);
         return warnReceiveStaffMapper.updateByExampleSelective(warnReceiveStaff, example);

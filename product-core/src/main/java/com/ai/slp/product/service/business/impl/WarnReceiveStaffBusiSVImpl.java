@@ -76,7 +76,7 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
             if(warnReceiveStaffOper.getOperId() == 0)
                 throw new BusinessException("", "找不到操作人="+warnReceiveStaffOper.getOperId());
             warnReceiveStaffAtomSV.deleteWarnReceiveStaff(warnReceiveStaffOper.getTenantId(), 
-                    warnReceiveStaffOper.getId(), warnReceiveStaffOper.getOperId(), warnReceiveStaffOper.getOperTime());
+                    warnReceiveStaffOper.getId(), warnReceiveStaffOper.getOperId());
             count++;
         }
         return count;

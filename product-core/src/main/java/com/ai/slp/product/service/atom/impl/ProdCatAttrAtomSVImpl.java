@@ -60,11 +60,11 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
      * @return
      */
     @Override
-    public int deleteByCatAttrId(String tenantId, String catId, Long attrId, Long operId, Timestamp operTime) {
+    public int deleteByCatAttrId(String tenantId, String catId, Long attrId, Long operId) {
         ProdCatAttr prodCatAttr = new ProdCatAttr();
         prodCatAttr.setState(CommonSatesConstants.STATE_INACTIVE);
         prodCatAttr.setOperId(operId);
-        prodCatAttr.setOperTime(operTime!=null?operTime: DateUtils.currTimeStamp());
+        prodCatAttr.setOperTime(DateUtils.currTimeStamp());
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andProductCatIdEqualTo(catId);
         return prodCatAttrMapper.updateByExampleSelective(prodCatAttr,example);
@@ -72,11 +72,11 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
 
 
     @Override
-    public int deleteByCatId(String tenantId,String catAttrId,Long operId, Timestamp operTime) {
+    public int deleteByCatId(String tenantId,String catAttrId,Long operId) {
         ProdCatAttr prodCatAttr = new ProdCatAttr();
         prodCatAttr.setState(CommonSatesConstants.STATE_INACTIVE);
         prodCatAttr.setOperId(operId);
-        prodCatAttr.setOperTime(operTime!=null?operTime: DateUtils.currTimeStamp());
+        prodCatAttr.setOperTime(DateUtils.currTimeStamp());
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdEqualTo(catAttrId);
         return prodCatAttrMapper.updateByExampleSelective(prodCatAttr,example);

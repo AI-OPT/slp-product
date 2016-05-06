@@ -20,9 +20,10 @@ public interface IProdCatAttrValAtomSV {
      *
      * @param tenantId
      * @param catAttrId
+     * @param operId
      * @return
      */
-    public int deleteByCat(String tenantId,String catAttrId,Long operId, Timestamp operTime);
+    public int deleteByCat(String tenantId,String catAttrId,Long operId);
 
     /**
      * 删除类目属性下的一个属性值
@@ -31,10 +32,9 @@ public interface IProdCatAttrValAtomSV {
      * @param catAttrId
      * @param attrValId
      * @param operId
-     * @param operTime
      * @return
      */
-    public int deleteValByAttr(String tenantId,String catAttrId,String attrValId,Long operId, Timestamp operTime);
+    public int deleteValByAttr(String tenantId,String catAttrId,String attrValId,Long operId);
 
     /**
      * 查询类目属性关系对应的属性值

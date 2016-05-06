@@ -122,7 +122,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     }
 
     @Override
-    public void deleteByCatId(String tenantId, String productCatId,Long operId, Timestamp operTime) {
+    public void deleteByCatId(String tenantId, String productCatId,Long operId) {
         //查询是否存在类目
         ProductCat productCat = prodCatDefAtomSV.selectById(tenantId,productCatId);
         if (productCat==null)
@@ -139,9 +139,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         if (catAttrList!=null && catAttrList.size()>0){
             for (ProdCatAttr catAttr:catAttrList){
                 //删除类目下属性与属性值的对应关系
-                prodCatAttrValAtomSV.deleteByCat(tenantId,catAttr.getCatAttrId(),operId,operTime);
+                prodCatAttrValAtomSV.deleteByCat(tenantId,catAttr.getCatAttrId(),operId);
                 //删除类目与属性对应关系
-                prodCatAttrAtomSV.deleteByCatId(tenantId,catAttr.getCatAttrId(),operId,operTime);
+                prodCatAttrAtomSV.deleteByCatId(tenantId,catAttr.getCatAttrId(),operId);
             }
         }
         //删除类目
@@ -242,14 +242,14 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         if (StringUtils.isNotBlank(catAttrVal.getAttrvalueDefId())){
             //删除属性值
             prodCatAttrValAtomSV.deleteValByAttr(catAttrVal.getTenantId(),catAttrVal.getCatAttrId(),
-                    catAttrVal.getAttrvalueDefId(),catAttrVal.getOperId(),catAttrVal.getOperTime());
+                    catAttrVal.getAttrvalueDefId(),catAttrVal.getOperId());
         }else{//删除整个属性值
             //删除关联属性值
             prodCatAttrValAtomSV.deleteByCat(catAttrVal.getTenantId(),catAttrVal.getCatAttrId(),
-                    catAttrVal.getOperId(),catAttrVal.getOperTime());
+                    catAttrVal.getOperId());
             //删除关联属性
             prodCatAttrAtomSV.deleteByCatAttrId(catAttrVal.getTenantId(),catAttrVal.getProductCatId(),
-                    catAttrVal.getAttrId(),catAttrVal.getOperId(),catAttrVal.getOperTime());
+                    catAttrVal.getAttrId(),catAttrVal.getOperId());
         }
     }
 

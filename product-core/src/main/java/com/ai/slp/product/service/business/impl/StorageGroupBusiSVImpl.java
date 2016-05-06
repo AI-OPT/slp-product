@@ -79,7 +79,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             storageGroupLogAtomSV.install(groupLog);
         }
         //添加商品
-        productBusiSV.addProductWithStorageGroup(group,storageGroup.getOperId(),storageGroup.getCreateTime());
+        productBusiSV.addProductWithStorageGroup(group,storageGroup.getOperId());
         return installNum;
     }
 

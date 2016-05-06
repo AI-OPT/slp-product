@@ -208,7 +208,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     }
 
     @Override
-    public void discardProduct(String tenantId, String productId, Long operId, Date operTime) {
+    public void discardProduct(String tenantId, String productId, Long operId) {
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,productId);
         if (standedProduct==null)
             throw  new BusinessException("","不存在指定标准品,租户ID:"+tenantId+",标准品标识:"+productId);
@@ -217,7 +217,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         if (noDiscardNum>0)
             throw new BusinessException("","该标准品下存在["+noDiscardNum+"]个未废弃库存组");
         standedProduct.setOperId(operId);
-        standedProduct.setOperTime(operTime==null?null:DateUtils.toTimeStamp(operTime));
+        standedProduct.setOperTime(standedProduct.getOperTime());
         standedProduct.setState(StandedProductConstants.STATUS_DISCARD);//设置废弃
         //添加日志
         if (standedProductAtomSV.updateObj(standedProduct)>0){
@@ -364,7 +364,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         //更新市场价格信息
         int count = standedProductAtomSV.updateMarketPrice(marketPrice.getTenantId(),
                         marketPrice.getProductId(), marketPrice.getMarketPrice(),
-                        marketPrice.getOperId(), marketPrice.getOperTime());
+                        marketPrice.getOperId());
         if(count > 0){
             //更行标准品日志
             StandedProductLog standedProductLog = new StandedProductLog();

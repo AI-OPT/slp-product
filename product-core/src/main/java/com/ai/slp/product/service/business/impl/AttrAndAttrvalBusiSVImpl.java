@@ -106,8 +106,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         
         if (attrPam.getTenantId() == null)
             throw new BusinessException("", "未找到指定的属性信息，租户ID=" + attrPam.getTenantId());
-        return prodAttrDefAtomSV.deleteById(attrPam.getTenantId(), attrPam.getAttrId(),
-                attrPam.getOperId(), attrPam.getOperTime());
+        return prodAttrDefAtomSV.deleteById(attrPam.getTenantId(), attrPam.getAttrId(),attrPam.getOperId());
     }
 
     @Override
@@ -166,8 +165,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             throw new BusinessException("", "该属性已被使用，不能删除");
         
         return prodAttrValDefAtomSV.deleteProdAttrVal(attrValUniqueReq.getTenantId(),
-                attrValUniqueReq.getAttrvalueDefId(), attrValUniqueReq.getOperId(),
-                attrValUniqueReq.getOperTime());
+                attrValUniqueReq.getAttrvalueDefId(), attrValUniqueReq.getOperId());
     }
 
     @Override

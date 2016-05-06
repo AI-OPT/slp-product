@@ -18,6 +18,5 @@ public interface IProductBusiSV {
      * @param group
      * @return
      */
-    public int addProductWithStorageGroup(
-            StorageGroup group, Long operId, Timestamp operTime);
+    public int addProductWithStorageGroup(StorageGroup group, Long operId);
 }

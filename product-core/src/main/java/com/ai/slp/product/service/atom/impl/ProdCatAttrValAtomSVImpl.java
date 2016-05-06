@@ -27,13 +27,13 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
      * @return
      */
     @Override
-    public int deleteByCat(String tenantId, String catAttrId, Long operId, Timestamp operTime) {
+    public int deleteByCat(String tenantId, String catAttrId, Long operId) {
         ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdEqualTo(catAttrId);
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
         attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
         attrValue.setOperId(operId);
-        attrValue.setOperTime(operTime!=null?operTime: DateUtils.currTimeStamp());
+        attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.updateByExampleSelective(attrValue,example);
     }
 
@@ -48,14 +48,14 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
      * @return
      */
     @Override
-    public int deleteValByAttr(String tenantId, String catAttrId, String attrValId, Long operId, Timestamp operTime) {
+    public int deleteValByAttr(String tenantId, String catAttrId, String attrValId, Long operId) {
         ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andCatAttrIdEqualTo(catAttrId).andAttrvalueDefIdGreaterThan(attrValId);
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
         attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
         attrValue.setOperId(operId);
-        attrValue.setOperTime(operTime!=null?operTime: DateUtils.currTimeStamp());
+        attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.updateByExampleSelective(attrValue,example);
     }
 

@@ -58,10 +58,8 @@ public interface IStandedProductAtomSV {
      * @param productId
      * @param marketPrice
      * @param operId
-     * @param operTime
      * @return
      * @author lipeng
-    *  @ApiCode
      */
-    public int updateMarketPrice(String tenantId,String productId,long marketPrice,Long operId,Timestamp operTime);
+    public int updateMarketPrice(String tenantId,String productId,long marketPrice,Long operId);
 }

@@ -46,10 +46,11 @@ public interface IProdAttrValDefAtomSV {
      * 
      * @param tenantId
      * @param attrvalueDefId
+     * @param operId
      * @return
      * @author lipeng
      */
-    public int deleteProdAttrVal(String tenantId,String attrvalueDefId, Long operId, Timestamp operTime);
+    public int deleteProdAttrVal(String tenantId,String attrvalueDefId, Long operId);
     
     /**
      * 根据信息分页查询属性值信息

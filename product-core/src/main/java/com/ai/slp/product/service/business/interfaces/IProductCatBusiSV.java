@@ -47,7 +47,7 @@ public interface IProductCatBusiSV {
      * @param tenantId
      * @param productCatId
      */
-    public void deleteByCatId(String tenantId, String productCatId, Long operId, Timestamp operTime);
+    public void deleteByCatId(String tenantId, String productCatId, Long operId);
 
     /**
      * 查询类目的类目链
