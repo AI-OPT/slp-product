@@ -16,4 +16,13 @@ public interface IStorageAtomSV {
      * @return
      */
     public List<Storage> queryOfGroup(String tenantId,Long groupId);
+    
+    /**
+     * 查询库存是否存在(通过预警对象标识) 
+     * @param tenantId
+     * @param objectId
+     * @return
+     * @author lipeng
+     */
+    public int findStorage(String tenantId,String objectId);
 }
