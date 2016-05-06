@@ -11,7 +11,7 @@ public class Product {
 
     private String standedProdId;
 
-    private Long storageGroupId;
+    private String storageGroupId;
 
     private String productType;
 
@@ -89,12 +89,12 @@ public class Product {
         this.standedProdId = standedProdId == null ? null : standedProdId.trim();
     }
 
-    public Long getStorageGroupId() {
+    public String getStorageGroupId() {
         return storageGroupId;
     }
 
-    public void setStorageGroupId(Long storageGroupId) {
-        this.storageGroupId = storageGroupId;
+    public void setStorageGroupId(String storageGroupId) {
+        this.storageGroupId = storageGroupId == null ? null : storageGroupId.trim();
     }
 
     public String getProductType() {

@@ -10,7 +10,7 @@ public interface StorageGroupMapper {
 
     int deleteByExample(StorageGroupCriteria example);
 
-    int deleteByPrimaryKey(Long storageGroupId);
+    int deleteByPrimaryKey(String storageGroupId);
 
     int insert(StorageGroup record);
 
@@ -18,7 +18,7 @@ public interface StorageGroupMapper {
 
     List<StorageGroup> selectByExample(StorageGroupCriteria example);
 
-    StorageGroup selectByPrimaryKey(Long storageGroupId);
+    StorageGroup selectByPrimaryKey(String storageGroupId);
 
     int updateByExampleSelective(@Param("record") StorageGroup record, @Param("example") StorageGroupCriteria example);
 

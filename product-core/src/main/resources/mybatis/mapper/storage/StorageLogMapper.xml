@@ -5,7 +5,7 @@
     <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
     <result column="STORAGE_ID" property="storageId" jdbcType="VARCHAR" />
     <result column="ROUTE_GROUP_ID" property="routeGroupId" jdbcType="DECIMAL" />
-    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="DECIMAL" />
+    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="VARCHAR" />
     <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
     <result column="STORAGE_NAME" property="storageName" jdbcType="VARCHAR" />
     <result column="SALE_PRICE" property="salePrice" jdbcType="DECIMAL" />
@@ -124,7 +124,7 @@
       SERIAL_NUMBER, STATE, OPER_ID, 
       OPER_TIME)
     values (#{logId,jdbcType=VARCHAR}, #{storageId,jdbcType=VARCHAR}, #{routeGroupId,jdbcType=DECIMAL}, 
-      #{storageGroupId,jdbcType=DECIMAL}, #{prodId,jdbcType=VARCHAR}, #{storageName,jdbcType=VARCHAR}, 
+      #{storageGroupId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{storageName,jdbcType=VARCHAR}, 
       #{salePrice,jdbcType=DECIMAL}, #{totalNum,jdbcType=DECIMAL}, #{warnNum,jdbcType=DECIMAL}, 
       #{activeTime,jdbcType=TIMESTAMP}, #{inactiveTime,jdbcType=TIMESTAMP}, #{priorityNumber,jdbcType=DECIMAL}, 
       #{serialNumber,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, 
@@ -193,7 +193,7 @@
         #{routeGroupId,jdbcType=DECIMAL},
       </if>
       <if test="storageGroupId != null" >
-        #{storageGroupId,jdbcType=DECIMAL},
+        #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="prodId != null" >
         #{prodId,jdbcType=VARCHAR},
@@ -252,7 +252,7 @@
         ROUTE_GROUP_ID = #{record.routeGroupId,jdbcType=DECIMAL},
       </if>
       <if test="record.storageGroupId != null" >
-        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.prodId != null" >
         PROD_ID = #{record.prodId,jdbcType=VARCHAR},
@@ -300,7 +300,7 @@
     set LOG_ID = #{record.logId,jdbcType=VARCHAR},
       STORAGE_ID = #{record.storageId,jdbcType=VARCHAR},
       ROUTE_GROUP_ID = #{record.routeGroupId,jdbcType=DECIMAL},
-      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       PROD_ID = #{record.prodId,jdbcType=VARCHAR},
       STORAGE_NAME = #{record.storageName,jdbcType=VARCHAR},
       SALE_PRICE = #{record.salePrice,jdbcType=DECIMAL},
@@ -327,7 +327,7 @@
         ROUTE_GROUP_ID = #{routeGroupId,jdbcType=DECIMAL},
       </if>
       <if test="storageGroupId != null" >
-        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="prodId != null" >
         PROD_ID = #{prodId,jdbcType=VARCHAR},
@@ -372,7 +372,7 @@
     update storage_log
     set STORAGE_ID = #{storageId,jdbcType=VARCHAR},
       ROUTE_GROUP_ID = #{routeGroupId,jdbcType=DECIMAL},
-      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       PROD_ID = #{prodId,jdbcType=VARCHAR},
       STORAGE_NAME = #{storageName,jdbcType=VARCHAR},
       SALE_PRICE = #{salePrice,jdbcType=DECIMAL},

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog" >
     <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
-    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="DECIMAL" />
+    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="VARCHAR" />
     <result column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
     <result column="ROUTE_GROUP_ID" property="routeGroupId" jdbcType="DECIMAL" />
     <result column="STORAGE_GROUP_NAME" property="storageGroupName" jdbcType="VARCHAR" />
@@ -117,7 +117,7 @@
       LOW_SALE_PRICE, HIGH_SALE_PRICE, SERIAL_NUMBER, 
       STATE, OPER_ID, OPER_TIME
       )
-    values (#{logId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=DECIMAL}, 
+    values (#{logId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=VARCHAR}, 
       #{standedProdId,jdbcType=VARCHAR}, #{routeGroupId,jdbcType=DECIMAL}, #{storageGroupName,jdbcType=VARCHAR}, 
       #{lowSalePrice,jdbcType=DECIMAL}, #{highSalePrice,jdbcType=DECIMAL}, #{serialNumber,jdbcType=DECIMAL}, 
       #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}
@@ -171,7 +171,7 @@
         #{tenantId,jdbcType=VARCHAR},
       </if>
       <if test="storageGroupId != null" >
-        #{storageGroupId,jdbcType=DECIMAL},
+        #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="standedProdId != null" >
         #{standedProdId,jdbcType=VARCHAR},
@@ -218,7 +218,7 @@
         TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       </if>
       <if test="record.storageGroupId != null" >
-        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.standedProdId != null" >
         STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
@@ -256,7 +256,7 @@
     update storage_group_log
     set LOG_ID = #{record.logId,jdbcType=VARCHAR},
       TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
       ROUTE_GROUP_ID = #{record.routeGroupId,jdbcType=DECIMAL},
       STORAGE_GROUP_NAME = #{record.storageGroupName,jdbcType=VARCHAR},
@@ -277,7 +277,7 @@
         TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       </if>
       <if test="storageGroupId != null" >
-        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="standedProdId != null" >
         STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
@@ -312,7 +312,7 @@
   <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog" >
     update storage_group_log
     set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
       ROUTE_GROUP_ID = #{routeGroupId,jdbcType=DECIMAL},
       STORAGE_GROUP_NAME = #{storageGroupName,jdbcType=VARCHAR},
