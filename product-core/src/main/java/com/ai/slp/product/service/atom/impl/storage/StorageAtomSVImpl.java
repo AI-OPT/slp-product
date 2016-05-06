@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
+import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
@@ -30,5 +31,12 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
         example.setOrderByClause("PRIORITY_NUMBER");
         example.createCriteria().andStorageGroupIdEqualTo(groupId);
         return storageMapper.selectByExample(example);
+    }
+
+    @Override
+    public int findStorage(String tenantId, String objectId) {
+        StorageCriteria example = new StorageCriteria();
+        example.createCriteria().andStorageIdEqualTo(objectId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        return storageMapper.countByExample(example);
     }
 }

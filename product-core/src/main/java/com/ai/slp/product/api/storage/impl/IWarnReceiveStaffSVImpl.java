@@ -34,8 +34,6 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
     @Override
     public BaseResponse installWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
             throws BusinessException, SystemException {
-        if(operList == null || operList.isEmpty())
-            return null;
         for(WarnReceiveStaffOper warnReceiveStaffOper : operList){
             CommonCheckUtils.checkTenantId(warnReceiveStaffOper.getTenantId(), "");
         }
@@ -52,8 +50,6 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
     @Override
     public BaseResponse deleteWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
             throws BusinessException, SystemException {
-        if(operList == null || operList.isEmpty())
-            return null;
         for(WarnReceiveStaffOper warnReceiveStaffOper : operList){
             CommonCheckUtils.checkTenantId(warnReceiveStaffOper.getTenantId(), "");
         }
