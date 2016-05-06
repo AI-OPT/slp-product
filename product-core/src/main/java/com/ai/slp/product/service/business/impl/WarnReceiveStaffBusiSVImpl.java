@@ -32,7 +32,7 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
         for(WarnReceiveStaff warnReceiveStaff : warnReceiveStaffList){
             WarnReceStaff warnReceStaff = new WarnReceStaff();
             warnReceStaff.setStaffId(warnReceiveStaff.getStaffId());
-            //TODO只返回预警人ID，其余信息从用户端获取
+            //只返回预警人ID，其余信息从用户端获取
             warnReceStaffList.add(warnReceStaff);
         }
         return warnReceStaffList;
@@ -47,6 +47,9 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
             if(warnReceiveStaffOper.getObjectId() == null || warnReceiveStaffOper.getOperId() == 0)
                 throw new BusinessException("", "找不到指定的预警对象="+warnReceiveStaffOper.getObjectId()+
                         ",找不到操作人="+warnReceiveStaffOper.getOperId());
+            //根据操作类型查询是否存在-现只有仓库-通过预警对象标识查库存是否存在
+            //TODO
+            
             WarnReceiveStaff warnReceiveStaff = new WarnReceiveStaff();
             BeanUtils.copyProperties(warnReceiveStaff, warnReceiveStaffOper);
             warnReceiveStaffList.add(warnReceiveStaff);
