@@ -26,7 +26,7 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
      * @return
      */
     @Override
-    public List<Storage> queryOfGroup(String tenantId, Long groupId) {
+    public List<Storage> queryOfGroup(String tenantId, String groupId) {
         StorageCriteria example = new StorageCriteria();
         example.setOrderByClause("PRIORITY_NUMBER");
         example.createCriteria().andStorageGroupIdEqualTo(groupId);

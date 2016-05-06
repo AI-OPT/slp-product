@@ -20,7 +20,7 @@ public class StoragePriorityCharge extends BaseInfo {
      */
     @Min(value = 0,message = "库存组标识不能小于0",
             groups = {IStorageSV.ChargeStoragePriority.class})
-    private long groupId;
+    private String groupId;
     /**
      * 原优先级<br>
      * 不能小于0,不能与目标优先级一致
@@ -36,11 +36,11 @@ public class StoragePriorityCharge extends BaseInfo {
             groups = {IStorageSV.ChargeStoragePriority.class})
     private int newLevel;
 
-    public long getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(long groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 

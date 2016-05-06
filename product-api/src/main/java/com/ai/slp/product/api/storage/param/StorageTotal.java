@@ -23,10 +23,6 @@ public class StorageTotal extends BaseInfo{
     private List<String> attrs;
     
     public List<String> getAttrs() {
-        String[] strs = saleAttrs.split(";");
-        for(String str:strs){
-            attrs.add(str);
-        }
         return attrs;
     }
     public void setAttrs(List<String> attrs) {

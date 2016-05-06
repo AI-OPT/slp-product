@@ -20,7 +20,7 @@ public class StorageGroupStatus extends BaseInfo {
      */
     @NotNull(message = "库存组标识不能为空",
             groups = { IStorageSV.UpdateStorageGroup.class})
-    private Long groupId;
+    private String groupId;
     /**
      * 状态<br>
      * 添加时使用停用状态,更新时直接忽略
@@ -46,11 +46,11 @@ public class StorageGroupStatus extends BaseInfo {
      */
     private Timestamp operTime;
 
-    public Long getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Long groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 

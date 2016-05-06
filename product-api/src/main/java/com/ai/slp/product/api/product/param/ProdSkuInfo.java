@@ -31,7 +31,7 @@ public class ProdSkuInfo extends BaseInfo {
      */
     @NotNull(message = "库存组标识不能为空",
             groups = { IProductSV.SaveMultSKUInfo.class })
-    private Long storageGroupId;
+    private String storageGroupId;
     /**
      * 属性串<br>
      * 若不存在SKU单品标识,则使用属性串进行查重更新或添加
@@ -75,11 +75,11 @@ public class ProdSkuInfo extends BaseInfo {
         this.prodId = prodId;
     }
 
-    public Long getStorageGroupId() {
+    public String getStorageGroupId() {
         return storageGroupId;
     }
 
-    public void setStorageGroupId(Long storageGroupId) {
+    public void setStorageGroupId(String storageGroupId) {
         this.storageGroupId = storageGroupId;
     }
 

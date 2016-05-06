@@ -36,7 +36,7 @@ public class ProductListQuery extends BaseInfo {
     /**
      * 库存组id
      */
-    private Long storageGroupId;
+    private String storageGroupId;
     /**
      * 库存组名称
      */
@@ -82,11 +82,11 @@ public class ProductListQuery extends BaseInfo {
         this.prodType = prodType;
     }
 
-    public Long getStorageGroupId() {
+    public String getStorageGroupId() {
         return storageGroupId;
     }
 
-    public void setStorageGroupId(Long storageGroupId) {
+    public void setStorageGroupId(String storageGroupId) {
         this.storageGroupId = storageGroupId;
     }
 

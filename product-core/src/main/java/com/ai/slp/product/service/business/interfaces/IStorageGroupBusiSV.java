@@ -45,7 +45,7 @@ public interface IStorageGroupBusiSV {
      * @param groupId
      * @return
      */
-    public StorageGroupInfo queryGroupInfoByGroupId(String tenantId,Long groupId);
+    public StorageGroupInfo queryGroupInfoByGroupId(String tenantId,String groupId);
     
     /**
      * 更新库存组价格信息

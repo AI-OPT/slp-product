@@ -25,7 +25,7 @@ public class ProProductParam extends BaseInfo{
     /**
      * 库存组ID
      */
-    private long storageGroupId;
+    private String storageGroupId;
     
     /**
      * 库存组名称
@@ -63,11 +63,11 @@ public class ProProductParam extends BaseInfo{
         this.prodName = prodName;
     }
 
-    public long getStorageGroupId() {
+    public String getStorageGroupId() {
         return storageGroupId;
     }
 
-    public void setStorageGroupId(long storageGroupId) {
+    public void setStorageGroupId(String storageGroupId) {
         this.storageGroupId = storageGroupId;
     }
 

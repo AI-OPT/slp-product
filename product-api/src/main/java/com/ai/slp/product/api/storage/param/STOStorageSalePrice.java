@@ -21,7 +21,7 @@ public class STOStorageSalePrice implements Serializable {
      */
     @NotNull(message = "库存标识不能为空",
             groups = { IStorageSV.UpdateMultiStorageSalePrice.class })
-    private Long storageId;
+    private String storageId;
 
     /**
      * 销售价
@@ -43,11 +43,11 @@ public class STOStorageSalePrice implements Serializable {
      */
     private Date operTime;
 
-    public Long getStorageId() {
+    public String getStorageId() {
         return storageId;
     }
 
-    public void setStorageId(Long storageId) {
+    public void setStorageId(String storageId) {
         this.storageId = storageId;
     }
 

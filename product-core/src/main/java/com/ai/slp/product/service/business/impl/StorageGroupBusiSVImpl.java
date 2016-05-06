@@ -146,7 +146,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @return
      */
     @Override
-    public StorageGroupInfo queryGroupInfoByGroupId(String tenantId, Long groupId) {
+    public StorageGroupInfo queryGroupInfoByGroupId(String tenantId, String groupId) {
         StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
         if (storageGroup == null) {
             logger.warn("租户ID:" + tenantId + ",库存组标识:" + groupId);
@@ -226,7 +226,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         if(updateNum > 0){
             ProdPriceLog prodPriceLog = new ProdPriceLog();
             BeanUtils.copyProperties(prodPriceLog, storageGroup);
-//            prodPriceLog.setObjId(storageGroup.getStorageGroupId());
+            prodPriceLog.setObjId(storageGroup.getStorageGroupId());
             //设置类型为库存组
             prodPriceLog.setObjType("SG");
             prodPriceLog.setUpdatePrice(storageGroup.getLowSalePrice());

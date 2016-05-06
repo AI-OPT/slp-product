@@ -21,7 +21,7 @@ public class StorageGroupSalePrice extends BaseInfo {
      */
     @NotNull(message = "库存组标识不能为空",
             groups = { IStorageSV.UpdateStorageGroupSalePrice.class})
-    private Long groupId;
+    private String groupId;
 
     /**
      * 最低销售价
@@ -50,11 +50,11 @@ public class StorageGroupSalePrice extends BaseInfo {
      */
     private Date operTime;
 
-    public Long getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Long groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 

@@ -20,7 +20,7 @@ public class StorageGroupInfoQuery extends BaseInfo {
      */
     @NotNull(message = "库存组标识不能为空",
             groups = { IStorageSV.QueryGroupInfoById.class })
-    private long groupId;
+    private String groupId;
     /**
      * 标准品标识
      * 在根据标准品标识查询时,不能为空.其他情况忽略
@@ -29,11 +29,11 @@ public class StorageGroupInfoQuery extends BaseInfo {
             groups = { IStorageSV.QueryGroupInfoByProductId.class })
     private String productId;
 
-    public long getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(long groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 

@@ -67,7 +67,7 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
     }
 
     @Override
-    public int deleteWarnReceiveStaff(String tenantId, String warnReceiveStaffId, long operId,Timestamp operTime) {
+    public int deleteWarnReceiveStaff(String tenantId, String warnReceiveStaffId, Long operId,Timestamp operTime) {
         WarnReceiveStaff warnReceiveStaff = new WarnReceiveStaff();
         warnReceiveStaff.setState(CommonSatesConstants.STATE_INACTIVE);
         warnReceiveStaff.setOperId(operId);

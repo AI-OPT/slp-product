@@ -9,7 +9,7 @@ public class ProProdAttr extends BaseResponse{
     /**
      * 库存组ID
      */
-    private long storageGroupId;
+    private String storageGroupId;
     
     /**
      * 库存组名称
@@ -53,10 +53,10 @@ public class ProProdAttr extends BaseResponse{
      */
     private String address;
     
-    public long getStorageGroupId() {
+    public String getStorageGroupId() {
         return storageGroupId;
     }
-    public void setStorageGroupId(long storageGroupId) {
+    public void setStorageGroupId(String storageGroupId) {
         this.storageGroupId = storageGroupId;
     }
     public String getStorageGroupName() {
