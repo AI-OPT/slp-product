@@ -16,4 +16,20 @@ public interface IProductAtomSV {
      */
     public int installProduct(Product product);
 
+    /**
+     * 查询指定库存组下的销售商品
+     *
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    public Product selectByGroupId(String tenantId,String groupId);
+
+    /**
+     * 根据标识更新商品信息
+     *
+     * @param product
+     * @return
+     */
+    public int updateById(Product product);
 }

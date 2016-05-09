@@ -19,7 +19,7 @@ public interface IProductBusiSV {
      * @param group
      * @return
      */
-    public int addProductWithStorageGroup(StorageGroup group, Long operId, Timestamp operTime);
+    public int addProductWithStorageGroup(StorageGroup group, Long operId);
 
     /**
      * 查询指定商品下的SKU信息
@@ -29,4 +29,26 @@ public interface IProductBusiSV {
      * @return
      */
     public SkuSetForProduct querySkuByProdId(String tenantId,String prodId);
+
+    /**
+     * 对停用下架的商品进行上架处理
+     *
+     * @param tenantId
+     * @param prodId
+     */
+    public void changeToSaleForStop(String tenantId,String prodId,Long operId);
+
+    /**
+     * 进行停用下架
+     * @param tenantId
+     * @param prodId
+     */
+    public void stopProduct(String tenantId,String prodId,Long operId);
+
+    /**
+     * 废弃商品
+     * @param tenantId
+     * @param prodId
+     */
+    public void discardProduct(String tenantId,String prodId,Long operId);
 }

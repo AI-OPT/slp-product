@@ -25,4 +25,21 @@ public interface IStorageAtomSV {
      * @author lipeng
      */
     public int findStorage(String tenantId,String objectId);
+
+    /**
+     * 查询启用状态的库存信息
+     *
+     * @param tenantId
+     * @param groupId
+     * @param hasUsable 是否需要查询可用量大于零
+     * @return
+     */
+    public List<Storage> queryActive(String tenantId,String groupId,boolean hasUsable);
+
+    /**
+     * 更新库存信息
+     * @param storage
+     * @return
+     */
+    public int updateById(Storage storage);
 }

@@ -55,4 +55,13 @@ public interface IStorageGroupBusiSV {
     *  @ApiCode
      */
     public int updateStorageGroupPrice(StorageGroupSalePrice salePrice);
+
+    /**
+     * 变更库存组状态
+     * @param tenantId 租户ID
+     * @param groupId 库存组ID
+     * @param state 要变更状态
+     * @param operId 操作者ID
+     */
+    public void updateGroupState(String tenantId,String groupId,String state,Long operId);
 }

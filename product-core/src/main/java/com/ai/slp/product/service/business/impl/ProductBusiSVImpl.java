@@ -9,11 +9,13 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     IProductLogAtomSV productLogAtomSV;
     @Autowired
     IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
+    @Autowired
+    IStorageAtomSV storageAtomSV;
+
     /**
      * 添加商城商品
      *
@@ -86,5 +91,89 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     public SkuSetForProduct querySkuByProdId(String tenantId, String prodId) {
 
         return null;
+    }
+
+    /**
+     * 对停用下架的商品进行上架处理
+     *
+     * @param tenantId
+     * @param prodId
+     */
+    @Override
+    public void changeToSaleForStop(String tenantId, String prodId,Long operId) {
+        Product product = productAtomSV.selectByGroupId(tenantId,prodId);
+        if (prodId == null){
+            throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
+        }
+        //若商品状态不是"停用下架",则不进行处理
+        if(!ProductConstants.STATE_STOP.equals(product.getState())){
+            return;
+        }
+        //检查商品是否有库存,若没有,则直接切换至"售罄下架"
+        List<Storage> storageList = storageAtomSV.queryActive(tenantId,prodId,true);
+        //直接切换至"售罄下架"
+        if (storageList==null || storageList.isEmpty()){
+            product.setState(ProductConstants.STATE_SALE_OUT);
+        }else { //切换至上架
+            product.setState(ProductConstants.STATE_IN_SALE);
+        }
+        product.setOperId(operId);
+        //添加日志
+        if (productAtomSV.updateById(product)>0){
+            ProductLog productLog = new ProductLog();
+            BeanUtils.copyProperties(productLog,product);
+            productLogAtomSV.install(productLog);
+        }
+    }
+
+
+    /**
+     * 进行停用下架
+     *
+     * @param tenantId
+     * @param prodId
+     */
+    @Override
+    public void stopProduct(String tenantId, String prodId,Long operId) {
+        Product product = productAtomSV.selectByGroupId(tenantId,prodId);
+        if (prodId == null){
+            throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
+        }
+        //若商品状态不是"在售",则不进行处理
+        if(!ProductConstants.STATE_IN_SALE.equals(product.getState())){
+            return;
+        }
+        //设置为停用下架状态
+        product.setState(ProductConstants.STATE_STOP);
+        product.setOperId(operId);
+        //添加日志
+        if (productAtomSV.updateById(product)>0){
+            ProductLog productLog = new ProductLog();
+            BeanUtils.copyProperties(productLog,product);
+            productLogAtomSV.install(productLog);
+        }
+    }
+
+    /**
+     * 废弃商品
+     *
+     * @param tenantId
+     * @param prodId
+     */
+    @Override
+    public void discardProduct(String tenantId, String prodId,Long operId) {
+        Product product = productAtomSV.selectByGroupId(tenantId,prodId);
+        if (prodId == null){
+            throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
+        }
+        //设置为停用下架状态
+        product.setState(ProductConstants.STATE_DISCARD);
+        product.setOperId(operId);
+        //添加日志
+        if (productAtomSV.updateById(product)>0){
+            ProductLog productLog = new ProductLog();
+            BeanUtils.copyProperties(productLog,product);
+            productLogAtomSV.install(productLog);
+        }
     }
 }

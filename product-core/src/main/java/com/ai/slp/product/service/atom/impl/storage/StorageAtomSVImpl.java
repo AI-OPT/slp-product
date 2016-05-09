@@ -1,13 +1,17 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
 import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
+import com.ai.slp.product.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,5 +42,40 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
         StorageCriteria example = new StorageCriteria();
         example.createCriteria().andStorageIdEqualTo(objectId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return storageMapper.countByExample(example);
+    }
+
+    /**
+     * 查询启用状态的库存信息
+     *
+     * @param tenantId
+     * @param groupId
+     * @param hasUsable
+     * @return
+     */
+    @Override
+    public List<Storage> queryActive(String tenantId, String groupId,boolean hasUsable) {
+        StorageCriteria example = new StorageCriteria();
+        example.setOrderByClause("PRIORITY_NUMBER");
+        List<String> activeList = new ArrayList<>();
+        activeList.add(StorageConstants.STATE_ACTIVE);
+        activeList.add(StorageConstants.STATE_AUTO_ACTIVE);
+        StorageCriteria.Criteria criteria = example.createCriteria();
+        criteria.andStorageGroupIdEqualTo(groupId).andStateIn(activeList);
+        //查询可用量大于0的
+        if (hasUsable)
+            criteria.andUsableNumGreaterThan(0l);
+        return storageMapper.selectByExample(example);
+    }
+
+    /**
+     * 更新库存信息
+     *
+     * @param storage
+     * @return
+     */
+    @Override
+    public int updateById(Storage storage) {
+        storage.setOperTime(DateUtils.currTimeStamp());
+        return storageMapper.updateByPrimaryKey(storage);
     }
 }

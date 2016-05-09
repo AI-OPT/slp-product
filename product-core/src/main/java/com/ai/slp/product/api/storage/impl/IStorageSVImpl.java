@@ -94,11 +94,18 @@ public class IStorageSVImpl implements IStorageSV {
      */
     @Override
     public BaseResponse chargeStorageGroupStatus(StorageGroupStatus groupStatus) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(groupStatus.getTenantId(),"");
+        groupBusiSV.updateGroupState(groupStatus.getTenantId(),groupStatus.getGroupId(),groupStatus.getState(),groupStatus.getOperId());
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode("");
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 
     /**
-     * 查询标准品库存组列表<br>
+     * 查询虚拟库存组列表<br>
      *
      * @param groupQuery 库存组查询信息对象
      * @return 库存组列表

@@ -39,12 +39,6 @@ public class StorageGroupStatus extends BaseInfo {
             groups = { IStorageSV.ChargeStorageGroupStatus.class,
                     IStorageSV.UpdateStorageGroup.class})
     private Long operId;
-    /**
-     * 操作时间<br>
-     * 若不填写,则设置接收时间
-     * 查询时,使用操作时间范围的属性
-     */
-    private Timestamp operTime;
 
     public String getGroupId() {
         return groupId;
@@ -68,13 +62,5 @@ public class StorageGroupStatus extends BaseInfo {
 
     public void setOperId(Long operId) {
         this.operId = operId;
-    }
-
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
     }
 }
