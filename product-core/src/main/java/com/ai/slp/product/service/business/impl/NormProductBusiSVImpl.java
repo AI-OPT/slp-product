@@ -1,9 +1,9 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 import com.ai.slp.product.api.normproduct.param.*;
-import com.ai.slp.product.api.normproduct.param.ProdCatAttrDef;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.*;
 import com.ai.slp.product.service.atom.interfaces.*;
@@ -68,8 +68,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         StandedProduct standedProduct = new StandedProduct();
         BeanUtils.copyProperties(standedProduct, normProdct);
         standedProduct.setStandedProductName(normProdct.getProductName());
-        if (normProdct.getCreateTime() != null)
-            standedProduct.setCreateTime(DateUtils.toTimeStamp(normProdct.getCreateTime()));
         //添加成功,添加标准品日志
         if (standedProductAtomSV.installObj(standedProduct) > 0) {
             StandedProductLog productLog = new StandedProductLog();
@@ -77,9 +75,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             standedProductLogAtomSV.insert(productLog);
         }
         //添加标准品属性值
-        List<NormProdAttrValRequest> attrValList = normProdct.getAttrValList();
-//        Timestamp nowTime = DateUtils.currTimeStamp();
-        for (NormProdAttrValRequest attrValReq : attrValList) {
+        List<AttrValRequest> attrValList = normProdct.getAttrValList();
+        Timestamp nowTime = DateUtils.currTimeStamp();
+        for (AttrValRequest attrValReq : attrValList) {
             StandedProdAttr prodAttr = new StandedProdAttr();
             BeanUtils.copyProperties(prodAttr, attrValReq);
             prodAttr.setTenantId(normProdct.getTenantId());
@@ -87,7 +85,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             prodAttr.setAttrValueName(attrValReq.getAttrVal());
             prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
             prodAttr.setState(CommonSatesConstants.STATE_ACTIVE);//设置为有效
-            prodAttr.setOperTime(DateUtils.toTimeStamp(attrValReq.getOperTime()));
+            prodAttr.setOperTime(nowTime);
             //添加成功,添加日志
             if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
                 StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
@@ -241,20 +239,20 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
      * @return
      */
     @Override
-    public AttrMapOfNormProd queryAttrOfProduct(String tenantId, String productId, String attrType) {
+    public AttrMap queryAttrOfProduct(String tenantId, String productId, String attrType) {
         //查询标准品信息
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,productId);
         if (standedProduct==null)
             throw new BusinessException("","未找到对应标准品信息,租户ID:"+tenantId+",标准品标识:"+productId);
-        AttrMapOfNormProd attrMapOfNormProd = new AttrMapOfNormProd();
+        AttrMap attrMapOfNormProd = new AttrMap();
         Map<Long,List<Long>> attrAndValMap = new HashMap<>();
-        Map<Long,ProdCatAttrDef> attrDefMap = new HashMap<>();
-        Map<Long,ProductAttrValDef> attrValDefMap = new HashMap<>();
+        Map<Long,ProdCatAttrInfo> attrDefMap = new HashMap<>();
+        Map<Long,AttrValInfo> attrValDefMap = new HashMap<>();
         //查询对应类目属性
         List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,standedProduct.getProductCatId(),attrType);
         //查询标准品对应属性的属性值
         for (ProdCatAttrAttch catAttrAttch:catAttrAttches){
-            ProdCatAttrDef catAttrDef = new ProdCatAttrDef();
+            ProdCatAttrInfo catAttrDef = new ProdCatAttrInfo();
             BeanUtils.copyProperties(catAttrDef,catAttrAttch);
             List<Long> attrValDefList = new ArrayList<>();
             attrAndValMap.put(catAttrDef.getAttrId(),attrValDefList);
@@ -263,7 +261,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(
                     tenantId,productId,catAttrAttch.getAttrId());
             for (StandedProdAttr prodAttr:prodAttrs){
-                ProductAttrValDef valDef = new ProductAttrValDef();
+                AttrValInfo valDef = new AttrValInfo();
                 BeanUtils.copyProperties(valDef,prodAttr);
                 valDef.setProductId(prodAttr.getStandedProdId());
                 valDef.setAttrValId(prodAttr.getAttrvalueDefId());
@@ -290,11 +288,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
      */
     private void updateStandedProdAttr(NormProdSaveRequest normProdct){
         //
-        List<NormProdAttrValRequest> attrValList = normProdct.getAttrValList();
+        List<AttrValRequest> attrValList = normProdct.getAttrValList();
         //查询原来的属性值
         Map<String,StandedProdAttr> oldAttrValMap = queryOldProdAttr(normProdct.getTenantId(),normProdct.getProductId());
         String tenantId = normProdct.getTenantId(),catId = normProdct.getProductCatId();
-        for (NormProdAttrValRequest attrValReq : attrValList) {
+        Long operId = normProdct.getOperId();
+        for (AttrValRequest attrValReq : attrValList) {
             //查询属性值是否已存在
             String attrKey = attrValReq.getAttrId()+ATTR_LINE_VAL+attrValReq.getAttrValId();
             StandedProdAttr prodAttr = oldAttrValMap.get(attrKey);
@@ -304,8 +303,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
                 prodAttr.setAttrValueName(attrValReq.getAttrVal());
                 prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
                 prodAttr.setSerialNumber(attrValReq.getSerialNumber());
-                prodAttr.setOperId(attrValReq.getOperId());
-                prodAttr.setOperTime(attrValReq.getOperTime());
+                prodAttr.setOperId(operId);
                 upNum = standedProdAttrAtomSV.updateObj(prodAttr);
             }else {
                 prodAttr = new StandedProdAttr();
@@ -367,7 +365,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     }
 
     @Override
-    public int updateMarketPrice(MarketPrice4Update marketPrice) {
+    public int updateMarketPrice(MarketPriceUpdate marketPrice) {
         StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
                 marketPrice.getProductId());
         //判断此租户下是否存在次标准品

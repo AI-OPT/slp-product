@@ -1,5 +1,7 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import com.ai.opt.base.vo.BaseResponse;
+
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Set;
@@ -11,8 +13,52 @@ import java.util.Set;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class NormProdInfoResponse extends NormProdBaseResponse {
+public class NormProdInfoResponse extends BaseResponse {
+    /**
+     * 租户Id
+     */
+    private String tenantId;
 
+    /**
+     * 类目ID<br>
+     */
+    private String productCatId;
+
+    /**
+     * 标准品ID
+     */
+    private String productId;
+
+    /**
+     * 标准品名称
+     */
+    private String productName;
+
+    /**
+     * 标准品状态
+     * 0:废弃;1:可使用;2:不可使用
+     */
+    private String state;
+
+    /**
+     * 标准品类型
+     * 1实物;2虚拟
+     */
+    private String productType;
+    /**
+     * 市场价
+     */
+    private Long marketPrice;
+
+    /**
+     * 创建时间<br>
+     */
+    private Timestamp createTime;
+
+    /**
+     * 创建人ID<br>
+     */
+    private Long createId;
     /**
      * 创建者名称
      */
@@ -22,10 +68,6 @@ public class NormProdInfoResponse extends NormProdBaseResponse {
      * 操作人
      */
     private Long operId;
-    /**
-     * 市场价
-     */
-    private Long marketPrice;
 
     /**
      * 操作人名称
@@ -41,6 +83,78 @@ public class NormProdInfoResponse extends NormProdBaseResponse {
      * 属性与属性值对应关系
      */
     private Map<Long,Set<String>> attrAndValueIds;
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getProductCatId() {
+        return productCatId;
+    }
+
+    public void setProductCatId(String productCatId) {
+        this.productCatId = productCatId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public Long getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(Long marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
 
     public String getCreateName() {
         return createName;
@@ -64,14 +178,6 @@ public class NormProdInfoResponse extends NormProdBaseResponse {
 
     public void setOperName(String operName) {
         this.operName = operName;
-    }
-
-    public Long getMarketPrice() {
-        return marketPrice;
-    }
-
-    public void setMarketPrice(Long marketPrice) {
-        this.marketPrice = marketPrice;
     }
 
     public Timestamp getOperTime() {

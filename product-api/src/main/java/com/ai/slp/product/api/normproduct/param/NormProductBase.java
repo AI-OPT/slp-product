@@ -27,14 +27,14 @@ public abstract class NormProductBase extends BaseInfo {
     /**
      * 标准品ID
      */
-    @NotNull(message = "标准品ID不能为空",
+    @NotBlank(message = "标准品ID不能为空",
             groups = { INormProductSV.UpdateProductInfo.class })
     private String productId;
 
     /**
      * 标准品名称
      */
-    @NotNull(message = "类目ID不能为空",
+    @NotBlank(message = "类目ID不能为空",
             groups = { INormProductSV.SaveProductInfo.class
                     ,INormProductSV.UpdateProductInfo.class })
     private String productName;
@@ -44,7 +44,7 @@ public abstract class NormProductBase extends BaseInfo {
      * 添加/更新信息时,不能为NULL<br>
      * NULL:全部;1可上架;2不可上架;3待处理;4废弃
      */
-    @NotNull(message = "标准品状态不能为空",
+    @NotBlank(message = "标准品状态不能为空",
             groups = { INormProductSV.SaveProductInfo.class
                     ,INormProductSV.UpdateProductInfo.class
             })
@@ -55,12 +55,10 @@ public abstract class NormProductBase extends BaseInfo {
      * 添加/更新信息时,不能为NULL<br>
      * NULL:全部;1实物;2虚拟
      */
-    @NotNull(message = "标准品类型不能为空",
+    @NotBlank(message = "标准品类型不能为空",
             groups = { INormProductSV.SaveProductInfo.class,
                     INormProductSV.UpdateProductInfo.class })
     private String productType;
-
-
 
     public String getProductCatId() {
         return productCatId;

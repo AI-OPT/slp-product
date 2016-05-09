@@ -1,7 +1,7 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.slp.product.api.common.param.PageInfoForRes;
-import com.ai.slp.product.api.normproduct.param.ProdCatAttrDef;
+import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.param.*;
 
 import java.util.List;

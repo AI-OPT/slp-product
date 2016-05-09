@@ -102,7 +102,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0106
      */
-    public BaseResponse updateMarketPrice(MarketPrice4Update marketPrice)
+    public BaseResponse updateMarketPrice(MarketPriceUpdate marketPrice)
             throws BusinessException,SystemException;
     @interface UpdateMarketPrice{}
 
@@ -119,7 +119,7 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiCode ATTR_VAL_0210
      */
-    public AttrMapOfNormProd queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
+    public AttrMap queryAttrByNormProduct(AttrQuery attrQuery)
             throws BusinessException,SystemException;
     @interface QueryAttrByNormProduct{}
 

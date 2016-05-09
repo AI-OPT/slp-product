@@ -77,7 +77,7 @@ public class INormProductSVImpl implements INormProductSV {
     }
 
     @Override
-    public BaseResponse updateMarketPrice(MarketPrice4Update marketPrice) throws BusinessException, SystemException {
+    public BaseResponse updateMarketPrice(MarketPriceUpdate marketPrice) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(marketPrice.getTenantId(),"");
         normProductBusiSV.updateMarketPrice(marketPrice);
         BaseResponse baseResponse = new BaseResponse();
@@ -100,7 +100,7 @@ public class INormProductSVImpl implements INormProductSV {
      * @ApiCode ATTR_VAL_0210
      */
     @Override
-    public AttrMapOfNormProd queryAttrByNormProduct(AttrQueryForNormProduct attrQuery) throws BusinessException, SystemException {
+    public AttrMap queryAttrByNormProduct(AttrQuery attrQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
         return normProductBusiSV.queryAttrOfProduct(attrQuery.getTenantId(),attrQuery.getProductId(),attrQuery.getAttrType());
     }

@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.business;
 
-import com.ai.slp.product.api.normproduct.param.MarketPrice4Update;
+import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.util.DateUtils;
 
@@ -21,7 +21,7 @@ public class INormProductBusiSVTest {
 
     @Test
     public void updateMarketPrice(){
-        MarketPrice4Update marketPrice4Update = new MarketPrice4Update();
+        MarketPriceUpdate marketPrice4Update = new MarketPriceUpdate();
         marketPrice4Update.setMarketPrice(123123124L);
         marketPrice4Update.setProductId("2");
         marketPrice4Update.setOperId(2L);

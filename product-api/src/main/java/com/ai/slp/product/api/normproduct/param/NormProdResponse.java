@@ -1,7 +1,6 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import com.ai.opt.base.vo.BaseResponse;
-
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -11,7 +10,7 @@ import java.sql.Timestamp;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class NormProdResponse extends BaseResponse {
+public class NormProdResponse implements Serializable {
 
     /**
      * 类目ID
@@ -29,14 +28,14 @@ public class NormProdResponse extends BaseResponse {
     private String productName;
 
     /**
-     * 标准品状态
-     * 0:全部;1可上架;2不可上架;3待处理;4废弃
+     * 标准品状态<br>
+     * 1可上架;2不可上架;3待处理;4废弃
      */
     private String state;
 
     /**
-     * 标准品类型
-     * 0:全部;1实物;2虚拟
+     * 标准品类型<br>
+     * 1实物;2虚拟
      */
     private String productType;
     /**

@@ -1,4 +1,4 @@
-package com.ai.slp.product.api.normproduct.param;
+package com.ai.slp.product.api.productcat.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 

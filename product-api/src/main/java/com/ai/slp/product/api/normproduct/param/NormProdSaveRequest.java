@@ -16,13 +16,6 @@ import java.util.List;
 public class NormProdSaveRequest extends NormProductBase {
 
     /**
-     * 创建时间<br>
-     * 创建时赋值,更新时不进行操作<br>
-     *     若为空,更新时则填充服务接收时间
-     */
-    private Timestamp createTime;
-
-    /**
      * 创建人ID<br>
      * 添加时不能为空,更新时不进行操作
      */
@@ -38,20 +31,15 @@ public class NormProdSaveRequest extends NormProductBase {
             groups = { INormProductSV.UpdateProductInfo.class})
     private Long operId;
     /**
-     * 操作时间<br>
-     * 若为空,更新时则填充服务接收时间
-     */
-    private Timestamp operTime;
-    /**
      * 标准品属性值集合
      */
-    private List<NormProdAttrValRequest> attrValList;
+    private List<AttrValRequest> attrValList;
 
-    public List<NormProdAttrValRequest> getAttrValList() {
+    public List<AttrValRequest> getAttrValList() {
         return attrValList;
     }
 
-    public void setAttrValList(List<NormProdAttrValRequest> attrValList) {
+    public void setAttrValList(List<AttrValRequest> attrValList) {
         this.attrValList = attrValList;
     }
 
@@ -61,22 +49,6 @@ public class NormProdSaveRequest extends NormProductBase {
 
     public void setOperId(Long operId) {
         this.operId = operId;
-    }
-
-    public Timestamp getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Timestamp createTime) {
-        this.createTime = createTime;
-    }
-
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
     }
 
     public Long getCreateId() {

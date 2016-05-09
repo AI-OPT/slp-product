@@ -27,10 +27,6 @@ public class AttrPam extends BaseInfo {
      */
     @NotNull(message = "操作人ID不能为空", groups = { IAttrAndValDefSV.DeleteAttr.class})
     private long operId;
-    /**
-     * 操作时间
-     */
-    private Timestamp operTime;
     
     public long getAttrId() {
         return attrId;
@@ -43,12 +39,6 @@ public class AttrPam extends BaseInfo {
     }
     public void setOperId(long operId) {
         this.operId = operId;
-    }
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
     }
 
 }

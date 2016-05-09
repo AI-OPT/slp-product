@@ -1,5 +1,7 @@
 package com.ai.slp.product.api.productcat.param;
 
+import java.io.Serializable;
+
 /**
  * 查询属性和属性值的MAP集合的返回属性类型
  * 
@@ -8,7 +10,7 @@ package com.ai.slp.product.api.productcat.param;
  * 
  * @author lipeng
  */
-public class AttrDef {
+public class AttrDef implements Serializable {
     
     /**
      *租户ID

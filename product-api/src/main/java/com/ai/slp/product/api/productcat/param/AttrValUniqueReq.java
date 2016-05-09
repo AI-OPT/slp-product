@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 /**
- * 属性值唯一标识请求信息<br>
+ * 属性值请求信息<br>
  *
  * Date: 2016年5月2日 <br>
  * Copyright (c) 2016 asiainfo.com <br>

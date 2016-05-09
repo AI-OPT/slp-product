@@ -1,44 +1,41 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import com.ai.opt.base.vo.BaseResponse;
 
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 /**
- * 标准品属性值请求信息<br>
+ * 标准品属性值返回信息<br>
  *
  * Date: 2016年4月19日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class NormProdAttrValRequest extends BaseInfo {
-    
+public class AttrValInfo extends BaseResponse {
+    /**
+     * 租户Id，必填
+     */
+    private String tenantId;
     /**
      * 标准品属性值ID
      */
     private Long productAttrValId;
-    
     /**
-     * 属性ID<br>
-     * 不能为空
+     * 标准品标识
      */
-    @NotNull(message = "属性ID不能为空", groups = { INormProductSV.SaveProductInfo.class })
-    private Long attrId;
-    
+    private String productId;
     /**
-     * 属性值id<br>
-     * 与属性值两者不能全部为空
+     * 属性ID
+     */
+    private Long attrId;
+    /**
+     * 属性值id
      */
     private String attrValId;
-    
     /**
-     * 属性值<br>
-     * 与属性值ID两者不能全部为空
+     * 属性值
      */
     private String attrVal;
-    
     /**
      * 属性值2,用于范围型属性值
      */
@@ -47,19 +44,26 @@ public class NormProdAttrValRequest extends BaseInfo {
      * 序列号
      */
     private Short serialNumber;
-    
     /**
-     * 操作人ID<br>
-     * 不能为空
+     * 状态
      */
-    @NotNull(message = "操作ID不能为空", groups = { INormProductSV.SaveProductInfo.class })
-    private Long operId;
-    
+    private String state;
     /**
-     * 操作时间<br>
-     * 为空时,则使用服务端接收时间
+     * 操作人ID
+     */
+    private Long operId;
+    /**
+     * 操作时间
      */
     private Timestamp operTime;
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
     public Long getProductAttrValId() {
         return productAttrValId;
@@ -69,20 +73,20 @@ public class NormProdAttrValRequest extends BaseInfo {
         this.productAttrValId = productAttrValId;
     }
 
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
     public Long getAttrId() {
         return attrId;
     }
 
     public void setAttrId(Long attrId) {
         this.attrId = attrId;
-    }
-
-    public String getAttrValId() {
-        return attrValId;
-    }
-
-    public void setAttrValId(String attrValId) {
-        this.attrValId = attrValId;
     }
 
     public String getAttrVal() {
@@ -101,6 +105,14 @@ public class NormProdAttrValRequest extends BaseInfo {
         this.attrVal2 = attrVal2;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public Long getOperId() {
         return operId;
     }
@@ -109,12 +121,12 @@ public class NormProdAttrValRequest extends BaseInfo {
         this.operId = operId;
     }
 
-    public Timestamp getOperTime() {
-        return operTime;
+    public String getAttrValId() {
+        return attrValId;
     }
 
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
+    public void setAttrValId(String attrValId) {
+        this.attrValId = attrValId;
     }
 
     public Short getSerialNumber() {
@@ -123,5 +135,13 @@ public class NormProdAttrValRequest extends BaseInfo {
 
     public void setSerialNumber(Short serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public Timestamp getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Timestamp operTime) {
+        this.operTime = operTime;
     }
 }

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 /**
- * 标准品废弃请求信息<br>
+ * 标准品请求信息<br>
  *
  * Date: 2016年4月19日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
@@ -29,11 +29,6 @@ public class NormProdUniqueReq extends BaseInfo {
             groups = { INormProductSV.DiscardProduct.class })
     private Long operId;
 
-    /**
-     * 操作时间
-     */
-    private Timestamp operTime;
-
     public String getProductId() {
         return productId;
     }
@@ -50,11 +45,4 @@ public class NormProdUniqueReq extends BaseInfo {
         this.operId = operId;
     }
 
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
-    }
 }

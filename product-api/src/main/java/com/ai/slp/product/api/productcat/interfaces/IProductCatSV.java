@@ -8,7 +8,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
-import com.ai.slp.product.api.normproduct.param.ProdCatAttrDef;
+import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.param.*;
 
 /**

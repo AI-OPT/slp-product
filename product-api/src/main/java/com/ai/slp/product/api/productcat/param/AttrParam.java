@@ -55,11 +55,6 @@ public class AttrParam extends BaseInfo{
                     IAttrAndValDefSV.DeleteAttr.class,
                     IAttrAndValDefSV.AddAttr.class})
     private long operId;
-    
-    /**
-     * 操作时间
-     */
-    private Timestamp operTime;
 
     public long getAttrId() {
         return attrId;
@@ -75,14 +70,6 @@ public class AttrParam extends BaseInfo{
 
     public void setOperId(long operId) {
         this.operId = operId;
-    }
-
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
     }
     
     public String getAttrName() {

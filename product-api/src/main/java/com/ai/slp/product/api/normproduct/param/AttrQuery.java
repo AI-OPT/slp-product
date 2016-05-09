@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class AttrQueryForNormProduct extends BaseInfo {
+public class AttrQuery extends BaseInfo {
     /**
      * 标准品标识
      */

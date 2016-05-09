@@ -5,7 +5,7 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
-import com.ai.slp.product.api.normproduct.param.ProdCatAttrDef;
+import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;

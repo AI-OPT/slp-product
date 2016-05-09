@@ -43,7 +43,6 @@ public interface INormProductBusiSV {
      * @param tenantId 租户id
      * @param productId 标准品标识
      * @param operId 操作者id
-     * @param operTime 操作时间,可以为空
      */
     public void discardProduct(String tenantId,String productId,Long operId);
 
@@ -55,7 +54,7 @@ public interface INormProductBusiSV {
      * @param attrType
      * @return
      */
-    public AttrMapOfNormProd queryAttrOfProduct(String tenantId,String productId,String attrType);
+    public AttrMap queryAttrOfProduct(String tenantId, String productId, String attrType);
     
     /**
      * 更新标准品的市场价
@@ -65,5 +64,5 @@ public interface INormProductBusiSV {
      * @author lipeng
     *  @ApiCode
      */
-    public int updateMarketPrice(MarketPrice4Update marketPrice);
+    public int updateMarketPrice(MarketPriceUpdate marketPrice);
 }

@@ -15,7 +15,7 @@ import java.sql.Timestamp;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class MarketPrice4Update extends BaseInfo {
+public class MarketPriceUpdate extends BaseInfo {
     /**
      * 标准品ID
      */
