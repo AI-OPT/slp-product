@@ -27,10 +27,8 @@ import com.ai.slp.product.vo.AttrAndValPageQueryVo;
 public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     @Autowired
     ProdAttrDefMapper prodAttrDefMapper;
-    
     @Autowired
     ProdAttrvalueDefMapper prodAttrvalueDefMapper;
-
     //获取序列号
     @Autowired
     ISysSequenceCreditAtomSV sequenceCreditAtomSV;
@@ -112,8 +110,7 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
         example.setOrderByClause("firstLetter");
         example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
-        List<ProdAttrDef> prodAttrList = prodAttrDefMapper.selectByExample(example);
-        return prodAttrList;
+        return prodAttrDefMapper.selectByExample(example);
     }
 
     
