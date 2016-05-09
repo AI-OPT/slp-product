@@ -43,7 +43,6 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
      * @param catAttrId
      * @param attrValId
      * @param operId
-     * @param operTime
      * @return
      */
     @Override

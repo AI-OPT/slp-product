@@ -7,6 +7,7 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.*;
 import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     IStorageGroupAtomSV storageGroupAtomSV;
     @Autowired
     IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
+    @Autowired
+    IProdCatAttrAtomSV prodCatAttrAtomSV;
+    @Autowired
+    IProdCatAttrValAtomSV prodCatAttrValAtomSV;
     @Autowired
     IProdAttrValDefAtomSV attrValDefAtomSV;
     @Autowired
@@ -287,7 +292,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         List<NormProdAttrValRequest> attrValList = normProdct.getAttrValList();
         //查询原来的属性值
         Map<String,StandedProdAttr> oldAttrValMap = queryOldProdAttr(normProdct.getTenantId(),normProdct.getProductId());
-
+        String tenantId = normProdct.getTenantId(),catId = normProdct.getProductCatId();
         for (NormProdAttrValRequest attrValReq : attrValList) {
             //查询属性值是否已存在
             String attrKey = attrValReq.getAttrId()+ATTR_LINE_VAL+attrValReq.getAttrValId();
@@ -307,6 +312,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
                 prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
                 prodAttr.setAttrValueName(attrValReq.getAttrVal());
                 prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
+                prodAttr.setSerialNumber(queryValInfoSerialNum(tenantId,catId,attrValReq.getAttrId(),attrValReq.getAttrValId()));
                 prodAttr.setState(CommonSatesConstants.STATE_ACTIVE);//设置为有效
                 upNum = standedProdAttrAtomSV.installObj(prodAttr);
             }
@@ -387,6 +393,28 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         }
         
         return count;
+    }
+
+    /**
+     * 查询类目属性值的顺序
+     *
+     * @param catId
+     * @param attrId
+     * @param valId
+     * @return
+     */
+    private Short queryValInfoSerialNum(String tenantId,String catId,Long attrId,String valId){
+        if (StringUtils.isBlank(valId))
+            return 0;
+        //根据类目和属性查询关系信息
+        ProdCatAttr prodCatAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(
+                tenantId,catId,attrId,null);
+        if (prodCatAttr==null)
+            return 0;
+        //根据关系和属性值查询属性值信息
+        ProdCatAttrValue attrValue = prodCatAttrValAtomSV.queryByCatAndCatAttrId(
+                tenantId,prodCatAttr.getCatAttrId(),valId);
+        return attrValue==null?0:attrValue.getSerialNumber();
     }
 
 }

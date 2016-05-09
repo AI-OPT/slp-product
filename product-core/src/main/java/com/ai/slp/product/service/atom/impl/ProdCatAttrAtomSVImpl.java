@@ -5,6 +5,7 @@ import java.util.List;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
@@ -54,7 +55,6 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
      * @param catId
      * @param attrId
      * @param operId
-     * @param operTime
      * @return
      */
     @Override
@@ -109,11 +109,13 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     @Override
     public ProdCatAttr queryByCatIdAndTypeAndAttrId(String tenantId, String catId, Long attrId, String attrType) {
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
-        example.createCriteria().andTenantIdEqualTo(tenantId)
+        ProdCatAttrCriteria.Criteria criteria = example.createCriteria();
+        criteria.andTenantIdEqualTo(tenantId)
                 .andProductCatIdEqualTo(catId)
                 .andAttrIdEqualTo(attrId)
-                .andAttrTypeEqualTo(attrType)
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        if (StringUtils.isNotBlank(attrType))
+            criteria.andAttrTypeEqualTo(attrType);
         List<ProdCatAttr> attrList = prodCatAttrMapper.selectByExample(example);
         return attrList==null||attrList.isEmpty()?null:attrList.get(0);
     }
