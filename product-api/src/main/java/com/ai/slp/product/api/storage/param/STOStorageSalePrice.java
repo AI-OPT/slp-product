@@ -1,10 +1,10 @@
 package com.ai.slp.product.api.storage.param;
 
+import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -15,7 +15,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class STOStorageSalePrice implements Serializable {
+public class STOStorageSalePrice extends BaseInfo {
     /**
      * 库存id
      */
@@ -37,11 +37,6 @@ public class STOStorageSalePrice implements Serializable {
     @NotNull(message = "操作人不能为空",
             groups = { IStorageSV.UpdateMultiStorageSalePrice.class })
     private Long operId;
-    /**
-     * 操作时间<br>
-     * 若不填写,则设置接收时间
-     */
-    private Date operTime;
 
     public String getStorageId() {
         return storageId;
@@ -65,13 +60,5 @@ public class STOStorageSalePrice implements Serializable {
 
     public void setOperId(Long operId) {
         this.operId = operId;
-    }
-
-    public Date getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Date operTime) {
-        this.operTime = operTime;
     }
 }
