@@ -43,6 +43,10 @@ public class NormProdResponse extends BaseResponse {
      * 市场价
      */
     private Long marketPrice;
+    /**
+     * 库存组的数量
+     */
+    private int storageGroupNum;
 
     /**
      * 创建时间
@@ -177,5 +181,13 @@ public class NormProdResponse extends BaseResponse {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public int getStorageGroupNum() {
+        return storageGroupNum;
+    }
+
+    public void setStorageGroupNum(int storageGroupNum) {
+        this.storageGroupNum = storageGroupNum;
     }
 }

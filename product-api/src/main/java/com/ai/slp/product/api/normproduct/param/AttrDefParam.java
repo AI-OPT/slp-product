@@ -11,11 +11,6 @@ import com.ai.opt.base.vo.BaseInfo;
  * @author lipeng
  */
 public class AttrDefParam extends BaseInfo {
-    
-    /**
-     * 租户Id
-     */
-    private String tenantId;
 	
 	/**
      * 请求查询的页码

@@ -104,4 +104,19 @@ public class INormProductSVImpl implements INormProductSV {
         CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
         return normProductBusiSV.queryAttrOfProduct(attrQuery.getTenantId(),attrQuery.getProductId(),attrQuery.getAttrType());
     }
+
+    /**
+     * 制定商品销售价中标准品列表查询.<br>
+     *
+     * @param productRequest 查询标准品信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode ATTR_VAL_0211
+     */
+    @Override
+    public PageInfoForRes<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest) throws BusinessException, SystemException {
+        return null;
+    }
 }

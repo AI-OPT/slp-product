@@ -2,6 +2,7 @@ package com.ai.slp.product.api.normproduct.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
@@ -16,7 +17,7 @@ public abstract class NormProductBase extends BaseInfo {
     /**
      * 类目ID,不能为空
      */
-    @NotNull(message = "类目ID不能为空",
+    @NotBlank(message = "类目ID不能为空",
             groups = { INormProductSV.QueryNormProduct.class
                     ,INormProductSV.SaveProductInfo.class
                     ,INormProductSV.UpdateProductInfo.class

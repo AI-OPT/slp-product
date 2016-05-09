@@ -211,7 +211,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0112
      */
-    public List<StorageGroupInfo> queryGroupByProdIdForSalePrice(StorageGroupInfoQuery infoQuery)
+    public PageInfoForRes<StorageGroupInfo> queryGroupByProdIdForSalePrice(StorageGroupInfoPageReq infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupByProdIdForSalePrice{}
 

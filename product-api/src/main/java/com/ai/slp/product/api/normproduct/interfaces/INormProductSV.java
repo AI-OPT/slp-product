@@ -125,4 +125,19 @@ public interface INormProductSV {
     public AttrMapOfNormProd queryAttrByNormProduct(AttrQueryForNormProduct attrQuery)
             throws BusinessException,SystemException;
     @interface QueryAttrByNormProduct{}
+
+    /**
+     * 制定商品销售价中标准品列表查询.<br>
+     *     库存组数量为非废弃的数量
+     *
+     * @param productRequest 查询标准品信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode ATTR_VAL_0211
+     */
+    public PageInfoForRes<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest)
+            throws BusinessException,SystemException;
+    @interface QueryNormProductForSalePrice {}
 }

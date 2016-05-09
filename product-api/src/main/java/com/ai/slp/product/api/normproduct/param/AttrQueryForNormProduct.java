@@ -2,6 +2,7 @@ package com.ai.slp.product.api.normproduct.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
@@ -16,12 +17,13 @@ public class AttrQueryForNormProduct extends BaseInfo {
     /**
      * 标准品标识
      */
-    @NotNull(message = "标准品标识不能为空",groups = {INormProductSV.QueryAttrByNormProduct.class})
+    @NotBlank(message = "标准品标识不能为空",groups = {INormProductSV.QueryAttrByNormProduct.class})
     private String productId;
     /**
-     * 属性类型
+     * 属性类型<br>
+     *     1:关键属性;2:销售属性;3:非关键属性
      */
-    @NotNull(message = "属性类型不能为空",groups = {INormProductSV.QueryAttrByNormProduct.class})
+    @NotBlank(message = "属性类型不能为空",groups = {INormProductSV.QueryAttrByNormProduct.class})
     private String attrType;
 
     public String getProductId() {
