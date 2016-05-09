@@ -54,4 +54,29 @@ public final class ProductConstants {
      * 废弃
      */
     public static final String STATE_DISCARD = "7";
+
+    /**
+     * SKU启用状态
+     */
+    public static final String SKU_STATE_ACTIVE = "1";
+    /**
+     * SKU自动启用状态
+     */
+    public static final String SKU_STATE_AUTO_ACTIVE = "11";
+    /**
+     * SKU停用状态
+     */
+    public static final String SKU_STATE_STOP = "2";
+    /**
+     * SKU自动停用状态
+     */
+    public static final String SKU_STATE_AUTO_STOP = "21";
+    /**
+     * SKU废弃状态
+     */
+    public static final String SKU_STATE_DISCARD = "3";
+    /**
+     * SKU自动废弃状态
+     */
+    public static final String SKU_STATE_AUTO_DISCARD = "31";
 }

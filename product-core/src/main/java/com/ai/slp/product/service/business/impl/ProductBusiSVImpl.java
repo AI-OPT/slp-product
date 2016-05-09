@@ -2,6 +2,7 @@ package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.api.product.param.SkuSetForProduct;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
@@ -74,5 +75,18 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             productLogAtomSV.install(productLog);
         }
         return installNum;
+    }
+
+    /**
+     * 查询指定商品下的SKU信息
+     *
+     * @param tenantId
+     * @param prodId
+     * @return
+     */
+    @Override
+    public SkuSetForProduct querySkuByProdId(String tenantId, String prodId) {
+
+        return null;
     }
 }

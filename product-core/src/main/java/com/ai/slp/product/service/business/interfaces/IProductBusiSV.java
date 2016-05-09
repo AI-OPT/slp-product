@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.slp.product.api.product.param.SkuSetForProduct;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
@@ -18,6 +19,14 @@ public interface IProductBusiSV {
      * @param group
      * @return
      */
-    public int addProductWithStorageGroup(
-            StorageGroup group, Long operId, Timestamp operTime);
+    public int addProductWithStorageGroup(StorageGroup group, Long operId, Timestamp operTime);
+
+    /**
+     * 查询指定商品下的SKU信息
+     *
+     * @param tenantId
+     * @param prodId
+     * @return
+     */
+    public SkuSetForProduct querySkuByProdId(String tenantId,String prodId);
 }

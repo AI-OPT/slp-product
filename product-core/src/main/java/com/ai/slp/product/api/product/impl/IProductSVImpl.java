@@ -6,13 +6,22 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
+import com.ai.slp.product.util.CommonCheckUtils;
+import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * Created by jackieliu on 16/4/27.
  */
+@Service
+@Component
 public class IProductSVImpl implements IProductSV {
+    @Autowired
+    IProductBusiSV productBusiSV;
     /**
      * 查询商品列表<br>
      *
@@ -90,10 +99,7 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public SkuSetForProduct querySkuSetForProduct(SkuSetForProductQuery query) throws BusinessException, SystemException {
-        //获取商品下所有SKU信息
-
-        //获取所有SKU的属性值列表
-
-        return null;
+        CommonCheckUtils.checkTenantId(query.getTenantId(),"");
+        return productBusiSV.querySkuByProdId(query.getTenantId(),query.getProdId());
     }
 }
