@@ -1,6 +1,5 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.api.storage.param.StorageGroupInfo;
 import com.ai.slp.product.api.storage.param.StorageGroupSalePrice;

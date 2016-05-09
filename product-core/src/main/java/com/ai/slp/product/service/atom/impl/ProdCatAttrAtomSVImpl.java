@@ -1,10 +1,8 @@
 package com.ai.slp.product.service.atom.impl;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import com.ai.slp.product.constants.CommonSatesConstants;
-import com.ai.slp.product.dao.mapper.bo.ProductCatCriteria;
 import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;

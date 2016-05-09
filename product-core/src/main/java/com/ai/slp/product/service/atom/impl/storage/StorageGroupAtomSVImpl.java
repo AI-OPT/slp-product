@@ -3,7 +3,6 @@ package com.ai.slp.product.service.atom.impl.storage;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupCriteria;
-import com.ai.slp.product.dao.mapper.interfaces.SysSequenceCreditMapper;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageGroupMapper;
 import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;

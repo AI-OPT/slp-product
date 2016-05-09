@@ -4,7 +4,6 @@ import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**

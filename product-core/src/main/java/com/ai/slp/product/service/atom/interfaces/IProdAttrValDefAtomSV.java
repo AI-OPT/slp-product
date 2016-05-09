@@ -1,6 +1,5 @@
 package com.ai.slp.product.service.atom.interfaces;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import com.ai.opt.base.vo.PageInfo;
