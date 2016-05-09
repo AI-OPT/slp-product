@@ -106,8 +106,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         
         if (attrPam.getTenantId() == null)
             throw new BusinessException("", "未找到指定的属性信息，租户ID=" + attrPam.getTenantId());
-        return prodAttrDefAtomSV.deleteById(attrPam.getTenantId(), attrPam.getAttrId(),
-                attrPam.getOperId(), attrPam.getOperTime());
+        return prodAttrDefAtomSV.deleteById(attrPam.getTenantId(), attrPam.getAttrId(),attrPam.getOperId());
     }
 
     @Override
@@ -166,8 +165,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             throw new BusinessException("", "该属性已被使用，不能删除");
         
         return prodAttrValDefAtomSV.deleteProdAttrVal(attrValUniqueReq.getTenantId(),
-                attrValUniqueReq.getAttrvalueDefId(), attrValUniqueReq.getOperId(),
-                attrValUniqueReq.getOperTime());
+                attrValUniqueReq.getAttrvalueDefId(), attrValUniqueReq.getOperId());
     }
 
     @Override
@@ -199,7 +197,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     @Override
     public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId) {
         MapForRes<AttrDef, List<AttrValDef>> attrAndValues = new MapForRes<>();
-
+        //属性集合
         List<ProdAttrDef> prodAttrList = prodAttrDefAtomSV.selectAllAttrs(tenantId);
         for (ProdAttrDef prodAttr : prodAttrList) {
             AttrDef attrDef = new AttrDef();
@@ -210,7 +208,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             List<AttrValDef> attrValList = new ArrayList<AttrValDef>();
             for (ProdAttrvalueDef prodAttrVal : prodAttrValList) {
                 AttrValDef attrVal = new AttrValDef();
-                BeanUtils.copyProperties(prodAttrVal, prodAttrVal);
+                BeanUtils.copyProperties(attrVal, prodAttrVal);
                 attrValList.add(attrVal);
             }
             attrAndValues.put(attrDef, attrValList);

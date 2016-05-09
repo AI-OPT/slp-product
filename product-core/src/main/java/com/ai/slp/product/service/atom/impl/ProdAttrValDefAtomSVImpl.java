@@ -46,6 +46,7 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         if(prodAttrvalueDef.getOperTime() == null)
             prodAttrvalueDef.setOperTime(DateUtils.currTimeStamp());
         prodAttrvalueDef.setAttrvalueDefId(sequenceCreditAtomSV.getSeqByName()+"");
+        prodAttrvalueDef.setState(CommonSatesConstants.STATE_ACTIVE);
         return prodAttrvalueDefMapper.insertSelective(prodAttrvalueDef);
     }
 
@@ -58,11 +59,11 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
 
 
     @Override
-    public int deleteProdAttrVal(String tenantId, String attrvalueDefId, Long operId, Timestamp operTime) {
+    public int deleteProdAttrVal(String tenantId, String attrvalueDefId, Long operId) {
         ProdAttrvalueDef prodAttrvalueDef =new ProdAttrvalueDef();
         prodAttrvalueDef.setState(CommonSatesConstants.STATE_INACTIVE);
         prodAttrvalueDef.setOperId(operId);
-        prodAttrvalueDef.setOperTime(operTime!=null?operTime: DateUtils.currTimeStamp());
+        prodAttrvalueDef.setOperTime(DateUtils.currTimeStamp());
         
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andAttrvalueDefIdEqualTo(attrvalueDefId);

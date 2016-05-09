@@ -49,7 +49,7 @@ public interface INormProductBusiSV {
      * @param operId 操作者id
      * @param operTime 操作时间,可以为空
      */
-    public void discardProduct(String tenantId,String productId,Long operId,Date operTime);
+    public void discardProduct(String tenantId,String productId,Long operId);
 
     /**
      * 查询标准品下指定类型的属性及属性值信息

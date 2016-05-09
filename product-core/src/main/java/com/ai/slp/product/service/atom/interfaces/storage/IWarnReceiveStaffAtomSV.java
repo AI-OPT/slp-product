@@ -57,9 +57,10 @@ public interface IWarnReceiveStaffAtomSV {
      * 
      * @param tenantId
      * @param warnReceiveStaffId
+     * @param operId
      * @return
      * @author lipeng
      */
-    public int deleteWarnReceiveStaff(String tenantId,String warnReceiveStaffId,Long operId,Timestamp operTime);
+    public int deleteWarnReceiveStaff(String tenantId,String warnReceiveStaffId,Long operId);
     
 }

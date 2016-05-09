@@ -71,7 +71,7 @@ public class INormProductSVImpl implements INormProductSV {
     public BaseResponse discardProduct(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
         normProductBusiSV.discardProduct(
                 invalidRequest.getTenantId(),invalidRequest.getProductId(),
-                invalidRequest.getOperId(),invalidRequest.getOperTime());
+                invalidRequest.getOperId());
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);

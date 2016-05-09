@@ -69,7 +69,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),"");
         productCatBusiSV.deleteByCatId(catUniqueReq.getTenantId(),catUniqueReq.getProductCatId(),
-                catUniqueReq.getOperId(),catUniqueReq.getOperTime());
+                catUniqueReq.getOperId());
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setResultCode("");
