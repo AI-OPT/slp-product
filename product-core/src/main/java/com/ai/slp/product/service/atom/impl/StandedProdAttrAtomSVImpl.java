@@ -45,8 +45,8 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
 
     @Override
     public int updateObj(StandedProdAttr prodAttr) {
-
-        return 0;
+        prodAttr.setOperTime(DateUtils.currTimeStamp());
+        return prodAttrMapper.updateByPrimaryKey(prodAttr);
     }
 
 

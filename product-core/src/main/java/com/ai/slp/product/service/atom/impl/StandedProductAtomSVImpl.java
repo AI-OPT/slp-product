@@ -50,8 +50,7 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
         standedProduct.setCreateTime(null);
         standedProduct.setCreateId(null);
         standedProduct.setProductCatId(null);
-        if (standedProduct.getOperTime()==null)
-            standedProduct.setOperTime(DateUtil.getSysDate());
+        standedProduct.setOperTime(DateUtil.getSysDate());
         StandedProductCriteria example = new StandedProductCriteria();
         example.createCriteria()
                 .andTenantIdEqualTo(standedProduct.getTenantId())

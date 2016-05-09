@@ -52,8 +52,7 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
 
     @Override
     public int updateProdAttrVal(ProdAttrvalueDef prodAttrvalueDef) {
-        if(prodAttrvalueDef.getOperTime() == null)
-            prodAttrvalueDef.setOperTime(DateUtils.currTimeStamp());
+        prodAttrvalueDef.setOperTime(DateUtils.currTimeStamp());
         return prodAttrvalueDefMapper.updateByPrimaryKeySelective(prodAttrvalueDef);
     }
 

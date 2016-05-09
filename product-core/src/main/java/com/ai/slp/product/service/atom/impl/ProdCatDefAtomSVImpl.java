@@ -107,8 +107,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         ProductCatCriteria example = new ProductCatCriteria();
         example.createCriteria().andTenantIdEqualTo(productCat.getTenantId())
                 .andProductCatIdEqualTo(productCat.getProductCatId());
-        if (productCat.getOperTime()==null)
-            productCat.setOperTime(DateUtils.currTimeStamp());
+        productCat.setOperTime(DateUtils.currTimeStamp());
         productCat.setCatLevel(null);//不允许更新等级
         productCat.setParentProductCatId(null);//不允许更新父类目
         productCat.setState(null);//不允许更新状态

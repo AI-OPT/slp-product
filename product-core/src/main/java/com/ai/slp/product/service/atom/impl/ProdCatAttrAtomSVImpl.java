@@ -128,8 +128,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
      */
     @Override
     public int update(ProdCatAttr prodCatAttr) {
-        if (prodCatAttr.getOperTime()==null)
-            prodCatAttr.setOperTime(DateUtils.currTimeStamp());
+        prodCatAttr.setOperTime(DateUtils.currTimeStamp());
         return prodCatAttrMapper.updateByPrimaryKey(prodCatAttr);
     }
 

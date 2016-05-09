@@ -126,8 +126,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
      */
     @Override
     public int updateStorGroupPrice(StorageGroup storageGroup) {
-        if(storageGroup.getOperTime() == null)
-            storageGroup.setOperTime(DateUtils.currTimeStamp());
+        storageGroup.setOperTime(DateUtils.currTimeStamp());
         return groupMapper.updateByPrimaryKeySelective(storageGroup);
     }
 }
