@@ -261,7 +261,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0112
      */
     @Override
-    public List<StorageGroupInfo> queryGroupByProdIdForSalePrice(StorageGroupInfoQuery infoQuery) throws BusinessException, SystemException {
+    public PageInfoForRes<StorageGroupInfo> queryGroupByProdIdForSalePrice(StorageGroupInfoPageReq infoQuery) throws BusinessException, SystemException {
         return null;
     }
 

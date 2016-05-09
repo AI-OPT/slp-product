@@ -1,0 +1,110 @@
+package com.ai.slp.product.api.productcat.param;
+
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
+
+import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
+
+/**
+ * 类目属性值对象<br>
+ *
+ *
+ * Date: 2016年5月3日 <br>
+ * Copyright (c) 2016 asiainfo.com <br>
+ *
+ * @author liutong5
+ */
+public class ProdCatAttrVal extends BaseInfo{
+    /**
+     * 类目与属性关系标识
+     */
+    @NotNull(message = "关系标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
+    private String catAttrId;
+    /**
+     * 商品类目标识
+     */
+    @NotNull(message = "类目标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
+    private String productCatId;
+    /**
+     * 属性ID
+     */
+    @NotNull(message = "属性标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
+    private long attrId;
+    /**
+     * 属性值ID<br>
+     * 为空时,表示删除整个属性
+     */
+    private String attrvalueDefId;
+
+    /**
+     * 属性类型,包括关键属性 非关键属性 销售属性
+     */
+    @NotNull(message = "属性类型不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
+    private String attrType;
+    /**
+     * 操作人
+     */
+    @NotNull(message = "操作人标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
+    private long operId;
+    /**
+     * 操作时间
+     */
+    private Timestamp operTime;
+
+    public String getCatAttrId() {
+        return catAttrId;
+    }
+
+    public void setCatAttrId(String catAttrId) {
+        this.catAttrId = catAttrId;
+    }
+
+    public String getProductCatId() {
+        return productCatId;
+    }
+
+    public void setProductCatId(String productCatId) {
+        this.productCatId = productCatId;
+    }
+
+    public long getAttrId() {
+        return attrId;
+    }
+
+    public void setAttrId(long attrId) {
+        this.attrId = attrId;
+    }
+
+    public String getAttrvalueDefId() {
+        return attrvalueDefId;
+    }
+
+    public void setAttrvalueDefId(String attrvalueDefId) {
+        this.attrvalueDefId = attrvalueDefId;
+    }
+
+    public String getAttrType() {
+        return attrType;
+    }
+
+    public void setAttrType(String attrType) {
+        this.attrType = attrType;
+    }
+
+    public long getOperId() {
+        return operId;
+    }
+
+    public void setOperId(long operId) {
+        this.operId = operId;
+    }
+
+    public Timestamp getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Timestamp operTime) {
+        this.operTime = operTime;
+    }
+}

@@ -6,9 +6,6 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.param.*;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * 标准品处理接口<br>
  *

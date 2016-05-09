@@ -2,20 +2,20 @@ package com.ai.slp.product.service.business.interfaces;
 
 import java.util.List;
 
-import com.ai.slp.product.api.common.param.MapForRes;
+import com.ai.slp.product.api.productcat.param.MapForRes;
 import com.ai.slp.product.api.common.param.PageInfoForRes;
-import com.ai.slp.product.api.normproduct.param.AttrDef;
-import com.ai.slp.product.api.normproduct.param.AttrDefInfo;
-import com.ai.slp.product.api.normproduct.param.AttrDefParam;
-import com.ai.slp.product.api.normproduct.param.AttrInfo;
-import com.ai.slp.product.api.normproduct.param.AttrPam;
-import com.ai.slp.product.api.normproduct.param.AttrParam;
-import com.ai.slp.product.api.normproduct.param.AttrVal;
-import com.ai.slp.product.api.normproduct.param.AttrValDef;
-import com.ai.slp.product.api.normproduct.param.AttrValInfo;
-import com.ai.slp.product.api.normproduct.param.AttrValPageQuery;
-import com.ai.slp.product.api.normproduct.param.AttrValParam;
-import com.ai.slp.product.api.normproduct.param.AttrValUniqueReq;
+import com.ai.slp.product.api.productcat.param.AttrDef;
+import com.ai.slp.product.api.productcat.param.AttrDefInfo;
+import com.ai.slp.product.api.productcat.param.AttrDefParam;
+import com.ai.slp.product.api.productcat.param.AttrInfo;
+import com.ai.slp.product.api.productcat.param.AttrPam;
+import com.ai.slp.product.api.productcat.param.AttrParam;
+import com.ai.slp.product.api.productcat.param.AttrVal;
+import com.ai.slp.product.api.productcat.param.AttrValDef;
+import com.ai.slp.product.api.productcat.param.AttrValInfo;
+import com.ai.slp.product.api.productcat.param.AttrValPageQuery;
+import com.ai.slp.product.api.productcat.param.AttrValParam;
+import com.ai.slp.product.api.productcat.param.AttrValUniqueReq;
 
 /**
  * 属性与属性值的相关操作

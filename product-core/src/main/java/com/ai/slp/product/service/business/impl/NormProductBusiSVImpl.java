@@ -3,6 +3,7 @@ package com.ai.slp.product.service.business.impl;
 import java.util.*;
 
 import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.api.normproduct.param.ProdCatAttrDef;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.*;
 import com.ai.slp.product.service.atom.interfaces.*;
