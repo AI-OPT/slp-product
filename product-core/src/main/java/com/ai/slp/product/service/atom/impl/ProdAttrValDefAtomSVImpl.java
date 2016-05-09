@@ -46,6 +46,7 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         if(prodAttrvalueDef.getOperTime() == null)
             prodAttrvalueDef.setOperTime(DateUtils.currTimeStamp());
         prodAttrvalueDef.setAttrvalueDefId(sequenceCreditAtomSV.getSeqByName()+"");
+        prodAttrvalueDef.setState(CommonSatesConstants.STATE_ACTIVE);
         return prodAttrvalueDefMapper.insertSelective(prodAttrvalueDef);
     }
 

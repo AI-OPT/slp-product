@@ -197,7 +197,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     @Override
     public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId) {
         MapForRes<AttrDef, List<AttrValDef>> attrAndValues = new MapForRes<>();
-
+        //属性集合
         List<ProdAttrDef> prodAttrList = prodAttrDefAtomSV.selectAllAttrs(tenantId);
         for (ProdAttrDef prodAttr : prodAttrList) {
             AttrDef attrDef = new AttrDef();
@@ -208,7 +208,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             List<AttrValDef> attrValList = new ArrayList<AttrValDef>();
             for (ProdAttrvalueDef prodAttrVal : prodAttrValList) {
                 AttrValDef attrVal = new AttrValDef();
-                BeanUtils.copyProperties(prodAttrVal, prodAttrVal);
+                BeanUtils.copyProperties(attrVal, prodAttrVal);
                 attrValList.add(attrVal);
             }
             attrAndValues.put(attrDef, attrValList);
