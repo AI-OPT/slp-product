@@ -1,7 +1,5 @@
 package com.ai.slp.product.service.atom.interfaces;
 
-import java.sql.Timestamp;
-
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.vo.StandedProdPageQueryVo;

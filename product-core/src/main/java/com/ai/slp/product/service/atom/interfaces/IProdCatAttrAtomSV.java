@@ -1,8 +1,6 @@
 package com.ai.slp.product.service.atom.interfaces;
 
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
-
-import java.sql.Timestamp;
 import java.util.List;
 
 /**

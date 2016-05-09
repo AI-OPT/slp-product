@@ -1,12 +1,8 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
-import com.ai.slp.product.dao.mapper.bo.ProductCat;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
-import java.sql.Timestamp;
 
 /**
  * 商城商品业务操作

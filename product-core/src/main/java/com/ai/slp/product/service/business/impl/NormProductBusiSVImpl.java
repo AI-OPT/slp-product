@@ -1,6 +1,5 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.sql.Timestamp;
 import java.util.*;
 
 import com.ai.slp.product.api.normproduct.param.*;
@@ -73,7 +72,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         }
         //添加标准品属性值
         List<NormProdAttrValRequest> attrValList = normProdct.getAttrValList();
-        Timestamp nowTime = DateUtils.currTimeStamp();
+//        Timestamp nowTime = DateUtils.currTimeStamp();
         for (NormProdAttrValRequest attrValReq : attrValList) {
             StandedProdAttr prodAttr = new StandedProdAttr();
             BeanUtils.copyProperties(prodAttr, attrValReq);

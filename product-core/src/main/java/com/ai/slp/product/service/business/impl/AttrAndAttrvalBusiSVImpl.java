@@ -39,13 +39,10 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Autowired
     IProdAttrDefAtomSV prodAttrDefAtomSV;
-
     @Autowired
     IProdAttrValDefAtomSV prodAttrValDefAtomSV;
-    
     @Autowired
     IProdCatAttrAtomSV prodCatAttrAtomSV;
-    
     @Autowired
     IStandedProdAttrAtomSV standedProdAttrAtomSV;
 
@@ -56,9 +53,6 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             throw new BusinessException("", "未找到指定的属性信息，租户ID=" + tenantId + ",属性标识=" + attrId);
         AttrInfo attrInfo = new AttrInfo();
         BeanUtils.copyProperties(attrInfo, prodAttrDef);
-        if (prodAttrDef.getFirstLetter() != null)
-            attrInfo.setFirstLetter(prodAttrDef.getFirstLetter());
-        // attrInfo.setIsAllowCustom(prodAttrDef.getIsAllowCustom());//一期不做 Y是 N否
 
         return attrInfo;
     }
@@ -72,7 +66,6 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         List<AttrDefInfo> attrDefInfoList = new ArrayList<AttrDefInfo>();
         for (ProdAttrDef prodAttrDef : prodAttrDefList) {
             AttrDefInfo attrDefInfo = new AttrDefInfo();
-
             BeanUtils.copyProperties(attrDefInfo, prodAttrDef);
 
             attrDefInfoList.add(attrDefInfo);
@@ -87,8 +80,8 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Override
     public int updateAttr(AttrParam attrParam) {
-        if(prodCatAttrAtomSV.selectCatNumByAttrId(attrParam.getTenantId(), attrParam.getAttrId())<=0
-                || standedProdAttrAtomSV.queryProdNumOfAttr(attrParam.getTenantId(), attrParam.getAttrId())<=0)
+        if(prodCatAttrAtomSV.selectCatNumByAttrId(attrParam.getTenantId(), attrParam.getAttrId()) > 0
+                || standedProdAttrAtomSV.queryProdNumOfAttr(attrParam.getTenantId(), attrParam.getAttrId()) > 0)
             throw new BusinessException("", "该属性已被使用，不能修改");
         
         ProdAttrDef prodAttrDef = new ProdAttrDef();
@@ -100,8 +93,8 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Override
     public int deleteAttr(AttrPam attrPam) {
-        if(prodCatAttrAtomSV.selectCatNumByAttrId(attrPam.getTenantId(), attrPam.getAttrId())<=0
-                || standedProdAttrAtomSV.queryProdNumOfAttr(attrPam.getTenantId(), attrPam.getAttrId())<=0)
+        if(prodCatAttrAtomSV.selectCatNumByAttrId(attrPam.getTenantId(), attrPam.getAttrId()) > 0
+                || standedProdAttrAtomSV.queryProdNumOfAttr(attrPam.getTenantId(), attrPam.getAttrId()) > 0)
             throw new BusinessException("", "该属性已被使用，不能删除");
         
         if (attrPam.getTenantId() == null)
@@ -160,8 +153,8 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Override
     public int deleteAttrVal(AttrValUniqueReq attrValUniqueReq) {
-        if(prodCatAttrAtomSV.selectCatNumByAttrId(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrId())<=0
-                || standedProdAttrAtomSV.queryProdNumOfAttr(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrId())<=0)
+        if(prodCatAttrAtomSV.selectCatNumByAttrId(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrId()) > 0
+                || standedProdAttrAtomSV.queryProdNumOfAttr(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrId()) > 0)
             throw new BusinessException("", "该属性已被使用，不能删除");
         
         return prodAttrValDefAtomSV.deleteProdAttrVal(attrValUniqueReq.getTenantId(),
@@ -170,8 +163,8 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Override
     public int updateAttrVal(AttrValParam attrValParam) {
-        if(prodCatAttrAtomSV.selectCatNumByAttrId(attrValParam.getTenantId(), attrValParam.getAttrId())<=0
-                || standedProdAttrAtomSV.queryProdNumOfAttr(attrValParam.getTenantId(), attrValParam.getAttrId())<=0)
+        if(prodCatAttrAtomSV.selectCatNumByAttrId(attrValParam.getTenantId(), attrValParam.getAttrId()) > 0
+                || standedProdAttrAtomSV.queryProdNumOfAttr(attrValParam.getTenantId(), attrValParam.getAttrId()) > 0)
             throw new BusinessException("", "该属性已被使用，不能修改");
 
         ProdAttrvalueDef prodAttrvalueDef = new ProdAttrvalueDef();

@@ -1,9 +1,6 @@
 package com.ai.slp.product.api.normproduct.param;
 
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.interfaces.IAttrAndValDefSV;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 属性值分页查询请求参数<br>
