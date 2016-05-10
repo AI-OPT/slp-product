@@ -8,10 +8,12 @@ import com.ai.opt.base.vo.BaseInfo;
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class AttrDefParam extends BaseInfo {
 	
+	private static final long serialVersionUID = 1L;
+
 	/**
      * 请求查询的页码
      * 默认为1
@@ -20,6 +22,7 @@ public class AttrDefParam extends BaseInfo {
 
     /**
      * 每页显示条数
+     * 默认为20
      */
     private Integer pageSize =20;
 

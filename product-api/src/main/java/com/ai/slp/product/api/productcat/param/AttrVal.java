@@ -8,11 +8,13 @@ import com.ai.opt.base.vo.BaseResponse;
  * Date: 2016年5月4日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class AttrVal extends BaseResponse{
     
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 属性值名称
      */
     private String attrValueName;

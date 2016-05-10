@@ -1,5 +1,12 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupCriteria;
@@ -7,11 +14,6 @@ import com.ai.slp.product.dao.mapper.interfaces.storage.StorageGroupMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 库存组原子操作
@@ -125,5 +127,30 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
     public int updateStorGroupPrice(StorageGroup storageGroup) {
         storageGroup.setOperTime(DateUtils.currTimeStamp());
         return groupMapper.updateByPrimaryKeySelective(storageGroup);
+    }
+
+    @Override
+    public int countStorGroupByProdID(String tenantId, String standedProdId) {
+        StorageGroupCriteria example = new StorageGroupCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(tenantId).andStateNotEqualTo("3").andStateNotEqualTo("31");
+        return groupMapper.countByExample(example);
+    }
+    /**
+     *  分页查询某个标准品下的库存组列表
+     */
+    @Override
+    public PageInfoForRes<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId,Integer pageNo,Integer pageSize) {
+    	StorageGroupCriteria example = new StorageGroupCriteria();
+    	example.setLimitStart((pageNo-1)*pageSize);
+    	example.setLimitEnd(pageSize);
+    	List<String> stateList = new ArrayList<String>();
+    	stateList.add("3");
+    	stateList.add("31");
+    	example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId).andStateNotIn(stateList);
+    	PageInfoForRes<StorageGroup> storageGroupPage = new PageInfoForRes<>(); 
+    	storageGroupPage.setResult(groupMapper.selectByExample(example));
+    	storageGroupPage.setPageNo(pageNo);
+    	storageGroupPage.setPageSize(pageSize);
+    	return storageGroupPage;
     }
 }

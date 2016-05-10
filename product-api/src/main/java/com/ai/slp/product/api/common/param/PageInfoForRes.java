@@ -13,7 +13,9 @@ import java.util.List;
  * @author liutong5
  */
 public class PageInfoForRes<T> extends BaseResponse {
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 请求查询的页码
      */
     private Integer pageNo = 1;
@@ -21,7 +23,7 @@ public class PageInfoForRes<T> extends BaseResponse {
     /**
      * 每页显示条数
      */
-    private Integer pageSize;
+    private Integer pageSize = 20;
 
     /**
      * 结果集

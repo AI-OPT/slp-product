@@ -11,7 +11,9 @@ import com.ai.opt.base.vo.BaseInfo;
  * @author liutong5
  */
 public class AttrValPageQuery extends BaseInfo{
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 属性值ID
      */
     private String attrvalueDefId;

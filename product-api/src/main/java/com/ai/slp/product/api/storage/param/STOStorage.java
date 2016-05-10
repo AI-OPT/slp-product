@@ -16,7 +16,7 @@ import java.sql.Timestamp;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class Storage extends BaseInfo{
+public class STOStorage extends BaseInfo{
     /**
      * 库存标识<br>
      * 若包含标识则进行更新操作,否则进行添加操作

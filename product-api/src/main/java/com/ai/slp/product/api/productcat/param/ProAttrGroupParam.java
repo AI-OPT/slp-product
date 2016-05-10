@@ -14,7 +14,9 @@ import com.ai.opt.base.vo.BaseInfo;
  */
 public class ProAttrGroupParam extends BaseInfo {
     
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 类目属性组ID
      */
     private long attrGroupId;
@@ -112,6 +114,14 @@ public class ProAttrGroupParam extends BaseInfo {
     public void setLogoURL(String logoURL) {
         this.logoURL = logoURL;
     }
+
+	public long getAttrNum() {
+		return attrNum;
+	}
+
+	public void setAttrNum(long attrNum) {
+		this.attrNum = attrNum;
+	}
     
     
 }

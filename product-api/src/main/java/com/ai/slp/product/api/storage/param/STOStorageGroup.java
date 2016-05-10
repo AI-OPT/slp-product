@@ -15,7 +15,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class StorageGroup extends BaseInfo {
+public class STOStorageGroup extends BaseInfo {
 
     /**
      * 标准品标识<br>

@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class AttrValInfo {
 
@@ -30,12 +30,12 @@ public class AttrValInfo {
     /**
      * 操作人ID
      */
-    private long operId;
+    private Long operId;
     
     /**
      *操作人
      */
-    private String oper;
+    private String operName;
     
     /**
      * 操作时间
@@ -43,11 +43,11 @@ public class AttrValInfo {
     private Timestamp operTime;
 
     public String getOper() {
-        return oper;
+        return operName;
     }
 
     public void setOper(String oper) {
-        this.oper = oper;
+        this.operName = oper;
     }
 
     public String getAttrvalueDefId() {
@@ -74,11 +74,11 @@ public class AttrValInfo {
         this.firstLetter = firstLetter;
     }
 
-    public long getOperId() {
+    public Long getOperId() {
         return operId;
     }
 
-    public void setOperId(long operId) {
+    public void setOperId(Long operId) {
         this.operId = operId;
     }
 

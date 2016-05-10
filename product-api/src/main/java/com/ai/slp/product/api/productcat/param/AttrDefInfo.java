@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.productcat.param;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -8,9 +9,10 @@ import java.sql.Timestamp;
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
-public class AttrDefInfo {
+public class AttrDefInfo implements Serializable{
+	private static final long serialVersionUID = 1L;
     
     /**
      * 属性ID
@@ -45,7 +47,7 @@ public class AttrDefInfo {
     /**
      *操作人-通过操作人ID调用永华数据查询
      */
-    private String oper;
+    private String operName;
     
     /**
      * 操作人ID
@@ -122,11 +124,11 @@ public class AttrDefInfo {
     }
 
     public String getOper() {
-        return oper;
+        return operName;
     }
 
     public void setOper(String oper) {
-        this.oper = oper;
+        this.operName = oper;
     }
 
 }

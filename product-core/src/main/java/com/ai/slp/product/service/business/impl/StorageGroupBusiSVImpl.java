@@ -63,7 +63,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @return
      */
     @Override
-    public int addGroup(StorageGroup storageGroup) {
+    public int addGroup(STOStorageGroup storageGroup) {
         //查询标准品是否有销售属性
         String tenantId = storageGroup.getTenantId();
         String standedProdId = storageGroup.getProdId();
@@ -72,7 +72,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             throw new BusinessException("","未找到对应标准品信息,租户id:"+tenantId+",标准品标识:"+standedProdId);
         }
         //添加库存组信息,状态默认为停用
-        com.ai.slp.product.dao.mapper.bo.storage.StorageGroup group = new com.ai.slp.product.dao.mapper.bo.storage.StorageGroup();
+        StorageGroup group = new StorageGroup();
         BeanUtils.copyProperties(group,storageGroup);
         //默认为停用状态
         group.setState(StorageConstants.GROUP_STATE_STOP);
@@ -84,7 +84,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             storageGroupLogAtomSV.install(groupLog);
         }
         //添加商品
-        productBusiSV.addProductWithStorageGroup(group,storageGroup.getCreateId());
+        productBusiSV.addProductWithStorageGroup(group,storageGroup.getOperId());
         return installNum;
     }
 
@@ -95,20 +95,21 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @return
      */
     @Override
-    public int updateGroupName(StorageGroupUpName storageGroup) {
+    public int updateGroup(STOStorageGroup storageGroup) {
         //查询库存组是否存在
-        com.ai.slp.product.dao.mapper.bo.storage.StorageGroup group = storageGroupAtomSV.queryByGroupId(
-                storageGroup.getTenantId(),storageGroup.getStorageGroupId());
+        StorageGroup group = storageGroupAtomSV.queryByGroupId(
+                storageGroup.getTenantId(),storageGroup.getGroupId());
         if (group == null)
             throw new BusinessException("","要更新库存组信息不存在,租户ID:"+storageGroup.getTenantId()
-            +",库存组标识:"+storageGroup.getStorageGroupId());
+            +",库存组标识:"+storageGroup.getGroupId());
         //已废弃,不允许变更
         if (StorageConstants.GROUP_STATE_DISCARD.equals(group.getState())
                 || StorageConstants.GROUP_STATE_AUTO_DISCARD.equals(group.getState())){
             throw new BusinessException("","库存组已经废弃,不允许更新信息");
         }
         //设置可更新信息
-        group.setStorageGroupName(storageGroup.getStorageGroupName());
+        group.setStorageGroupName(storageGroup.getGroupName());
+        group.setSerialNumber(storageGroup.getSerialNumber());
         group.setOperId(storageGroup.getOperId());
         int updateNum = storageGroupAtomSV.updateById(group);
         //添加库存组日志
@@ -128,14 +129,14 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @return
      */
     @Override
-    public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId, String productId) {
+    public List<StorageGroupInfo> queryGroupInfoByNormProId(String tenantId, String productId) {
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,productId);
         if (standedProduct==null)
             throw new BusinessException("","未找到对应的标准品信息,租户ID:"+tenantId+",标准品标识:"+productId);
         //查询出标准品下的所有库存组,创建时间倒序
-        List<StorageGroupRes> groupInfoList = new ArrayList<>();
-        List<com.ai.slp.product.dao.mapper.bo.storage.StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId,productId);
-        for (com.ai.slp.product.dao.mapper.bo.storage.StorageGroup storageGroup: groupList){
+        List<StorageGroupInfo> groupInfoList = new ArrayList<>();
+        List<StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId,productId);
+        for (StorageGroup storageGroup: groupList){
             groupInfoList.add(genStorageGroupInfo(storageGroup,standedProduct));
         }
         return groupInfoList;
@@ -149,8 +150,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @return
      */
     @Override
-    public StorageGroupRes queryGroupInfoByGroupId(String tenantId, String groupId) {
-        com.ai.slp.product.dao.mapper.bo.storage.StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
+    public StorageGroupInfo queryGroupInfoByGroupId(String tenantId, String groupId) {
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
         if (storageGroup == null) {
             logger.warn("租户ID:" + tenantId + ",库存组标识:" + groupId);
             throw new BusinessException("", "未找到对应的标准品信息,租户ID:" + tenantId + ",库存组标识:" + groupId);
@@ -168,14 +169,16 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @param group
      * @return
      */
-    private StorageGroupRes genStorageGroupInfo(com.ai.slp.product.dao.mapper.bo.storage.StorageGroup group, StandedProduct standedProduct){
-        StorageGroupRes groupInfo = new StorageGroupRes();
+    private StorageGroupInfo genStorageGroupInfo(StorageGroup group,StandedProduct standedProduct){
+        StorageGroupInfo groupInfo = new StorageGroupInfo();
         BeanUtils.copyProperties(groupInfo,group);
         //填充库存组信息
-//        groupInfo.setProdId(group.getStandedProdId());
-//        groupInfo.setProdName(standedProduct.getStandedProductName());
+        groupInfo.setGroupId(group.getStorageGroupId());
+        groupInfo.setGroupName(group.getStorageGroupName());
+        groupInfo.setProdId(group.getStandedProdId());
+        groupInfo.setProdName(standedProduct.getStandedProductName());
         //库存总量
-        Map<Short,List<StorageRes>> storageMap = new HashMap<>();
+        Map<Short,List<STOStorage>> storageMap = new HashMap<>();
         //====填充库存集合信息
         //当前启用的优先级
         Short activePriority = null;
@@ -184,13 +187,14 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //查询库存组的库存集合
         List<Storage> storageList = storageAtomSV.queryOfGroup(group.getTenantId(),group.getStorageGroupId());
         for (Storage storage:storageList){
-            List<StorageRes> stoStorageList = storageMap.get(storage.getPriorityNumber());
+            List<STOStorage> stoStorageList = storageMap.get(storage.getPriorityNumber());
             if (stoStorageList==null){
                 stoStorageList = new ArrayList<>();
                 storageMap.put(storage.getPriorityNumber(),stoStorageList);
             }
-            StorageRes stoStorage = new StorageRes();
+            STOStorage stoStorage = new STOStorage();
             BeanUtils.copyProperties(stoStorage,storage);
+            stoStorage.setGroupId(storage.getStorageGroupId());
             stoStorageList.add(stoStorage);
             //如果库存为启用状态
             if (StorageConstants.GROUP_STATE_ACTIVE.equals(storage.getState())
@@ -220,7 +224,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         if(storageGroupAtomSV.queryByGroupId(salePrice.getTenantId(), salePrice.getGroupId()).getState().equals("3"))
             throw new BusinessException("", "废弃状态的库存组不能更新价格信息");
         //填充价格等基本信息
-        com.ai.slp.product.dao.mapper.bo.storage.StorageGroup storageGroup = new com.ai.slp.product.dao.mapper.bo.storage.StorageGroup();
+        StorageGroup storageGroup = new StorageGroup();
         BeanUtils.copyProperties(storageGroup, salePrice);
         int updateNum = storageGroupAtomSV.updateStorGroupPrice(storageGroup);
         //写入日志信息
@@ -249,7 +253,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
     @Override
     public void updateGroupState(String tenantId, String groupId, String state, Long operId) {
         //查询库存组是否存在
-        com.ai.slp.product.dao.mapper.bo.storage.StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
         if (storageGroup == null){
             logger.warn("要查询库存组不存在,租户ID:"+tenantId+",库存组标识:"+groupId);
             throw new BusinessException("","库存组不存在,租户ID:"+tenantId+",库存组标识:"+groupId);
@@ -279,7 +283,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * 库存组启用
      * @param storageGroup
      */
-    private void startGroup(com.ai.slp.product.dao.mapper.bo.storage.StorageGroup storageGroup, Long operId){
+    private void startGroup(StorageGroup storageGroup,Long operId){
         //检查是否已配置路由
         if (storageGroup.getRouteGroupId()==null){
             throw new BusinessException("","库存组没有配置路由信息,不能启用");
@@ -307,7 +311,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @param storageGroup
      * @param operId
      */
-    private void stopGroup(com.ai.slp.product.dao.mapper.bo.storage.StorageGroup storageGroup, Long operId){
+    private void stopGroup(StorageGroup storageGroup,Long operId){
         //库存组变更为停用
         storageGroup.setState(StorageConstants.GROUP_STATE_STOP);
         storageGroup.setOperId(operId);
@@ -329,7 +333,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @param storageGroup
      * @param operId
      */
-    private void discardGroup(com.ai.slp.product.dao.mapper.bo.storage.StorageGroup storageGroup, Long operId){
+    private void discardGroup(StorageGroup storageGroup,Long operId){
         //商品废弃
         Product product = productAtomSV.selectByGroupId(
                 storageGroup.getTenantId(),storageGroup.getStorageGroupId());

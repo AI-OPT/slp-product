@@ -1,8 +1,8 @@
 package com.ai.slp.product.api.productcat.param;
 
-import java.sql.Timestamp;
-
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
@@ -13,16 +13,18 @@ import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class AttrValParam extends BaseInfo {
 	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 属性ID
 	 */
-    @NotNull(message = "属性ID不能为空",
+	@NotBlank(message = "属性ID不能为空",
             groups = {IAttrAndValDefSV.UpdateAttrVal.class})
-	private long attrId;
+	private Long attrId;
 	
 	/**
 	 * 属性值ID
@@ -32,7 +34,7 @@ public class AttrValParam extends BaseInfo {
 	/**
 	 * 属性值名称
 	 */
-	@NotNull(message = "属性值不能为空",
+	@NotBlank(message = "属性值不能为空",
 	        groups = {IAttrAndValDefSV.AddAttrVal.class,
 	                IAttrAndValDefSV.UpdateAttrVal.class})
 	private String attrValueName;
@@ -48,30 +50,16 @@ public class AttrValParam extends BaseInfo {
 	@NotNull(message = "操作人ID不能为空",
 	        groups = {IAttrAndValDefSV.AddAttrVal.class,
 	                IAttrAndValDefSV.UpdateAttrVal.class})
-    private long operId;
+    private Long operId;
     
-    /**
-     * 操作时间
-     */
-    private Timestamp operTime;
-
-
-    public long getOperId() {
+    public Long getOperId() {
         return operId;
     }
 
-    public void setOperId(long operId) {
+    public void setOperId(Long operId) {
         this.operId = operId;
     }
 
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
-    }
-    
 	public Long getAttrId() {
 		return attrId;
 	}
