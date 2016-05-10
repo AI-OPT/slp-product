@@ -23,8 +23,8 @@ public class StorageStatus extends BaseInfo {
     private String storageId;
 
     /**
-     * 库存状态<br>
-     * 添加库存时,必须为停用状态
+     * 库存状态 1:启用;2:停用;3:废弃<br>
+     *     状态变更时不能为空
      */
     @NotNull(message = "库存状态不能为空",
             groups = { IStorageSV.ChargeStorageStatus.class })
@@ -35,11 +35,6 @@ public class StorageStatus extends BaseInfo {
     @NotNull(message = "操作人不能为空",
             groups = { IStorageSV.ChargeStorageStatus.class })
     private Long operId;
-    /**
-     * 操作时间<br>
-     * 若不填写,则设置接收时间
-     */
-    private Timestamp operTime;
 
     public String getStorageId() {
         return storageId;
@@ -63,13 +58,5 @@ public class StorageStatus extends BaseInfo {
 
     public void setOperId(Long operId) {
         this.operId = operId;
-    }
-
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
     }
 }

@@ -21,7 +21,7 @@ public interface IWarnReceiveStaffSV {
     /**
      * 查询指定库存的预警人集合
      *
-     * @param objectId 库存标识
+     * @param warnReceStafForQuery 库存标识
      * @return 预警人集合
      * @throws BusinessException
      * @throws SystemException

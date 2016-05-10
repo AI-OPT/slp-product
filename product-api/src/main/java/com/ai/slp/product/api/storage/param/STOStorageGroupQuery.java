@@ -1,6 +1,8 @@
 package com.ai.slp.product.api.storage.param;
 
-import java.util.Date;
+import com.ai.opt.base.vo.BaseInfo;
+
+import java.sql.Timestamp;
 
 /**
  * 虚拟库存组列表信息<br>
@@ -9,7 +11,19 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class STOStorageGroupQuery extends StorageGroupStatus {
+public class STOStorageGroupQuery extends BaseInfo {
+    /**
+     * 库存组标识
+     */
+    private String groupId;
+    /**
+     * 状态 null:全部;1:启用;2:停用;3:废弃
+     */
+    private String state;
+    /**
+     * 操作者ID
+     */
+    private Long operId;
     /**
      * 标准品标识
      */
@@ -25,19 +39,43 @@ public class STOStorageGroupQuery extends StorageGroupStatus {
     /**
      * 查询中操作时间的开始值
      */
-    private Date operTimeStart;
+    private Timestamp operTimeStart;
     /**
      * 查询中操作时间的结束值
      */
-    private Date operTimeEnd;
+    private Timestamp operTimeEnd;
     /**
      * 创建时间范围开始时间
      */
-    private Date createTimeStart;
+    private Timestamp createTimeStart;
     /**
      * 创建时间范围结束时间
      */
-    private Date createTimeEnd;
+    private Timestamp createTimeEnd;
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Long getOperId() {
+        return operId;
+    }
+
+    public void setOperId(Long operId) {
+        this.operId = operId;
+    }
 
     public String getProdId() {
         return prodId;
@@ -63,35 +101,35 @@ public class STOStorageGroupQuery extends StorageGroupStatus {
         this.groupName = groupName;
     }
 
-    public Date getOperTimeStart() {
+    public Timestamp getOperTimeStart() {
         return operTimeStart;
     }
 
-    public void setOperTimeStart(Date operTimeStart) {
+    public void setOperTimeStart(Timestamp operTimeStart) {
         this.operTimeStart = operTimeStart;
     }
 
-    public Date getOperTimeEnd() {
+    public Timestamp getOperTimeEnd() {
         return operTimeEnd;
     }
 
-    public void setOperTimeEnd(Date operTimeEnd) {
+    public void setOperTimeEnd(Timestamp operTimeEnd) {
         this.operTimeEnd = operTimeEnd;
     }
 
-    public Date getCreateTimeStart() {
+    public Timestamp getCreateTimeStart() {
         return createTimeStart;
     }
 
-    public void setCreateTimeStart(Date createTimeStart) {
+    public void setCreateTimeStart(Timestamp createTimeStart) {
         this.createTimeStart = createTimeStart;
     }
 
-    public Date getCreateTimeEnd() {
+    public Timestamp getCreateTimeEnd() {
         return createTimeEnd;
     }
 
-    public void setCreateTimeEnd(Date createTimeEnd) {
+    public void setCreateTimeEnd(Timestamp createTimeEnd) {
         this.createTimeEnd = createTimeEnd;
     }
 }

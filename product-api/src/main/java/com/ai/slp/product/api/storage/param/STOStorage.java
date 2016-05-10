@@ -1,7 +1,9 @@
 package com.ai.slp.product.api.storage.param;
 
+import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -14,11 +16,16 @@ import java.sql.Timestamp;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class STOStorage extends StorageStatus{
+public class STOStorage extends BaseInfo{
     /**
-     * 库存名称
+     * 库存标识<br>
+     * 若包含标识则进行更新操作,否则进行添加操作
      */
-    @NotNull(message = "库存名称不能为空",
+    private String storageId;
+    /**
+     * 库存名称,不能为空,且长度不能超过300
+     */
+    @NotBlank(message = "库存名称不能为空",
             groups = { IStorageSV.SaveStorage.class })
     @Length(max = 300,message = "库存名称长度不允许超过300",
             groups = {IStorageSV.SaveStorage.class})
@@ -27,18 +34,18 @@ public class STOStorage extends StorageStatus{
     /**
      * 库存组id
      */
-    @NotNull(message = "库存组标识不能为空",
+    @NotBlank(message = "库存组标识不能为空",
             groups = { IStorageSV.SaveStorage.class })
     private String groupId;
 
     /**
-     * 虚拟库存量
+     * 虚拟库存量,不能小于0
      */
     @Min(value = 0,message = "虚拟库存量不能小于0",
             groups = {IStorageSV.SaveStorage.class})
     private Long totalNum;
     /**
-     * 预警库存量
+     * 预警库存量,不能小于0
      */
     @Min(value = 0,message = "预警库存量不能小于0",
             groups = {IStorageSV.SaveStorage.class})
@@ -50,8 +57,7 @@ public class STOStorage extends StorageStatus{
             groups = {IStorageSV.SaveStorage.class})
     private Short priorityNumber;
     /**
-     * 销售价
-     * 在查询时,忽略此字段
+     * 销售价,为空则不更新
      */
     private Long salePrice;
 
@@ -63,6 +69,21 @@ public class STOStorage extends StorageStatus{
      * 失效时间
      */
     private Timestamp inactiveTime;
+
+    /**
+     * 操作人ID
+     */
+    @NotNull(message = "操作人不能为空",
+            groups = { IStorageSV.SaveStorage.class })
+    private Long operId;
+
+    public String getStorageId() {
+        return storageId;
+    }
+
+    public void setStorageId(String storageId) {
+        this.storageId = storageId;
+    }
 
     public String getStorageName() {
         return storageName;
@@ -126,5 +147,13 @@ public class STOStorage extends StorageStatus{
 
     public void setSalePrice(Long salePrice) {
         this.salePrice = salePrice;
+    }
+
+    public Long getOperId() {
+        return operId;
+    }
+
+    public void setOperId(Long operId) {
+        this.operId = operId;
     }
 }

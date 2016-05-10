@@ -1,6 +1,8 @@
 package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.storage.interfaces.IWarnReceiveStaffSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 预警接收人查询入参
@@ -13,8 +15,9 @@ import com.ai.opt.base.vo.BaseInfo;
 public class WarnReceStafForQuery extends BaseInfo{
 
     /**
-     *库存标识
+     *库存标识,不能为空
      */
+    @NotBlank(message = "库存标识不能为空",groups = {IWarnReceiveStaffSV.QueryByObjectIdOfStorage.class})
     private String storageId;
 
     public String getStorageId() {

@@ -43,7 +43,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0101
      */
-    public StorageGroupInfo queryGroupInfoById(StorageGroupInfoQuery infoQuery)
+    public StorageGroupInfo queryGroupInfoByGroupId(StorageGroupInfoQuery infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupInfoById{}
 
@@ -89,9 +89,9 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0104
      */
-    public PageInfoForRes<STOStorageGroup4List> queryGroupList(STOStorageGroupQuery groupQuery)
+    public PageInfoForRes<STOStorageGroup4List> queryGroup(STOStorageGroupQuery groupQuery)
             throws BusinessException,SystemException;
-    @interface QueryGroupList{}
+    @interface QueryGroup{}
 
     /**
      * 保存标准品库存信息<br>
@@ -119,7 +119,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0106
      */
-    public STOStorage queryStorageById(String storageId)
+    public StorageInfo queryStorageById(String storageId)
             throws BusinessException,SystemException;
     @interface QueryStorageById{}
 
@@ -165,7 +165,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0109
      */
-    public BaseResponse updateStorageGroup(STOStorageGroup storageGroup)
+    public BaseResponse updateStorageGroup(StorageGroupUpdate storageGroup)
         throws BusinessException,SystemException;
     @interface UpdateStorageGroup{}
 

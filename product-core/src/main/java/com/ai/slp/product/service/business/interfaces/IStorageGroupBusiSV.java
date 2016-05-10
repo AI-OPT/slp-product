@@ -3,6 +3,7 @@ package com.ai.slp.product.service.business.interfaces;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.api.storage.param.StorageGroupInfo;
 import com.ai.slp.product.api.storage.param.StorageGroupSalePrice;
+import com.ai.slp.product.api.storage.param.StorageGroupUpdate;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface IStorageGroupBusiSV {
      * @param storageGroup
      * @return
      */
-    public int updateGroup(STOStorageGroup storageGroup);
+    public int updateGroup(StorageGroupUpdate storageGroup);
 
     /**
      * 查询指定标准品下的库存组信息,包括库存信息

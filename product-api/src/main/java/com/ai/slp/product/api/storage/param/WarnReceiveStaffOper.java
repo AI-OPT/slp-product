@@ -2,6 +2,7 @@ package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IWarnReceiveStaffSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
@@ -22,13 +23,12 @@ public class WarnReceiveStaffOper extends BaseInfo {
      * 作为查询结果时,等同于预警标识
      */
     private String id;
+
     /**
-     * 预警对象标识
+     * 预警对象标识,不能为空
      */
     @NotNull(message = "预警对象标识不能为空",
-            groups = {IWarnReceiveStaffSV.DeleteWarnReceiveStaff.class,
-                    IWarnReceiveStaffSV.InstallWarnReceiveStaff.class
-            })
+            groups = {IWarnReceiveStaffSV.InstallWarnReceiveStaff.class})
     private String objectId;
     /**
      * 预警对象类型
@@ -43,10 +43,6 @@ public class WarnReceiveStaffOper extends BaseInfo {
      * 操作人id
      */
     private long operId;
-    /**
-     * 操作时间
-     */
-    private Timestamp operTime;
 
     public String getId() {
         return id;
@@ -78,13 +74,5 @@ public class WarnReceiveStaffOper extends BaseInfo {
 
     public void setOperId(long operId) {
         this.operId = operId;
-    }
-
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
     }
 }

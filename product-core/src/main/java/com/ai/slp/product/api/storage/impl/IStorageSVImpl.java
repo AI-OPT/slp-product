@@ -58,7 +58,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0101
      */
     @Override
-    public StorageGroupInfo queryGroupInfoById(StorageGroupInfoQuery infoQuery) throws BusinessException, SystemException {
+    public StorageGroupInfo queryGroupInfoByGroupId(StorageGroupInfoQuery infoQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(infoQuery.getTenantId(),"");
         return groupBusiSV.queryGroupInfoByGroupId(infoQuery.getTenantId(),infoQuery.getGroupId());
     }
@@ -116,7 +116,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0104
      */
     @Override
-    public PageInfoForRes<STOStorageGroup4List> queryGroupList(STOStorageGroupQuery groupQuery) throws BusinessException, SystemException {
+    public PageInfoForRes<STOStorageGroup4List> queryGroup(STOStorageGroupQuery groupQuery) throws BusinessException, SystemException {
         return null;
     }
 
@@ -148,7 +148,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0106
      */
     @Override
-    public STOStorage queryStorageById(String storageId) throws BusinessException, SystemException {
+    public StorageInfo queryStorageById(String storageId) throws BusinessException, SystemException {
         return null;
     }
 
@@ -197,7 +197,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0109
      */
     @Override
-    public BaseResponse updateStorageGroup(STOStorageGroup storageGroup) throws BusinessException, SystemException {
+    public BaseResponse updateStorageGroup(StorageGroupUpdate storageGroup) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(storageGroup.getTenantId(),"");
         groupBusiSV.updateGroup(storageGroup);
         BaseResponse baseResponse = new BaseResponse();

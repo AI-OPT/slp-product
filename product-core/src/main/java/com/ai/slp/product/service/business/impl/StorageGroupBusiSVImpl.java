@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
@@ -19,10 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.storage.param.STOStorage;
-import com.ai.slp.product.api.storage.param.STOStorageGroup;
-import com.ai.slp.product.api.storage.param.StorageGroupInfo;
-import com.ai.slp.product.api.storage.param.StorageGroupSalePrice;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
@@ -89,7 +86,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             storageGroupLogAtomSV.install(groupLog);
         }
         //添加商品
-        productBusiSV.addProductWithStorageGroup(group,storageGroup.getOperId());
+        productBusiSV.addProductWithStorageGroup(group,storageGroup.getCreateId());
         return installNum;
     }
 
@@ -100,21 +97,21 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @return
      */
     @Override
-    public int updateGroup(STOStorageGroup storageGroup) {
+    public int updateGroup(StorageGroupUpdate storageGroup) {
         //查询库存组是否存在
         StorageGroup group = storageGroupAtomSV.queryByGroupId(
-                storageGroup.getTenantId(),storageGroup.getGroupId());
+                storageGroup.getTenantId(),storageGroup.getStorageGroupId());
         if (group == null)
             throw new BusinessException("","要更新库存组信息不存在,租户ID:"+storageGroup.getTenantId()
-            +",库存组标识:"+storageGroup.getGroupId());
+            +",库存组标识:"+storageGroup.getStorageGroupId());
         //已废弃,不允许变更
         if (StorageConstants.GROUP_STATE_DISCARD.equals(group.getState())
                 || StorageConstants.GROUP_STATE_AUTO_DISCARD.equals(group.getState())){
             throw new BusinessException("","库存组已经废弃,不允许更新信息");
         }
         //设置可更新信息
-        group.setStorageGroupName(storageGroup.getGroupName());
-        group.setSerialNumber(storageGroup.getSerialNumber());
+        group.setStorageGroupName(storageGroup.getStorageGroupName());
+//        group.setSerialNumber(storageGroup.get());
         group.setOperId(storageGroup.getOperId());
         int updateNum = storageGroupAtomSV.updateById(group);
         //添加库存组日志
@@ -178,12 +175,10 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         StorageGroupInfo groupInfo = new StorageGroupInfo();
         BeanUtils.copyProperties(groupInfo,group);
         //填充库存组信息
-        groupInfo.setGroupId(group.getStorageGroupId());
-        groupInfo.setGroupName(group.getStorageGroupName());
-        groupInfo.setProdId(group.getStandedProdId());
-        groupInfo.setProdName(standedProduct.getStandedProductName());
+//        groupInfo.setProdId(group.getStandedProdId());
+//        groupInfo.setProdName(standedProduct.getStandedProductName());
         //库存总量
-        Map<Short,List<STOStorage>> storageMap = new HashMap<>();
+        Map<Short,List<StorageInfo>> storageMap = new HashMap<>();
         //====填充库存集合信息
         //当前启用的优先级
         Short activePriority = null;
@@ -192,14 +187,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //查询库存组的库存集合
         List<Storage> storageList = storageAtomSV.queryOfGroup(group.getTenantId(),group.getStorageGroupId());
         for (Storage storage:storageList){
-            List<STOStorage> stoStorageList = storageMap.get(storage.getPriorityNumber());
+            List<StorageInfo> stoStorageList = storageMap.get(storage.getPriorityNumber());
             if (stoStorageList==null){
                 stoStorageList = new ArrayList<>();
                 storageMap.put(storage.getPriorityNumber(),stoStorageList);
             }
-            STOStorage stoStorage = new STOStorage();
+            StorageInfo stoStorage = new StorageInfo();
             BeanUtils.copyProperties(stoStorage,storage);
-            stoStorage.setGroupId(storage.getStorageGroupId());
             stoStorageList.add(stoStorage);
             //如果库存为启用状态
             if (StorageConstants.GROUP_STATE_ACTIVE.equals(storage.getState())

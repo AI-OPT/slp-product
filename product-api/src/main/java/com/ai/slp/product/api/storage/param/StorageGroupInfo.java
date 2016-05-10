@@ -1,5 +1,8 @@
 package com.ai.slp.product.api.storage.param;
 
+import com.ai.opt.base.vo.BaseResponse;
+
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -11,13 +14,25 @@ import java.util.Map;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class StorageGroupInfo extends STOStorageGroup {
+public class StorageGroupInfo extends BaseResponse {
     /**
-     * 标准品名称
+     * 库存组标识
      */
-    private String prodName;
+    private String storageGroupId;
     /**
-     * 组内库存量
+     * 库存组名称
+     */
+    private String storageGroupName;
+    /**
+     * 序列号
+     */
+    private Short serialNumber;
+    /**
+     * 创建者ID
+     */
+    private Long createId;
+    /**
+     * 总库存量
      */
     private long storageTotal;
     /**
@@ -37,16 +52,48 @@ public class StorageGroupInfo extends STOStorageGroup {
      */
     private Long highSalePrice;
     /**
+     * 创建时间
+     */
+    private Timestamp createTime;
+    /**
+     * 操作时间
+     */
+    private Timestamp operTime;
+    /**
      * 优先级顺序库存集合
      */
-    private Map<Short,List<STOStorage>> storageList;
+    private Map<Short,List<StorageInfo>> storageList;
 
-    public String getProdName() {
-        return prodName;
+    public String getStorageGroupId() {
+        return storageGroupId;
     }
 
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
+    public void setStorageGroupId(String storageGroupId) {
+        this.storageGroupId = storageGroupId;
+    }
+
+    public String getStorageGroupName() {
+        return storageGroupName;
+    }
+
+    public void setStorageGroupName(String storageGroupName) {
+        this.storageGroupName = storageGroupName;
+    }
+
+    public Short getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Short serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
     }
 
     public long getStorageTotal() {
@@ -73,14 +120,6 @@ public class StorageGroupInfo extends STOStorageGroup {
         this.createName = createName;
     }
 
-    public Map<Short, List<STOStorage>> getStorageList() {
-        return storageList;
-    }
-
-    public void setStorageList(Map<Short, List<STOStorage>> storageList) {
-        this.storageList = storageList;
-    }
-
     public Long getLowSalePrice() {
         return lowSalePrice;
     }
@@ -95,5 +134,29 @@ public class StorageGroupInfo extends STOStorageGroup {
 
     public void setHighSalePrice(Long highSalePrice) {
         this.highSalePrice = highSalePrice;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+    }
+
+    public Timestamp getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Timestamp operTime) {
+        this.operTime = operTime;
+    }
+
+    public Map<Short, List<StorageInfo>> getStorageList() {
+        return storageList;
+    }
+
+    public void setStorageList(Map<Short, List<StorageInfo>> storageList) {
+        this.storageList = storageList;
     }
 }
