@@ -35,7 +35,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0100
      */
     @Override
-    public BaseResponse installStorageGroup(StorageGroup storageGroup) throws BusinessException, SystemException {
+    public BaseResponse installStorageGroup(STOStorageGroup storageGroup) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(storageGroup.getTenantId(),"");
         groupBusiSV.addGroup(storageGroup);
         BaseResponse baseResponse = new BaseResponse();
@@ -132,7 +132,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0105
      */
     @Override
-    public BaseResponse saveStorage(Storage stoStorage) throws BusinessException, SystemException {
+    public BaseResponse saveStorage(STOStorage stoStorage) throws BusinessException, SystemException {
         return null;
     }
 
