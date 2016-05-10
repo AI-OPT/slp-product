@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom;
 
+import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import org.junit.Assert;
@@ -24,27 +25,27 @@ public class IProdAttrDefAtomSVTest {
     @Test
     public void installTest(){
         String tenantId = "SLP";
-        long attrId = 123125l;
         ProdAttrDef prodAttrDef = new ProdAttrDef();
         prodAttrDef.setTenantId(tenantId);
-        prodAttrDef.setAttrId(attrId);
         prodAttrDef.setAttrName("测试属性");
         prodAttrDef.setFirstLetter("C");
         prodAttrDef.setOperId(1l);
         prodAttrDef.setOperTime(new Timestamp(System.currentTimeMillis()));
-        prodAttrDef.setState("1");
+        prodAttrDef.setState(CommonSatesConstants.STATE_ACTIVE);
         prodAttrDef.setValueWay("1");
-        int ret = prodAttrDefAtomSV.installObj(prodAttrDef);
-        Assert.assertEquals(1,ret);
+//        int ret = prodAttrDefAtomSV.installObj(prodAttrDef);
+//        Assert.assertEquals(1,ret);
+        Long attrDefId = prodAttrDef.getAttrId();
+        attrDefId = 7l;
         //查询验证是否存在
-        ProdAttrDef selRet = prodAttrDefAtomSV.selectById(tenantId,attrId);
+        ProdAttrDef selRet = prodAttrDefAtomSV.selectById(tenantId,attrDefId);
         Assert.assertNotNull(selRet);
-        Assert.assertEquals(attrId,selRet.getAttrId().longValue());
+        Assert.assertEquals(attrDefId.longValue(),selRet.getAttrId().longValue());
         //删除
-        prodAttrDefAtomSV.deleteById(tenantId,attrId,1l);
+        prodAttrDefAtomSV.deleteById(tenantId,attrDefId,1l);
 
         //查询验证是否存在
-        selRet = prodAttrDefAtomSV.selectById(tenantId,attrId);
+        selRet = prodAttrDefAtomSV.selectById(tenantId,attrDefId);
         Assert.assertNull(selRet);
     }
 
