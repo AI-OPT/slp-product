@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.interfaces.storage;
 
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 import java.util.List;
@@ -80,4 +81,16 @@ public interface IStorageGroupAtomSV {
      * @author lipeng
      */
     public int countStorGroupByProdID(String tenantId,String standedProdId);
+    
+    /**
+     * 分页查询某个标准品下的库存组列表
+     * 
+     * @param tenantId
+     * @param standedProdId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     * @author lipeng
+     */
+    public PageInfoForRes<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId,Integer pageNo,Integer pageSize);
 }

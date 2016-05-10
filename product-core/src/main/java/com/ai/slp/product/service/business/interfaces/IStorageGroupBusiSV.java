@@ -1,7 +1,9 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.api.storage.param.StorageGroupInfo;
+import com.ai.slp.product.api.storage.param.StorageGroupInfoPageReq;
 import com.ai.slp.product.api.storage.param.StorageGroupSalePrice;
 
 import java.util.List;
@@ -63,4 +65,13 @@ public interface IStorageGroupBusiSV {
      * @param operId 操作者ID
      */
     public void updateGroupState(String tenantId,String groupId,String state,Long operId);
+    
+    /**
+     * 根据标准品查询库存组(库存)信息-更新销售价页面
+     * 
+     * @param infoQuery
+     * @return
+     * @author lipeng
+     */
+    public PageInfoForRes<StorageGroupInfo> queryGroupByProdIdForSalePrice(StorageGroupInfoPageReq infoQuery);
 }
