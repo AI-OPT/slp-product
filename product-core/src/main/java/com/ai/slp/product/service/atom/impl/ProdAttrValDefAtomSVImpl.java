@@ -2,6 +2,7 @@ package com.ai.slp.product.service.atom.impl;
 
 import java.util.List;
 
+import com.ai.slp.product.util.SequenceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,6 @@ import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
 
@@ -25,9 +25,6 @@ import com.ai.slp.product.vo.AttrAndValPageQueryVo;
 public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
     @Autowired
     ProdAttrvalueDefMapper prodAttrvalueDefMapper;
-
-    @Autowired
-    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
     
     @Override
     public ProdAttrvalueDef selectById(String tenantId, String attrvalueDefId) {
@@ -44,7 +41,7 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
     public int insertProdAttrVal(ProdAttrvalueDef prodAttrvalueDef) {
         if(prodAttrvalueDef.getOperTime() == null)
             prodAttrvalueDef.setOperTime(DateUtils.currTimeStamp());
-        prodAttrvalueDef.setAttrvalueDefId(sequenceCreditAtomSV.getSeqByName()+"");
+        prodAttrvalueDef.setAttrvalueDefId(SequenceUtil.genProdAttrvalueDefId());
         prodAttrvalueDef.setState(CommonSatesConstants.STATE_ACTIVE);
         return prodAttrvalueDefMapper.insertSelective(prodAttrvalueDef);
     }

@@ -57,7 +57,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         //查询类目是否有销售属性
         List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
-                tenantId,standedProduct.getProductCatId(), ProductCatConstants.ATTR_TYPE_SALE);
+                tenantId,standedProduct.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
 
         //添加商品,商品名称同标准品名称
         Product product = new Product();

@@ -2,6 +2,7 @@ package com.ai.slp.product.service.atom.impl;
 
 import java.util.List;
 
+import com.ai.slp.product.util.SequenceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,6 @@ import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrDefMapper;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
 
@@ -27,13 +27,10 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     ProdAttrDefMapper prodAttrDefMapper;
     @Autowired
     ProdAttrvalueDefMapper prodAttrvalueDefMapper;
-    //获取序列号
-    @Autowired
-    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
 
     @Override
     public int installObj(ProdAttrDef productAttr) {
-        productAttr.setAttrId(sequenceCreditAtomSV.get6SeqByName());
+        productAttr.setAttrId(SequenceUtil.createAttrDefId());
         if(productAttr.getOperTime() == null)
             productAttr.setOperTime(DateUtils.currTimeStamp());
         return prodAttrDefMapper.insertSelective(productAttr);

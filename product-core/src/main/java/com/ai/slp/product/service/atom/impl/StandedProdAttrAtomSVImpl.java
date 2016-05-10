@@ -5,8 +5,8 @@ import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.StandedProdAttrMapper;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,8 +24,6 @@ import java.util.Map;
 public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
     @Autowired
     StandedProdAttrMapper prodAttrMapper;
-    @Autowired
-    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
     /**
      * 添加标准品属性值
      *
@@ -37,7 +35,7 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
         if (prodAttr==null)
             return 0;
         //设置序列号
-        prodAttr.setStandedProdAttrId(sequenceCreditAtomSV.getSeqByName());
+        prodAttr.setStandedProdAttrId(SequenceUtil.genStandedProdAttrId());
         if (prodAttr.getOperTime()==null)
             prodAttr.setOperTime(DateUtils.currTimeStamp());
         return prodAttrMapper.insert(prodAttr);

@@ -49,7 +49,7 @@
     <!--</bean>-->
 
 	<bean id="seqDataSourceLoader"
-		class="com.ai.opt.sdk.sequence.datasource.SeqDataSourceLoader"
+		class="com.ai.opt.sdk.components.sequence.datasource.SeqDataSourceLoader"
 		init-method="init">
 		<property name="ds" ref="dataSource" />
 	</bean>

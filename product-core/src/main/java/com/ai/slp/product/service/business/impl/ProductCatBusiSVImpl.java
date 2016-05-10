@@ -103,8 +103,8 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         //判断是否变更了"是否有子分类"选项
         if (!productCat.getIsChild().equals(catParam.getIsChild())){
             //若把有改成无
-            if (ProductCatConstants.HAS_CHILD.equals(productCat.getIsChild())
-                    && ProductCatConstants.NO_CHILD.equals(catParam.getIsChild())){
+            if (ProductCatConstants.ProductCat.IsChild.HAS_CHILD.equals(productCat.getIsChild())
+                    && ProductCatConstants.ProductCat.IsChild.NO_CHILD.equals(catParam.getIsChild())){
                 //判断是否有子类目
                 if (prodCatDefAtomSV.queryOfParent(productCat.getParentProductCatId())>0)
                     throw new BusinessException("","此类目下存在子类目,无法变更为[无子分类]");
@@ -232,8 +232,8 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     @Override
     public void deleteAttrOrVa(ProdCatAttrVal catAttrVal) {
         //若删除未关键属性或销售属性,需要检查是否关联标准品
-        if (ProductCatConstants.ATTR_TYPE_KEY.equals(catAttrVal.getAttrType())
-                || ProductCatConstants.ATTR_TYPE_SALE.equals(catAttrVal.getAttrType())) {
+        if (ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(catAttrVal.getAttrType())
+                || ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(catAttrVal.getAttrType())) {
             int prodNum = prodAttrAtomSV.queryProdNumOfAttr(catAttrVal.getTenantId(), catAttrVal.getAttrId());
             if (prodNum > 0)
                 throw new BusinessException("", "此属性已关联标准品,不允许删除");
@@ -312,8 +312,8 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catAttr.setOperId(addCatAttrParam.getOperId());
                 catAttr.setOperTime(operTime);
                 //设置是否必填,关键属性和销售属性为必填,其他为非必填
-                if (ProductCatConstants.ATTR_TYPE_KEY.equals(attrType)
-                        || ProductCatConstants.ATTR_TYPE_SALE.equals(attrType))
+                if (ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(attrType)
+                        || ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(attrType))
                     catAttr.setIsNecessary("Y");
                 else
                     catAttr.setIsNecessary("N");
