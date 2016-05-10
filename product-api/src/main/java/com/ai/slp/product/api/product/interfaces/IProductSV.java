@@ -62,9 +62,9 @@ public interface IProductSV {
     @interface UpdateMultSKUSalePrice{}
 
     /**
-     * 批量保存SKU信息<br>
+     * 更新商品SKU信息<br>
      *
-     * @param skuInfoList sku销售价
+     * @param saveInfo 商品对应SKU属性和属性值信息
      * @return 操作结果
      * @throws BusinessException
      * @throws SystemException
@@ -72,7 +72,7 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0103
      */
-    public BaseResponse saveMultSKUInfo(List<ProdSkuInfo> skuInfoList)
+    public BaseResponse saveMultSKUInfo(SkuInfoMultSave saveInfo)
             throws BusinessException,SystemException;
     @interface SaveMultSKUInfo{}
 
@@ -90,4 +90,6 @@ public interface IProductSV {
     public SkuSetForProduct querySkuSetForProduct(SkuSetForProductQuery query)
             throws BusinessException,SystemException;
     @interface QuerySkuSetForProduct{}
+
+
 }

@@ -4,6 +4,35 @@ package com.ai.slp.product.constants;
  * Created by jackieliu on 16/5/5.
  */
 public final class ProductConstants {
+
+    public final class ProdSkuAttr{
+        public final class state{
+            /**
+             * 启用状态
+             */
+            public static final String ACTIVE = "1";
+            /**
+             * 自动启用状态
+             */
+            public static final String AUTO_ACTIVE = "11";
+            /**
+             * 停用状态
+             */
+            public static final String STOP = "2";
+            /**
+             * 自动停用状态
+             */
+            public static final String AUTO_STOP = "21";
+            /**
+             * 废弃状态
+             */
+            public static final String DISCARD = "3";
+            /**
+             * 自动废弃状态
+             */
+            public static final String AUTO_DISCARD = "31";
+        }
+    }
     /**
      * 固定有效期类型
      */
