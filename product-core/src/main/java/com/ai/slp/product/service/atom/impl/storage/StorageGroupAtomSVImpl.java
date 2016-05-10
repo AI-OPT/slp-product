@@ -6,7 +6,6 @@ import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageGroupMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.util.DateUtils;
-import com.ai.slp.product.util.SequenceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -68,7 +67,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
      */
     @Override
     public int installGroup(StorageGroup group) {
-        group.setStorageGroupId(SequenceUtil.genStorageGroupId());
+//        group.setStorageGroupId(SequenceUtil.genStorageGroupId());
         if (group.getCreateTime()==null)
             group.setCreateTime(DateUtils.currTimeStamp());
         group.setOperTime(group.getCreateTime());
@@ -125,5 +124,12 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
     public int updateStorGroupPrice(StorageGroup storageGroup) {
         storageGroup.setOperTime(DateUtils.currTimeStamp());
         return groupMapper.updateByPrimaryKeySelective(storageGroup);
+    }
+
+    @Override
+    public int countStorGroupByProdID(String tenantId, String standedProdId) {
+        StorageGroupCriteria example = new StorageGroupCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(tenantId).andStateNotEqualTo("3").andStateNotEqualTo("31");
+        return groupMapper.countByExample(example);
     }
 }
