@@ -51,6 +51,23 @@ public class ProductAtomSVImpl implements IProductAtomSV {
     }
 
     /**
+     * 查询指定商品
+     *
+     * @param tenantId
+     * @param prodId
+     * @return
+     */
+    @Override
+    public Product selectByProductId(String tenantId, String prodId) {
+        ProductCriteria example = new ProductCriteria();
+        example.setOrderByClause("CREATE_TIME desc");
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andProdIdEqualTo(prodId);
+        List<Product> products = productMapper.selectByExample(example);
+        return products==null||products.isEmpty()?null:products.get(0);
+    }
+
+    /**
      * 根据标识更新商品信息
      *
      * @param product

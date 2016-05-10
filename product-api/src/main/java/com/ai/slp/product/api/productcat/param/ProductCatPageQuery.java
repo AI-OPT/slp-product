@@ -25,7 +25,7 @@ public class ProductCatPageQuery extends BaseInfo {
     /**
      * 父类目
      */
-    private Long parentProductCatId;
+    private String parentProductCatId;
 
     /**
      * 商品类目ID
@@ -82,11 +82,11 @@ public class ProductCatPageQuery extends BaseInfo {
         this.isChild = isChild;
     }
 
-    public Long getParentProductCatId() {
+    public String getParentProductCatId() {
         return parentProductCatId;
     }
 
-    public void setParentProductCatId(Long parentProductCatId) {
+    public void setParentProductCatId(String parentProductCatId) {
         this.parentProductCatId = parentProductCatId;
     }
 }

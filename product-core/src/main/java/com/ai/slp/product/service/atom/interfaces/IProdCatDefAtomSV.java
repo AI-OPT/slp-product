@@ -19,7 +19,7 @@ public interface IProdCatDefAtomSV {
      * 根据条件进行分页查寻
      * @return
      */
-    public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,Long parentProductCatId,
+    public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,String parentProductCatId,
             String tenantId,String productCatId,String productCatName,String isChild);
 
     /**
@@ -75,7 +75,7 @@ public interface IProdCatDefAtomSV {
      * @param parentCatId
      * @return
      */
-    public int queryOfParent(Long parentCatId);
+    public int queryOfParent(String parentCatId);
 
     /**
      * 根据名称或首字母查询
@@ -86,5 +86,5 @@ public interface IProdCatDefAtomSV {
      * @param isName
      * @return
      */
-    public List<ProductCat> queryByNameOrFirst(String tenantId,Long parentCatId,String query,Boolean isName);
+    public List<ProductCat> queryByNameOrFirst(String tenantId,String parentCatId,String query,Boolean isName);
 }

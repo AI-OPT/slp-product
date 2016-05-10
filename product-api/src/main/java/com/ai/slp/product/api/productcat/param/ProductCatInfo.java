@@ -25,7 +25,7 @@ public class ProductCatInfo extends BaseResponse{
 	/**
 	 * 父类目
 	 */
-	private Long parentProductCatId;
+	private String parentProductCatId;
 	
 	/**
 	 * 是否有子分类
@@ -58,12 +58,15 @@ public class ProductCatInfo extends BaseResponse{
     public void setProductCatName(String productCatName) {
         this.productCatName = productCatName;
     }
-    public Long getParentProductCatId() {
+
+    public String getParentProductCatId() {
         return parentProductCatId;
     }
-    public void setParentProductCatId(Long parentProductCatId) {
+
+    public void setParentProductCatId(String parentProductCatId) {
         this.parentProductCatId = parentProductCatId;
     }
+
     public String getIsChild() {
         return isChild;
     }

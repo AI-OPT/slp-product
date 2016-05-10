@@ -345,52 +345,62 @@ public class ProductCatCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andParentProductCatIdEqualTo(Long value) {
+        public Criteria andParentProductCatIdEqualTo(String value) {
             addCriterion("PARENT_PRODUCT_CAT_ID =", value, "parentProductCatId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProductCatIdNotEqualTo(Long value) {
+        public Criteria andParentProductCatIdNotEqualTo(String value) {
             addCriterion("PARENT_PRODUCT_CAT_ID <>", value, "parentProductCatId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProductCatIdGreaterThan(Long value) {
+        public Criteria andParentProductCatIdGreaterThan(String value) {
             addCriterion("PARENT_PRODUCT_CAT_ID >", value, "parentProductCatId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProductCatIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andParentProductCatIdGreaterThanOrEqualTo(String value) {
             addCriterion("PARENT_PRODUCT_CAT_ID >=", value, "parentProductCatId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProductCatIdLessThan(Long value) {
+        public Criteria andParentProductCatIdLessThan(String value) {
             addCriterion("PARENT_PRODUCT_CAT_ID <", value, "parentProductCatId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProductCatIdLessThanOrEqualTo(Long value) {
+        public Criteria andParentProductCatIdLessThanOrEqualTo(String value) {
             addCriterion("PARENT_PRODUCT_CAT_ID <=", value, "parentProductCatId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProductCatIdIn(List<Long> values) {
+        public Criteria andParentProductCatIdLike(String value) {
+            addCriterion("PARENT_PRODUCT_CAT_ID like", value, "parentProductCatId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductCatIdNotLike(String value) {
+            addCriterion("PARENT_PRODUCT_CAT_ID not like", value, "parentProductCatId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductCatIdIn(List<String> values) {
             addCriterion("PARENT_PRODUCT_CAT_ID in", values, "parentProductCatId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProductCatIdNotIn(List<Long> values) {
+        public Criteria andParentProductCatIdNotIn(List<String> values) {
             addCriterion("PARENT_PRODUCT_CAT_ID not in", values, "parentProductCatId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProductCatIdBetween(Long value1, Long value2) {
+        public Criteria andParentProductCatIdBetween(String value1, String value2) {
             addCriterion("PARENT_PRODUCT_CAT_ID between", value1, value2, "parentProductCatId");
             return (Criteria) this;
         }
 
-        public Criteria andParentProductCatIdNotBetween(Long value1, Long value2) {
+        public Criteria andParentProductCatIdNotBetween(String value1, String value2) {
             addCriterion("PARENT_PRODUCT_CAT_ID not between", value1, value2, "parentProductCatId");
             return (Criteria) this;
         }

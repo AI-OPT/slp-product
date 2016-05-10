@@ -20,7 +20,7 @@ public class ProductCatQuery extends BaseInfo {
     /**
      * 父类目
      */
-    private Long parentProductCatId;
+    private String parentProductCatId;
 
     public String getQueryVal() {
         return queryVal;
@@ -30,11 +30,11 @@ public class ProductCatQuery extends BaseInfo {
         this.queryVal = queryVal;
     }
 
-    public Long getParentProductCatId() {
+    public String getParentProductCatId() {
         return parentProductCatId;
     }
 
-    public void setParentProductCatId(Long parentProductCatId) {
+    public void setParentProductCatId(String parentProductCatId) {
         this.parentProductCatId = parentProductCatId;
     }
 }

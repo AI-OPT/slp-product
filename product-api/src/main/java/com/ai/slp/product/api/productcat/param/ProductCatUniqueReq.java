@@ -33,11 +33,6 @@ public class ProductCatUniqueReq extends BaseInfo {
     })
     private Long operId;
 
-    /**
-     * 执行操作时间
-     */
-    private Timestamp operTime;
-
     public String getProductCatId() {
         return productCatId;
     }
@@ -54,11 +49,4 @@ public class ProductCatUniqueReq extends BaseInfo {
         this.operId = operId;
     }
 
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
-    }
 }

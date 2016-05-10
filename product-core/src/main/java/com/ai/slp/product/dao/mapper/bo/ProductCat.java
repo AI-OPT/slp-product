@@ -9,7 +9,7 @@ public class ProductCat {
 
     private String productCatName;
 
-    private Long parentProductCatId;
+    private String parentProductCatId;
 
     private String firstLetter;
 
@@ -49,12 +49,12 @@ public class ProductCat {
         this.productCatName = productCatName == null ? null : productCatName.trim();
     }
 
-    public Long getParentProductCatId() {
+    public String getParentProductCatId() {
         return parentProductCatId;
     }
 
-    public void setParentProductCatId(Long parentProductCatId) {
-        this.parentProductCatId = parentProductCatId;
+    public void setParentProductCatId(String parentProductCatId) {
+        this.parentProductCatId = parentProductCatId == null ? null : parentProductCatId.trim();
     }
 
     public String getFirstLetter() {

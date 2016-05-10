@@ -25,7 +25,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     ProductCatMapper productCatMapper;
 
     @Override
-    public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,Long parentProductCatId,
+    public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,String parentProductCatId,
             String tenantId, String productCatId, String productCatName, String isChild) {
         ProductCatCriteria example = new ProductCatCriteria();
         ProductCatCriteria.Criteria criteria = example.createCriteria();
@@ -120,7 +120,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     }
 
     @Override
-    public int queryOfParent(Long parentCatId) {
+    public int queryOfParent(String parentCatId) {
         ProductCatCriteria example = new ProductCatCriteria();
         example.createCriteria().andParentProductCatIdEqualTo(parentCatId);
         return productCatMapper.countByExample(example);
@@ -136,7 +136,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
      * @return
      */
     @Override
-    public List<ProductCat> queryByNameOrFirst(String tenantId, Long parentCatId, String query, Boolean isName) {
+    public List<ProductCat> queryByNameOrFirst(String tenantId, String parentCatId, String query, Boolean isName) {
         ProductCatCriteria example = new ProductCatCriteria();
         example.setOrderByClause("SERIAL_NUMBER ");
         ProductCatCriteria.Criteria criteria = example.createCriteria();

@@ -26,6 +26,15 @@ public interface IProductAtomSV {
     public Product selectByGroupId(String tenantId,String groupId);
 
     /**
+     * 查询指定商品
+     *
+     * @param tenantId
+     * @param prodId
+     * @return
+     */
+    public Product selectByProductId(String tenantId,String prodId);
+
+    /**
      * 根据标识更新商品信息
      *
      * @param product

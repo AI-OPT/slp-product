@@ -5,7 +5,7 @@
     <id column="PRODUCT_CAT_ID" property="productCatId" jdbcType="VARCHAR" />
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="PRODUCT_CAT_NAME" property="productCatName" jdbcType="VARCHAR" />
-    <result column="PARENT_PRODUCT_CAT_ID" property="parentProductCatId" jdbcType="DECIMAL" />
+    <result column="PARENT_PRODUCT_CAT_ID" property="parentProductCatId" jdbcType="VARCHAR" />
     <result column="FIRST_LETTER" property="firstLetter" jdbcType="VARCHAR" />
     <result column="CAT_LEVEL" property="catLevel" jdbcType="DECIMAL" />
     <result column="IS_CHILD" property="isChild" jdbcType="CHAR" />
@@ -116,7 +116,7 @@
       IS_CHILD, SERIAL_NUMBER, STATE, 
       OPER_ID, OPER_TIME)
     values (#{productCatId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{productCatName,jdbcType=VARCHAR}, 
-      #{parentProductCatId,jdbcType=DECIMAL}, #{firstLetter,jdbcType=VARCHAR}, #{catLevel,jdbcType=DECIMAL}, 
+      #{parentProductCatId,jdbcType=VARCHAR}, #{firstLetter,jdbcType=VARCHAR}, #{catLevel,jdbcType=DECIMAL}, 
       #{isChild,jdbcType=CHAR}, #{serialNumber,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, 
       #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP})
   </insert>
@@ -168,7 +168,7 @@
         #{productCatName,jdbcType=VARCHAR},
       </if>
       <if test="parentProductCatId != null" >
-        #{parentProductCatId,jdbcType=DECIMAL},
+        #{parentProductCatId,jdbcType=VARCHAR},
       </if>
       <if test="firstLetter != null" >
         #{firstLetter,jdbcType=VARCHAR},
@@ -212,7 +212,7 @@
         PRODUCT_CAT_NAME = #{record.productCatName,jdbcType=VARCHAR},
       </if>
       <if test="record.parentProductCatId != null" >
-        PARENT_PRODUCT_CAT_ID = #{record.parentProductCatId,jdbcType=DECIMAL},
+        PARENT_PRODUCT_CAT_ID = #{record.parentProductCatId,jdbcType=VARCHAR},
       </if>
       <if test="record.firstLetter != null" >
         FIRST_LETTER = #{record.firstLetter,jdbcType=VARCHAR},
@@ -245,7 +245,7 @@
     set PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
       TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       PRODUCT_CAT_NAME = #{record.productCatName,jdbcType=VARCHAR},
-      PARENT_PRODUCT_CAT_ID = #{record.parentProductCatId,jdbcType=DECIMAL},
+      PARENT_PRODUCT_CAT_ID = #{record.parentProductCatId,jdbcType=VARCHAR},
       FIRST_LETTER = #{record.firstLetter,jdbcType=VARCHAR},
       CAT_LEVEL = #{record.catLevel,jdbcType=DECIMAL},
       IS_CHILD = #{record.isChild,jdbcType=CHAR},
@@ -267,7 +267,7 @@
         PRODUCT_CAT_NAME = #{productCatName,jdbcType=VARCHAR},
       </if>
       <if test="parentProductCatId != null" >
-        PARENT_PRODUCT_CAT_ID = #{parentProductCatId,jdbcType=DECIMAL},
+        PARENT_PRODUCT_CAT_ID = #{parentProductCatId,jdbcType=VARCHAR},
       </if>
       <if test="firstLetter != null" >
         FIRST_LETTER = #{firstLetter,jdbcType=VARCHAR},
@@ -297,7 +297,7 @@
     update product_cat
     set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       PRODUCT_CAT_NAME = #{productCatName,jdbcType=VARCHAR},
-      PARENT_PRODUCT_CAT_ID = #{parentProductCatId,jdbcType=DECIMAL},
+      PARENT_PRODUCT_CAT_ID = #{parentProductCatId,jdbcType=VARCHAR},
       FIRST_LETTER = #{firstLetter,jdbcType=VARCHAR},
       CAT_LEVEL = #{catLevel,jdbcType=DECIMAL},
       IS_CHILD = #{isChild,jdbcType=CHAR},

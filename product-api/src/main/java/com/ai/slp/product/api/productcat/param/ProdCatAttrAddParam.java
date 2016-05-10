@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
@@ -22,23 +23,19 @@ public class ProdCatAttrAddParam extends BaseInfo{
     /**
      * 商品类目ID
      */
-    @NotNull(message = "商品类目标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
+    @NotBlank(message = "商品类目标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
     private String productCatId;
     /**
      * 属性类型,包括关键属性 非关键属性 销售属性
      */
-    @NotNull(message = "属性类型不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
+    @NotBlank(message = "属性类型不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
     private String attrType;
     /**
      * 操作人ID
      */
-    @NotNull(message = "操作人标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
-    private long operId;
-    
-    /**
-     * 操作时间
-     */
-    private Timestamp operTime;
+    @NotBlank(message = "操作人标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
+    private Long operId;
+
     /**
      * 属性及对应属性值<br>
      * K:属性标识,V:属性值标识的集合
@@ -61,20 +58,12 @@ public class ProdCatAttrAddParam extends BaseInfo{
         this.attrType = attrType;
     }
 
-    public long getOperId() {
+    public Long getOperId() {
         return operId;
     }
 
-    public void setOperId(long operId) {
+    public void setOperId(Long operId) {
         this.operId = operId;
-    }
-
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
     }
 
     public Map<Long, Set<String>> getAttrAndVal() {

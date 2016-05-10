@@ -15,6 +15,7 @@ import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
+import com.ai.slp.product.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +132,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         if (productAtomSV.queryByCatId(productCatId)>0)
             throw new BusinessException("","已关联了标准品，不可删除");
         //判断是否有子类目
-        if (prodCatDefAtomSV.queryOfParent(Long.parseLong(productCatId))>0)
+        if (prodCatDefAtomSV.queryOfParent(productCatId)>0)
             throw new BusinessException("","此类目下存在子类目,不可删除");
         List<ProdCatAttr> catAttrList =
                 prodCatAttrAtomSV.queryAttrsByCatId(tenantId,productCatId);
@@ -296,7 +297,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             throw new BusinessException("","未找到指定类目信息,租户ID:"+tenantId+",类目标识:"+catId);
         }
         String attrType = addCatAttrParam.getAttrType();
-        Timestamp operTime = addCatAttrParam.getOperTime();
+        Timestamp operTime = DateUtils.currTimeStamp();
         Map<Long,Set<String>> attrAndVal = addCatAttrParam.getAttrAndVal();
         for (Long attId:attrAndVal.keySet()){
             //检查是否已经关联
