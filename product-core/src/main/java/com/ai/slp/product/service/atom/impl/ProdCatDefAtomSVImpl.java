@@ -5,8 +5,8 @@ import java.util.List;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.constants.CommonSatesConstants;
-import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,8 +23,6 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     @Autowired
     ProductCatMapper productCatMapper;
-    @Autowired
-    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
 
     @Override
     public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,Long parentProductCatId,
@@ -88,7 +86,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     public int insertProductCat(ProductCat productCat) {
         if (productCat==null)
             return 0;
-        productCat.setProductCatId(sequenceCreditAtomSV.get6SeqByName()+"");
+        productCat.setProductCatId(SequenceUtil.genProductCatId());
         if (productCat.getOperTime()==null)
             productCat.setOperTime(DateUtils.currTimeStamp());
         productCat.setState(CommonSatesConstants.STATE_ACTIVE);

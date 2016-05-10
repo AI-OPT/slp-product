@@ -5,6 +5,7 @@ import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
      */
     @Override
     public int installProduct(Product product) {
+        product.setProdId(SequenceUtil.createProductProdId());
         if (product.getCreateTime() == null)
             product.setCreateTime(DateUtils.currTimeStamp());
         product.setOperTime(product.getCreateTime());

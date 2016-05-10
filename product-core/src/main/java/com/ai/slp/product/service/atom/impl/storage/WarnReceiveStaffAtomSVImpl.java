@@ -2,13 +2,13 @@ package com.ai.slp.product.service.atom.impl.storage;
 
 import java.util.List;
 
+import com.ai.slp.product.util.SequenceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaff;
 import com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaffCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.WarnReceiveStaffMapper;
-import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IWarnReceiveStaffAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import org.springframework.stereotype.Component;
@@ -18,8 +18,6 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
 
     @Autowired
     WarnReceiveStaffMapper warnReceiveStaffMapper;
-    @Autowired
-    ISysSequenceCreditAtomSV sysSequenceCreditAtomSV;
     
     @Override
     public WarnReceiveStaff selectWarnReceiveStaff(String tenantId, String warnReceiveStaffId) {
@@ -44,7 +42,7 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
     public int insertWarnReceiveStaff(WarnReceiveStaff warnReceiveStaff) {
         if(warnReceiveStaff.getOperTime()==null)
             warnReceiveStaff.setOperTime(DateUtils.currTimeStamp());
-        warnReceiveStaff.setWarnReceiveStaffId(sysSequenceCreditAtomSV.getSeqByName()+"");
+        warnReceiveStaff.setWarnReceiveStaffId(SequenceUtil.genWarnReceiveStaffId());
         return warnReceiveStaffMapper.insert(warnReceiveStaff);
     }
 
@@ -58,7 +56,7 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
                 warnReceiveStaff.setOperTime(DateUtils.currTimeStamp());
             //设置预警类型为库存预警11
             warnReceiveStaff.setObiectType("11");
-            warnReceiveStaff.setWarnReceiveStaffId(sysSequenceCreditAtomSV.getSeqByName()+"");
+            warnReceiveStaff.setWarnReceiveStaffId(SequenceUtil.genWarnReceiveStaffId());
             warnReceiveStaffMapper.insert(warnReceiveStaff);
             count++;
         }

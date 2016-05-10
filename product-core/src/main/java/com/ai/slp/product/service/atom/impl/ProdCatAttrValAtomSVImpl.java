@@ -6,6 +6,7 @@ import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValueCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrValueMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrValAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -99,6 +100,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
      */
     @Override
     public int installCatAttrVal(ProdCatAttrValue attrValue) {
+        attrValue.setCatAttrId(SequenceUtil.genProdCatAttrValId());
         if (attrValue.getOperTime()==null)
             attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.insert(attrValue);

@@ -6,8 +6,8 @@ import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.StandedProductCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.StandedProductMapper;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.StandedProdPageQueryVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +23,13 @@ import java.util.List;
 public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
     @Autowired
     StandedProductMapper productMapper;
-    @Autowired
-    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
 
     @Override
     public int installObj(StandedProduct standedProduct) {
         if (standedProduct==null)
             return 0;
         //设置标准品标识
-        standedProduct.setStandedProdId(
-                sequenceCreditAtomSV.gen12SeqByName()+"");
+        standedProduct.setStandedProdId(SequenceUtil.genStandedProductId());
         //设置添加时间
         if (standedProduct.getCreateTime()==null)
             standedProduct.setCreateTime(DateUtil.getSysDate());

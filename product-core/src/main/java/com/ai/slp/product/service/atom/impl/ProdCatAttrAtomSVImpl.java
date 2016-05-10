@@ -3,8 +3,8 @@ package com.ai.slp.product.service.atom.impl;
 import java.util.List;
 
 import com.ai.slp.product.constants.CommonSatesConstants;
-import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,8 +19,6 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
 
     @Autowired
     ProdCatAttrMapper prodCatAttrMapper;
-    @Autowired
-    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
     
     @Override
     public ProdCatAttr selectById(String tenantId, String productCatId) {
@@ -36,7 +34,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     public int insertProdCatAttr(ProdCatAttr prodCatAttr) {
         if (prodCatAttr.getOperTime()==null)
             prodCatAttr.setOperTime(DateUtils.currTimeStamp());
-        prodCatAttr.setCatAttrId(sequenceCreditAtomSV.getSeqByName()+"");
+        prodCatAttr.setCatAttrId(SequenceUtil.genProdCatAttrId());
         return prodCatAttrMapper.insertSelective(prodCatAttr);
     }
 

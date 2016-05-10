@@ -14,7 +14,6 @@ import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrDefMapper;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.ISysSequenceCreditAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
 
