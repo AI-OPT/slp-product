@@ -1,16 +1,18 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageGroupMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.util.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.ai.slp.product.util.SequenceUtil;
 
 /**
  * 库存组原子操作
@@ -67,7 +69,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
      */
     @Override
     public int installGroup(StorageGroup group) {
-//        group.setStorageGroupId(SequenceUtil.genStorageGroupId());
+        group.setStorageGroupId(SequenceUtil.genStorageGroupId());
         if (group.getCreateTime()==null)
             group.setCreateTime(DateUtils.currTimeStamp());
         group.setOperTime(group.getCreateTime());
