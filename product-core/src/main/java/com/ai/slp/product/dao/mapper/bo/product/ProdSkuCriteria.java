@@ -345,52 +345,62 @@ public class ProdSkuCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdEqualTo(Long value) {
+        public Criteria andStorageGroupIdEqualTo(String value) {
             addCriterion("STORAGE_GROUP_ID =", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdNotEqualTo(Long value) {
+        public Criteria andStorageGroupIdNotEqualTo(String value) {
             addCriterion("STORAGE_GROUP_ID <>", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdGreaterThan(Long value) {
+        public Criteria andStorageGroupIdGreaterThan(String value) {
             addCriterion("STORAGE_GROUP_ID >", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andStorageGroupIdGreaterThanOrEqualTo(String value) {
             addCriterion("STORAGE_GROUP_ID >=", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdLessThan(Long value) {
+        public Criteria andStorageGroupIdLessThan(String value) {
             addCriterion("STORAGE_GROUP_ID <", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdLessThanOrEqualTo(Long value) {
+        public Criteria andStorageGroupIdLessThanOrEqualTo(String value) {
             addCriterion("STORAGE_GROUP_ID <=", value, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdIn(List<Long> values) {
+        public Criteria andStorageGroupIdLike(String value) {
+            addCriterion("STORAGE_GROUP_ID like", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdNotLike(String value) {
+            addCriterion("STORAGE_GROUP_ID not like", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdIn(List<String> values) {
             addCriterion("STORAGE_GROUP_ID in", values, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdNotIn(List<Long> values) {
+        public Criteria andStorageGroupIdNotIn(List<String> values) {
             addCriterion("STORAGE_GROUP_ID not in", values, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdBetween(Long value1, Long value2) {
+        public Criteria andStorageGroupIdBetween(String value1, String value2) {
             addCriterion("STORAGE_GROUP_ID between", value1, value2, "storageGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andStorageGroupIdNotBetween(Long value1, Long value2) {
+        public Criteria andStorageGroupIdNotBetween(String value1, String value2) {
             addCriterion("STORAGE_GROUP_ID not between", value1, value2, "storageGroupId");
             return (Criteria) this;
         }
@@ -535,123 +545,73 @@ public class ProdSkuCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumIsNull() {
-            addCriterion("TOTAL_NUM is null");
+        public Criteria andSaleAttrsIsNull() {
+            addCriterion("SALE_ATTRS is null");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumIsNotNull() {
-            addCriterion("TOTAL_NUM is not null");
+        public Criteria andSaleAttrsIsNotNull() {
+            addCriterion("SALE_ATTRS is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumEqualTo(Long value) {
-            addCriterion("TOTAL_NUM =", value, "totalNum");
+        public Criteria andSaleAttrsEqualTo(String value) {
+            addCriterion("SALE_ATTRS =", value, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumNotEqualTo(Long value) {
-            addCriterion("TOTAL_NUM <>", value, "totalNum");
+        public Criteria andSaleAttrsNotEqualTo(String value) {
+            addCriterion("SALE_ATTRS <>", value, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumGreaterThan(Long value) {
-            addCriterion("TOTAL_NUM >", value, "totalNum");
+        public Criteria andSaleAttrsGreaterThan(String value) {
+            addCriterion("SALE_ATTRS >", value, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumGreaterThanOrEqualTo(Long value) {
-            addCriterion("TOTAL_NUM >=", value, "totalNum");
+        public Criteria andSaleAttrsGreaterThanOrEqualTo(String value) {
+            addCriterion("SALE_ATTRS >=", value, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumLessThan(Long value) {
-            addCriterion("TOTAL_NUM <", value, "totalNum");
+        public Criteria andSaleAttrsLessThan(String value) {
+            addCriterion("SALE_ATTRS <", value, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumLessThanOrEqualTo(Long value) {
-            addCriterion("TOTAL_NUM <=", value, "totalNum");
+        public Criteria andSaleAttrsLessThanOrEqualTo(String value) {
+            addCriterion("SALE_ATTRS <=", value, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumIn(List<Long> values) {
-            addCriterion("TOTAL_NUM in", values, "totalNum");
+        public Criteria andSaleAttrsLike(String value) {
+            addCriterion("SALE_ATTRS like", value, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumNotIn(List<Long> values) {
-            addCriterion("TOTAL_NUM not in", values, "totalNum");
+        public Criteria andSaleAttrsNotLike(String value) {
+            addCriterion("SALE_ATTRS not like", value, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumBetween(Long value1, Long value2) {
-            addCriterion("TOTAL_NUM between", value1, value2, "totalNum");
+        public Criteria andSaleAttrsIn(List<String> values) {
+            addCriterion("SALE_ATTRS in", values, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andTotalNumNotBetween(Long value1, Long value2) {
-            addCriterion("TOTAL_NUM not between", value1, value2, "totalNum");
+        public Criteria andSaleAttrsNotIn(List<String> values) {
+            addCriterion("SALE_ATTRS not in", values, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andSalePriceIsNull() {
-            addCriterion("SALE_PRICE is null");
+        public Criteria andSaleAttrsBetween(String value1, String value2) {
+            addCriterion("SALE_ATTRS between", value1, value2, "saleAttrs");
             return (Criteria) this;
         }
 
-        public Criteria andSalePriceIsNotNull() {
-            addCriterion("SALE_PRICE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalePriceEqualTo(Long value) {
-            addCriterion("SALE_PRICE =", value, "salePrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalePriceNotEqualTo(Long value) {
-            addCriterion("SALE_PRICE <>", value, "salePrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalePriceGreaterThan(Long value) {
-            addCriterion("SALE_PRICE >", value, "salePrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalePriceGreaterThanOrEqualTo(Long value) {
-            addCriterion("SALE_PRICE >=", value, "salePrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalePriceLessThan(Long value) {
-            addCriterion("SALE_PRICE <", value, "salePrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalePriceLessThanOrEqualTo(Long value) {
-            addCriterion("SALE_PRICE <=", value, "salePrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalePriceIn(List<Long> values) {
-            addCriterion("SALE_PRICE in", values, "salePrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalePriceNotIn(List<Long> values) {
-            addCriterion("SALE_PRICE not in", values, "salePrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalePriceBetween(Long value1, Long value2) {
-            addCriterion("SALE_PRICE between", value1, value2, "salePrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalePriceNotBetween(Long value1, Long value2) {
-            addCriterion("SALE_PRICE not between", value1, value2, "salePrice");
+        public Criteria andSaleAttrsNotBetween(String value1, String value2) {
+            addCriterion("SALE_ATTRS not between", value1, value2, "saleAttrs");
             return (Criteria) this;
         }
 

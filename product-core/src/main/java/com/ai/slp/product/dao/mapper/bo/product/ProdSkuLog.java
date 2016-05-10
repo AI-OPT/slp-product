@@ -11,15 +11,13 @@ public class ProdSkuLog {
 
     private String prodId;
 
-    private Long storageGroupId;
+    private String storageGroupId;
 
     private String skuName;
 
     private String isSaleAttr;
 
-    private Long totalNum;
-
-    private Long salePrice;
+    private String saleAttrs;
 
     private Short serialNumber;
 
@@ -28,8 +26,6 @@ public class ProdSkuLog {
     private Long operId;
 
     private Timestamp operTime;
-
-    private Byte[] saleAttrs;
 
     public String getLogId() {
         return logId;
@@ -63,12 +59,12 @@ public class ProdSkuLog {
         this.prodId = prodId == null ? null : prodId.trim();
     }
 
-    public Long getStorageGroupId() {
+    public String getStorageGroupId() {
         return storageGroupId;
     }
 
-    public void setStorageGroupId(Long storageGroupId) {
-        this.storageGroupId = storageGroupId;
+    public void setStorageGroupId(String storageGroupId) {
+        this.storageGroupId = storageGroupId == null ? null : storageGroupId.trim();
     }
 
     public String getSkuName() {
@@ -87,20 +83,12 @@ public class ProdSkuLog {
         this.isSaleAttr = isSaleAttr == null ? null : isSaleAttr.trim();
     }
 
-    public Long getTotalNum() {
-        return totalNum;
+    public String getSaleAttrs() {
+        return saleAttrs;
     }
 
-    public void setTotalNum(Long totalNum) {
-        this.totalNum = totalNum;
-    }
-
-    public Long getSalePrice() {
-        return salePrice;
-    }
-
-    public void setSalePrice(Long salePrice) {
-        this.salePrice = salePrice;
+    public void setSaleAttrs(String saleAttrs) {
+        this.saleAttrs = saleAttrs == null ? null : saleAttrs.trim();
     }
 
     public Short getSerialNumber() {
@@ -133,13 +121,5 @@ public class ProdSkuLog {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
-    }
-
-    public Byte[] getSaleAttrs() {
-        return saleAttrs;
-    }
-
-    public void setSaleAttrs(Byte[] saleAttrs) {
-        this.saleAttrs = saleAttrs;
     }
 }

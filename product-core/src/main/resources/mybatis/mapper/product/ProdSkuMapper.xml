@@ -5,18 +5,14 @@
     <id column="SKU_ID" property="skuId" jdbcType="VARCHAR" />
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
-    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="DECIMAL" />
+    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="VARCHAR" />
     <result column="SKU_NAME" property="skuName" jdbcType="VARCHAR" />
     <result column="IS_SALE_ATTR" property="isSaleAttr" jdbcType="CHAR" />
-    <result column="TOTAL_NUM" property="totalNum" jdbcType="DECIMAL" />
-    <result column="SALE_PRICE" property="salePrice" jdbcType="DECIMAL" />
+    <result column="SALE_ATTRS" property="saleAttrs" jdbcType="VARCHAR" />
     <result column="SERIAL_NUMBER" property="serialNumber" jdbcType="DECIMAL" />
     <result column="STATE" property="state" jdbcType="VARCHAR" />
     <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.ai.slp.product.dao.mapper.bo.product.ProdSku" extends="BaseResultMap" >
-    <result column="SALE_ATTRS" property="saleAttrs" jdbcType="VARBINARY" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -77,29 +73,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    SKU_ID, TENANT_ID, PROD_ID, STORAGE_GROUP_ID, SKU_NAME, IS_SALE_ATTR, TOTAL_NUM, 
-    SALE_PRICE, SERIAL_NUMBER, STATE, OPER_ID, OPER_TIME
+    SKU_ID, TENANT_ID, PROD_ID, STORAGE_GROUP_ID, SKU_NAME, IS_SALE_ATTR, SALE_ATTRS, 
+    SERIAL_NUMBER, STATE, OPER_ID, OPER_TIME
   </sql>
-  <sql id="Blob_Column_List" >
-    SALE_ATTRS
-  </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSkuCriteria" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    'false' as QUERYID,
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from prod_sku
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSkuCriteria" >
     select
     <if test="distinct" >
@@ -118,11 +94,9 @@
       limit #{limitStart} , #{limitEnd}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from prod_sku
     where SKU_ID = #{skuId,jdbcType=VARCHAR}
   </select>
@@ -139,14 +113,12 @@
   <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSku" >
     insert into prod_sku (SKU_ID, TENANT_ID, PROD_ID, 
       STORAGE_GROUP_ID, SKU_NAME, IS_SALE_ATTR, 
-      TOTAL_NUM, SALE_PRICE, SERIAL_NUMBER, 
-      STATE, OPER_ID, OPER_TIME, 
-      SALE_ATTRS)
+      SALE_ATTRS, SERIAL_NUMBER, STATE, 
+      OPER_ID, OPER_TIME)
     values (#{skuId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, 
-      #{storageGroupId,jdbcType=DECIMAL}, #{skuName,jdbcType=VARCHAR}, #{isSaleAttr,jdbcType=CHAR}, 
-      #{totalNum,jdbcType=DECIMAL}, #{salePrice,jdbcType=DECIMAL}, #{serialNumber,jdbcType=DECIMAL}, 
-      #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}, 
-      #{saleAttrs,jdbcType=VARBINARY})
+      #{storageGroupId,jdbcType=VARCHAR}, #{skuName,jdbcType=VARCHAR}, #{isSaleAttr,jdbcType=CHAR}, 
+      #{saleAttrs,jdbcType=VARCHAR}, #{serialNumber,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, 
+      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSku" >
     insert into prod_sku
@@ -169,11 +141,8 @@
       <if test="isSaleAttr != null" >
         IS_SALE_ATTR,
       </if>
-      <if test="totalNum != null" >
-        TOTAL_NUM,
-      </if>
-      <if test="salePrice != null" >
-        SALE_PRICE,
+      <if test="saleAttrs != null" >
+        SALE_ATTRS,
       </if>
       <if test="serialNumber != null" >
         SERIAL_NUMBER,
@@ -187,9 +156,6 @@
       <if test="operTime != null" >
         OPER_TIME,
       </if>
-      <if test="saleAttrs != null" >
-        SALE_ATTRS,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="skuId != null" >
@@ -202,7 +168,7 @@
         #{prodId,jdbcType=VARCHAR},
       </if>
       <if test="storageGroupId != null" >
-        #{storageGroupId,jdbcType=DECIMAL},
+        #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="skuName != null" >
         #{skuName,jdbcType=VARCHAR},
@@ -210,11 +176,8 @@
       <if test="isSaleAttr != null" >
         #{isSaleAttr,jdbcType=CHAR},
       </if>
-      <if test="totalNum != null" >
-        #{totalNum,jdbcType=DECIMAL},
-      </if>
-      <if test="salePrice != null" >
-        #{salePrice,jdbcType=DECIMAL},
+      <if test="saleAttrs != null" >
+        #{saleAttrs,jdbcType=VARCHAR},
       </if>
       <if test="serialNumber != null" >
         #{serialNumber,jdbcType=DECIMAL},
@@ -227,9 +190,6 @@
       </if>
       <if test="operTime != null" >
         #{operTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="saleAttrs != null" >
-        #{saleAttrs,jdbcType=VARBINARY},
       </if>
     </trim>
   </insert>
@@ -252,7 +212,7 @@
         PROD_ID = #{record.prodId,jdbcType=VARCHAR},
       </if>
       <if test="record.storageGroupId != null" >
-        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.skuName != null" >
         SKU_NAME = #{record.skuName,jdbcType=VARCHAR},
@@ -260,11 +220,8 @@
       <if test="record.isSaleAttr != null" >
         IS_SALE_ATTR = #{record.isSaleAttr,jdbcType=CHAR},
       </if>
-      <if test="record.totalNum != null" >
-        TOTAL_NUM = #{record.totalNum,jdbcType=DECIMAL},
-      </if>
-      <if test="record.salePrice != null" >
-        SALE_PRICE = #{record.salePrice,jdbcType=DECIMAL},
+      <if test="record.saleAttrs != null" >
+        SALE_ATTRS = #{record.saleAttrs,jdbcType=VARCHAR},
       </if>
       <if test="record.serialNumber != null" >
         SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
@@ -278,29 +235,7 @@
       <if test="record.operTime != null" >
         OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.saleAttrs != null" >
-        SALE_ATTRS = #{record.saleAttrs,jdbcType=VARBINARY},
-      </if>
     </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map" >
-    update prod_sku
-    set SKU_ID = #{record.skuId,jdbcType=VARCHAR},
-      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
-      PROD_ID = #{record.prodId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
-      SKU_NAME = #{record.skuName,jdbcType=VARCHAR},
-      IS_SALE_ATTR = #{record.isSaleAttr,jdbcType=CHAR},
-      TOTAL_NUM = #{record.totalNum,jdbcType=DECIMAL},
-      SALE_PRICE = #{record.salePrice,jdbcType=DECIMAL},
-      SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
-      STATE = #{record.state,jdbcType=VARCHAR},
-      OPER_ID = #{record.operId,jdbcType=DECIMAL},
-      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
-      SALE_ATTRS = #{record.saleAttrs,jdbcType=VARBINARY}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -310,11 +245,10 @@
     set SKU_ID = #{record.skuId,jdbcType=VARCHAR},
       TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       PROD_ID = #{record.prodId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
       SKU_NAME = #{record.skuName,jdbcType=VARCHAR},
       IS_SALE_ATTR = #{record.isSaleAttr,jdbcType=CHAR},
-      TOTAL_NUM = #{record.totalNum,jdbcType=DECIMAL},
-      SALE_PRICE = #{record.salePrice,jdbcType=DECIMAL},
+      SALE_ATTRS = #{record.saleAttrs,jdbcType=VARCHAR},
       SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
       STATE = #{record.state,jdbcType=VARCHAR},
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
@@ -333,7 +267,7 @@
         PROD_ID = #{prodId,jdbcType=VARCHAR},
       </if>
       <if test="storageGroupId != null" >
-        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       </if>
       <if test="skuName != null" >
         SKU_NAME = #{skuName,jdbcType=VARCHAR},
@@ -341,11 +275,8 @@
       <if test="isSaleAttr != null" >
         IS_SALE_ATTR = #{isSaleAttr,jdbcType=CHAR},
       </if>
-      <if test="totalNum != null" >
-        TOTAL_NUM = #{totalNum,jdbcType=DECIMAL},
-      </if>
-      <if test="salePrice != null" >
-        SALE_PRICE = #{salePrice,jdbcType=DECIMAL},
+      <if test="saleAttrs != null" >
+        SALE_ATTRS = #{saleAttrs,jdbcType=VARCHAR},
       </if>
       <if test="serialNumber != null" >
         SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
@@ -359,37 +290,17 @@
       <if test="operTime != null" >
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="saleAttrs != null" >
-        SALE_ATTRS = #{saleAttrs,jdbcType=VARBINARY},
-      </if>
     </set>
-    where SKU_ID = #{skuId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSku" >
-    update prod_sku
-    set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
-      PROD_ID = #{prodId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
-      SKU_NAME = #{skuName,jdbcType=VARCHAR},
-      IS_SALE_ATTR = #{isSaleAttr,jdbcType=CHAR},
-      TOTAL_NUM = #{totalNum,jdbcType=DECIMAL},
-      SALE_PRICE = #{salePrice,jdbcType=DECIMAL},
-      SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
-      STATE = #{state,jdbcType=VARCHAR},
-      OPER_ID = #{operId,jdbcType=DECIMAL},
-      OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
-      SALE_ATTRS = #{saleAttrs,jdbcType=VARBINARY}
     where SKU_ID = #{skuId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdSku" >
     update prod_sku
     set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       PROD_ID = #{prodId,jdbcType=VARCHAR},
-      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=DECIMAL},
+      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
       SKU_NAME = #{skuName,jdbcType=VARCHAR},
       IS_SALE_ATTR = #{isSaleAttr,jdbcType=CHAR},
-      TOTAL_NUM = #{totalNum,jdbcType=DECIMAL},
-      SALE_PRICE = #{salePrice,jdbcType=DECIMAL},
+      SALE_ATTRS = #{saleAttrs,jdbcType=VARCHAR},
       SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
       STATE = #{state,jdbcType=VARCHAR},
       OPER_ID = #{operId,jdbcType=DECIMAL},

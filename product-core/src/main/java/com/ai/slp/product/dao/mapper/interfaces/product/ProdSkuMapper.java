@@ -16,21 +16,15 @@ public interface ProdSkuMapper {
 
     int insertSelective(ProdSku record);
 
-    List<ProdSku> selectByExampleWithBLOBs(ProdSkuCriteria example);
-
     List<ProdSku> selectByExample(ProdSkuCriteria example);
 
     ProdSku selectByPrimaryKey(String skuId);
 
     int updateByExampleSelective(@Param("record") ProdSku record, @Param("example") ProdSkuCriteria example);
 
-    int updateByExampleWithBLOBs(@Param("record") ProdSku record, @Param("example") ProdSkuCriteria example);
-
     int updateByExample(@Param("record") ProdSku record, @Param("example") ProdSkuCriteria example);
 
     int updateByPrimaryKeySelective(ProdSku record);
-
-    int updateByPrimaryKeyWithBLOBs(ProdSku record);
 
     int updateByPrimaryKey(ProdSku record);
 }
