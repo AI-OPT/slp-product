@@ -27,7 +27,7 @@ import com.ai.slp.product.api.productcat.param.AttrValUniqueReq;
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public interface IAttrAndValDefSV {
     
@@ -38,7 +38,7 @@ public interface IAttrAndValDefSV {
      * @return 符合页数的属性集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng1616
     *  @ApiCode ATTR_VAL_0200
      */
     public PageInfoForRes<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
@@ -52,7 +52,7 @@ public interface IAttrAndValDefSV {
      * @return 通过ID查询到的单个属性
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_VAL_0201
      */
     public AttrInfo queryAttr(AttrPam attrPam)
@@ -66,7 +66,7 @@ public interface IAttrAndValDefSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_VAL_0202
      */
     public BaseResponse addAttr(List<AttrParam> attrParamList) 
@@ -80,7 +80,7 @@ public interface IAttrAndValDefSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_VAL_0203
      */
     public BaseResponse updateAttr(AttrParam attrParam) 
@@ -94,7 +94,7 @@ public interface IAttrAndValDefSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_VAL_0204
      */
     public BaseResponse deleteAttr(AttrPam attrPam)
@@ -108,7 +108,7 @@ public interface IAttrAndValDefSV {
      * @return 符合条件的属性集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_VAL_0205
      */
     public PageInfoForRes<AttrValInfo> queryAttrValues(AttrValPageQuery pageQuery)
@@ -122,7 +122,7 @@ public interface IAttrAndValDefSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_VAL_0206
      */
     public BaseResponse addAttrVal(List<AttrValParam> attrValParamList)
@@ -136,7 +136,7 @@ public interface IAttrAndValDefSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_VAL_0207
      */
     public BaseResponse updateAttrVal(AttrValParam attrValParam)
@@ -150,7 +150,7 @@ public interface IAttrAndValDefSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_VAL_0208
      */
     public BaseResponse deleteAttrVal(AttrValUniqueReq attrValUniqueReq)
@@ -164,7 +164,7 @@ public interface IAttrAndValDefSV {
      * @return 符合条件的单个属性值信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
      * @ApiCode ATTR_VAL_0209
      */
     public AttrVal queryAttrVal(AttrValUniqueReq attrValUniqueReq)
@@ -177,7 +177,7 @@ public interface IAttrAndValDefSV {
      * @return 由属性对象对应的属性值List的Map
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_VAL_0210
      */
     public MapForRes<AttrDef,List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo) 

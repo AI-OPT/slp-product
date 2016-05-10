@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.productcat.param;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -8,9 +9,10 @@ import java.sql.Timestamp;
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
-public class AttrDefInfo {
+public class AttrDefInfo implements Serializable{
+	private static final long serialVersionUID = 1L;
     
     /**
      * 属性ID

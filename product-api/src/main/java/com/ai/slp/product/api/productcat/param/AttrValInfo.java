@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class AttrValInfo {
 

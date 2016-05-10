@@ -1,8 +1,8 @@
 package com.ai.slp.product.api.productcat.param;
 
-import java.sql.Timestamp;
-
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
@@ -13,21 +13,23 @@ import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
  * Date: 2016年5月4日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class AttrParam extends BaseInfo{
     
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 属性标识
      */
-    @NotNull(message = "属性ID不能为空", 
+	@NotBlank(message = "属性ID不能为空", 
             groups = { IAttrAndValDefSV.UpdateAttr.class})
     private Long attrId;
 
     /**
      * 属性名称
      */
-    @NotNull(message = "属性名称不能为空", 
+	@NotBlank(message = "属性名称不能为空", 
             groups = { IAttrAndValDefSV.AddAttr.class,
                     IAttrAndValDefSV.UpdateAttr.class})
     private String attrName;

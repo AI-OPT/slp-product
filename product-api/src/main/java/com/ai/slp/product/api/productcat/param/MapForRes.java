@@ -1,11 +1,10 @@
 package com.ai.slp.product.api.productcat.param;
 
-import com.ai.opt.base.vo.BaseResponse;
-
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import com.ai.opt.base.vo.BaseResponse;
 
 /**
  * 包含返回相关属性的封装map<br>
@@ -13,7 +12,8 @@ import java.util.Set;
  * Created by jackieliu on 16/5/2.
  */
 public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
-    Map<K,V> objMap;
+    private static final long serialVersionUID = 1L;
+	Map<K,V> objMap;
 
     public void setObjMap(Map<K, V> objMap) {
         this.objMap = objMap;

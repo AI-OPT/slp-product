@@ -1,10 +1,9 @@
 package com.ai.slp.product.api.productcat.param;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
-
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 
 /**
  * 属性值请求信息<br>
@@ -14,29 +13,26 @@ import java.sql.Timestamp;
  * @author liutong5
  */
 public class AttrValUniqueReq extends BaseInfo{
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 属性ID
      */
-    private long attrId;
+    private Long attrId;
 
     /**
      * 属性值ID
      */
-    @NotNull(message = "属性值ID不能为空",
+    @NotBlank(message = "属性值ID不能为空",
             groups = {IAttrAndValDefSV.QueryAttrVal.class,
                     IAttrAndValDefSV.DeleteAttrVal.class})
     private String attrvalueDefId;
     /**
      * 操作人ID
      */
-    @NotNull(message = "操作人ID不能为空",
+    @NotBlank(message = "操作人ID不能为空",
             groups = {IAttrAndValDefSV.DeleteAttrVal.class})
     private Long operId;
-
-    /**
-     * 操作时间
-     */
-    private Timestamp operTime;
 
     public long getAttrId() {
         return attrId;
@@ -62,11 +58,4 @@ public class AttrValUniqueReq extends BaseInfo{
         this.operId = operId;
     }
 
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
-    }
 }

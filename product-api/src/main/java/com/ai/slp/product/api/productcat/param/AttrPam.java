@@ -1,8 +1,6 @@
 package com.ai.slp.product.api.productcat.param;
 
-import java.sql.Timestamp;
-
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
@@ -13,31 +11,32 @@ import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
  * Date: 2016年5月4日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class AttrPam extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 属性标识
      */
-    @NotNull(message = "属性ID不能为空", groups = { IAttrAndValDefSV.QueryAttr.class,
+    @NotBlank(message = "属性ID不能为空", groups = { IAttrAndValDefSV.QueryAttr.class,
             IAttrAndValDefSV.DeleteAttr.class})
-    private long attrId;
+    private Long attrId;
     /**
      * 操作人ID
      */
-    @NotNull(message = "操作人ID不能为空", groups = { IAttrAndValDefSV.DeleteAttr.class})
-    private long operId;
+    @NotBlank(message = "操作人ID不能为空", groups = { IAttrAndValDefSV.DeleteAttr.class})
+    private Long operId;
     
-    public long getAttrId() {
+    public Long getAttrId() {
         return attrId;
     }
-    public void setAttrId(long attrId) {
+    public void setAttrId(Long attrId) {
         this.attrId = attrId;
     }
-    public long getOperId() {
+    public Long getOperId() {
         return operId;
     }
-    public void setOperId(long operId) {
+    public void setOperId(Long operId) {
         this.operId = operId;
     }
 

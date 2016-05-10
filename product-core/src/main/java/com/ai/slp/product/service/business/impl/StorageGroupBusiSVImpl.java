@@ -390,7 +390,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		//查询分页的库存组信息
 		PageInfoForRes<StorageGroup> storageGroupPage = storageGroupAtomSV.queryPageOfStandedProd(
 				infoQuery.getTenantId(), infoQuery.getProductId(), infoQuery.getPageNo(), infoQuery.getPageSize());
-		
+		//统计库存量：当前生效优先级下正在启用的库存量之和
 		return null;
 	}
 }

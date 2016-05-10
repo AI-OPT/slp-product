@@ -12,10 +12,7 @@ import java.io.Serializable;
  */
 public class AttrDef implements Serializable {
     
-    /**
-     *租户ID
-     */
-    private String tenantId;
+    private static final long serialVersionUID = 1L;
     
     /**
      *属性标识
@@ -36,14 +33,6 @@ public class AttrDef implements Serializable {
      *值输入方式
      */
     private String valueWay;
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
 
     public Long getAttrId() {
         return attrId;
