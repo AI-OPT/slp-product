@@ -62,7 +62,15 @@ public interface INormProductBusiSV {
      * @param marketPrice
      * @return
      * @author lipeng
-    *  @ApiCode
      */
     public int updateMarketPrice(MarketPriceUpdate marketPrice);
+    
+    /**
+     * 添加商品销售价页面查询标准品及库存组数量信息
+     * 
+     * @param productRequest
+     * @return
+     * @author lipeng
+     */
+    public PageInfoForRes<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest);
 }

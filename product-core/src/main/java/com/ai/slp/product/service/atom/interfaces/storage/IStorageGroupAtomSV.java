@@ -70,4 +70,14 @@ public interface IStorageGroupAtomSV {
      * @author lipeng
      */
     public int updateStorGroupPrice(StorageGroup storageGroup);
+    
+    /**
+     * 通过标准品ID查询标准品下的非废弃库存组数量
+     * 
+     * @param tenantId
+     * @param standedProdId
+     * @return 标准品下库存组数量
+     * @author lipeng
+     */
+    public int countStorGroupByProdID(String tenantId,String standedProdId);
 }
