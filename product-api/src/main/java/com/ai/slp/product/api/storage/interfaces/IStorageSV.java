@@ -28,7 +28,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0100
      */
-    public BaseResponse installStorageGroup(STOStorageGroup storageGroup)
+    public BaseResponse installStorageGroup(StorageGroup storageGroup)
         throws BusinessException,SystemException;
     @interface InstallStorage{}
 
@@ -43,7 +43,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0101
      */
-    public StorageGroupInfo queryGroupInfoByGroupId(StorageGroupInfoQuery infoQuery)
+    public StorageGroupRes queryGroupInfoByGroupId(StorageGroupQuery infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupInfoById{}
 
@@ -58,7 +58,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0102
      */
-    public List<StorageGroupInfo> queryGroupInfoByNormProId(StorageGroupInfoQuery infoQuery)
+    public List<StorageGroupRes> queryGroupInfoByNormProId(StorageGroupQuery infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupInfoByProductId{}
 
@@ -89,7 +89,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0104
      */
-    public PageInfoForRes<STOStorageGroup4List> queryGroup(STOStorageGroupQuery groupQuery)
+    public PageInfoForRes<StorageGroup4List> queryGroup(StorageGroupQueryPage groupQuery)
             throws BusinessException,SystemException;
     @interface QueryGroup{}
 
@@ -104,12 +104,12 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0105
      */
-    public BaseResponse saveStorage(STOStorage stoStorage)
+    public BaseResponse saveStorage(Storage stoStorage)
             throws BusinessException,SystemException;
     @interface SaveStorage{}
 
     /**
-     * 查询标准品库存信息<br>
+     * 查询库存信息<br>
      *
      * @param storageId 库存标识
      * @return 标准品库存信息
@@ -119,7 +119,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0106
      */
-    public StorageInfo queryStorageById(String storageId)
+    public StorageRes queryStorageById(String storageId)
             throws BusinessException,SystemException;
     @interface QueryStorageById{}
 
@@ -165,12 +165,12 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0109
      */
-    public BaseResponse updateStorageGroup(StorageGroupUpdate storageGroup)
+    public BaseResponse updateStorageGroupName(StorageGroupUpName storageGroup)
         throws BusinessException,SystemException;
-    @interface UpdateStorageGroup{}
+    @interface UpdateStorageGroupName{}
 
     /**
-     * 更新库存组销售价信息
+     * 更新库存组最低最高销售价信息
      *
      * @param salePrice 库存组销售价信息
      * @return 操作结果
@@ -196,7 +196,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0111
      */
-    public PageInfoForRes<STOStorageGroup4SaleList> queryGroupListForSalePrice(STOStorageGroupQuery groupQuery)
+    public PageInfoForRes<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupListForSalePrice{}
 
@@ -211,7 +211,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0112
      */
-    public PageInfoForRes<StorageGroupInfo> queryGroupByProdIdForSalePrice(StorageGroupInfoPageReq infoQuery)
+    public PageInfoForRes<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupByProdIdForSalePrice{}
 
@@ -226,7 +226,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0113
      */
-    public BaseResponse updateMultiStorageSalePrice(List<STOStorageSalePrice> salePriceList)
+    public BaseResponse updateMultiStorageSalePrice(List<StorageSalePrice> salePriceList)
             throws BusinessException,SystemException;
     @interface UpdateMultiStorageSalePrice{}
 }

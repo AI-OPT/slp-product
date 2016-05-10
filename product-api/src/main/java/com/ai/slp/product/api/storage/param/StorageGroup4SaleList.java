@@ -8,7 +8,7 @@ package com.ai.slp.product.api.storage.param;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class STOStorageGroup4SaleList extends STOStorageGroup4List {
+public class StorageGroup4SaleList extends StorageGroup4List {
     /**
      * 状态不为废弃的库存组的数量
      */

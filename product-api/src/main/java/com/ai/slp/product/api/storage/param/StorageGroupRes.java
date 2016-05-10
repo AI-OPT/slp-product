@@ -14,7 +14,7 @@ import java.util.Map;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class StorageGroupInfo extends BaseResponse {
+public class StorageGroupRes extends BaseResponse {
     /**
      * 库存组标识
      */
@@ -62,7 +62,7 @@ public class StorageGroupInfo extends BaseResponse {
     /**
      * 优先级顺序库存集合
      */
-    private Map<Short,List<StorageInfo>> storageList;
+    private Map<Short,List<StorageRes>> storageList;
 
     public String getStorageGroupId() {
         return storageGroupId;
@@ -152,11 +152,11 @@ public class StorageGroupInfo extends BaseResponse {
         this.operTime = operTime;
     }
 
-    public Map<Short, List<StorageInfo>> getStorageList() {
+    public Map<Short, List<StorageRes>> getStorageList() {
         return storageList;
     }
 
-    public void setStorageList(Map<Short, List<StorageInfo>> storageList) {
+    public void setStorageList(Map<Short, List<StorageRes>> storageList) {
         this.storageList = storageList;
     }
 }

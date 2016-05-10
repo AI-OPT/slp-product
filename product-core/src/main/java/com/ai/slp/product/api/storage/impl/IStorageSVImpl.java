@@ -35,7 +35,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0100
      */
     @Override
-    public BaseResponse installStorageGroup(STOStorageGroup storageGroup) throws BusinessException, SystemException {
+    public BaseResponse installStorageGroup(StorageGroup storageGroup) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(storageGroup.getTenantId(),"");
         groupBusiSV.addGroup(storageGroup);
         BaseResponse baseResponse = new BaseResponse();
@@ -58,7 +58,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0101
      */
     @Override
-    public StorageGroupInfo queryGroupInfoByGroupId(StorageGroupInfoQuery infoQuery) throws BusinessException, SystemException {
+    public StorageGroupRes queryGroupInfoByGroupId(StorageGroupQuery infoQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(infoQuery.getTenantId(),"");
         return groupBusiSV.queryGroupInfoByGroupId(infoQuery.getTenantId(),infoQuery.getGroupId());
     }
@@ -75,7 +75,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0102
      */
     @Override
-    public List<StorageGroupInfo> queryGroupInfoByNormProId(StorageGroupInfoQuery infoQuery) throws BusinessException, SystemException {
+    public List<StorageGroupRes> queryGroupInfoByNormProId(StorageGroupQuery infoQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(infoQuery.getTenantId(),"");
         return groupBusiSV.queryGroupInfoByNormProId(infoQuery.getTenantId(),infoQuery.getProductId());
     }
@@ -116,7 +116,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0104
      */
     @Override
-    public PageInfoForRes<STOStorageGroup4List> queryGroup(STOStorageGroupQuery groupQuery) throws BusinessException, SystemException {
+    public PageInfoForRes<StorageGroup4List> queryGroup(StorageGroupQueryPage groupQuery) throws BusinessException, SystemException {
         return null;
     }
 
@@ -132,7 +132,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0105
      */
     @Override
-    public BaseResponse saveStorage(STOStorage stoStorage) throws BusinessException, SystemException {
+    public BaseResponse saveStorage(Storage stoStorage) throws BusinessException, SystemException {
         return null;
     }
 
@@ -148,7 +148,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0106
      */
     @Override
-    public StorageInfo queryStorageById(String storageId) throws BusinessException, SystemException {
+    public StorageRes queryStorageById(String storageId) throws BusinessException, SystemException {
         return null;
     }
 
@@ -197,9 +197,9 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0109
      */
     @Override
-    public BaseResponse updateStorageGroup(StorageGroupUpdate storageGroup) throws BusinessException, SystemException {
+    public BaseResponse updateStorageGroupName(StorageGroupUpName storageGroup) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(storageGroup.getTenantId(),"");
-        groupBusiSV.updateGroup(storageGroup);
+        groupBusiSV.updateGroupName(storageGroup);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);
@@ -244,7 +244,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0111
      */
     @Override
-    public PageInfoForRes<STOStorageGroup4SaleList> queryGroupListForSalePrice(STOStorageGroupQuery groupQuery) throws BusinessException, SystemException {
+    public PageInfoForRes<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery) throws BusinessException, SystemException {
         return null;
     }
 
@@ -261,7 +261,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0112
      */
     @Override
-    public PageInfoForRes<StorageGroupInfo> queryGroupByProdIdForSalePrice(StorageGroupInfoPageReq infoQuery) throws BusinessException, SystemException {
+    public PageInfoForRes<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery) throws BusinessException, SystemException {
         return null;
     }
 
@@ -277,7 +277,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0113
      */
     @Override
-    public BaseResponse updateMultiStorageSalePrice(List<STOStorageSalePrice> salePriceList) throws BusinessException, SystemException {
+    public BaseResponse updateMultiStorageSalePrice(List<StorageSalePrice> salePriceList) throws BusinessException, SystemException {
         return null;
     }
 }

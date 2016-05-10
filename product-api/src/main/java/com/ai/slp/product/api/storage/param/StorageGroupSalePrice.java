@@ -43,12 +43,6 @@ public class StorageGroupSalePrice extends BaseInfo {
     @NotNull(message = "操作者不能为空",
             groups = { IStorageSV.UpdateStorageGroupSalePrice.class})
     private Long operId;
-    /**
-     * 操作时间<br>
-     * 若不填写,则设置接收时间
-     * 查询时,使用操作时间范围的属性
-     */
-    private Date operTime;
 
     public String getGroupId() {
         return groupId;
@@ -82,11 +76,4 @@ public class StorageGroupSalePrice extends BaseInfo {
         this.operId = operId;
     }
 
-    public Date getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Date operTime) {
-        this.operTime = operTime;
-    }
 }

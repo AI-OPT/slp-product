@@ -2,51 +2,39 @@ package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
 /**
- * 库存组信息查询条件,用于分页查询<br>
+ * 库存组信息查询条件<br>
  * 包括下属库存集合
  *
  * Date: 2016年4月21日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class StorageGroupInfoPageReq extends BaseInfo {
+public class StorageGroupQuery extends BaseInfo {
     /**
-     * 请求查询的页码
-     * 默认为1
+     * 库存组标识
+     * 在根据库存组查询时,不能为空.其他情况不使用
      */
-    private Integer pageNo = 1;
-
-    /**
-     * 每页显示条数,默认每页20条
-     */
-    private Integer pageSize =20;
+    @NotNull(message = "库存组标识不能为空",
+            groups = { IStorageSV.QueryGroupInfoById.class })
+    private String groupId;
     /**
      * 标准品标识
      * 在根据标准品标识查询时,不能为空.其他情况忽略
      */
-    @NotBlank(message = "标准品标识不能为空",
+    @NotNull(message = "标准品标识不能为空",
             groups = { IStorageSV.QueryGroupInfoByProductId.class })
     private String productId;
 
-    public Integer getPageNo() {
-        return pageNo;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setPageNo(Integer pageNo) {
-        this.pageNo = pageNo;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     public String getProductId() {

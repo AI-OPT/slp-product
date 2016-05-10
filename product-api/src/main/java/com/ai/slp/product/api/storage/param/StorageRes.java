@@ -11,7 +11,7 @@ import java.sql.Timestamp;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class StorageInfo extends BaseResponse {
+public class StorageRes extends BaseResponse {
     /**
      * 库存标识
      */

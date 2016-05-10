@@ -25,7 +25,7 @@ public interface IProProductSV {
      * @author lipeng
     *  @ApiCode PROPRO_0100
      */
-    public PageInfoForRes<ProProduct> queryProProducts(ProProductParam proProductParam)
+    public PageInfoForRes<ProProductRes> queryProProducts(ProProductParam proProductParam)
             throws BusinessException, SystemException;
     @interface QueryProProducts {}
     

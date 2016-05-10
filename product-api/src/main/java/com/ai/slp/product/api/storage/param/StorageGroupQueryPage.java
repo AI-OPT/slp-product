@@ -11,7 +11,17 @@ import java.sql.Timestamp;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class STOStorageGroupQuery extends BaseInfo {
+public class StorageGroupQueryPage extends BaseInfo {
+    /**
+     * 请求查询的页码
+     * 默认为1
+     */
+    private Integer pageNo = 1;
+
+    /**
+     * 每页显示条数,默认每页20条
+     */
+    private Integer pageSize =20;
     /**
      * 库存组标识
      */
@@ -131,5 +141,21 @@ public class STOStorageGroupQuery extends BaseInfo {
 
     public void setCreateTimeEnd(Timestamp createTimeEnd) {
         this.createTimeEnd = createTimeEnd;
+    }
+
+    public Integer getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(Integer pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }

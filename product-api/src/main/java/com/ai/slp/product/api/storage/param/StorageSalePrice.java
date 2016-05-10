@@ -15,7 +15,7 @@ import java.util.Date;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class STOStorageSalePrice extends BaseInfo {
+public class StorageSalePrice extends BaseInfo {
     /**
      * 库存id
      */

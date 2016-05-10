@@ -29,7 +29,7 @@ public class StoragePriorityCharge extends BaseInfo {
             groups = {IStorageSV.ChargeStoragePriority.class})
     private int oldLevel;
     /**
-     * 目标优先级
+     * 目标优先级<br>
      * 不能小于0,不能与原优先级一致
      */
     @Min(value = 0,message = "变更的优先级不能小于0",

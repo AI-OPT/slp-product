@@ -11,7 +11,7 @@ import java.sql.Timestamp;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class STOStorageGroup4List implements Serializable {
+public class StorageGroup4List implements Serializable {
     /**
      * 库存组标识
      */
