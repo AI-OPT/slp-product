@@ -12,11 +12,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:context/core-context.xml")
 public class ISysSequenceCreditAtomSVTest {
-//    @Autowired
+    @Autowired
 //    ISysSequenceCreditAtomSV sequenceCreditAtomSV;
-//
-//    @Test
-//    public void genSeqTest(){
+
+    @Test
+    public void genSeqTest(){
 //        System.out.println(sequenceCreditAtomSV.getSeqByName());
-//    }
+    }
 }

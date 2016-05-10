@@ -22,7 +22,7 @@ public interface IStorageAtomSV {
      * @param tenantId
      * @param objectId
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int findStorage(String tenantId,String objectId);
 

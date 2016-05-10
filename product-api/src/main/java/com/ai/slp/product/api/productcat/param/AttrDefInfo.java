@@ -47,7 +47,7 @@ public class AttrDefInfo implements Serializable{
     /**
      *操作人-通过操作人ID调用永华数据查询
      */
-    private String oper;
+    private String operName;
     
     /**
      * 操作人ID
@@ -124,11 +124,11 @@ public class AttrDefInfo implements Serializable{
     }
 
     public String getOper() {
-        return oper;
+        return operName;
     }
 
     public void setOper(String oper) {
-        this.oper = oper;
+        this.operName = oper;
     }
 
 }

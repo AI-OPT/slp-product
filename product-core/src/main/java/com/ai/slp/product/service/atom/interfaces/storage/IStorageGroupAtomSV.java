@@ -68,7 +68,7 @@ public interface IStorageGroupAtomSV {
      * 
      * @param storageGroup
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int updateStorGroupPrice(StorageGroup storageGroup);
     
@@ -78,7 +78,7 @@ public interface IStorageGroupAtomSV {
      * @param tenantId
      * @param standedProdId
      * @return 标准品下库存组数量
-     * @author lipeng
+     * @author lipeng16
      */
     public int countStorGroupByProdID(String tenantId,String standedProdId);
     
@@ -90,7 +90,7 @@ public interface IStorageGroupAtomSV {
      * @param pageNo
      * @param pageSize
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public PageInfoForRes<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId,Integer pageNo,Integer pageSize);
 }

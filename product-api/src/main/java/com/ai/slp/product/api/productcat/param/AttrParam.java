@@ -47,7 +47,7 @@ public class AttrParam extends BaseInfo{
     /**
      * 是否允许用户自定义属性值
      */
-    private String isCustom;
+    private String isAllowCustom;
     
     /**
      * 操作人ID
@@ -99,11 +99,11 @@ public class AttrParam extends BaseInfo{
     }
 
     public String getIsCustom() {
-        return isCustom;
+        return isAllowCustom;
     }
 
     public void setIsCustom(String isCustom) {
-        this.isCustom = isCustom;
+        this.isAllowCustom = isCustom;
     }
     
     
