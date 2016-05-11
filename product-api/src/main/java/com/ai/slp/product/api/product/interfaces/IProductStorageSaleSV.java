@@ -12,7 +12,7 @@ import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
  * Date: 2016年4月25日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public interface IProductStorageSaleSV {
     
@@ -27,10 +27,10 @@ public interface IProductStorageSaleSV {
      * @return 商品管理售中与仓库商品返回类集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode PROMAN_0200
      */
-    public PageInfoForRes<ProductStorageSale> queryStorageProduct(ProductStorageSaleParam productStorageSaleParam)throws BusinessException,SystemException;
+    public PageInfoForRes<ProductStorageSale> queryStorageProduct(ProductStorageSaleParam productStorageSaleParam) throws BusinessException,SystemException;
     @interface QueryStorageProduct {}
     
     

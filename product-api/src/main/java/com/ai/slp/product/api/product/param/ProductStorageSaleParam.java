@@ -12,10 +12,12 @@ import com.ai.opt.base.vo.BaseInfo;
  * 
  * @author lipeng
  */
-public class ProductStorageSaleParam extends ProductBase{
+public class ProductStorageSaleParam extends BaseInfo{
     
 
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 商品名称
      */
     private String prodName;
@@ -74,6 +76,17 @@ public class ProductStorageSaleParam extends ProductBase{
      * 剩余最小库存量
      */
     private long lowStorageNum;
+    
+    /**
+     * 状态
+     * 0新增
+     * 1未编辑2已编辑
+     * 3审核中4审核未通过
+     * 5在售
+     * 6仓库中（审核通过放入） 61售罄下架62废弃下架63自动下架
+     * 7停用8废弃
+     */
+    private String state;
 
     public String getProdName() {
         return prodName;
@@ -170,6 +183,14 @@ public class ProductStorageSaleParam extends ProductBase{
     public void setLowStorageNum(long lowStorageNum) {
         this.lowStorageNum = lowStorageNum;
     }
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
 
     
     
