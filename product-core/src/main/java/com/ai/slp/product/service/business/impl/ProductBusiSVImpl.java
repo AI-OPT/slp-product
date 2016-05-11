@@ -154,7 +154,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                 valInfoList.add(valInfo);
             }
         }
-
+        //设置属性下每个属性值跨行数
+        Iterator<Map.Entry<SkuAttrInfo,List<SkuAttrValInfo>>> entryIterator = attrAndValInfoMap.entrySet().iterator();
+        skuSetForProduct.setSkuNum(entryIterator.hasNext()?getAttrRowspan(entryIterator):0);
         return skuSetForProduct;
     }
 
@@ -240,5 +242,22 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             BeanUtils.copyProperties(productLog,product);
             productLogAtomSV.install(productLog);
         }
+    }
+
+    /**
+     * 返回下级属性的属性值的跨行数
+     *
+     * @param entryIterator
+     * @return
+     */
+    private int getAttrRowspan(Iterator<Map.Entry<SkuAttrInfo,List<SkuAttrValInfo>>> entryIterator){
+        Map.Entry<SkuAttrInfo,List<SkuAttrValInfo>> entry = entryIterator.next();
+        SkuAttrInfo skuAttrInfo = entry.getKey();
+        int valNum = entry.getValue().size();
+        int rowspan = 1;
+        if (entryIterator.hasNext())
+            rowspan = getAttrRowspan(entryIterator);
+        skuAttrInfo.setRowspan(rowspan);
+        return rowspan*valNum;
     }
 }

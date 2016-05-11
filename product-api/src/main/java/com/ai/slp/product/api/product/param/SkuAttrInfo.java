@@ -23,9 +23,9 @@ public class SkuAttrInfo implements Serializable {
      */
     private Short serialNumber;
     /**
-     * SKU数量
+     * 属性下属性值跨行数
      */
-    private int skuNum;
+    private int rowspan;
 
     public Long getAttrId() {
         return attrId;
@@ -51,11 +51,11 @@ public class SkuAttrInfo implements Serializable {
         this.serialNumber = serialNumber;
     }
 
-    public int getSkuNum() {
-        return skuNum;
+    public int getRowspan() {
+        return rowspan;
     }
 
-    public void setSkuNum(int skuNum) {
-        this.skuNum = skuNum;
+    public void setRowspan(int rowspan) {
+        this.rowspan = rowspan;
     }
 }
