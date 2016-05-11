@@ -1,6 +1,8 @@
 package com.ai.slp.product.api.product.param;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+
+import com.ai.opt.base.vo.BaseInfo;
 
 /**
  * 商品管理被拒绝查询参数
@@ -8,11 +10,13 @@ import java.sql.Date;
  * Date: 2016年4月22日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
-public class ProductRefuseParam extends ProductBase{
+public class ProductRefuseParam extends BaseInfo{
     
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 拒绝原因-被拒绝参数
      */
     private String refuseReason;
@@ -40,12 +44,12 @@ public class ProductRefuseParam extends ProductBase{
     /**
      * 上架起始时间
      */
-    private Date upBeginTime;
+    private Timestamp upBeginTime;
     
     /**
      * 上架截止时间
      */
-    private Date upEndTime;
+    private Timestamp upEndTime;
 
     /**
      * 最高销售价
@@ -67,6 +71,17 @@ public class ProductRefuseParam extends ProductBase{
      */
     private String prodId;
 
+    /**
+     * 状态
+     * 0新增
+     * 1未编辑2已编辑
+     * 3审核中4审核未通过
+     * 5在售
+     * 6仓库中（审核通过放入） 61售罄下架62废弃下架63自动下架
+     * 7停用8废弃
+     */
+    private String state;
+    
     public String getRefuseReason() {
         return refuseReason;
     }
@@ -99,23 +114,35 @@ public class ProductRefuseParam extends ProductBase{
         this.upshelfType = upshelfType;
     }
 
-    public Date getUpBeginTime() {
-        return upBeginTime;
-    }
+    public String getRefuseDes() {
+		return refuseDes;
+	}
 
-    public void setUpBeginTime(Date upBeginTime) {
-        this.upBeginTime = upBeginTime;
-    }
+	public void setRefuseDes(String refuseDes) {
+		this.refuseDes = refuseDes;
+	}
 
-    public Date getUpEndTime() {
-        return upEndTime;
-    }
+	public Timestamp getUpBeginTime() {
+		return upBeginTime;
+	}
 
-    public void setUpEndTime(Date upEndTime) {
-        this.upEndTime = upEndTime;
-    }
+	public void setUpBeginTime(Timestamp upBeginTime) {
+		this.upBeginTime = upBeginTime;
+	}
 
-    public long getHighSalePrice() {
+	public Timestamp getUpEndTime() {
+		return upEndTime;
+	}
+
+	public void setUpEndTime(Timestamp upEndTime) {
+		this.upEndTime = upEndTime;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public long getHighSalePrice() {
         return highSalePrice;
     }
 
@@ -146,6 +173,14 @@ public class ProductRefuseParam extends ProductBase{
     public void setProdId(String prodId) {
         this.prodId = prodId;
     }
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
 
 
     

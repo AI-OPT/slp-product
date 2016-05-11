@@ -1,8 +1,6 @@
 package com.ai.slp.product.api.product.param;
 
-import java.sql.Date;
-
-import com.ai.opt.base.vo.BaseResponse;
+import java.io.Serializable;
 
 /**
  * 商品管理售中与仓库商品返回类
@@ -10,11 +8,13 @@ import com.ai.opt.base.vo.BaseResponse;
  * Date: 2016年4月25日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
-public class ProductStorageSale extends BaseResponse{
+public class ProductStorageSale implements Serializable{
 
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 商品名称
      */
     private String prodName;
@@ -42,7 +42,7 @@ public class ProductStorageSale extends BaseResponse{
     /**
      * 商品图ID
      */
-    private long proPictureId;
+    private Long proPictureId;
     
     /**
      * 价格
@@ -61,7 +61,7 @@ public class ProductStorageSale extends BaseResponse{
 
     /**
      * 状态
-     * 0
+     * 0新增
      * 1未编辑2已编辑
      * 3审核中4审核未通过
      * 5在售
@@ -110,11 +110,11 @@ public class ProductStorageSale extends BaseResponse{
         this.productType = productType;
     }
 
-    public long getProPictureId() {
+    public Long getProPictureId() {
         return proPictureId;
     }
 
-    public void setProPictureId(long proPictureId) {
+    public void setProPictureId(Long proPictureId) {
         this.proPictureId = proPictureId;
     }
 

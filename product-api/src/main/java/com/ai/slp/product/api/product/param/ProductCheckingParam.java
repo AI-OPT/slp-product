@@ -1,6 +1,8 @@
 package com.ai.slp.product.api.product.param;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+
+import com.ai.opt.base.vo.BaseInfo;
 
 /**
  * 商品管理审核中查询参数
@@ -8,11 +10,13 @@ import java.sql.Date;
  * Date: 2016年4月25日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
-public class ProductCheckingParam extends ProductBase {
+public class ProductCheckingParam extends BaseInfo {
     
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 上架类型 1审核通过后立即上架 2审核通过后放入仓库 3定时上架
      */
     private String upshelfType;
@@ -20,12 +24,12 @@ public class ProductCheckingParam extends ProductBase {
     /**
      * 上架起始时间
      */
-    private Date upStartTime;
+    private Timestamp upStartTime;
     
     /**
      * 上架截止时间
      */
-    private Date upEndTime;
+    private Timestamp upEndTime;
 
     /**
      * 商品类目ID
@@ -56,6 +60,17 @@ public class ProductCheckingParam extends ProductBase {
      * 商品ID
      */
     private String prodId;
+    
+    /**
+     * 状态
+     * 0新增
+     * 1未编辑2已编辑
+     * 3审核中4审核未通过
+     * 5在售
+     * 6仓库中（审核通过放入） 61售罄下架62废弃下架63自动下架
+     * 7停用8废弃
+     */
+    private String state;
 
     public String getUpshelfType() {
         return upshelfType;
@@ -65,21 +80,6 @@ public class ProductCheckingParam extends ProductBase {
         this.upshelfType = upshelfType;
     }
 
-    public Date getUpStartTime() {
-        return upStartTime;
-    }
-
-    public void setUpStartTime(Date upStartTime) {
-        this.upStartTime = upStartTime;
-    }
-
-    public Date getUpEndTime() {
-        return upEndTime;
-    }
-
-    public void setUpEndTime(Date upEndTime) {
-        this.upEndTime = upEndTime;
-    }
 
     public String getProductCatId() {
         return productCatId;
@@ -128,6 +128,30 @@ public class ProductCheckingParam extends ProductBase {
     public void setProdId(String prodId) {
         this.prodId = prodId;
     }
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public Timestamp getUpEndTime() {
+		return upEndTime;
+	}
+
+	public void setUpEndTime(Timestamp upEndTime) {
+		this.upEndTime = upEndTime;
+	}
+
+	public Timestamp getUpStartTime() {
+		return upStartTime;
+	}
+
+	public void setUpStartTime(Timestamp upStartTime) {
+		this.upStartTime = upStartTime;
+	}
 
     
 }
