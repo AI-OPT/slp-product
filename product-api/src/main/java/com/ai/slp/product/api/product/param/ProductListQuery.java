@@ -15,6 +15,16 @@ import javax.validation.constraints.NotNull;
  */
 public class ProductListQuery extends BaseInfo {
     /**
+     * 请求查询的页码
+     * 默认为1
+     */
+    private Integer pageNo = 1;
+
+    /**
+     * 每页显示条数,默认每页20条
+     */
+    private Integer pageSize =20;
+    /**
      * 类目标识
      */
     @NotNull(message = "类目标识不能为空",groups = {IProductSV.QueryProductList.class})
@@ -112,5 +122,21 @@ public class ProductListQuery extends BaseInfo {
 
     public void setNormProdName(String normProdName) {
         this.normProdName = normProdName;
+    }
+
+    public Integer getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(Integer pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }

@@ -61,7 +61,7 @@ public class ProductInfo extends BaseInfo {
     private String isSaleNationwide;
 
     /**
-     * 属性与属性值对应关系
+     * 非关键属性与属性值对应关系
      */
     private Map<Long,Set<Long>> attrAndValueIds;
 

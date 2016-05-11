@@ -1,6 +1,8 @@
 package com.ai.slp.product.api.product.param;
 
+import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import com.ai.opt.base.vo.BaseResponse;
 /**
@@ -11,8 +13,8 @@ import com.ai.opt.base.vo.BaseResponse;
  * 
  * @author lipeng
  */
-public class ProductEditUp extends BaseResponse{
-    
+public class ProductEditUp implements Serializable{
+
     /**
      * 商品ID
      */
@@ -36,7 +38,7 @@ public class ProductEditUp extends BaseResponse{
     /**
      * 商品图ID
      */
-    private long proPictureId;
+    private Long proPictureId;
     
     /**
      * 商品名称
@@ -54,13 +56,14 @@ public class ProductEditUp extends BaseResponse{
     private long totalNum;
     
     /**
-     * 状态
-     * 0
-     * 1未编辑2已编辑
-     * 3审核中4审核未通过
-     * 5在售
-     * 6仓库中（审核通过放入） 61售罄下架62废弃下架63自动下架
-     * 7停用8废弃
+     * 状态,必填
+     * 0:新增
+     * 1:未编辑;2:已编辑
+     * 3:审核中;4:审核未通过
+     * 5:在售
+     * 6:仓库中（审核通过放入） 61售罄下架62废弃下架63自动下架
+     * 7:停用
+     * 8:废弃
      */
     private String state;
     
@@ -77,7 +80,7 @@ public class ProductEditUp extends BaseResponse{
     /**
      * 生成时间-排序按时间升序
      */
-    private Date creatTime;
+    private Timestamp creatTime;
     /**
      * 申请优先
      */
@@ -92,6 +95,11 @@ public class ProductEditUp extends BaseResponse{
      * 拒绝描述-被拒绝参数
      */
     private String refuseDes;
+
+    /**
+     * 操作时间
+     */
+    private Timestamp operTime;
 
     public String getProdId() {
         return prodId;
@@ -181,14 +189,6 @@ public class ProductEditUp extends BaseResponse{
         this.priorityReason = priorityReason;
     }
 
-    public Date getCreatTime() {
-        return creatTime;
-    }
-
-    public void setCreatTime(Date creatTime) {
-        this.creatTime = creatTime;
-    }
-
     public String getRefuseReason() {
         return refuseReason;
     }
@@ -211,5 +211,25 @@ public class ProductEditUp extends BaseResponse{
 
     public void setPrecedence(String precedence) {
         this.precedence = precedence;
+    }
+
+    public void setProPictureId(Long proPictureId) {
+        this.proPictureId = proPictureId;
+    }
+
+    public Timestamp getCreatTime() {
+        return creatTime;
+    }
+
+    public void setCreatTime(Timestamp creatTime) {
+        this.creatTime = creatTime;
+    }
+
+    public Timestamp getOperTime() {
+        return operTime;
+    }
+
+    public void setOperTime(Timestamp operTime) {
+        this.operTime = operTime;
     }
 }

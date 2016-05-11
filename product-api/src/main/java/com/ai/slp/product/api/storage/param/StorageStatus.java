@@ -16,16 +16,14 @@ import java.sql.Timestamp;
  */
 public class StorageStatus extends BaseInfo {
     /**
-     * 库存标识<br>
-     * 在保存时,若包含标识则进行更新操作,否则进行添加操作
+     * 库存标识,必填
      */
     @NotBlank(message = "库存标识不能为空",
             groups = { IStorageSV.ChargeStorageStatus.class })
     private String storageId;
 
     /**
-     * 库存状态 1:启用;2:停用;3:废弃<br>
-     *     状态变更时不能为空
+     * 库存状态 必填 1:启用;2:停用;3:废弃
      */
     @NotBlank(message = "库存状态不能为空",
             groups = { IStorageSV.ChargeStorageStatus.class })

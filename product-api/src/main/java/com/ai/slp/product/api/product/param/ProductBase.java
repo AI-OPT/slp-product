@@ -29,11 +29,6 @@ public class ProductBase extends BaseInfo{
      * 操作人ID
      */
     private long operId;
-    
-    /**
-     * 操作时间
-     */
-    private Date operTime;
 
     public String getState() {
         return state;
@@ -49,14 +44,6 @@ public class ProductBase extends BaseInfo{
 
     public void setOperId(long operId) {
         this.operId = operId;
-    }
-
-    public Date getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Date operTime) {
-        this.operTime = operTime;
     }
     
     

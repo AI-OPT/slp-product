@@ -42,7 +42,7 @@ public interface IProductEditUpSV {
      * @author lipeng
     *  @ApiCode PROMAN_0101
      */
-    public PageInfoForRes<ProductEditUp> queryProductRefuse(ProductRefuseParam productRefuseParam) throws BusinessException, SystemException;
+    public PageInfoForRes<ProductEditUp> queryProductRefuse(ProductEditParam productRefuseParam) throws BusinessException, SystemException;
     @interface QueryProductRefuse {}
     
     /**
@@ -57,7 +57,7 @@ public interface IProductEditUpSV {
      * @author lipeng
     *  @ApiCode PROMAN_0102
      */
-    public PageInfoForRes<ProductEditUp> queryProductCheck(ProductCheckingParam productCheckingParam) throws BusinessException, SystemException;
+    public PageInfoForRes<ProductEditUp> queryProductCheck(ProductEditParam productCheckingParam) throws BusinessException, SystemException;
     @interface QueryProductCheck {}
 
     /**

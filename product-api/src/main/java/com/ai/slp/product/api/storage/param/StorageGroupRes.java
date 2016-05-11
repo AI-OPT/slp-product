@@ -52,6 +52,10 @@ public class StorageGroupRes extends BaseResponse {
      */
     private Long highSalePrice;
     /**
+     * 库存组状态
+     */
+    private String state;
+    /**
      * 创建时间
      */
     private Timestamp createTime;
@@ -158,5 +162,13 @@ public class StorageGroupRes extends BaseResponse {
 
     public void setStorageList(Map<Short, List<StorageRes>> storageList) {
         this.storageList = storageList;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

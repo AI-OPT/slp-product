@@ -25,7 +25,7 @@ public class STOStorageGroup extends BaseInfo {
             groups = { IStorageSV.InstallStorage.class})
     private String prodId;
     /**
-     * 库存组名称<br>
+     * 库存组名称,添加时必填<br>
      * 设置为null,则不进行更新操作
      */
     @NotBlank(message = "库存组名称不能为空",

@@ -2,6 +2,7 @@ package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -17,9 +18,9 @@ import java.util.Date;
  */
 public class StorageGroupSalePrice extends BaseInfo {
     /**
-     * 库存组标识
+     * 库存组标识,必填
      */
-    @NotNull(message = "库存组标识不能为空",
+    @NotBlank(message = "库存组标识不能为空",
             groups = { IStorageSV.UpdateStorageGroupSalePrice.class})
     private String groupId;
 

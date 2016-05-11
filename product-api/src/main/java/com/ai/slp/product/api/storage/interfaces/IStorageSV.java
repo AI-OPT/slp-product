@@ -28,7 +28,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0100
      */
-    public BaseResponse installStorageGroup(STOStorageGroup storageGroup)
+    public BaseResponse createStorageGroup(STOStorageGroup storageGroup)
         throws BusinessException,SystemException;
     @interface InstallStorage{}
 
@@ -58,7 +58,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0102
      */
-    public List<StorageGroupRes> queryGroupInfoByNormProId(StorageGroupQuery infoQuery)
+    public List<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupInfoByProductId{}
 

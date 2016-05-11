@@ -32,14 +32,14 @@ public class STOStorage extends BaseInfo{
     private String storageName;
 
     /**
-     * 库存组id
+     * 库存组id,必填
      */
     @NotBlank(message = "库存组标识不能为空",
             groups = { IStorageSV.SaveStorage.class })
     private String groupId;
 
     /**
-     * 虚拟库存量,不能小于0
+     * 虚拟库存量,必填,不能小于0
      */
     @Min(value = 0,message = "虚拟库存量不能小于0",
             groups = {IStorageSV.SaveStorage.class})
@@ -71,7 +71,7 @@ public class STOStorage extends BaseInfo{
     private Timestamp inactiveTime;
 
     /**
-     * 操作人ID
+     * 操作人ID,标题
      */
     @NotNull(message = "操作人不能为空",
             groups = { IStorageSV.SaveStorage.class })
