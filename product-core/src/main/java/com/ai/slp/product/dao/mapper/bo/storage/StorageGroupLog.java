@@ -11,7 +11,7 @@ public class StorageGroupLog {
 
     private String standedProdId;
 
-    private Long routeGroupId;
+    private String routeGroupId;
 
     private String storageGroupName;
 
@@ -59,12 +59,12 @@ public class StorageGroupLog {
         this.standedProdId = standedProdId == null ? null : standedProdId.trim();
     }
 
-    public Long getRouteGroupId() {
+    public String getRouteGroupId() {
         return routeGroupId;
     }
 
-    public void setRouteGroupId(Long routeGroupId) {
-        this.routeGroupId = routeGroupId;
+    public void setRouteGroupId(String routeGroupId) {
+        this.routeGroupId = routeGroupId == null ? null : routeGroupId.trim();
     }
 
     public String getStorageGroupName() {

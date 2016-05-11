@@ -12,6 +12,7 @@ import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -283,7 +284,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      */
     private void startGroup(StorageGroup storageGroup, Long operId){
         //检查是否已配置路由
-        if (storageGroup.getRouteGroupId()==null){
+        if (StringUtils.isBlank(storageGroup.getRouteGroupId())){
             throw new BusinessException("","库存组没有配置路由信息,不能启用");
         }
         //检查路由是否已为启用状态

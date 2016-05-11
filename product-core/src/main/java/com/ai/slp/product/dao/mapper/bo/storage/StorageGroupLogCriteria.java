@@ -415,52 +415,62 @@ public class StorageGroupLogCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andRouteGroupIdEqualTo(Long value) {
+        public Criteria andRouteGroupIdEqualTo(String value) {
             addCriterion("ROUTE_GROUP_ID =", value, "routeGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andRouteGroupIdNotEqualTo(Long value) {
+        public Criteria andRouteGroupIdNotEqualTo(String value) {
             addCriterion("ROUTE_GROUP_ID <>", value, "routeGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andRouteGroupIdGreaterThan(Long value) {
+        public Criteria andRouteGroupIdGreaterThan(String value) {
             addCriterion("ROUTE_GROUP_ID >", value, "routeGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andRouteGroupIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andRouteGroupIdGreaterThanOrEqualTo(String value) {
             addCriterion("ROUTE_GROUP_ID >=", value, "routeGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andRouteGroupIdLessThan(Long value) {
+        public Criteria andRouteGroupIdLessThan(String value) {
             addCriterion("ROUTE_GROUP_ID <", value, "routeGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andRouteGroupIdLessThanOrEqualTo(Long value) {
+        public Criteria andRouteGroupIdLessThanOrEqualTo(String value) {
             addCriterion("ROUTE_GROUP_ID <=", value, "routeGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andRouteGroupIdIn(List<Long> values) {
+        public Criteria andRouteGroupIdLike(String value) {
+            addCriterion("ROUTE_GROUP_ID like", value, "routeGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRouteGroupIdNotLike(String value) {
+            addCriterion("ROUTE_GROUP_ID not like", value, "routeGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRouteGroupIdIn(List<String> values) {
             addCriterion("ROUTE_GROUP_ID in", values, "routeGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andRouteGroupIdNotIn(List<Long> values) {
+        public Criteria andRouteGroupIdNotIn(List<String> values) {
             addCriterion("ROUTE_GROUP_ID not in", values, "routeGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andRouteGroupIdBetween(Long value1, Long value2) {
+        public Criteria andRouteGroupIdBetween(String value1, String value2) {
             addCriterion("ROUTE_GROUP_ID between", value1, value2, "routeGroupId");
             return (Criteria) this;
         }
 
-        public Criteria andRouteGroupIdNotBetween(Long value1, Long value2) {
+        public Criteria andRouteGroupIdNotBetween(String value1, String value2) {
             addCriterion("ROUTE_GROUP_ID not between", value1, value2, "routeGroupId");
             return (Criteria) this;
         }
