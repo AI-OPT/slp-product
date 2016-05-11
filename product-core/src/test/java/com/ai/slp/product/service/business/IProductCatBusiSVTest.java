@@ -21,8 +21,6 @@ public class IProductCatBusiSVTest {
     public void copyProTest(){
         ProductCatParam catParam = new ProductCatParam();
         ProductCat productCat = new ProductCat();
-        catParam.setOperTime(DateUtils.currTimeStamp());
-        catParam.setCatLevel((short) 12);
         BeanUtils.copyProperties(productCat,catParam);
         System.out.println(productCat.getCatLevel()+",operTime="+productCat.getOperTime());
     }

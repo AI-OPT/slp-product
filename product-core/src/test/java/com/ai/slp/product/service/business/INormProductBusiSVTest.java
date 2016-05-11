@@ -25,7 +25,6 @@ public class INormProductBusiSVTest {
         marketPrice4Update.setMarketPrice(123123124L);
         marketPrice4Update.setProductId("2");
         marketPrice4Update.setOperId(2L);
-        marketPrice4Update.setOperTime(DateUtils.currTimeStamp());
         marketPrice4Update.setTenantId("2");
         int count = normProductBusiSV.updateMarketPrice(marketPrice4Update);
         System.out.println(count);
