@@ -28,9 +28,17 @@ public class StorageGroupRes extends BaseResponse {
      */
     private Short serialNumber;
     /**
-     * 创建者ID
+     * 商城商品标识
      */
-    private Long createId;
+    private String prodId;
+    /**
+     * 标准品标识
+     */
+    private String standedProdId;
+    /**
+     * 是否有销售属性
+     */
+    private String isSaleAttr;
     /**
      * 总库存量
      */
@@ -55,6 +63,10 @@ public class StorageGroupRes extends BaseResponse {
      * 库存组状态
      */
     private String state;
+    /**
+     * 创建者ID
+     */
+    private Long createId;
     /**
      * 创建时间
      */
@@ -170,5 +182,29 @@ public class StorageGroupRes extends BaseResponse {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getProdId() {
+        return prodId;
+    }
+
+    public void setProdId(String prodId) {
+        this.prodId = prodId;
+    }
+
+    public String getStandedProdId() {
+        return standedProdId;
+    }
+
+    public void setStandedProdId(String standedProdId) {
+        this.standedProdId = standedProdId;
+    }
+
+    public String getIsSaleAttr() {
+        return isSaleAttr;
+    }
+
+    public void setIsSaleAttr(String isSaleAttr) {
+        this.isSaleAttr = isSaleAttr;
     }
 }

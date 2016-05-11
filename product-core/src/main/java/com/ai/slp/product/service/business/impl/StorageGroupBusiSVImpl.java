@@ -139,7 +139,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         List<StorageGroupRes> groupInfoList = new ArrayList<>();
         List<StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId,productId);
         for (StorageGroup storageGroup: groupList){
-            groupInfoList.add(genStorageGroupInfo(storageGroup,standedProduct));
+            groupInfoList.add(genStorageGroupInfo(storageGroup));
         }
         return groupInfoList;
     }
@@ -163,7 +163,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             logger.warn("租户ID:" + tenantId + ",库存组标识:" + groupId);
             throw new BusinessException("", "未找到对应的标准品信息,租户ID:" + tenantId + ",标准品标识:" + storageGroup.getStandedProdId());
         }
-        return genStorageGroupInfo(storageGroup,standedProduct);
+        return genStorageGroupInfo(storageGroup);
     }
 
     /**
@@ -171,12 +171,16 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @param group
      * @return
      */
-    private StorageGroupRes genStorageGroupInfo(StorageGroup group, StandedProduct standedProduct){
+    private StorageGroupRes genStorageGroupInfo(StorageGroup group){
         StorageGroupRes groupInfo = new StorageGroupRes();
         BeanUtils.copyProperties(groupInfo,group);
         //填充库存组信息
-//        groupInfo.setProdId(group.getStandedProdId());
-//        groupInfo.setProdName(standedProduct.getStandedProductName());
+        //查询对应商品信息
+        Product product = productAtomSV.selectByGroupId(group.getTenantId(),group.getStorageGroupId());
+        if (product!=null)
+            groupInfo.setProdId(product.getProdId());
+//        groupInfo.setCreateName("");//TODO... 添加创建者账户
+//        groupInfo.setOperName("");//TODO... 添加操作者账户
         //库存总量
         Map<Short,List<StorageRes>> storageMap = new HashMap<>();
         //====填充库存集合信息
