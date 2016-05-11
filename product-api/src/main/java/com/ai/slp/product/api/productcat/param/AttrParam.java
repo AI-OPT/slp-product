@@ -30,7 +30,7 @@ public class AttrParam extends BaseInfo{
      * 属性名称
      */
 	@NotBlank(message = "属性名称不能为空", 
-            groups = { IAttrAndValDefSV.AddAttr.class,
+            groups = { IAttrAndValDefSV.CreateAttrs.class,
                     IAttrAndValDefSV.UpdateAttr.class})
     private String attrName;
 
@@ -55,7 +55,7 @@ public class AttrParam extends BaseInfo{
     @NotNull(message = "操作人ID不能为空",
             groups = { IAttrAndValDefSV.UpdateAttr.class,
                     IAttrAndValDefSV.DeleteAttr.class,
-                    IAttrAndValDefSV.AddAttr.class})
+                    IAttrAndValDefSV.CreateAttrs.class})
     private long operId;
 
     public long getAttrId() {

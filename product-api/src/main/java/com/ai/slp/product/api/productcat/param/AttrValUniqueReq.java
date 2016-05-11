@@ -24,14 +24,14 @@ public class AttrValUniqueReq extends BaseInfo{
      * 属性值ID
      */
     @NotBlank(message = "属性值ID不能为空",
-            groups = {IAttrAndValDefSV.QueryAttrVal.class,
-                    IAttrAndValDefSV.DeleteAttrVal.class})
+            groups = {IAttrAndValDefSV.QueryAttrvalue.class,
+                    IAttrAndValDefSV.DeleteAttrvalue.class})
     private String attrvalueDefId;
     /**
      * 操作人ID
      */
     @NotBlank(message = "操作人ID不能为空",
-            groups = {IAttrAndValDefSV.DeleteAttrVal.class})
+            groups = {IAttrAndValDefSV.DeleteAttrvalue.class})
     private Long operId;
 
     public long getAttrId() {

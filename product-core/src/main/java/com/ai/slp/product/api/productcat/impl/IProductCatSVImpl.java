@@ -29,7 +29,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     IProductCatBusiSV productCatBusiSV;
 
     @Override
-    public PageInfoForRes<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) throws BusinessException, SystemException {
+    public PageInfoForRes<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(pageQuery.getTenantId(),"");
         PageInfoForRes<ProductCatInfo> catInfoPageInfoWrapper = productCatBusiSV.queryProductCat(pageQuery);
         ResponseHeader responseHeader = new ResponseHeader();
@@ -97,7 +97,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     @Override
-    public BaseResponse deleteProductCatAttrVal(ProdCatAttrVal productAttrValParam)
+    public BaseResponse deleteProductCatAttrOrVal(ProdCatAttrVal productAttrValParam)
             throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(productAttrValParam.getTenantId(),"");
         productCatBusiSV.deleteAttrOrVa(productAttrValParam);

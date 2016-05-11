@@ -17,7 +17,7 @@ import com.ai.slp.product.api.productcat.param.*;
  * Date: 2016年4月19日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public interface IProductCatSV {
 
@@ -28,12 +28,12 @@ public interface IProductCatSV {
      * @return 商品类目查询条件
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode PRODUCT_CAT_0100
      */
-	public PageInfoForRes<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery)
+	public PageInfoForRes<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery)
 			throws BusinessException, SystemException;
-	@interface QueryProductCat {}
+	@interface QueryPageProductCat {}
 
 	/**
 	 * 商品类目批量添加<br>
@@ -42,11 +42,11 @@ public interface IProductCatSV {
 	 * @return 服务返回基本信息
 	 * @throws BusinessException
 	 * @throws SystemException
-	 * @author lipeng
+	 * @author lipeng16
 	*  @ApiCode PRODUCT_CAT_0101
 	 */
 	public BaseResponse createProductCat(List<ProductCatParam> pcpList) throws BusinessException, SystemException;
-	@interface AddProductCat {}
+	@interface CreateProductCat {}
 	
 	/**
 	 * 商品类目修改<br>
@@ -55,7 +55,7 @@ public interface IProductCatSV {
 	 * @return 服务返回基本信息
 	 * @throws BusinessException
 	 * @throws SystemException
-	 * @author lipeng
+	 * @author lipeng16
 	*  @ApiCode PRODUCT_CAT_0102
 	 */
 	public BaseResponse updateProductCat(ProductCatParam productCatParam) throws BusinessException, SystemException;
@@ -70,7 +70,7 @@ public interface IProductCatSV {
 	 * @return 服务返回基本信息
 	 * @throws BusinessException
 	 * @throws SystemException
-	 * @author lipeng
+	 * @author lipeng16
 	*  @ApiCode PRODUCT_CAT_0104
 	 */
 	public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException;
@@ -97,11 +97,11 @@ public interface IProductCatSV {
      * @return
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode PRODUCT_CAT_0107
      */
-    public BaseResponse deleteProductCatAttrVal(ProdCatAttrVal catAttrVal) throws BusinessException, SystemException;
-    @interface DeleteProductCatAttrVal {}
+    public BaseResponse deleteProductCatAttrOrVal(ProdCatAttrVal catAttrVal) throws BusinessException, SystemException;
+    @interface DeleteProductCatAttrOrVal {}
 
 	/**
 	 * 依据商品类目和属性类型添加类目属性<br>
@@ -111,7 +111,7 @@ public interface IProductCatSV {
 	 * @return
 	 * @throws BusinessException
 	 * @throws SystemException
-	 * @author lipeng
+	 * @author lipeng16
 	 * @ApiCode PRODUCT_CAT_0108
 	 */
 	public BaseResponse addAttrForCatAndType(ProdCatAttrAddParam addCatAttrParam) throws BusinessException,SystemException;

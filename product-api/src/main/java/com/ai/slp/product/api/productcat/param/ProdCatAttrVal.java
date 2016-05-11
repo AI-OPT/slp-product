@@ -1,10 +1,9 @@
 package com.ai.slp.product.api.productcat.param;
 
+import javax.validation.constraints.NotNull;
+
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
-
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 
 /**
  * 类目属性值对象<br>
@@ -16,20 +15,21 @@ import java.sql.Timestamp;
  * @author liutong5
  */
 public class ProdCatAttrVal extends BaseInfo{
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 类目与属性关系标识
      */
-    @NotNull(message = "关系标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
+    @NotNull(message = "关系标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
     private String catAttrId;
     /**
      * 商品类目标识
      */
-    @NotNull(message = "类目标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
+    @NotNull(message = "类目标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
     private String productCatId;
     /**
      * 属性ID
      */
-    @NotNull(message = "属性标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
+    @NotNull(message = "属性标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
     private long attrId;
     /**
      * 属性值ID<br>
@@ -40,12 +40,12 @@ public class ProdCatAttrVal extends BaseInfo{
     /**
      * 属性类型,包括 1:关键属性 2:销售属性 3:非关键属性
      */
-    @NotNull(message = "属性类型不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
+    @NotNull(message = "属性类型不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
     private String attrType;
     /**
      * 操作人
      */
-    @NotNull(message = "操作人标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
+    @NotNull(message = "操作人标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
     private long operId;
 
     public String getCatAttrId() {

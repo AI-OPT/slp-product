@@ -38,12 +38,12 @@ public interface IAttrAndValDefSV {
      * @return 符合页数的属性集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng1616
+     * @author lipeng16
     *  @ApiCode ATTR_VAL_0200
      */
-    public PageInfoForRes<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
+    public PageInfoForRes<AttrDefInfo> queryPageAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException;
-    @interface QueryAttrs {}
+    @interface QueryPageAttrs {}
     
     /**
      * 单个属性查询
@@ -69,9 +69,9 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0202
      */
-    public BaseResponse addAttr(List<AttrParam> attrParamList) 
+    public BaseResponse createAttrs(List<AttrParam> attrParamList) 
             throws BusinessException, SystemException;
-    @interface AddAttr{}
+    @interface CreateAttrs{}
     
     /**
      * 属性修改
@@ -111,9 +111,9 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0205
      */
-    public PageInfoForRes<AttrValInfo> queryAttrValues(AttrValPageQuery pageQuery)
+    public PageInfoForRes<AttrValInfo> queryPageAttrvalue(AttrValPageQuery pageQuery)
             throws BusinessException, SystemException;
-    @interface QueryAttrValues {}
+    @interface QueryPageAttrvalue {}
     
     /**
      * 属性值添加
@@ -125,9 +125,9 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0206
      */
-    public BaseResponse addAttrVal(List<AttrValParam> attrValParamList)
+    public BaseResponse createAttrvalue(List<AttrValParam> attrValParamList)
             throws BusinessException, SystemException;
-    @interface AddAttrVal{}
+    @interface CreateAttrvalue {}
     
     /**
      * 属性值修改
@@ -139,9 +139,9 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0207
      */
-    public BaseResponse updateAttrVal(AttrValParam attrValParam)
+    public BaseResponse updateAttrvalue(AttrValParam attrValParam)
             throws BusinessException, SystemException;
-    @interface UpdateAttrVal {}
+    @interface UpdateAttrvalue {}
     
     /**
      * 属性值删除
@@ -153,9 +153,9 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0208
      */
-    public BaseResponse deleteAttrVal(AttrValUniqueReq attrValUniqueReq)
+    public BaseResponse deleteAttrvalue(AttrValUniqueReq attrValUniqueReq)
             throws BusinessException, SystemException;
-    @interface DeleteAttrVal {}
+    @interface DeleteAttrvalue {}
 
     /**
      * 单个属性值查询
@@ -167,9 +167,9 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
      * @ApiCode ATTR_VAL_0209
      */
-    public AttrVal queryAttrVal(AttrValUniqueReq attrValUniqueReq)
+    public AttrVal queryAttrvalue(AttrValUniqueReq attrValUniqueReq)
             throws BusinessException, SystemException;
-    @interface QueryAttrVal {}
+    @interface QueryAttrvalue {}
 
     /**
      * 查询所有的属性和属性值

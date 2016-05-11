@@ -23,8 +23,8 @@ public class AttrValParam extends BaseInfo {
 	 * 属性ID
 	 */
 	@NotBlank(message = "属性ID不能为空",
-            groups = {IAttrAndValDefSV.UpdateAttrVal.class,
-			IAttrAndValDefSV.AddAttrVal.class})
+            groups = {IAttrAndValDefSV.UpdateAttrvalue.class,
+			IAttrAndValDefSV.CreateAttrvalue.class})
 	private Long attrId;
 	
 	/**
@@ -36,8 +36,8 @@ public class AttrValParam extends BaseInfo {
 	 * 属性值名称
 	 */
 	@NotBlank(message = "属性值不能为空",
-	        groups = {IAttrAndValDefSV.AddAttrVal.class,
-	                IAttrAndValDefSV.UpdateAttrVal.class})
+	        groups = {IAttrAndValDefSV.CreateAttrvalue.class,
+	                IAttrAndValDefSV.UpdateAttrvalue.class})
 	private String attrValueName;
 	
 	/**
@@ -49,8 +49,8 @@ public class AttrValParam extends BaseInfo {
      * 操作人ID
      */
 	@NotNull(message = "操作人ID不能为空",
-	        groups = {IAttrAndValDefSV.AddAttrVal.class,
-	                IAttrAndValDefSV.UpdateAttrVal.class})
+	        groups = {IAttrAndValDefSV.CreateAttrvalue.class,
+	                IAttrAndValDefSV.UpdateAttrvalue.class})
     private Long operId;
     
     public Long getOperId() {

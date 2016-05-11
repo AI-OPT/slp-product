@@ -2,12 +2,11 @@ package com.ai.slp.product.api.productcat.param;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
-
-import java.sql.Timestamp;
 
 /**
  * 商品类目请求参数<br>
@@ -15,14 +14,16 @@ import java.sql.Timestamp;
  * Date: 2016年4月19日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class ProductCatParam extends BaseInfo {
 	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 商品类目ID,更新时必填
 	 */
-    @NotNull(message = "类目ID不能为空", 
+    @NotBlank(message = "类目ID不能为空", 
             groups = { IProductCatSV.DeleteProductCat.class,
                     IProductCatSV.UpdateProductCat.class })
 	private String productCatId;
@@ -30,8 +31,8 @@ public class ProductCatParam extends BaseInfo {
 	/**
 	 * 商品类目名称
 	 */
-    @NotNull(message = "名称不能为空", 
-            groups = { IProductCatSV.AddProductCat.class,
+    @NotBlank(message = "名称不能为空", 
+            groups = { IProductCatSV.CreateProductCat.class,
                     IProductCatSV.UpdateProductCat.class})
 	private String productCatName;
 
@@ -43,8 +44,8 @@ public class ProductCatParam extends BaseInfo {
     /**
      * 是否有子分类,必填
      */
-	@NotNull(message = "请确定是否有子分类",
-            groups = { IProductCatSV.AddProductCat.class,
+	@NotBlank(message = "请确定是否有子分类",
+            groups = { IProductCatSV.CreateProductCat.class,
                     IProductCatSV.UpdateProductCat.class})
     private String isChild;
 
@@ -57,24 +58,24 @@ public class ProductCatParam extends BaseInfo {
      * 序列号-用于排序
      */
     @Min(value = 0,message = "排序号不能小于0",groups = {
-            IProductCatSV.AddProductCat.class,IProductCatSV.UpdateProductCat.class})
+            IProductCatSV.CreateProductCat.class,IProductCatSV.UpdateProductCat.class})
     @Max(value = 10000,message = "排序号不能大于10000",groups = {
-            IProductCatSV.AddProductCat.class,IProductCatSV.UpdateProductCat.class})
+            IProductCatSV.CreateProductCat.class,IProductCatSV.UpdateProductCat.class})
     private short serialNumber;
 
     /**
      * 操作人ID
      */
-    @NotNull(message = "操作人ID不能为空",
-            groups = { IProductCatSV.AddProductCat.class,
+    @NotBlank(message = "操作人ID不能为空",
+            groups = { IProductCatSV.CreateProductCat.class,
                     IProductCatSV.UpdateProductCat.class})
-    private long operId;
+    private Long operId;
 
-    public long getOperId() {
+    public Long getOperId() {
         return operId;
     }
 
-    public void setOperId(long operId) {
+    public void setOperId(Long operId) {
         this.operId = operId;
     }
 

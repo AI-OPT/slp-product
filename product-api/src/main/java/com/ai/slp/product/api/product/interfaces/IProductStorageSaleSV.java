@@ -30,8 +30,8 @@ public interface IProductStorageSaleSV {
      * @author lipeng16
     *  @ApiCode PROMAN_0200
      */
-    public PageInfoForRes<ProductStorageSale> queryStorageProduct(ProductStorageSaleParam productStorageSaleParam) throws BusinessException,SystemException;
-    @interface QueryStorageProduct {}
+    public PageInfoForRes<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) throws BusinessException,SystemException;
+    @interface QueryStorageProdByState {}
     
     
 }

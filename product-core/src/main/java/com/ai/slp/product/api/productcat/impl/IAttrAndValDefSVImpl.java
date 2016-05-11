@@ -38,7 +38,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     IAttrAndAttrvalBusiSV attrAndAttrvalBusiSV;
 
     @Override
-    public PageInfoForRes<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam)
+    public PageInfoForRes<AttrDefInfo> queryPageAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException {
         return attrAndAttrvalBusiSV.queryAttrs(attrDefParam);
     }
@@ -49,7 +49,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public BaseResponse addAttr(List<AttrParam> attrParamList)
+    public BaseResponse createAttrs(List<AttrParam> attrParamList)
             throws BusinessException, SystemException {
         attrAndAttrvalBusiSV.addAttr(attrParamList);
         
@@ -86,13 +86,13 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public PageInfoForRes<AttrValInfo> queryAttrValues(AttrValPageQuery pageQuery)
+    public PageInfoForRes<AttrValInfo> queryPageAttrvalue(AttrValPageQuery pageQuery)
             throws BusinessException, SystemException {
         return attrAndAttrvalBusiSV.queryAttrvals(pageQuery);
     }
 
     @Override
-    public BaseResponse addAttrVal(List<AttrValParam> attrValParamList)
+    public BaseResponse createAttrvalue(List<AttrValParam> attrValParamList)
             throws BusinessException, SystemException {
         attrAndAttrvalBusiSV.addAttrVal(attrValParamList);
         BaseResponse baseResponse = new BaseResponse();
@@ -104,7 +104,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public BaseResponse updateAttrVal(AttrValParam attrValParam)
+    public BaseResponse updateAttrvalue(AttrValParam attrValParam)
             throws BusinessException, SystemException {
         attrAndAttrvalBusiSV.updateAttrVal(attrValParam);
         BaseResponse baseResponse = new BaseResponse();
@@ -116,7 +116,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public BaseResponse deleteAttrVal(AttrValUniqueReq attrValUniqueReq)
+    public BaseResponse deleteAttrvalue(AttrValUniqueReq attrValUniqueReq)
             throws BusinessException, SystemException {
         attrAndAttrvalBusiSV.deleteAttrVal(attrValUniqueReq);
         BaseResponse baseResponse = new BaseResponse();
@@ -128,7 +128,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public AttrVal queryAttrVal(AttrValUniqueReq attrValUniqueReq)
+    public AttrVal queryAttrvalue(AttrValUniqueReq attrValUniqueReq)
             throws BusinessException, SystemException {
         return attrAndAttrvalBusiSV.queryAttrVal(attrValUniqueReq);
     }

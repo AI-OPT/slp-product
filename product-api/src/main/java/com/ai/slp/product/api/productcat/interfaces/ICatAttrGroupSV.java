@@ -17,7 +17,7 @@ import com.ai.slp.product.api.productcat.param.ProAttrGroupParam;
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public interface ICatAttrGroupSV {
     
@@ -28,7 +28,7 @@ public interface ICatAttrGroupSV {
      * @return 符合条件的集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_GROUP_0301
      */
     public PageInfoForRes<ProAttrGroup> queryProAttrGroup(ProAttrGroupParam proAttrGroupParam)
@@ -42,7 +42,7 @@ public interface ICatAttrGroupSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_GROUP_0302
      */
     public BaseResponse addProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
@@ -56,7 +56,7 @@ public interface ICatAttrGroupSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_GROUP_0303
      */
     public BaseResponse updateProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
@@ -70,7 +70,7 @@ public interface ICatAttrGroupSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_GROUP_0304
      */
     public BaseResponse deleteProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
@@ -84,7 +84,7 @@ public interface ICatAttrGroupSV {
      * @return 符合条件的商品属性集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_GROUP_0305
      */
     public List<AttrDefInfo> queryGroupAttr(ProAttrGroupParam proAttrGroupParam)
@@ -98,7 +98,7 @@ public interface ICatAttrGroupSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_GROUP_0306
      */
     public BaseResponse addGroupAttr(List<AttrValParam> listProAttrVal)
@@ -112,7 +112,7 @@ public interface ICatAttrGroupSV {
      * @return 服务返回基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode ATTR_GROUP_0307
      */
     public BaseResponse deleteGroupAttr(List<AttrValParam> listProAttrVal)

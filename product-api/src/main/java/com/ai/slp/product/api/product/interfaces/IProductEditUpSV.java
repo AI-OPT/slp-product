@@ -12,7 +12,7 @@ import com.ai.slp.product.api.product.param.*;
  * Date: 2016年4月22日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public interface IProductEditUpSV {
     
@@ -25,7 +25,7 @@ public interface IProductEditUpSV {
      * @return 满足条件的商品集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode PROMAN_0100
      */
     public PageInfoForRes<ProductEditUp> queryProductEdit(ProductEditParam productEditParam) throws BusinessException, SystemException;
@@ -39,7 +39,7 @@ public interface IProductEditUpSV {
      * @return 满足条件的商品集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode PROMAN_0101
      */
     public PageInfoForRes<ProductEditUp> queryProductRefuse(ProductEditParam productRefuseParam) throws BusinessException, SystemException;
@@ -54,14 +54,14 @@ public interface IProductEditUpSV {
      * @return 满足条件的商品集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode PROMAN_0102
      */
     public PageInfoForRes<ProductEditUp> queryProductCheck(ProductEditParam productCheckingParam) throws BusinessException, SystemException;
     @interface QueryProductCheck {}
 
     /**
-     * 审核调用方法<br>
+     * 审核是否通过调用方法<br>
      * 通过上架类型 1审核通过后立即上架 2审核通过后放入仓库 3定时上架<br>
      * 判断改变为哪种状态<br>
      * 销售商品状态 4审核未通过<br>
@@ -71,7 +71,7 @@ public interface IProductEditUpSV {
      * @return 基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
      *  @ApiCode PROMAN_0103
      */
     public BaseResponse productCheck(ProductCheckParam productCheckParam)
@@ -85,7 +85,7 @@ public interface IProductEditUpSV {
      * @return 基本信息
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
      *  @ApiCode PROMAN_0104
      */
     public BaseResponse productPriority(ProductPriorityParam productPriorityParam)
