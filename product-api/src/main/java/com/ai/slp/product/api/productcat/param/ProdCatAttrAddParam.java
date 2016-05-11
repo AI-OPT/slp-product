@@ -26,12 +26,12 @@ public class ProdCatAttrAddParam extends BaseInfo{
     @NotBlank(message = "商品类目标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
     private String productCatId;
     /**
-     * 属性类型,包括关键属性 非关键属性 销售属性
+     * 属性类型,包括 1:关键属性 2:销售属性 3:非关键属性
      */
     @NotBlank(message = "属性类型不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
     private String attrType;
     /**
-     * 操作人ID
+     * 操作人ID,必填
      */
     @NotBlank(message = "操作人标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
     private Long operId;

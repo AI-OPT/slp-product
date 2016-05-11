@@ -2,6 +2,7 @@ package com.ai.slp.product.api.productcat.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
@@ -23,9 +24,10 @@ public class ProdCatAttrUpdateParam extends BaseInfo{
     @NotNull(message = "唯一标识不能为空",groups = {IProductCatSV.UpdateCatAttrAndVal.class})
     private String updateObjId;
     /**
-     * 更新数据的类型<br>
+     * 更新数据的类型,必填<br>
      *     1:属性;2:属性值
      */
+    @NotBlank(message = "更新数据的类型不能为空",groups = {IProductCatSV.UpdateCatAttrAndVal.class})
     private String objType;
 
     /**
@@ -44,11 +46,6 @@ public class ProdCatAttrUpdateParam extends BaseInfo{
      */
     @NotNull(message = "操作人标识不能为空",groups = {IProductCatSV.UpdateCatAttrAndVal.class})
     private long operId;
-    
-    /**
-     * 操作时间
-     */
-    private Timestamp operTime;
 
     public String getUpdateObjId() {
         return updateObjId;
@@ -88,14 +85,6 @@ public class ProdCatAttrUpdateParam extends BaseInfo{
 
     public void setOperId(long operId) {
         this.operId = operId;
-    }
-
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
     }
 
     @Override

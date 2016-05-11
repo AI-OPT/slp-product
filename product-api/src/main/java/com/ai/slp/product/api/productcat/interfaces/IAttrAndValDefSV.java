@@ -60,7 +60,7 @@ public interface IAttrAndValDefSV {
     @interface QueryAttr {}
     
     /**
-     * 属性添加
+     * 属性批量添加
      * 
      * @param attrParamList
      * @return 服务返回基本信息

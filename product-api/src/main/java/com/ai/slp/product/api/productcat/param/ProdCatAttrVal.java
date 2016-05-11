@@ -38,7 +38,7 @@ public class ProdCatAttrVal extends BaseInfo{
     private String attrvalueDefId;
 
     /**
-     * 属性类型,包括关键属性 非关键属性 销售属性
+     * 属性类型,包括 1:关键属性 2:销售属性 3:非关键属性
      */
     @NotNull(message = "属性类型不能为空",groups = {IProductCatSV.DeleteProductCatAttrVal.class})
     private String attrType;

@@ -15,7 +15,7 @@ import java.sql.Timestamp;
  */
 public class ProductCatUniqueReq extends BaseInfo {
     /**
-     * 类目ID
+     * 类目ID,必填
      *
      */
     @NotNull(message = "类目标识不能为空",groups = {
@@ -26,7 +26,7 @@ public class ProductCatUniqueReq extends BaseInfo {
     private String productCatId;
 
     /**
-     * 操作人id
+     * 操作人id,删除时必填
      */
     @NotNull(message = "操作人ID不能为空",groups = {
             IProductCatSV.DeleteProductCat.class

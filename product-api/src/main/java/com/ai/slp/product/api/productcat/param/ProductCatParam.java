@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 public class ProductCatParam extends BaseInfo {
 	
 	/**
-	 * 商品类目ID
+	 * 商品类目ID,更新时必填
 	 */
     @NotNull(message = "类目ID不能为空", 
             groups = { IProductCatSV.DeleteProductCat.class,
@@ -41,7 +41,7 @@ public class ProductCatParam extends BaseInfo {
 	private String parentProductCatId;
 
     /**
-     * 是否有子分类
+     * 是否有子分类,必填
      */
 	@NotNull(message = "请确定是否有子分类",
             groups = { IProductCatSV.AddProductCat.class,
@@ -52,10 +52,7 @@ public class ProductCatParam extends BaseInfo {
 	 * 首字母
 	 */
 	private String firstLetter;
-	/**
-     * 类目的级别-用于判断是类目(一级)还是子类目
-     */
-    private short catLevel;
+
     /**
      * 序列号-用于排序
      */
@@ -66,12 +63,6 @@ public class ProductCatParam extends BaseInfo {
     private short serialNumber;
 
     /**
-     * 状态
-     * 1有效0无效
-     */
-    private String state;
-
-    /**
      * 操作人ID
      */
     @NotNull(message = "操作人ID不能为空",
@@ -79,33 +70,12 @@ public class ProductCatParam extends BaseInfo {
                     IProductCatSV.UpdateProductCat.class})
     private long operId;
 
-    /**
-     * 操作时间
-     */
-    private Timestamp operTime;
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
     public long getOperId() {
         return operId;
     }
 
     public void setOperId(long operId) {
         this.operId = operId;
-    }
-
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
     }
 
     public String getProductCatId() {
@@ -140,14 +110,6 @@ public class ProductCatParam extends BaseInfo {
     }
     public void setFirstLetter(String firstLetter) {
         this.firstLetter = firstLetter;
-    }
-
-    public short getCatLevel() {
-        return catLevel;
-    }
-
-    public void setCatLevel(short catLevel) {
-        this.catLevel = catLevel;
     }
 
     public short getSerialNumber() {
