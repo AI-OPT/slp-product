@@ -375,7 +375,6 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                     prodCatAttr.setSerialNumber(updateParam.getSerialNumber());
                     prodCatAttr.setIsPicture(updateParam.getIsPicture());
                     prodCatAttr.setOperId(updateParam.getOperId());
-                    prodCatAttr.setOperTime(updateParam.getOperTime());
                     prodCatAttrAtomSV.update(prodCatAttr);
                     successNum++;
                     break;
@@ -389,7 +388,6 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                     }
                     attrVal.setSerialNumber(updateParam.getSerialNumber());
                     attrVal.setOperId(updateParam.getOperId());
-                    attrVal.setOperTime(updateParam.getOperTime());
                     prodCatAttrValAtomSV.update(attrVal);
                     successNum++;
                     break;
