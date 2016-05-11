@@ -16,13 +16,13 @@ import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
 public class AttrPam extends BaseInfo {
     private static final long serialVersionUID = 1L;
 	/**
-     * 属性标识
+     * 属性标识,查询和删除时不能为空
      */
     @NotBlank(message = "属性ID不能为空", groups = { IAttrAndValDefSV.QueryAttr.class,
             IAttrAndValDefSV.DeleteAttr.class})
     private Long attrId;
     /**
-     * 操作人ID
+     * 操作人ID,删除时不能为空
      */
     @NotBlank(message = "操作人ID不能为空", groups = { IAttrAndValDefSV.DeleteAttr.class})
     private Long operId;

@@ -16,13 +16,14 @@ public class AttrValUniqueReq extends BaseInfo{
     private static final long serialVersionUID = 1L;
     
     /**
-	 * 属性ID,用于查询类目关联情况
+	 * 属性ID,删除属性值时不能为空(用于查询类目关联情况)
 	 */
-	@NotBlank(message = "属性ID不能为空")
+	@NotBlank(message = "属性ID不能为空",
+			 groups = {IAttrAndValDefSV.DeleteAttrvalue.class})
 	private Long attrId;
 
     /**
-     * 属性值ID
+     * 属性值ID,查询和删除属性值时不能为空
      */
     @NotBlank(message = "属性值ID不能为空",
             groups = {IAttrAndValDefSV.QueryAttrvalue.class,
@@ -30,7 +31,7 @@ public class AttrValUniqueReq extends BaseInfo{
     private String attrvalueDefId;
     
     /**
-     * 操作人ID
+     * 操作人ID,伤处属性值时不能为空
      */
     @NotBlank(message = "操作人ID不能为空",
             groups = {IAttrAndValDefSV.DeleteAttrvalue.class})

@@ -20,14 +20,14 @@ public class AttrParam extends BaseInfo{
     private static final long serialVersionUID = 1L;
 
 	/**
-     * 属性标识
+     * 属性标识,修改属性时不能为空
      */
 	@NotBlank(message = "属性ID不能为空", 
             groups = { IAttrAndValDefSV.UpdateAttr.class})
     private Long attrId;
 
     /**
-     * 属性名称
+     * 属性名称,添加和修改属性时不能为空
      */
 	@NotBlank(message = "属性名称不能为空", 
             groups = { IAttrAndValDefSV.CreateAttrs.class,
@@ -35,7 +35,7 @@ public class AttrParam extends BaseInfo{
     private String attrName;
 
     /**
-     * 值输入方式:
+     * 值输入方式(添加属性时不能为空):
      * 1.下拉单选 2.多选 3.可输入文本框（单行）4.可输入文本框（多行）
      * 5.日期时间 6.日期时间段
      */
@@ -54,15 +54,27 @@ public class AttrParam extends BaseInfo{
     private String isAllowCustom;
     
     /**
-     * 操作人ID
+     * 操作人ID,修改、删除、添加属性时不能为空
      */
     @NotNull(message = "操作人ID不能为空",
             groups = { IAttrAndValDefSV.UpdateAttr.class,
                     IAttrAndValDefSV.DeleteAttr.class,
                     IAttrAndValDefSV.CreateAttrs.class})
-    private long operId;
+    private Long operId;
 
-    public long getAttrId() {
+    public String getIsAllowCustom() {
+		return isAllowCustom;
+	}
+
+	public void setIsAllowCustom(String isAllowCustom) {
+		this.isAllowCustom = isAllowCustom;
+	}
+
+	public void setAttrId(Long attrId) {
+		this.attrId = attrId;
+	}
+
+	public long getAttrId() {
         return attrId;
     }
 
@@ -70,11 +82,11 @@ public class AttrParam extends BaseInfo{
         this.attrId = attrId;
     }
 
-    public long getOperId() {
+    public Long getOperId() {
         return operId;
     }
 
-    public void setOperId(long operId) {
+    public void setOperId(Long operId) {
         this.operId = operId;
     }
     

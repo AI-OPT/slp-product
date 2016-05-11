@@ -12,6 +12,14 @@ import java.sql.Timestamp;
  * @author lipeng16
  */
 public class AttrDefInfo implements Serializable{
+	public String getOperName() {
+		return operName;
+	}
+
+	public void setOperName(String operName) {
+		this.operName = operName;
+	}
+
 	private static final long serialVersionUID = 1L;
     
     /**

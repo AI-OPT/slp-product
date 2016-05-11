@@ -17,7 +17,7 @@ public class AttrValPageQuery extends BaseInfo{
     private static final long serialVersionUID = 1L;
 
 	/**
-     * 属性值ID
+     * 属性值ID,查询属性值时不能为空
      */
     @NotBlank(message = "属性标识不能为空",
     		groups = { IAttrAndValDefSV.QueryPageAttrvalue.class})
@@ -28,7 +28,6 @@ public class AttrValPageQuery extends BaseInfo{
      */
     private Long attrId;
     
-
     /**
      * 请求查询的页码
      * 默认为1

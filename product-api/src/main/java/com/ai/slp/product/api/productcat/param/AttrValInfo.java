@@ -42,7 +42,15 @@ public class AttrValInfo {
      */
     private Timestamp operTime;
 
-    public String getOper() {
+    public String getOperName() {
+		return operName;
+	}
+
+	public void setOperName(String operName) {
+		this.operName = operName;
+	}
+
+	public String getOper() {
         return operName;
     }
 

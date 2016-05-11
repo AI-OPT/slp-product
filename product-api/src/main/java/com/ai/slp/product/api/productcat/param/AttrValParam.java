@@ -27,14 +27,14 @@ public class AttrValParam extends BaseInfo {
 	private Long attrId;
 	
 	/**
-	 * 属性值ID
+	 * 属性值ID,属性值修改时不能为空
 	 */
 	@NotBlank(message = "属性ID不能为空",
             groups = {IAttrAndValDefSV.UpdateAttrvalue.class})
 	private String attrvalueDefId;
 	
 	/**
-	 * 属性值名称
+	 * 属性值名称,添加和修改属性值时不能为空
 	 */
 	@NotBlank(message = "属性值不能为空",
 	        groups = {IAttrAndValDefSV.CreateAttrvalue.class,
@@ -47,7 +47,7 @@ public class AttrValParam extends BaseInfo {
 	private String firstLetter;
     
     /**
-     * 操作人ID
+     * 操作人ID,添加和修改属性值时不能为空
      */
 	@NotNull(message = "操作人ID不能为空",
 	        groups = {IAttrAndValDefSV.CreateAttrvalue.class,
