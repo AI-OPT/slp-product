@@ -45,7 +45,7 @@ public interface IProductCatSV {
 	 * @author lipeng
 	*  @ApiCode PRODUCT_CAT_0101
 	 */
-	public BaseResponse addProductCat(List<ProductCatParam> pcpList) throws BusinessException, SystemException;
+	public BaseResponse createProductCat(List<ProductCatParam> pcpList) throws BusinessException, SystemException;
 	@interface AddProductCat {}
 	
 	/**

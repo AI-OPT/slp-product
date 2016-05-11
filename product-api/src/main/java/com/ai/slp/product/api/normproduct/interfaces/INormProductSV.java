@@ -117,7 +117,7 @@ public interface INormProductSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode ATTR_VAL_0210
+     * @ApiCode NORM_PRODUCT_0107
      */
     public AttrMap queryAttrByNormProduct(AttrQuery attrQuery)
             throws BusinessException,SystemException;
@@ -132,7 +132,7 @@ public interface INormProductSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode ATTR_VAL_0211
+     * @ApiCode NORM_PRODUCT_0108
      */
     public PageInfoForRes<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest)
             throws BusinessException,SystemException;

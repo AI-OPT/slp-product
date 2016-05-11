@@ -40,7 +40,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     }
 
     @Override
-    public BaseResponse addProductCat(List<ProductCatParam> pcpList)
+    public BaseResponse createProductCat(List<ProductCatParam> pcpList)
             throws BusinessException, SystemException {
         if (pcpList!=null && pcpList.size()>0){
             productCatBusiSV.addCatList(pcpList);

@@ -1,6 +1,8 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
@@ -13,19 +15,58 @@ import java.util.List;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class NormProdSaveRequest extends NormProductBase {
+public class NormProdSaveRequest extends BaseInfo {
+    /**
+     * 类目ID,必填.
+     */
+    @NotBlank(message = "类目ID不能为空",
+            groups = {INormProductSV.SaveProductInfo.class
+                    ,INormProductSV.UpdateProductInfo.class
+            })
+    private String productCatId;
 
     /**
-     * 创建人ID<br>
-     * 添加时不能为空,更新时不进行操作
+     * 标准品ID,更新时必填
+     */
+    @NotBlank(message = "标准品ID不能为空",
+            groups = { INormProductSV.UpdateProductInfo.class })
+    private String productId;
+
+    /**
+     * 标准品名称,必填
+     */
+    @NotBlank(message = "标准品名称不能为空",
+            groups = { INormProductSV.SaveProductInfo.class
+                    ,INormProductSV.UpdateProductInfo.class })
+    private String productName;
+
+    /**
+     * 标准品状态,必填<br>
+     *     1可使用;2不可使用
+     */
+    @NotBlank(message = "标准品状态不能为空",
+            groups = { INormProductSV.SaveProductInfo.class
+                    ,INormProductSV.UpdateProductInfo.class
+            })
+    private String state;
+
+    /**
+     * 标准品类型,必填<br>
+     * 1实物;2虚拟
+     */
+    @NotBlank(message = "标准品类型不能为空",
+            groups = { INormProductSV.SaveProductInfo.class,
+                    INormProductSV.UpdateProductInfo.class })
+    private String productType;
+    /**
+     * 创建人ID,添加时必填<br>
      */
     @NotNull(message = "创建人ID不能为空",
             groups = { INormProductSV.SaveProductInfo.class})
     private Long createId;
 
     /**
-     * 操作人ID<br>
-     * 更新时不能为空
+     * 操作人ID,更新时必填<br>
      */
     @NotNull(message = "创建人ID不能为空",
             groups = { INormProductSV.UpdateProductInfo.class})
@@ -35,12 +76,52 @@ public class NormProdSaveRequest extends NormProductBase {
      */
     private List<AttrValRequest> attrValList;
 
-    public List<AttrValRequest> getAttrValList() {
-        return attrValList;
+    public String getProductCatId() {
+        return productCatId;
     }
 
-    public void setAttrValList(List<AttrValRequest> attrValList) {
-        this.attrValList = attrValList;
+    public void setProductCatId(String productCatId) {
+        this.productCatId = productCatId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
     }
 
     public Long getOperId() {
@@ -51,11 +132,11 @@ public class NormProdSaveRequest extends NormProductBase {
         this.operId = operId;
     }
 
-    public Long getCreateId() {
-        return createId;
+    public List<AttrValRequest> getAttrValList() {
+        return attrValList;
     }
 
-    public void setCreateId(Long createId) {
-        this.createId = createId;
+    public void setAttrValList(List<AttrValRequest> attrValList) {
+        this.attrValList = attrValList;
     }
 }

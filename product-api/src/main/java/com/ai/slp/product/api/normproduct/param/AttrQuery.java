@@ -15,12 +15,12 @@ import javax.validation.constraints.NotNull;
  */
 public class AttrQuery extends BaseInfo {
     /**
-     * 标准品标识
+     * 标准品标识,必填
      */
     @NotBlank(message = "标准品标识不能为空",groups = {INormProductSV.QueryAttrByNormProduct.class})
     private String productId;
     /**
-     * 属性类型<br>
+     * 属性类型,必填<br>
      *     1:关键属性;2:销售属性;3:非关键属性
      */
     @NotBlank(message = "属性类型不能为空",groups = {INormProductSV.QueryAttrByNormProduct.class})

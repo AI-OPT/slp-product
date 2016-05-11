@@ -3,6 +3,7 @@ package com.ai.slp.product.api.normproduct.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -19,7 +20,7 @@ public class MarketPriceUpdate extends BaseInfo {
     /**
      * 标准品ID
      */
-    @NotNull(message = "标准品ID不能为空",
+    @NotBlank(message = "标准品ID不能为空",
             groups = { INormProductSV.UpdateMarketPrice.class })
     private String productId;
     /**
@@ -30,17 +31,11 @@ public class MarketPriceUpdate extends BaseInfo {
     private long marketPrice;
 
     /**
-     * 操作人ID<br>
-     * 更新时不能为空
+     * 操作人ID,必填<br>
      */
     @NotNull(message = "创建人ID不能为空",
             groups = { INormProductSV.UpdateMarketPrice.class})
     private Long operId;
-    /**
-     * 操作时间<br>
-     * 若为空,更新时则填充服务接收时间
-     */
-    private Timestamp operTime;
 
     public String getProductId() {
         return productId;
@@ -66,11 +61,4 @@ public class MarketPriceUpdate extends BaseInfo {
         this.operId = operId;
     }
 
-    public Timestamp getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
-    }
 }

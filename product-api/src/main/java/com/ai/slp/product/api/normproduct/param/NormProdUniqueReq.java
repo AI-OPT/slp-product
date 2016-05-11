@@ -15,15 +15,15 @@ import java.sql.Timestamp;
  */
 public class NormProdUniqueReq extends BaseInfo {
     /**
-     * 标准品ID
-     * 执行废弃操作和按照id查询时,均不能为空
+     * 标准品ID,必填
+     *
      */
     @NotNull(message = "标准品ID不能为空",
             groups = { INormProductSV.DiscardProduct.class,INormProductSV.QueryProducById.class })
     private String productId;
     /**
-     * 操作人<br>
-     * 执行废弃操作时,不能为空
+     * 操作人,执行废弃操作时,必填
+     *
      */
     @NotNull(message = "操作人ID不能为空",
             groups = { INormProductSV.DiscardProduct.class })
