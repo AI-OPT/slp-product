@@ -134,4 +134,12 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.updateByPrimaryKey(attrValue);
     }
+
+//	/**
+//	 * 根据属性值标识查询关联的类目数
+//	 */
+//	@Override
+//	public int queryNumByAttrvalId(String tenantId, String catAttrValId) {
+//		return 0;
+//	}
 }

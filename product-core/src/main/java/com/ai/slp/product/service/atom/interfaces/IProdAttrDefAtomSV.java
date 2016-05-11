@@ -42,7 +42,7 @@ public interface IProdAttrDefAtomSV {
      * 
      * @param attrAndValPageQueryVo
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public PageInfo<ProdAttrDef> selectPageAttrs(AttrAndValPageQueryVo attrAndValPageQueryVo);
     
@@ -52,7 +52,7 @@ public interface IProdAttrDefAtomSV {
      * @param tenantId
      * @param attrId
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int selectAttrvalNum(String tenantId,Long attrId);
     
@@ -61,7 +61,7 @@ public interface IProdAttrDefAtomSV {
      * 
      * @param attrDefParam
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int  updateAttr(ProdAttrDef prodAttrDef);
     
@@ -69,7 +69,7 @@ public interface IProdAttrDefAtomSV {
      * 查询所有有效属性
      * 
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public List<ProdAttrDef> selectAllAttrs(String tenantId);
     

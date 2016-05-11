@@ -77,4 +77,14 @@ public interface IProdCatAttrValAtomSV {
      * @return
      */
     public int update(ProdCatAttrValue attrValue);
+//    
+//    /**
+//     * 根据属性值标识查询关联类目个数
+//     * 
+//     * @param tenantId
+//     * @param catAttrValId
+//     * @return
+//     * @author lipeng16
+//     */
+//    public int queryNumByAttrvalId(String tenantId,String catAttrValId);
 }

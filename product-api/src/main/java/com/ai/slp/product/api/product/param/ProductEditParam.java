@@ -9,10 +9,12 @@ import org.hibernate.validator.constraints.NotBlank;
  * Date: 2016年4月22日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class ProductEditParam extends BaseInfo{
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 请求查询的页码
      * 默认为1
      */

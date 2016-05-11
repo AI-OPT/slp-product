@@ -1,11 +1,11 @@
 package com.ai.slp.product.api.product.param;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import com.ai.opt.base.vo.BaseInfo;
 
 /**
- * 商品管理售中与仓库商品
+ * 商品管理售中与仓库商品查询参数
  * 
  * Date: 2016年4月25日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
@@ -13,9 +13,19 @@ import com.ai.opt.base.vo.BaseInfo;
  * @author lipeng16
  */
 public class ProductStorageSaleParam extends BaseInfo{
-    
 
     private static final long serialVersionUID = 1L;
+    
+    /**
+     * 请求查询的页码
+     * 默认为1
+     */
+    private Integer pageNo = 1;
+
+    /**
+     * 每页显示条数,默认每页20条
+     */
+    private Integer pageSize =30;
 
 	/**
      * 商品名称
@@ -30,12 +40,12 @@ public class ProductStorageSaleParam extends BaseInfo{
     /**
      * 上架起始时间
      */
-    private Date upBeginTime;
+    private Timestamp upBeginTime;
     
     /**
      * 上架截止时间
      */
-    private Date upEndTime;
+    private Timestamp upEndTime; 
 
     /**
      * 商品类目ID
@@ -104,19 +114,19 @@ public class ProductStorageSaleParam extends BaseInfo{
         this.prodId = prodId;
     }
 
-    public Date getUpBeginTime() {
+    public Timestamp getUpBeginTime() {
         return upBeginTime;
     }
 
-    public void setUpBeginTime(Date upBeginTime) {
+    public void setUpBeginTime(Timestamp upBeginTime) {
         this.upBeginTime = upBeginTime;
     }
 
-    public Date getUpEndTime() {
+    public Timestamp getUpEndTime() {
         return upEndTime;
     }
 
-    public void setUpEndTime(Date upEndTime) {
+    public void setUpEndTime(Timestamp upEndTime) {
         this.upEndTime = upEndTime;
     }
 
@@ -190,6 +200,22 @@ public class ProductStorageSaleParam extends BaseInfo{
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
 	}
 
     

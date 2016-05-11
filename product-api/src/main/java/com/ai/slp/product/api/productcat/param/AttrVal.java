@@ -14,6 +14,11 @@ public class AttrVal extends BaseResponse{
     
     private static final long serialVersionUID = 1L;
 
+    /**
+	 * 属性ID
+	 */
+    private Long attrId;
+    
 	/**
      * 属性值名称
      */
@@ -39,5 +44,13 @@ public class AttrVal extends BaseResponse{
     public void setFirstLetter(String firstLetter) {
         this.firstLetter = firstLetter;
     }
+
+	public Long getAttrId() {
+		return attrId;
+	}
+
+	public void setAttrId(Long attrId) {
+		this.attrId = attrId;
+	}
     
 }

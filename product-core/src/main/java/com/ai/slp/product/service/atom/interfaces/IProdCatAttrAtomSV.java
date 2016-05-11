@@ -9,7 +9,7 @@ import java.util.List;
  * Date: 2016年4月29日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public interface IProdCatAttrAtomSV {
     
@@ -19,7 +19,7 @@ public interface IProdCatAttrAtomSV {
      * @param tenantId
      * @param productCatId
      * @return
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode
      */
     public ProdCatAttr selectById(String tenantId,String productCatId);
@@ -29,7 +29,7 @@ public interface IProdCatAttrAtomSV {
      * 
      * @param prodCatAttr
      * @return
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode
      */
     public int insertProdCatAttr(ProdCatAttr prodCatAttr);
@@ -98,7 +98,7 @@ public interface IProdCatAttrAtomSV {
      * @param tenantId
      * @param attrId
      * @return
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode
      */
     public int selectCatNumByAttrId(String tenantId, Long attrId );

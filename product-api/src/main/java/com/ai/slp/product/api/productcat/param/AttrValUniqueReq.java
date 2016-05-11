@@ -14,11 +14,12 @@ import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
  */
 public class AttrValUniqueReq extends BaseInfo{
     private static final long serialVersionUID = 1L;
-
-	/**
-     * 属性ID
-     */
-    private Long attrId;
+    
+    /**
+	 * 属性ID,用于查询类目关联情况
+	 */
+	@NotBlank(message = "属性ID不能为空")
+	private Long attrId;
 
     /**
      * 属性值ID
@@ -27,20 +28,13 @@ public class AttrValUniqueReq extends BaseInfo{
             groups = {IAttrAndValDefSV.QueryAttrvalue.class,
                     IAttrAndValDefSV.DeleteAttrvalue.class})
     private String attrvalueDefId;
+    
     /**
      * 操作人ID
      */
     @NotBlank(message = "操作人ID不能为空",
             groups = {IAttrAndValDefSV.DeleteAttrvalue.class})
     private Long operId;
-
-    public long getAttrId() {
-        return attrId;
-    }
-
-    public void setAttrId(long attrId) {
-        this.attrId = attrId;
-    }
 
     public String getAttrvalueDefId() {
         return attrvalueDefId;
@@ -57,5 +51,13 @@ public class AttrValUniqueReq extends BaseInfo{
     public void setOperId(Long operId) {
         this.operId = operId;
     }
+
+	public Long getAttrId() {
+		return attrId;
+	}
+
+	public void setAttrId(Long attrId) {
+		this.attrId = attrId;
+	}
 
 }

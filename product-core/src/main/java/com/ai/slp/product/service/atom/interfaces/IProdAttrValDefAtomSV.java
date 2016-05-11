@@ -12,7 +12,7 @@ import com.ai.slp.product.vo.AttrAndValPageQueryVo;
  * Date: 2016年4月28日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public interface IProdAttrValDefAtomSV {
     /**
@@ -21,7 +21,7 @@ public interface IProdAttrValDefAtomSV {
      * @param tenantId 租户ID
      * @param attrvalueDefId 属性值ID
      * @return 商品属性值对象
-     * @author lipeng
+     * @author lipeng16
      */
     public ProdAttrvalueDef selectById(String tenantId,String attrvalueDefId);
     /**
@@ -29,7 +29,7 @@ public interface IProdAttrValDefAtomSV {
      * 
      * @param prodAttrvalueDef
      * @return 
-     * @author lipeng
+     * @author lipeng16
      */
     public int insertProdAttrVal(ProdAttrvalueDef prodAttrvalueDef);
     /**
@@ -37,7 +37,7 @@ public interface IProdAttrValDefAtomSV {
      * 
      * @param prodAttrvalueDef
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int updateProdAttrVal(ProdAttrvalueDef prodAttrvalueDef);
     /**
@@ -47,7 +47,7 @@ public interface IProdAttrValDefAtomSV {
      * @param attrvalueDefId
      * @param operId
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int deleteProdAttrVal(String tenantId,String attrvalueDefId, Long operId);
     
@@ -56,7 +56,7 @@ public interface IProdAttrValDefAtomSV {
      * 
      * @param attrAndValPageQueryVo
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrAndValPageQueryVo attrAndValPageQueryVo);
 
@@ -64,7 +64,7 @@ public interface IProdAttrValDefAtomSV {
      * 查询属性对应的所有有效属性值
      * 
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public List<ProdAttrvalueDef> selectAttrValForAttr(String tenantId, Long attrId);
 }

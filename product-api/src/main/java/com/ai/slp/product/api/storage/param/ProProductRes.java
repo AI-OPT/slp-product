@@ -4,7 +4,9 @@ import com.ai.opt.base.vo.BaseResponse;
 
 public class ProProductRes extends BaseResponse{
 
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 商城商品ID
      */
     private String prodId;

@@ -8,11 +8,24 @@ import com.ai.opt.base.vo.BaseInfo;
  * Date: 2016年4月21日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class ProProductParam extends BaseInfo{
     
+    private static final long serialVersionUID = 1L;
+    
     /**
+     * 请求查询的页码
+     * 默认为1
+     */
+    private Integer pageNo = 1;
+
+    /**
+     * 每页显示条数
+     */
+    private Integer pageSize =20;
+
+	/**
      * 商城商品ID
      */
     private String prodId;
@@ -102,6 +115,22 @@ public class ProProductParam extends BaseInfo{
     public void setProductCatId(long productCatId) {
         this.productCatId = productCatId;
     }
+
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
     
     
 }

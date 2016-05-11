@@ -20,16 +20,17 @@ public class AttrValParam extends BaseInfo {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 属性ID
+	 * 属性ID,属性值修改时不能对属性ID进行操作
 	 */
 	@NotBlank(message = "属性ID不能为空",
-            groups = {IAttrAndValDefSV.UpdateAttrvalue.class,
-			IAttrAndValDefSV.CreateAttrvalue.class})
+            groups = {IAttrAndValDefSV.CreateAttrvalue.class})
 	private Long attrId;
 	
 	/**
 	 * 属性值ID
 	 */
+	@NotBlank(message = "属性ID不能为空",
+            groups = {IAttrAndValDefSV.UpdateAttrvalue.class})
 	private String attrvalueDefId;
 	
 	/**

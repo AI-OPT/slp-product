@@ -19,7 +19,7 @@ import com.ai.slp.product.vo.AttrAndValPageQueryVo;
  * Date: 2016年4月28日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 @Component
 public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{

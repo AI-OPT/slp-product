@@ -11,7 +11,7 @@ import com.ai.slp.product.api.storage.param.*;
  * Date: 2016年4月21日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public interface IProProductSV {
     
@@ -22,7 +22,7 @@ public interface IProProductSV {
      * @return 符合条件的一类商品的集合
      * @throws BusinessException
      * @throws SystemException
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode PROPRO_0100
      */
     public PageInfoForRes<ProProductRes> queryProProducts(ProProductParam proProductParam)

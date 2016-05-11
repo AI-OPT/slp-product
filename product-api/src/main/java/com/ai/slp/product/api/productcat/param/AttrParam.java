@@ -35,8 +35,12 @@ public class AttrParam extends BaseInfo{
     private String attrName;
 
     /**
-     * 值输入方式
+     * 值输入方式:
+     * 1.下拉单选 2.多选 3.可输入文本框（单行）4.可输入文本框（多行）
+     * 5.日期时间 6.日期时间段
      */
+	@NotBlank(message = "值输入方式不能为空",
+			groups = { IAttrAndValDefSV.CreateAttrs.class})
     private String valueWay;
     
     /**
