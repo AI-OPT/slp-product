@@ -5,6 +5,7 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
@@ -83,6 +84,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
         if (group==null)
             throw new BusinessException("","未找到指定库存组,租户ID:"+tenantId+",库存组标识:"+product.getStandedProdId());
+        //查询库存组下库存
+        List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId,group.getStorageGroupId());
         //查询商品的销售属性集合,序号正序
         Map<Long, List<String>> attrAndValMap = saveInfo.getAttrAndValIdMap();
         List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
@@ -117,7 +120,16 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
                 addSkuAttrs(prodSku);
             }
             //添加库存下的SKU库存
-
+            for (Storage storage:storageList){
+                SkuStorage skuStorage = new SkuStorage();
+                skuStorage.setSkuId(prodSku.getSkuId());
+                skuStorage.setStorageId(storage.getStorageId());
+                skuStorage.setTotalNum(0l);
+                skuStorage.setUsableNum(0l);
+                skuStorage.setState(StorageConstants.SkuStorage.State.AUTO_STOP);
+                skuStorage.setOperId(saveInfo.getOperId());
+                skuStorageAtomSV.install(skuStorage);
+            }
         }
     }
 

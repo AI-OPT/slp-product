@@ -25,5 +25,18 @@ public interface ISkuStorageAtomSV {
      */
     public List<SkuStorage> queryOfSku(String skuId);
 
+    /**
+     * 废弃指定SKU库存
+     * @param skuStorageId
+     * @param operId
+     * @return
+     */
     public int discardById(String skuStorageId,Long operId);
+
+    /**
+     * 添加指定SKU库存
+     * @param skuStorage
+     * @return
+     */
+    public int install(SkuStorage skuStorage);
 }

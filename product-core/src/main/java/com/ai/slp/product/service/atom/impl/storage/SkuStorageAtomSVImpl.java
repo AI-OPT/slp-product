@@ -64,4 +64,16 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
         skuStorage.setOperTime(DateUtils.currTimeStamp());
         return skuStorageMapper.updateByPrimaryKeySelective(skuStorage);
     }
+
+    /**
+     * 添加指定SKU库存
+     *
+     * @param skuStorage
+     * @return
+     */
+    @Override
+    public int install(SkuStorage skuStorage) {
+        skuStorage.setOperTime(DateUtils.currTimeStamp());
+        return skuStorageMapper.insert(skuStorage);
+    }
 }
