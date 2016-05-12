@@ -20,4 +20,13 @@ public interface IStorageBusiSV {
      * @param storage
      */
     public void autoStopStorage(Storage storage);
+
+    /**
+     * 更改库存状态
+     * @param tenantId
+     * @param storageId
+     * @param state
+     * @param operId
+     */
+    public void changeStorageStats(String tenantId,String storageId,String state,Long operId);
 }

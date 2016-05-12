@@ -283,7 +283,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //废弃处理
         }else if(StorageConstants.StorageGroup.State.DISCARD.equals(state)){
             discardGroup(storageGroup,operId);
-        }
+        }else
+            throw new BusinessException("","无法识别的状态");
     }
 
     /**

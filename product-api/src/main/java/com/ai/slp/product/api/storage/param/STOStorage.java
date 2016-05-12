@@ -71,7 +71,7 @@ public class STOStorage extends BaseInfo{
     private Timestamp inactiveTime;
 
     /**
-     * 操作人ID,标题
+     * 操作人ID,必填
      */
     @NotNull(message = "操作人不能为空",
             groups = { IStorageSV.SaveStorage.class })

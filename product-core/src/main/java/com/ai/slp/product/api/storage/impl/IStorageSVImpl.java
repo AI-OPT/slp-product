@@ -7,9 +7,12 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +28,8 @@ public class IStorageSVImpl implements IStorageSV {
     IStorageGroupBusiSV groupBusiSV;
     @Autowired
     IStorageGroupBusiSV storageGroupBusiSV;
+    @Autowired
+    IStorageBusiSV storageBusiSV;
     /**
      * 添加标准品库存组<br>
      *
@@ -155,7 +160,7 @@ public class IStorageSVImpl implements IStorageSV {
     }
 
     /**
-     * 更改标准品库存状态<br>
+     * 更改库存状态<br>
      * 包括启用,停用,废弃
      *
      * @param storageStatus 要设置的库存状态对象
@@ -168,6 +173,14 @@ public class IStorageSVImpl implements IStorageSV {
      */
     @Override
     public BaseResponse chargeStorageStatus(StorageStatus storageStatus) throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(storageStatus.getTenantId(),"");
+        storageBusiSV.changeStorageStats(
+                storageStatus.getTenantId(),storageStatus.getStorageId(),storageStatus.getState(),storageStatus.getOperId());
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode("");
+        baseResponse.setResponseHeader(responseHeader);
         return null;
     }
 
