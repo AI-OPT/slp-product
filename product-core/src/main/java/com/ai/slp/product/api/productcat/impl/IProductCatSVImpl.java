@@ -22,7 +22,7 @@ import java.util.Set;
 /**
  * Created by jackieliu on 16/4/28.
  */
-@Service
+@Service(validation = "true")
 @Component
 public class IProductCatSVImpl implements IProductCatSV {
     @Autowired

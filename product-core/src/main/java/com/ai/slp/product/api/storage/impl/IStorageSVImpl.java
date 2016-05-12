@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by jackieliu on 16/5/4.
  */
-@Service
+@Service(validation = "true")
 @Component
 public class IStorageSVImpl implements IStorageSV {
     @Autowired

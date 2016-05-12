@@ -17,7 +17,7 @@ import com.ai.slp.product.service.business.interfaces.IWarnReceiveStaffBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import org.springframework.stereotype.Component;
 
-@Service
+@Service(validation = "true")
 @Component
 public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
     

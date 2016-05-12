@@ -32,7 +32,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 /**
  * Created by jackieliu on 16/4/27.
  */
-@Service
+@Service(validation = "true")
 @Component
 public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     @Autowired
