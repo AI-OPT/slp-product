@@ -3,6 +3,7 @@ package com.ai.slp.product.service.business.impl;
 import java.sql.Timestamp;
 import java.util.*;
 
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.*;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
@@ -194,13 +194,13 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     }
 
     @Override
-    public PageInfoForRes<NormProdResponse> queryForPage(NormProdRequest productRequest) {
+    public PageInfoResponse<NormProdResponse> queryForPage(NormProdRequest productRequest) {
         StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
         BeanUtils.copyProperties(pageQueryVo, productRequest);
         // 查询结果
         PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
         // 接口输出接口
-        PageInfoForRes<NormProdResponse> normProdPageInfo = new PageInfoForRes<NormProdResponse>();
+        PageInfoResponse<NormProdResponse> normProdPageInfo = new PageInfoResponse<NormProdResponse>();
         BeanUtils.copyProperties(normProdPageInfo, productPageInfo);
         // 添加结果集
         List<StandedProduct> productList = productPageInfo.getResult();
@@ -436,7 +436,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
      *分页查询标准品及数据信息-添加商场商品销售价页面
      */
     @Override
-    public PageInfoForRes<NormProdResponse> queryNormProductForSalePrice(
+    public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(
             NormProdRequest productRequest) {
         StandedProdPageQueryVo standedProdPageQueryVo = new StandedProdPageQueryVo();
         BeanUtils.copyProperties(standedProdPageQueryVo, productRequest);
@@ -462,7 +462,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             NormProdResponseList.add(normProdResponse);
         }
         //新建返回对象
-        PageInfoForRes<NormProdResponse> normProdResponseList = new PageInfoForRes<>();
+        PageInfoResponse<NormProdResponse> normProdResponseList = new PageInfoResponse<>();
         //结果集赋值
         normProdResponseList.setResult(NormProdResponseList);
         normProdResponseList.setPageNo(productRequest.getPageNo());

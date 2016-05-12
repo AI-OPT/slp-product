@@ -2,6 +2,7 @@ package com.ai.slp.product.api.productcat.impl;
 
 import java.util.List;
 
+import com.ai.opt.base.vo.PageInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,6 @@ import com.ai.opt.base.vo.BaseInfo;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.productcat.param.MapForRes;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
 import com.ai.slp.product.api.productcat.param.AttrDef;
 import com.ai.slp.product.api.productcat.param.AttrDefInfo;
@@ -38,7 +38,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     IAttrAndAttrvalBusiSV attrAndAttrvalBusiSV;
 
     @Override
-    public PageInfoForRes<AttrDefInfo> queryPageAttrs(AttrDefParam attrDefParam)
+    public PageInfoResponse<AttrDefInfo> queryPageAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException {
         return attrAndAttrvalBusiSV.queryAttrs(attrDefParam);
     }
@@ -86,7 +86,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     }
 
     @Override
-    public PageInfoForRes<AttrValInfo> queryPageAttrvalue(AttrValPageQuery pageQuery)
+    public PageInfoResponse<AttrValInfo> queryPageAttrvalue(AttrValPageQuery pageQuery)
             throws BusinessException, SystemException {
         return attrAndAttrvalBusiSV.queryAttrvals(pageQuery);
     }

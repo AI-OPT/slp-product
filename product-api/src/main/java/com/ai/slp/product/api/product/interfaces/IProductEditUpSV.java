@@ -3,7 +3,7 @@ package com.ai.slp.product.api.product.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
 
 /**
@@ -28,7 +28,7 @@ public interface IProductEditUpSV {
      * @author lipeng16
     *  @ApiCode PROMAN_0100
      */
-    public PageInfoForRes<ProductEditUp> queryProductEdit(ProductEditParam productEditParam) throws BusinessException, SystemException;
+    public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditParam productEditParam) throws BusinessException, SystemException;
     @interface QueryProductEdit {}
     
     /**
@@ -42,7 +42,7 @@ public interface IProductEditUpSV {
      * @author lipeng16
     *  @ApiCode PROMAN_0101
      */
-    public PageInfoForRes<ProductEditUp> queryProductRefuse(ProductEditParam productRefuseParam) throws BusinessException, SystemException;
+    public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditParam productRefuseParam) throws BusinessException, SystemException;
     @interface QueryProductRefuse {}
     
     /**
@@ -57,7 +57,7 @@ public interface IProductEditUpSV {
      * @author lipeng16
     *  @ApiCode PROMAN_0102
      */
-    public PageInfoForRes<ProductEditUp> queryProductCheck(ProductEditParam productCheckingParam) throws BusinessException, SystemException;
+    public PageInfoResponse<ProductEditUp> queryProductCheck(ProductEditParam productCheckingParam) throws BusinessException, SystemException;
     @interface QueryProductCheck {}
 
     /**

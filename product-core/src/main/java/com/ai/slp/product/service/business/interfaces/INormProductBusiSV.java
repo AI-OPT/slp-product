@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.normproduct.param.*;
 
 /**
@@ -36,7 +36,7 @@ public interface INormProductBusiSV {
      *
      * @return
      */
-    public PageInfoForRes<NormProdResponse> queryForPage(NormProdRequest productRequest);
+    public PageInfoResponse<NormProdResponse> queryForPage(NormProdRequest productRequest);
 
     /**
      * 废弃标准品
@@ -72,5 +72,5 @@ public interface INormProductBusiSV {
      * @return
      * @author lipeng
      */
-    public PageInfoForRes<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest);
+    public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest);
 }

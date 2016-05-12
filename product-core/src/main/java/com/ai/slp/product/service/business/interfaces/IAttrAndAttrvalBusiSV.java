@@ -2,8 +2,8 @@ package com.ai.slp.product.service.business.interfaces;
 
 import java.util.List;
 
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.MapForRes;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.productcat.param.AttrDef;
 import com.ai.slp.product.api.productcat.param.AttrDefInfo;
 import com.ai.slp.product.api.productcat.param.AttrDefParam;
@@ -34,7 +34,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @return
      * @author lipeng
      */
-    public PageInfoForRes<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam);
+    public PageInfoResponse<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam);
     
     /**
      * 查询指定的属性信息
@@ -79,7 +79,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @return
      * @author lipeng
      */
-    public PageInfoForRes<AttrValInfo> queryAttrvals(AttrValPageQuery attrValPageQuery);
+    public PageInfoResponse<AttrValInfo> queryAttrvals(AttrValPageQuery attrValPageQuery);
 
     /**
      * 插入(新增)属性值信息

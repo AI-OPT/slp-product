@@ -3,8 +3,8 @@ package com.ai.slp.product.api.normproduct.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
@@ -29,7 +29,7 @@ public class INormProductSVImpl implements INormProductSV {
     INormProductBusiSV normProductBusiSV;
 
     @Override
-    public PageInfoForRes<NormProdResponse> queryNormProduct(NormProdRequest productRequest) throws BusinessException, SystemException {
+    public PageInfoResponse<NormProdResponse> queryNormProduct(NormProdRequest productRequest) throws BusinessException, SystemException {
         return normProductBusiSV.queryForPage(productRequest);
     }
 
@@ -116,7 +116,7 @@ public class INormProductSVImpl implements INormProductSV {
      * @ApiCode ATTR_VAL_0211
      */
     @Override
-    public PageInfoForRes<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest) throws BusinessException, SystemException {
+    public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest) throws BusinessException, SystemException {
     	return  normProductBusiSV.queryNormProductForSalePrice(productRequest);
     }
 }

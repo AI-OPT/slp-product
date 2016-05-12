@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.atom.interfaces.storage;
 
-import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 import java.util.List;
@@ -92,5 +92,5 @@ public interface IStorageGroupAtomSV {
      * @return
      * @author lipeng16
      */
-    public PageInfoForRes<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId,Integer pageNo,Integer pageSize);
+    public PageInfoResponse<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId, Integer pageNo, Integer pageSize);
 }

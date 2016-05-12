@@ -3,7 +3,7 @@ package com.ai.slp.product.api.normproduct.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.normproduct.param.*;
 
 /**
@@ -26,7 +26,7 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0100
      */
-    public PageInfoForRes<NormProdResponse> queryNormProduct(NormProdRequest productRequest)
+    public PageInfoResponse<NormProdResponse> queryNormProduct(NormProdRequest productRequest)
             throws BusinessException,SystemException;
     @interface QueryNormProduct {}
 
@@ -134,7 +134,7 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiCode NORM_PRODUCT_0108
      */
-    public PageInfoForRes<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest)
+    public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest)
             throws BusinessException,SystemException;
     @interface QueryNormProductForSalePrice {}
 }

@@ -3,8 +3,8 @@ package com.ai.slp.product.api.storage.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
@@ -116,7 +116,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0104
      */
     @Override
-    public PageInfoForRes<StorageGroup4List> queryGroup(StorageGroupQueryPage groupQuery) throws BusinessException, SystemException {
+    public PageInfoResponse<StorageGroup4List> queryGroup(StorageGroupQueryPage groupQuery) throws BusinessException, SystemException {
         return null;
     }
 
@@ -244,7 +244,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0111
      */
     @Override
-    public PageInfoForRes<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery) throws BusinessException, SystemException {
+    public PageInfoResponse<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery) throws BusinessException, SystemException {
         return null;
     }
 
@@ -261,7 +261,7 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0112
      */
     @Override
-    public PageInfoForRes<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery) throws BusinessException, SystemException {
+    public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery) throws BusinessException, SystemException {
         return null;
     }
 

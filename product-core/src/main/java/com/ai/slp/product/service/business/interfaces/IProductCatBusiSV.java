@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.param.*;
 
@@ -19,7 +19,7 @@ public interface IProductCatBusiSV {
      * @param pageQuery 查询条件
      * @return
      */
-    public PageInfoForRes<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery);
+    public PageInfoResponse<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery);
 
     /**
      * 批量添加类目

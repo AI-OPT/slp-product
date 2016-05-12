@@ -6,8 +6,8 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.MapForRes;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.productcat.param.AttrDef;
 import com.ai.slp.product.api.productcat.param.AttrDefInfo;
 import com.ai.slp.product.api.productcat.param.AttrDefParam;
@@ -41,7 +41,7 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0200
      */
-    public PageInfoForRes<AttrDefInfo> queryPageAttrs(AttrDefParam attrDefParam)
+    public PageInfoResponse<AttrDefInfo> queryPageAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException;
     @interface QueryPageAttrs {}
     
@@ -111,7 +111,7 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0205
      */
-    public PageInfoForRes<AttrValInfo> queryPageAttrvalue(AttrValPageQuery pageQuery)
+    public PageInfoResponse<AttrValInfo> queryPageAttrvalue(AttrValPageQuery pageQuery)
             throws BusinessException, SystemException;
     @interface QueryPageAttrvalue {}
     

@@ -3,7 +3,7 @@ package com.ai.slp.product.api.storage.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.param.*;
 
 import java.util.List;
@@ -89,7 +89,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0104
      */
-    public PageInfoForRes<StorageGroup4List> queryGroup(StorageGroupQueryPage groupQuery)
+    public PageInfoResponse<StorageGroup4List> queryGroup(StorageGroupQueryPage groupQuery)
             throws BusinessException,SystemException;
     @interface QueryGroup{}
 
@@ -196,7 +196,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0111
      */
-    public PageInfoForRes<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery)
+    public PageInfoResponse<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupListForSalePrice{}
 
@@ -211,7 +211,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0112
      */
-    public PageInfoForRes<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery)
+    public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupByProdIdForSalePrice{}
 

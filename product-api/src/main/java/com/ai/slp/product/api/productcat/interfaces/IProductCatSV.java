@@ -7,7 +7,7 @@ import java.util.Set;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.param.*;
 
@@ -31,7 +31,7 @@ public interface IProductCatSV {
      * @author lipeng16
     *  @ApiCode PRODUCT_CAT_0100
      */
-	public PageInfoForRes<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery)
+	public PageInfoResponse<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery)
 			throws BusinessException, SystemException;
 	@interface QueryPageProductCat {}
 

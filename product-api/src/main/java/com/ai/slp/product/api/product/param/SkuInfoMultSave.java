@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class SkuInfoMultSave extends BaseInfo{
     /**
-     * 商品标识
+     * 商品标识,必填
      */
     @NotBlank(message = "商品标识不能为空",
             groups = { IProductSV.SaveMultSKUInfo.class })
@@ -29,7 +29,7 @@ public class SkuInfoMultSave extends BaseInfo{
     private Map<Long,List<String>> attrAndValIdMap;
 
     /**
-     * 操作人ID
+     * 操作人ID,必填
      */
     @NotBlank(message = "操作人不能为空",
             groups = { IProductSV.SaveMultSKUInfo.class })

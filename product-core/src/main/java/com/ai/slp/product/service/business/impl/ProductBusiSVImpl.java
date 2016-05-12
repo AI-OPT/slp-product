@@ -2,13 +2,11 @@ package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.product.param.SkuAttrInfo;
-import com.ai.slp.product.api.product.param.SkuAttrValInfo;
-import com.ai.slp.product.api.product.param.SkuInfo;
-import com.ai.slp.product.api.product.param.SkuSetForProduct;
+import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
@@ -16,6 +14,7 @@ import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
@@ -53,6 +52,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     IProdSkuAtomSV prodSkuAtomSV;
     @Autowired
     IProdSkuAttrAtomSV prodSkuAttrAtomSV;
+    @Autowired
+    IProdCatAttrAtomSV prodCatAttrAtomSV;
 
     /**
      * 添加商城商品
@@ -245,6 +246,35 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     }
 
     /**
+     * 更新商品SKU信息
+     *
+     * @param saveInfo
+     */
+    @Override
+    public void updateSkuOfProduct(SkuInfoMultSave saveInfo) {
+
+        String tenantId = saveInfo.getTenantId(),productId = saveInfo.getProdId();
+        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        if (product==null)
+            throw new BusinessException("","未找到指定商品,租户ID:"+tenantId+",商品标识:"+productId);
+        //查询商品的销售属性集合,序号正序
+        Map<Long, List<String>> attrAndValMap = saveInfo.getAttrAndValIdMap();
+        List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
+                tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+        if (attrAndValMap.size()!=catAttrList.size())
+            throw new BusinessException("","已选择销售属性数量与实际数量不符,已选择属性数量:"+attrAndValMap.size()
+                    +",实际属性数量:"+catAttrList.size());
+        //参数属性值的所有SKU组合
+        Set<String> skuSaleAttrs = new HashSet<>();//新SKU属性串集合
+        genSkuSalAttr(attrAndValMap,"",0,skuSaleAttrs,catAttrList);
+        //查询商品的所有SKU信息
+
+        //遍历商品已有SKU信息,确认是否在新的SKU组合中
+
+
+    }
+
+    /**
      * 返回下级属性的属性值的跨行数
      *
      * @param entryIterator
@@ -259,5 +289,24 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             rowspan = getAttrRowspan(entryIterator);
         skuAttrInfo.setRowspan(rowspan);
         return rowspan*valNum;
+    }
+
+    private void genSkuSalAttr(Map<Long, List<String>> attrAndValMap,
+            String skuInfo,int attrIndex,Set<String> skuSalInfo,List<ProdCatAttr> catAttrList){
+
+        if (attrIndex == catAttrList.size()){
+            skuSalInfo.add(skuInfo);
+            return;
+        }
+        ProdCatAttr catAttr = catAttrList.get(attrIndex);
+        Long attrId = catAttr.getAttrId();
+        List<String> valList = attrAndValMap.get(attrId);
+        //拼装sku属性串
+        String newSkuAttr = skuInfo + ProductConstants.ProdSku.SALE_ATTR_SPLIT
+                +attrId+ProductConstants.ProdSku.SALE_ATTRVAL_SPLIT;
+        for (String val:valList){
+            String skuAttrVal = newSkuAttr+val;
+            genSkuSalAttr(attrAndValMap,skuAttrVal,attrIndex+1,skuSalInfo,catAttrList);
+        }
     }
 }

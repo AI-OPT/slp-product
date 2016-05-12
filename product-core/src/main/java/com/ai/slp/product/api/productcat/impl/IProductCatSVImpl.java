@@ -3,8 +3,8 @@ package com.ai.slp.product.api.productcat.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 import com.ai.slp.product.api.productcat.param.*;
@@ -29,9 +29,9 @@ public class IProductCatSVImpl implements IProductCatSV {
     IProductCatBusiSV productCatBusiSV;
 
     @Override
-    public PageInfoForRes<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery) throws BusinessException, SystemException {
+    public PageInfoResponse<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(pageQuery.getTenantId(),"");
-        PageInfoForRes<ProductCatInfo> catInfoPageInfoWrapper = productCatBusiSV.queryProductCat(pageQuery);
+        PageInfoResponse<ProductCatInfo> catInfoPageInfoWrapper = productCatBusiSV.queryProductCat(pageQuery);
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setResultCode("");
         responseHeader.setIsSuccess(true);

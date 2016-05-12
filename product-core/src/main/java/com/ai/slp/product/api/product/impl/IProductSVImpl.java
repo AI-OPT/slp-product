@@ -3,7 +3,7 @@ package com.ai.slp.product.api.product.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
@@ -34,7 +34,7 @@ public class IProductSVImpl implements IProductSV {
      * @ApiCode PRODUCT_0100
      */
     @Override
-    public PageInfoForRes<Product4List> queryProductList(ProductListQuery productQuery) throws BusinessException, SystemException {
+    public PageInfoResponse<Product4List> queryProductList(ProductListQuery productQuery) throws BusinessException, SystemException {
         return null;
     }
 

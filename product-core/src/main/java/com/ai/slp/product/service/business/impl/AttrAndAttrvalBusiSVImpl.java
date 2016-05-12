@@ -3,6 +3,7 @@ package com.ai.slp.product.service.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ai.opt.base.vo.PageInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.productcat.param.AttrDef;
 import com.ai.slp.product.api.productcat.param.AttrDefInfo;
 import com.ai.slp.product.api.productcat.param.AttrDefParam;
@@ -58,7 +58,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public PageInfoForRes<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam) {
+    public PageInfoResponse<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam) {
         AttrAndValPageQueryVo attrAndValPageQueryVo = new AttrAndValPageQueryVo();
         BeanUtils.copyProperties(attrAndValPageQueryVo, attrDefParam);
         PageInfo<ProdAttrDef> pageInfo = prodAttrDefAtomSV.selectPageAttrs(attrAndValPageQueryVo);
@@ -70,7 +70,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
             attrDefInfoList.add(attrDefInfo);
         }
-        PageInfoForRes<AttrDefInfo> AttrDefInfoPage = new PageInfoForRes<>();
+        PageInfoResponse<AttrDefInfo> AttrDefInfoPage = new PageInfoResponse<>();
         AttrDefInfoPage.setResult(attrDefInfoList);
         AttrDefInfoPage.setPageNo(pageInfo.getPageNo());
         AttrDefInfoPage.setPageSize(pageInfo.getPageSize());
@@ -119,7 +119,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public PageInfoForRes<AttrValInfo> queryAttrvals(AttrValPageQuery attrValPageQuery) {
+    public PageInfoResponse<AttrValInfo> queryAttrvals(AttrValPageQuery attrValPageQuery) {
         AttrAndValPageQueryVo attrAndValPageQueryVo = new AttrAndValPageQueryVo();
         BeanUtils.copyProperties(attrAndValPageQueryVo, attrValPageQuery);
         PageInfo<ProdAttrvalueDef> attrValPage = prodAttrValDefAtomSV
@@ -132,7 +132,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
             attrValInfoList.add(attrValInfo);
         }
-        PageInfoForRes<AttrValInfo> attrValInfo = new PageInfoForRes<AttrValInfo>();
+        PageInfoResponse<AttrValInfo> attrValInfo = new PageInfoResponse<AttrValInfo>();
         attrValInfo.setResult(attrValInfoList);
         attrValInfo.setPageNo(attrValPage.getPageNo());
         attrValInfo.setPageSize(attrValPage.getPageSize());

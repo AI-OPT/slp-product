@@ -2,8 +2,8 @@ package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.constants.CommonSatesConstants;
@@ -47,13 +47,13 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     IStandedProdAttrAtomSV prodAttrAtomSV;
 
     @Override
-    public PageInfoForRes<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
+    public PageInfoResponse<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
         PageInfo<ProductCat> catInfoPageInfo = prodCatDefAtomSV.queryForPage(
                 pageQuery.getPageNo(),pageQuery.getPageSize(),pageQuery.getParentProductCatId(),
                 pageQuery.getTenantId(),pageQuery.getProductCatId(),
                 pageQuery.getProductCatName(),pageQuery.getIsChild()
         );
-        PageInfoForRes<ProductCatInfo> pageInfoWrapper = new PageInfoForRes<>();
+        PageInfoResponse<ProductCatInfo> pageInfoWrapper = new PageInfoResponse<>();
         pageInfoWrapper.setCount(catInfoPageInfo.getCount());
         pageInfoWrapper.setPageSize(catInfoPageInfo.getPageSize());
         pageInfoWrapper.setPageCount(catInfoPageInfo.getPageCount());

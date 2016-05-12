@@ -3,10 +3,10 @@ package com.ai.slp.product.service.atom.impl.storage;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ai.opt.base.vo.PageInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ai.slp.product.api.common.param.PageInfoForRes;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupCriteria;
@@ -139,7 +139,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
      *  分页查询某个标准品下的库存组列表
      */
     @Override
-    public PageInfoForRes<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId,Integer pageNo,Integer pageSize) {
+    public PageInfoResponse<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId,Integer pageNo,Integer pageSize) {
     	StorageGroupCriteria example = new StorageGroupCriteria();
     	example.setLimitStart((pageNo-1)*pageSize);
     	example.setLimitEnd(pageSize);
@@ -147,7 +147,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
     	stateList.add("3");
     	stateList.add("31");
     	example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId).andStateNotIn(stateList);
-    	PageInfoForRes<StorageGroup> storageGroupPage = new PageInfoForRes<>(); 
+        PageInfoResponse<StorageGroup> storageGroupPage = new PageInfoResponse<>();
     	storageGroupPage.setResult(groupMapper.selectByExample(example));
     	storageGroupPage.setPageNo(pageNo);
     	storageGroupPage.setPageSize(pageSize);

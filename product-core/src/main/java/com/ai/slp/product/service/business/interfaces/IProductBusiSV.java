@@ -1,7 +1,11 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.slp.product.api.product.param.SkuInfoMultSave;
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -47,4 +51,10 @@ public interface IProductBusiSV {
      * @param prodId
      */
     public void discardProduct(String tenantId,String prodId,Long operId);
+
+    /**
+     * 更新商品SKU信息
+     * @param saveInfo
+     */
+    public void updateSkuOfProduct(SkuInfoMultSave saveInfo);
 }
