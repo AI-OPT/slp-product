@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by jackieliu on 16/4/27.
  */
-@Service
+@Service(validation = "true")
 @Component
 public class IProductSVImpl implements IProductSV {
     @Autowired

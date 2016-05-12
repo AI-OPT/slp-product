@@ -23,7 +23,7 @@ import com.ai.slp.product.api.productcat.param.AttrValUniqueReq;
  * Date: 2016年4月29日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public interface IAttrAndAttrvalBusiSV {
     
@@ -32,7 +32,7 @@ public interface IAttrAndAttrvalBusiSV {
      * 
      * @param attrDefParam
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public PageInfoResponse<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam);
     
@@ -40,7 +40,7 @@ public interface IAttrAndAttrvalBusiSV {
      * 查询指定的属性信息
      * 
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public AttrInfo queryAttrById(String tenantId,Long attrId);
     
@@ -49,7 +49,7 @@ public interface IAttrAndAttrvalBusiSV {
      * 
      * @param attrParamList
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int addAttr(List<AttrParam> attrParamList);
     
@@ -58,7 +58,7 @@ public interface IAttrAndAttrvalBusiSV {
      * 
      * @param attrDefParam
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int updateAttr(AttrParam attrParam);
     
@@ -68,7 +68,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @param tenantId
      * @param attrId
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int deleteAttr(AttrPam attrPam);
     
@@ -77,7 +77,7 @@ public interface IAttrAndAttrvalBusiSV {
      * 
      * @param attrValPageQuery
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public PageInfoResponse<AttrValInfo> queryAttrvals(AttrValPageQuery attrValPageQuery);
 
@@ -86,7 +86,7 @@ public interface IAttrAndAttrvalBusiSV {
      * 
      * @param attrValParamList
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int addAttrVal(List<AttrValParam> attrValParamList);
 
@@ -95,7 +95,7 @@ public interface IAttrAndAttrvalBusiSV {
      * 
      * @param attrValParam
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int updateAttrVal(AttrValParam attrValParam);
     
@@ -105,7 +105,7 @@ public interface IAttrAndAttrvalBusiSV {
      * @param tenantId
      * @param attrValueId
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int deleteAttrVal(AttrValUniqueReq attrValUniqueReq);
     
@@ -114,7 +114,7 @@ public interface IAttrAndAttrvalBusiSV {
      * 
      * @param attrValParam
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public AttrVal queryAttrVal(AttrValUniqueReq attrValUniqueReq);
    
@@ -123,7 +123,7 @@ public interface IAttrAndAttrvalBusiSV {
      * 查询所有的属性和属性值
      * 
      * @return 由属性对象对应的属性值List的Map
-     * @author lipeng
+     * @author lipeng16
      */
     public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId);
 }

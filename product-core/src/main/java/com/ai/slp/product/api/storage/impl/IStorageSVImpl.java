@@ -18,11 +18,13 @@ import java.util.List;
 /**
  * Created by jackieliu on 16/5/4.
  */
-@Service
+@Service(validation = "true")
 @Component
 public class IStorageSVImpl implements IStorageSV {
     @Autowired
     IStorageGroupBusiSV groupBusiSV;
+    @Autowired
+    IStorageGroupBusiSV storageGroupBusiSV;
     /**
      * 添加标准品库存组<br>
      *
@@ -262,7 +264,8 @@ public class IStorageSVImpl implements IStorageSV {
      */
     @Override
     public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery) throws BusinessException, SystemException {
-        return null;
+    	CommonCheckUtils.checkTenantId(infoQuery.getTenantId(), "");
+        return storageGroupBusiSV.queryGroupByProdIdForSalePrice(infoQuery);
     }
 
     /**

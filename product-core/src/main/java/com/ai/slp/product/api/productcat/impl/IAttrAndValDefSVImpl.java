@@ -26,12 +26,13 @@ import com.ai.slp.product.api.productcat.param.AttrValPageQuery;
 import com.ai.slp.product.api.productcat.param.AttrValParam;
 import com.ai.slp.product.api.productcat.param.AttrValUniqueReq;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
+import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 
 /**
  * Created by jackieliu on 16/4/27.
  */
-@Service
+@Service(validation = "true")
 @Component
 public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     @Autowired
@@ -40,19 +41,25 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     @Override
     public PageInfoResponse<AttrDefInfo> queryPageAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException {
+    	CommonCheckUtils.checkTenantId(attrDefParam.getTenantId(),"");
         return attrAndAttrvalBusiSV.queryAttrs(attrDefParam);
     }
 
     @Override
     public AttrInfo queryAttr(AttrPam attrPam) throws BusinessException, SystemException {
-        return attrAndAttrvalBusiSV.queryAttrById(attrPam.getTenantId(), attrPam.getAttrId());
+    	CommonCheckUtils.checkTenantId(attrPam.getTenantId(),"");
+    	return attrAndAttrvalBusiSV.queryAttrById(attrPam.getTenantId(), attrPam.getAttrId());
     }
 
     @Override
     public BaseResponse createAttrs(List<AttrParam> attrParamList)
             throws BusinessException, SystemException {
-        attrAndAttrvalBusiSV.addAttr(attrParamList);
-        
+    	if(attrParamList != null && !attrParamList.isEmpty()){
+	    	for(AttrParam attrParam : attrParamList){
+	    		CommonCheckUtils.checkTenantId(attrParam.getTenantId(),"");
+	    	}
+	        attrAndAttrvalBusiSV.addAttr(attrParamList);
+    	}
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);
@@ -63,6 +70,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
 
     @Override
     public BaseResponse updateAttr(AttrParam attrParam) throws BusinessException, SystemException {
+    	CommonCheckUtils.checkTenantId(attrParam.getTenantId(),"");
         attrAndAttrvalBusiSV.updateAttr(attrParam);
         
         BaseResponse baseResponse = new BaseResponse();
@@ -75,6 +83,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
 
     @Override
     public BaseResponse deleteAttr(AttrPam attrPam) throws BusinessException, SystemException {
+    	CommonCheckUtils.checkTenantId(attrPam.getTenantId(),"");
         attrAndAttrvalBusiSV.deleteAttr(attrPam);
         
         BaseResponse baseResponse = new BaseResponse();
@@ -88,13 +97,19 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     @Override
     public PageInfoResponse<AttrValInfo> queryPageAttrvalue(AttrValPageQuery pageQuery)
             throws BusinessException, SystemException {
+    	CommonCheckUtils.checkTenantId(pageQuery.getTenantId(),"");
         return attrAndAttrvalBusiSV.queryAttrvals(pageQuery);
     }
 
     @Override
     public BaseResponse createAttrvalue(List<AttrValParam> attrValParamList)
             throws BusinessException, SystemException {
-        attrAndAttrvalBusiSV.addAttrVal(attrValParamList);
+	    if(attrValParamList != null && !attrValParamList.isEmpty()){	
+	    	for(AttrValParam attrValParam : attrValParamList){
+	    		CommonCheckUtils.checkTenantId(attrValParam.getTenantId(),"");
+	    	}
+	    	attrAndAttrvalBusiSV.addAttrVal(attrValParamList);
+	    }
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);
@@ -106,6 +121,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     @Override
     public BaseResponse updateAttrvalue(AttrValParam attrValParam)
             throws BusinessException, SystemException {
+    	CommonCheckUtils.checkTenantId(attrValParam.getTenantId(),"");
         attrAndAttrvalBusiSV.updateAttrVal(attrValParam);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
@@ -118,6 +134,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     @Override
     public BaseResponse deleteAttrvalue(AttrValUniqueReq attrValUniqueReq)
             throws BusinessException, SystemException {
+    	CommonCheckUtils.checkTenantId(attrValUniqueReq.getTenantId(),"");
         attrAndAttrvalBusiSV.deleteAttrVal(attrValUniqueReq);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
@@ -130,12 +147,14 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     @Override
     public AttrVal queryAttrvalue(AttrValUniqueReq attrValUniqueReq)
             throws BusinessException, SystemException {
+    	CommonCheckUtils.checkTenantId(attrValUniqueReq.getTenantId(),"");
         return attrAndAttrvalBusiSV.queryAttrVal(attrValUniqueReq);
     }
 
     @Override
     public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo)
             throws BusinessException, SystemException {
+    	CommonCheckUtils.checkTenantId(baseInfo.getTenantId(),"");
         return attrAndAttrvalBusiSV.queryAllAttrAndVals(baseInfo.getTenantId());
     }
 

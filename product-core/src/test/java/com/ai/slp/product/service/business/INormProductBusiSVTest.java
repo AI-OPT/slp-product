@@ -2,7 +2,6 @@ package com.ai.slp.product.service.business;
 
 import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
-import com.ai.slp.product.util.DateUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

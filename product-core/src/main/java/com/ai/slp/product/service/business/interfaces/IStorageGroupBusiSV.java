@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.param.*;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public interface IStorageGroupBusiSV {
      * 更新库存组价格信息
      * @param salePrice
      * @return
-     * @author lipeng
+     * @author lipeng16
     *  @ApiCode
      */
     public int updateStorageGroupPrice(StorageGroupSalePrice salePrice);
@@ -61,5 +62,15 @@ public interface IStorageGroupBusiSV {
      * @param operId 操作者ID
      */
     public void updateGroupState(String tenantId,String groupId,String state,Long operId);
+    
+    /**
+     * 根据标准品标识分页查询库存组信息<br>
+     * 库存组不包括废弃状态的
+     * 
+     * @param infoQuery
+     * @return
+     * @author lipeng16
+     */
+    public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery);
 
 }

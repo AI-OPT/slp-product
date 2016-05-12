@@ -5,12 +5,70 @@ package com.ai.slp.product.constants;
  */
 public final class ProductConstants {
 
-    public final class Product{
-        public final class ActiveType{
+    public final class ProdSkuAttr{
+
+        public final class state{
             /**
-             * 固定有效期类型
+             * 启用状态
              */
-            public static final String FIXED = "1";
+            public static final String ACTIVE = "1";
+            /**
+             * 自动启用状态
+             */
+            public static final String AUTO_ACTIVE = "11";
+            /**
+             * 停用状态
+             */
+            public static final String STOP = "2";
+            /**
+             * 自动停用状态
+             */
+            public static final String AUTO_STOP = "21";
+            /**
+             * 废弃状态
+             */
+            public static final String DISCARD = "3";
+            /**
+             * 自动废弃状态
+             */
+            public static final String AUTO_DISCARD = "31";
+        }
+    }
+
+    public final class ProdSku{
+        public static final String SALE_ATTR_SPLIT = ";";
+        public static final String SALE_ATTRVAL_SPLIT = ":";
+        public final class state{
+            /**
+             * 启用状态
+             */
+            public static final String ACTIVE = "1";
+            /**
+             * 自动启用状态
+             */
+            public static final String AUTO_ACTIVE = "11";
+            /**
+             * 停用状态
+             */
+            public static final String STOP = "2";
+            /**
+             * 自动停用状态
+             */
+            public static final String AUTO_STOP = "21";
+            /**
+             * 废弃状态
+             */
+            public static final String DISCARD = "3";
+            /**
+             * 自动废弃状态
+             */
+            public static final String AUTO_DISCARD = "31";
+        }
+    }
+    /**
+     * 固定有效期类型
+     */
+    public static final String ACTIVE_TYPE_FIXED = "1";
 
             /**
              * 灵活有效期类型
