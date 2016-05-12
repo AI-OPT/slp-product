@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
@@ -369,4 +370,29 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             storageGroupLogAtomSV.install(groupLog);
         }
     }
+
+	@Override
+	public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery) {
+		//分页查询库存组信息
+		PageInfoResponse<StorageGroup> StorageGroupPage = 
+				storageGroupAtomSV.queryPageOfStandedProd(infoQuery.getTenantId(), infoQuery.getStandedProdId(), infoQuery.getPageNo(), infoQuery.getPageSize());
+		//统计条件结果数量
+		int count = storageGroupAtomSV.queryCountNoDiscard(infoQuery.getTenantId(), infoQuery.getStandedProdId());
+		if (StorageGroupPage == null)
+            throw new BusinessException("","未找到对应的库存组信息,租户ID:"+infoQuery.getTenantId()+",标准品标识:"+infoQuery.getStandedProdId());
+		//获取分页查询到的库存组集合-用于查询对应的库存与库存组信息对象
+		List<StorageGroup> storageGroupList = StorageGroupPage.getResult();
+		//新建返回分页结果对象的结果集
+		List<StorageGroupRes> storageGroupResList = new ArrayList<>();
+		for(StorageGroup storageGroup : storageGroupList){
+			storageGroupResList.add(genStorageGroupInfo(storageGroup));
+		}
+		//新建返回对象
+		PageInfoResponse<StorageGroupRes> storageGroupResPage = new PageInfoResponse<>();
+		storageGroupResPage.setResult(storageGroupResList);
+		storageGroupResPage.setPageNo(infoQuery.getPageNo());
+		storageGroupResPage.setPageSize(infoQuery.getPageSize());
+		storageGroupResPage.setCount(count);
+		return storageGroupResPage;
+	}
 }

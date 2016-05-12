@@ -23,6 +23,8 @@ import java.util.List;
 public class IStorageSVImpl implements IStorageSV {
     @Autowired
     IStorageGroupBusiSV groupBusiSV;
+    @Autowired
+    IStorageGroupBusiSV storageGroupBusiSV;
     /**
      * 添加标准品库存组<br>
      *
@@ -262,7 +264,8 @@ public class IStorageSVImpl implements IStorageSV {
      */
     @Override
     public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery) throws BusinessException, SystemException {
-        return null;
+    	CommonCheckUtils.checkTenantId(infoQuery.getTenantId(), "");
+        return storageGroupBusiSV.queryGroupByProdIdForSalePrice(infoQuery);
     }
 
     /**
