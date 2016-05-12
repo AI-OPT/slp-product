@@ -83,7 +83,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         product.setProductType(standedProduct.getProductType());
         product.setProdName(standedProduct.getStandedProductName());//使用标准品名称设置为商品名称
         product.setIsSaleAttr(catAttrAttches==null||catAttrAttches.isEmpty()?"N":"Y");
-        product.setState(ProductConstants.STATE_ADD);//新增状态
+        product.setState(ProductConstants.Product.State.ADD);//新增状态
         product.setOperId(group.getCreateId());
         int installNum = productAtomSV.installProduct(product);
         if (installNum > 0){
@@ -92,73 +92,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             productLogAtomSV.install(productLog);
         }
         return installNum;
-    }
-
-    /**
-     * 查询指定商品下的SKU信息
-     *
-     * @param tenantId
-     * @param prodId
-     * @return
-     */
-    @Override
-    public SkuSetForProduct querySkuByProdId(String tenantId, String prodId) {
-        //查询商品信息
-        Product product = productAtomSV.selectByProductId(tenantId,prodId);
-        if (product==null)
-            throw new BusinessException("","查询商品信息不存在,租户ID:"+tenantId+",商品标识:"+prodId);
-
-        //查询商品的SKU信息
-        Map<String,SkuInfo> skuInfoMap = new HashMap<>();
-        Map<String,String> saleAttrsMap = new HashMap<>();
-        SkuSetForProduct skuSetForProduct = new SkuSetForProduct();
-        skuSetForProduct.setSkuInfoMap(skuInfoMap);
-        skuSetForProduct.setSaleAttrsMap(saleAttrsMap);
-        List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(tenantId,prodId);
-        //设置SKU单品信息集合
-        for (ProdSku sku:skuList){
-            //设置属性串和SKU标识
-            saleAttrsMap.put(sku.getSaleAttrs(),sku.getSkuId());
-            SkuInfo skuInfo = new SkuInfo();
-            BeanUtils.copyProperties(skuInfo,sku);
-            skuInfoMap.put(sku.getSkuId(),skuInfo);
-        }
-
-        //查询商品对应标准品的销售属性,已按照属性属性排序
-        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
-                tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-        Map<Long,Set<String>> attrAndValIdMap = new LinkedHashMap<>();
-        Map<SkuAttrInfo,List<SkuAttrValInfo>> attrAndValInfoMap
-                = new LinkedHashMap<>();
-        skuSetForProduct.setAttrAndValIdMap(attrAndValIdMap);
-        skuSetForProduct.setAttrAndValInfoMap(attrAndValInfoMap);
-        //查询已设置SKU的属性和属性值信息
-        for (ProdCatAttrAttch attrAttch:catAttrAttches){
-            //设置标识集合
-            Set<String> attrValSet = new LinkedHashSet<>();
-            attrAndValIdMap.put(attrAttch.getAttrId(),attrValSet);
-            //设置对象集合
-            SkuAttrInfo skuAttrInfo = new SkuAttrInfo();
-            BeanUtils.copyProperties(skuAttrInfo,attrAttch);
-            List<SkuAttrValInfo> valInfoList = new ArrayList<>();
-            attrAndValInfoMap.put(skuAttrInfo,valInfoList);
-            //查询属性对应属性值集合
-            List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(
-                    tenantId,prodId,attrAttch.getAttrId());
-            for (StandedProdAttr prodAttr:prodAttrs){
-                //若SKU不包含当前属性值,则查询下一个属性值
-                if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId,prodId,prodAttr.getAttrvalueDefId())<=0)
-                    continue;
-                attrValSet.add(prodAttr.getAttrvalueDefId());
-                SkuAttrValInfo valInfo = new SkuAttrValInfo();
-                BeanUtils.copyProperties(valInfo,prodAttr);
-                valInfoList.add(valInfo);
-            }
-        }
-        //设置属性下每个属性值跨行数
-        Iterator<Map.Entry<SkuAttrInfo,List<SkuAttrValInfo>>> entryIterator = attrAndValInfoMap.entrySet().iterator();
-        skuSetForProduct.setSkuNum(entryIterator.hasNext()?getAttrRowspan(entryIterator):0);
-        return skuSetForProduct;
     }
 
     /**
@@ -174,16 +107,16 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
         //若商品状态不是"停用下架",则不进行处理
-        if(!ProductConstants.STATE_STOP.equals(product.getState())){
+        if(!ProductConstants.Product.State.STOP.equals(product.getState())){
             return;
         }
         //检查商品是否有库存,若没有,则直接切换至"售罄下架"
         List<Storage> storageList = storageAtomSV.queryActive(tenantId,prodId,true);
         //直接切换至"售罄下架"
         if (storageList==null || storageList.isEmpty()){
-            product.setState(ProductConstants.STATE_SALE_OUT);
+            product.setState(ProductConstants.Product.State.SALE_OUT);
         }else { //切换至上架
-            product.setState(ProductConstants.STATE_IN_SALE);
+            product.setState(ProductConstants.Product.State.IN_SALE);
         }
         product.setOperId(operId);
         //添加日志
@@ -208,11 +141,11 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
         //若商品状态不是"在售",则不进行处理
-        if(!ProductConstants.STATE_IN_SALE.equals(product.getState())){
+        if(!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
             return;
         }
         //设置为停用下架状态
-        product.setState(ProductConstants.STATE_STOP);
+        product.setState(ProductConstants.Product.State.STOP);
         product.setOperId(operId);
         //添加日志
         if (productAtomSV.updateById(product)>0){
@@ -234,79 +167,14 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if (prodId == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
-        //设置为停用下架状态
-        product.setState(ProductConstants.STATE_DISCARD);
+        //设置为废弃状态
+        product.setState(ProductConstants.Product.State.DISCARD);
         product.setOperId(operId);
         //添加日志
         if (productAtomSV.updateById(product)>0){
             ProductLog productLog = new ProductLog();
             BeanUtils.copyProperties(productLog,product);
             productLogAtomSV.install(productLog);
-        }
-    }
-
-    /**
-     * 更新商品SKU信息
-     *
-     * @param saveInfo
-     */
-    @Override
-    public void updateSkuOfProduct(SkuInfoMultSave saveInfo) {
-
-        String tenantId = saveInfo.getTenantId(),productId = saveInfo.getProdId();
-        Product product = productAtomSV.selectByProductId(tenantId,productId);
-        if (product==null)
-            throw new BusinessException("","未找到指定商品,租户ID:"+tenantId+",商品标识:"+productId);
-        //查询商品的销售属性集合,序号正序
-        Map<Long, List<String>> attrAndValMap = saveInfo.getAttrAndValIdMap();
-        List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
-                tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-        if (attrAndValMap.size()!=catAttrList.size())
-            throw new BusinessException("","已选择销售属性数量与实际数量不符,已选择属性数量:"+attrAndValMap.size()
-                    +",实际属性数量:"+catAttrList.size());
-        //参数属性值的所有SKU组合
-        Set<String> skuSaleAttrs = new HashSet<>();//新SKU属性串集合
-        genSkuSalAttr(attrAndValMap,"",0,skuSaleAttrs,catAttrList);
-        //查询商品的所有SKU信息
-
-        //遍历商品已有SKU信息,确认是否在新的SKU组合中
-
-
-    }
-
-    /**
-     * 返回下级属性的属性值的跨行数
-     *
-     * @param entryIterator
-     * @return
-     */
-    private int getAttrRowspan(Iterator<Map.Entry<SkuAttrInfo,List<SkuAttrValInfo>>> entryIterator){
-        Map.Entry<SkuAttrInfo,List<SkuAttrValInfo>> entry = entryIterator.next();
-        SkuAttrInfo skuAttrInfo = entry.getKey();
-        int valNum = entry.getValue().size();
-        int rowspan = 1;
-        if (entryIterator.hasNext())
-            rowspan = getAttrRowspan(entryIterator);
-        skuAttrInfo.setRowspan(rowspan);
-        return rowspan*valNum;
-    }
-
-    private void genSkuSalAttr(Map<Long, List<String>> attrAndValMap,
-            String skuInfo,int attrIndex,Set<String> skuSalInfo,List<ProdCatAttr> catAttrList){
-
-        if (attrIndex == catAttrList.size()){
-            skuSalInfo.add(skuInfo);
-            return;
-        }
-        ProdCatAttr catAttr = catAttrList.get(attrIndex);
-        Long attrId = catAttr.getAttrId();
-        List<String> valList = attrAndValMap.get(attrId);
-        //拼装sku属性串
-        String newSkuAttr = skuInfo + ProductConstants.ProdSku.SALE_ATTR_SPLIT
-                +attrId+ProductConstants.ProdSku.SALE_ATTRVAL_SPLIT;
-        for (String val:valList){
-            String skuAttrVal = newSkuAttr+val;
-            genSkuSalAttr(attrAndValMap,skuAttrVal,attrIndex+1,skuSalInfo,catAttrList);
         }
     }
 }

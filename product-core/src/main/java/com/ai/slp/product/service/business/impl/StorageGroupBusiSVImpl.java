@@ -12,6 +12,7 @@ import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
+import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
     IStorageLogAtomSV storageLogAtomSV;
     @Autowired
     IProdPriceLogAtomSV prodPriceLogAtomSV;
+    @Autowired
+    IStorageBusiSV storageBusiSV;
     /**
      * 添加库存组
      *
@@ -77,7 +80,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         StorageGroup group = new StorageGroup();
         BeanUtils.copyProperties(group,storageGroup);
         //默认为停用状态
-        group.setState(StorageConstants.GROUP_STATE_STOP);
+        group.setState(StorageConstants.StorageGroup.State.STOP);
         //添加库存组日志
         int installNum = storageGroupAtomSV.installGroup(group);
         if (installNum>0){
@@ -105,8 +108,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             throw new BusinessException("","要更新库存组信息不存在,租户ID:"+storageGroup.getTenantId()
             +",库存组标识:"+storageGroup.getStorageGroupId());
         //已废弃,不允许变更
-        if (StorageConstants.GROUP_STATE_DISCARD.equals(group.getState())
-                || StorageConstants.GROUP_STATE_AUTO_DISCARD.equals(group.getState())){
+        if (StorageConstants.StorageGroup.State.DISCARD.equals(group.getState())
+                || StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(group.getState())){
             throw new BusinessException("","库存组已经废弃,不允许更新信息");
         }
         //设置可更新信息
@@ -200,8 +203,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             BeanUtils.copyProperties(stoStorage,storage);
             stoStorageList.add(stoStorage);
             //如果库存为启用状态
-            if (StorageConstants.GROUP_STATE_ACTIVE.equals(storage.getState())
-                    || StorageConstants.GROUP_STATE_AUTO_ACTIVE.equals(storage.getState())){
+            if (StorageConstants.StorageGroup.State.ACTIVE.equals(storage.getState())
+                    || StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storage.getState())){
                 //若为设置启用优先级,则设置第一个启用库存的优先级为启用优先级
                 if (activePriority==null)
                     activePriority = storage.getPriorityNumber();
@@ -266,18 +269,18 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             throw new BusinessException("","状态已经变更,不需要重复变更");
         }
         //查看是否为废弃状态
-        if (StorageConstants.GROUP_STATE_DISCARD.equals(oldState)
-                || StorageConstants.GROUP_STATE_AUTO_DISCARD.equals(oldState)){
+        if (StorageConstants.StorageGroup.State.DISCARD.equals(oldState)
+                || StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(oldState)){
             throw new BusinessException("",groupId+"库存组已废弃,不允许变更状态");
         }
         //启用
-        if (StorageConstants.GROUP_STATE_ACTIVE.equals(state)){
+        if (StorageConstants.StorageGroup.State.ACTIVE.equals(state)){
             startGroup(storageGroup,operId);
         //停用
-        }else if (StorageConstants.GROUP_STATE_STOP.equals(state)){
+        }else if (StorageConstants.StorageGroup.State.STOP.equals(state)){
             stopGroup(storageGroup,operId);
         //废弃处理
-        }else if(StorageConstants.GROUP_STATE_DISCARD.equals(state)){
+        }else if(StorageConstants.StorageGroup.State.DISCARD.equals(state)){
             discardGroup(storageGroup,operId);
         }
     }
@@ -294,7 +297,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //检查路由是否已为启用状态
         //TODO...
         //库存组设置为启用状态
-        storageGroup.setState(StorageConstants.GROUP_STATE_ACTIVE);
+        storageGroup.setState(StorageConstants.StorageGroup.State.ACTIVE);
         storageGroup.setOperId(operId);
         if (storageGroupAtomSV.updateById(storageGroup)>0){
             StorageGroupLog groupLog = new StorageGroupLog();
@@ -304,7 +307,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //若对应商品为"62停用下架",则进行自动上架.
         Product product = productAtomSV.selectByGroupId(
                 storageGroup.getTenantId(),storageGroup.getStorageGroupId());
-        if (product!=null && ProductConstants.STATE_STOP.equals(product.getState())){
+        if (product!=null && ProductConstants.Product.State.STOP.equals(product.getState())){
             productBusiSV.changeToSaleForStop(product.getTenantId(),product.getProdId(),operId);
         }
     }
@@ -316,7 +319,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      */
     private void stopGroup(StorageGroup storageGroup, Long operId){
         //库存组变更为停用
-        storageGroup.setState(StorageConstants.GROUP_STATE_STOP);
+        storageGroup.setState(StorageConstants.StorageGroup.State.STOP);
         storageGroup.setOperId(operId);
         if (storageGroupAtomSV.updateById(storageGroup)>0){
             StorageGroupLog groupLog = new StorageGroupLog();
@@ -326,7 +329,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //商品进行停用下架
         Product product = productAtomSV.selectByGroupId(
                 storageGroup.getTenantId(),storageGroup.getStorageGroupId());
-        if (product!=null && ProductConstants.STATE_IN_SALE.equals(product.getState())){
+        if (product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState())){
             productBusiSV.stopProduct(product.getTenantId(),product.getProdId(),operId);
         }
     }
@@ -343,25 +346,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         if (product!=null){
             productBusiSV.discardProduct(product.getTenantId(),product.getProdId(),operId);
         }
-        //查询该库存组下所有库存
-        List<Storage> storageList = storageAtomSV.queryOfGroup(
-                storageGroup.getTenantId(),storageGroup.getStorageGroupId());
-        //库存废弃
-        for (Storage storage:storageList){
-            //若已废弃,则不处理
-            if (StorageConstants.STATE_DISCARD.equals(storage.getState())
-                    ||StorageConstants.STATE_AUTO_DISCARD.equals(storage.getState()))
-                continue;
-            storage.setState(StorageConstants.STATE_DISCARD);
-            storage.setOperId(operId);
-            if (storageAtomSV.updateById(storage)>0){
-                StorageLog storageLog = new StorageLog();
-                BeanUtils.copyProperties(storageLog,storage);
-                storageLogAtomSV.installLog(storageLog);
-            }
-        }
         //库存组废弃
-        storageGroup.setState(StorageConstants.GROUP_STATE_DISCARD);
+        storageGroup.setState(StorageConstants.StorageGroup.State.DISCARD);
         storageGroup.setOperId(operId);
         if (storageGroupAtomSV.updateById(storageGroup)>0){
             StorageGroupLog groupLog = new StorageGroupLog();

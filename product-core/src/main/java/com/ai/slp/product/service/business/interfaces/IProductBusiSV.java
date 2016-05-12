@@ -22,15 +22,6 @@ public interface IProductBusiSV {
     public int addProductWithStorageGroup(StorageGroup group, Long operId);
 
     /**
-     * 查询指定商品下的SKU信息
-     *
-     * @param tenantId
-     * @param prodId
-     * @return
-     */
-    public SkuSetForProduct querySkuByProdId(String tenantId,String prodId);
-
-    /**
      * 对停用下架的商品进行上架处理
      *
      * @param tenantId
@@ -52,9 +43,4 @@ public interface IProductBusiSV {
      */
     public void discardProduct(String tenantId,String prodId,Long operId);
 
-    /**
-     * 更新商品SKU信息
-     * @param saveInfo
-     */
-    public void updateSkuOfProduct(SkuInfoMultSave saveInfo);
 }

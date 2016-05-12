@@ -34,8 +34,8 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
     public int queryCountNoDiscard(String tenantId, String standedProdId) {
         StorageGroupCriteria example = new StorageGroupCriteria();
         List<String> discard = new ArrayList<>();
-        discard.add(StorageConstants.GROUP_STATE_DISCARD);
-        discard.add(StorageConstants.GROUP_STATE_AUTO_DISCARD);
+        discard.add(StorageConstants.StorageGroup.State.DISCARD);
+        discard.add(StorageConstants.StorageGroup.State.AUTO_DISCARD);
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId)
                 .andStandedProdIdEqualTo(standedProdId)
@@ -53,8 +53,8 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
     public int queryCountActive(String tenantId, String standedProdId) {
         StorageGroupCriteria example = new StorageGroupCriteria();
         List<String> stateList = new ArrayList<>();
-        stateList.add(StorageConstants.GROUP_STATE_ACTIVE);
-        stateList.add(StorageConstants.GROUP_STATE_AUTO_ACTIVE);
+        stateList.add(StorageConstants.StorageGroup.State.ACTIVE);
+        stateList.add(StorageConstants.StorageGroup.State.AUTO_ACTIVE);
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId)
                 .andStandedProdIdEqualTo(standedProdId)

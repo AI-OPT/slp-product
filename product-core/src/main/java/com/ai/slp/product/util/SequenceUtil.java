@@ -24,6 +24,9 @@ public final class SequenceUtil {
     private static final String STANDED_PROD_ATTR_LOG$LOG_ID$SEQ = "STANDED_PROD_ATTR_LOG$LOG_ID$SEQ";
     private static final String STANDED_PRODUCT$STANDED_PROD_ID$SEQ = "STANDED_PRODUCT$STANDED_PROD_ID$SEQ";
     private static final String STANDED_PRODUCT_LOG$LOG_ID$SEQ = "STANDED_PRODUCT_LOG$LOG_ID$SEQ";
+    private static final String PROD_SKU$SKU_ID$SEQ = "PROD_SKU$SKU_ID$SEQ";
+    private static final String PROD_SKU_LOG$LOG_ID$SEQ = "PROD_SKU_LOG$LOG_ID$SEQ";
+    private static final String PROD_SKU_ATTR$SKU_ATTR_ID$SEQ = "PROD_SKU_ATTR$SKU_ATTR_ID$SEQ";
 
     public static Long createAttrDefId() {
         return SeqUtil.getNewId(PROD_ATTR_DEF$ATTR_ID$SEQ);
@@ -84,7 +87,20 @@ public final class SequenceUtil {
     public static String genStandedProductId(){
         return SeqUtil.getNewId(STANDED_PRODUCT$STANDED_PROD_ID$SEQ,16);
     }
+
     public static String genStandedProductLogId(){
         return SeqUtil.getNewId(STANDED_PRODUCT_LOG$LOG_ID$SEQ,16);
+    }
+
+    public static String genSkuLogId(){
+        return SeqUtil.getNewId(PROD_SKU_LOG$LOG_ID$SEQ,16);
+    }
+
+    public static Long genSkuAttrId(){
+        return SeqUtil.getNewId(PROD_SKU_ATTR$SKU_ATTR_ID$SEQ);
+    }
+
+    public static String genProdSkuId(){
+        return SeqUtil.getNewId(PROD_SKU$SKU_ID$SEQ,16);
     }
 }

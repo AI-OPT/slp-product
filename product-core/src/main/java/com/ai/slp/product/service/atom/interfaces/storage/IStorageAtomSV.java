@@ -20,11 +20,11 @@ public interface IStorageAtomSV {
     /**
      * 查询库存是否存在(通过预警对象标识) 
      * @param tenantId
-     * @param objectId
+     * @param storageId
      * @return
      * @author lipeng16
      */
-    public int findStorage(String tenantId,String objectId);
+    public int findStorage(String tenantId,String storageId);
 
     /**
      * 查询启用状态的库存信息
@@ -42,4 +42,11 @@ public interface IStorageAtomSV {
      * @return
      */
     public int updateById(Storage storage);
+
+    /**
+     * 查询指定标识的库存
+     * @param storageId
+     * @return
+     */
+    public Storage queryById(String storageId);
 }

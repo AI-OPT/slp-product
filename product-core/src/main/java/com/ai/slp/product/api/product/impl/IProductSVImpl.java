@@ -4,8 +4,10 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -22,6 +24,8 @@ import java.util.List;
 public class IProductSVImpl implements IProductSV {
     @Autowired
     IProductBusiSV productBusiSV;
+    @Autowired
+    IProdSkuBusiSV prodSkuBusiSV;
     /**
      * 查询商品列表<br>
      *
@@ -83,7 +87,12 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public BaseResponse saveMultSKUInfo(SkuInfoMultSave saveInfo) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(saveInfo.getTenantId(),"");
+        prodSkuBusiSV.updateSkuOfProduct(saveInfo);
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        return baseResponse;
     }
 
     /**
@@ -100,6 +109,6 @@ public class IProductSVImpl implements IProductSV {
     @Override
     public SkuSetForProduct querySkuSetForProduct(SkuSetForProductQuery query) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(query.getTenantId(),"");
-        return productBusiSV.querySkuByProdId(query.getTenantId(),query.getProdId());
+        return prodSkuBusiSV.querySkuByProdId(query.getTenantId(),query.getProdId());
     }
 }

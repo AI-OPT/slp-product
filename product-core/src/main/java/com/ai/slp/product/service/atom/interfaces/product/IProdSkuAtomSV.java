@@ -17,4 +17,17 @@ public interface IProdSkuAtomSV {
      * @return
      */
     public List<ProdSku> querySkuOfProd(String tenantId,String prodId);
+
+    /**
+     * 废弃指定SKU单品
+     * @return
+     */
+    public int updateSkuById(ProdSku prodSku);
+
+    /**
+     * 添加商品SKU信息
+     * @param prodSku
+     * @return
+     */
+    public int createObj(ProdSku prodSku);
 }

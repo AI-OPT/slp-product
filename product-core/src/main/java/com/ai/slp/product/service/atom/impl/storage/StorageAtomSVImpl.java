@@ -38,9 +38,10 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
     }
 
     @Override
-    public int findStorage(String tenantId, String objectId) {
+    public int findStorage(String tenantId, String storageId) {
         StorageCriteria example = new StorageCriteria();
-        example.createCriteria().andStorageIdEqualTo(objectId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        example.createCriteria().andStorageIdEqualTo(storageId)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return storageMapper.countByExample(example);
     }
 
@@ -57,8 +58,8 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
         StorageCriteria example = new StorageCriteria();
         example.setOrderByClause("PRIORITY_NUMBER");
         List<String> activeList = new ArrayList<>();
-        activeList.add(StorageConstants.STATE_ACTIVE);
-        activeList.add(StorageConstants.STATE_AUTO_ACTIVE);
+        activeList.add(StorageConstants.Storage.State.ACTIVE);
+        activeList.add(StorageConstants.Storage.State.AUTO_ACTIVE);
         StorageCriteria.Criteria criteria = example.createCriteria();
         criteria.andStorageGroupIdEqualTo(groupId).andStateIn(activeList);
         //查询可用量大于0的
@@ -77,5 +78,20 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
     public int updateById(Storage storage) {
         storage.setOperTime(DateUtils.currTimeStamp());
         return storageMapper.updateByPrimaryKey(storage);
+    }
+
+    /**
+     * 查询指定标识的库存
+     *
+     * @param storageId
+     * @return
+     */
+    @Override
+    public Storage queryById(String storageId) {
+        Storage storage = storageMapper.selectByPrimaryKey(storageId);
+        if (StorageConstants.Storage.State.DISCARD.equals(storage.getState())
+                || StorageConstants.Storage.State.AUTO_DISCARD.equals(storage.getState()))
+            return null;
+        return storage;
     }
 }
