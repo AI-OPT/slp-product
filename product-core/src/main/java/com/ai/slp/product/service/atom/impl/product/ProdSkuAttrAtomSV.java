@@ -21,8 +21,8 @@ public class ProdSkuAttrAtomSV implements IProdSkuAttrAtomSV {
     public int queryAttrValNumOfSku(String tenantId, String prodId, String valId) {
         ProdSkuAttrCriteria example = new ProdSkuAttrCriteria();
         List<String> state = new ArrayList<>();
-        state.add(ProductConstants.ProdSkuAttr.state.DISCARD);
-        state.add(ProductConstants.ProdSkuAttr.state.AUTO_DISCARD);
+        state.add(ProductConstants.ProdSkuAttr.State.DISCARD);
+        state.add(ProductConstants.ProdSkuAttr.State.AUTO_DISCARD);
         example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andProdIdEqualTo(prodId)
                 .andAttrvalueDefIdEqualTo(valId)

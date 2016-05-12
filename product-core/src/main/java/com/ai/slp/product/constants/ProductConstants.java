@@ -7,7 +7,7 @@ public final class ProductConstants {
 
     public final class ProdSkuAttr{
 
-        public final class state{
+        public final class State{
             /**
              * 启用状态
              */
@@ -38,7 +38,7 @@ public final class ProductConstants {
     public final class ProdSku{
         public static final String SALE_ATTR_SPLIT = ";";
         public static final String SALE_ATTRVAL_SPLIT = ":";
-        public final class state{
+        public final class State{
             /**
              * 启用状态
              */
