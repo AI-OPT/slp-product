@@ -1,6 +1,8 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.vo.ProductPageQueryVo;
 
 /**
  * 销售商品原子操作
@@ -41,4 +43,13 @@ public interface IProductAtomSV {
      * @return
      */
     public int updateById(Product product);
+    
+    /**
+     * 分页查询商品信息
+     * 
+     * @param productPageQueryVo
+     * @return
+     * @author lipeng16
+     */
+    public PageInfo<Product> selectProductPage(ProductPageQueryVo productPageQueryVo);
 }

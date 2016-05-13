@@ -1,11 +1,14 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
+import com.ai.slp.product.vo.ProductPageQueryVo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -78,4 +81,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
         product.setOperTime(DateUtils.currTimeStamp());
         return productMapper.updateByPrimaryKey(product);
     }
+
+	@Override
+	public PageInfo<Product> selectProductPage(ProductPageQueryVo productPageQueryVo) {
+		return null;
+	}
 }

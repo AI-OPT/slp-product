@@ -14,7 +14,9 @@ import javax.validation.constraints.NotNull;
  * @author liutong5
  */
 public class ProductListQuery extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 请求查询的页码
      * 默认为1
      */
@@ -41,7 +43,7 @@ public class ProductListQuery extends BaseInfo {
      * 商品类型
      * 0:全部
      */
-    @NotNull(message = "类目标识不能为空",groups = {IProductSV.QueryProductList.class})
+    @NotNull(message = "商品类型不能为空",groups = {IProductSV.QueryProductList.class})
     private String prodType;
     /**
      * 库存组id

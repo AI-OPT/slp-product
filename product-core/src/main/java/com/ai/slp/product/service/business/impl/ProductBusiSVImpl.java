@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.api.product.param.Product4List;
+import com.ai.slp.product.api.product.param.ProductListQuery;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
@@ -174,4 +177,18 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             productLogAtomSV.install(productLog);
         }
     }
+
+    /**
+     * 分页查询商城商品信息-商城商品销售价之商城商品列表
+     * 
+     * @param productQuery
+     * @return
+     * @author lipeng16
+     */
+	@Override
+	public PageInfo<Product4List> queryProductPage(ProductListQuery productQuery) {
+		
+		
+		return null;
+	}
 }

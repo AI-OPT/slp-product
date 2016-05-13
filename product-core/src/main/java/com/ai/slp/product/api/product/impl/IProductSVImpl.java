@@ -38,7 +38,7 @@ public class IProductSVImpl implements IProductSV {
      * @ApiCode PRODUCT_0100
      */
     @Override
-    public PageInfoResponse<Product4List> queryProductList(ProductListQuery productQuery) throws BusinessException, SystemException {
+    public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery) throws BusinessException, SystemException {
         return null;
     }
 
