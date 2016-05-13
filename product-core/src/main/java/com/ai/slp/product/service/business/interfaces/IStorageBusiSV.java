@@ -35,6 +35,7 @@ public interface IStorageBusiSV {
     public void changeStorageStats(String tenantId,String storageId,String state,Long operId);
 	 /**
 	  * 批量更新库存销售价
+	  *
 	  * 
 	 * @param salePriceList
 	 * @return
