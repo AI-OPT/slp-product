@@ -11,7 +11,9 @@ import com.ai.opt.base.vo.BaseInfo;
  * @author liutong5
  */
 public class ProductCatPageQuery extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 请求查询的页码
      * 默认为1
      */

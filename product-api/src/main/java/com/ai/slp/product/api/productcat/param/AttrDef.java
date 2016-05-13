@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Date: 2016年5月3日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class AttrDef implements Serializable {
     

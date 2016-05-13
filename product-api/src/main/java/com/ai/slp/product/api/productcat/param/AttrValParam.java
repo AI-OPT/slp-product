@@ -22,7 +22,7 @@ public class AttrValParam extends BaseInfo {
 	/**
 	 * 属性ID,属性值修改时不能对属性ID进行操作
 	 */
-	@NotBlank(message = "属性ID不能为空",
+	@NotNull(message = "属性ID不能为空",
             groups = {IAttrAndValDefSV.CreateAttrvalue.class})
 	private Long attrId;
 	
