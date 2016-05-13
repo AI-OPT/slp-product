@@ -15,7 +15,8 @@ import java.util.Set;
  * @author liutong5
  */
 public class ProductInfo extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 商品标识
      */
     private String productId;

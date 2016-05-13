@@ -1,14 +1,14 @@
 package com.ai.slp.product.api.productcat.param;
 
-import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Set;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 
 /**
  * 增加类目的类目属性参数
@@ -16,11 +16,12 @@ import javax.validation.constraints.NotNull;
  * Date: 2016年4月29日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  * update liutong5 at 2016/05/04
  */
 public class ProdCatAttrAddParam extends BaseInfo{
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 商品类目ID
      */
     @NotBlank(message = "商品类目标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
@@ -33,7 +34,7 @@ public class ProdCatAttrAddParam extends BaseInfo{
     /**
      * 操作人ID,必填
      */
-    @NotBlank(message = "操作人标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
+    @NotNull(message = "操作人标识不能为空",groups = {IProductCatSV.AddAttrForCatAndType.class})
     private Long operId;
 
     /**

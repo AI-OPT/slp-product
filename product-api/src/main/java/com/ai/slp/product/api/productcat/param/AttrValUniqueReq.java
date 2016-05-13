@@ -1,5 +1,7 @@
 package com.ai.slp.product.api.productcat.param;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.ai.opt.base.vo.BaseInfo;
@@ -18,7 +20,7 @@ public class AttrValUniqueReq extends BaseInfo{
     /**
 	 * 属性ID,删除属性值时不能为空(用于查询类目关联情况)
 	 */
-	@NotBlank(message = "属性ID不能为空",
+	@NotNull(message = "属性ID不能为空",
 			 groups = {IAttrAndValDefSV.DeleteAttrvalue.class})
 	private Long attrId;
 
@@ -33,7 +35,7 @@ public class AttrValUniqueReq extends BaseInfo{
     /**
      * 操作人ID,伤处属性值时不能为空
      */
-    @NotBlank(message = "操作人ID不能为空",
+    @NotNull(message = "操作人ID不能为空",
             groups = {IAttrAndValDefSV.DeleteAttrvalue.class})
     private Long operId;
 

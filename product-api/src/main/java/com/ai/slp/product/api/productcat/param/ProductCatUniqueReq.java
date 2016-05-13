@@ -1,10 +1,11 @@
 package com.ai.slp.product.api.productcat.param;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
-
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 
 /**
  * 类目唯一标识请求信息<br>
@@ -14,11 +15,13 @@ import java.sql.Timestamp;
  * @author liutong5
  */
 public class ProductCatUniqueReq extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 类目ID,必填
      *
      */
-    @NotNull(message = "类目标识不能为空",groups = {
+    @NotBlank(message = "类目标识不能为空",groups = {
             IProductCatSV.QueryByCatId.class,
             IProductCatSV.DeleteProductCat.class,
             IProductCatSV.QueryLinkOfCatById.class

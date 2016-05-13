@@ -1,9 +1,6 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr;
-import com.ai.slp.product.dao.mapper.interfaces.product.ProdSkuAttrMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by jackieliu on 16/5/10.

@@ -1,11 +1,11 @@
 package com.ai.slp.product.api.productcat.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 
 /**
  * 类目属性更新参数
@@ -17,11 +17,12 @@ import java.sql.Timestamp;
  */
 public class ProdCatAttrUpdateParam extends BaseInfo{
 
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 要更新信息的唯一标识<br>
      * 若更新信息为属性,则为关系ID,若更新信息为属性值,则为商品类目属性值ID
      */
-    @NotNull(message = "唯一标识不能为空",groups = {IProductCatSV.UpdateCatAttrAndVal.class})
+    @NotBlank(message = "唯一标识不能为空",groups = {IProductCatSV.UpdateCatAttrAndVal.class})
     private String updateObjId;
     /**
      * 更新数据的类型,必填<br>
@@ -45,7 +46,7 @@ public class ProdCatAttrUpdateParam extends BaseInfo{
      * 操作人ID
      */
     @NotNull(message = "操作人标识不能为空",groups = {IProductCatSV.UpdateCatAttrAndVal.class})
-    private long operId;
+    private Long operId;
 
     public String getUpdateObjId() {
         return updateObjId;

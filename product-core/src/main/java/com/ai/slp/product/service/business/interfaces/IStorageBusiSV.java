@@ -3,7 +3,6 @@ package com.ai.slp.product.service.business.interfaces;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import java.util.List;
 
-import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
 
 /**

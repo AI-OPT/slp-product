@@ -12,11 +12,12 @@ import javax.validation.constraints.NotNull;
  * Date: 2016年4月26日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class ProductCheckParam extends BaseInfo {
     
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 商品ID
      */
     @NotBlank(message = "商品标识不能为空",groups = {IProductEditUpSV.ProductCheck.class})

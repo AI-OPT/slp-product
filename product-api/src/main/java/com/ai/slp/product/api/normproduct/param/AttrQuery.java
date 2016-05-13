@@ -1,10 +1,9 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 
 /**
  * 标准品属性查询对象<br>
@@ -14,7 +13,8 @@ import javax.validation.constraints.NotNull;
  * @author liutong5
  */
 public class AttrQuery extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 标准品标识,必填
      */
     @NotBlank(message = "标准品标识不能为空",groups = {INormProductSV.QueryAttrByNormProduct.class})

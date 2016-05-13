@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 商城商品的SKU批量更新<br>
  *
@@ -16,7 +18,9 @@ import java.util.Map;
  * @author liutong5
  */
 public class SkuInfoMultSave extends BaseInfo{
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 商品标识,必填
      */
     @NotBlank(message = "商品标识不能为空",
@@ -31,7 +35,7 @@ public class SkuInfoMultSave extends BaseInfo{
     /**
      * 操作人ID,必填
      */
-    @NotBlank(message = "操作人不能为空",
+    @NotNull(message = "操作人不能为空",
             groups = { IProductSV.SaveMultSKUInfo.class })
     private Long operId;
 

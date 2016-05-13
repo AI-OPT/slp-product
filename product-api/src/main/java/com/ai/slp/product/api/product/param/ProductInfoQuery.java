@@ -13,7 +13,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author liutong5
  */
 public class ProductInfoQuery extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 商品标识,必填
      */
     @NotBlank(message = "商品标识不能为空",groups = {IProductSV.QueryProductById.class})

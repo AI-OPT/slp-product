@@ -14,7 +14,9 @@ import java.util.Set;
  * @author liutong5
  */
 public class NormProdInfoResponse extends BaseResponse {
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 租户Id
      */
     private String tenantId;

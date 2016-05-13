@@ -8,10 +8,12 @@ import com.ai.opt.base.vo.BaseResponse;
  * Date: 2016年4月20日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class ProAttrGroup extends BaseResponse{
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 属性组ID
      */
     private long attrGroupId;
@@ -67,6 +69,14 @@ public class ProAttrGroup extends BaseResponse{
     public void setLogoURL(String logoURL) {
         this.logoURL = logoURL;
     }
+
+	public int getAttrValNum() {
+		return attrValNum;
+	}
+
+	public void setAttrValNum(int attrValNum) {
+		this.attrValNum = attrValNum;
+	}
     
     
 }

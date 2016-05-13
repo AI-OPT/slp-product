@@ -1,10 +1,11 @@
 package com.ai.slp.product.api.normproduct.param;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 
 /**
  * 标准品请求信息<br>
@@ -14,11 +15,12 @@ import java.sql.Timestamp;
  * @author liutong5
  */
 public class NormProdUniqueReq extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 标准品ID,必填
      *
      */
-    @NotNull(message = "标准品ID不能为空",
+    @NotBlank(message = "标准品ID不能为空",
             groups = { INormProductSV.DiscardProduct.class,INormProductSV.QueryProducById.class })
     private String productId;
     /**

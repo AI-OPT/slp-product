@@ -27,7 +27,7 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0100
      */
-    public PageInfoResponse<Product4List> queryProductList(ProductListQuery productQuery)
+    public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery)
         throws BusinessException,SystemException;
     @interface QueryProductList{}
 

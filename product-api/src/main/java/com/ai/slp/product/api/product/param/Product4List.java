@@ -11,7 +11,8 @@ import com.ai.opt.base.vo.BaseInfo;
  * @author liutong5
  */
 public class Product4List extends BaseInfo{
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 类目标识
      */
     private String catId;

@@ -1,11 +1,9 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import com.ai.slp.product.api.product.param.SkuInfoMultSave;
-import com.ai.slp.product.api.product.param.SkuSetForProduct;
+import com.ai.opt.base.vo.PageInfo;
+import com.ai.slp.product.api.product.param.Product4List;
+import com.ai.slp.product.api.product.param.ProductListQuery;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -43,5 +41,14 @@ public interface IProductBusiSV {
      * @param prodId
      */
     public void discardProduct(String tenantId,String prodId,Long operId);
+    
+    /**
+     * 分页查询商城商品信息-商城商品销售价之商城商品列表
+     * 
+     * @param productQuery
+     * @return
+     * @author lipeng16
+     */
+    public PageInfo<Product4List> queryProductPage(ProductListQuery productQuery);
 
 }

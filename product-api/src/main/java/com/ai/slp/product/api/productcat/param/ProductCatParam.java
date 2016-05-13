@@ -2,6 +2,7 @@ package com.ai.slp.product.api.productcat.param;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -66,7 +67,7 @@ public class ProductCatParam extends BaseInfo {
     /**
      * 操作人ID
      */
-    @NotBlank(message = "操作人ID不能为空",
+    @NotNull(message = "操作人ID不能为空",
             groups = { IProductCatSV.CreateProductCat.class,
                     IProductCatSV.UpdateProductCat.class})
     private Long operId;

@@ -1,12 +1,10 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import org.hibernate.validator.constraints.NotBlank;
+import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.sql.Timestamp;
+
+import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 
 /**
  * 标准品属性值请求信息<br>
@@ -17,7 +15,9 @@ import java.sql.Timestamp;
  */
 public class AttrValRequest implements Serializable {
     
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 标准品属性值ID
      */
     private Long productAttrValId;
@@ -26,7 +26,7 @@ public class AttrValRequest implements Serializable {
      * 属性ID<br>
      * 不能为空
      */
-    @NotBlank(message = "属性ID不能为空", groups = { INormProductSV.SaveProductInfo.class })
+    @NotNull(message = "属性ID不能为空", groups = { INormProductSV.SaveProductInfo.class })
     private Long attrId;
     
     /**

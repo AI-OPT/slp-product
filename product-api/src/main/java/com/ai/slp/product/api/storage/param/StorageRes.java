@@ -12,7 +12,8 @@ import java.sql.Timestamp;
  * @author liutong5
  */
 public class StorageRes extends BaseResponse {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 库存标识
      */
     private String storageId;

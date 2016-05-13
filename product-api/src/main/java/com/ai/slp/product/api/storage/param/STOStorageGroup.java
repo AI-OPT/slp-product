@@ -1,12 +1,11 @@
 package com.ai.slp.product.api.storage.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.IStorageSV;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.util.Date;
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 /**
  * 虚拟库存组信息<br>
@@ -17,7 +16,8 @@ import java.util.Date;
  */
 public class STOStorageGroup extends BaseInfo {
 
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 标准品标识<br>
      * 设置为null,则不进行更新操作
      */

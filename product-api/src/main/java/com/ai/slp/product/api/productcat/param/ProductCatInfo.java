@@ -8,9 +8,11 @@ import com.ai.opt.base.vo.BaseResponse;
  * Date: 2016年4月19日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class ProductCatInfo extends BaseResponse{
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 商品类目标识
