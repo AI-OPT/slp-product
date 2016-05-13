@@ -10,9 +10,6 @@ import com.ai.slp.product.util.SequenceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by jackieliu on 16/5/10.
  */

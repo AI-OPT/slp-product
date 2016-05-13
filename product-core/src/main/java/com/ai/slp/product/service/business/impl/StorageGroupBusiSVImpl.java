@@ -9,7 +9,6 @@ import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;

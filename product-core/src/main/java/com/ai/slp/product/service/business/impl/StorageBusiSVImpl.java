@@ -7,7 +7,6 @@ import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
-import com.ai.slp.product.dao.mapper.interfaces.storage.StorageGroupMapper;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
