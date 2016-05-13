@@ -11,7 +11,9 @@ import java.util.Set;
  * @author liutong5
  */
 public class AudiencesSetOfProduct implements Serializable {
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 个人受众信息
      */
     private ProdAudiences personAudiences;

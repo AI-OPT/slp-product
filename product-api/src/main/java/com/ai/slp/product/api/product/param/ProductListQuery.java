@@ -1,9 +1,9 @@
 package com.ai.slp.product.api.product.param;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 商城商品查询对象<br>
@@ -29,7 +29,7 @@ public class ProductListQuery extends BaseInfo {
     /**
      * 类目标识
      */
-    @NotNull(message = "类目标识不能为空",groups = {IProductSV.QueryProductList.class})
+    @NotBlank(message = "类目标识不能为空",groups = {IProductSV.QueryProductList.class})
     private String catId;
     /**
      * 商城商品标识
@@ -43,7 +43,7 @@ public class ProductListQuery extends BaseInfo {
      * 商品类型
      * 0:全部
      */
-    @NotNull(message = "商品类型不能为空",groups = {IProductSV.QueryProductList.class})
+    @NotBlank(message = "商品类型不能为空",groups = {IProductSV.QueryProductList.class})
     private String prodType;
     /**
      * 库存组id

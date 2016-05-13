@@ -1,11 +1,11 @@
 package com.ai.slp.product.api.product.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.product.interfaces.IProductSV;
-import com.ai.slp.product.api.storage.interfaces.IStorageSV;
+import java.util.Date;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.product.interfaces.IProductSV;
 
 /**
  * SKU销售价对称<br>
@@ -16,7 +16,8 @@ import java.util.Date;
  * @author liutong5
  */
 public class ProdSkuSalPrice extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * sku单品标识
      */
     @NotNull(message = "SKU单品标识不能为空",

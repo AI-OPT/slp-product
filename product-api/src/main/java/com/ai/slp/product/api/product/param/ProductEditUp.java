@@ -1,21 +1,20 @@
 package com.ai.slp.product.api.product.param;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
-
-import com.ai.opt.base.vo.BaseResponse;
 /**
  * 商品编辑上架返回类
  * 
  * Date: 2016年4月22日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public class ProductEditUp implements Serializable{
 
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 商品ID
      */
     private String prodId;

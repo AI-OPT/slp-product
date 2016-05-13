@@ -11,7 +11,8 @@ import java.sql.Timestamp;
  * @author liutong5
  */
 public class SkuInfo implements Serializable {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * sku单品标识
      */
     private String skuId;

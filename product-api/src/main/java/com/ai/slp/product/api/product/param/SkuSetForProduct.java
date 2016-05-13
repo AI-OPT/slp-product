@@ -1,7 +1,6 @@
 package com.ai.slp.product.api.product.param;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,7 +13,9 @@ import java.util.Set;
  * @author liutong5
  */
 public class SkuSetForProduct implements Serializable {
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 商品标识
      */
     private String prodId;

@@ -10,7 +10,8 @@ import java.io.Serializable;
  * @author liutong5
  */
 public class SkuAttrValInfo implements Serializable {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 属性值ID
      */
     private String attrvalueDefId;
