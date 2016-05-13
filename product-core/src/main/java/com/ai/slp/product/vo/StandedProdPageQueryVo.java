@@ -3,7 +3,7 @@ package com.ai.slp.product.vo;
 import java.util.Date;
 
 /**
- * 标准品分页查询条件对象
+ * 标准品分页查询条件对象  
  *
  * Created by liutong5 on 16/4/28.
  */
