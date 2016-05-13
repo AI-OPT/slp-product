@@ -1,9 +1,10 @@
 package com.ai.slp.product.api.productcat.param;
 
-import org.hibernate.validator.constraints.NotBlank;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 单个属性查询删除参数
@@ -18,13 +19,13 @@ public class AttrPam extends BaseInfo {
 	/**
      * 属性标识,查询和删除时不能为空
      */
-    @NotBlank(message = "属性ID不能为空", groups = { IAttrAndValDefSV.QueryAttr.class,
+    @NotNull(message = "属性ID不能为空", groups = { IAttrAndValDefSV.QueryAttr.class,
             IAttrAndValDefSV.DeleteAttr.class})
     private Long attrId;
     /**
      * 操作人ID,删除时不能为空
      */
-    @NotBlank(message = "操作人ID不能为空", groups = { IAttrAndValDefSV.DeleteAttr.class})
+    @NotNull(message = "操作人ID不能为空", groups = { IAttrAndValDefSV.DeleteAttr.class})
     private Long operId;
     
     public Long getAttrId() {
