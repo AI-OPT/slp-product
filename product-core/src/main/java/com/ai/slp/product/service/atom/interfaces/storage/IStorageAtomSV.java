@@ -49,4 +49,14 @@ public interface IStorageAtomSV {
      * @return
      */
     public Storage queryById(String storageId);
+    
+    /**
+     * 更新库存销售价
+     * 
+     * @param storage
+     * @return
+     * @author lipeng16
+     */
+    public int updateSaleById(Storage storage);
+
 }

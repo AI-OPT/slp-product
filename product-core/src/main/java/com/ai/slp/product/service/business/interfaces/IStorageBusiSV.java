@@ -1,6 +1,10 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
+import java.util.List;
+
+import com.ai.opt.base.vo.BaseResponse;
+import com.ai.slp.product.api.storage.param.StorageSalePrice;
 
 /**
  * 库存业务操作
@@ -29,4 +33,12 @@ public interface IStorageBusiSV {
      * @param operId
      */
     public void changeStorageStats(String tenantId,String storageId,String state,Long operId);
+	 /**
+	  * 批量更新库存销售价
+	  * 
+	 * @param salePriceList
+	 * @return
+	 * @author lipeng16
+	 */
+	public int updateMultiStorageSalePrice(List<StorageSalePrice> salePriceList);
 }
