@@ -9,7 +9,8 @@ package com.ai.slp.product.api.storage.param;
  * @author liutong5
  */
 public class StorageGroup4SaleList extends StorageGroup4List {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 状态不为废弃的库存组的数量
      */
     private int groupNum;

@@ -17,7 +17,8 @@ import java.sql.Timestamp;
  * @author liutong5
  */
 public class STOStorage extends BaseInfo{
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 库存标识<br>
      * 若包含标识则进行更新操作,否则进行添加操作
      */

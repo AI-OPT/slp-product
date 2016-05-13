@@ -1,12 +1,12 @@
 package com.ai.slp.product.api.storage.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.IStorageSV;
-import org.hibernate.validator.constraints.NotBlank;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 /**
  * 库存组售价信息<br>
@@ -17,7 +17,9 @@ import java.util.Date;
  * @author liutong5
  */
 public class StorageGroupSalePrice extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 库存组标识,必填
      */
     @NotBlank(message = "库存组标识不能为空",

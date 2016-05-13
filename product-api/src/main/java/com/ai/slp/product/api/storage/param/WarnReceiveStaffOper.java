@@ -1,13 +1,9 @@
 package com.ai.slp.product.api.storage.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.IWarnReceiveStaffSV;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
-
-import java.sql.Timestamp;
-import java.util.Date;
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.storage.interfaces.IWarnReceiveStaffSV;
 
 /**
  * 预警接收人操作时涉及的信息<br>
@@ -17,7 +13,9 @@ import java.util.Date;
  * @author liutong5
  */
 public class WarnReceiveStaffOper extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 进行删除时,等同与预警标识
      * 进行添加时,等同于预警接收人标识
      * 作为查询结果时,等同于预警标识
@@ -27,14 +25,14 @@ public class WarnReceiveStaffOper extends BaseInfo {
     /**
      * 预警对象标识,不能为空
      */
-    @NotNull(message = "预警对象标识不能为空",
+    @NotBlank(message = "预警对象标识不能为空",
             groups = {IWarnReceiveStaffSV.InstallWarnReceiveStaff.class})
     private String objectId;
     /**
      * 预警对象类型
      * 11:库存预警
      */
-    @NotNull(message = "预警对象类型不能为空",
+    @NotBlank(message = "预警对象类型不能为空",
             groups = {IWarnReceiveStaffSV.DeleteWarnReceiveStaff.class,
                     IWarnReceiveStaffSV.InstallWarnReceiveStaff.class
             })
@@ -42,7 +40,7 @@ public class WarnReceiveStaffOper extends BaseInfo {
     /**
      * 操作人id
      */
-    private long operId;
+    private Long operId;
 
     public String getId() {
         return id;

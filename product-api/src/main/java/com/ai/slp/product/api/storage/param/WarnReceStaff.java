@@ -1,7 +1,5 @@
 package com.ai.slp.product.api.storage.param;
 
-import java.util.Date;
-
 /**
  * 预警接收人信息<br>
  *
@@ -11,7 +9,8 @@ import java.util.Date;
  */
 public class WarnReceStaff extends WarnReceiveStaffOper {
 
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 预警人id
      */
     private long staffId;

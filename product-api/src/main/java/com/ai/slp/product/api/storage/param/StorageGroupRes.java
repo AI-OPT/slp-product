@@ -15,7 +15,8 @@ import java.util.Map;
  * @author liutong5
  */
 public class StorageGroupRes extends BaseResponse {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 库存组标识
      */
     private String storageGroupId;

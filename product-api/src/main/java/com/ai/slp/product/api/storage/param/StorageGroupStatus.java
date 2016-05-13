@@ -14,7 +14,8 @@ import javax.validation.constraints.NotNull;
  * @author liutong5
  */
 public class StorageGroupStatus extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 库存组标识
      */
     @NotBlank(message = "库存组标识不能为空",

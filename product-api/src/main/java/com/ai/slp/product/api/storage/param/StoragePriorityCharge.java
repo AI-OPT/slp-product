@@ -15,7 +15,8 @@ import javax.validation.constraints.NotNull;
  * @author liutong5
  */
 public class StoragePriorityCharge extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 库存组标识,必填
      */
     @Min(value = 0,message = "库存组标识不能小于0",

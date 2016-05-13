@@ -12,7 +12,8 @@ import java.sql.Timestamp;
  * @author liutong5
  */
 public class StorageGroup4List implements Serializable {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 库存组标识
      */
     private String storageGroupId;
