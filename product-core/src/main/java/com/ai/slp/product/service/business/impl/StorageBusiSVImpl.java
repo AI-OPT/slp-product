@@ -142,5 +142,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
         return count;
     }
 
+    /**
+     * 启用库存
+     * @param storage
+     */
+    private void activeStorage(Storage storage){
+        //检查库存可用量,若没有则设置为自动停用.
 
+        //若有库存,则检查库存组是否自动停用,若是,则自动启用
+    }
 }
