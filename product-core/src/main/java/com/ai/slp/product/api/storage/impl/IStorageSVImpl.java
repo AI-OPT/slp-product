@@ -5,8 +5,10 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -22,9 +24,10 @@ import java.util.List;
 @Component
 public class IStorageSVImpl implements IStorageSV {
     @Autowired
-    IStorageGroupBusiSV groupBusiSV;
-    @Autowired
     IStorageGroupBusiSV storageGroupBusiSV;
+    @Autowired
+    IStorageBusiSV storageBusiSV;
+    
     /**
      * 添加标准品库存组<br>
      *
@@ -39,7 +42,7 @@ public class IStorageSVImpl implements IStorageSV {
     @Override
     public BaseResponse createStorageGroup(STOStorageGroup storageGroup) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(storageGroup.getTenantId(),"");
-        groupBusiSV.addGroup(storageGroup);
+        storageGroupBusiSV.addGroup(storageGroup);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);
@@ -62,7 +65,7 @@ public class IStorageSVImpl implements IStorageSV {
     @Override
     public StorageGroupRes queryGroupInfoByGroupId(StorageGroupQuery infoQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(infoQuery.getTenantId(),"");
-        return groupBusiSV.queryGroupInfoByGroupId(infoQuery.getTenantId(),infoQuery.getGroupId());
+        return storageGroupBusiSV.queryGroupInfoByGroupId(infoQuery.getTenantId(),infoQuery.getGroupId());
     }
 
     /**
@@ -79,7 +82,7 @@ public class IStorageSVImpl implements IStorageSV {
     @Override
     public List<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(infoQuery.getTenantId(),"");
-        return groupBusiSV.queryGroupInfoByNormProId(infoQuery.getTenantId(),infoQuery.getProductId());
+        return storageGroupBusiSV.queryGroupInfoByNormProId(infoQuery.getTenantId(),infoQuery.getProductId());
     }
 
     /**
@@ -97,7 +100,7 @@ public class IStorageSVImpl implements IStorageSV {
     @Override
     public BaseResponse chargeStorageGroupStatus(StorageGroupStatus groupStatus) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(groupStatus.getTenantId(),"");
-        groupBusiSV.updateGroupState(groupStatus.getTenantId(),groupStatus.getGroupId(),groupStatus.getState(),groupStatus.getOperId());
+        storageGroupBusiSV.updateGroupState(groupStatus.getTenantId(),groupStatus.getGroupId(),groupStatus.getState(),groupStatus.getOperId());
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);
@@ -201,7 +204,7 @@ public class IStorageSVImpl implements IStorageSV {
     @Override
     public BaseResponse updateStorageGroupName(StorageGroupUpName storageGroup) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(storageGroup.getTenantId(),"");
-        groupBusiSV.updateGroupName(storageGroup);
+        storageGroupBusiSV.updateGroupName(storageGroup);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);
@@ -224,7 +227,7 @@ public class IStorageSVImpl implements IStorageSV {
     @Override
     public BaseResponse updateStorageGroupSalePrice(StorageGroupSalePrice salePrice) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(salePrice.getTenantId(),"");
-        groupBusiSV.updateStorageGroupPrice(salePrice);
+        storageGroupBusiSV.updateStorageGroupPrice(salePrice);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);
@@ -281,6 +284,19 @@ public class IStorageSVImpl implements IStorageSV {
      */
     @Override
     public BaseResponse updateMultiStorageSalePrice(List<StorageSalePrice> salePriceList) throws BusinessException, SystemException {
-        return null;
+    	//判断集合元素
+		if(CollectionUtil.isEmpty(salePriceList))
+			throw new BusinessException("", "找不到指定的信息");
+		for(StorageSalePrice storageSalePrice : salePriceList){
+			CommonCheckUtils.checkTenantId(storageSalePrice.getTenantId(), "");
+		}
+		storageBusiSV.updateMultiStorageSalePrice(salePriceList);
+		BaseResponse baseResponse = new BaseResponse();
+		ResponseHeader responseHeader = new ResponseHeader();
+		responseHeader.setIsSuccess(true);
+		responseHeader.setResultCode("");
+		responseHeader.setResultMessage("修改库存销售价成功");
+		baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
     }
 }
