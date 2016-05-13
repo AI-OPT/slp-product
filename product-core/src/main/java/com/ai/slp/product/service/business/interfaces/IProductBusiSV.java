@@ -15,6 +15,7 @@ import java.util.Map;
 public interface IProductBusiSV {
 
     /**
+     * 
      * 添加商城商品
      * @param group
      * @return
