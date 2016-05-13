@@ -14,7 +14,8 @@ import java.util.Map;
  * @author liutong5
  */
 public class AttrMap extends BaseResponse {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 属性与属性值的对应关系
      */
     public Map<Long,List<Long>> attrAndVal;

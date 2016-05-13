@@ -1,12 +1,13 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import org.hibernate.validator.constraints.NotBlank;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.util.List;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 
 /**
  * 标准品将保存信息<br>
@@ -16,7 +17,9 @@ import java.util.List;
  * @author liutong5
  */
 public class NormProdSaveRequest extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 类目ID,必填.
      */
     @NotBlank(message = "类目ID不能为空",

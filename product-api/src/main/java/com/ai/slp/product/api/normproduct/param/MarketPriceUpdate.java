@@ -1,13 +1,13 @@
 package com.ai.slp.product.api.normproduct.param;
 
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import org.hibernate.validator.constraints.NotBlank;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 
 /**
  * 标准品市场价更新请求<br>
@@ -17,7 +17,8 @@ import java.sql.Timestamp;
  * @author liutong5
  */
 public class MarketPriceUpdate extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 标准品ID
      */
     @NotBlank(message = "标准品ID不能为空",

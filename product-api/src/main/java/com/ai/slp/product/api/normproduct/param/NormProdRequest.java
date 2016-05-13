@@ -1,11 +1,8 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import org.hibernate.validator.constraints.NotBlank;
-
 import java.sql.Timestamp;
-import java.util.Date;
+
+import com.ai.opt.base.vo.BaseInfo;
 
 /**
  * 标准品列表查询参数<br>
@@ -16,7 +13,9 @@ import java.util.Date;
  */
 public class NormProdRequest extends BaseInfo {
 
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * 请求查询的页码<br>
      *  默认为1
      */

@@ -12,7 +12,8 @@ import com.ai.opt.base.vo.BaseInfo;
  * @author liutong5
  */
 public class ProdCatAttrInfo extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * 类目与属性关系标识
      */
     private String catAttrId;
