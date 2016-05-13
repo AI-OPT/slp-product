@@ -30,7 +30,7 @@ public class ProductListQuery extends BaseInfo {
      * 类目标识
      */
     @NotBlank(message = "类目标识不能为空",groups = {IProductSV.QueryProductList.class})
-    private String catId;
+    private String productCatId;
     /**
      * 商城商品标识
      */
@@ -62,15 +62,16 @@ public class ProductListQuery extends BaseInfo {
      */
     private String normProdName;
 
-    public String getCatId() {
-        return catId;
-    }
 
-    public void setCatId(String catId) {
-        this.catId = catId;
-    }
+    public String getProductCatId() {
+		return productCatId;
+	}
 
-    public String getProdId() {
+	public void setProductCatId(String productCatId) {
+		this.productCatId = productCatId;
+	}
+
+	public String getProdId() {
         return prodId;
     }
 

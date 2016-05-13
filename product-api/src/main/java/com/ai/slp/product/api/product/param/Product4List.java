@@ -15,7 +15,7 @@ public class Product4List extends BaseInfo{
 	/**
      * 类目标识
      */
-    private String catId;
+    private String productCatId;
     /**
      * 类目名称
      */
@@ -49,14 +49,6 @@ public class Product4List extends BaseInfo{
      * 标准品名称
      */
     private String normProdName;
-
-    public String getCatId() {
-        return catId;
-    }
-
-    public void setCatId(String catId) {
-        this.catId = catId;
-    }
 
     public String getCatName() {
         return catName;
@@ -121,4 +113,12 @@ public class Product4List extends BaseInfo{
     public void setNormProdName(String normProdName) {
         this.normProdName = normProdName;
     }
+
+	public String getProductCatId() {
+		return productCatId;
+	}
+
+	public void setProductCatId(String productCatId) {
+		this.productCatId = productCatId;
+	}
 }

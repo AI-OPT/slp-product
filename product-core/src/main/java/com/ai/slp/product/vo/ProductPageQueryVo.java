@@ -25,7 +25,7 @@ public class ProductPageQueryVo {
     /**
      * 类目标识
      */
-    private String catId;
+    private String productCatId;
     /**
      * 商城商品标识
      */
@@ -74,12 +74,6 @@ public class ProductPageQueryVo {
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
 	}
-	public String getCatId() {
-		return catId;
-	}
-	public void setCatId(String catId) {
-		this.catId = catId;
-	}
 	public String getProdId() {
 		return prodId;
 	}
@@ -121,6 +115,12 @@ public class ProductPageQueryVo {
 	}
 	public void setNormProdName(String normProdName) {
 		this.normProdName = normProdName;
+	}
+	public String getProductCatId() {
+		return productCatId;
+	}
+	public void setProductCatId(String productCatId) {
+		this.productCatId = productCatId;
 	}
 
     

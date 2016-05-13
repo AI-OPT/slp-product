@@ -84,6 +84,8 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 
 	@Override
 	public PageInfo<Product> selectProductPage(ProductPageQueryVo productPageQueryVo) {
+		ProductCriteria example = new ProductCriteria();
+		example.createCriteria().andTenantIdEqualTo(productPageQueryVo.getTenantId()).andProductCatIdEqualTo(productPageQueryVo.getProductCatId());
 		return null;
 	}
 }
