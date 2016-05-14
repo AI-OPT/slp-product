@@ -294,8 +294,6 @@ public class IStorageSVImpl implements IStorageSV {
     public BaseResponse updateMultiStorageSalePrice(List<StorageSalePrice> salePriceList) throws BusinessException, SystemException {
     	//判断集合元素
 		if(CollectionUtil.isEmpty(salePriceList))
-    	//判断集合元素
-		if(CollectionUtil.isEmpty(salePriceList))
 			throw new BusinessException("", "找不到指定的信息");
 		for(StorageSalePrice storageSalePrice : salePriceList){
 			CommonCheckUtils.checkTenantId(storageSalePrice.getTenantId(), "");
