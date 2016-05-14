@@ -19,7 +19,7 @@ public class Product4List extends BaseInfo{
     /**
      * 类目名称
      */
-    private String catName;
+    private String productCatName;
     /**
      * 商城商品标识
      */
@@ -32,7 +32,7 @@ public class Product4List extends BaseInfo{
      * 商品类型
      * 0:全部
      */
-    private String prodType;
+    private String productType;
     /**
      * 库存组id
      */
@@ -44,81 +44,68 @@ public class Product4List extends BaseInfo{
     /**
      *标准品标识
      */
-    private Long normProdId;
+    private Long standedProdId;
     /**
      * 标准品名称
      */
-    private String normProdName;
-
-    public String getCatName() {
-        return catName;
-    }
-
-    public void setCatName(String catName) {
-        this.catName = catName;
-    }
-
-    public String getProdId() {
-        return prodId;
-    }
-
-    public void setProdId(String prodId) {
-        this.prodId = prodId;
-    }
-
-    public String getProdName() {
-        return prodName;
-    }
-
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
-    }
-
-    public String getProdType() {
-        return prodType;
-    }
-
-    public void setProdType(String prodType) {
-        this.prodType = prodType;
-    }
-
-    public String getStorageGroupId() {
-        return storageGroupId;
-    }
-
-    public void setStorageGroupId(String storageGroupId) {
-        this.storageGroupId = storageGroupId;
-    }
-
-    public String getStorageGroupName() {
-        return storageGroupName;
-    }
-
-    public void setStorageGroupName(String storageGroupName) {
-        this.storageGroupName = storageGroupName;
-    }
-
-    public Long getNormProdId() {
-        return normProdId;
-    }
-
-    public void setNormProdId(Long normProdId) {
-        this.normProdId = normProdId;
-    }
-
-    public String getNormProdName() {
-        return normProdName;
-    }
-
-    public void setNormProdName(String normProdName) {
-        this.normProdName = normProdName;
-    }
-
+    private String standedProdName;
+    
 	public String getProductCatId() {
 		return productCatId;
 	}
-
 	public void setProductCatId(String productCatId) {
 		this.productCatId = productCatId;
 	}
+	public String getProductCatName() {
+		return productCatName;
+	}
+	public void setProductCatName(String productCatName) {
+		this.productCatName = productCatName;
+	}
+	public String getProdId() {
+		return prodId;
+	}
+	public void setProdId(String prodId) {
+		this.prodId = prodId;
+	}
+	public String getProdName() {
+		return prodName;
+	}
+	public void setProdName(String prodName) {
+		this.prodName = prodName;
+	}
+	public String getProductType() {
+		return productType;
+	}
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
+	public String getStorageGroupId() {
+		return storageGroupId;
+	}
+	public void setStorageGroupId(String storageGroupId) {
+		this.storageGroupId = storageGroupId;
+	}
+	public String getStorageGroupName() {
+		return storageGroupName;
+	}
+	public void setStorageGroupName(String storageGroupName) {
+		this.storageGroupName = storageGroupName;
+	}
+	public Long getStandedProdId() {
+		return standedProdId;
+	}
+	public void setStandedProdId(Long standedProdId) {
+		this.standedProdId = standedProdId;
+	}
+	public String getStandedProdName() {
+		return standedProdName;
+	}
+	public void setStandedProdName(String standedProdName) {
+		this.standedProdName = standedProdName;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 }

@@ -56,90 +56,82 @@ public class ProductListQuery extends BaseInfo {
     /**
      *标准品标识
      */
-    private Long normProdId;
+    private Long standedProdId;
     /**
      * 标准品名称
      */
-    private String normProdName;
-
-
-    public String getProductCatId() {
+    private String standedProdName;
+//    /**
+//     *状态0新增1未编辑2已编辑
+//     *3审核中4审核未通过5在售
+//     *6仓库中（审核通过、手动下架放入）61售罄下架62停用下架
+//     *7废弃
+//     *此处参数查询状态为不废弃的
+//     */
+//    private String state;
+    
+	public Integer getPageNo() {
+		return pageNo;
+	}
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
+	}
+	public Integer getPageSize() {
+		return pageSize;
+	}
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+	public String getProductCatId() {
 		return productCatId;
 	}
-
 	public void setProductCatId(String productCatId) {
 		this.productCatId = productCatId;
 	}
-
 	public String getProdId() {
-        return prodId;
-    }
+		return prodId;
+	}
+	public void setProdId(String prodId) {
+		this.prodId = prodId;
+	}
+	public String getProdName() {
+		return prodName;
+	}
+	public void setProdName(String prodName) {
+		this.prodName = prodName;
+	}
+	public String getProdType() {
+		return prodType;
+	}
+	public void setProdType(String prodType) {
+		this.prodType = prodType;
+	}
+	public String getStorageGroupId() {
+		return storageGroupId;
+	}
+	public void setStorageGroupId(String storageGroupId) {
+		this.storageGroupId = storageGroupId;
+	}
+	public String getStorageGroupName() {
+		return storageGroupName;
+	}
+	public void setStorageGroupName(String storageGroupName) {
+		this.storageGroupName = storageGroupName;
+	}
+	public Long getStandedProdId() {
+		return standedProdId;
+	}
+	public void setStandedProdId(Long standedProdId) {
+		this.standedProdId = standedProdId;
+	}
+	public String getStandedProdName() {
+		return standedProdName;
+	}
+	public void setStandedProdName(String standedProdName) {
+		this.standedProdName = standedProdName;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
-    public void setProdId(String prodId) {
-        this.prodId = prodId;
-    }
-
-    public String getProdName() {
-        return prodName;
-    }
-
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
-    }
-
-    public String getProdType() {
-        return prodType;
-    }
-
-    public void setProdType(String prodType) {
-        this.prodType = prodType;
-    }
-
-    public String getStorageGroupId() {
-        return storageGroupId;
-    }
-
-    public void setStorageGroupId(String storageGroupId) {
-        this.storageGroupId = storageGroupId;
-    }
-
-    public String getStorageGroupName() {
-        return storageGroupName;
-    }
-
-    public void setStorageGroupName(String storageGroupName) {
-        this.storageGroupName = storageGroupName;
-    }
-
-    public Long getNormProdId() {
-        return normProdId;
-    }
-
-    public void setNormProdId(Long normProdId) {
-        this.normProdId = normProdId;
-    }
-
-    public String getNormProdName() {
-        return normProdName;
-    }
-
-    public void setNormProdName(String normProdName) {
-        this.normProdName = normProdName;
-    }
-
-    public Integer getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(Integer pageNo) {
-        this.pageNo = pageNo;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
 }

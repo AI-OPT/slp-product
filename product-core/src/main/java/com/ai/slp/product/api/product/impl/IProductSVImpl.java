@@ -39,6 +39,7 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery) throws BusinessException, SystemException {
+    	
         return null;
     }
 
