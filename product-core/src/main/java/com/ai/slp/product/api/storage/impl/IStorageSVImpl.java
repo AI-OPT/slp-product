@@ -179,7 +179,7 @@ public class IStorageSVImpl implements IStorageSV {
         responseHeader.setIsSuccess(true);
         responseHeader.setResultCode("");
         baseResponse.setResponseHeader(responseHeader);
-        return null;
+        return baseResponse;
     }
 
     /**

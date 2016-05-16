@@ -27,17 +27,49 @@ public class INormProductSVImpl implements INormProductSV {
     //标准品处理对象
     @Autowired
     INormProductBusiSV normProductBusiSV;
-
+    /**
+     * 标准品列表查询. <br>
+     *
+     * @param productRequest 查询条件
+     * @return 符合条件的标准品信息集合
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode NORM_PRODUCT_0100
+     */
     @Override
     public PageInfoResponse<NormProdResponse> queryNormProduct(NormProdRequest productRequest) throws BusinessException, SystemException {
         return normProductBusiSV.queryForPage(productRequest);
     }
 
+    /**
+     * 查询指定标准品标识的标准品信息. <br>
+     *
+     * @param invalidRequest 标准品查询条件
+     * @return 标准品详细信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode NORM_PRODUCT_0102
+     */
     @Override
     public NormProdInfoResponse queryProducById(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
         return normProductBusiSV.queryById(invalidRequest.getTenantId(),invalidRequest.getProductId());
     }
 
+    /**
+     * 添加标准品信息. <br>
+     *
+     * @param productInfoRequest 标准品信息
+     * @return 标准品保存结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode NORM_PRODUCT_0103
+     */
     @Override
     public BaseResponse createProductInfo(NormProdSaveRequest productInfoRequest) throws BusinessException, SystemException {
         normProductBusiSV.installNormProd(productInfoRequest);
@@ -49,6 +81,18 @@ public class INormProductSVImpl implements INormProductSV {
         return baseResponse;
     }
 
+    /**
+     * 更新标准品信息. <br>
+     * 不允许变更为废弃状态,要进行废弃操作,请使用废弃接口.
+     *
+     * @param productInfoRequest 标准品信息
+     * @return 标准品更新结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode NORM_PRODUCT_0104
+     */
     @Override
     public BaseResponse updateProductInfo(NormProdSaveRequest productInfoRequest) throws BusinessException, SystemException {
         if (StringUtils.isBlank(productInfoRequest.getTenantId())
@@ -63,6 +107,17 @@ public class INormProductSVImpl implements INormProductSV {
         return baseResponse;
     }
 
+    /**
+     * 废弃标准品. <br>
+     *
+     * @param invalidRequest 标准品废弃请求参数
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode NORM_PRODUCT_0105
+     */
     @Override
     public BaseResponse discardProduct(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
         normProductBusiSV.discardProduct(
@@ -76,6 +131,17 @@ public class INormProductSVImpl implements INormProductSV {
         return baseResponse;
     }
 
+    /**
+     * 更新标准品市场价. <br>
+     *
+     * @param marketPrice 标准品市场价
+     * @return 更新结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode NORM_PRODUCT_0106
+     */
     @Override
     public BaseResponse updateMarketPrice(MarketPriceUpdate marketPrice) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(marketPrice.getTenantId(),"");
@@ -97,7 +163,7 @@ public class INormProductSVImpl implements INormProductSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode ATTR_VAL_0210
+     * @ApiCode NORM_PRODUCT_0107
      */
     @Override
     public AttrMap queryAttrByNormProduct(AttrQuery attrQuery) throws BusinessException, SystemException {
@@ -107,13 +173,14 @@ public class INormProductSVImpl implements INormProductSV {
 
     /**
      * 制定商品销售价中标准品列表查询.<br>
+     *     库存组数量为非废弃的数量
      *
      * @param productRequest 查询标准品信息
      * @return
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode ATTR_VAL_0211
+     * @ApiCode NORM_PRODUCT_0108
      */
     @Override
     public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest) throws BusinessException, SystemException {
