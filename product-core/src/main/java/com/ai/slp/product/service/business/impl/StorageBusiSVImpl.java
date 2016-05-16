@@ -1,25 +1,28 @@
 package com.ai.slp.product.service.business.impl;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.storage.param.StorageSalePrice;
-import com.ai.slp.product.constants.StorageConstants;
-import com.ai.slp.product.dao.mapper.bo.storage.Storage;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
-import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
-import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
-import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.api.storage.param.StorageSalePrice;
+import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
+import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
+import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
+import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 
 /**
  * 库存业务操作
@@ -40,6 +43,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
     ISkuStorageAtomSV skuStorageAtomSV;
     @Autowired
     private transient StorageMapper storageMapper;
+    @Autowired
+    IProdPriceLogAtomSV prodPriceLogAtomSV;
 
 
     /**
@@ -135,7 +140,15 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
             storage.setStorageId(storageSalePrice.getStorageId());
             storage.setSalePrice(storageSalePrice.getSalePrice());
             storage.setOperId(storageSalePrice.getOperId());
-            storageAtomSV.updateSaleById(storage);
+            int installNum = storageAtomSV.updateSaleById(storage);
+            if(installNum > 0){
+            	ProdPriceLog prodPriceLog = new ProdPriceLog();
+            	prodPriceLog.setObjId(storageSalePrice.getStorageId());
+            	prodPriceLog.setObjType("SO");
+            	prodPriceLog.setOperId(storageSalePrice.getOperId());
+            	prodPriceLog.setUpdatePrice(storageSalePrice.getSalePrice());
+            	prodPriceLogAtomSV.insert(prodPriceLog);
+            }
             count++;
         }
         return count;

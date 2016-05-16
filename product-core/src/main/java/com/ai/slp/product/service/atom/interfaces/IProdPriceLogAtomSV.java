@@ -8,7 +8,7 @@ import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
  * Date: 2016年5月5日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * 
- * @author lipeng
+ * @author lipeng16
  */
 public interface IProdPriceLogAtomSV {
     /**
@@ -16,7 +16,7 @@ public interface IProdPriceLogAtomSV {
      * 
      * @param prodPriceLog
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int insert(ProdPriceLog prodPriceLog);
 }
