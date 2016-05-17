@@ -2,7 +2,10 @@ package com.ai.slp.product.service.business.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,38 +128,59 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	/**
 	 * 批量更新库存销售价
 	 *
-	 * @param salePriceList
+	 * @param storageSalePrice
 	 * @return
 	 * @author lipeng16
 	 */
 	@Override
-	public int updateMultiStorageSalePrice(List<StorageSalePrice> salePriceList) {
+	public int updateMultiStorageSalePrice(StorageSalePrice storageSalePrice) {
+		Map<String,Long> priceMap = storageSalePrice.getStorageSalePrice();
+		if (priceMap==null||priceMap.isEmpty())
+			return 0;
+		String tenantId = storageSalePrice.getTenantId();
+		Long operId = storageSalePrice.getOperId();
 		int count = 0;
-		for (StorageSalePrice storageSalePrice : salePriceList) {
+		for (String storageId : priceMap.keySet()) {
+			//库存标识为空,库存对应价格为空,库存销售价小于等于0,均不处理
+			if (StringUtils.isBlank(storageId)
+					||priceMap.get(storageId)==null || priceMap.get(storageId)<=0){
+				logger.warn("库存标识为空或销售价不大于零,库存标识[{0}],销售价[{1}]",storageId,priceMap.get(storageId));
+				continue;
+			}
+
 			// 查看对应的标识下是否存在库存信息
-			if (storageMapper.selectByPrimaryKey(storageSalePrice.getStorageId()) == null)
-				throw new BusinessException("", "找不到对应的库存信息，库存标识=" + storageSalePrice.getStorageId());
+			Storage storage0 = storageMapper.selectByPrimaryKey(storageId);
+			if (storage0 == null) {
+				logger.warn("未查询到指定库存,库存标识[{0}]",storageId);
+				continue;
+			}
 			// 获取当前库存对应库存组
-			StorageGroup StorageGroup = storageGroupAtomSV.queryByGroupId(storageSalePrice.getTenantId(),
-					storageSalePrice.getStorageId());
+			StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,storage0.getStorageGroupId());
+			if (storageGroup==null
+					|| storageGroup.getHighSalePrice()==null || storageGroup.getLowSalePrice()==null){
+				logger.warn("未找到对应库存组或库存组为设置最低最高销售价,租户ID:{0},库存组标识:{1}"
+						,tenantId,storage0.getStorageGroupId());
+				throw new BusinessException("","未找到对应库存组或库存组未设置最低最高销售价,租户ID:"+tenantId+",库存组标识:"+storage0.getStorageGroupId());
+			}
 			// 判断销售价是否在库存组价格区间
-			if (StorageGroup.getHighSalePrice() != null && StorageGroup.getHighSalePrice() > 0
-					&& storageSalePrice.getSalePrice() > StorageGroup.getHighSalePrice())
-				throw new BusinessException("", "销售价不能大于库存组最高价,库存组最高价=" + StorageGroup.getHighSalePrice());
-			if (storageSalePrice.getSalePrice() < StorageGroup.getLowSalePrice())
-				throw new BusinessException("", "销售价不能小于库存组最低价,库存组最低价=" + StorageGroup.getLowSalePrice());
+			Long salePrice = priceMap.get(storageId);
+			if (salePrice > storageGroup.getHighSalePrice()
+					|| salePrice < storageGroup.getLowSalePrice()){
+				throw new BusinessException("","库存["+storage0.getStorageName()+"]的价格必须在库存组的最低最高销售价范围内");
+			}
+
 			// 更新库存价格信息
 			Storage storage = new Storage();
-			storage.setStorageId(storageSalePrice.getStorageId());
-			storage.setSalePrice(storageSalePrice.getSalePrice());
+			storage.setStorageId(tenantId);
+			storage.setSalePrice(salePrice);
 			storage.setOperId(storageSalePrice.getOperId());
 			int installNum = storageAtomSV.updateSaleById(storage);
 			if (installNum > 0) {
 				ProdPriceLog prodPriceLog = new ProdPriceLog();
-				prodPriceLog.setObjId(storageSalePrice.getStorageId());
+				prodPriceLog.setObjId(storageId);
 				prodPriceLog.setObjType("SO");
 				prodPriceLog.setOperId(storageSalePrice.getOperId());
-				prodPriceLog.setUpdatePrice(storageSalePrice.getSalePrice());
+				prodPriceLog.setUpdatePrice(salePrice);
 				prodPriceLogAtomSV.insert(prodPriceLog);
 			}
 			count++;

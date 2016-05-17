@@ -38,12 +38,11 @@ public interface IStorageBusiSV {
 	 /**
 	  * 批量更新库存销售价
 	  *
-	  * 
-	 * @param salePriceList
+	 * @param salePrice
 	 * @return
 	 * @author lipeng16
 	 */
-	public int updateMultiStorageSalePrice(List<StorageSalePrice> salePriceList);
+	public int updateMultiStorageSalePrice(StorageSalePrice salePrice);
 	
 	/**
 	 * 查询标准品列表,包含标准品的库存组,适用于库存组定最低最高销售价<br>

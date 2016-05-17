@@ -8,7 +8,9 @@ import com.ai.slp.product.dao.mapper.attach.ProductAttach;
 import com.ai.slp.product.dao.mapper.attach.ProductAttachMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAttachAtomSV;
 import com.ai.slp.product.vo.ProductPageQueryVo;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProductAttachAtomSVImpl implements IProductAttachAtomSV {
 	@Autowired
 	ProductAttachMapper productAttachMapper;

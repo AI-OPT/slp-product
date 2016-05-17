@@ -218,7 +218,7 @@ public interface IStorageSV {
     /**
      * 批量更新库存销售价<br>
      *
-     * @param salePriceList 库存批量销售价信息
+     * @param salePrice 库存批量销售价信息
      * @return 操作结果
      * @throws BusinessException
      * @throws SystemException
@@ -226,7 +226,7 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0113
      */
-    public BaseResponse updateMultiStorageSalePrice(List<StorageSalePrice> salePriceList)
+    public BaseResponse updateMultiStorageSalePrice(StorageSalePrice salePrice)
             throws BusinessException,SystemException;
     @interface UpdateMultiStorageSalePrice{}
 }

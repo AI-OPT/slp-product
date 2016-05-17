@@ -283,7 +283,7 @@ public class IStorageSVImpl implements IStorageSV {
     /**
      * 批量更新库存销售价<br>
      *
-     * @param salePriceList 库存批量销售价信息
+     * @param salePrice 库存批量销售价信息
      * @return 操作结果
      * @throws BusinessException
      * @throws SystemException
@@ -292,14 +292,10 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0113
      */
     @Override
-    public BaseResponse updateMultiStorageSalePrice(List<StorageSalePrice> salePriceList) throws BusinessException, SystemException {
+    public BaseResponse updateMultiStorageSalePrice(StorageSalePrice salePrice) throws BusinessException, SystemException {
     	//判断集合元素
-		if(CollectionUtil.isEmpty(salePriceList))
-			throw new BusinessException("", "找不到指定的信息");
-		for(StorageSalePrice storageSalePrice : salePriceList){
-			CommonCheckUtils.checkTenantId(storageSalePrice.getTenantId(), "");
-		}
-		storageBusiSV.updateMultiStorageSalePrice(salePriceList);
+        CommonCheckUtils.checkTenantId(salePrice.getTenantId(),"");
+		storageBusiSV.updateMultiStorageSalePrice(salePrice);
 		BaseResponse baseResponse = new BaseResponse();
 		ResponseHeader responseHeader = new ResponseHeader();
 		responseHeader.setIsSuccess(true);
