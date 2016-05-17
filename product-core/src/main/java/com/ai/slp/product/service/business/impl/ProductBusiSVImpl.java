@@ -2,6 +2,8 @@ package com.ai.slp.product.service.business.impl;
 
 import java.util.List;
 
+import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +48,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     IProductLogAtomSV productLogAtomSV;
     @Autowired
     IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
+    @Autowired
+    IStorageGroupAtomSV storageGroupAtomSV;
     @Autowired
     IStorageAtomSV storageAtomSV;
     @Autowired
@@ -105,6 +109,14 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         Product product = productAtomSV.selectByGroupId(tenantId,prodId);
         if (prodId == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
+        }
+        //查询库存组是否为"启用"状态
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
+        if (storageGroup==null
+                || (StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState()))
+                    && StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storageGroup.getState())){
+            throw new BusinessException("","对应库存组不存在,或库存组不是[启用]状态,租户ID:"+tenantId
+                    +"库存组ID:"+product.getStorageGroupId());
         }
         //若商品状态不是"停用下架",则不进行处理
         if(!ProductConstants.Product.State.STOP.equals(product.getState())){
