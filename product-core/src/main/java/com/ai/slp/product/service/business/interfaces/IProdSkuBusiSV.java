@@ -2,6 +2,7 @@ package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.slp.product.api.product.param.SkuInfoMultSave;
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 
 /**
  * 商品SKU业务操作
@@ -23,4 +24,11 @@ public interface IProdSkuBusiSV {
      * @return
      */
     public SkuSetForProduct querySkuByProdId(String tenantId, String prodId);
+
+    /**
+     * 添加单个sku
+     * @param prodSku
+     * @return
+     */
+    public int addSku(ProdSku prodSku);
 }

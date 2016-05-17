@@ -201,6 +201,23 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     }
 
     /**
+     * 添加单个sku
+     *
+     * @param prodSku
+     * @return
+     */
+    @Override
+    public int addSku(ProdSku prodSku) {
+        int addNum = prodSkuAtomSV.createObj(prodSku);
+        if (addNum>0){
+            ProdSkuLog prodSkuLog = new ProdSkuLog();
+            BeanUtils.copyProperties(prodSkuLog,prodSku);
+            prodSkuLogAtomSV.install(prodSkuLog);
+        }
+        return addNum;
+    }
+
+    /**
      * 返回下级属性的属性值的跨行数
      *
      * @param entryIterator

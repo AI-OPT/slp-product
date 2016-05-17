@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +46,9 @@ import com.ai.slp.product.vo.ProductPageQueryVo;
 @Service
 @Transactional
 public class ProductBusiSVImpl implements IProductBusiSV {
+    private static Logger logger = LoggerFactory.getLogger(ProductBusiSVImpl.class);
+    @Autowired
+    IProdSkuBusiSV prodSkuBusiSV;
     @Autowired
     IStandedProductAtomSV standedProductAtomSV;
     @Autowired
@@ -78,12 +85,13 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         String standedProdId = group.getStandedProdId();
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,standedProdId);
         if (standedProduct==null) {
+            logger.warn("未找到对应标准品,租户ID:{0},标准品标识:{1}",tenantId,standedProdId);
             throw new BusinessException("","未找到对应标准品信息,租户id:"+tenantId+",标准品标识:"+standedProdId);
         }
         //查询类目是否有销售属性
         List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
                 tenantId,standedProduct.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-
+        boolean isSaleAttr = catAttrAttches==null||catAttrAttches.isEmpty()?false:true;
         //添加商品,商品名称同标准品名称
         Product product = new Product();
         product.setTenantId(tenantId);
@@ -92,7 +100,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         product.setStorageGroupId(group.getStorageGroupId());
         product.setProductType(standedProduct.getProductType());
         product.setProdName(standedProduct.getStandedProductName());//使用标准品名称设置为商品名称
-        product.setIsSaleAttr(catAttrAttches==null||catAttrAttches.isEmpty()?"N":"Y");
+        product.setIsSaleAttr(isSaleAttr? ProductConstants.Product.IsSaleAttr.YES: ProductConstants.Product.IsSaleAttr.NO);
         product.setState(ProductConstants.Product.State.ADD);//新增状态
         product.setOperId(group.getCreateId());
         int installNum = productAtomSV.installProduct(product);
@@ -100,6 +108,19 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             ProductLog productLog = new ProductLog();
             BeanUtils.copyProperties(productLog,product);
             productLogAtomSV.install(productLog);
+            //若没有销售属性,则添加SKU
+            if (catAttrAttches==null||catAttrAttches.isEmpty()){
+                ProdSku prodSku = new ProdSku();
+                prodSku.setTenantId(tenantId);
+                prodSku.setProdId(product.getProdId());
+                prodSku.setStorageGroupId(group.getStorageGroupId());
+                prodSku.setSkuName(product.getProdName());
+                prodSku.setIsSaleAttr(isSaleAttr? ProductConstants.ProdSku.IsSaleAttr.YES: ProductConstants.ProdSku.IsSaleAttr.NO);
+                prodSku.setSerialNumber((short)0);
+                prodSku.setState(ProductConstants.ProdSku.State.ACTIVE);
+                prodSku.setOperId(operId);
+                prodSkuBusiSV.addSku(prodSku);
+            }
         }
         return installNum;
     }

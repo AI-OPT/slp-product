@@ -7,7 +7,18 @@ public final class ProductConstants {
 
     public final class Product {
 
-        public final class activeType {
+        public final class IsSaleAttr {
+            /**
+             * 具有销售属性
+             */
+            public static final String YES = "Y";
+            /**
+             * 没有销售属性
+             */
+            public static final String NO = "N";
+        }
+
+        public final class ActiveType {
             /**
              * 固定有效期类型
              */
@@ -79,8 +90,26 @@ public final class ProductConstants {
     }
 
     public final class ProdSku{
+
+        public final class IsSaleAttr {
+            /**
+             * 具有销售属性
+             */
+            public static final String YES = "Y";
+            /**
+             * 没有销售属性
+             */
+            public static final String NO = "N";
+        }
+
         public final class SaleAttrs{
+            /**
+             * 属性串中属性之间分隔符
+             */
             public static final String ATTR_SPLIT = ";";
+            /**
+             * 属性串中属性和属性值分隔符
+             */
             public static final String ATTRVAL_SPLIT = ":";
         }
 
