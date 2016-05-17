@@ -245,7 +245,7 @@ public class IStorageSVImpl implements IStorageSV {
     }
 
     /**
-     * 查询标准品列表,包含标准品的库存组,适用于商城商品定销售价<br>
+     * 查询标准品列表,包含标准品的库存组,适用于商城商品定销售价初始页面<br>
      * 库存组不包括废弃状态的
      *
      * @param groupQuery 库存组查询信息对象
@@ -258,7 +258,8 @@ public class IStorageSVImpl implements IStorageSV {
      */
     @Override
     public PageInfoResponse<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery) throws BusinessException, SystemException {
-        return null;
+    	CommonCheckUtils.checkTenantId(groupQuery.getTenantId(),"");
+        return storageBusiSV.queryGroupsForSalePrice(groupQuery);
     }
 
     /**
