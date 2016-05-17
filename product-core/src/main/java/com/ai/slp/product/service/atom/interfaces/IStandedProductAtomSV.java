@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.vo.StandedProdPageQueryVo;
@@ -57,7 +59,16 @@ public interface IStandedProductAtomSV {
      * @param marketPrice
      * @param operId
      * @return
-     * @author lipeng
+     * @author lipeng16
      */
     public int updateMarketPrice(String tenantId,String productId,long marketPrice,Long operId);
+    
+    /**
+     *	通过标准品名称查ID集合(模糊查询)
+     *
+     * @param standedProductName
+     * @return
+     * @author lipeng16
+     */
+    public List<String> queryIdByName(String standedProductName);
 }

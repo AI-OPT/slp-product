@@ -1,12 +1,12 @@
 package com.ai.slp.product.dao.mapper.attach;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.type.JdbcType;
-
-import com.ai.opt.base.vo.PageInfo;
 
 /**
  * 商品属性扩展
@@ -32,7 +32,7 @@ public interface ProductAttachMapper {
 			@Result(property = "standedProdId", column = "standed_prod_id", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "standedProdName", column = "standed_product_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 	})
-	public PageInfo<ProductAttach> getProductPage(@Param("pageNo") Integer pageNo, @Param("pageSize") Integer pageSize,
+	public List<ProductAttach> getProductPage(@Param("pageNo") Integer pageNo, @Param("pageSize") Integer pageSize,
 			@Param("productCatId") String productCatId, @Param("prodId") String prodId,
 			@Param("prodName") String prodName, @Param("productType") String productType,
 			@Param("storageGroupId") String storageGroupId, @Param("storageGroupName") String storageGroupName,

@@ -1,6 +1,6 @@
 package com.ai.slp.product.api.product.param;
 
-import com.ai.opt.base.vo.BaseInfo;
+import java.io.Serializable;
 
 /**
  * 商城商品列表中对象<br>
@@ -10,7 +10,7 @@ import com.ai.opt.base.vo.BaseInfo;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class Product4List extends BaseInfo{
+public class Product4List implements Serializable {
     private static final long serialVersionUID = 1L;
 	/**
      * 类目标识

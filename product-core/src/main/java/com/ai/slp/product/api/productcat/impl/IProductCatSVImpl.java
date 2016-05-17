@@ -28,6 +28,16 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Autowired
     IProductCatBusiSV productCatBusiSV;
 
+    /**
+     * 商品类目分页查询<br>
+     * 
+     * @param pageQuery
+     * @return 商品类目查询条件
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng16
+    *  @ApiCode PRODUCT_CAT_0100
+     */
     @Override
     public PageInfoResponse<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(pageQuery.getTenantId(),"");
@@ -39,6 +49,16 @@ public class IProductCatSVImpl implements IProductCatSV {
         return catInfoPageInfoWrapper;
     }
 
+	/**
+	 * 商品类目批量添加<br>
+	 * 
+	 * @param pcpList
+	 * @return 服务返回基本信息
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author lipeng16
+	*  @ApiCode PRODUCT_CAT_0101
+	 */
     @Override
     public BaseResponse createProductCat(List<ProductCatParam> pcpList)
             throws BusinessException, SystemException {
@@ -53,6 +73,16 @@ public class IProductCatSVImpl implements IProductCatSV {
         return baseResponse;
     }
 
+	/**
+	 * 商品类目修改<br>
+	 * 
+	 * @param productCatParam
+	 * @return 服务返回基本信息
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author lipeng16
+	*  @ApiCode PRODUCT_CAT_0102
+	 */
     @Override
     public BaseResponse updateProductCat(ProductCatParam productCatParam)
             throws BusinessException, SystemException {
@@ -66,6 +96,18 @@ public class IProductCatSVImpl implements IProductCatSV {
         return baseResponse;
     }
 
+	/**
+	 * 商品类目删除<br>
+	 * 删除类目时，需要判断是否已经有关联的标准品（包括废弃状态的）<br>
+	 * 类目一旦删除，其下包含的子类目一并删除，与选择好的属性、属性值解除关联关系<br>
+	 * 
+	 * @param catUniqueReq
+	 * @return 服务返回基本信息
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author lipeng16
+	*  @ApiCode PRODUCT_CAT_0104
+	 */
     @Override
     public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),"");
@@ -78,7 +120,37 @@ public class IProductCatSVImpl implements IProductCatSV {
         baseResponse.setResponseHeader(responseHeader);
         return baseResponse;
     }
+    
+    /**
+     * 查询指定类目下某种类型的属性标识和属性值标识的集合<br>
+     * 类型分为:关键属性,销售属性,非关键属性
+     *
+     * @param attrQuery
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PRODUCT_CAT_0105
+     */
+    @Override
+    public Map<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
+        return productCatBusiSV.queryAttrAndValIdByCatIdAndType(
+                attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
+    }
 
+
+	/**
+	 * 依据商品类目和属性类型添加类目属性<br>
+	 * 类型分为:关键属性,销售属性,非关键属性
+	 * 
+	 * @param addCatAttrParam
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author lipeng16
+	 * @ApiCode PRODUCT_CAT_0108
+	 */
     @Override
     public BaseResponse addAttrForCatAndType(ProdCatAttrAddParam addCatAttrParam)
             throws BusinessException, SystemException {
@@ -96,6 +168,15 @@ public class IProductCatSVImpl implements IProductCatSV {
         return baseResponse;
     }
 
+    /**
+     * 删除商品类目属性或属性值
+     * 
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng16
+    *  @ApiCode PRODUCT_CAT_0107
+     */
     @Override
     public BaseResponse deleteProductCatAttrOrVal(ProdCatAttrVal productAttrValParam)
             throws BusinessException, SystemException {
@@ -109,6 +190,16 @@ public class IProductCatSVImpl implements IProductCatSV {
         return baseResponse;
     }
 
+	/**
+	 * 查询指定标识的类目信息
+	 *
+	 * @param catUniqueReq
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiCode PRODUCT_CAT_0109
+	 */
     @Override
     public ProductCatInfo queryByCatId(ProductCatUniqueReq catUniqueReq)
             throws BusinessException, SystemException {
@@ -192,22 +283,5 @@ public class IProductCatSVImpl implements IProductCatSV {
         return baseResponse;
     }
 
-    /**
-     * 查询指定类目下某种类型的属性标识和属性值标识的集合<br>
-     * 类型分为:关键属性,销售属性,非关键属性
-     *
-     * @param attrQuery
-     * @return
-     * @throws BusinessException
-     * @throws SystemException
-     * @author liutong5
-     * @ApiCode PRODUCT_CAT_0105
-     */
-    @Override
-    public Map<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
-        return productCatBusiSV.queryAttrAndValIdByCatIdAndType(
-                attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
-    }
-
+  
 }

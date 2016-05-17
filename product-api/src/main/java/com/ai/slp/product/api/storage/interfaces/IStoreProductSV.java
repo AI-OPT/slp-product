@@ -13,7 +13,7 @@ import com.ai.slp.product.api.storage.param.*;
  * 
  * @author lipeng16
  */
-public interface IProProductSV {
+public interface IStoreProductSV {
     
     /**
      * 商城商品库存查询

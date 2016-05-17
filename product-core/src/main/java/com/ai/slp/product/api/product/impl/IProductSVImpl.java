@@ -1,20 +1,28 @@
 package com.ai.slp.product.api.product.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
-import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.product.param.ProdSkuSalPrice;
+import com.ai.slp.product.api.product.param.Product4List;
+import com.ai.slp.product.api.product.param.ProductInfo;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.ProductListQuery;
+import com.ai.slp.product.api.product.param.SkuInfoMultSave;
+import com.ai.slp.product.api.product.param.SkuSetForProduct;
+import com.ai.slp.product.api.product.param.SkuSetForProductQuery;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by jackieliu on 16/4/27.
@@ -26,8 +34,9 @@ public class IProductSVImpl implements IProductSV {
     IProductBusiSV productBusiSV;
     @Autowired
     IProdSkuBusiSV prodSkuBusiSV;
+    
     /**
-     * 查询商品列表<br>
+     * 分页查询商品列表<br>
      *
      * @param productQuery 查询对象
      * @return 商品信息列表
@@ -39,8 +48,8 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery) throws BusinessException, SystemException {
-    	
-        return null;
+    	CommonCheckUtils.checkTenantId(productQuery.getTenantId(),"");
+        return productBusiSV.queryProductPage(productQuery);
     }
 
     /**

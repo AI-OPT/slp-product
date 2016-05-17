@@ -24,6 +24,16 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
     @Autowired
     IWarnReceiveStaffBusiSV warnReceiveStaffBusiSV;
 
+    /**
+     * 查询指定库存的预警人集合
+     *
+     * @param warnReceStafForQuery 库存标识
+     * @return 预警人集合
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode WARN_RECE_0100
+     */
     @Override
     public List<WarnReceStaff> queryByObjectIdOfStorage(
             WarnReceStafForQuery warnReceStafForQuery) throws BusinessException, SystemException {
@@ -31,6 +41,16 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
         return warnReceiveStaffBusiSV.queryByObjectId(warnReceStafForQuery);
     }
 
+    /**
+     * 添加库存的预警人
+     *
+     * @param operList 预警人集合
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode WARN_RECE_0101
+     */
     @Override
     public BaseResponse installWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
             throws BusinessException, SystemException {
@@ -47,6 +67,16 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
         return baseResponse;
     }
 
+    /**
+     * 删除库存的预警人
+     *
+     * @param operList 预警人集合
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode WARN_RECE_0102
+     */
     @Override
     public BaseResponse deleteWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
             throws BusinessException, SystemException {

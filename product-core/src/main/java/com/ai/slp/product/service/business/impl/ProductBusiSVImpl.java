@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ai.slp.product.constants.StorageConstants;
@@ -9,13 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.product.param.Product4List;
 import com.ai.slp.product.api.product.param.ProductListQuery;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
+import com.ai.slp.product.dao.mapper.attach.ProductAttach;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
@@ -28,9 +30,11 @@ import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
+import com.ai.slp.product.vo.ProductPageQueryVo;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -58,6 +62,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     IProdSkuAttrAtomSV prodSkuAttrAtomSV;
     @Autowired
     IProdCatAttrAtomSV prodCatAttrAtomSV;
+    @Autowired
+    IProductAttachAtomSV productAttachAtomSV;
 
     /**
      * 添加商城商品
@@ -198,9 +204,24 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @author lipeng16
      */
 	@Override
-	public PageInfo<Product4List> queryProductPage(ProductListQuery productQuery) {
+	public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery) {
+		ProductPageQueryVo productPageQueryVo = new ProductPageQueryVo();
+		BeanUtils.copyProperties(productPageQueryVo, productQuery);
+		//多表联合查询商品信息
+		List<ProductAttach> productAttachList = productAttachAtomSV.queryProductPageBySearch(productPageQueryVo);
+		//设置结果集
+		List<Product4List> product4ListList = new ArrayList<Product4List>();
+		for(ProductAttach ProductAttach : productAttachList){
+			Product4List product4List = new Product4List();
+			BeanUtils.copyProperties(product4List, ProductAttach);
+			product4ListList.add(product4List);
+		}
+		//新建返回类
+		PageInfoResponse<Product4List> product4ListPage = new PageInfoResponse<>();
+		product4ListPage.setResult(product4ListList);
+		product4ListPage.setPageNo(productQuery.getPageNo());
+		product4ListPage.setPageSize(productQuery.getPageSize());
 		
-		
-		return null;
+		return product4ListPage;
 	}
 }

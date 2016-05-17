@@ -3,6 +3,9 @@ package com.ai.slp.product.service.business.interfaces;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import java.util.List;
 
+import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
+import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
 
 /**
@@ -41,4 +44,14 @@ public interface IStorageBusiSV {
 	 * @author lipeng16
 	 */
 	public int updateMultiStorageSalePrice(List<StorageSalePrice> salePriceList);
+	
+	/**
+	 * 查询标准品列表,包含标准品的库存组,适用于库存组定最低最高销售价<br>
+     * 库存组不包括废弃状态的
+	 *
+	 * @param groupQuery
+	 * @return
+	 * @author lipeng16
+	 */
+	public PageInfoResponse<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery);
 }

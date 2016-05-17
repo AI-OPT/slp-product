@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.Product4List;
 import com.ai.slp.product.api.product.param.ProductListQuery;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -49,6 +49,6 @@ public interface IProductBusiSV {
      * @return
      * @author lipeng16
      */
-    public PageInfo<Product4List> queryProductPage(ProductListQuery productQuery);
+    public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery);
 
 }
