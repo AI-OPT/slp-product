@@ -79,11 +79,15 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     public void updateSkuOfProduct(SkuInfoMultSave saveInfo) {
         String tenantId = saveInfo.getTenantId(),productId = saveInfo.getProdId();
         Product product = productAtomSV.selectByProductId(tenantId,productId);
-        if (product==null)
-            throw new BusinessException("","未找到指定商品,租户ID:"+tenantId+",商品标识:"+productId);
+        if (product==null){
+        	logger.warn("未找到指定商品,租户ID{0},商品标识{1}:"+tenantId+","+productId);
+        	throw new BusinessException("","未找到指定商品,租户ID:"+tenantId+",商品标识:"+productId);
+        }
         StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
-        if (group==null)
+        if (group==null){
+        	logger.warn("未找到指定商品,租户ID{0},库存组标识{1}:"+tenantId+","+product.getStandedProdId());
             throw new BusinessException("","未找到指定库存组,租户ID:"+tenantId+",库存组标识:"+product.getStandedProdId());
+        }
         //查询库存组下库存
         List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId,group.getStorageGroupId());
         //查询商品的销售属性集合,序号正序
@@ -137,23 +141,24 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
      * 查询指定商品下的SKU信息
      *
      * @param tenantId
-     * @param prodId
+     * @param productId
      * @return
      */
     @Override
-    public SkuSetForProduct querySkuByProdId(String tenantId, String prodId) {
+    public SkuSetForProduct querySkuByProdId(String tenantId, String productId) {
         //查询商品信息
-        Product product = productAtomSV.selectByProductId(tenantId,prodId);
-        if (product==null)
-            throw new BusinessException("","查询商品信息不存在,租户ID:"+tenantId+",商品标识:"+prodId);
-
+        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        if (product==null){
+        	logger.warn("未找到指定商品,租户ID{0},商品标识{1}:"+tenantId+","+productId);
+            throw new BusinessException("","查询商品信息不存在,租户ID:"+tenantId+",商品标识:"+productId);
+        }
         //查询商品的SKU信息
         Map<String,SkuInfo> skuInfoMap = new HashMap<>();
         Map<String,String> saleAttrsMap = new HashMap<>();
         SkuSetForProduct skuSetForProduct = new SkuSetForProduct();
         skuSetForProduct.setSkuInfoMap(skuInfoMap);
         skuSetForProduct.setSaleAttrsMap(saleAttrsMap);
-        List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(tenantId,prodId);
+        List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(tenantId,productId);
         //设置SKU单品信息集合
         for (ProdSku sku:skuList){
             //设置属性串和SKU标识
@@ -183,10 +188,10 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
             attrAndValInfoMap.put(skuAttrInfo,valInfoList);
             //查询属性对应属性值集合
             List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(
-                    tenantId,prodId,attrAttch.getAttrId());
+                    tenantId,productId,attrAttch.getAttrId());
             for (StandedProdAttr prodAttr:prodAttrs){
                 //若SKU不包含当前属性值,则查询下一个属性值
-                if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId,prodId,prodAttr.getAttrvalueDefId())<=0)
+                if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId,productId,prodAttr.getAttrvalueDefId())<=0)
                     continue;
                 attrValSet.add(prodAttr.getAttrvalueDefId());
                 SkuAttrValInfo valInfo = new SkuAttrValInfo();

@@ -58,5 +58,14 @@ public interface IStorageAtomSV {
      * @author lipeng16
      */
     public int updateSaleById(Storage storage);
+    
+    /**
+     * 新增库存信息
+     *
+     * @param storage
+     * @return
+     * @author lipeng16
+     */
+    public int insertStorage(Storage storage);
 
 }

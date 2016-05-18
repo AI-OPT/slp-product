@@ -11,8 +11,6 @@ import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Component;
 @Service(validation = "true")
 @Component
 public class INormProductSVImpl implements INormProductSV {
-    private static Logger logger = LoggerFactory.getLogger(INormProductSVImpl.class);
     //标准品处理对象
     @Autowired
     INormProductBusiSV normProductBusiSV;

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.api.storage.param.STOStorage;
 import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
@@ -228,5 +229,15 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		//设置结果集
 		StorageGroup4SaleListPage.setResult(storGroup4SaleList);
 		return StorageGroup4SaleListPage;
+	}
+	
+
+	/**
+	 * 保存库存信息
+	 */
+	@Override
+	public int saveStorage(STOStorage stoStorage) {
+		
+		return 0;
 	}
 }

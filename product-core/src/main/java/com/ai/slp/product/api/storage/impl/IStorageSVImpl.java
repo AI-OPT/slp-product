@@ -65,8 +65,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public StorageGroupRes queryGroupInfoByGroupId(StorageGroupQuery infoQuery)
-			throws BusinessException, SystemException
-	{
+			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(infoQuery.getTenantId(), "");
 		return storageGroupBusiSV.queryGroupInfoByGroupId(infoQuery.getTenantId(), infoQuery.getGroupId());
 	}
@@ -85,8 +84,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public List<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery)
-			throws BusinessException, SystemException
-	{
+			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(infoQuery.getTenantId(), "");
 		return storageGroupBusiSV.queryGroupInfoByNormProId(infoQuery.getTenantId(), infoQuery.getProductId());
 	}
@@ -106,8 +104,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public BaseResponse chargeStorageGroupStatus(StorageGroupStatus groupStatus)
-			throws BusinessException, SystemException
-	{
+			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(groupStatus.getTenantId(), "");
 		storageGroupBusiSV.updateGroupState(groupStatus.getTenantId(), groupStatus.getGroupId(), groupStatus.getState(),
 				groupStatus.getOperId());
@@ -133,8 +130,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public PageInfoResponse<StorageGroup4List> queryGroup(StorageGroupQueryPage groupQuery)
-			throws BusinessException, SystemException
-	{
+			throws BusinessException, SystemException {
 		return null;
 	}
 
@@ -152,6 +148,8 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public BaseResponse saveStorage(STOStorage stoStorage) throws BusinessException, SystemException {
+		
+		
 		return null;
 	}
 
@@ -212,8 +210,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public BaseResponse chargeStoragePriority(StoragePriorityCharge priorityCharge)
-			throws BusinessException, SystemException
-	{
+			throws BusinessException, SystemException {
 		return null;
 	}
 
@@ -231,8 +228,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public BaseResponse updateStorageGroupName(StorageGroupUpName storageGroup)
-			throws BusinessException, SystemException
-	{
+			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(storageGroup.getTenantId(), "");
 		storageGroupBusiSV.updateGroupName(storageGroup);
 		BaseResponse baseResponse = new BaseResponse();
@@ -257,8 +253,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public BaseResponse updateStorageGroupSalePrice(StorageGroupSalePrice salePrice)
-			throws BusinessException, SystemException
-	{
+			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(salePrice.getTenantId(), "");
 		storageGroupBusiSV.updateStorageGroupPrice(salePrice);
 		BaseResponse baseResponse = new BaseResponse();
@@ -284,8 +279,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public PageInfoResponse<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery)
-			throws BusinessException, SystemException
-	{
+			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(groupQuery.getTenantId(), "");
 		return storageBusiSV.queryGroupsForSalePrice(groupQuery);
 	}
@@ -305,8 +299,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery)
-			throws BusinessException, SystemException
-	{
+			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(infoQuery.getTenantId(), "");
 		return storageGroupBusiSV.queryGroupByProdIdForSalePrice(infoQuery);
 	}
@@ -325,8 +318,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public BaseResponse updateMultiStorageSalePrice(StorageSalePrice salePrice)
-			throws BusinessException, SystemException
-	{
+			throws BusinessException, SystemException {
 		// 判断集合元素
 		CommonCheckUtils.checkTenantId(salePrice.getTenantId(), "");
 		storageBusiSV.updateMultiStorageSalePrice(salePrice);

@@ -292,11 +292,11 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
      * @param storageGroup
      */
     private void startGroup(StorageGroup storageGroup, Long operId){
-        //检查是否已配置路由
+        //检查是否已配置路由组
         if (StringUtils.isBlank(storageGroup.getRouteGroupId())){
             throw new BusinessException("","库存组没有配置路由信息,不能启用");
         }
-        //检查路由是否已为启用状态
+        //检查路由组是否已为启用状态
         //TODO...
         //库存组设置为启用状态
         storageGroup.setState(StorageConstants.StorageGroup.State.ACTIVE);
@@ -350,6 +350,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         if (product!=null){
             productBusiSV.discardProduct(product.getTenantId(),product.getProdId(),operId);
         }
+        //TODO 库存废弃包括SKU库存状态为自动废弃
+        
         //库存组废弃
         storageGroup.setState(StorageConstants.StorageGroup.State.DISCARD);
         storageGroup.setOperId(operId);
@@ -359,7 +361,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
             BeanUtils.copyProperties(groupLog,groupLog);
             storageGroupLogAtomSV.install(groupLog);
         }
-        //TODO 库存废弃包括SKU库存状态
+        
     }
 
 	@Override

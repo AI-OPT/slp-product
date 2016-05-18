@@ -50,5 +50,6 @@ public interface IProductBusiSV {
      * @author lipeng16
      */
     public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery);
+    
 
 }

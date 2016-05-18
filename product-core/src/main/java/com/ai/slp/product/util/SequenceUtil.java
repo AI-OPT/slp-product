@@ -13,6 +13,7 @@ public final class SequenceUtil {
     private static final String PRODUCT_LOG$LOG_ID$SEQ = "PRODUCT_LOG$LOG_ID$SEQ";
     private static final String STORAGE_GROUP$STORAGE_GROUP_ID$SEQ = "STORAGE_GROUP$STORAGE_GROUP_ID$SEQ";
     private static final String STORAGE_GROUP_LOG$LOG_ID$SEQ = "STORAGE_GROUP_LOG$LOG_ID$SEQ";
+    private static final String STORAGE$STORAGE_ID$SEQ = "STORAGE$STORAGE_ID$SEQ";
     private static final String STORAGE_LOG$LOG_ID$SEQ = "STORAGE_LOG$LOG_ID$SEQ";
     private static final String WARN_RECEIVE_STAFF$WARN_RECEIVE_STAFF_ID$SEQ = "WARN_RECEIVE_STAFF$WARN_RECEIVE_STAFF_ID$SEQ";
     private static final String PROD_ATTRVALUE_DEF$ATTRVALUE_DEF_ID$SEQ = "PROD_ATTRVALUE_DEF$ATTRVALUE_DEF_ID$SEQ";
@@ -48,6 +49,9 @@ public final class SequenceUtil {
         return SeqUtil.getNewId(STORAGE_GROUP_LOG$LOG_ID$SEQ,16);
     }
 
+    public static String genStorageId(){
+    	return SeqUtil.getNewId(STORAGE$STORAGE_ID$SEQ, 18);
+    }
     public static String genStorageLogId(){
         return SeqUtil.getNewId(STORAGE_LOG$LOG_ID$SEQ,16);
     }

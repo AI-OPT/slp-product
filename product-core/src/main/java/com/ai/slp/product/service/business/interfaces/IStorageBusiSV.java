@@ -1,9 +1,9 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
-import java.util.List;
 
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.storage.param.STOStorage;
 import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
@@ -53,4 +53,13 @@ public interface IStorageBusiSV {
 	 * @author lipeng16
 	 */
 	public PageInfoResponse<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery);
+	
+	 /**
+     * 保存库存信息
+     *
+     * @param stoStorage
+     * @return
+     * @author lipeng16
+     */
+    public int saveStorage(STOStorage stoStorage);
 }

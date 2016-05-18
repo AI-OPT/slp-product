@@ -13,6 +13,7 @@ import com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -36,7 +37,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
         example.createCriteria().andStorageGroupIdEqualTo(groupId);
         return storageMapper.selectByExample(example);
     }
-
+    /**
+     * 查询库存是否存在(通过预警对象标识) 
+     */
     @Override
     public int findStorage(String tenantId, String storageId) {
         StorageCriteria example = new StorageCriteria();
@@ -82,9 +85,6 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 
     /**
      * 查询指定标识的库存
-     *
-     * @param storageId
-     * @return
      */
     @Override
     public Storage queryById(String storageId) {
@@ -94,9 +94,23 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
             return null;
         return storage;
     }
+    
+    /**
+     * 更新库存销售价
+     */
 	@Override
 	public int updateSaleById(Storage storage) {
 		storage.setOperTime(DateUtils.currTimeStamp());
 		return storageMapper.updateByPrimaryKeySelective(storage);
+	}
+	/**
+	 * 新增库存信息
+	 */
+	@Override
+	public int insertStorage(Storage storage) {
+		if(storage == null)return 0;
+		storage.setOperTime(DateUtils.currTimeStamp());
+		storage.setStorageId(SequenceUtil.genStorageId());
+		return storageMapper.insert(storage);
 	}
 }

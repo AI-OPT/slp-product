@@ -145,8 +145,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //查询库存组是否为"启用"状态
         StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
         if (storageGroup==null
-                || (StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState()))
-                    && StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storageGroup.getState())){
+                || (!StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState()))
+                    && !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storageGroup.getState())){
             throw new BusinessException("","对应库存组不存在,或库存组不是[启用]状态,租户ID:"+tenantId
                     +"库存组ID:"+product.getStorageGroupId());
         }
@@ -163,7 +163,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             product.setState(ProductConstants.Product.State.SALE_OUT);
         }else { //切换至上架
             product.setState(ProductConstants.Product.State.IN_SALE);
-            //TODO 是否需要调用上架方法??
         }
         product.setOperId(operId);
         //添加日志
@@ -184,7 +183,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     @Override
     public void stopProduct(String tenantId, String prodId,Long operId) {
         Product product = productAtomSV.selectByGroupId(tenantId,prodId);
-        if (prodId == null){
+        if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
         //若商品状态不是"在售",则不进行处理
@@ -194,7 +193,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //设置为停用下架状态
         product.setState(ProductConstants.Product.State.STOP);
         product.setOperId(operId);
-        //TODO 是否需要调用库存停用方法??
         //添加日志
         if (productAtomSV.updateById(product)>0){
             ProductLog productLog = new ProductLog();
@@ -254,4 +252,5 @@ public class ProductBusiSVImpl implements IProductBusiSV {
 		
 		return product4ListPage;
 	}
+
 }
