@@ -30,6 +30,8 @@
     <result column="STATE" property="state" jdbcType="VARCHAR" />
     <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+    <result column="RECHARGE_TYPE" property="rechargeType" jdbcType="VARCHAR" />
+    <result column="BASIC_ORG_ID" property="basicOrgId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -94,7 +96,7 @@
     PROD_NAME, PRODUCT_SELL_POINT, ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, ACTIVE_CYCLE, 
     UNIT, PRO_DETAIL_CONTENT, IS_SALE_ATTR, IS_SALE_NATIONWIDE, IS_REPLACE_SELL, IS_INVOICE, 
     INVOICE_TYPE, AFTER_SALE, UPSHELF_TYPE, UP_TIME, DOWN_TIME, CREATE_TIME, STATE, OPER_ID, 
-    OPER_TIME
+    OPER_TIME, RECHARGE_TYPE, BASIC_ORG_ID
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLogCriteria" >
     select
@@ -140,7 +142,8 @@
       IS_INVOICE, INVOICE_TYPE, AFTER_SALE, 
       UPSHELF_TYPE, UP_TIME, DOWN_TIME, 
       CREATE_TIME, STATE, OPER_ID, 
-      OPER_TIME)
+      OPER_TIME, RECHARGE_TYPE, BASIC_ORG_ID
+      )
     values (#{logId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, 
       #{productCatId,jdbcType=VARCHAR}, #{standedProdId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=VARCHAR}, 
       #{productType,jdbcType=VARCHAR}, #{prodName,jdbcType=VARCHAR}, #{productSellPoint,jdbcType=VARCHAR}, 
@@ -150,7 +153,8 @@
       #{isInvoice,jdbcType=CHAR}, #{invoiceType,jdbcType=VARCHAR}, #{afterSale,jdbcType=VARCHAR}, 
       #{upshelfType,jdbcType=VARCHAR}, #{upTime,jdbcType=TIMESTAMP}, #{downTime,jdbcType=TIMESTAMP}, 
       #{createTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, 
-      #{operTime,jdbcType=TIMESTAMP})
+      #{operTime,jdbcType=TIMESTAMP}, #{rechargeType,jdbcType=VARCHAR}, #{basicOrgId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLog" >
     insert into product_log
@@ -239,6 +243,12 @@
       <if test="operTime != null" >
         OPER_TIME,
       </if>
+      <if test="rechargeType != null" >
+        RECHARGE_TYPE,
+      </if>
+      <if test="basicOrgId != null" >
+        BASIC_ORG_ID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="logId != null" >
@@ -324,6 +334,12 @@
       </if>
       <if test="operTime != null" >
         #{operTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rechargeType != null" >
+        #{rechargeType,jdbcType=VARCHAR},
+      </if>
+      <if test="basicOrgId != null" >
+        #{basicOrgId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -420,6 +436,12 @@
       <if test="record.operTime != null" >
         OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.rechargeType != null" >
+        RECHARGE_TYPE = #{record.rechargeType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.basicOrgId != null" >
+        BASIC_ORG_ID = #{record.basicOrgId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -454,7 +476,9 @@
       CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
       STATE = #{record.state,jdbcType=VARCHAR},
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
-      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      RECHARGE_TYPE = #{record.rechargeType,jdbcType=VARCHAR},
+      BASIC_ORG_ID = #{record.basicOrgId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -543,6 +567,12 @@
       <if test="operTime != null" >
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="rechargeType != null" >
+        RECHARGE_TYPE = #{rechargeType,jdbcType=VARCHAR},
+      </if>
+      <if test="basicOrgId != null" >
+        BASIC_ORG_ID = #{basicOrgId,jdbcType=VARCHAR},
+      </if>
     </set>
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
@@ -574,7 +604,9 @@
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       STATE = #{state,jdbcType=VARCHAR},
       OPER_ID = #{operId,jdbcType=DECIMAL},
-      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      RECHARGE_TYPE = #{rechargeType,jdbcType=VARCHAR},
+      BASIC_ORG_ID = #{basicOrgId,jdbcType=VARCHAR}
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -57,6 +57,10 @@ public class Product {
 
     private Timestamp operTime;
 
+    private String rechargeType;
+
+    private String basicOrgId;
+
     public String getProdId() {
         return prodId;
     }
@@ -271,5 +275,21 @@ public class Product {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public String getRechargeType() {
+        return rechargeType;
+    }
+
+    public void setRechargeType(String rechargeType) {
+        this.rechargeType = rechargeType == null ? null : rechargeType.trim();
+    }
+
+    public String getBasicOrgId() {
+        return basicOrgId;
+    }
+
+    public void setBasicOrgId(String basicOrgId) {
+        this.basicOrgId = basicOrgId == null ? null : basicOrgId.trim();
     }
 }

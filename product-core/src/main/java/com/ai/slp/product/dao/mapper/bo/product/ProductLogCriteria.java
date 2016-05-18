@@ -2004,6 +2004,146 @@ public class ProductLogCriteria {
             addCriterion("OPER_TIME not between", value1, value2, "operTime");
             return (Criteria) this;
         }
+
+        public Criteria andRechargeTypeIsNull() {
+            addCriterion("RECHARGE_TYPE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeIsNotNull() {
+            addCriterion("RECHARGE_TYPE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeEqualTo(String value) {
+            addCriterion("RECHARGE_TYPE =", value, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeNotEqualTo(String value) {
+            addCriterion("RECHARGE_TYPE <>", value, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeGreaterThan(String value) {
+            addCriterion("RECHARGE_TYPE >", value, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("RECHARGE_TYPE >=", value, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeLessThan(String value) {
+            addCriterion("RECHARGE_TYPE <", value, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeLessThanOrEqualTo(String value) {
+            addCriterion("RECHARGE_TYPE <=", value, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeLike(String value) {
+            addCriterion("RECHARGE_TYPE like", value, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeNotLike(String value) {
+            addCriterion("RECHARGE_TYPE not like", value, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeIn(List<String> values) {
+            addCriterion("RECHARGE_TYPE in", values, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeNotIn(List<String> values) {
+            addCriterion("RECHARGE_TYPE not in", values, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeBetween(String value1, String value2) {
+            addCriterion("RECHARGE_TYPE between", value1, value2, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRechargeTypeNotBetween(String value1, String value2) {
+            addCriterion("RECHARGE_TYPE not between", value1, value2, "rechargeType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdIsNull() {
+            addCriterion("BASIC_ORG_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdIsNotNull() {
+            addCriterion("BASIC_ORG_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdEqualTo(String value) {
+            addCriterion("BASIC_ORG_ID =", value, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdNotEqualTo(String value) {
+            addCriterion("BASIC_ORG_ID <>", value, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdGreaterThan(String value) {
+            addCriterion("BASIC_ORG_ID >", value, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdGreaterThanOrEqualTo(String value) {
+            addCriterion("BASIC_ORG_ID >=", value, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdLessThan(String value) {
+            addCriterion("BASIC_ORG_ID <", value, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdLessThanOrEqualTo(String value) {
+            addCriterion("BASIC_ORG_ID <=", value, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdLike(String value) {
+            addCriterion("BASIC_ORG_ID like", value, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdNotLike(String value) {
+            addCriterion("BASIC_ORG_ID not like", value, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdIn(List<String> values) {
+            addCriterion("BASIC_ORG_ID in", values, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdNotIn(List<String> values) {
+            addCriterion("BASIC_ORG_ID not in", values, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdBetween(String value1, String value2) {
+            addCriterion("BASIC_ORG_ID between", value1, value2, "basicOrgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasicOrgIdNotBetween(String value1, String value2) {
+            addCriterion("BASIC_ORG_ID not between", value1, value2, "basicOrgId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
