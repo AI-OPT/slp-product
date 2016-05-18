@@ -11,19 +11,15 @@ public class StandedProdAttrLog {
 
     private String standedProdId;
 
-    private String attrType;
-
     private Long attrId;
-
-    private String attrName;
-
-    private String valueWay;
 
     private String attrvalueDefId;
 
     private String attrValueName;
 
     private String attrValueName2;
+
+    private Short serialNumber;
 
     private String state;
 
@@ -63,36 +59,12 @@ public class StandedProdAttrLog {
         this.standedProdId = standedProdId == null ? null : standedProdId.trim();
     }
 
-    public String getAttrType() {
-        return attrType;
-    }
-
-    public void setAttrType(String attrType) {
-        this.attrType = attrType == null ? null : attrType.trim();
-    }
-
     public Long getAttrId() {
         return attrId;
     }
 
     public void setAttrId(Long attrId) {
         this.attrId = attrId;
-    }
-
-    public String getAttrName() {
-        return attrName;
-    }
-
-    public void setAttrName(String attrName) {
-        this.attrName = attrName == null ? null : attrName.trim();
-    }
-
-    public String getValueWay() {
-        return valueWay;
-    }
-
-    public void setValueWay(String valueWay) {
-        this.valueWay = valueWay == null ? null : valueWay.trim();
     }
 
     public String getAttrvalueDefId() {
@@ -117,6 +89,14 @@ public class StandedProdAttrLog {
 
     public void setAttrValueName2(String attrValueName2) {
         this.attrValueName2 = attrValueName2 == null ? null : attrValueName2.trim();
+    }
+
+    public Short getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Short serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public String getState() {

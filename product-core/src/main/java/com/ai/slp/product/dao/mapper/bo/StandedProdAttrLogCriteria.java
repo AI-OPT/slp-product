@@ -395,76 +395,6 @@ public class StandedProdAttrLogCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andAttrTypeIsNull() {
-            addCriterion("ATTR_TYPE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeIsNotNull() {
-            addCriterion("ATTR_TYPE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeEqualTo(String value) {
-            addCriterion("ATTR_TYPE =", value, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeNotEqualTo(String value) {
-            addCriterion("ATTR_TYPE <>", value, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeGreaterThan(String value) {
-            addCriterion("ATTR_TYPE >", value, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("ATTR_TYPE >=", value, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeLessThan(String value) {
-            addCriterion("ATTR_TYPE <", value, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeLessThanOrEqualTo(String value) {
-            addCriterion("ATTR_TYPE <=", value, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeLike(String value) {
-            addCriterion("ATTR_TYPE like", value, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeNotLike(String value) {
-            addCriterion("ATTR_TYPE not like", value, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeIn(List<String> values) {
-            addCriterion("ATTR_TYPE in", values, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeNotIn(List<String> values) {
-            addCriterion("ATTR_TYPE not in", values, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeBetween(String value1, String value2) {
-            addCriterion("ATTR_TYPE between", value1, value2, "attrType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrTypeNotBetween(String value1, String value2) {
-            addCriterion("ATTR_TYPE not between", value1, value2, "attrType");
-            return (Criteria) this;
-        }
-
         public Criteria andAttrIdIsNull() {
             addCriterion("ATTR_ID is null");
             return (Criteria) this;
@@ -522,146 +452,6 @@ public class StandedProdAttrLogCriteria {
 
         public Criteria andAttrIdNotBetween(Long value1, Long value2) {
             addCriterion("ATTR_ID not between", value1, value2, "attrId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameIsNull() {
-            addCriterion("ATTR_NAME is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameIsNotNull() {
-            addCriterion("ATTR_NAME is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameEqualTo(String value) {
-            addCriterion("ATTR_NAME =", value, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameNotEqualTo(String value) {
-            addCriterion("ATTR_NAME <>", value, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameGreaterThan(String value) {
-            addCriterion("ATTR_NAME >", value, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameGreaterThanOrEqualTo(String value) {
-            addCriterion("ATTR_NAME >=", value, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameLessThan(String value) {
-            addCriterion("ATTR_NAME <", value, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameLessThanOrEqualTo(String value) {
-            addCriterion("ATTR_NAME <=", value, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameLike(String value) {
-            addCriterion("ATTR_NAME like", value, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameNotLike(String value) {
-            addCriterion("ATTR_NAME not like", value, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameIn(List<String> values) {
-            addCriterion("ATTR_NAME in", values, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameNotIn(List<String> values) {
-            addCriterion("ATTR_NAME not in", values, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameBetween(String value1, String value2) {
-            addCriterion("ATTR_NAME between", value1, value2, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andAttrNameNotBetween(String value1, String value2) {
-            addCriterion("ATTR_NAME not between", value1, value2, "attrName");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayIsNull() {
-            addCriterion("VALUE_WAY is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayIsNotNull() {
-            addCriterion("VALUE_WAY is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayEqualTo(String value) {
-            addCriterion("VALUE_WAY =", value, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayNotEqualTo(String value) {
-            addCriterion("VALUE_WAY <>", value, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayGreaterThan(String value) {
-            addCriterion("VALUE_WAY >", value, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayGreaterThanOrEqualTo(String value) {
-            addCriterion("VALUE_WAY >=", value, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayLessThan(String value) {
-            addCriterion("VALUE_WAY <", value, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayLessThanOrEqualTo(String value) {
-            addCriterion("VALUE_WAY <=", value, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayLike(String value) {
-            addCriterion("VALUE_WAY like", value, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayNotLike(String value) {
-            addCriterion("VALUE_WAY not like", value, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayIn(List<String> values) {
-            addCriterion("VALUE_WAY in", values, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayNotIn(List<String> values) {
-            addCriterion("VALUE_WAY not in", values, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayBetween(String value1, String value2) {
-            addCriterion("VALUE_WAY between", value1, value2, "valueWay");
-            return (Criteria) this;
-        }
-
-        public Criteria andValueWayNotBetween(String value1, String value2) {
-            addCriterion("VALUE_WAY not between", value1, value2, "valueWay");
             return (Criteria) this;
         }
 
@@ -872,6 +662,66 @@ public class StandedProdAttrLogCriteria {
 
         public Criteria andAttrValueName2NotBetween(String value1, String value2) {
             addCriterion("ATTR_VALUE_NAME2 not between", value1, value2, "attrValueName2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberIsNull() {
+            addCriterion("SERIAL_NUMBER is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberIsNotNull() {
+            addCriterion("SERIAL_NUMBER is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberEqualTo(Short value) {
+            addCriterion("SERIAL_NUMBER =", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberNotEqualTo(Short value) {
+            addCriterion("SERIAL_NUMBER <>", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberGreaterThan(Short value) {
+            addCriterion("SERIAL_NUMBER >", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberGreaterThanOrEqualTo(Short value) {
+            addCriterion("SERIAL_NUMBER >=", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberLessThan(Short value) {
+            addCriterion("SERIAL_NUMBER <", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberLessThanOrEqualTo(Short value) {
+            addCriterion("SERIAL_NUMBER <=", value, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberIn(List<Short> values) {
+            addCriterion("SERIAL_NUMBER in", values, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberNotIn(List<Short> values) {
+            addCriterion("SERIAL_NUMBER not in", values, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberBetween(Short value1, Short value2) {
+            addCriterion("SERIAL_NUMBER between", value1, value2, "serialNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSerialNumberNotBetween(Short value1, Short value2) {
+            addCriterion("SERIAL_NUMBER not between", value1, value2, "serialNumber");
             return (Criteria) this;
         }
 

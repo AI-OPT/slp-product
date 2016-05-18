@@ -6,13 +6,11 @@
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="STANDED_PROD_ATTR_ID" property="standedProdAttrId" jdbcType="DECIMAL" />
     <result column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
-    <result column="ATTR_TYPE" property="attrType" jdbcType="VARCHAR" />
     <result column="ATTR_ID" property="attrId" jdbcType="DECIMAL" />
-    <result column="ATTR_NAME" property="attrName" jdbcType="VARCHAR" />
-    <result column="VALUE_WAY" property="valueWay" jdbcType="VARCHAR" />
     <result column="ATTRVALUE_DEF_ID" property="attrvalueDefId" jdbcType="VARCHAR" />
     <result column="ATTR_VALUE_NAME" property="attrValueName" jdbcType="VARCHAR" />
     <result column="ATTR_VALUE_NAME2" property="attrValueName2" jdbcType="VARCHAR" />
+    <result column="SERIAL_NUMBER" property="serialNumber" jdbcType="DECIMAL" />
     <result column="STATE" property="state" jdbcType="VARCHAR" />
     <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
@@ -76,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    LOG_ID, TENANT_ID, STANDED_PROD_ATTR_ID, STANDED_PROD_ID, ATTR_TYPE, ATTR_ID, ATTR_NAME, 
-    VALUE_WAY, ATTRVALUE_DEF_ID, ATTR_VALUE_NAME, ATTR_VALUE_NAME2, STATE, OPER_ID, OPER_TIME
+    LOG_ID, TENANT_ID, STANDED_PROD_ATTR_ID, STANDED_PROD_ID, ATTR_ID, ATTRVALUE_DEF_ID, 
+    ATTR_VALUE_NAME, ATTR_VALUE_NAME2, SERIAL_NUMBER, STATE, OPER_ID, OPER_TIME
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProdAttrLogCriteria" >
     select
@@ -115,15 +113,15 @@
   </delete>
   <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog" >
     insert into standed_prod_attr_log (LOG_ID, TENANT_ID, STANDED_PROD_ATTR_ID, 
-      STANDED_PROD_ID, ATTR_TYPE, ATTR_ID, 
-      ATTR_NAME, VALUE_WAY, ATTRVALUE_DEF_ID, 
-      ATTR_VALUE_NAME, ATTR_VALUE_NAME2, STATE, 
-      OPER_ID, OPER_TIME)
+      STANDED_PROD_ID, ATTR_ID, ATTRVALUE_DEF_ID, 
+      ATTR_VALUE_NAME, ATTR_VALUE_NAME2, SERIAL_NUMBER, 
+      STATE, OPER_ID, OPER_TIME
+      )
     values (#{logId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{standedProdAttrId,jdbcType=DECIMAL}, 
-      #{standedProdId,jdbcType=VARCHAR}, #{attrType,jdbcType=VARCHAR}, #{attrId,jdbcType=DECIMAL}, 
-      #{attrName,jdbcType=VARCHAR}, #{valueWay,jdbcType=VARCHAR}, #{attrvalueDefId,jdbcType=VARCHAR}, 
-      #{attrValueName,jdbcType=VARCHAR}, #{attrValueName2,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
-      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP})
+      #{standedProdId,jdbcType=VARCHAR}, #{attrId,jdbcType=DECIMAL}, #{attrvalueDefId,jdbcType=VARCHAR}, 
+      #{attrValueName,jdbcType=VARCHAR}, #{attrValueName2,jdbcType=VARCHAR}, #{serialNumber,jdbcType=DECIMAL}, 
+      #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog" >
     insert into standed_prod_attr_log
@@ -140,17 +138,8 @@
       <if test="standedProdId != null" >
         STANDED_PROD_ID,
       </if>
-      <if test="attrType != null" >
-        ATTR_TYPE,
-      </if>
       <if test="attrId != null" >
         ATTR_ID,
-      </if>
-      <if test="attrName != null" >
-        ATTR_NAME,
-      </if>
-      <if test="valueWay != null" >
-        VALUE_WAY,
       </if>
       <if test="attrvalueDefId != null" >
         ATTRVALUE_DEF_ID,
@@ -160,6 +149,9 @@
       </if>
       <if test="attrValueName2 != null" >
         ATTR_VALUE_NAME2,
+      </if>
+      <if test="serialNumber != null" >
+        SERIAL_NUMBER,
       </if>
       <if test="state != null" >
         STATE,
@@ -184,17 +176,8 @@
       <if test="standedProdId != null" >
         #{standedProdId,jdbcType=VARCHAR},
       </if>
-      <if test="attrType != null" >
-        #{attrType,jdbcType=VARCHAR},
-      </if>
       <if test="attrId != null" >
         #{attrId,jdbcType=DECIMAL},
-      </if>
-      <if test="attrName != null" >
-        #{attrName,jdbcType=VARCHAR},
-      </if>
-      <if test="valueWay != null" >
-        #{valueWay,jdbcType=VARCHAR},
       </if>
       <if test="attrvalueDefId != null" >
         #{attrvalueDefId,jdbcType=VARCHAR},
@@ -204,6 +187,9 @@
       </if>
       <if test="attrValueName2 != null" >
         #{attrValueName2,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=DECIMAL},
       </if>
       <if test="state != null" >
         #{state,jdbcType=VARCHAR},
@@ -237,17 +223,8 @@
       <if test="record.standedProdId != null" >
         STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
       </if>
-      <if test="record.attrType != null" >
-        ATTR_TYPE = #{record.attrType,jdbcType=VARCHAR},
-      </if>
       <if test="record.attrId != null" >
         ATTR_ID = #{record.attrId,jdbcType=DECIMAL},
-      </if>
-      <if test="record.attrName != null" >
-        ATTR_NAME = #{record.attrName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.valueWay != null" >
-        VALUE_WAY = #{record.valueWay,jdbcType=VARCHAR},
       </if>
       <if test="record.attrvalueDefId != null" >
         ATTRVALUE_DEF_ID = #{record.attrvalueDefId,jdbcType=VARCHAR},
@@ -257,6 +234,9 @@
       </if>
       <if test="record.attrValueName2 != null" >
         ATTR_VALUE_NAME2 = #{record.attrValueName2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
       </if>
       <if test="record.state != null" >
         STATE = #{record.state,jdbcType=VARCHAR},
@@ -278,13 +258,11 @@
       TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       STANDED_PROD_ATTR_ID = #{record.standedProdAttrId,jdbcType=DECIMAL},
       STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
-      ATTR_TYPE = #{record.attrType,jdbcType=VARCHAR},
       ATTR_ID = #{record.attrId,jdbcType=DECIMAL},
-      ATTR_NAME = #{record.attrName,jdbcType=VARCHAR},
-      VALUE_WAY = #{record.valueWay,jdbcType=VARCHAR},
       ATTRVALUE_DEF_ID = #{record.attrvalueDefId,jdbcType=VARCHAR},
       ATTR_VALUE_NAME = #{record.attrValueName,jdbcType=VARCHAR},
       ATTR_VALUE_NAME2 = #{record.attrValueName2,jdbcType=VARCHAR},
+      SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
       STATE = #{record.state,jdbcType=VARCHAR},
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
       OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
@@ -304,17 +282,8 @@
       <if test="standedProdId != null" >
         STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
       </if>
-      <if test="attrType != null" >
-        ATTR_TYPE = #{attrType,jdbcType=VARCHAR},
-      </if>
       <if test="attrId != null" >
         ATTR_ID = #{attrId,jdbcType=DECIMAL},
-      </if>
-      <if test="attrName != null" >
-        ATTR_NAME = #{attrName,jdbcType=VARCHAR},
-      </if>
-      <if test="valueWay != null" >
-        VALUE_WAY = #{valueWay,jdbcType=VARCHAR},
       </if>
       <if test="attrvalueDefId != null" >
         ATTRVALUE_DEF_ID = #{attrvalueDefId,jdbcType=VARCHAR},
@@ -324,6 +293,9 @@
       </if>
       <if test="attrValueName2 != null" >
         ATTR_VALUE_NAME2 = #{attrValueName2,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
       </if>
       <if test="state != null" >
         STATE = #{state,jdbcType=VARCHAR},
@@ -342,13 +314,11 @@
     set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       STANDED_PROD_ATTR_ID = #{standedProdAttrId,jdbcType=DECIMAL},
       STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
-      ATTR_TYPE = #{attrType,jdbcType=VARCHAR},
       ATTR_ID = #{attrId,jdbcType=DECIMAL},
-      ATTR_NAME = #{attrName,jdbcType=VARCHAR},
-      VALUE_WAY = #{valueWay,jdbcType=VARCHAR},
       ATTRVALUE_DEF_ID = #{attrvalueDefId,jdbcType=VARCHAR},
       ATTR_VALUE_NAME = #{attrValueName,jdbcType=VARCHAR},
       ATTR_VALUE_NAME2 = #{attrValueName2,jdbcType=VARCHAR},
+      SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
       STATE = #{state,jdbcType=VARCHAR},
       OPER_ID = #{operId,jdbcType=DECIMAL},
       OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
