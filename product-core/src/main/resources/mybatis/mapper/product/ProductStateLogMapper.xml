@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.product.ProductStateLogMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.product.ProductStateLog" >
+    <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="PRIORITY_NUMBER" property="priorityNumber" jdbcType="DECIMAL" />
+    <result column="PRIORITY_REASON" property="priorityReason" jdbcType="VARCHAR" />
+    <result column="REFUSE_REASON" property="refuseReason" jdbcType="VARCHAR" />
+    <result column="REFUSE_DES" property="refuseDes" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    LOG_ID, PROD_ID, PRIORITY_NUMBER, PRIORITY_REASON, REFUSE_REASON, REFUSE_DES, STATE, 
+    OPER_ID, OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductStateLogCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from product_state_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_state_log
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from product_state_log
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductStateLogCriteria" >
+    delete from product_state_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductStateLog" >
+    insert into product_state_log (LOG_ID, PROD_ID, PRIORITY_NUMBER, 
+      PRIORITY_REASON, REFUSE_REASON, REFUSE_DES, 
+      STATE, OPER_ID, OPER_TIME
+      )
+    values (#{logId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{priorityNumber,jdbcType=DECIMAL}, 
+      #{priorityReason,jdbcType=VARCHAR}, #{refuseReason,jdbcType=VARCHAR}, #{refuseDes,jdbcType=VARCHAR}, 
+      #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductStateLog" >
+    insert into product_state_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        LOG_ID,
+      </if>
+      <if test="prodId != null" >
+        PROD_ID,
+      </if>
+      <if test="priorityNumber != null" >
+        PRIORITY_NUMBER,
+      </if>
+      <if test="priorityReason != null" >
+        PRIORITY_REASON,
+      </if>
+      <if test="refuseReason != null" >
+        REFUSE_REASON,
+      </if>
+      <if test="refuseDes != null" >
+        REFUSE_DES,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        #{logId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="priorityNumber != null" >
+        #{priorityNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="priorityReason != null" >
+        #{priorityReason,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null" >
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseDes != null" >
+        #{refuseDes,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductStateLogCriteria" resultType="java.lang.Integer" >
+    select count(*) from product_state_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update product_state_log
+    <set >
+      <if test="record.logId != null" >
+        LOG_ID = #{record.logId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null" >
+        PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priorityNumber != null" >
+        PRIORITY_NUMBER = #{record.priorityNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.priorityReason != null" >
+        PRIORITY_REASON = #{record.priorityReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refuseReason != null" >
+        REFUSE_REASON = #{record.refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refuseDes != null" >
+        REFUSE_DES = #{record.refuseDes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update product_state_log
+    set LOG_ID = #{record.logId,jdbcType=VARCHAR},
+      PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      PRIORITY_NUMBER = #{record.priorityNumber,jdbcType=DECIMAL},
+      PRIORITY_REASON = #{record.priorityReason,jdbcType=VARCHAR},
+      REFUSE_REASON = #{record.refuseReason,jdbcType=VARCHAR},
+      REFUSE_DES = #{record.refuseDes,jdbcType=VARCHAR},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductStateLog" >
+    update product_state_log
+    <set >
+      <if test="prodId != null" >
+        PROD_ID = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="priorityNumber != null" >
+        PRIORITY_NUMBER = #{priorityNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="priorityReason != null" >
+        PRIORITY_REASON = #{priorityReason,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null" >
+        REFUSE_REASON = #{refuseReason,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseDes != null" >
+        REFUSE_DES = #{refuseDes,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductStateLog" >
+    update product_state_log
+    set PROD_ID = #{prodId,jdbcType=VARCHAR},
+      PRIORITY_NUMBER = #{priorityNumber,jdbcType=DECIMAL},
+      PRIORITY_REASON = #{priorityReason,jdbcType=VARCHAR},
+      REFUSE_REASON = #{refuseReason,jdbcType=VARCHAR},
+      REFUSE_DES = #{refuseDes,jdbcType=VARCHAR},
+      STATE = #{state,jdbcType=VARCHAR},
+      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+</mapper>

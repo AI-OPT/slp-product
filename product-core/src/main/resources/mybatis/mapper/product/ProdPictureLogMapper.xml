@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.product.ProdPictureLogMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.product.ProdPictureLog" >
+    <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
+    <result column="PRO_PICTURE_ID" property="proPictureId" jdbcType="DECIMAL" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="SKU_ATTR_ID" property="skuAttrId" jdbcType="DECIMAL" />
+    <result column="PIC_USES" property="picUses" jdbcType="CHAR" />
+    <result column="PIC_TYPE" property="picType" jdbcType="VARCHAR" />
+    <result column="VFS_ID" property="vfsId" jdbcType="VARCHAR" />
+    <result column="IS_MAIN_PIC" property="isMainPic" jdbcType="CHAR" />
+    <result column="SERIAL_NUMBER" property="serialNumber" jdbcType="DECIMAL" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    LOG_ID, PRO_PICTURE_ID, PROD_ID, SKU_ATTR_ID, PIC_USES, PIC_TYPE, VFS_ID, IS_MAIN_PIC, 
+    SERIAL_NUMBER, STATE, OPER_ID, OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdPictureLogCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from prod_picture_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from prod_picture_log
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from prod_picture_log
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdPictureLogCriteria" >
+    delete from prod_picture_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdPictureLog" >
+    insert into prod_picture_log (LOG_ID, PRO_PICTURE_ID, PROD_ID, 
+      SKU_ATTR_ID, PIC_USES, PIC_TYPE, 
+      VFS_ID, IS_MAIN_PIC, SERIAL_NUMBER, 
+      STATE, OPER_ID, OPER_TIME
+      )
+    values (#{logId,jdbcType=VARCHAR}, #{proPictureId,jdbcType=DECIMAL}, #{prodId,jdbcType=VARCHAR}, 
+      #{skuAttrId,jdbcType=DECIMAL}, #{picUses,jdbcType=CHAR}, #{picType,jdbcType=VARCHAR}, 
+      #{vfsId,jdbcType=VARCHAR}, #{isMainPic,jdbcType=CHAR}, #{serialNumber,jdbcType=DECIMAL}, 
+      #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdPictureLog" >
+    insert into prod_picture_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        LOG_ID,
+      </if>
+      <if test="proPictureId != null" >
+        PRO_PICTURE_ID,
+      </if>
+      <if test="prodId != null" >
+        PROD_ID,
+      </if>
+      <if test="skuAttrId != null" >
+        SKU_ATTR_ID,
+      </if>
+      <if test="picUses != null" >
+        PIC_USES,
+      </if>
+      <if test="picType != null" >
+        PIC_TYPE,
+      </if>
+      <if test="vfsId != null" >
+        VFS_ID,
+      </if>
+      <if test="isMainPic != null" >
+        IS_MAIN_PIC,
+      </if>
+      <if test="serialNumber != null" >
+        SERIAL_NUMBER,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        #{logId,jdbcType=VARCHAR},
+      </if>
+      <if test="proPictureId != null" >
+        #{proPictureId,jdbcType=DECIMAL},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="skuAttrId != null" >
+        #{skuAttrId,jdbcType=DECIMAL},
+      </if>
+      <if test="picUses != null" >
+        #{picUses,jdbcType=CHAR},
+      </if>
+      <if test="picType != null" >
+        #{picType,jdbcType=VARCHAR},
+      </if>
+      <if test="vfsId != null" >
+        #{vfsId,jdbcType=VARCHAR},
+      </if>
+      <if test="isMainPic != null" >
+        #{isMainPic,jdbcType=CHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdPictureLogCriteria" resultType="java.lang.Integer" >
+    select count(*) from prod_picture_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update prod_picture_log
+    <set >
+      <if test="record.logId != null" >
+        LOG_ID = #{record.logId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.proPictureId != null" >
+        PRO_PICTURE_ID = #{record.proPictureId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.prodId != null" >
+        PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuAttrId != null" >
+        SKU_ATTR_ID = #{record.skuAttrId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.picUses != null" >
+        PIC_USES = #{record.picUses,jdbcType=CHAR},
+      </if>
+      <if test="record.picType != null" >
+        PIC_TYPE = #{record.picType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vfsId != null" >
+        VFS_ID = #{record.vfsId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isMainPic != null" >
+        IS_MAIN_PIC = #{record.isMainPic,jdbcType=CHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update prod_picture_log
+    set LOG_ID = #{record.logId,jdbcType=VARCHAR},
+      PRO_PICTURE_ID = #{record.proPictureId,jdbcType=DECIMAL},
+      PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      SKU_ATTR_ID = #{record.skuAttrId,jdbcType=DECIMAL},
+      PIC_USES = #{record.picUses,jdbcType=CHAR},
+      PIC_TYPE = #{record.picType,jdbcType=VARCHAR},
+      VFS_ID = #{record.vfsId,jdbcType=VARCHAR},
+      IS_MAIN_PIC = #{record.isMainPic,jdbcType=CHAR},
+      SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      OPER_ID = #{record.operId,jdbcType=DECIMAL},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdPictureLog" >
+    update prod_picture_log
+    <set >
+      <if test="proPictureId != null" >
+        PRO_PICTURE_ID = #{proPictureId,jdbcType=DECIMAL},
+      </if>
+      <if test="prodId != null" >
+        PROD_ID = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="skuAttrId != null" >
+        SKU_ATTR_ID = #{skuAttrId,jdbcType=DECIMAL},
+      </if>
+      <if test="picUses != null" >
+        PIC_USES = #{picUses,jdbcType=CHAR},
+      </if>
+      <if test="picType != null" >
+        PIC_TYPE = #{picType,jdbcType=VARCHAR},
+      </if>
+      <if test="vfsId != null" >
+        VFS_ID = #{vfsId,jdbcType=VARCHAR},
+      </if>
+      <if test="isMainPic != null" >
+        IS_MAIN_PIC = #{isMainPic,jdbcType=CHAR},
+      </if>
+      <if test="serialNumber != null" >
+        SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=DECIMAL},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdPictureLog" >
+    update prod_picture_log
+    set PRO_PICTURE_ID = #{proPictureId,jdbcType=DECIMAL},
+      PROD_ID = #{prodId,jdbcType=VARCHAR},
+      SKU_ATTR_ID = #{skuAttrId,jdbcType=DECIMAL},
+      PIC_USES = #{picUses,jdbcType=CHAR},
+      PIC_TYPE = #{picType,jdbcType=VARCHAR},
+      VFS_ID = #{vfsId,jdbcType=VARCHAR},
+      IS_MAIN_PIC = #{isMainPic,jdbcType=CHAR},
+      SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
+      STATE = #{state,jdbcType=VARCHAR},
+      OPER_ID = #{operId,jdbcType=DECIMAL},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
+  </update>
+</mapper>
