@@ -156,6 +156,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             product.setState(ProductConstants.Product.State.SALE_OUT);
         }else { //切换至上架
             product.setState(ProductConstants.Product.State.IN_SALE);
+            //TODO 是否需要调用上架方法??
         }
         product.setOperId(operId);
         //添加日志
@@ -186,6 +187,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //设置为停用下架状态
         product.setState(ProductConstants.Product.State.STOP);
         product.setOperId(operId);
+        //TODO 是否需要调用库存停用方法??
         //添加日志
         if (productAtomSV.updateById(product)>0){
             ProductLog productLog = new ProductLog();

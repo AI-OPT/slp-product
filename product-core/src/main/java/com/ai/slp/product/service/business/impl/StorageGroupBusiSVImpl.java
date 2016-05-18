@@ -301,6 +301,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //库存组设置为启用状态
         storageGroup.setState(StorageConstants.StorageGroup.State.ACTIVE);
         storageGroup.setOperId(operId);
+        //添加日志信息
         if (storageGroupAtomSV.updateById(storageGroup)>0){
             StorageGroupLog groupLog = new StorageGroupLog();
             BeanUtils.copyProperties(groupLog,groupLog);
@@ -323,6 +324,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //库存组变更为停用
         storageGroup.setState(StorageConstants.StorageGroup.State.STOP);
         storageGroup.setOperId(operId);
+        //添加日志信息
         if (storageGroupAtomSV.updateById(storageGroup)>0){
             StorageGroupLog groupLog = new StorageGroupLog();
             BeanUtils.copyProperties(groupLog,groupLog);
@@ -351,11 +353,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //库存组废弃
         storageGroup.setState(StorageConstants.StorageGroup.State.DISCARD);
         storageGroup.setOperId(operId);
+        //添加日志
         if (storageGroupAtomSV.updateById(storageGroup)>0){
             StorageGroupLog groupLog = new StorageGroupLog();
             BeanUtils.copyProperties(groupLog,groupLog);
             storageGroupLogAtomSV.install(groupLog);
         }
+        //TODO 库存废弃包括SKU库存状态
     }
 
 	@Override
