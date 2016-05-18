@@ -3,7 +3,6 @@ package com.ai.slp.product.service.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -112,10 +111,10 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 
 		switch (state) {
 		case StorageConstants.Storage.State.ACTIVE:// 转启用
-
+			//TODO 调用启用库存方法
 			break;
 		case StorageConstants.Storage.State.STOP:// 转停用
-
+			//TODO 调用停用库存方法
 			break;
 		case StorageConstants.Storage.State.DISCARD:// 转废弃
 			discardStorage(storage);
@@ -173,13 +172,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			Storage storage = new Storage();
 			storage.setStorageId(tenantId);
 			storage.setSalePrice(salePrice);
-			storage.setOperId(storageSalePrice.getOperId());
+			storage.setOperId(operId);
 			int installNum = storageAtomSV.updateSaleById(storage);
 			if (installNum > 0) {
 				ProdPriceLog prodPriceLog = new ProdPriceLog();
 				prodPriceLog.setObjId(storageId);
 				prodPriceLog.setObjType("SO");
-				prodPriceLog.setOperId(storageSalePrice.getOperId());
+				prodPriceLog.setOperId(operId);
 				prodPriceLog.setUpdatePrice(salePrice);
 				prodPriceLogAtomSV.insert(prodPriceLog);
 			}

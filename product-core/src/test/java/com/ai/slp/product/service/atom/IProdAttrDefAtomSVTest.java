@@ -33,20 +33,20 @@ public class IProdAttrDefAtomSVTest {
         prodAttrDef.setOperTime(new Timestamp(System.currentTimeMillis()));
         prodAttrDef.setState(CommonSatesConstants.STATE_ACTIVE);
         prodAttrDef.setValueWay("1");
-//        int ret = prodAttrDefAtomSV.installObj(prodAttrDef);
-//        Assert.assertEquals(1,ret);
-        Long attrDefId = prodAttrDef.getAttrId();
-        attrDefId = 7l;
-        //查询验证是否存在
-        ProdAttrDef selRet = prodAttrDefAtomSV.selectById(tenantId,attrDefId);
-        Assert.assertNotNull(selRet);
-        Assert.assertEquals(attrDefId.longValue(),selRet.getAttrId().longValue());
-        //删除
-        prodAttrDefAtomSV.deleteById(tenantId,attrDefId,1l);
-
-        //查询验证是否存在
-        selRet = prodAttrDefAtomSV.selectById(tenantId,attrDefId);
-        Assert.assertNull(selRet);
+        int ret = prodAttrDefAtomSV.installObj(prodAttrDef);
+        Assert.assertEquals(1,ret);
+//        Long attrDefId = prodAttrDef.getAttrId();
+//        attrDefId = 7l;
+//        //查询验证是否存在
+//        ProdAttrDef selRet = prodAttrDefAtomSV.selectById(tenantId,attrDefId);
+//        Assert.assertNotNull(selRet);
+//        Assert.assertEquals(attrDefId.longValue(),selRet.getAttrId().longValue());
+//        //删除
+//        prodAttrDefAtomSV.deleteById(tenantId,attrDefId,1l);
+//
+//        //查询验证是否存在
+//        selRet = prodAttrDefAtomSV.selectById(tenantId,attrDefId);
+//        Assert.assertNull(selRet);
     }
 
 }
