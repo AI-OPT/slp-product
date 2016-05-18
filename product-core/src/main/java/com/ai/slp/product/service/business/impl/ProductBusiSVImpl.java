@@ -126,7 +126,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     }
 
     /**
-     * 对停用下架的商品进行上架处理
+     * 对停用/售罄下架的商品进行上架处理
      *
      * @param tenantId
      * @param prodId
@@ -137,6 +137,11 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if (prodId == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
+        //若商品状态不是"停用下架",也不是"售罄下架",则不进行处理
+        if(!ProductConstants.Product.State.STOP.equals(product.getState())
+                && !ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
+            return;
+        }
         //查询库存组是否为"启用"状态
         StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
         if (storageGroup==null
@@ -145,12 +150,14 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new BusinessException("","对应库存组不存在,或库存组不是[启用]状态,租户ID:"+tenantId
                     +"库存组ID:"+product.getStorageGroupId());
         }
-        //若商品状态不是"停用下架",则不进行处理
-        if(!ProductConstants.Product.State.STOP.equals(product.getState())){
-            return;
-        }
+
         //检查商品是否有库存,若没有,则直接切换至"售罄下架"
         List<Storage> storageList = storageAtomSV.queryActive(tenantId,prodId,true);
+        //若原状态为"售罄下架",且现在没有库存,则不处理
+        if ((storageList==null || storageList.isEmpty())
+                && ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
+            return;
+        }
         //直接切换至"售罄下架"
         if (storageList==null || storageList.isEmpty()){
             product.setState(ProductConstants.Product.State.SALE_OUT);
