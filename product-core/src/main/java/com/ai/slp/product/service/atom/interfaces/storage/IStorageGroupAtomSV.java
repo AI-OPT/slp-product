@@ -95,5 +95,12 @@ public interface IStorageGroupAtomSV {
      */
     public PageInfoResponse<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId, Integer pageNo, Integer pageSize);
     
+    /**
+     * 根据搜索条件分页查询库存组列表
+     *
+     * @param storageGroupPageQueryVo
+     * @return
+     * @author lipeng16
+     */
     public PageInfoResponse<StorageGroup> queryPageOfSearch(StorageGroupPageQueryVo storageGroupPageQueryVo);
 }

@@ -61,5 +61,5 @@ public interface IStorageBusiSV {
      * @return
      * @author lipeng16
      */
-    public int saveStorage(STOStorage stoStorage);
+    public int saveOrUpdateStorage(STOStorage stoStorage);
 }

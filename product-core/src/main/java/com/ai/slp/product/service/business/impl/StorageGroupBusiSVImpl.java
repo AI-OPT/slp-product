@@ -86,7 +86,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         int installNum = storageGroupAtomSV.installGroup(group);
         if (installNum>0){
             StorageGroupLog groupLog = new StorageGroupLog();
-            BeanUtils.copyProperties(groupLog,groupLog);
+            BeanUtils.copyProperties(groupLog,group);
             storageGroupLogAtomSV.install(groupLog);
         }
         //添加商品
@@ -121,7 +121,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //添加库存组日志
         if (updateNum>0){
             StorageGroupLog groupLog = new StorageGroupLog();
-            BeanUtils.copyProperties(groupLog,groupLog);
+            BeanUtils.copyProperties(groupLog,group);
             storageGroupLogAtomSV.install(groupLog);
         }
         return updateNum;
@@ -304,7 +304,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         //添加日志信息
         if (storageGroupAtomSV.updateById(storageGroup)>0){
             StorageGroupLog groupLog = new StorageGroupLog();
-            BeanUtils.copyProperties(groupLog,groupLog);
+            BeanUtils.copyProperties(groupLog,storageGroup);
             storageGroupLogAtomSV.install(groupLog);
         }
         //若对应商品为"62停用下架",则进行自动上架.

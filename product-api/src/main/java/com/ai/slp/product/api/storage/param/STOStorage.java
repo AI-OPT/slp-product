@@ -18,6 +18,12 @@ import java.sql.Timestamp;
  */
 public class STOStorage extends BaseInfo{
     private static final long serialVersionUID = 1L;
+    /**
+     * 商品类目标识
+     */
+    @NotBlank(message = "类目标识不能为空",
+    		groups = { IStorageSV.SaveStorage.class })
+    private String productCatId;
 	/**
      * 库存标识<br>
      * 若包含标识则进行更新操作,否则进行添加操作
@@ -37,7 +43,7 @@ public class STOStorage extends BaseInfo{
      */
     @NotBlank(message = "库存组标识不能为空",
             groups = { IStorageSV.SaveStorage.class })
-    private String groupId;
+    private String storageGroupId;
 
     /**
      * 虚拟库存量,必填,不能小于0
@@ -94,12 +100,12 @@ public class STOStorage extends BaseInfo{
         this.storageName = storageName;
     }
 
-    public String getGroupId() {
-        return groupId;
+    public String getStorageGroupId() {
+        return storageGroupId;
     }
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
+    public void setStorageGroupId(String groupId) {
+        this.storageGroupId = groupId;
     }
 
     public Long getTotalNum() {
@@ -157,4 +163,12 @@ public class STOStorage extends BaseInfo{
     public void setOperId(Long operId) {
         this.operId = operId;
     }
+
+	public String getProductCatId() {
+		return productCatId;
+	}
+
+	public void setProductCatId(String productCatId) {
+		this.productCatId = productCatId;
+	}
 }
