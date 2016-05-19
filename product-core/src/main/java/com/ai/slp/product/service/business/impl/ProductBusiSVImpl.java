@@ -85,7 +85,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         String standedProdId = group.getStandedProdId();
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,standedProdId);
         if (standedProduct==null) {
-            logger.warn("未找到对应标准品,租户ID:{0},标准品标识:{1}",tenantId,standedProdId);
+            logger.warn("未找到对应标准品,租户ID:{},标准品标识:{}",tenantId,standedProdId);
             throw new BusinessException("","未找到对应标准品信息,租户id:"+tenantId+",标准品标识:"+standedProdId);
         }
         //查询类目是否有销售属性

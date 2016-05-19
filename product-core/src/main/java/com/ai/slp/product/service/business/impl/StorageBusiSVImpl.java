@@ -144,21 +144,21 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			//库存标识为空,库存对应价格为空,库存销售价小于等于0,均不处理
 			if (StringUtils.isBlank(storageId)
 					||priceMap.get(storageId)==null || priceMap.get(storageId)<=0){
-				logger.warn("库存标识为空或销售价不大于零,库存标识[{0}],销售价[{1}]",storageId,priceMap.get(storageId));
+				logger.warn("库存标识为空或销售价不大于零,库存标识[{}],销售价[{}]",storageId,priceMap.get(storageId));
 				continue;
 			}
 
 			// 查看对应的标识下是否存在库存信息
 			Storage storage0 = storageMapper.selectByPrimaryKey(storageId);
 			if (storage0 == null) {
-				logger.warn("未查询到指定库存,库存标识[{0}]",storageId);
+				logger.warn("未查询到指定库存,库存标识[{}]",storageId);
 				continue;
 			}
 			// 获取当前库存对应库存组
 			StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,storage0.getStorageGroupId());
 			if (storageGroup==null
 					|| storageGroup.getHighSalePrice()==null || storageGroup.getLowSalePrice()==null){
-				logger.warn("未找到对应库存组或库存组为设置最低最高销售价,租户ID:{0},库存组标识:{1}"
+				logger.warn("未找到对应库存组或库存组为设置最低最高销售价,租户ID:{},库存组标识:{}"
 						,tenantId,storage0.getStorageGroupId());
 				throw new BusinessException("","未找到对应库存组或库存组未设置最低最高销售价,租户ID:"+tenantId+",库存组标识:"+storage0.getStorageGroupId());
 			}
