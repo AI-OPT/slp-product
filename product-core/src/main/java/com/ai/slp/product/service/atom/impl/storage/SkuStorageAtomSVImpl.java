@@ -6,6 +6,8 @@ import com.ai.slp.product.dao.mapper.bo.storage.SkuStorageCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.SkuStorageMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -72,6 +74,7 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
      */
     @Override
     public int install(SkuStorage skuStorage) {
+    	skuStorage.setSkuStorageId(SequenceUtil.genskuStorageId());
         skuStorage.setOperTime(DateUtils.currTimeStamp());
         return skuStorageMapper.insert(skuStorage);
     }

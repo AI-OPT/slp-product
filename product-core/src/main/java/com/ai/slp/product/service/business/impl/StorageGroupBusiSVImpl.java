@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.constants.ProdPriceLogConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -244,7 +245,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			BeanUtils.copyProperties(prodPriceLog, storageGroup);
 			prodPriceLog.setObjId(storageGroup.getStorageGroupId());
 			// 设置类型为库存组
-			prodPriceLog.setObjType("SG");
+			prodPriceLog.setObjType(ProdPriceLogConstants.ProdPriceLog.ObjType.STORAGE_GROUP);
 			prodPriceLog.setUpdatePrice(storageGroup.getLowSalePrice());
 			if (storageGroup.getHighSalePrice() != null)
 				prodPriceLog.setUpdatePeice2(storageGroup.getHighSalePrice());
