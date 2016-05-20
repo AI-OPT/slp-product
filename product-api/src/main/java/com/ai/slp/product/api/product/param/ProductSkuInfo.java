@@ -76,7 +76,7 @@ public class ProductSkuInfo extends BaseResponse {
         this.state = state;
     }
 
-    public Long getTotalNum() {
+    public long getTotalNum() {
         return totalNum;
     }
 
