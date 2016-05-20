@@ -20,11 +20,13 @@ import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.SkuStorageConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuLog;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
@@ -251,10 +253,38 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	public int saveOrUpdateStorage(STOStorage stoStorage) {
 		String tenantId = stoStorage.getTenantId();
 		Long operId = stoStorage.getOperId();
+		// 通过库存组查询库存相关标准品信息及是否有销售属性1.库存组标识查库存组,2.库存组的标准品标识查询标准品信息,3.获取是否有销售属性
+		StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId, stoStorage.getStorageGroupId());
+		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, storageGroup.getStandedProdId());
+		// 商品是否有销售属性
+		String isSaleAttr = storageGroup.getIsSaleAttr();
 		// 库存标识为空进行新增操作
 		if (stoStorage.getStorageId() == null || stoStorage.getStorageId().isEmpty()) {
+			// 增加销售商品信息
+			Product product = new Product();
+			product.setTenantId(tenantId);
+			product.setProductCatId(stoStorage.getProductCatId());
+			product.setStandedProdId(standedProduct.getStandedProdId());
+			product.setStorageGroupId(stoStorage.getStorageGroupId());
+			// 设置商品名称为标准品名称,设置商品类型为标准品类型
+			product.setProdName(standedProduct.getStandedProductName());
+			product.setProductType(standedProduct.getProductType());
+			product.setIsSaleAttr(isSaleAttr);
+			product.setOperId(operId);
+			// 设置商品状态为新增状态
+			product.setState(ProductConstants.Product.State.ADD);
+			// 调用方法保存商品
+			int saveProductNum = productAtomSV.installProduct(product);
+			if(saveProductNum<=0){
+				throw new BusinessException("", "新增商城商品失败,商品ID="+product.getProdId());
+			}
+			//新增库存信息
 			Storage storage = new Storage();
 			BeanUtils.copyProperties(storage, stoStorage);
+			storage.setProdId(product.getProdId());
+			storage.setIsSaleAttr(isSaleAttr);
+			//设置优先级
+			storage.setPriorityNumber(stoStorage.getPriorityNumber());
 			int saveNum = storageAtomSV.insertStorage(storage);
 			if (saveNum <= 0) {
 				// 没有插入成功返回0
@@ -264,29 +294,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			StorageLog storageLog = new StorageLog();
 			BeanUtils.copyProperties(storageLog, storage);
 			storageLogAtomSV.installLog(storageLog);
-			// TODO 新增SKU虚拟库存
-
-			// 增加销售商品信息
-			Product product = new Product();
-			product.setTenantId(tenantId);
-			product.setProductCatId(stoStorage.getProductCatId());
-			// 通过库存组查询库存相关标准品信息1.库存组标识查库存组,2.库存组的标准品标识查询标准品信息
-			StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId, stoStorage.getStorageGroupId());
-			StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, storageGroup.getStandedProdId());
-			product.setStandedProdId(standedProduct.getStandedProdId());
-			product.setStorageGroupId(stoStorage.getStorageGroupId());
-			// 设置商品名称为标准品名称,设置商品类型为标准品类型
-			product.setProdName(standedProduct.getStandedProductName());
-			product.setProductType(standedProduct.getProductType());
-			// 商品是否有销售属性
-			String isSaleAttr = storageGroup.getIsSaleAttr();
-			product.setIsSaleAttr(isSaleAttr);
-			product.setOperId(operId);
-			// 设置商品状态为新增状态
-			product.setState(ProductConstants.Product.State.ADD);
-			// 调用方法保存商品
-			productAtomSV.installProduct(product);
-
+			
+			
 			if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)) {
 				// 如果有销售属性则返回
 				return saveNum;
@@ -305,32 +314,95 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				prodSku.setState(CommonSatesConstants.STATE_ACTIVE);
 				prodSku.setOperId(operId);
 				int saveProdSku = prodSkuAtomSV.createObj(prodSku);
-				if (saveProdSku > 0) {
-					// 更新SKU日志信息
-					ProdSkuLog prodSkuLog = new ProdSkuLog();
-					BeanUtils.copyProperties(prodSkuLog, prodSku);
-					prodSkuLogAtomSV.install(prodSkuLog);
+				if (saveProdSku <= 0) {
+						throw new BusinessException("", "添加单品SKU失败,单品SKU_ID="+prodSku.getSkuId());
+				}
+				// 添加SKU日志信息
+				ProdSkuLog prodSkuLog = new ProdSkuLog();
+				BeanUtils.copyProperties(prodSkuLog, prodSku);
+				prodSkuLogAtomSV.install(prodSkuLog);
+				
+				// 新增SKU虚拟库存,数据来自虚拟库存和单品SKU
+				SkuStorage skuStorage = new SkuStorage();
+				skuStorage.setSkuId(prodSku.getSkuId());
+				skuStorage.setStorageId(storage.getStorageId());
+				skuStorage.setTotalNum(storage.getTotalNum());
+				skuStorage.setState(SkuStorageConstants.SkuStorage.State.ACTIVE);
+				skuStorage.setOperId(operId);
+				int saveSkuStorage = skuStorageAtomSV.install(skuStorage);
+				if(saveSkuStorage<=0){
+					throw new BusinessException("", "添加SKU虚拟库存失败,虚拟库存ID="+skuStorage.getSkuStorageId());
 				}
 				return saveNum;
 			} else {
 				throw new BusinessException("", "不是有效的是否有销售属性状态" + isSaleAttr);
 			}
 		}
+		//获取库存ID
+		String storageId = stoStorage.getStorageId();
 		// 判断库存标识是否存在库存信息
-		if (storageAtomSV.findStorage(tenantId, stoStorage.getStorageId()) <= 0) {
-			throw new BusinessException("", "找不到指定的标识的库存,库存标识=" + stoStorage.getStorageId());
+		if (storageAtomSV.findStorage(tenantId, storageId) <= 0) {
+			throw new BusinessException("", "找不到指定的标识的库存,库存标识=" + storageId);
 		}
-		// 库存标识不为空且存在库存则进行修改
+		//如果存在则修改库存信息,只能修改名称和最低预警库存量
 		Storage storage = new Storage();
-		BeanUtils.copyProperties(storage, stoStorage);
+		storage.setStorageId(storageId);
+		storage.setStorageName(stoStorage.getStorageName());
+		storage.setWarnNum(storage.getWarnNum());
+		storage.setOperId(operId);
 		int updateNum = storageAtomSV.updateById(storage);
-		if (updateNum > 0) {
-			// 更新库存日志信息
-			StorageLog storageLog = new StorageLog();
-			BeanUtils.copyProperties(storageLog, storage);
-			storageLogAtomSV.installLog(storageLog);
+		if (updateNum <= 0) {
+			throw new BusinessException("", "修改库存信息失败,库存ID="+storageId);
 		}
-		//TODO 更新SKU库存信息,数据来自虚拟库存和单品SKU
+		// 更新库存日志信息
+		StorageLog storageLog = new StorageLog();
+		BeanUtils.copyProperties(storageLog, storage);
+		storageLogAtomSV.installLog(storageLog);
 		return updateNum;
+		
+		
+//		if(isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.NO)){
+//			// 如果没有销售属性则修改库存,并修改SKU库存的库存量
+//			Storage storage = new Storage();
+//			storage.setStorageId(storageId);
+//			storage.setStorageName(stoStorage.getStorageName());
+//			storage.setTotalNum(stoStorage.getTotalNum());
+//			storage.setWarnNum(stoStorage.getWarnNum());
+//			storage.setActiveTime(stoStorage.getActiveTime());
+//			storage.setInactiveTime(stoStorage.getInactiveTime());
+//			storage.setOperId(operId);
+//			int updateNum = storageAtomSV.updateById(storage);
+//			if (updateNum <= 0) {
+//				throw new BusinessException("", "修改库存信息失败,库存ID="+storageId);
+//			}
+//			// 更新库存日志信息
+//			StorageLog storageLog = new StorageLog();
+//			BeanUtils.copyProperties(storageLog, storageAtomSV.queryById(storageId));
+//			storageLogAtomSV.installLog(storageLog);
+//			//更新SKU库存信息
+//			return updateNum;
+//		}else if(isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)){
+//			// 如果有销售属性则修改库存和SKU库存(多个SKU库存)
+//		}
+		
 	}
+	
+//	/**
+//	 * 修改库存和SKU库存信息
+//	 */
+//	private int updateStorageSku(Storage storage){
+//		String storageId = storage.getStorageId();
+//		//修改库存信息
+//		int updateNum = storageAtomSV.updateById(storage);
+//		if (updateNum <= 0) {
+//			throw new BusinessException("", "修改库存信息失败,库存ID="+storageId);
+//		}
+//		// 更新库存日志信息
+//		StorageLog storageLog = new StorageLog();
+//		BeanUtils.copyProperties(storageLog, storageAtomSV.queryById(storageId));
+//		storageLogAtomSV.installLog(storageLog);
+//		//通过库存标识查找相关的SKU虚拟库存(包括多个)
+//		
+//		return 0;
+//	}
 }

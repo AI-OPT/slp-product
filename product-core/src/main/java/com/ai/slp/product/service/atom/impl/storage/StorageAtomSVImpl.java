@@ -81,7 +81,7 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	@Override
 	public int updateById(Storage storage) {
 		storage.setOperTime(DateUtils.currTimeStamp());
-		return storageMapper.updateByPrimaryKey(storage);
+		return storageMapper.updateByPrimaryKeySelective(storage);
 	}
 
 	/**
