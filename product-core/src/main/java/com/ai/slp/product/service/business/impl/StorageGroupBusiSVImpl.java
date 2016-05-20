@@ -74,7 +74,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
         String standedProdId = storageGroup.getProdId();
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,standedProdId);
         if (standedProduct==null) {
-            logger.warn("未找到对应标准品,租户ID:{0},标准品标识:{1}",tenantId,standedProdId);
+            logger.warn("未找到对应标准品,租户ID:{},标准品标识:{}",tenantId,standedProdId);
             throw new BusinessException("","未找到对应标准品信息,租户id:"+tenantId+",标准品标识:"+standedProdId);
         }
         //添加库存组信息,状态默认为停用
