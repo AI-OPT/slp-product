@@ -57,7 +57,7 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
                 throw new BusinessException("", "找不到指定的预警对象="+warnReceiveStaffOper.getObjectId()+
                         ",找不到操作人="+warnReceiveStaffOper.getOperId());
             //根据操作类型查询是否存在-现只有仓库-通过预警对象标识查库存是否存在
-            if(storageAtomSV.findStorage(warnReceiveStaffOper.getTenantId(), warnReceiveStaffOper.getObjectId())>0){
+            if(storageAtomSV.findStorage(warnReceiveStaffOper.getObjectId())>0){
                 WarnReceiveStaff warnReceiveStaff = new WarnReceiveStaff();
                 BeanUtils.copyProperties(warnReceiveStaff, warnReceiveStaffOper);
                 warnReceiveStaffAtomSV.insertWarnReceiveStaff(warnReceiveStaff);

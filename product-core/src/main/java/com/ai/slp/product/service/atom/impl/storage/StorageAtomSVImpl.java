@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ai.opt.sdk.components.sequence.util.SeqUtil;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
@@ -43,7 +42,7 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	 * 查询库存是否存在(通过预警对象标识)
 	 */
 	@Override
-	public int findStorage(String tenantId, String storageId) {
+	public int findStorage(String storageId) {
 		StorageCriteria example = new StorageCriteria();
 		example.createCriteria().andStorageIdEqualTo(storageId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
 		return storageMapper.countByExample(example);
