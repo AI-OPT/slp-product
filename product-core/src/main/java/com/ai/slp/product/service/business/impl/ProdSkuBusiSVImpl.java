@@ -80,12 +80,12 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         String tenantId = saveInfo.getTenantId(),productId = saveInfo.getProdId();
         Product product = productAtomSV.selectByProductId(tenantId,productId);
         if (product==null){
-        	logger.warn("未找到指定商品,租户ID{0},商品标识{1}:"+tenantId+","+productId);
+        	logger.warn("未找到指定商品,租户ID{},商品标识{}:"+tenantId+","+productId);
         	throw new BusinessException("","未找到指定商品,租户ID:"+tenantId+",商品标识:"+productId);
         }
         StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
         if (group==null){
-        	logger.warn("未找到指定商品,租户ID{0},库存组标识{1}:"+tenantId+","+product.getStandedProdId());
+        	logger.warn("未找到指定商品,租户ID{},库存组标识{}:"+tenantId+","+product.getStandedProdId());
             throw new BusinessException("","未找到指定库存组,租户ID:"+tenantId+",库存组标识:"+product.getStandedProdId());
         }
         //查询库存组下库存
@@ -149,7 +149,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         //查询商品信息
         Product product = productAtomSV.selectByProductId(tenantId,productId);
         if (product==null){
-        	logger.warn("未找到指定商品,租户ID{0},商品标识{1}:"+tenantId+","+productId);
+        	logger.warn("未找到指定商品,租户ID{},商品标识{}:"+tenantId+","+productId);
             throw new BusinessException("","查询商品信息不存在,租户ID:"+tenantId+",商品标识:"+productId);
         }
         //查询商品的SKU信息

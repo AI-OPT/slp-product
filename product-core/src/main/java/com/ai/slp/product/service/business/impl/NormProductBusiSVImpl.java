@@ -166,7 +166,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     public NormProdInfoResponse queryById(String tenantId, String productId) {
         StandedProduct product = standedProductAtomSV.selectById(tenantId, productId);
         if (product == null) {
-            logger.warn("租户[{0}]下不存在标识[{1}]的标准品", tenantId, productId);
+            logger.warn("租户[{}]下不存在标识[{}]的标准品", tenantId, productId);
             throw new BusinessException("", "未找到对应标准品信息,租户id=" + tenantId + ",标准品标识=" + productId);
         }
         NormProdInfoResponse response = new NormProdInfoResponse();
