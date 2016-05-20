@@ -61,5 +61,14 @@ public interface IStorageBusiSV {
      * @return
      * @author lipeng16
      */
-    public int saveOrUpdateStorage(STOStorage stoStorage);
+    public int saveStorage(STOStorage stoStorage);
+    
+    /**
+     * 修改库存信息
+     *
+     * @param stoStorage
+     * @return
+     * @author lipeng16
+     */
+    public int updateStorageNameWarn(STOStorage stoStorage);
 }

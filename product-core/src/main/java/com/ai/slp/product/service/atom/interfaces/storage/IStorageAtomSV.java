@@ -24,7 +24,7 @@ public interface IStorageAtomSV {
      * @return
      * @author lipeng16
      */
-    public int findStorage(String tenantId,String storageId);
+    public int findStorage(String storageId);
 
     /**
      * 查询启用状态的库存信息
