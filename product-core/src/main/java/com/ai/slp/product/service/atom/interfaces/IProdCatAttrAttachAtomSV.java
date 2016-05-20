@@ -1,9 +1,10 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import java.util.List;
+
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-
-import java.util.List;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 
 /**
  * 类目属性扩展表
@@ -29,4 +30,5 @@ public interface IProdCatAttrAttachAtomSV {
      * @return
      */
     public List<ProdAttrvalueDef> queryValListByCatAttr(String tenantId, String catAttrId);
+   
 }

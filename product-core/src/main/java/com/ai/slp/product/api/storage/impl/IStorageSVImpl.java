@@ -172,6 +172,9 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public StorageRes queryStorageById(String storageId) throws BusinessException, SystemException {
+		
+		
+		
 		return null;
 	}
 

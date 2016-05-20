@@ -23,7 +23,7 @@ import java.util.Map;
 @Component
 public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
     @Autowired
-    StandedProdAttrMapper prodAttrMapper;
+    StandedProdAttrMapper standedProdAttrMapper;
     /**
      * 添加标准品属性值
      *
@@ -38,13 +38,13 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
         prodAttr.setStandedProdAttrId(SequenceUtil.genStandedProdAttrId());
         if (prodAttr.getOperTime()==null)
             prodAttr.setOperTime(DateUtils.currTimeStamp());
-        return prodAttrMapper.insert(prodAttr);
+        return standedProdAttrMapper.insert(prodAttr);
     }
 
     @Override
     public int updateObj(StandedProdAttr prodAttr) {
         prodAttr.setOperTime(DateUtils.currTimeStamp());
-        return prodAttrMapper.updateByPrimaryKey(prodAttr);
+        return standedProdAttrMapper.updateByPrimaryKey(prodAttr);
     }
 
 
@@ -63,7 +63,7 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId)
                 .andStandedProdIdEqualTo(standedId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
-        return prodAttrMapper.selectByExample(example);
+        return standedProdAttrMapper.selectByExample(example);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
                 .andStandedProdIdEqualTo(standedId)
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
 
-        return prodAttrMapper.updateByExampleSelective(prodAttr,example);
+        return standedProdAttrMapper.updateByExampleSelective(prodAttr,example);
     }
 
     /**
@@ -105,7 +105,7 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
                 .andTenantIdEqualTo(tenantId)
                 .andAttrIdEqualTo(attrId)
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
-        return prodAttrMapper.countByExample(example);
+        return standedProdAttrMapper.countByExample(example);
     }
 
     /**
@@ -125,7 +125,7 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
                 .andStandedProdIdEqualTo(standedId)
                 .andAttrIdEqualTo(attrId)
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
-        return prodAttrMapper.selectByExample(example);
+        return standedProdAttrMapper.selectByExample(example);
     }
 
 }

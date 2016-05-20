@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ai.slp.product.constants.CommonSatesConstants;
@@ -138,4 +139,14 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         return prodCatAttrMapper.countByExample(example);
     }
 
+	@Override
+	public List<ProdCatAttr> queryCatAttrByAttrId(String tenantId, Long attrId) {
+		if (StringUtils.isBlank(tenantId) || attrId == null) {
+			return new ArrayList<ProdCatAttr>();
+		}
+		ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+		example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId)
+				.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+		return prodCatAttrMapper.selectByExample(example);
+	}
 }

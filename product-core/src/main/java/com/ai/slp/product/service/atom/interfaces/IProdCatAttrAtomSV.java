@@ -102,4 +102,9 @@ public interface IProdCatAttrAtomSV {
     *  @ApiCode
      */
     public int selectCatNumByAttrId(String tenantId, Long attrId );
+    
+    /**
+     * 通过属性标识查看商品类目属性信息
+     */
+    public List<ProdCatAttr> queryCatAttrByAttrId(String tenantId,Long attrId);
 }
