@@ -14,7 +14,7 @@ public class ProductSkuInfo extends BaseResponse {
     /**
      * 销售商品标识
      */
-    private String prodId;
+    private String productId;
     /**
      * 商品名称
      */
@@ -28,9 +28,13 @@ public class ProductSkuInfo extends BaseResponse {
      */
     private String state;
     /**
-     * 库存量
+     * 商品图片标识
      */
-    private long totalNum;
+    private String vfsId;
+    /**
+     * 库存可用量
+     */
+    private long usableNum;
     /**
      * 销售价
      */
@@ -44,12 +48,12 @@ public class ProductSkuInfo extends BaseResponse {
         this.skuId = skuId;
     }
 
-    public String getProdId() {
-        return prodId;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setProdId(String prodId) {
-        this.prodId = prodId;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -76,12 +80,20 @@ public class ProductSkuInfo extends BaseResponse {
         this.state = state;
     }
 
-    public long getTotalNum() {
-        return totalNum;
+    public String getVfsId() {
+        return vfsId;
     }
 
-    public void setTotalNum(long totalNum) {
-        this.totalNum = totalNum;
+    public void setVfsId(String vfsId) {
+        this.vfsId = vfsId;
+    }
+
+    public long getUsableNum() {
+        return usableNum;
+    }
+
+    public void setUsableNum(long usableNum) {
+        this.usableNum = usableNum;
     }
 
     public Long getSalePrice() {
