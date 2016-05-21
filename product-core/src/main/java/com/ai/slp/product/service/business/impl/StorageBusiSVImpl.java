@@ -16,8 +16,10 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.param.STOStorage;
+import com.ai.slp.product.api.storage.param.SkuStorageAndProd;
 import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
+import com.ai.slp.product.api.storage.param.StorageRes;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
@@ -28,6 +30,7 @@ import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuLog;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
@@ -367,8 +370,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				return false;
 			}
 			for (ProdCatAttr prodCatAttr : prodCatAttrList) {
-				if(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(prodCatAttr.getAttrType())){
-					//有一个是销售属性则返回true
+				if (ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(prodCatAttr.getAttrType())) {
+					// 有一个是销售属性则返回true
 					return true;
 				}
 			}
@@ -404,6 +407,47 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		BeanUtils.copyProperties(storageLog, storage);
 		storageLogAtomSV.installLog(storageLog);
 		return updateNum;
+	}
+
+	/**
+	 * 查看库存信息
+	 */
+	@Override
+	public StorageRes queryStorageById(String storageId) {
+		if (storageAtomSV.queryAllStateStorage(storageId) == null) {
+			throw new BusinessException("", "找不到指定标识的库存,库存ID" + storageId);
+		}
+		Storage storage = storageAtomSV.queryAllStateStorage(storageId);
+		StorageRes storageRes = new StorageRes();
+		BeanUtils.copyProperties(storageRes, storage);
+		return storageRes;
+	}
+
+	@Override
+	public List<SkuStorageAndProd> querySkuStorageById(String storageId) {
+		// 通过库存标识查询SKU库存集合
+		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storageId);
+		if (CollectionUtil.isEmpty(skuStorageList)) {
+			throw new BusinessException("", "找不到指定库存标识的SKU库存,库存标识=" + storageId);
+		}
+		List<SkuStorageAndProd> skuStorageAndProdList = new ArrayList<>();
+		SkuStorageAndProd skuStorageAndProd = null;
+		// 通过SKU库存的SKU标识查对应的商品SKU
+		for (SkuStorage skuStorage : skuStorageList) {
+			String skuId = skuStorage.getSkuId();
+			ProdSku prodSku = prodSkuAtomSV.querySkuById(skuId);
+			if (prodSku == null) {
+				continue;
+			}
+			skuStorageAndProd = new SkuStorageAndProd();
+			skuStorageAndProd.setSkuId(skuId);
+			skuStorageAndProd.setSkuStorageId(storageId);
+			skuStorageAndProd.setTotalNum(skuStorage.getTotalNum());
+			skuStorageAndProd.setSaleAttrs(prodSku.getSaleAttrs());
+			//填充返回值
+			skuStorageAndProdList.add(skuStorageAndProd);
+		}
+		return CollectionUtil.isEmpty(skuStorageAndProdList) ? null : skuStorageAndProdList;
 	}
 
 	// /**

@@ -39,4 +39,13 @@ public interface ISkuStorageAtomSV {
      * @return
      */
     public int install(SkuStorage skuStorage);
+    
+    /**
+     * 根据库存ID查询SKU库存
+     *
+     * @param storageId
+     * @return
+     * @author lipeng16
+     */
+    public List<SkuStorage> queryByStorageId(String storageId);
 }

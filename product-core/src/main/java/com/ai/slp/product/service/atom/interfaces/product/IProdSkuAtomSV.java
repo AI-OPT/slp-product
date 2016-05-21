@@ -30,4 +30,12 @@ public interface IProdSkuAtomSV {
      * @return
      */
     public int createObj(ProdSku prodSku);
+    /**
+     * 通过SKU标识查询SKU信息
+     *
+     * @param skuId
+     * @return
+     * @author lipeng16
+     */
+    public ProdSku querySkuById(String skuId);
 }

@@ -44,7 +44,7 @@ public interface IStorageAtomSV {
     public int updateById(Storage storage);
 
     /**
-     * 查询指定标识的库存
+     * 查询指定标识的库存(不包括废弃的)
      * @param storageId
      * @return
      */
@@ -67,5 +67,14 @@ public interface IStorageAtomSV {
      * @author lipeng16
      */
     public int insertStorage(Storage storage);
+    
+    /**
+     * 通过库存标识查询库存(所有状态,包括启用\停用\废弃等)
+     *
+     * @param storageId
+     * @return
+     * @author lipeng16
+     */
+    public Storage queryAllStateStorage(String storageId);
 
 }

@@ -1,12 +1,16 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import com.ai.slp.product.dao.mapper.bo.storage.Storage;
+import java.util.List;
 
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.param.STOStorage;
+import com.ai.slp.product.api.storage.param.SkuStorageAndProd;
 import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
+import com.ai.slp.product.api.storage.param.StorageRes;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
+import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 
 /**
  * 库存业务操作
@@ -71,4 +75,22 @@ public interface IStorageBusiSV {
      * @author lipeng16
      */
     public int updateStorageNameWarn(STOStorage stoStorage);
+    
+    /**
+     * 查看库存信息
+     *
+     * @param storageId
+     * @return
+     * @author lipeng16
+     */
+    public StorageRes queryStorageById(String storageId);
+    
+    /**
+     * 查询SKU库存信息
+     *
+     * @param storageId
+     * @return
+     * @author lipeng16
+     */
+    public List<SkuStorageAndProd> querySkuStorageById(String storageId);
 }

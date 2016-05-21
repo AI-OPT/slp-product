@@ -229,4 +229,16 @@ public interface IStorageSV {
     public BaseResponse updateMultiStorageSalePrice(StorageSalePrice salePrice)
             throws BusinessException,SystemException;
     @interface UpdateMultiStorageSalePrice{}
+    
+    /**
+     * 查看sku库存信息和sku单品
+     *
+     * @return 
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng16
+     * @ApiCode STORAGE_0114
+     */
+    public List<SkuStorageAndProd> querySkuStorageById(String storageId) throws BusinessException,SystemException;
+    @interface QuerySkuStorageById{}
 }

@@ -11,6 +11,8 @@ import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -172,10 +174,10 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public StorageRes queryStorageById(String storageId) throws BusinessException, SystemException {
-		
-		
-		
-		return null;
+		if(StringUtils.isEmpty(storageId)){
+			throw new BusinessException("", "库存ID不存在,库存ID"+storageId);
+		}
+		return storageBusiSV.queryStorageById(storageId);
 	}
 
 	/**
@@ -337,5 +339,23 @@ public class IStorageSVImpl implements IStorageSV {
 		responseHeader.setResultMessage("修改库存销售价成功");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
+	}
+
+	 
+    /**
+     * 查看sku库存信息和sku单品
+     *
+     * @return 
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng16
+     * @ApiCode STORAGE_0114
+     */
+	@Override
+	public List<SkuStorageAndProd> querySkuStorageById(String storageId) throws BusinessException, SystemException {
+		if(StringUtils.isEmpty(storageId)){
+			throw new BusinessException("", "指定的库存标识不存在,库存ID="+storageId);
+		}
+		return storageBusiSV.querySkuStorageById(storageId);
 	}
 }

@@ -3,9 +3,11 @@ package com.ai.slp.product.service.atom.impl.storage;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
@@ -44,7 +46,10 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	@Override
 	public int findStorage(String storageId) {
 		StorageCriteria example = new StorageCriteria();
-		example.createCriteria().andStorageIdEqualTo(storageId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+		List<String> stateList = new ArrayList<>();
+		stateList.add(StorageConstants.Storage.State.DISCARD);
+		stateList.add(StorageConstants.Storage.State.AUTO_DISCARD);
+		example.createCriteria().andStorageIdEqualTo(storageId).andStateNotIn(stateList);
 		return storageMapper.countByExample(example);
 	}
 
@@ -116,5 +121,13 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 		//新增库存的状态为停用
 		storage.setState(StorageConstants.Storage.State.STOP);
 		return storageMapper.insert(storage);
+	}
+
+	@Override
+	public Storage queryAllStateStorage(String storageId) {
+		if(StringUtils.isEmpty(storageId)){
+			throw new BusinessException("", "库存ID不存在,库存ID"+storageId);
+		}
+		return storageMapper.selectByPrimaryKey(storageId);
 	}
 }
