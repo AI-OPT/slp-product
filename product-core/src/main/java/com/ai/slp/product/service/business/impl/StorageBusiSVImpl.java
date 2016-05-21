@@ -215,6 +215,15 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		}
 		return count;
 	}
+	
+	/**
+	 * 修改库存状态,启用/停用
+	 *
+	 * @author lipeng16
+	 */
+	public void updateStorageState(){
+		
+	}
 
 	/**
 	 * 启用库存

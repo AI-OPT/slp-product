@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 
 /**
  * 类目属性扩展表

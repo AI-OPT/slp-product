@@ -9,7 +9,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * Created by jackieliu on 16/5/20.
  */
 public class SkuInfoQuery extends BaseInfo {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * SKU单品标识
      */
     @NotBlank(message = "SKU单品标识不能为空",groups = {IProductServerSV.QueryProducSkutById.class})

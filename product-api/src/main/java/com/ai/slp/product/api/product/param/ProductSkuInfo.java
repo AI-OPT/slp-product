@@ -7,7 +7,8 @@ import com.ai.opt.base.vo.BaseResponse;
  * Created by jackieliu on 16/5/20.
  */
 public class ProductSkuInfo extends BaseResponse {
-    /**
+    private static final long serialVersionUID = 1L;
+	/**
      * sku单品标识
      */
     private String skuId;
