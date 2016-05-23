@@ -325,63 +325,73 @@ public class ProdPictureLogCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdIsNull() {
-            addCriterion("SKU_ATTR_ID is null");
+        public Criteria andAttrvalueDefIdIsNull() {
+            addCriterion("ATTRVALUE_DEF_ID is null");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdIsNotNull() {
-            addCriterion("SKU_ATTR_ID is not null");
+        public Criteria andAttrvalueDefIdIsNotNull() {
+            addCriterion("ATTRVALUE_DEF_ID is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdEqualTo(Long value) {
-            addCriterion("SKU_ATTR_ID =", value, "skuAttrId");
+        public Criteria andAttrvalueDefIdEqualTo(String value) {
+            addCriterion("ATTRVALUE_DEF_ID =", value, "attrvalueDefId");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdNotEqualTo(Long value) {
-            addCriterion("SKU_ATTR_ID <>", value, "skuAttrId");
+        public Criteria andAttrvalueDefIdNotEqualTo(String value) {
+            addCriterion("ATTRVALUE_DEF_ID <>", value, "attrvalueDefId");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdGreaterThan(Long value) {
-            addCriterion("SKU_ATTR_ID >", value, "skuAttrId");
+        public Criteria andAttrvalueDefIdGreaterThan(String value) {
+            addCriterion("ATTRVALUE_DEF_ID >", value, "attrvalueDefId");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("SKU_ATTR_ID >=", value, "skuAttrId");
+        public Criteria andAttrvalueDefIdGreaterThanOrEqualTo(String value) {
+            addCriterion("ATTRVALUE_DEF_ID >=", value, "attrvalueDefId");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdLessThan(Long value) {
-            addCriterion("SKU_ATTR_ID <", value, "skuAttrId");
+        public Criteria andAttrvalueDefIdLessThan(String value) {
+            addCriterion("ATTRVALUE_DEF_ID <", value, "attrvalueDefId");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdLessThanOrEqualTo(Long value) {
-            addCriterion("SKU_ATTR_ID <=", value, "skuAttrId");
+        public Criteria andAttrvalueDefIdLessThanOrEqualTo(String value) {
+            addCriterion("ATTRVALUE_DEF_ID <=", value, "attrvalueDefId");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdIn(List<Long> values) {
-            addCriterion("SKU_ATTR_ID in", values, "skuAttrId");
+        public Criteria andAttrvalueDefIdLike(String value) {
+            addCriterion("ATTRVALUE_DEF_ID like", value, "attrvalueDefId");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdNotIn(List<Long> values) {
-            addCriterion("SKU_ATTR_ID not in", values, "skuAttrId");
+        public Criteria andAttrvalueDefIdNotLike(String value) {
+            addCriterion("ATTRVALUE_DEF_ID not like", value, "attrvalueDefId");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdBetween(Long value1, Long value2) {
-            addCriterion("SKU_ATTR_ID between", value1, value2, "skuAttrId");
+        public Criteria andAttrvalueDefIdIn(List<String> values) {
+            addCriterion("ATTRVALUE_DEF_ID in", values, "attrvalueDefId");
             return (Criteria) this;
         }
 
-        public Criteria andSkuAttrIdNotBetween(Long value1, Long value2) {
-            addCriterion("SKU_ATTR_ID not between", value1, value2, "skuAttrId");
+        public Criteria andAttrvalueDefIdNotIn(List<String> values) {
+            addCriterion("ATTRVALUE_DEF_ID not in", values, "attrvalueDefId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrvalueDefIdBetween(String value1, String value2) {
+            addCriterion("ATTRVALUE_DEF_ID between", value1, value2, "attrvalueDefId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrvalueDefIdNotBetween(String value1, String value2) {
+            addCriterion("ATTRVALUE_DEF_ID not between", value1, value2, "attrvalueDefId");
             return (Criteria) this;
         }
 

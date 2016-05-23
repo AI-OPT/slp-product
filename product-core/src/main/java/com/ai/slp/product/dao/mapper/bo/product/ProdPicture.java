@@ -7,7 +7,7 @@ public class ProdPicture {
 
     private String prodId;
 
-    private Long skuAttrId;
+    private String attrvalueDefId;
 
     private String picUses;
 
@@ -41,12 +41,12 @@ public class ProdPicture {
         this.prodId = prodId == null ? null : prodId.trim();
     }
 
-    public Long getSkuAttrId() {
-        return skuAttrId;
+    public String getAttrvalueDefId() {
+        return attrvalueDefId;
     }
 
-    public void setSkuAttrId(Long skuAttrId) {
-        this.skuAttrId = skuAttrId;
+    public void setAttrvalueDefId(String attrvalueDefId) {
+        this.attrvalueDefId = attrvalueDefId == null ? null : attrvalueDefId.trim();
     }
 
     public String getPicUses() {

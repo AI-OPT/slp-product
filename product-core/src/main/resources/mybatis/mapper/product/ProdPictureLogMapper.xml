@@ -5,7 +5,7 @@
     <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
     <result column="PRO_PICTURE_ID" property="proPictureId" jdbcType="DECIMAL" />
     <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
-    <result column="SKU_ATTR_ID" property="skuAttrId" jdbcType="DECIMAL" />
+    <result column="ATTRVALUE_DEF_ID" property="attrvalueDefId" jdbcType="VARCHAR" />
     <result column="PIC_USES" property="picUses" jdbcType="CHAR" />
     <result column="PIC_TYPE" property="picType" jdbcType="VARCHAR" />
     <result column="VFS_ID" property="vfsId" jdbcType="VARCHAR" />
@@ -74,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    LOG_ID, PRO_PICTURE_ID, PROD_ID, SKU_ATTR_ID, PIC_USES, PIC_TYPE, VFS_ID, IS_MAIN_PIC, 
+    LOG_ID, PRO_PICTURE_ID, PROD_ID, ATTRVALUE_DEF_ID, PIC_USES, PIC_TYPE, VFS_ID, IS_MAIN_PIC, 
     SERIAL_NUMBER, STATE, OPER_ID, OPER_TIME
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdPictureLogCriteria" >
@@ -113,12 +113,12 @@
   </delete>
   <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdPictureLog" >
     insert into prod_picture_log (LOG_ID, PRO_PICTURE_ID, PROD_ID, 
-      SKU_ATTR_ID, PIC_USES, PIC_TYPE, 
+      ATTRVALUE_DEF_ID, PIC_USES, PIC_TYPE, 
       VFS_ID, IS_MAIN_PIC, SERIAL_NUMBER, 
       STATE, OPER_ID, OPER_TIME
       )
     values (#{logId,jdbcType=VARCHAR}, #{proPictureId,jdbcType=DECIMAL}, #{prodId,jdbcType=VARCHAR}, 
-      #{skuAttrId,jdbcType=DECIMAL}, #{picUses,jdbcType=CHAR}, #{picType,jdbcType=VARCHAR}, 
+      #{attrvalueDefId,jdbcType=VARCHAR}, #{picUses,jdbcType=CHAR}, #{picType,jdbcType=VARCHAR}, 
       #{vfsId,jdbcType=VARCHAR}, #{isMainPic,jdbcType=CHAR}, #{serialNumber,jdbcType=DECIMAL}, 
       #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}
       )
@@ -135,8 +135,8 @@
       <if test="prodId != null" >
         PROD_ID,
       </if>
-      <if test="skuAttrId != null" >
-        SKU_ATTR_ID,
+      <if test="attrvalueDefId != null" >
+        ATTRVALUE_DEF_ID,
       </if>
       <if test="picUses != null" >
         PIC_USES,
@@ -173,8 +173,8 @@
       <if test="prodId != null" >
         #{prodId,jdbcType=VARCHAR},
       </if>
-      <if test="skuAttrId != null" >
-        #{skuAttrId,jdbcType=DECIMAL},
+      <if test="attrvalueDefId != null" >
+        #{attrvalueDefId,jdbcType=VARCHAR},
       </if>
       <if test="picUses != null" >
         #{picUses,jdbcType=CHAR},
@@ -220,8 +220,8 @@
       <if test="record.prodId != null" >
         PROD_ID = #{record.prodId,jdbcType=VARCHAR},
       </if>
-      <if test="record.skuAttrId != null" >
-        SKU_ATTR_ID = #{record.skuAttrId,jdbcType=DECIMAL},
+      <if test="record.attrvalueDefId != null" >
+        ATTRVALUE_DEF_ID = #{record.attrvalueDefId,jdbcType=VARCHAR},
       </if>
       <if test="record.picUses != null" >
         PIC_USES = #{record.picUses,jdbcType=CHAR},
@@ -257,7 +257,7 @@
     set LOG_ID = #{record.logId,jdbcType=VARCHAR},
       PRO_PICTURE_ID = #{record.proPictureId,jdbcType=DECIMAL},
       PROD_ID = #{record.prodId,jdbcType=VARCHAR},
-      SKU_ATTR_ID = #{record.skuAttrId,jdbcType=DECIMAL},
+      ATTRVALUE_DEF_ID = #{record.attrvalueDefId,jdbcType=VARCHAR},
       PIC_USES = #{record.picUses,jdbcType=CHAR},
       PIC_TYPE = #{record.picType,jdbcType=VARCHAR},
       VFS_ID = #{record.vfsId,jdbcType=VARCHAR},
@@ -279,8 +279,8 @@
       <if test="prodId != null" >
         PROD_ID = #{prodId,jdbcType=VARCHAR},
       </if>
-      <if test="skuAttrId != null" >
-        SKU_ATTR_ID = #{skuAttrId,jdbcType=DECIMAL},
+      <if test="attrvalueDefId != null" >
+        ATTRVALUE_DEF_ID = #{attrvalueDefId,jdbcType=VARCHAR},
       </if>
       <if test="picUses != null" >
         PIC_USES = #{picUses,jdbcType=CHAR},
@@ -313,7 +313,7 @@
     update prod_picture_log
     set PRO_PICTURE_ID = #{proPictureId,jdbcType=DECIMAL},
       PROD_ID = #{prodId,jdbcType=VARCHAR},
-      SKU_ATTR_ID = #{skuAttrId,jdbcType=DECIMAL},
+      ATTRVALUE_DEF_ID = #{attrvalueDefId,jdbcType=VARCHAR},
       PIC_USES = #{picUses,jdbcType=CHAR},
       PIC_TYPE = #{picType,jdbcType=VARCHAR},
       VFS_ID = #{vfsId,jdbcType=VARCHAR},
