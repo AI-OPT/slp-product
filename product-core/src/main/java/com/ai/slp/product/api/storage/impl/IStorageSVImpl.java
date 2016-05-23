@@ -5,6 +5,7 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
@@ -343,7 +344,7 @@ public class IStorageSVImpl implements IStorageSV {
 
 	 
     /**
-     * 查看sku库存信息和sku单品
+     * 查看SKU库存信息和SKU单品
      *
      * @return 
      * @throws BusinessException
@@ -357,5 +358,29 @@ public class IStorageSVImpl implements IStorageSV {
 			throw new BusinessException("", "指定的库存标识不存在,库存ID="+storageId);
 		}
 		return storageBusiSV.querySkuStorageById(storageId);
+	}
+
+	/**
+     * 新增SKU库存信息(有销售属性)
+     *
+     * @param skuStorageAddList
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng16
+     * @ApiCode STORAGE_0115
+     */
+	@Override
+	public BaseResponse addSkuStorage(List<SkuStorageAdd> skuStorageAddList) throws BusinessException, SystemException {
+		if(CollectionUtil.isEmpty(skuStorageAddList)){
+			throw new BusinessException("", "新增信息集合为空");
+		}
+		BaseResponse baseResponse = new BaseResponse();
+		ResponseHeader responseHeader = new ResponseHeader();
+		responseHeader.setIsSuccess(true);
+		responseHeader.setResultCode("");
+		responseHeader.setResultMessage("新增SKU库存信息成功(有销售属性");
+		baseResponse.setResponseHeader(responseHeader);
+		return baseResponse;
 	}
 }

@@ -16,6 +16,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.param.STOStorage;
+import com.ai.slp.product.api.storage.param.SkuStorageAdd;
 import com.ai.slp.product.api.storage.param.SkuStorageAndProd;
 import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
@@ -232,7 +233,6 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	private void activeStorage(Storage storage) {
 		// 检查库存可用量,若没有则设置为自动停用.
-		// TODO
 		// 若有库存,则检查库存组是否自动停用,若是,则自动启用
 	}
 
@@ -432,6 +432,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		return storageRes;
 	}
 
+	/**
+	 * 查看SKU库存
+	 */
 	@Override
 	public List<SkuStorageAndProd> querySkuStorageById(String storageId) {
 		// 通过库存标识查询SKU库存集合
@@ -457,6 +460,23 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			skuStorageAndProdList.add(skuStorageAndProd);
 		}
 		return CollectionUtil.isEmpty(skuStorageAndProdList) ? null : skuStorageAndProdList;
+	}
+
+	/**
+	 * 新增SKU库存
+	 */
+	@Override
+	public int insertSkuStorage(List<SkuStorageAdd> skuStorageAddList) {
+		SkuStorage skuStorage = null; 
+		int count = 0;
+		for(SkuStorageAdd skuStorageAdd : skuStorageAddList){
+			skuStorage = new SkuStorage();
+			BeanUtils.copyProperties(skuStorage, skuStorageAdd);
+			skuStorage.setState(SkuStorageConstants.SkuStorage.State.ACTIVE);
+			int addNum = skuStorageAtomSV.install(skuStorage);
+			count+=addNum;
+		}
+		return count;
 	}
 
 	// /**
