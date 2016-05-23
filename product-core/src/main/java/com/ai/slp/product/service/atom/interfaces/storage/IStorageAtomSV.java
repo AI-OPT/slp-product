@@ -76,5 +76,13 @@ public interface IStorageAtomSV {
      * @author lipeng16
      */
     public Storage queryAllStateStorage(String storageId);
+    
+    /**
+     * 通过库存组标识和库存标识查找库存信息(所有状态)
+     *
+     * @return
+     * @author lipeng16
+     */
+    public Storage queryStorageByGroupAndId(String storageGroupId, String storageId);
 
 }

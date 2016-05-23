@@ -222,7 +222,14 @@ public class IStorageSVImpl implements IStorageSV {
 	@Override
 	public BaseResponse chargeStoragePriority(StoragePriorityCharge priorityCharge)
 			throws BusinessException, SystemException {
-		return null;
+		CommonCheckUtils.checkTenantId(priorityCharge.getTenantId(), "");
+		int updateNum = storageBusiSV.updateStoragePriority(priorityCharge);
+		BaseResponse baseResponse = new BaseResponse();
+		ResponseHeader responseHeader = new ResponseHeader();
+		responseHeader.setIsSuccess(updateNum>0 ? true : false);
+		responseHeader.setResultCode("");
+		baseResponse.setResponseHeader(responseHeader);
+		return baseResponse;
 	}
 
 	/**
@@ -241,10 +248,10 @@ public class IStorageSVImpl implements IStorageSV {
 	public BaseResponse updateStorageGroupName(StorageGroupUpName storageGroup)
 			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(storageGroup.getTenantId(), "");
-		storageGroupBusiSV.updateGroupName(storageGroup);
+		int updateNum = storageGroupBusiSV.updateGroupName(storageGroup);
 		BaseResponse baseResponse = new BaseResponse();
 		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(true);
+		responseHeader.setIsSuccess(updateNum>0 ? true : false);
 		responseHeader.setResultCode("");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;

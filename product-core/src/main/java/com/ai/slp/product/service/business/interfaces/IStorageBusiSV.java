@@ -8,6 +8,7 @@ import com.ai.slp.product.api.storage.param.SkuStorageAdd;
 import com.ai.slp.product.api.storage.param.SkuStorageAndProd;
 import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
+import com.ai.slp.product.api.storage.param.StoragePriorityCharge;
 import com.ai.slp.product.api.storage.param.StorageRes;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
@@ -102,4 +103,13 @@ public interface IStorageBusiSV {
      * @author lipeng16
      */
     public int insertSkuStorage(List<SkuStorageAdd> skuStorageAddList);
+    
+    /**
+     * 变更库存优先级
+     *
+     * @param StoPriorityCharge
+     * @return
+     * @author lipeng16
+     */
+    public int updateStoragePriority(StoragePriorityCharge StoPriorityCharge);
 }

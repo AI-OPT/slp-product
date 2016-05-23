@@ -20,6 +20,7 @@ import com.ai.slp.product.api.storage.param.SkuStorageAdd;
 import com.ai.slp.product.api.storage.param.SkuStorageAndProd;
 import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
+import com.ai.slp.product.api.storage.param.StoragePriorityCharge;
 import com.ai.slp.product.api.storage.param.StorageRes;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
 import com.ai.slp.product.constants.CommonSatesConstants;
@@ -216,14 +217,14 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		}
 		return count;
 	}
-	
+
 	/**
 	 * 修改库存状态,启用/停用
 	 *
 	 * @author lipeng16
 	 */
-	public void updateStorageState(){
-		
+	public void updateStorageState() {
+
 	}
 
 	/**
@@ -390,7 +391,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	}
 
 	/**
-	 * 修改库存信息,只能修改名称和最低预警库存量-实用有和无销售属性两种状态
+	 * 修改库存信息,只能修改名称和最低预警库存量-适用有和无销售属性两种状态
 	 */
 	@Override
 	public int updateStorageNameWarn(STOStorage stoStorage) {
@@ -456,7 +457,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			skuStorageAndProd.setSkuStorageId(storageId);
 			skuStorageAndProd.setTotalNum(skuStorage.getTotalNum());
 			skuStorageAndProd.setSaleAttrs(prodSku.getSaleAttrs());
-			//填充返回值
+			// 填充返回值
 			skuStorageAndProdList.add(skuStorageAndProd);
 		}
 		return CollectionUtil.isEmpty(skuStorageAndProdList) ? null : skuStorageAndProdList;
@@ -467,14 +468,66 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	@Override
 	public int insertSkuStorage(List<SkuStorageAdd> skuStorageAddList) {
-		SkuStorage skuStorage = null; 
+		SkuStorage skuStorage = null;
 		int count = 0;
-		for(SkuStorageAdd skuStorageAdd : skuStorageAddList){
+		for (SkuStorageAdd skuStorageAdd : skuStorageAddList) {
 			skuStorage = new SkuStorage();
 			BeanUtils.copyProperties(skuStorage, skuStorageAdd);
 			skuStorage.setState(SkuStorageConstants.SkuStorage.State.ACTIVE);
 			int addNum = skuStorageAtomSV.install(skuStorage);
-			count+=addNum;
+			count += addNum;
+		}
+		return count;
+	}
+
+	@Override
+	public int updateStoragePriority(StoragePriorityCharge stoPriorityCharge) {
+		// 获取库存组标识
+		String storageGroupId = stoPriorityCharge.getStorageGroupId();
+		if (stoPriorityCharge == null
+				|| storageGroupAtomSV.queryByGroupId(stoPriorityCharge.getTenantId(), storageGroupId) == null) {
+			logger.warn("找不到指定的库存组,库存组标识=" + stoPriorityCharge.getStorageGroupId());
+			return 0;
+		}
+		if (stoPriorityCharge.getPriorityMap().isEmpty()) {
+			logger.warn("找不到指定的优先级map对象");
+			return 0;
+		}
+		// 获取操作人标识
+		Long operId = stoPriorityCharge.getOperId();
+		Map<Short, List<String>> priorityMap = stoPriorityCharge.getPriorityMap();
+		Storage storage = null;
+		int count = 0;
+		// 遍历map获取优先级对应的库存ID集合
+		for (Short priorityNum : priorityMap.keySet()) {
+			List<String> storageIdList = priorityMap.get(priorityNum);
+			if (CollectionUtil.isEmpty(storageIdList)) {
+				continue;
+			}
+			// 遍历优先级对应的库存ID集合
+			for (String storageId : storageIdList) {
+				if (storageAtomSV.queryStorageByGroupAndId(storageGroupId, storageId) == null) {
+					continue;
+				}
+				//获取优先级
+				Short oldPriority = storageAtomSV.queryStorageByGroupAndId(storageGroupId, storageId).getPriorityNumber();
+				//如果优先级没有改变则不进行下一步的修改操作
+				if(priorityNum == oldPriority){
+					continue;
+				}
+				storage = new Storage();
+				storage.setStorageId(storageId);
+				storage.setOperId(operId);
+				storage.setPriorityNumber(priorityNum);
+				int updateNum = storageAtomSV.updateById(storage);
+				if(updateNum>0){
+					//更新库存日志信息
+					StorageLog storageLog = new StorageLog();
+					BeanUtils.copyProperties(storageLog, storage);
+					storageLogAtomSV.installLog(storageLog);
+				}
+				count += updateNum;
+			}
 		}
 		return count;
 	}

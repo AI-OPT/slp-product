@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria;
@@ -128,5 +129,13 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 			throw new BusinessException("", "库存ID不存在,库存ID"+storageId);
 		}
 		return storageMapper.selectByPrimaryKey(storageId);
+	}
+
+	@Override
+	public Storage queryStorageByGroupAndId(String storageGroupId, String storageId) {
+		StorageCriteria example = new StorageCriteria();
+		example.createCriteria().andStorageIdEqualTo(storageId).andStorageGroupIdEqualTo(storageGroupId);
+		List<Storage> storageList = storageMapper.selectByExample(example);
+		return CollectionUtil.isEmpty(storageList) ? null : storageList.get(0);
 	}
 }
