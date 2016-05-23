@@ -231,7 +231,7 @@ public interface IStorageSV {
     @interface UpdateMultiStorageSalePrice{}
     
     /**
-     * 查看sku库存信息和sku单品
+     * 查看SKU库存信息和SKU单品
      *
      * @return 
      * @throws BusinessException
@@ -241,4 +241,17 @@ public interface IStorageSV {
      */
     public List<SkuStorageAndProd> querySkuStorageById(String storageId) throws BusinessException,SystemException;
     @interface QuerySkuStorageById{}
+    
+    /**
+     * 新增SKU库存信息(有销售属性)
+     *
+     * @param skuStorageAddList
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author lipeng16
+     * @ApiCode STORAGE_0115
+     */
+    public BaseResponse addSkuStorage(List<SkuStorageAdd> skuStorageAddList) throws BusinessException,SystemException;
+    @interface AddSkuStorage {}
 }

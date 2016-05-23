@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.param.STOStorage;
+import com.ai.slp.product.api.storage.param.SkuStorageAdd;
 import com.ai.slp.product.api.storage.param.SkuStorageAndProd;
 import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
 import com.ai.slp.product.api.storage.param.StorageRes;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
-import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 
 /**
@@ -93,4 +93,13 @@ public interface IStorageBusiSV {
      * @author lipeng16
      */
     public List<SkuStorageAndProd> querySkuStorageById(String storageId);
+    
+    /**
+     * 新增SKU库存(有销售属性)
+     *
+     * @param skuStorageAddList
+     * @return
+     * @author lipeng16
+     */
+    public int insertSkuStorage(List<SkuStorageAdd> skuStorageAddList);
 }
