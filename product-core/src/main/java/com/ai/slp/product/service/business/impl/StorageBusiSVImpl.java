@@ -99,7 +99,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * @param storage
 	 */
 	@Override
-	public void discardStorage(Storage storage) {
+	public void discardStorage(Storage storage, Long operId) {
 		// 废弃库存
 		if (storageAtomSV.updateById(storage) > 0) {
 			StorageLog storageLog = new StorageLog();
@@ -117,6 +117,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	@Override
 	public void autoStopStorage(Storage storage) {
+		//售罄后自动停用,上级库存组停用自动停用
 		// TODO...
 	}
 
@@ -148,15 +149,15 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 
 		switch (state) {
 		case StorageConstants.Storage.State.ACTIVE:// 转启用
-			// TODO 调用启用库存方法
-			activeStorage(storage);
+			// 调用启用库存方法
+			activeStorage(storage,operId);
 			break;
 		case StorageConstants.Storage.State.STOP:// 转停用
-			// TODO 调用停用库存方法
-			stopStorage(storage);
+			// 调用停用库存方法
+			stopStorage(storage,operId);
 			break;
 		case StorageConstants.Storage.State.DISCARD:// 转废弃
-			discardStorage(storage);
+			discardStorage(storage,operId);
 			break;
 		default:
 			throw new BusinessException("", "无法识别的状态:" + state);
@@ -169,8 +170,34 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * @param storage
 	 * @author lipeng16
 	 */
-	private void stopStorage(Storage storage) {
-		//库存状态变为停用
+	@Override
+	public void stopStorage(Storage storage, Long operId) {
+		//库存对应的库存组下是否存在启用或自动启用的库存,若存在则直接停用
+		List<Storage> storageList = storageAtomSV.queryStorageActiveByGroupId(storage.getStorageGroupId());
+		if(!CollectionUtil.isEmpty(storageList)){
+			//库存状态变为停用并更新日志
+			storage.setState(StorageConstants.Storage.State.STOP);
+			storage.setOperId(operId);
+			if(storageAtomSV.updateById(storage)>0){
+				StorageLog storageLog = new StorageLog();
+				BeanUtils.copyProperties(storageLog, storage);
+				storageLogAtomSV.installLog(storageLog);
+			}
+			//TODO 调用自动切换库存方法
+			return;
+		}
+		//若不存在,则该库存组对应商品状态若为在售则变为停用下架
+		Product product = productAtomSV.queryProductByGroupId(TenantIdConstants.tenantId, storage.getStorageGroupId());
+		if(!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+			return;
+		}
+		product.setState(ProductConstants.Product.State.STOP);
+		product.setOperId(operId);
+		if(productAtomSV.updateById(product)>0){
+			ProductLog productLog = new ProductLog();
+			BeanUtils.copyProperties(productLog, product);
+			productLogAtomSV.install(productLog);
+		}
 	}
 
 	/**
@@ -240,7 +267,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * 
 	 * @param storage
 	 */
-	private void activeStorage(Storage storage) {
+	@Override
+	public void activeStorage(Storage storage, Long operId) {
 		// 检查库存可用量,若有库存,则检查库存组是否自动停用,若是,则自动启用
 		if (storage.getUsableNum() > 0) {
 			// 通过库存组ID查询启用或自动启用的库存
@@ -248,6 +276,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			if (CollectionUtil.isEmpty(storageList)) {
 				// 如果不存在启用的库存则更新当前库存状态为启用
 				storage.setState(StorageConstants.Storage.State.ACTIVE);
+				storage.setOperId(operId);
 				// 更新库存和日志
 				if (storageAtomSV.updateById(storage) > 0) {
 					StorageLog storageLog = new StorageLog();
@@ -268,6 +297,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				if(ProductConstants.Product.State.SALE_OUT.equals(product.getState()) || ProductConstants.Product.State.STOP.equals(product.getState())){
 					//是则改为在售
 					product.setState(ProductConstants.Product.State.IN_SALE);
+					storage.setOperId(operId);
 					//更新商品和日志
 					if(productAtomSV.updateById(product) >0 ){
 						ProductLog productLog = new ProductLog();
@@ -279,6 +309,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				if (storageList.get(0).getPriorityNumber().equals(storage.getPriorityNumber())) {
 					// 判断当前启用状态的优先级是否与当前库存的优先级相同,相同则改为启用状态
 					storage.setState(StorageConstants.Storage.State.ACTIVE);
+					storage.setOperId(operId);
 					// 更新库存和日志
 					if (storageAtomSV.updateById(storage) > 0) {
 						StorageLog storageLog = new StorageLog();
