@@ -138,4 +138,21 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 		List<Storage> storageList = storageMapper.selectByExample(example);
 		return CollectionUtil.isEmpty(storageList) ? null : storageList.get(0);
 	}
+
+	/**
+	 * 通过库存组标识查询状态为启用或自动启用的库存
+	 *
+	 * @param storageGroupId
+	 * @return
+	 * @author lipeng16
+	 */
+	@Override
+	public List<Storage> queryStorageActiveByGroupId(String storageGroupId) {
+		StorageCriteria example = new StorageCriteria();
+		List<String> stateList = new ArrayList<>();
+		stateList.add(StorageConstants.Storage.State.ACTIVE);
+		stateList.add(StorageConstants.Storage.State.AUTO_ACTIVE);
+		example.createCriteria().andStorageGroupIdEqualTo(storageGroupId).andStateIn(stateList);
+		return storageMapper.selectByExample(example);
+	}
 }
