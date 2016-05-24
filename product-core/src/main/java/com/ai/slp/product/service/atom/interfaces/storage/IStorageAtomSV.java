@@ -85,4 +85,12 @@ public interface IStorageAtomSV {
      */
     public Storage queryStorageByGroupAndId(String storageGroupId, String storageId);
 
+    /**
+     * 通过库存组标识查询启用或自动启用状态的库存
+     *
+     * @param storageGroupId
+     * @return
+     * @author lipeng16
+     */
+    public List<Storage> queryStorageActiveByGroupId(String storageGroupId);
 }

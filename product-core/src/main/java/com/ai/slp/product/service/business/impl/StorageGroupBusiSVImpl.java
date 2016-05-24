@@ -362,6 +362,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		}
 		// TODO 库存废弃包括SKU库存状态为自动废弃
 
+		// 库存组下库存状态也为废弃
+		
 		// 库存组废弃
 		storageGroup.setState(StorageConstants.StorageGroup.State.DISCARD);
 		storageGroup.setOperId(operId);
