@@ -43,7 +43,7 @@ public class ProductSKUResponse extends BaseResponse{
     /**
      * 库存可用量
      */
-    private long usableNum;
+    private Long usableNum;
     /**
      * 销售价
      */
@@ -105,10 +105,10 @@ public class ProductSKUResponse extends BaseResponse{
 	public void setProductAttrList(List<ProductSKUAttr> productAttrList) {
 		this.productAttrList = productAttrList;
 	}
-	public long getUsableNum() {
+	public Long getUsableNum() {
 		return usableNum;
 	}
-	public void setUsableNum(long usableNum) {
+	public void setUsableNum(Long usableNum) {
 		this.usableNum = usableNum;
 	}
 	public Double getSalePrice() {
