@@ -20,6 +20,8 @@ public interface IProductDetailSV {
 	 * @return
 	 * @throws BusinessException
 	 * @throws SystemException
+	 * @ApiDocMethod
+     * @ApiCode 
 	 */
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest productSKURequest) throws BusinessException,SystemException;;
 	@interface QueryProducSKUById{}

@@ -1,8 +1,11 @@
 package com.ai.slp.product.api.webfront.param;
 
+import java.io.Serializable;
 
-public class ProductSKUAttrValue{
+
+public class ProductSKUAttrValue implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 商品属性值标识
 	 */
