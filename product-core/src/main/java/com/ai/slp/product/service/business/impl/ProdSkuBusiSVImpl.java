@@ -2,6 +2,7 @@ package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
@@ -113,7 +114,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
             skuSaleAttrs.remove(prodSku.getSaleAttrs());
         }
         //若新添加SKU,则需要废除之前所有库存.
-        if (skuSaleAttrs!=null && skuSaleAttrs.size()>0) {
+        if (!CollectionUtil.isEmpty(skuSaleAttrs)) {
             //查询库存组下库存
             List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId,group.getStorageGroupId());
             for (Storage storage : storageList) {

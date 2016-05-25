@@ -5,14 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.param.*;
-import com.ai.slp.product.constants.ProdPriceLogConstants;
-import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.*;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.*;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import com.ai.slp.route.api.routequery.interfaces.IRouteQuerySV;
+import com.ai.slp.route.api.routequery.param.RouteGroupQueryResult;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,16 +27,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
 import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 
@@ -61,6 +61,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	IProdPriceLogAtomSV prodPriceLogAtomSV;
 	@Autowired
 	IStorageBusiSV storageBusiSV;
+	@Autowired
+	ISkuStorageAtomSV skuStorageAtomSV;
 
 	/**
 	 * 添加库存组
@@ -313,29 +315,22 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		if (queryResult==null || !RouteConstants.RouteGroup.State.RIGHT.equals(queryResult.getState())){
 			throw new BusinessException("","对应路由组状态不正常,无法启用库存组");
 		}
-		// TODO...
 		// 判断标准品的状态是否可用
 		String staProdState = standedProductAtomSV.selectById(storageGroup.getTenantId(), storageGroup.getStandedProdId()).getState();
 		if(!StandedProductConstants.STATUS_ACTIVE.equals(staProdState)){
-			throw new BusinessException("", "改库存组对应的标准品的状态不可用,不能启用");
+			throw new BusinessException("", "该库存组对应的标准品的状态不可用,不能启用");
 		}
 		// 判断库存组下SKU库存有没有价格1.通过库存组查询所有库存,2.通过库存ID查找所有SKU库存的销售价是否存在
 		// 3.若存在则继续下一步,若不存在则提示添加价格后才可以启用.
 		List<Storage> storageList = storageAtomSV.queryOfGroup(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
 		// 如果该库存组下有库存则判断库存下的SKU库存是否有销售价
 		if(!CollectionUtil.isEmpty(storageList)){
+			List<String> storageIdList = new ArrayList<>();
 			for(Storage storage : storageList){
-				//通过库存标识查SKU库存
-				List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storage.getStorageId());
-				if(CollectionUtil.isEmpty(skuStorageList)){
-					break;
-				}
-				//判断所有SKU库存是否有销售价,若有一个没有则不允许启用库存组
-				for(SkuStorage skuStorage : skuStorageList){
-					if(skuStorage.getSalePrice()==null){
-						throw new BusinessException("", "有没有定销售价的单品,库存组不能启用,请先指定价格");
-					}
-				}
+				storageIdList.add(storage.getStorageId());
+			}
+			if (skuStorageAtomSV.queryNoPriceOfStorageByIdList(storageIdList)>0){
+				throw new BusinessException("","该库存组下存在未指定销售价的单品,库存组无法启用");
 			}
 		}
 		// 库存组设置为启用状态
