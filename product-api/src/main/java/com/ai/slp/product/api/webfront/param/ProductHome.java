@@ -35,6 +35,15 @@ public class ProductHome implements Serializable{
      * 商品图
      */
     private ProductImage productImage;
+    private String picUrl;
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
+    }
 
     public String getTenantId() {
         return tenantId;

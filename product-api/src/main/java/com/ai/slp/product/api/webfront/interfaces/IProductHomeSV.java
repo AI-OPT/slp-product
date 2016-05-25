@@ -26,5 +26,14 @@ public interface IProductHomeSV {
      * @ApiCode
      */
     public List<ProductHome> queryPhoneBillProduct()throws BusinessException, SystemException;
+    /**
+     * 获取推荐产品
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author zhanglh
+     * @ApiCode
+     */
+    public List<ProductHome> queryHotProduct()throws BusinessException, SystemException;
     
 }
