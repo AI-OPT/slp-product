@@ -155,4 +155,19 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 		example.createCriteria().andStorageGroupIdEqualTo(storageGroupId).andStateIn(stateList);
 		return storageMapper.selectByExample(example);
 	}
+
+	/**
+	 * 查询指定库存组下指定优先级库存列表
+	 *
+	 * @param groupId
+	 * @param priorityNum
+	 * @return
+	 */
+	@Override
+	public List<Storage> queryStorageByGroupIdAndPriority(String groupId, short priorityNum) {
+		StorageCriteria example = new StorageCriteria();
+		example.createCriteria().andStorageGroupIdEqualTo(groupId)
+				.andPriorityNumberEqualTo(priorityNum);
+		return storageMapper.selectByExample(example);
+	}
 }

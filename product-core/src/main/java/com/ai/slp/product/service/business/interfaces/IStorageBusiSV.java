@@ -129,6 +129,6 @@ public interface IStorageBusiSV {
      * @return
      * @author lipeng16
      */
-    public int updateStoragePriority(StoragePriorityCharge StoPriorityCharge);
+    public void updateStoragePriority(StoragePriorityCharge StoPriorityCharge);
     
 }

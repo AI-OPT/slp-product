@@ -579,75 +579,42 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	}
 
 	@Override
-	public int updateStoragePriority(StoragePriorityCharge stoPriorityCharge) {
+	public void updateStoragePriority(StoragePriorityCharge stoPriorityCharge) {
 		// 获取库存组标识
-		String storageGroupId = stoPriorityCharge.getStorageGroupId();
+		String groupId = stoPriorityCharge.getStorageGroupId();
+		String tenantId = stoPriorityCharge.getTenantId();
+		// 检查将移动优先级是否一致
+		if (stoPriorityCharge.getNewLevel() == stoPriorityCharge.getOldLevel()){
+			throw new BusinessException("","优先级为发生变更");
+		}
+		// 检查库存组是否存在
 		if (stoPriorityCharge == null
-				|| storageGroupAtomSV.queryByGroupId(stoPriorityCharge.getTenantId(), storageGroupId) == null)
-		{
-			logger.warn("找不到指定的库存组,库存组标识=" + stoPriorityCharge.getStorageGroupId());
-			return 0;
+				|| storageGroupAtomSV.queryByGroupId(tenantId, groupId) == null) {
+			logger.warn("找不到指定的库存组,租户表{},库存组标识{}",tenantId,groupId );
+			throw new BusinessException("","指定库存组不存在,租户ID:"+tenantId+",库存组ID:"+groupId);
 		}
-		if (stoPriorityCharge.getPriorityMap().isEmpty()) {
-			logger.warn("找不到指定的优先级map对象");
-			return 0;
-		}
-		// 获取操作人标识
-		Long operId = stoPriorityCharge.getOperId();
-		Map<Short, List<String>> priorityMap = stoPriorityCharge.getPriorityMap();
-		Storage storage = null;
-		int count = 0;
-		// 遍历map获取优先级对应的库存ID集合
-		for (Short priorityNum : priorityMap.keySet()) {
-			List<String> storageIdList = priorityMap.get(priorityNum);
-			if (CollectionUtil.isEmpty(storageIdList)) {
-				continue;
-			}
-			// 遍历优先级对应的库存ID集合
-			for (String storageId : storageIdList) {
-				if (storageAtomSV.queryStorageByGroupAndId(storageGroupId, storageId) == null) {
-					continue;
-				}
-				// 获取优先级
-				Short oldPriority = storageAtomSV.queryStorageByGroupAndId(storageGroupId, storageId)
-						.getPriorityNumber();
-				// 如果优先级没有改变则不进行下一步的修改操作
-				if (priorityNum == oldPriority) {
-					continue;
-				}
-				storage = new Storage();
-				storage.setStorageId(storageId);
-				storage.setOperId(operId);
-				storage.setPriorityNumber(priorityNum);
-				int updateNum = storageAtomSV.updateById(storage);
-				if (updateNum > 0) {
-					// 更新库存日志信息
-					StorageLog storageLog = new StorageLog();
-					BeanUtils.copyProperties(storageLog, storage);
-					storageLogAtomSV.installLog(storageLog);
-				}
-				count += updateNum;
-			}
-		}
-		return count;
+		// 获取要优先级库存
+		List<Storage> oldStorageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,stoPriorityCharge.getOldLevel());
+		List<Storage> newStorageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,stoPriorityCharge.getNewLevel());
+		changeStoragePriority(oldStorageList,stoPriorityCharge.getNewLevel());
+		changeStoragePriority(newStorageList,stoPriorityCharge.getOldLevel());
 	}
 
-	// /**
-	// * 修改库存和SKU库存信息
-	// */
-	// private int updateStorageSku(Storage storage){
-	// String storageId = storage.getStorageId();
-	// //修改库存信息
-	// int updateNum = storageAtomSV.updateById(storage);
-	// if (updateNum <= 0) {
-	// throw new BusinessException("", "修改库存信息失败,库存ID="+storageId);
-	// }
-	// // 更新库存日志信息
-	// StorageLog storageLog = new StorageLog();
-	// BeanUtils.copyProperties(storageLog, storageAtomSV.queryById(storageId));
-	// storageLogAtomSV.installLog(storageLog);
-	// //通过库存标识查找相关的SKU虚拟库存(包括多个)
-	//
-	// return 0;
-	// }
+	/**
+	 * 变更库存优先级
+	 * @param storageList
+	 * @param newLevel
+     */
+	private void changeStoragePriority(List<Storage> storageList,short newLevel){
+		if (CollectionUtil.isEmpty(storageList))
+			return;
+		for (Storage storage:storageList){
+			storage.setPriorityNumber(newLevel);
+			if (storageAtomSV.updateById(storage)>0){
+				StorageLog storageLog = new StorageLog();
+				BeanUtils.copyProperties(storageLog, storage);
+				storageLogAtomSV.installLog(storageLog);
+			}
+		}
+	}
 }

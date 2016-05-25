@@ -19,7 +19,6 @@ public interface IStorageAtomSV {
     
     /**
      * 查询库存是否存在(通过预警对象标识) 
-     * @param tenantId
      * @param storageId
      * @return
      * @author lipeng16
@@ -93,4 +92,13 @@ public interface IStorageAtomSV {
      * @author lipeng16
      */
     public List<Storage> queryStorageActiveByGroupId(String storageGroupId);
+
+    /**
+     * 查询指定库存组下指定优先级库存列表
+     *
+     * @param groupId
+     * @param priorityNum
+     * @return
+     */
+    public List<Storage> queryStorageByGroupIdAndPriority(String groupId,short priorityNum);
 }
