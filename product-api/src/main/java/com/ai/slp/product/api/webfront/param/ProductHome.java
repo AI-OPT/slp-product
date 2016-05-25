@@ -1,6 +1,10 @@
 package com.ai.slp.product.api.webfront.param;
 
-public class ProductHome{
+import java.io.Serializable;
+
+public class ProductHome implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 租户ID
