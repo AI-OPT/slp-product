@@ -8,6 +8,7 @@ import com.ai.slp.product.api.storage.param.SkuStorageAdd;
 import com.ai.slp.product.api.storage.param.SkuStorageAndProd;
 import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
+import com.ai.slp.product.api.storage.param.StoragePriorityCharge;
 import com.ai.slp.product.api.storage.param.StorageRes;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
@@ -23,13 +24,31 @@ public interface IStorageBusiSV {
      * 废弃库存组
      * @param storage
      */
-    public void discardStorage(Storage storage);
+    public void discardStorage(Storage storage, Long operId);
 
     /**
      * 自动停用库存
      * @param storage
      */
     public void autoStopStorage(Storage storage);
+    
+    /**
+     * 停用库存
+     *
+     * @param storage
+     * @param operId
+     * @author lipeng16
+     */
+    public void stopStorage(Storage storage, Long operId);
+    
+    /**
+     * 启用库存
+     *
+     * @param storage
+     * @param operId
+     * @author lipeng16
+     */
+    public void activeStorage(Storage storage, Long operId);
 
     /**
      * 更改库存状态
@@ -102,4 +121,14 @@ public interface IStorageBusiSV {
      * @author lipeng16
      */
     public int insertSkuStorage(List<SkuStorageAdd> skuStorageAddList);
+    
+    /**
+     * 变更库存优先级
+     *
+     * @param StoPriorityCharge
+     * @return
+     * @author lipeng16
+     */
+    public void updateStoragePriority(StoragePriorityCharge StoPriorityCharge);
+    
 }

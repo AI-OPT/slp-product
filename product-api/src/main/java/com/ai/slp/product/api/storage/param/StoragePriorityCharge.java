@@ -1,10 +1,15 @@
 package com.ai.slp.product.api.storage.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.IStorageSV;
+import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 /**
  * 变更库存组下库存的优先级<br>
@@ -19,23 +24,24 @@ public class StoragePriorityCharge extends BaseInfo {
 	/**
      * 库存组标识,必填
      */
-    @Min(value = 0,message = "库存组标识不能小于0",
+    @NotBlank(message = "库存组标识不能小于0",
             groups = {IStorageSV.ChargeStoragePriority.class})
-    private String groupId;
+    private String storageGroupId;
     /**
      * 原优先级,必填<br>
      * 不能小于0,不能与目标优先级一致
      */
     @Min(value = 0,message = "将修改优先级不能小于0",
             groups = {IStorageSV.ChargeStoragePriority.class})
-    private int oldLevel;
+    private short oldLevel;
     /**
      * 目标优先级,必填<br>
      * 不能小于0,不能与原优先级一致
      */
     @Min(value = 0,message = "变更的优先级不能小于0",
             groups = {IStorageSV.ChargeStoragePriority.class})
-    private int newLevel;
+    private short newLevel;
+
     /**
      * 操作人,必填
      */
@@ -43,27 +49,27 @@ public class StoragePriorityCharge extends BaseInfo {
             groups = {IStorageSV.ChargeStoragePriority.class})
     private Long operId;
 
-    public String getGroupId() {
-        return groupId;
+    public String getStorageGroupId() {
+        return storageGroupId;
     }
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
+    public void setStorageGroupId(String groupId) {
+        this.storageGroupId = groupId;
     }
 
-    public int getOldLevel() {
+    public short getOldLevel() {
         return oldLevel;
     }
 
-    public void setOldLevel(int oldLevel) {
+    public void setOldLevel(short oldLevel) {
         this.oldLevel = oldLevel;
     }
 
-    public int getNewLevel() {
+    public short getNewLevel() {
         return newLevel;
     }
 
-    public void setNewLevel(int newLevel) {
+    public void setNewLevel(short newLevel) {
         this.newLevel = newLevel;
     }
 
@@ -74,4 +80,5 @@ public class StoragePriorityCharge extends BaseInfo {
     public void setOperId(Long operId) {
         this.operId = operId;
     }
+
 }

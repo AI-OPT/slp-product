@@ -2,6 +2,7 @@ package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
@@ -88,8 +89,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         	logger.warn("未找到指定商品,租户ID{},库存组标识{}:"+tenantId+","+product.getStandedProdId());
             throw new BusinessException("","未找到指定库存组,租户ID:"+tenantId+",库存组标识:"+product.getStandedProdId());
         }
-        //查询库存组下库存
-        List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId,group.getStorageGroupId());
+        //只有在库存组停用时,才允许变更SKU.
+        //TODO...
+
         //查询商品的销售属性集合,序号正序
         Map<Long, List<String>> attrAndValMap = saveInfo.getAttrAndValIdMap();
         List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
@@ -111,28 +113,12 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
             }
             skuSaleAttrs.remove(prodSku.getSaleAttrs());
         }
-        //此时,skuSaleAttrs剩余要添加的SKU
-        for (String saleAttr:skuSaleAttrs){
-            ProdSku prodSku = new ProdSku();
-            prodSku.setTenantId(tenantId);
-            prodSku.setProdId(productId);
-            prodSku.setStorageGroupId(product.getStorageGroupId());
-            prodSku.setOperId(saveInfo.getOperId());
-            prodSku.setSaleAttrs(saleAttr);
-            prodSku.setState(ProductConstants.ProdSku.State.ACTIVE);
-            if (prodSkuAtomSV.createObj(prodSku)>0){
-                addSkuAttrs(prodSku);
-            }
-            //添加库存下的SKU库存
-            for (Storage storage:storageList){
-                SkuStorage skuStorage = new SkuStorage();
-                skuStorage.setSkuId(prodSku.getSkuId());
-                skuStorage.setStorageId(storage.getStorageId());
-                skuStorage.setTotalNum(0l);
-                skuStorage.setUsableNum(0l);
-                skuStorage.setState(StorageConstants.SkuStorage.State.AUTO_STOP);
-                skuStorage.setOperId(saveInfo.getOperId());
-                skuStorageAtomSV.install(skuStorage);
+        //若新添加SKU,则需要废除之前所有库存.
+        if (!CollectionUtil.isEmpty(skuSaleAttrs)) {
+            //查询库存组下库存
+            List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId,group.getStorageGroupId());
+            for (Storage storage : storageList) {
+                storageBusiSV.discardStorage(storage, saveInfo.getOperId());
             }
         }
     }

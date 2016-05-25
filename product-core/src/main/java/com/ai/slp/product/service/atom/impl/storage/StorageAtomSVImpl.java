@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria;
@@ -128,5 +129,45 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 			throw new BusinessException("", "库存ID不存在,库存ID"+storageId);
 		}
 		return storageMapper.selectByPrimaryKey(storageId);
+	}
+
+	@Override
+	public Storage queryStorageByGroupAndId(String storageGroupId, String storageId) {
+		StorageCriteria example = new StorageCriteria();
+		example.createCriteria().andStorageIdEqualTo(storageId).andStorageGroupIdEqualTo(storageGroupId);
+		List<Storage> storageList = storageMapper.selectByExample(example);
+		return CollectionUtil.isEmpty(storageList) ? null : storageList.get(0);
+	}
+
+	/**
+	 * 通过库存组标识查询状态为启用或自动启用的库存
+	 *
+	 * @param storageGroupId
+	 * @return
+	 * @author lipeng16
+	 */
+	@Override
+	public List<Storage> queryStorageActiveByGroupId(String storageGroupId) {
+		StorageCriteria example = new StorageCriteria();
+		List<String> stateList = new ArrayList<>();
+		stateList.add(StorageConstants.Storage.State.ACTIVE);
+		stateList.add(StorageConstants.Storage.State.AUTO_ACTIVE);
+		example.createCriteria().andStorageGroupIdEqualTo(storageGroupId).andStateIn(stateList);
+		return storageMapper.selectByExample(example);
+	}
+
+	/**
+	 * 查询指定库存组下指定优先级库存列表
+	 *
+	 * @param groupId
+	 * @param priorityNum
+	 * @return
+	 */
+	@Override
+	public List<Storage> queryStorageByGroupIdAndPriority(String groupId, short priorityNum) {
+		StorageCriteria example = new StorageCriteria();
+		example.createCriteria().andStorageGroupIdEqualTo(groupId)
+				.andPriorityNumberEqualTo(priorityNum);
+		return storageMapper.selectByExample(example);
 	}
 }

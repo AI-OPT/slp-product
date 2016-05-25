@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
@@ -79,6 +80,13 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	public int updateById(Product product) {
 		product.setOperTime(DateUtils.currTimeStamp());
 		return productMapper.updateByPrimaryKey(product);
+	}
+
+	@Override
+	public Product queryProductByGroupId(String tenantId, String groupId) {
+		ProductCriteria example = new ProductCriteria();
+		example.createCriteria().andTenantIdEqualTo(tenantId).andStorageGroupIdEqualTo(groupId);
+		return productMapper.selectByExample(example).get(0);
 	}
 
 	/**

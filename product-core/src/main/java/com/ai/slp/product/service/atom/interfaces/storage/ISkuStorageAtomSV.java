@@ -48,4 +48,11 @@ public interface ISkuStorageAtomSV {
      * @author lipeng16
      */
     public List<SkuStorage> queryByStorageId(String storageId);
+
+    /**
+     * 查询指定库存集合中没有销售价格的SKU库存数量
+     * @param storageIdList
+     * @return
+     */
+    public int queryNoPriceOfStorageByIdList(List<String> storageIdList);
 }

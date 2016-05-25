@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.SkuStorageConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
@@ -97,5 +98,21 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 		example.createCriteria().andStorageIdEqualTo(storageId)
 				.andStateNotEqualTo(SkuStorageConstants.SkuStorage.State.AUTO_DISCARD);
 		return skuStorageMapper.selectByExample(example);
+	}
+
+	/**
+	 * 查询指定库存集合中没有销售价格的SKU库存数量
+	 *
+	 * @param storageIdList
+	 * @return
+	 */
+	@Override
+	public int queryNoPriceOfStorageByIdList(List<String> storageIdList) {
+		if (CollectionUtil.isEmpty(storageIdList))
+			return 0;
+		SkuStorageCriteria example = new SkuStorageCriteria();
+		example.createCriteria().andStorageIdIn(storageIdList)
+				.andSalePriceIsNull();
+		return skuStorageMapper.countByExample(example);
 	}
 }

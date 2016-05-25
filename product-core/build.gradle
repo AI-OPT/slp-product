@@ -7,6 +7,8 @@ dependencies {
     compile 'org.springframework:spring-jdbc:4.1.7.RELEASE'
 
     compile 'com.ai.opt.sdk:opt-sdk:2.0-SNAPSHOT'
+    //路由相关查询
+    compile 'com.ai.slp.route:routequery:1.0-SNAPSHOT'
 
     testCompile(
             "org.springframework:spring-test:4.1.7.RELEASE",

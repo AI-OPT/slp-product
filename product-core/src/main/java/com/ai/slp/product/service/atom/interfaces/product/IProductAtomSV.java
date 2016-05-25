@@ -50,4 +50,14 @@ public interface IProductAtomSV {
 //     * @author lipeng16
 //     */
 //    public PageInfo<Product> selectProductPage(ProductPageQueryVo productPageQueryVo);
+    
+    /**
+     * 通过库存组标识查询商品
+     *
+     * @param tenantId
+     * @param groupId
+     * @return
+     * @author lipeng16
+     */
+    public Product queryProductByGroupId(String tenantId,String groupId);
 }

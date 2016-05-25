@@ -20,6 +20,7 @@ import com.ai.slp.product.api.storage.param.SkuStorageAdd;
 import com.ai.slp.product.api.storage.param.SkuStorageAndProd;
 import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
+import com.ai.slp.product.api.storage.param.StoragePriorityCharge;
 import com.ai.slp.product.api.storage.param.StorageRes;
 import com.ai.slp.product.api.storage.param.StorageSalePrice;
 import com.ai.slp.product.constants.CommonSatesConstants;
@@ -27,6 +28,7 @@ import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SkuStorageConstants;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.constants.TenantIdConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
@@ -34,6 +36,7 @@ import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuLog;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -46,6 +49,7 @@ import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
@@ -86,6 +90,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	IStandedProdAttrAtomSV standedProdAttrAtomSV;
 	@Autowired
 	IProdCatAttrAtomSV prodCatAttrAtomSV;
+	@Autowired
+	IProductLogAtomSV productLogAtomSV;
 
 	/**
 	 * 废弃库存
@@ -93,7 +99,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * @param storage
 	 */
 	@Override
-	public void discardStorage(Storage storage) {
+	public void discardStorage(Storage storage, Long operId) {
 		// 废弃库存
 		if (storageAtomSV.updateById(storage) > 0) {
 			StorageLog storageLog = new StorageLog();
@@ -111,6 +117,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	@Override
 	public void autoStopStorage(Storage storage) {
+		//售罄后自动停用,上级库存组停用自动停用
 		// TODO...
 	}
 
@@ -142,16 +149,54 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 
 		switch (state) {
 		case StorageConstants.Storage.State.ACTIVE:// 转启用
-			// TODO 调用启用库存方法
+			// 调用启用库存方法
+			activeStorage(storage,operId);
 			break;
 		case StorageConstants.Storage.State.STOP:// 转停用
-			// TODO 调用停用库存方法
+			// 调用停用库存方法
+			stopStorage(storage,operId);
 			break;
 		case StorageConstants.Storage.State.DISCARD:// 转废弃
-			discardStorage(storage);
+			discardStorage(storage,operId);
 			break;
 		default:
 			throw new BusinessException("", "无法识别的状态:" + state);
+		}
+	}
+
+	/**
+	 * 停用库存
+	 *
+	 * @param storage
+	 * @author lipeng16
+	 */
+	@Override
+	public void stopStorage(Storage storage, Long operId) {
+		//库存对应的库存组下是否存在启用或自动启用的库存,若存在则直接停用
+		List<Storage> storageList = storageAtomSV.queryStorageActiveByGroupId(storage.getStorageGroupId());
+		if(!CollectionUtil.isEmpty(storageList)){
+			//库存状态变为停用并更新日志
+			storage.setState(StorageConstants.Storage.State.STOP);
+			storage.setOperId(operId);
+			if(storageAtomSV.updateById(storage)>0){
+				StorageLog storageLog = new StorageLog();
+				BeanUtils.copyProperties(storageLog, storage);
+				storageLogAtomSV.installLog(storageLog);
+			}
+			//TODO 调用自动切换库存方法
+			return;
+		}
+		//若不存在,则该库存组对应商品状态若为在售则变为停用下架
+		Product product = productAtomSV.queryProductByGroupId(TenantIdConstants.tenantId, storage.getStorageGroupId());
+		if(!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+			return;
+		}
+		product.setState(ProductConstants.Product.State.STOP);
+		product.setOperId(operId);
+		if(productAtomSV.updateById(product)>0){
+			ProductLog productLog = new ProductLog();
+			BeanUtils.copyProperties(productLog, product);
+			productLogAtomSV.install(productLog);
 		}
 	}
 
@@ -216,24 +261,78 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		}
 		return count;
 	}
-	
-	/**
-	 * 修改库存状态,启用/停用
-	 *
-	 * @author lipeng16
-	 */
-	public void updateStorageState(){
-		
-	}
 
 	/**
 	 * 启用库存
 	 * 
 	 * @param storage
 	 */
-	private void activeStorage(Storage storage) {
-		// 检查库存可用量,若没有则设置为自动停用.
-		// 若有库存,则检查库存组是否自动停用,若是,则自动启用
+	@Override
+	public void activeStorage(Storage storage, Long operId) {
+		// 检查库存可用量,若有库存,则检查库存组是否自动停用,若是,则自动启用
+		if (storage.getUsableNum() > 0) {
+			// 通过库存组ID查询启用或自动启用的库存
+			List<Storage> storageList = storageAtomSV.queryStorageActiveByGroupId(storage.getStorageGroupId());
+			if (CollectionUtil.isEmpty(storageList)) {
+				// 如果不存在启用的库存则更新当前库存状态为启用
+				storage.setState(StorageConstants.Storage.State.ACTIVE);
+				storage.setOperId(operId);
+				// 更新库存和日志
+				if (storageAtomSV.updateById(storage) > 0) {
+					StorageLog storageLog = new StorageLog();
+					BeanUtils.copyProperties(storageLog, storage);
+					storageLogAtomSV.installLog(storageLog);
+				}
+				// 检查库存组状态
+				String state = storageGroupAtomSV
+						.queryByGroupId(TenantIdConstants.tenantId, storage.getStorageGroupId()).getState();
+				// 库存组状态不为启用或不启用则不进行下一步操作
+				if (!StorageConstants.StorageGroup.State.ACTIVE.equals(state)
+						|| !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(state))
+				{
+					return;
+				}
+				// 查询销售商品的状态是否为售罄下架或停用下架
+				Product product = productAtomSV.selectByGroupId(TenantIdConstants.tenantId, storage.getStorageGroupId());
+				if(ProductConstants.Product.State.SALE_OUT.equals(product.getState()) || ProductConstants.Product.State.STOP.equals(product.getState())){
+					//是则改为在售
+					product.setState(ProductConstants.Product.State.IN_SALE);
+					storage.setOperId(operId);
+					//更新商品和日志
+					if(productAtomSV.updateById(product) >0 ){
+						ProductLog productLog = new ProductLog();
+						BeanUtils.copyProperties(productLog, product);
+						productLogAtomSV.install(productLog);
+					}
+				}
+			} else {
+				if (storageList.get(0).getPriorityNumber().equals(storage.getPriorityNumber())) {
+					// 判断当前启用状态的优先级是否与当前库存的优先级相同,相同则改为启用状态
+					storage.setState(StorageConstants.Storage.State.ACTIVE);
+					storage.setOperId(operId);
+					// 更新库存和日志
+					if (storageAtomSV.updateById(storage) > 0) {
+						StorageLog storageLog = new StorageLog();
+						BeanUtils.copyProperties(storageLog, storage);
+						storageLogAtomSV.installLog(storageLog);
+					}
+				} else {
+					// 若不同则不进行启用
+					return;
+				}
+			}
+		}
+		// 若没有则设置为自动停用.
+		if (storage.getUsableNum() <= 0) {
+			storage.setState(StorageConstants.Storage.State.AUTO_STOP);
+			// 更新日志
+			if (storageAtomSV.updateById(storage) > 0) {
+				StorageLog storageLog = new StorageLog();
+				BeanUtils.copyProperties(storageLog, storage);
+				storageLogAtomSV.installLog(storageLog);
+			}
+		}
+
 	}
 
 	/**
@@ -361,7 +460,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * 通过标准品ID判断是否有销售属性
 	 *
 	 * @param tenantId
-	 * @param standedProd
+	 * @param standedProdId
 	 * @return
 	 * @author lipeng16
 	 */
@@ -390,7 +489,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	}
 
 	/**
-	 * 修改库存信息,只能修改名称和最低预警库存量-实用有和无销售属性两种状态
+	 * 修改库存信息,只能修改名称和最低预警库存量-适用有和无销售属性两种状态
 	 */
 	@Override
 	public int updateStorageNameWarn(STOStorage stoStorage) {
@@ -456,7 +555,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			skuStorageAndProd.setSkuStorageId(storageId);
 			skuStorageAndProd.setTotalNum(skuStorage.getTotalNum());
 			skuStorageAndProd.setSaleAttrs(prodSku.getSaleAttrs());
-			//填充返回值
+			// 填充返回值
 			skuStorageAndProdList.add(skuStorageAndProd);
 		}
 		return CollectionUtil.isEmpty(skuStorageAndProdList) ? null : skuStorageAndProdList;
@@ -467,34 +566,55 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	@Override
 	public int insertSkuStorage(List<SkuStorageAdd> skuStorageAddList) {
-		SkuStorage skuStorage = null; 
+		SkuStorage skuStorage = null;
 		int count = 0;
-		for(SkuStorageAdd skuStorageAdd : skuStorageAddList){
+		for (SkuStorageAdd skuStorageAdd : skuStorageAddList) {
 			skuStorage = new SkuStorage();
 			BeanUtils.copyProperties(skuStorage, skuStorageAdd);
 			skuStorage.setState(SkuStorageConstants.SkuStorage.State.ACTIVE);
 			int addNum = skuStorageAtomSV.install(skuStorage);
-			count+=addNum;
+			count += addNum;
 		}
 		return count;
 	}
 
-	// /**
-	// * 修改库存和SKU库存信息
-	// */
-	// private int updateStorageSku(Storage storage){
-	// String storageId = storage.getStorageId();
-	// //修改库存信息
-	// int updateNum = storageAtomSV.updateById(storage);
-	// if (updateNum <= 0) {
-	// throw new BusinessException("", "修改库存信息失败,库存ID="+storageId);
-	// }
-	// // 更新库存日志信息
-	// StorageLog storageLog = new StorageLog();
-	// BeanUtils.copyProperties(storageLog, storageAtomSV.queryById(storageId));
-	// storageLogAtomSV.installLog(storageLog);
-	// //通过库存标识查找相关的SKU虚拟库存(包括多个)
-	//
-	// return 0;
-	// }
+	@Override
+	public void updateStoragePriority(StoragePriorityCharge stoPriorityCharge) {
+		// 获取库存组标识
+		String groupId = stoPriorityCharge.getStorageGroupId();
+		String tenantId = stoPriorityCharge.getTenantId();
+		// 检查将移动优先级是否一致
+		if (stoPriorityCharge.getNewLevel() == stoPriorityCharge.getOldLevel()){
+			throw new BusinessException("","优先级为发生变更");
+		}
+		// 检查库存组是否存在
+		if (stoPriorityCharge == null
+				|| storageGroupAtomSV.queryByGroupId(tenantId, groupId) == null) {
+			logger.warn("找不到指定的库存组,租户表{},库存组标识{}",tenantId,groupId );
+			throw new BusinessException("","指定库存组不存在,租户ID:"+tenantId+",库存组ID:"+groupId);
+		}
+		// 获取要优先级库存
+		List<Storage> oldStorageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,stoPriorityCharge.getOldLevel());
+		List<Storage> newStorageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,stoPriorityCharge.getNewLevel());
+		changeStoragePriority(oldStorageList,stoPriorityCharge.getNewLevel());
+		changeStoragePriority(newStorageList,stoPriorityCharge.getOldLevel());
+	}
+
+	/**
+	 * 变更库存优先级
+	 * @param storageList
+	 * @param newLevel
+     */
+	private void changeStoragePriority(List<Storage> storageList,short newLevel){
+		if (CollectionUtil.isEmpty(storageList))
+			return;
+		for (Storage storage:storageList){
+			storage.setPriorityNumber(newLevel);
+			if (storageAtomSV.updateById(storage)>0){
+				StorageLog storageLog = new StorageLog();
+				BeanUtils.copyProperties(storageLog, storage);
+				storageLogAtomSV.installLog(storageLog);
+			}
+		}
+	}
 }

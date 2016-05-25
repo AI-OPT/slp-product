@@ -5,6 +5,7 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
@@ -222,7 +223,14 @@ public class IStorageSVImpl implements IStorageSV {
 	@Override
 	public BaseResponse chargeStoragePriority(StoragePriorityCharge priorityCharge)
 			throws BusinessException, SystemException {
-		return null;
+		CommonCheckUtils.checkTenantId(priorityCharge.getTenantId(), "");
+		storageBusiSV.updateStoragePriority(priorityCharge);
+		BaseResponse baseResponse = new BaseResponse();
+		ResponseHeader responseHeader = new ResponseHeader();
+		responseHeader.setIsSuccess(true);
+		responseHeader.setResultCode("");
+		baseResponse.setResponseHeader(responseHeader);
+		return baseResponse;
 	}
 
 	/**
@@ -241,10 +249,10 @@ public class IStorageSVImpl implements IStorageSV {
 	public BaseResponse updateStorageGroupName(StorageGroupUpName storageGroup)
 			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(storageGroup.getTenantId(), "");
-		storageGroupBusiSV.updateGroupName(storageGroup);
+		int updateNum = storageGroupBusiSV.updateGroupName(storageGroup);
 		BaseResponse baseResponse = new BaseResponse();
 		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(true);
+		responseHeader.setIsSuccess(updateNum>0 ? true : false);
 		responseHeader.setResultCode("");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
