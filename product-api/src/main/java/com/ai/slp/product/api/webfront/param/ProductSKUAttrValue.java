@@ -22,6 +22,10 @@ public class ProductSKUAttrValue implements Serializable{
      * 图片
      */
     private ProductImage image;
+    /**
+     * 图片url
+     */
+    private String imageUrl;
     
 	public Long getAttrvalueDefId() {
 		return attrvalueDefId;
@@ -46,5 +50,11 @@ public class ProductSKUAttrValue implements Serializable{
 	}
 	public void setImage(ProductImage image) {
 		this.image = image;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }
