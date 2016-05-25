@@ -460,7 +460,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * 通过标准品ID判断是否有销售属性
 	 *
 	 * @param tenantId
-	 * @param standedProd
+	 * @param standedProdId
 	 * @return
 	 * @author lipeng16
 	 */
