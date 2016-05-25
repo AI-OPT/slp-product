@@ -45,7 +45,7 @@ public class IProductHomeSVImpl implements IProductHomeSV {
     @Override
     public List<ProductHome> queryHotProduct() throws BusinessException, SystemException {
         List<ProductHome> list1 = new ArrayList<ProductHome>();
-        for(int i=0;i<7;i++){
+        for(int i=0;i<8;i++){
             ProductHome response1 = new ProductHome();
             response1.setProdId("1000000000000010");
             response1.setProdName("TP-link300M无线路由器");
