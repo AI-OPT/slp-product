@@ -361,11 +361,12 @@ public class IStorageSVImpl implements IStorageSV {
      * @ApiCode STORAGE_0114
      */
 	@Override
-	public List<SkuStorageAndProd> querySkuStorageById(String storageId) throws BusinessException, SystemException {
+	public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) throws BusinessException, SystemException {
+		CommonCheckUtils.checkTenantId(tenantId,"");
 		if(StringUtils.isEmpty(storageId)){
-			throw new BusinessException("", "指定的库存标识不存在,库存ID="+storageId);
+			throw new BusinessException("", "库存标识不能为空");
 		}
-		return storageBusiSV.querySkuStorageById(storageId);
+		return storageBusiSV.querySkuStorageById(tenantId,storageId);
 	}
 
 	/**

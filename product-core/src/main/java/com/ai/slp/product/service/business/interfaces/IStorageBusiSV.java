@@ -89,11 +89,12 @@ public interface IStorageBusiSV {
     /**
      * 查询SKU库存信息
      *
+     * @param tenantId
      * @param storageId
      * @return
      * @author lipeng16
      */
-    public List<SkuStorageAndProd> querySkuStorageById(String storageId);
+    public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId);
     
     /**
      * 新增SKU库存(有销售属性)

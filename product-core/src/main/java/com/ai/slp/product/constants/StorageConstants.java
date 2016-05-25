@@ -7,6 +7,35 @@ package com.ai.slp.product.constants;
  */
 public final class StorageConstants {
 
+    public final class IPass{
+        public final class MdsParams{
+            /**
+             * 库存所用mds
+             */
+            public static final String STORAGE_MDS = "com.ai.opt.slp.product.storage";
+            /**
+             * 库存组前缀
+             */
+            public static final String GROUP_TAG = "GROUP_TAG";
+            /**
+             * 库存优先级价格前缀
+             */
+            public static final String SALE_PRICE_TAG = "SALE_PRICE";
+            /**
+             * 库存可用量
+             */
+            public static final String USABLE_NUM_TAG = "USABLE_NUM";
+            /**
+             * 促销库存
+             */
+            public static final String PROMOTION_STORAGE_TAG = "PROMOT_STO";
+            /**
+             * sku单品库存
+             */
+            public static final String SKU_STORAGE_TAG = "SKU_STO";
+        }
+    }
+
     public final class StorageGroup{
         public final class State{
             /**

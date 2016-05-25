@@ -532,7 +532,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * 查看SKU库存
 	 */
 	@Override
-	public List<SkuStorageAndProd> querySkuStorageById(String storageId) {
+	public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) {
 		// 通过库存标识查询SKU库存集合
 		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storageId);
 		if (CollectionUtil.isEmpty(skuStorageList)) {
@@ -543,7 +543,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		// 通过SKU库存的SKU标识查对应的商品SKU
 		for (SkuStorage skuStorage : skuStorageList) {
 			String skuId = skuStorage.getSkuId();
-			ProdSku prodSku = prodSkuAtomSV.querySkuById(skuId);
+			ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
 			if (prodSku == null) {
 				continue;
 			}

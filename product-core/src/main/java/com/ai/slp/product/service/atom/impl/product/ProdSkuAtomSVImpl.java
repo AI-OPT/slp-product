@@ -64,9 +64,11 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 	}
 
 	@Override
-	public ProdSku querySkuById(String skuId) {
+	public ProdSku querySkuById(String tenantId,String skuId) {
 		ProdSkuCriteria example = new ProdSkuCriteria();
-		example.createCriteria().andStateEqualTo(CommonSatesConstants.STATE_ACTIVE).andSkuIdEqualTo(skuId);
+		example.createCriteria().andStateEqualTo(ProductConstants.ProdSku.State.ACTIVE)
+				.andTenantIdEqualTo(tenantId)
+				.andSkuIdEqualTo(skuId);
 		List<ProdSku> prodSkuList = prodSkuMapper.selectByExample(example);
 		return CollectionUtil.isEmpty(prodSkuList) ? null : prodSkuList.get(0);
 	}
