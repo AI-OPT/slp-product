@@ -384,10 +384,12 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		if (product != null) {
 			productBusiSV.discardProduct(product.getTenantId(), product.getProdId(), operId);
 		}
-		// TODO 库存废弃包括SKU库存状态为自动废弃
-
-		// 库存组下库存状态也为废弃
-		
+		//TODO... 删除搜索引擎中商品信息
+		// 废弃库存组下所有库存和SKU库存
+		List<Storage> storageList = storageAtomSV.queryOfGroup(storageGroup.getTenantId(),storageGroup.getStorageGroupId());
+		for (Storage storage : storageList) {
+			storageBusiSV.discardStorage(storage, operId);
+		}
 		// 库存组废弃
 		storageGroup.setState(StorageConstants.StorageGroup.State.DISCARD);
 		storageGroup.setOperId(operId);
