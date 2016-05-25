@@ -5,6 +5,7 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
@@ -223,10 +224,10 @@ public class IStorageSVImpl implements IStorageSV {
 	public BaseResponse chargeStoragePriority(StoragePriorityCharge priorityCharge)
 			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(priorityCharge.getTenantId(), "");
-		int updateNum = storageBusiSV.updateStoragePriority(priorityCharge);
+		storageBusiSV.updateStoragePriority(priorityCharge);
 		BaseResponse baseResponse = new BaseResponse();
 		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(updateNum>0 ? true : false);
+		responseHeader.setIsSuccess(true);
 		responseHeader.setResultCode("");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
