@@ -41,6 +41,10 @@ public class ProductSKUResponse extends BaseResponse{
      */
     private List<ProductSKUAttr> productAttrList;
     /**
+     * 商品图片
+     */
+    private List<ProductSKUImage> productImageList;
+    /**
      * 库存可用量
      */
     private Long usableNum;
@@ -128,5 +132,11 @@ public class ProductSKUResponse extends BaseResponse{
 	}
 	public void setCommentNum(Long commentNum) {
 		this.commentNum = commentNum;
+	}
+	public List<ProductSKUImage> getProductImageList() {
+		return productImageList;
+	}
+	public void setProductImageList(List<ProductSKUImage> productImageList) {
+		this.productImageList = productImageList;
 	}
 }

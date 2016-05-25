@@ -9,7 +9,7 @@ public class ProductSKUAttrValue implements Serializable{
 	/**
 	 * 商品属性值标识
 	 */
-	private String attrvalueDefId;
+	private Long attrvalueDefId;
 	/**
 	 * 属性值编码
 	 */
@@ -23,10 +23,10 @@ public class ProductSKUAttrValue implements Serializable{
      */
     private ProductImage image;
     
-	public String getAttrvalueDefId() {
+	public Long getAttrvalueDefId() {
 		return attrvalueDefId;
 	}
-	public void setAttrvalueDefId(String attrvalueDefId) {
+	public void setAttrvalueDefId(Long attrvalueDefId) {
 		this.attrvalueDefId = attrvalueDefId;
 	}
 	public String getAttrValueId() {
