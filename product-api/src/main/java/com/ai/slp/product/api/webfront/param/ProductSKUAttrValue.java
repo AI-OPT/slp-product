@@ -19,9 +19,10 @@ public class ProductSKUAttrValue implements Serializable{
 	 */
 	private String attrValueName;
 	/**
-     * 商品图片标识
+     * 图片
      */
-    private String vfsId;
+    private ProductImage image;
+    
 	public String getAttrvalueDefId() {
 		return attrvalueDefId;
 	}
@@ -40,10 +41,10 @@ public class ProductSKUAttrValue implements Serializable{
 	public void setAttrValueName(String attrValueName) {
 		this.attrValueName = attrValueName;
 	}
-	public String getVfsId() {
-		return vfsId;
+	public ProductImage getImage() {
+		return image;
 	}
-	public void setVfsId(String vfsId) {
-		this.vfsId = vfsId;
+	public void setImage(ProductImage image) {
+		this.image = image;
 	}
 }
