@@ -3,6 +3,7 @@ package com.ai.slp.product.search;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.paas.ipaas.search.service.ISearchClient;
 import com.ai.slp.product.search.bo.*;
+import com.ai.slp.product.search.constants.Constants;
 import com.google.gson.GsonBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -31,7 +32,7 @@ public class InitialProductData {
     private static final String FETCH_AUDIENCE_SQL = "SELECT USER_TYPE,USER_ID FROM prod_audiences where PROD_ID = ? AND STATE = '1'";
     private static final String FETCH_SEAL_AREA = "select PROV_CODE from PROD_TARGET_AREA WHERE PROD_ID = ? AND STATE = '1' ";
 
-    public static final String SearchNameSpace = "com.ai.slp.search.productinfo";
+
     private static final int MAX_SIZE = 1000;
 
     public static void main(String[] args) throws SQLException, UnknownHostException {
@@ -40,7 +41,7 @@ public class InitialProductData {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:context/core-context.xml");
         DataSource dataSource = applicationContext.getBean(DataSource.class);
 
-        ISearchClient searchClient = SESClientFactory.getSearchClient(SearchNameSpace);
+        ISearchClient searchClient = SESClientFactory.getSearchClient(Constants.SearchNameSpace);
         Connection connection = dataSource.getConnection();
         List<SKUInfo> skuInfoList;
         int start = 0;
