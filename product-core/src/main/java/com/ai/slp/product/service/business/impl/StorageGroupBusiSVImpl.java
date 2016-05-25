@@ -5,14 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.constants.ProdPriceLogConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.RouteConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import com.ai.slp.route.api.routequery.interfaces.IRouteQuerySV;
+import com.ai.slp.route.api.routequery.param.RouteGroupQueryResult;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -308,7 +312,11 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			throw new BusinessException("", "库存组没有配置路由信息,不能启用");
 		}
 		// 检查路由组是否已为启用状态
-		// TODO...
+		IRouteQuerySV iRouteQuerySV = DubboConsumerFactory.getService("iRouteQuerySV");
+		RouteGroupQueryResult queryResult = iRouteQuerySV.routeGroupDetailQuery(storageGroup.getRouteGroupId());
+		if (queryResult==null || !RouteConstants.RouteGroup.State.RIGHT.equals(queryResult.getState())){
+			throw new BusinessException("","对应路由组状态不正常,无法启用库存组");
+		}
 		// 库存组设置为启用状态
 		storageGroup.setState(StorageConstants.StorageGroup.State.ACTIVE);
 		storageGroup.setOperId(operId);
