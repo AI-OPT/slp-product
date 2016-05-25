@@ -31,24 +31,6 @@ public interface IStorageBusiSV {
      * @param storage
      */
     public void autoStopStorage(Storage storage);
-    
-    /**
-     * 停用库存
-     *
-     * @param storage
-     * @param operId
-     * @author lipeng16
-     */
-    public void stopStorage(Storage storage, Long operId);
-    
-    /**
-     * 启用库存
-     *
-     * @param storage
-     * @param operId
-     * @author lipeng16
-     */
-    public void activeStorage(Storage storage, Long operId);
 
     /**
      * 更改库存状态

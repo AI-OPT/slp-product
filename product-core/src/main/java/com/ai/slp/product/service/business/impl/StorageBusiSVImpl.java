@@ -28,7 +28,6 @@ import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SkuStorageConstants;
 import com.ai.slp.product.constants.StorageConstants;
-import com.ai.slp.product.constants.TenantIdConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
@@ -150,11 +149,11 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		switch (state) {
 		case StorageConstants.Storage.State.ACTIVE:// 转启用
 			// 调用启用库存方法
-			activeStorage(storage,operId);
+			activeStorage(tenantId,storage,operId);
 			break;
 		case StorageConstants.Storage.State.STOP:// 转停用
 			// 调用停用库存方法
-			stopStorage(storage,operId);
+			stopStorage(tenantId,storage,operId);
 			break;
 		case StorageConstants.Storage.State.DISCARD:// 转废弃
 			discardStorage(storage,operId);
@@ -170,8 +169,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * @param storage
 	 * @author lipeng16
 	 */
-	@Override
-	public void stopStorage(Storage storage, Long operId) {
+	private void stopStorage(String tenantId,Storage storage, Long operId) {
 		//库存对应的库存组下是否存在启用或自动启用的库存,若存在则直接停用
 		List<Storage> storageList = storageAtomSV.queryStorageActiveByGroupId(storage.getStorageGroupId());
 		if(!CollectionUtil.isEmpty(storageList)){
@@ -187,7 +185,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			return;
 		}
 		//若不存在,则该库存组对应商品状态若为在售则变为停用下架
-		Product product = productAtomSV.queryProductByGroupId(TenantIdConstants.tenantId, storage.getStorageGroupId());
+		Product product = productAtomSV.queryProductByGroupId(tenantId, storage.getStorageGroupId());
 		if(!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
 			return;
 		}
@@ -267,8 +265,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * 
 	 * @param storage
 	 */
-	@Override
-	public void activeStorage(Storage storage, Long operId) {
+	private void activeStorage(String tenantId,Storage storage, Long operId) {
 		// 检查库存可用量,若有库存,则检查库存组是否自动停用,若是,则自动启用
 		if (storage.getUsableNum() > 0) {
 			// 通过库存组ID查询启用或自动启用的库存
@@ -285,7 +282,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				}
 				// 检查库存组状态
 				String state = storageGroupAtomSV
-						.queryByGroupId(TenantIdConstants.tenantId, storage.getStorageGroupId()).getState();
+						.queryByGroupId(tenantId, storage.getStorageGroupId()).getState();
 				// 库存组状态不为启用或不启用则不进行下一步操作
 				if (!StorageConstants.StorageGroup.State.ACTIVE.equals(state)
 						|| !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(state))
@@ -293,7 +290,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 					return;
 				}
 				// 查询销售商品的状态是否为售罄下架或停用下架
-				Product product = productAtomSV.selectByGroupId(TenantIdConstants.tenantId, storage.getStorageGroupId());
+				Product product = productAtomSV.selectByGroupId(tenantId, storage.getStorageGroupId());
 				if(ProductConstants.Product.State.SALE_OUT.equals(product.getState()) || ProductConstants.Product.State.STOP.equals(product.getState())){
 					//是则改为在售
 					product.setState(ProductConstants.Product.State.IN_SALE);
