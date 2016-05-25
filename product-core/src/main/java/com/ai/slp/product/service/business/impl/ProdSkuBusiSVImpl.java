@@ -86,12 +86,14 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         }
         StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
         if (group==null){
-        	logger.warn("未找到指定商品,租户ID{},库存组标识{}:"+tenantId+","+product.getStandedProdId());
-            throw new BusinessException("","未找到指定库存组,租户ID:"+tenantId+",库存组标识:"+product.getStandedProdId());
+        	logger.warn("未找到指定商品,租户ID{},库存组标识{}:"+tenantId+","+product.getStorageGroupId());
+            throw new BusinessException("","未找到指定库存组,租户ID:"+tenantId+",库存组标识:"+product.getStorageGroupId());
         }
         //只有在库存组停用时,才允许变更SKU.
-        //TODO...
-
+        if (!StorageConstants.StorageGroup.State.STOP.equals(group.getState())){
+            logger.warn("库存组不是停用状态,不允许更新SKU信息,租户ID:{},库存组标识:{}.",tenantId, product.getStorageGroupId());
+            throw new BusinessException("","库存组不是停用状态,不允许更新SKU信息");
+        }
         //查询商品的销售属性集合,序号正序
         Map<Long, List<String>> attrAndValMap = saveInfo.getAttrAndValIdMap();
         List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
