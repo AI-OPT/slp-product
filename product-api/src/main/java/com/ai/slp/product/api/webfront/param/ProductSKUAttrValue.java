@@ -9,7 +9,7 @@ public class ProductSKUAttrValue implements Serializable{
 	/**
 	 * 商品属性值标识
 	 */
-	private String attrvalueDefId;
+	private Long attrvalueDefId;
 	/**
 	 * 属性值编码
 	 */
@@ -19,13 +19,18 @@ public class ProductSKUAttrValue implements Serializable{
 	 */
 	private String attrValueName;
 	/**
-     * 商品图片标识
+     * 图片
      */
-    private String vfsId;
-	public String getAttrvalueDefId() {
+    private ProductImage image;
+    /**
+     * 图片url
+     */
+    private String imageUrl;
+    
+	public Long getAttrvalueDefId() {
 		return attrvalueDefId;
 	}
-	public void setAttrvalueDefId(String attrvalueDefId) {
+	public void setAttrvalueDefId(Long attrvalueDefId) {
 		this.attrvalueDefId = attrvalueDefId;
 	}
 	public String getAttrValueId() {
@@ -40,10 +45,16 @@ public class ProductSKUAttrValue implements Serializable{
 	public void setAttrValueName(String attrValueName) {
 		this.attrValueName = attrValueName;
 	}
-	public String getVfsId() {
-		return vfsId;
+	public ProductImage getImage() {
+		return image;
 	}
-	public void setVfsId(String vfsId) {
-		this.vfsId = vfsId;
+	public void setImage(ProductImage image) {
+		this.image = image;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }

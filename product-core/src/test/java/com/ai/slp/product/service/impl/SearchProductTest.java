@@ -16,10 +16,8 @@ import com.alibaba.fastjson.JSON;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:context/core-context.xml")
 public class SearchProductTest {
-   
     @Autowired
     ISearchProductSV iSearchProductSV;
-
     @Test
     public void serachProduct(){
         ProductQueryRequest request = new ProductQueryRequest();

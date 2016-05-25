@@ -1,0 +1,10 @@
+package com.ai.slp.product.search.api;
+
+import com.ai.paas.ipaas.search.vo.Results;
+import com.ai.slp.product.search.dto.ProductSearchCriteria;
+
+import java.util.Map;
+
+public interface IProductSearch {
+    Results<Map<String, Object>> search(ProductSearchCriteria builder);
+}
