@@ -90,8 +90,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         }
         //只有在库存组停用时,才允许变更SKU.
         //TODO...
-        //查询库存组下库存
-        List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId,group.getStorageGroupId());
+
         //查询商品的销售属性集合,序号正序
         Map<Long, List<String>> attrAndValMap = saveInfo.getAttrAndValIdMap();
         List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
@@ -115,6 +114,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         }
         //若新添加SKU,则需要废除之前所有库存.
         if (skuSaleAttrs!=null && skuSaleAttrs.size()>0) {
+            //查询库存组下库存
+            List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId,group.getStorageGroupId());
             for (Storage storage : storageList) {
                 storageBusiSV.discardStorage(storage, saveInfo.getOperId());
             }
