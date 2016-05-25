@@ -1,8 +1,12 @@
 package com.ai.slp.product.api.webfront.param;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ProductSKUImage {
+public class ProductSKUImage implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 商品属性值标识
 	 */
