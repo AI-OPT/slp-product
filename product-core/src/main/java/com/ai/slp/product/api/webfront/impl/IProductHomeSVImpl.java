@@ -3,11 +3,15 @@ package com.ai.slp.product.api.webfront.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.slp.product.api.webfront.interfaces.IProductHomeSV;
 import com.ai.slp.product.api.webfront.param.ProductHome;
-
+import com.alibaba.dubbo.config.annotation.Service;
+@Service(validation = "true")
+@Component
 public class IProductHomeSVImpl implements IProductHomeSV {
 
     @Override
