@@ -28,7 +28,6 @@ public class ProductSearchCriteria {
         private ProductSearchCriteria productSearchCriteria;
 
         public ProductSearchCriteriaBuilder(String saleArea, UserSearchAuthority userSearchAuthority) {
-
             productSearchCriteria = new ProductSearchCriteria();
 
             // sale Area search filed vo
@@ -39,8 +38,13 @@ public class ProductSearchCriteria {
             SearchfieldVo searchfieldVo = new SearchfieldVo();
             searchfieldVo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.USER_AUTHORITY, userSearchAuthority.getUsertype()
                     .getValue(), new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
-            searchfieldVo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.USER_AUTHORITY, userSearchAuthority.getUserCode()
-                    , new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
+            searchfieldVo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.SALE_NATIONWIDE, userSearchAuthority.getUsertype()
+                    .getValue(), new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
+
+            if (userSearchAuthority.getUserCode() != null && userSearchAuthority.getUserCode().length() > 0) {
+                searchfieldVo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.USER_AUTHORITY, userSearchAuthority.getUserCode()
+                        , new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
+            }
 
             productSearchCriteria.searchfieldVos.add(searchfieldVo);
 
@@ -75,6 +79,18 @@ public class ProductSearchCriteria {
             return orderBy(orderByField, SortType.DESC);
         }
 
+        public ProductSearchCriteriaBuilder categoryIs(String categoryId){
+            productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.CATEGORY,
+                    categoryId, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
+            return this;
+        }
+
+        public ProductSearchCriteriaBuilder attrNameLike(String attrValue){
+            productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.ATTR_VALUE,
+                    attrValue, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
+            return this;
+        }
+
         public ProductSearchCriteriaBuilder orderBy(String orderByField, SortType sortType) {
             productSearchCriteria.orderByField = orderByField;
             productSearchCriteria.sortType = sortType;
@@ -82,14 +98,18 @@ public class ProductSearchCriteria {
         }
 
 
-        public ProductSearchCriteriaBuilder startSize(int startSize){
+        public ProductSearchCriteriaBuilder startSize(int startSize) {
             productSearchCriteria.startSize = startSize;
             return this;
         }
 
-        public ProductSearchCriteriaBuilder maxSearchSize(int maxSearchSize){
+        public ProductSearchCriteriaBuilder maxSearchSize(int maxSearchSize) {
             productSearchCriteria.maxSearchSize = maxSearchSize;
             return this;
+        }
+
+        public ProductSearchCriteria build() {
+            return productSearchCriteria;
         }
 
     }
