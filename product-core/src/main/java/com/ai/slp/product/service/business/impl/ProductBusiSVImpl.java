@@ -3,6 +3,7 @@ package com.ai.slp.product.service.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
@@ -91,7 +92,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //查询类目是否有销售属性
         List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
                 tenantId,standedProduct.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-        boolean isSaleAttr = catAttrAttches==null||catAttrAttches.isEmpty()?false:true;
+        boolean isSaleAttr = CollectionUtil.isEmpty(catAttrAttches)?false:true;
         //添加商品,商品名称同标准品名称
         Product product = new Product();
         product.setTenantId(tenantId);
@@ -109,13 +110,13 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             BeanUtils.copyProperties(productLog,product);
             productLogAtomSV.install(productLog);
             //若没有销售属性,则添加SKU
-            if (catAttrAttches==null||catAttrAttches.isEmpty()){
+            if (!isSaleAttr){
                 ProdSku prodSku = new ProdSku();
                 prodSku.setTenantId(tenantId);
                 prodSku.setProdId(product.getProdId());
                 prodSku.setStorageGroupId(group.getStorageGroupId());
                 prodSku.setSkuName(product.getProdName());
-                prodSku.setIsSaleAttr(isSaleAttr? ProductConstants.ProdSku.IsSaleAttr.YES: ProductConstants.ProdSku.IsSaleAttr.NO);
+                prodSku.setIsSaleAttr(ProductConstants.ProdSku.IsSaleAttr.NO);
                 prodSku.setSerialNumber((short)0);
                 prodSku.setState(ProductConstants.ProdSku.State.ACTIVE);
                 prodSku.setOperId(operId);
