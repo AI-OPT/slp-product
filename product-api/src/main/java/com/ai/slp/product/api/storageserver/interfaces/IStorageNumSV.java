@@ -31,15 +31,15 @@ public interface IStorageNumSV {
         throws BusinessException,SystemException;
     @interface UseStorageNum{};
     /**
-     * 使用库存,即减库存量<br>
+     * 退回库存量<br>
      *
-     * @param backReq 使用单品数量信息
-     * @return 库存量减少信息
+     * @param backReq 退回单品数量信息
+     * @return 退回结果
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_NUM_0100
+     * @ApiCode STORAGE_NUM_0101
      */
     public BaseResponse backStorageNum(StorageNumBackReq backReq)
         throws BusinessException,SystemException;
