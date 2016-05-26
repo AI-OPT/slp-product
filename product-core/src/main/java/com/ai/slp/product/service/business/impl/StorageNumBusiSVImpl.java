@@ -2,6 +2,7 @@ package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.components.mcs.MCSClientFactory;
+import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
 import com.ai.slp.product.constants.ProductConstants;
@@ -12,6 +13,7 @@ import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.IPassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -34,6 +37,8 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     IProductAtomSV productAtomSV;
     @Autowired
     IStorageGroupAtomSV storageGroupAtomSV;
+    @Autowired
+    StorageNumDbBusiSVImpl numDbBusiSV;
     /**
      * 使用库存量
      *
@@ -72,16 +77,19 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
                     ,tenantId,groupId);
             throw new BusinessException("","库存组没有启用,无法使用");
         }
+
         //3.确认当前使用优先级
         //3.1确认当前是否在促销期内
         String serialsKey = IPassUtils.genMcsGroupSerialStartTimeKey(tenantId,groupId);
-
+        long nowTime = System.currentTimeMillis();
+        //TODO... 确认是否在促销内 ZREVRANGEBYSCORE nowTime 0
         //确认优先级
         String serial = "";
-        //查询优先级的价格
+
         String priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,serial);
-        //若不存在促销优先级价格,则使用库存组指定优先级
+        //3.2若不存在促销优先级价格,
         if (!cacheClient.exists(priceKey)){
+            //使用库存组指定优先级
             serial = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
             priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,serial);
             //判断库存组当前优先级可用量是否满足
@@ -94,7 +102,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         }
         //4.获取当前优先级中SKU的销售价
         long salePrice = Long.parseLong(cacheClient.hget(priceKey,skuId));
-        //库存是否充足
+        //5.进行减库存
         String usableNumKey = IPassUtils.genMcsGroupSerialUsableKey(tenantId,groupId,serial);
         //若减少库存之后,剩余库存小于零,表示库存不足
         if (cacheClient.hincrBy(usableNumKey,skuId,-skuNum)<0){
@@ -102,8 +110,18 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
                     ,tenantId,groupId);
             throw new BusinessException("","该商品库存不足");
         }
+        //6.确认库存量的库存来源
+        String skuStoragekey = IPassUtils.genMcsSkuStorageUsableKey(tenantId,groupId,serial,skuId);
 
-        return null;
+        StorageNumRes numRes = new StorageNumRes();
+        BeanUtils.copyProperties(numRes,product);
+        numRes.setSkuId(skuId);
+        numRes.setSkuName(skuInfo.getSkuName());
+        numRes.setSalePrice(salePrice);
+        numRes.setStorageNum(getSkuNumSource(cacheClient,skuStoragekey,skuNum));
+        //变更数据库信息
+        numDbBusiSV.userStorageNum(numRes.getStorageNum());
+        return numRes;
     }
 
     /**
@@ -116,5 +134,21 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     @Override
     public void backStorageNum(String tenantId, String skuId, Map<String, Integer> storageNum) {
 
+    }
+
+    /**
+     * 获知商品使用量的SKU库存来源
+     *
+     * @param cacheClient
+     * @param cacheKey sku库存缓存KEY
+     * @param skuNum 单品数量
+     * @return
+     */
+    private Map<String,Integer> getSkuNumSource(ICacheClient cacheClient,String cacheKey,int skuNum){
+        Map<String,Integer> skuNumMap = new HashMap<>();
+        //查询库存量大于零的 ZRANGE 1  +inf
+
+        //修改库存 ZINCRBY -skuNum
+        return skuNumMap;
     }
 }

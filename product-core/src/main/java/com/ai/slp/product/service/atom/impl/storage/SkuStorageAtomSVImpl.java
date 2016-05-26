@@ -115,4 +115,30 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 				.andSalePriceIsNull();
 		return skuStorageMapper.countByExample(example);
 	}
+
+	/**
+	 * 查询指定标识的SKU库存
+	 *
+	 * @param skuStorageId
+	 * @return
+	 */
+	@Override
+	public SkuStorage queryById(String skuStorageId) {
+		SkuStorage skuStorage = skuStorageMapper.selectByPrimaryKey(skuStorageId);
+		if (skuStorage!=null
+			&& StorageConstants.SkuStorage.State.AUTO_DISCARD.equals(skuStorage.getState()))
+			skuStorage = null;
+		return skuStorage;
+	}
+
+	/**
+	 * 根据标识符更新SKU库存
+	 *
+	 * @param skuStorage
+	 * @return
+	 */
+	@Override
+	public int updateById(SkuStorage skuStorage) {
+		return skuStorageMapper.updateByPrimaryKey(skuStorage);
+	}
 }

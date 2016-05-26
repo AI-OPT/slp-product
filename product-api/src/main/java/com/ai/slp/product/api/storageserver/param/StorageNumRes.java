@@ -28,7 +28,7 @@ public class StorageNumRes extends BaseResponse {
     /**
      * 销售商品标识
      */
-    private String productId;
+    private String prodId;
     /**
      * 销售价,单位:厘
      */
@@ -50,7 +50,7 @@ public class StorageNumRes extends BaseResponse {
     /**
      * 有效周期
      */
-    private Integer activeCycle;
+    private Short activeCycle;
     /**
      * 周期,D:天;M:月;Y:年
      */
@@ -84,12 +84,12 @@ public class StorageNumRes extends BaseResponse {
         this.standedProdId = standedProdId;
     }
 
-    public String getProductId() {
-        return productId;
+    public String getProdId() {
+        return prodId;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProdId(String prodId) {
+        this.prodId = prodId;
     }
 
     public long getSalePrice() {
@@ -124,11 +124,11 @@ public class StorageNumRes extends BaseResponse {
         this.inactiveTime = inactiveTime;
     }
 
-    public Integer getActiveCycle() {
+    public Short getActiveCycle() {
         return activeCycle;
     }
 
-    public void setActiveCycle(Integer activeCycle) {
+    public void setActiveCycle(Short activeCycle) {
         this.activeCycle = activeCycle;
     }
 

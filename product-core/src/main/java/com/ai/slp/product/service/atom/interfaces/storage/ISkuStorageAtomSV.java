@@ -55,4 +55,18 @@ public interface ISkuStorageAtomSV {
      * @return
      */
     public int queryNoPriceOfStorageByIdList(List<String> storageIdList);
+
+    /**
+     * 查询指定标识的SKU库存
+     * @param skuStorageId
+     * @return
+     */
+    public SkuStorage queryById(String skuStorageId);
+
+    /**
+     * 根据标识符更新SKU库存
+     * @param skuStorage
+     * @return
+     */
+    public int updateById(SkuStorage skuStorage);
 }
