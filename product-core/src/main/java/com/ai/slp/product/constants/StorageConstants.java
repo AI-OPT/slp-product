@@ -8,11 +8,11 @@ package com.ai.slp.product.constants;
 public final class StorageConstants {
 
     public final class IPass{
-        public final class MdsParams{
+        public final class McsParams {
             /**
              * 库存所用mds
              */
-            public static final String STORAGE_MDS = "com.ai.opt.slp.product.storage";
+            public static final String STORAGE_MCS = "com.ai.opt.slp.product.storage";
             /**
              * 库存组前缀
              */
@@ -33,6 +33,19 @@ public final class StorageConstants {
              * sku单品库存
              */
             public static final String SKU_STORAGE_TAG = "SKU_STO";
+
+            /**
+             * HASH中库存组优先级的hashKey
+             */
+            public static final String GROUP_SERIAL_HTAGE = "GROUP_SERIAL";
+            /**
+             * HASH中库存组状态的hashKey
+             */
+            public static final String GROUP_STATE_HTAGE = "GROUP_STATE";
+            /**
+             * HASH中库存组当前可用量的hashKey
+             */
+            public static final String GROUP_USABLE_HTAGE = "GROUP_USABLE";
         }
     }
 

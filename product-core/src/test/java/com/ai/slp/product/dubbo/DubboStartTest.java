@@ -8,4 +8,10 @@ public class DubboStartTest {
     public void testDubboStart(){
         DubboServiceStart.main(null);
     }
+
+    @Test
+    public void test1(){
+        int num = 9;
+        System.out.println(num+":"+(-num));
+    }
 }
