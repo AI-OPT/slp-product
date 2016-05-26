@@ -95,11 +95,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	/**
 	 * 废弃库存
 	 *
-	 * @param storage
+	 * @param storage 要废弃的库存信息
 	 */
 	@Override
 	public void discardStorage(Storage storage, Long operId) {
 		// 废弃库存
+		storage.setState(StorageConstants.Storage.State.AUTO_DISCARD);
+		storage.setOperId(operId);
 		if (storageAtomSV.updateById(storage) > 0) {
 			StorageLog storageLog = new StorageLog();
 			BeanUtils.copyProperties(storageLog, storage);
