@@ -34,6 +34,7 @@ public class IProductDetailSVImpl implements IProductDetailSV{
 		productSKUResponse.setSkuId("0001");
 		productSKUResponse.setSkuName("小米5 全网通 标准版");
 		productSKUResponse.setUsableNum(5000L);
+		productSKUResponse.setState("1");
 		//设置属性
 		List<ProductSKUAttr> productAttrList=new LinkedList<ProductSKUAttr>();
 		ProductSKUAttr skuAttr1=new ProductSKUAttr();
