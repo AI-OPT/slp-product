@@ -1,6 +1,10 @@
 package com.ai.slp.product.api.webfront.param;
 
-public class ProductHome{
+import java.io.Serializable;
+
+public class ProductHome implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 租户ID
@@ -31,6 +35,15 @@ public class ProductHome{
      * 商品图
      */
     private ProductImage productImage;
+    private String picUrl;
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
+    }
 
     public String getTenantId() {
         return tenantId;

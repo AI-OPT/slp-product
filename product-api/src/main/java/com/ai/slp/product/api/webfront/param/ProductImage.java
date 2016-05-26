@@ -1,7 +1,12 @@
 package com.ai.slp.product.api.webfront.param;
 
-public class ProductImage {
-    /**
+import java.io.Serializable;
+
+public class ProductImage implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
+	/**
      * 上传后的图片ID
      */
     private String idpsId;
