@@ -45,6 +45,7 @@ public class IProductDetailSVImpl implements IProductDetailSV{
 		skuAttrValue1.setAttrvalueDefId(1001L);
 		skuAttrValue1.setAttrValueId("001");
 		skuAttrValue1.setAttrValueName("白色");
+		skuAttrValue1.setIsOwn(true);
 		ProductImage image1=new ProductImage();
 		image1.setIdpsId("57454f50d601800009c0b0cf");
 		image1.setExtension(".jpg");
@@ -55,6 +56,7 @@ public class IProductDetailSVImpl implements IProductDetailSV{
 		skuAttrValue2.setAttrvalueDefId(1002L);
 		skuAttrValue2.setAttrValueId("002");
 		skuAttrValue2.setAttrValueName("黑色");
+		skuAttrValue2.setIsOwn(false);
 		ProductImage image2=new ProductImage();
 		image2.setIdpsId("574551b4d601800009c0b0d9");
 		image2.setExtension(".jpg");
@@ -65,6 +67,7 @@ public class IProductDetailSVImpl implements IProductDetailSV{
 		skuAttrValue3.setAttrvalueDefId(1003L);
 		skuAttrValue3.setAttrValueId("003");
 		skuAttrValue3.setAttrValueName("紫色");
+		skuAttrValue3.setIsOwn(false);
 		ProductImage image3=new ProductImage();
 		image3.setIdpsId("57455205d601800009c0b0df");
 		image3.setExtension(".jpg");
@@ -81,18 +84,21 @@ public class IProductDetailSVImpl implements IProductDetailSV{
 		skuAttrValue4.setAttrvalueDefId(1004L);
 		skuAttrValue4.setAttrValueId("004");
 		skuAttrValue4.setAttrValueName("标准版");
+		skuAttrValue4.setIsOwn(false);
 		attrValueList2.add(skuAttrValue4);
 		skuAttr2.setAttrValueList(attrValueList);
 		ProductSKUAttrValue skuAttrValue5 = new ProductSKUAttrValue();
 		skuAttrValue5.setAttrvalueDefId(1005L);
 		skuAttrValue5.setAttrValueId("005");
 		skuAttrValue5.setAttrValueName("高配版");
+		skuAttrValue5.setIsOwn(true);
 		attrValueList2.add(skuAttrValue5);
 		skuAttr2.setAttrValueList(attrValueList);
 		ProductSKUAttrValue skuAttrValue6 = new ProductSKUAttrValue();
 		skuAttrValue6.setAttrvalueDefId(1006L);
 		skuAttrValue6.setAttrValueId("006");
 		skuAttrValue6.setAttrValueName("尊享版");
+		skuAttrValue6.setIsOwn(false);
 		attrValueList2.add(skuAttrValue6);
 		skuAttr2.setAttrValueList(attrValueList2);
 		productAttrList.add(skuAttr2);

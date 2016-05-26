@@ -14,7 +14,6 @@ public class ProductSKUAttr implements Serializable{
 	 * 属性名称
 	 */
 	private String attrName;
-	
 	/**
 	 * 属性值集合
 	 */

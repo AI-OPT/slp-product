@@ -19,6 +19,10 @@ public class ProductSKUAttrValue implements Serializable{
 	 */
 	private String attrValueName;
 	/**
+	 * 是否自有属性
+	 */
+	private boolean isOwn;
+	/**
      * 图片
      */
     private ProductImage image;
@@ -56,5 +60,11 @@ public class ProductSKUAttrValue implements Serializable{
 	}
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+	public boolean getIsOwn() {
+		return isOwn;
+	}
+	public void setIsOwn(boolean isOwn) {
+		this.isOwn = isOwn;
 	}
 }
