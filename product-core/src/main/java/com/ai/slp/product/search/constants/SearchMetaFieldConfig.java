@@ -10,4 +10,7 @@ public class SearchMetaFieldConfig {
     public static final String SELL_POINT = "productsellpoint";
     public static final String RECHAGE_TYPE = "rechagetype";
     public static final String BASIC_ORG = "basicorgid";
+    public static final String SALE_NATIONWIDE = "salenationwide";
+    public static final String CATEGORY = "categorid";
+    public static final String ATTR_VALUE = "attrvalue";
 }

@@ -15,6 +15,7 @@ public class SKUInfo {
     //叶子
     @Expose
     private String productcategoryid;
+    @Expose
     private String rootcategorid;
     @Expose
     private String productid;

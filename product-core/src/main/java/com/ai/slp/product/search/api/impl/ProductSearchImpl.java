@@ -19,4 +19,11 @@ public class ProductSearchImpl implements IProductSearch {
         return searchClient.search(criteria.getSearchfieldVos(), criteria.getStartSize(), criteria.getMaxSearchSize(),
                 criteria.getOrderByField(), criteria.getSortType().getValue());
     }
+
+    @Override
+    public Results<Map<String, Long>> searchCategory(ProductSearchCriteria criteria) {
+        return null;
+    }
+
+
 }
