@@ -11,7 +11,10 @@ public class ProductQueryRequest extends BaseInfo {
      * sku标识
      */
     private String skuId;
-    private String image;
+    /**
+     * 商品类目标识
+     */
+    private String  productCatId;
 
     private PageInfo<ProductData> pageInfo;
 
@@ -31,12 +34,12 @@ public class ProductQueryRequest extends BaseInfo {
         this.skuId = skuId;
     }
 
-    public String getImage() {
-        return image;
+    public String getProductCatId() {
+        return productCatId;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setProductCatId(String productCatId) {
+        this.productCatId = productCatId;
     }
 
 }

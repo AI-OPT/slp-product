@@ -28,6 +28,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             data.setCommentIdCount(234);
             data.setSalePrice(34.9);
             data.setSkuName("华为荣耀 畅玩 5X 4G 手机 破晓银 移动4G版"); 
+            data.setProdName("华为荣耀 畅玩 5X 4G 手机 破晓银 移动4G版");
             list.add(data);
         }
         pageinfo.setResult(list);
@@ -45,7 +46,8 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             ProductData data = new ProductData();
             data.setCommentIdCount(234);
             data.setSalePrice(34.9);
-            data.setSkuName("华为荣耀 畅玩 5X 4G 手机 破晓银 移动4G版"); 
+            data.setSkuName("华为荣耀 畅玩 5X 4G 手机 破晓银 移动4G版");
+            data.setProdName("华为荣耀 畅玩 5X 4G 手机 破晓银 移动4G版");
             list.add(data);
         }
         return list;
