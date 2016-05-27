@@ -38,14 +38,14 @@ public class IPassUtils {
     }
 
     /**
-     * 库存组优先级的可用量KEY
+     * 库存组优先级下SKU的可用量KEY
      * @param tenantId
      * @param groupId
      * @param serial
      * @return
      */
-    public static String genMcsGroupSerialUsableKey(String tenantId,String groupId,String serial){
-        return StorageConstants.IPass.McsParams.USABLE_NUM_TAG+CACHE_KEY_SEPARATE
+    public static String genMcsSerialSKUUsableKey(String tenantId, String groupId, String serial){
+        return StorageConstants.IPass.McsParams.SKU_USABLE_TAG +CACHE_KEY_SEPARATE
                 +tenantId+CACHE_KEY_SEPARATE
                 +groupId+CACHE_KEY_SEPARATE
                 +serial;
@@ -78,5 +78,19 @@ public class IPassUtils {
                 +groupId+CACHE_KEY_SEPARATE
                 +serial+CACHE_KEY_SEPARATE
                 +skuId;
+    }
+
+    /**
+     * 库存组内优先级内库存可用量的KEY
+     * @param tenantId
+     * @param groupId
+     * @param serial
+     * @return
+     */
+    public static String genMcsPriorityUsableKey(String tenantId,String groupId,String serial){
+        return StorageConstants.IPass.McsParams.PRIORITY_USABLE_TAG+CACHE_KEY_SEPARATE
+                +tenantId+CACHE_KEY_SEPARATE
+                +groupId+CACHE_KEY_SEPARATE
+                +serial;
     }
 }

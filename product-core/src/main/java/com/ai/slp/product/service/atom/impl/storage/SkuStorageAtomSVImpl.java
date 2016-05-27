@@ -123,9 +123,9 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	 * @return
 	 */
 	@Override
-	public SkuStorage queryById(String skuStorageId) {
+	public SkuStorage queryById(String skuStorageId,boolean hasDiscard) {
 		SkuStorage skuStorage = skuStorageMapper.selectByPrimaryKey(skuStorageId);
-		if (skuStorage!=null
+		if (skuStorage!=null && !hasDiscard
 			&& StorageConstants.SkuStorage.State.AUTO_DISCARD.equals(skuStorage.getState()))
 			skuStorage = null;
 		return skuStorage;

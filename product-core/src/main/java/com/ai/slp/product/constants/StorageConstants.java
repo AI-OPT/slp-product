@@ -22,9 +22,9 @@ public final class StorageConstants {
              */
             public static final String SALE_PRICE_TAG = "SALE_PRICE";
             /**
-             * 库存可用量
+             * SKU优先级下总库存可用量
              */
-            public static final String USABLE_NUM_TAG = "USABLE_NUM";
+            public static final String SKU_USABLE_TAG = "SKU_USABLE";
             /**
              * 促销库存
              */
@@ -33,6 +33,10 @@ public final class StorageConstants {
              * sku单品库存
              */
             public static final String SKU_STORAGE_TAG = "SKU_STO";
+            /**
+             * 优先级总库存可用量
+             */
+            public static final String PRIORITY_USABLE_TAG = "PRIORITY_USABLE";
 
             /**
              * HASH中库存组优先级的hashKey
@@ -42,10 +46,7 @@ public final class StorageConstants {
              * HASH中库存组状态的hashKey
              */
             public static final String GROUP_STATE_HTAGE = "GROUP_STATE";
-            /**
-             * HASH中库存组当前可用量的hashKey
-             */
-            public static final String GROUP_USABLE_HTAGE = "GROUP_USABLE";
+
         }
     }
 

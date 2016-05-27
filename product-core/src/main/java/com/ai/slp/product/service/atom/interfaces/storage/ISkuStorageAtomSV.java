@@ -59,9 +59,10 @@ public interface ISkuStorageAtomSV {
     /**
      * 查询指定标识的SKU库存
      * @param skuStorageId
+     * @param hasDiscard 是否查询废弃库存, true:包含;false:不包含
      * @return
      */
-    public SkuStorage queryById(String skuStorageId);
+    public SkuStorage queryById(String skuStorageId,boolean hasDiscard);
 
     /**
      * 根据标识符更新SKU库存
