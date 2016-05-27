@@ -5,6 +5,7 @@ import com.ai.paas.ipaas.search.service.ISearchClient;
 import com.ai.paas.ipaas.search.vo.Results;
 import com.ai.slp.product.search.api.IProductSearch;
 import com.ai.slp.product.search.constants.Constants;
+import com.ai.slp.product.search.constants.SearchMetaFieldConfig;
 import com.ai.slp.product.search.dto.ProductSearchCriteria;
 
 import java.util.Map;
@@ -22,7 +23,8 @@ public class ProductSearchImpl implements IProductSearch {
 
     @Override
     public Results<Map<String, Long>> searchCategory(ProductSearchCriteria criteria) {
-        return null;
+        ISearchClient searchClient = SESClientFactory.getSearchClient(Constants.SearchNameSpace);
+        return searchClient.simpleAggregation(criteria.getSearchfieldVos(), SearchMetaFieldConfig.CATEGORY_ID);
     }
 
 
