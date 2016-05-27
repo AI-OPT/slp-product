@@ -73,4 +73,11 @@ public interface IStorageGroupBusiSV {
      */
     public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery);
 
+    /**
+     * 切换库存组优先级
+     * @param tenantId
+     * @param groupId
+     * @param nowPriority
+     */
+    public void changeUsePriority(String tenantId,String groupId,int nowPriority);
 }

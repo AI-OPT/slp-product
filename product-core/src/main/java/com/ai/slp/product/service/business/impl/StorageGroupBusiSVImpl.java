@@ -428,4 +428,18 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		return storageGroupResPage;
 	}
 
+	/**
+	 * 切换库存组优先级
+	 *
+	 * @param tenantId
+	 * @param groupId
+	 * @param nowPriority
+	 */
+	@Override
+	public void changeUsePriority(String tenantId, String groupId, int nowPriority) {
+		//查看当前优先级下是否有可用的库存量
+
+		//
+	}
+
 }

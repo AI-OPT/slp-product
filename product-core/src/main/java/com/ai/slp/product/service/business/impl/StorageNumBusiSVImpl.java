@@ -3,6 +3,7 @@ package com.ai.slp.product.service.business.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
 import com.ai.slp.product.constants.ProductConstants;
@@ -18,6 +19,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.util.IPassUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by jackieliu on 16/5/25.
@@ -90,19 +93,25 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         //3.1 确认当前是否在促销期内
         String serialsKey = IPassUtils.genMcsGroupSerialStartTimeKey(tenantId,groupId);
         long nowTime = System.currentTimeMillis();
-        //TODO... 确认是否在促销内 ZREVRANGEBYSCORE nowTime 0
         //使用优先级
         String serial = "";
+        Set<String> serialSet = cacheClient.zrevrangeByScore(serialsKey,nowTime,0);
+        if (!CollectionUtil.isEmpty(serialSet)){
+            serial = serialSet.toArray(new String[0])[0];
+        }
         //优先级价格对应KEY
         String priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,serial);
         //优先级中库存可用量对应KEY
         String priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,serial);
+
         /*3.2 以下情况使用正常优先级
-         *  A.促销价格不存在,则表明促销已过期;
-         *  B.促销优先级库存可用量不存在,则表明促销已过期
-         *  C.促销优先级库存可用量小于1,则表明促销商品已售完,切换正常优先级.
+         *  .未找到促销优先级
+         *  .促销价格不存在,则表明促销已过期;
+         *  .促销优先级库存可用量不存在,则表明促销已过期
+         *  .促销优先级库存可用量小于1,则表明促销商品已售完,切换正常优先级.
          */
-        if (!cacheClient.exists(priceKey)
+        if (StringUtils.isBlank(serial)
+                || !cacheClient.exists(priceKey)
                 || !cacheClient.exists(priorityUsable)
                 || Long.parseLong(cacheClient.get(priorityUsable))<1){
             //使用库存组指定优先级
@@ -113,6 +122,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             //若促销价格不存在,表明促销已过期,删除当前优先级的促销时间
             if (!cacheClient.exists(priceKey)) {
                 //TODO...删除促销期的优先级时间 ZREM serialsKey serial
+
             }
         }
 
@@ -122,6 +132,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         String usableNumKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,serial);
         //若减少库存之后,剩余库存小于零,表示库存不足
         if (cacheClient.hincrBy(usableNumKey,skuId,-skuNum)<0){
+            cacheClient.hincrBy(usableNumKey,skuId,skuNum);//需要将库存加回
             logger.warn("该商品库存不足,租户ID:{},库存组ID:{}"
                     ,tenantId,groupId);
             throw new BusinessException("","该商品库存不足");
@@ -136,7 +147,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         numRes.setSkuId(skuId);
         numRes.setSkuName(skuInfo.getSkuName());
         numRes.setSalePrice(salePrice);
-        numRes.setStorageNum(getSkuNumSource(cacheClient,skuStoragekey,skuNum));
+        numRes.setStorageNum(getSkuNumSource(cacheClient,skuStoragekey,new Double(skuNum)));
         //变更数据库信息
         numDbBusiSV.userStorageNum(numRes.getStorageNum(),true);
         return numRes;
@@ -181,7 +192,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             //2.2 回退优先级中,SKU库存可用量
             String skuStorageKey = IPassUtils.genMcsSkuStorageUsableKey(tenantId,groupId,serial,skuId);
             if (cacheClient.exists(skuStorageKey)){
-                //TODO... 返回SKU库存的库存量,增加权重
+                cacheClient.zincrby(skuStorageKey,skuNum,skuStorageId);
             }
             String priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,serial);
             //2.3 回退优先级中库存可用量
@@ -201,11 +212,21 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
      * @param skuNum 单品数量
      * @return
      */
-    private Map<String,Integer> getSkuNumSource(ICacheClient cacheClient,String cacheKey,int skuNum){
+    private Map<String,Integer> getSkuNumSource(ICacheClient cacheClient,String cacheKey,Double skuNum){
         Map<String,Integer> skuNumMap = new HashMap<>();
+        if (skuNum<1)
+            return skuNumMap;
         //查询库存量大于零的 ZRANGE 1  +inf
-
+        Set<String> storageSet = cacheClient.zrange(cacheKey,1,Long.MAX_VALUE);
+        //获取库存大于1的SKU库存标识
+        String storageId = storageSet.toArray(new String[0])[0];
         //修改库存 ZINCRBY -skuNum
+        Double skuStorage = cacheClient.zincrby(cacheKey,-skuNum,storageId);
+        //若库存小于1,则表示该库存不足
+        if (skuStorage<1){
+            cacheClient.zincrby(cacheKey,-skuStorage,storageId);//返回多减
+            skuNumMap.putAll(getSkuNumSource(cacheClient,cacheKey,-skuStorage));
+        }
         return skuNumMap;
     }
 }
