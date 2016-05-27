@@ -2,6 +2,7 @@ package com.ai.slp.product.api.webfront.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKURequest;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 
@@ -23,6 +24,9 @@ public interface IProductDetailSV {
 	 * @ApiDocMethod
      * @ApiCode 
 	 */
-	public ProductSKUResponse queryProducSKUById(ProductSKURequest productSKURequest) throws BusinessException,SystemException;;
+	public ProductSKUResponse queryProducSKUById(ProductSKURequest productSKURequest) throws BusinessException,SystemException;
 	@interface QueryProducSKUById{}
+	
+	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest productSKURequest) throws BusinessException,SystemException;
+	@interface QueryProductSKUConfig{}
 }

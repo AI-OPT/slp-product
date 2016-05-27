@@ -23,7 +23,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response1.setProdId("1000000000000010");
         response1.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response1.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response1.setSalePrice(100L);
+        response1.setSalePrice(100.00);
         response1.setTenantId("SLP");
         List<ProductHome> list1 = new ArrayList<ProductHome>();
         ProductHomeResponse response = new ProductHomeResponse();
@@ -36,7 +36,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response2.setProdId("1000000000000010");
         response2.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response2.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response2.setSalePrice(100L);
+        response2.setSalePrice(100.00);
         response2.setTenantId("SLP");
         List<ProductHome> list2 = new ArrayList<ProductHome>();
         list2.add(response2);
@@ -45,7 +45,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response3.setProdId("1000000000000010");
         response3.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response3.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response3.setSalePrice(100L);
+        response3.setSalePrice(100.00);
         response3.setTenantId("SLP");
         List<ProductHome> list3 = new ArrayList<ProductHome>();
         list3.add(response3);
@@ -54,7 +54,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response4.setProdId("1000000000000010");
         response4.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response4.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response4.setSalePrice(100L);
+        response4.setSalePrice(100.00);
         response4.setTenantId("SLP");
         List<ProductHome> list4 = new ArrayList<ProductHome>();
         list4.add(response4);
@@ -63,7 +63,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response5.setProdId("1000000000000010");
         response5.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response5.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response5.setSalePrice(100L);
+        response5.setSalePrice(100.00);
         response5.setTenantId("SLP");
         List<ProductHome> list5 = new ArrayList<ProductHome>();
         list5.add(response5);
@@ -72,7 +72,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response6.setProdId("1000000000000010");
         response6.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response6.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response6.setSalePrice(100L);
+        response6.setSalePrice(100.00);
         response6.setTenantId("SLP");
         List<ProductHome> list6 = new ArrayList<ProductHome>();
         list6.add(response6);
@@ -81,7 +81,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response7.setProdId("1000000000000010");
         response7.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response7.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response7.setSalePrice(100L);
+        response7.setSalePrice(100.00);
         response7.setTenantId("SLP");
         List<ProductHome> list7 = new ArrayList<ProductHome>();
         list7.add(response7);
@@ -90,7 +90,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response8.setProdId("1000000000000010");
         response8.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response8.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response8.setSalePrice(100L);
+        response8.setSalePrice(100.00);
         response8.setTenantId("SLP");
         List<ProductHome> list8 = new ArrayList<ProductHome>();
         list8.add(response8);
@@ -107,7 +107,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response1.setProdId("1000000000000010");
         response1.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response1.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response1.setSalePrice(100L);
+        response1.setSalePrice(100.00);
         response1.setTenantId("SLP");
         List<ProductHome> list1 = new ArrayList<ProductHome>();
         ProductHomeResponse response = new ProductHomeResponse();
@@ -120,7 +120,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response2.setProdId("1000000000000010");
         response2.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response2.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response2.setSalePrice(100L);
+        response2.setSalePrice(100.00);
         response2.setTenantId("SLP");
         List<ProductHome> list2 = new ArrayList<ProductHome>();
         list2.add(response2);
@@ -129,7 +129,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response3.setProdId("1000000000000010");
         response3.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response3.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response3.setSalePrice(100L);
+        response3.setSalePrice(100.00);
         response3.setTenantId("SLP");
         List<ProductHome> list3 = new ArrayList<ProductHome>();
         list3.add(response3);
@@ -138,7 +138,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response4.setProdId("1000000000000010");
         response4.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response4.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response4.setSalePrice(100L);
+        response4.setSalePrice(100.00);
         response4.setTenantId("SLP");
         List<ProductHome> list4 = new ArrayList<ProductHome>();
         list4.add(response4);
@@ -147,7 +147,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response5.setProdId("1000000000000010");
         response5.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response5.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response5.setSalePrice(100L);
+        response5.setSalePrice(100.00);
         response5.setTenantId("SLP");
         List<ProductHome> list5 = new ArrayList<ProductHome>();
         list5.add(response5);
@@ -156,7 +156,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response6.setProdId("1000000000000010");
         response6.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response6.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response6.setSalePrice(100L);
+        response6.setSalePrice(100.00);
         response6.setTenantId("SLP");
         List<ProductHome> list6 = new ArrayList<ProductHome>();
         list6.add(response6);
@@ -165,7 +165,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response7.setProdId("1000000000000010");
         response7.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response7.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response7.setSalePrice(100L);
+        response7.setSalePrice(100.00);
         response7.setTenantId("SLP");
         List<ProductHome> list7 = new ArrayList<ProductHome>();
         list7.add(response7);
@@ -174,7 +174,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response8.setProdId("1000000000000010");
         response8.setProdName("河北联通手机话费充值10元话费充值卡官方直充快充秒充 ");
         response8.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
-        response8.setSalePrice(100L);
+        response8.setSalePrice(100.00);
         response8.setTenantId("SLP");
         List<ProductHome> list8 = new ArrayList<ProductHome>();
         list8.add(response8);
@@ -210,7 +210,7 @@ public class IHomeProductSVImpl implements IHomeProductSV {
         response1.setTenantId("SLP");
         response1.setSkuId("1000000000002401");
         response1.setSkuName("山东 移动手机 话费充值 10元 快充直充24小时自动充值 即时到帐 ");
-        response1.setSalePrice(100L);
+        response1.setSalePrice(1010L);
         response1.setProductSellPoint("与三大运营商官方合作，价格最低，安全便捷，企业及个人充值首选平台");
         list1.add(response1);
         pageInfo.setResult(list1);
