@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.webfront.param;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ai.opt.base.vo.BaseResponse;
@@ -36,6 +37,26 @@ public class ProductSKUResponse extends BaseResponse{
      * 商品卖点
      */
     private String productSellPoint;
+    /**
+     * 有效期类型
+     */
+    private String activeType;
+    /**
+     * 生效时间
+     */
+    private Date activeTime;
+    /**
+     * 失效时间
+     */
+    private Date inactiveTime;
+    /**
+     * 有效周期
+     */
+    private Integer activeCycle;
+    /**
+     * 单位
+     */
+    private String unit;
     /**
      * 商品属性集合
      */
@@ -138,5 +159,35 @@ public class ProductSKUResponse extends BaseResponse{
 	}
 	public void setProductImageList(List<ProductImage> productImageList) {
 		this.productImageList = productImageList;
+	}
+	public String getActiveType() {
+		return activeType;
+	}
+	public void setActiveType(String activeType) {
+		this.activeType = activeType;
+	}
+	public Date getActiveTime() {
+		return activeTime;
+	}
+	public void setActiveTime(Date activeTime) {
+		this.activeTime = activeTime;
+	}
+	public Date getInactiveTime() {
+		return inactiveTime;
+	}
+	public void setInactiveTime(Date inactiveTime) {
+		this.inactiveTime = inactiveTime;
+	}
+	public Integer getActiveCycle() {
+		return activeCycle;
+	}
+	public void setActiveCycle(Integer activeCycle) {
+		this.activeCycle = activeCycle;
+	}
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 }

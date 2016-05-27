@@ -12,7 +12,7 @@ public class ProductSKURequest extends BaseInfo{
 	/**
 	 * SKU 单品标识
 	 */
-	@NotBlank(message = "SKU单品标识不能为空",groups = {IProductDetailSV.QueryProducSKUById.class})
+	@NotBlank(message = "SKU单品标识不能为空",groups = {IProductDetailSV.QueryProducSKUById.class,IProductDetailSV.QueryProductSKUConfig.class})
 	private String skuId;
 
 	public String getSkuId() {

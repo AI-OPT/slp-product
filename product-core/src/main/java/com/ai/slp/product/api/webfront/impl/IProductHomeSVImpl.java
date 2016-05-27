@@ -21,7 +21,7 @@ public class IProductHomeSVImpl implements IProductHomeSV {
             ProductHome response1 = new ProductHome();
             response1.setProdId("1000000000000010");
             response1.setProdName("移动上网卡季卡 ");
-            response1.setSalePrice(100L);
+            response1.setSalePrice(100.00);
             response1.setTenantId("SLP");
             list1.add(response1);
         }
@@ -35,7 +35,7 @@ public class IProductHomeSVImpl implements IProductHomeSV {
             ProductHome response1 = new ProductHome();
             response1.setProdId("1000000000000010");
             response1.setProdName("联通上网卡季卡 ");
-            response1.setSalePrice(300L);
+            response1.setSalePrice(300.00);
             response1.setTenantId("SLP");
             list1.add(response1);
         }
@@ -50,7 +50,7 @@ public class IProductHomeSVImpl implements IProductHomeSV {
             response1.setProdId("1000000000000010");
             response1.setProdName("TP-link300M无线路由器");
             response1.setProductSellPoint("简单实现无线桥接、中继，扩展无线覆盖");
-            response1.setSalePrice(99L);
+            response1.setSalePrice(99.00);
             response1.setTenantId("SLP");
             list1.add(response1);
         }

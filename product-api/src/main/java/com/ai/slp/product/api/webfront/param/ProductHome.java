@@ -1,10 +1,20 @@
 package com.ai.slp.product.api.webfront.param;
 
-import java.io.Serializable;
+import com.ai.opt.base.vo.BaseResponse;
 
-public class ProductHome implements Serializable{
+public class ProductHome extends BaseResponse {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * sku单品标识
+     */
+    private String skuId;
+
+    /**
+     * sku名称
+     */
+    private String skuName;
 
     /**
      * 租户ID
@@ -29,13 +39,30 @@ public class ProductHome implements Serializable{
     /**
      * 销售价
      */
-    private Long salePrice;
+    private Double salePrice;
 
     /**
      * 商品图
      */
     private ProductImage productImage;
+
     private String picUrl;
+
+    public String getSkuId() {
+        return skuId;
+    }
+
+    public void setSkuId(String skuId) {
+        this.skuId = skuId;
+    }
+
+    public String getSkuName() {
+        return skuName;
+    }
+
+    public void setSkuName(String skuName) {
+        this.skuName = skuName;
+    }
 
     public String getPicUrl() {
         return picUrl;
@@ -85,11 +112,11 @@ public class ProductHome implements Serializable{
         this.productSellPoint = productSellPoint;
     }
 
-    public Long getSalePrice() {
+    public Double getSalePrice() {
         return salePrice;
     }
 
-    public void setSalePrice(Long salePrice) {
+    public void setSalePrice(Double salePrice) {
         this.salePrice = salePrice;
     }
 
