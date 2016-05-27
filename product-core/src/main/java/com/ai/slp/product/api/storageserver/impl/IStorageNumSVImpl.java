@@ -3,6 +3,8 @@ package com.ai.slp.product.api.storageserver.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.storageserver.interfaces.IStorageNumSV;
 import com.ai.slp.product.api.storageserver.param.StorageNumBackReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
@@ -51,6 +53,14 @@ public class IStorageNumSVImpl implements IStorageNumSV {
      */
     @Override
     public BaseResponse backStorageNum(StorageNumBackReq backReq) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(backReq.getTenantId(),"");
+        storageNumBusiSV.backStorageNum(backReq.getTenantId(),backReq.getSkuId(),backReq.getStorageNum());
+        BaseResponse response = new BaseResponse();
+        ResponseHeader header = new ResponseHeader();
+        header.setResultCode(ExceptCodeConstants.Special.SUCCESS);
+        header.setIsSuccess(true);
+        header.setResultMessage("OK");
+        response.setResponseHeader(header);
+        return response;
     }
 }

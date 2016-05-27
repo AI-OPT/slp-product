@@ -9,8 +9,12 @@ import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.util.IPassUtils;
@@ -21,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -36,6 +41,10 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     IProductAtomSV productAtomSV;
     @Autowired
     IStorageGroupAtomSV storageGroupAtomSV;
+    @Autowired
+    IStorageAtomSV storageAtomSV;
+    @Autowired
+    ISkuStorageAtomSV skuStorageAtomSV;
     @Autowired
     StorageNumDbBusiSVImpl numDbBusiSV;
     /**
@@ -110,7 +119,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         //4.获取当前优先级中SKU的销售价
         long salePrice = Long.parseLong(cacheClient.hget(priceKey,skuId));
         //5.进行减sku库存
-        String usableNumKey = IPassUtils.genMcsSerialSKUUsableKey(tenantId,groupId,serial);
+        String usableNumKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,serial);
         //若减少库存之后,剩余库存小于零,表示库存不足
         if (cacheClient.hincrBy(usableNumKey,skuId,-skuNum)<0){
             logger.warn("该商品库存不足,租户ID:{},库存组ID:{}"
@@ -142,7 +151,46 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
      */
     @Override
     public void backStorageNum(String tenantId, String skuId, Map<String, Integer> storageNum) {
-
+        //检查SKU是否存在
+        Iterator<String> iterator = storageNum.keySet().iterator();
+        ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+        while (iterator.hasNext()){
+            String skuStorageId = iterator.next();
+            Integer skuNum = storageNum.get(skuStorageId);
+            //1. 根据SKU库存查询所属优先级
+            //1.1 查询SKU库存信息
+            SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);
+            if (skuStorage==null){
+                logger.warn("库存回退过程中,未找到对应SKU库存,SKU库存标识:{}",skuStorageId);
+                continue;
+            }
+            //1.2 查询SKU库存对应库存信息
+            Storage storage = storageAtomSV.queryById(skuStorage.getStorageId());
+            if (storage==null){
+                logger.warn("库存回退过程中,未找到对应库存,SKU库存标识:{},库存标识:{}"
+                        ,skuStorageId,skuStorage.getStorageId());
+                continue;
+            }
+            String groupId = storage.getStorageGroupId(),serial = storage.getSerialNumber().toString();
+            //2. 回退缓存中库存所用量
+            //2.1 回退优先级中,SKU可用量
+            String skuUsableKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,serial);
+            if (cacheClient.exists(skuUsableKey)){
+                cacheClient.hincrBy(skuUsableKey,skuId,skuNum);
+            }
+            //2.2 回退优先级中,SKU库存可用量
+            String skuStorageKey = IPassUtils.genMcsSkuStorageUsableKey(tenantId,groupId,serial,skuId);
+            if (cacheClient.exists(skuStorageKey)){
+                //TODO... 返回SKU库存的库存量,增加权重
+            }
+            String priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,serial);
+            //2.3 回退优先级中库存可用量
+            if (cacheClient.exists(priorityUsable)){
+                cacheClient.incrBy(priorityUsable,skuNum);
+            }
+        }
+        //调用数据库异步处理方法
+        numDbBusiSV.userStorageNum(storageNum,false);
     }
 
     /**

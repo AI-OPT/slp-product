@@ -44,7 +44,7 @@ public class IPassUtils {
      * @param serial
      * @return
      */
-    public static String genMcsSerialSKUUsableKey(String tenantId, String groupId, String serial){
+    public static String genMcsSerialSkuUsableKey(String tenantId, String groupId, String serial){
         return StorageConstants.IPass.McsParams.SKU_USABLE_TAG +CACHE_KEY_SEPARATE
                 +tenantId+CACHE_KEY_SEPARATE
                 +groupId+CACHE_KEY_SEPARATE
