@@ -69,10 +69,6 @@ public final class StorageConstants {
              */
             public static final String AUTO_STOP = "21";
             /**
-             * 售罄停用
-             */
-            public static final String SOLD_OUT_STOP = "22";
-            /**
              * 废弃
              */
             public static final String DISCARD = "3";

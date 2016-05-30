@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import scala.Int;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -84,8 +85,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         //若库存组不是启用状态,则不允许使用
         if (!StorageConstants.StorageGroup.State.ACTIVE.equals(groupState)
                 && !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(groupState)){
-            logger.warn("库存组没有启用,无法使用,租户ID:{},库存组ID:{}"
-                    ,tenantId,groupId);
+            logger.warn("库存组没有启用,无法使用,租户ID:{},库存组ID:{}",tenantId,groupId);
             throw new BusinessException("","库存组没有启用,无法使用");
         }
 
@@ -138,8 +138,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             throw new BusinessException("","该商品库存不足");
         }
         //6.进行减少优先级库存可用量
-        cacheClient.decrBy(priorityUsable,skuNum);
-        //7.确认库存量的库存来源
+        Long priorityUsableNum = cacheClient.decrBy(priorityUsable,skuNum);
         String skuStoragekey = IPassUtils.genMcsSkuStorageUsableKey(tenantId,groupId,serial,skuId);
         //8.组装返回值
         StorageNumRes numRes = new StorageNumRes();
@@ -149,7 +148,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         numRes.setSalePrice(salePrice);
         numRes.setStorageNum(getSkuNumSource(cacheClient,skuStoragekey,new Double(skuNum)));
         //变更数据库信息
-        numDbBusiSV.userStorageNum(numRes.getStorageNum(),true);
+        numDbBusiSV.storageNumChange(tenantId,skuId,numRes.getStorageNum(),true,priorityUsableNum<1?true:false);
         return numRes;
     }
 
@@ -201,7 +200,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             }
         }
         //调用数据库异步处理方法
-        numDbBusiSV.userStorageNum(storageNum,false);
+        numDbBusiSV.storageNumChange(tenantId,skuId,storageNum,false,false);
     }
 
     /**
@@ -214,19 +213,29 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
      */
     private Map<String,Integer> getSkuNumSource(ICacheClient cacheClient,String cacheKey,Double skuNum){
         Map<String,Integer> skuNumMap = new HashMap<>();
-        if (skuNum<1)
-            return skuNumMap;
         //查询库存量大于零的 ZRANGE 1  +inf
         Set<String> storageSet = cacheClient.zrange(cacheKey,1,Long.MAX_VALUE);
         //获取库存大于1的SKU库存标识
         String storageId = storageSet.toArray(new String[0])[0];
         //修改库存 ZINCRBY -skuNum
         Double skuStorage = cacheClient.zincrby(cacheKey,-skuNum,storageId);
-        //若库存小于1,则表示该库存不足
-        if (skuStorage<1){
-            cacheClient.zincrby(cacheKey,-skuStorage,storageId);//返回多减
-            skuNumMap.putAll(getSkuNumSource(cacheClient,cacheKey,-skuStorage));
+        Integer num = (int)(skuStorage+skuNum);
+
+        //若库存还有剩余,表示库存足够,直接返回
+        if (skuStorage>0){
+            skuNumMap.put(storageId,skuNum.intValue());
+            return skuNumMap;
         }
+        //若库存小于1,且操作数与数量之和大于零,则表示从该库存中出库一部分
+        else if (skuStorage<1 && num>0){
+            cacheClient.zincrby(cacheKey,-skuStorage,storageId);//返回多减
+            skuNumMap.put(storageId,num);
+        }
+        //库存小于1,且操作数与使用量之和小于零,则标识库存不足
+        else if(skuStorage<1 && num<0){
+            cacheClient.zincrby(cacheKey,skuNum,storageId);//返回多减
+        }
+        skuNumMap.putAll(getSkuNumSource(cacheClient,cacheKey,-skuStorage));
         return skuNumMap;
     }
 }

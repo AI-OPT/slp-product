@@ -166,13 +166,10 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		StorageGroupCriteria.Criteria request = example.createCriteria();
 		// 设置状态为除废弃外的所有状态
 		List<String> stateList = new ArrayList<String>();
-		stateList.add(StorageConstants.StorageGroup.State.ACTIVE);
-		stateList.add(StorageConstants.StorageGroup.State.AUTO_ACTIVE);
-		stateList.add(StorageConstants.StorageGroup.State.STOP);
-		stateList.add(StorageConstants.StorageGroup.State.AUTO_STOP);
-		stateList.add(StorageConstants.StorageGroup.State.SOLD_OUT_STOP);
+		stateList.add(StorageConstants.StorageGroup.State.DISCARD);
+		stateList.add(StorageConstants.StorageGroup.State.AUTO_DISCARD);
 		// 设置条件参数
-		request.andTenantIdEqualTo(storageGroupPageQueryVo.getTenantId()).andStateIn(stateList);
+		request.andTenantIdEqualTo(storageGroupPageQueryVo.getTenantId()).andStateNotIn(stateList);
 		if (storageGroupPageQueryVo.getStorageGroupName() != null)
 			request.andStorageGroupNameLike("%" + storageGroupPageQueryVo.getStorageGroupName() + "%");
 		if (storageGroupPageQueryVo.getStorageGroupId() != null)

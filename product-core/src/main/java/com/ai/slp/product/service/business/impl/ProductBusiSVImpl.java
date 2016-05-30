@@ -176,13 +176,13 @@ public class ProductBusiSVImpl implements IProductBusiSV {
 
 
     /**
-     * 进行停用下架
+     * 商品下架,当库存组为停用时,则为停用下架,否则为售罄下架
      *
      * @param tenantId
      * @param prodId
      */
     @Override
-    public void stopProduct(String tenantId, String prodId,Long operId) {
+    public void offSale(String tenantId, String prodId, Long operId) {
         Product product = productAtomSV.selectByGroupId(tenantId,prodId);
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
@@ -191,8 +191,15 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if(!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
             return;
         }
-        //设置为停用下架状态
-        product.setState(ProductConstants.Product.State.STOP);
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
+        //若库存组为"停用"或"自动停用"则设置为"停用下架"
+        if (StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())
+                || StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())) {
+            product.setState(ProductConstants.Product.State.STOP);
+        }
+        //否则为"售罄停用"
+        else
+            product.setState(ProductConstants.Product.State.SALE_OUT);
         product.setOperId(operId);
         //添加日志
         if (productAtomSV.updateById(product)>0){

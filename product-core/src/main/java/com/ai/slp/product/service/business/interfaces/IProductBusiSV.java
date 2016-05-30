@@ -33,7 +33,7 @@ public interface IProductBusiSV {
      * @param tenantId
      * @param prodId
      */
-    public void stopProduct(String tenantId,String prodId,Long operId);
+    public void offSale(String tenantId, String prodId, Long operId);
 
     /**
      * 废弃商品

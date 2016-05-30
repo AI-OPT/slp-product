@@ -10,7 +10,6 @@ import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.constants.*;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.*;
@@ -368,7 +367,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 商品进行停用下架
 		Product product = productAtomSV.selectByGroupId(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
 		if (product != null && ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
-			productBusiSV.stopProduct(product.getTenantId(), product.getProdId(), operId);
+			productBusiSV.offSale(product.getTenantId(), product.getProdId(), operId);
 		}
 	}
 
