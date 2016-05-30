@@ -165,7 +165,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }else { //切换至上架
             product.setState(ProductConstants.Product.State.IN_SALE);
         }
-        product.setOperId(operId);
+        //停用/售罄下架进行上架时,没有操作人
+        if (operId!=null)
+            product.setOperId(operId);
         //添加日志
         if (productAtomSV.updateById(product)>0){
             ProductLog productLog = new ProductLog();
@@ -200,7 +202,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //否则为"售罄停用"
         else
             product.setState(ProductConstants.Product.State.SALE_OUT);
-        product.setOperId(operId);
+        //当库存售光时,操作者ID为null
+        if (operId!=null)
+            product.setOperId(operId);
         //添加日志
         if (productAtomSV.updateById(product)>0){
             ProductLog productLog = new ProductLog();

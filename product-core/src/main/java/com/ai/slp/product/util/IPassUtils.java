@@ -12,7 +12,7 @@ public class IPassUtils {
      */
     private static final String CACHE_KEY_SEPARATE = ":";
     /**
-     * 获取缓存中group的key
+     * 获取缓存中group的key(A)
      * @param tenantId
      * @param groupId
      * @return
@@ -24,7 +24,7 @@ public class IPassUtils {
     }
 
     /**
-     * 库存组优先级的价格KEY
+     * 库存组优先级的价格KEY(B)
      * @param tenantId
      * @param groupId
      * @param serial
@@ -38,7 +38,7 @@ public class IPassUtils {
     }
 
     /**
-     * 库存组优先级下SKU的可用量KEY
+     * 库存组优先级下SKU的可用量KEY(C)
      * @param tenantId
      * @param groupId
      * @param serial
@@ -52,7 +52,7 @@ public class IPassUtils {
     }
 
     /**
-     * 促销优先级开始时间KEY
+     * 促销优先级开始时间KEY(D)
      * @param tenantId
      * @param groupId
      * @return
@@ -64,7 +64,7 @@ public class IPassUtils {
     }
 
     /**
-     * 库存组内优先级对应SKU库存的KEY
+     * 库存组内优先级对应SKU库存的KEY(E)
      * @param tenantId
      * @param groupId
      * @param serial
@@ -81,7 +81,7 @@ public class IPassUtils {
     }
 
     /**
-     * 库存组内优先级内库存可用量的KEY
+     * 库存组内优先级内库存可用量的KEY(F)
      * @param tenantId
      * @param groupId
      * @param serial

@@ -84,21 +84,33 @@ public interface IStorageAtomSV {
      */
     public Storage queryStorageByGroupAndId(String storageGroupId, String storageId);
 
-    /**
-     * 通过库存组标识查询启用或自动启用状态的库存
-     *
-     * @param storageGroupId
-     * @return
-     * @author lipeng16
-     */
-    public List<Storage> queryStorageActiveByGroupId(String storageGroupId);
 
     /**
      * 查询指定库存组下指定优先级库存列表
      *
      * @param groupId
      * @param priorityNum
+     * @param hasDestory
      * @return
      */
-    public List<Storage> queryStorageByGroupIdAndPriority(String groupId,short priorityNum);
+    public List<Storage> queryStorageByGroupIdAndPriority(String groupId,short priorityNum,boolean hasDestory);
+
+    /**
+     * 查询除指定优先级外,非促销,可用量大于零的库存,按照优先级正序排列
+     *
+     * @param groupId  库存组表示
+     * @param priority 指定优先级
+     * @param after null:优先级之前和之后;true:指定优先级之后,false:指定优先级之前
+     * @param hasDestory 是否查询废弃库存,包括手动废弃和自动废弃
+     * @return
+     */
+    public List<Storage> queryNoTimeNoPrioritySelf(String groupId,Short priority,Boolean after,boolean hasDestory);
+
+    /**
+     * 查询现在正促销优先级的库存,可用量大于零
+     * @param groupId
+     * @param hasDestory 是否包括废弃的库存
+     * @return
+     */
+    public List<Storage> queryTimeActiveOfNow(String groupId,boolean hasDestory);
 }

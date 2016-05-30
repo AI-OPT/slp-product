@@ -173,7 +173,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	private void stopStorage(String tenantId,Storage storage, Long operId) {
 		//库存对应的库存组下是否存在启用或自动启用的库存,若存在则直接停用
-		List<Storage> storageList = storageAtomSV.queryStorageActiveByGroupId(storage.getStorageGroupId());
+		List<Storage> storageList = storageAtomSV.queryActive(tenantId,storage.getStorageGroupId(),false);
 		if(!CollectionUtil.isEmpty(storageList)){
 			//库存状态变为停用并更新日志
 			storage.setState(StorageConstants.Storage.State.STOP);
@@ -271,7 +271,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		// 检查库存可用量,若有库存,则检查库存组是否自动停用,若是,则自动启用
 		if (storage.getUsableNum() > 0) {
 			// 通过库存组ID查询启用或自动启用的库存
-			List<Storage> storageList = storageAtomSV.queryStorageActiveByGroupId(storage.getStorageGroupId());
+			List<Storage> storageList = storageAtomSV.queryActive(tenantId,storage.getStorageGroupId(),false);
 			if (CollectionUtil.isEmpty(storageList)) {
 				// 如果不存在启用的库存则更新当前库存状态为启用
 				storage.setState(StorageConstants.Storage.State.ACTIVE);
@@ -593,8 +593,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			throw new BusinessException("","指定库存组不存在,租户ID:"+tenantId+",库存组ID:"+groupId);
 		}
 		// 获取要优先级库存
-		List<Storage> oldStorageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,stoPriorityCharge.getOldLevel());
-		List<Storage> newStorageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,stoPriorityCharge.getNewLevel());
+		List<Storage> oldStorageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,stoPriorityCharge.getOldLevel(),true);
+		List<Storage> newStorageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,stoPriorityCharge.getNewLevel(),true);
 		changeStoragePriority(oldStorageList,stoPriorityCharge.getNewLevel());
 		changeStoragePriority(newStorageList,stoPriorityCharge.getOldLevel());
 	}

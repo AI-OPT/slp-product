@@ -1,5 +1,8 @@
 package com.ai.slp.product.constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 库存和库存组的常量
  *

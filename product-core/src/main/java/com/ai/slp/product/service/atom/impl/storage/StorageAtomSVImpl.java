@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,18 @@ import com.ai.slp.product.util.SequenceUtil;
 public class StorageAtomSVImpl implements IStorageAtomSV {
 	@Autowired
 	StorageMapper storageMapper;
+	/*
+	 * 废弃状态标记集合
+	 */
+	static List<String> DISCARD_LIST = new ArrayList<>();
+	static List<String> STOP_LIST = new ArrayList<>();
+
+	static {
+		DISCARD_LIST.add(StorageConstants.Storage.State.DISCARD);
+		DISCARD_LIST.add(StorageConstants.Storage.State.AUTO_DISCARD);
+		STOP_LIST.add(StorageConstants.Storage.State.STOP);
+		STOP_LIST.add(StorageConstants.Storage.State.AUTO_STOP);
+	}
 
 	/**
 	 * 查询指定库存组下的库存信息,按照优先级正序排序
@@ -140,23 +153,6 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	}
 
 	/**
-	 * 通过库存组标识查询状态为启用或自动启用的库存
-	 *
-	 * @param storageGroupId
-	 * @return
-	 * @author lipeng16
-	 */
-	@Override
-	public List<Storage> queryStorageActiveByGroupId(String storageGroupId) {
-		StorageCriteria example = new StorageCriteria();
-		List<String> stateList = new ArrayList<>();
-		stateList.add(StorageConstants.Storage.State.ACTIVE);
-		stateList.add(StorageConstants.Storage.State.AUTO_ACTIVE);
-		example.createCriteria().andStorageGroupIdEqualTo(storageGroupId).andStateIn(stateList);
-		return storageMapper.selectByExample(example);
-	}
-
-	/**
 	 * 查询指定库存组下指定优先级库存列表
 	 *
 	 * @param groupId
@@ -164,10 +160,75 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	 * @return
 	 */
 	@Override
-	public List<Storage> queryStorageByGroupIdAndPriority(String groupId, short priorityNum) {
+	public List<Storage> queryStorageByGroupIdAndPriority(String groupId, short priorityNum,boolean hasDestory) {
 		StorageCriteria example = new StorageCriteria();
-		example.createCriteria().andStorageGroupIdEqualTo(groupId)
+		StorageCriteria.Criteria criteria = example.createCriteria();
+		criteria.andStorageGroupIdEqualTo(groupId)
 				.andPriorityNumberEqualTo(priorityNum);
+		//排除已废弃状态
+		if (!hasDestory){
+			criteria.andStateNotIn(DISCARD_LIST);
+		}
 		return storageMapper.selectByExample(example);
 	}
+
+	/**
+	 * 查询指定优先级后非促销的库存,按照优先级正序排列
+	 *
+	 * @param groupId    库存组表示
+	 * @param priority   指定优先级
+	 * @param hasDestory 是否查询废弃库存
+	 * @return
+	 */
+	@Override
+	public List<Storage> queryNoTimeNoPrioritySelf(String groupId, Short priority,Boolean after, boolean hasDestory) {
+		StorageCriteria example = new StorageCriteria();
+		example.setOrderByClause("PRIORITY_NUMBER");
+		StorageCriteria.Criteria criteria = example.createCriteria();
+		criteria.andStorageGroupIdEqualTo(groupId)
+				.andUsableNumGreaterThan(0l)
+				.andActiveTimeIsNull()
+				.andInactiveTimeIsNull();
+		//查询非当前优先级
+		if (after == null){
+			criteria.andPriorityNumberNotEqualTo(priority);
+		}
+		//查询当前优先级之后
+		else if (Boolean.TRUE.equals(after)){
+			criteria.andPriorityNumberGreaterThan(priority);
+		}
+		//查询当前优先级之前
+		else {
+			criteria.andPriorityNumberLessThan(priority);
+		}
+
+		if (!hasDestory){
+			criteria.andStateNotIn(DISCARD_LIST);
+		}
+		return storageMapper.selectByExample(example);
+	}
+
+	/**
+	 * 查询现在正促销优先级的库存,可用量大于零
+	 *
+	 * @param groupId
+	 * @param hasDestory 是否包括废弃的库存
+	 * @return
+	 */
+	@Override
+	public List<Storage> queryTimeActiveOfNow(String groupId, boolean hasDestory) {
+		StorageCriteria example = new StorageCriteria();
+		example.setOrderByClause("PRIORITY_NUMBER");
+		StorageCriteria.Criteria criteria = example.createCriteria();
+		Timestamp nowTime = DateUtils.currTimeStamp();
+		criteria.andStorageGroupIdEqualTo(groupId)
+				.andUsableNumGreaterThan(0l)
+				.andActiveTimeLessThanOrEqualTo(nowTime)
+				.andInactiveTimeGreaterThan(nowTime);
+		if (!hasDestory){
+			criteria.andStateNotIn(DISCARD_LIST);
+		}
+		return storageMapper.selectByExample(example);
+	}
+
 }
