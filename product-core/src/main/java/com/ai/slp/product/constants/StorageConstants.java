@@ -49,6 +49,10 @@ public final class StorageConstants {
              * HASH中库存组状态的hashKey
              */
             public static final String GROUP_STATE_HTAGE = "GROUP_STATE";
+            /**
+             * 缓存有效期延长时间,10分钟 单位:秒
+             */
+            public static final long CACHE_EXT_TIME = 10*60;
 
         }
     }

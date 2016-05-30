@@ -222,6 +222,11 @@ public class StorageNumDbBusiSVImpl {
         Timestamp activeTime = storage.getActiveTime();
         //优先级促销结束时间
         Timestamp inActiveTime = storage.getInactiveTime();
+        //缓存有效期
+        long expireTime = 0;
+        //便于在促销过期后仍能完成处理,需要将过期时间延长十分钟.
+        if (inActiveTime!=null)
+            expireTime = inActiveTime.getTime()/1000+StorageConstants.IPass.McsParams.CACHE_EXT_TIME;
         //若存在开始时间,则添加优先级开始时间
         if (activeTime!=null){
             //(D)
@@ -231,8 +236,8 @@ public class StorageNumDbBusiSVImpl {
 
         //(B)
         String serialPriceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority.toString());
-        //优先级总可用量(F)
-        String priorityUsableKey = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
+
+
         //设置优先级下SKU价格
         for (SkuStorage skuStorage:skuStorageList){
             //设置SKU价格
@@ -242,16 +247,20 @@ public class StorageNumDbBusiSVImpl {
                 //设置SKU库存(E)
                 String skuStorageKey = IPassUtils.genMcsSkuStorageUsableKey(
                         tenantId,groupId,priority.toString(),skuStorage.getSkuId());
-                cacheClient.expireAt(skuStorageKey,inActiveTime.getTime()/1000);
+                cacheClient.expireAt(skuStorageKey,expireTime);
             }
 
         }
         //若失效时间不为空,则设置过期时间,单位:秒
         if (inActiveTime!=null) {
-            //(B)
+            //(B) 用来判断是否过期,不需要延长
             cacheClient.expireAt(serialPriceKey, inActiveTime.getTime()/1000);
-            //(F)
-            cacheClient.expireAt(priorityUsableKey,inActiveTime.getTime()/1000);
+            //优先级中SKU库存量(C)
+            String skuUsableKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
+            cacheClient.expireAt(skuUsableKey,expireTime);
+            //优先级总可用量(F)
+            String priorityUsableKey = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
+            cacheClient.expireAt(priorityUsableKey,expireTime);
         }
     }
 }
