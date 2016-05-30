@@ -54,6 +54,9 @@ public class SKUInfo {
     @Expose
     private List<ImageInfo> thumbnail;
 
+    @Expose
+    private long uptime;
+
 
     public SKUInfo(String tenantid, String skuid, String skuname) {
         this.tenantid = tenantid;
@@ -161,5 +164,9 @@ public class SKUInfo {
 
     public void addThumbnail(ImageInfo imageInfo) {
         this.thumbnail.add(imageInfo);
+    }
+
+    public void setUptime(long uptime) {
+        this.uptime = uptime;
     }
 }

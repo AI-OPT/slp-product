@@ -5,19 +5,19 @@ package com.ai.slp.product.search.dto;
  */
 public class UserSearchAuthority {
     private UserType usertype;
-    private String userCode;
+    private String userId;
 
-    public UserSearchAuthority(UserType usertype, String userCode) {
+    public UserSearchAuthority(UserType usertype, String userId) {
         this.usertype = usertype;
-        this.userCode = userCode;
+        this.userId = userId;
     }
 
     public UserType getUsertype() {
         return usertype;
     }
 
-    public String getUserCode() {
-        return userCode;
+    public String getUserId() {
+        return userId;
     }
 
     public enum UserType {
