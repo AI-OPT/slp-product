@@ -249,7 +249,7 @@ public class StorageNumDbBusiSVImpl {
         //若失效时间不为空,则设置过期时间,单位:秒
         if (inActiveTime!=null) {
             //(B)
-            cacheClient.expireAt(serialPriceKey, inActiveTime.getTime() / 1000);
+            cacheClient.expireAt(serialPriceKey, inActiveTime.getTime()/1000);
             //(F)
             cacheClient.expireAt(priorityUsableKey,inActiveTime.getTime()/1000);
         }
