@@ -233,6 +233,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         }
         //库存小于1,且操作数与使用量之和小于零,则标识库存不足
         else if(skuStorage<1 && num<0){
+            skuStorage = -skuNum;
             cacheClient.zincrby(cacheKey,skuNum,storageId);//返回多减
         }
         skuNumMap.putAll(getSkuNumSource(cacheClient,cacheKey,-skuStorage));

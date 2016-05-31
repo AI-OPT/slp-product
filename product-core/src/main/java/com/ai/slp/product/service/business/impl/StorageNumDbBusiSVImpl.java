@@ -61,7 +61,8 @@ public class StorageNumDbBusiSVImpl {
      * @return
      */
     @Async
-    public void storageNumChange(String tenantId,String skuId,Map<String,Integer> skuNumMap, boolean isUser, boolean priorityChange) {
+    public void storageNumChange(
+            String tenantId,String skuId,Map<String,Integer> skuNumMap, boolean isUser, boolean priorityChange) {
         if (skuNumMap==null || skuNumMap.isEmpty())
             return;
         Iterator<String> iterator = skuNumMap.keySet().iterator();
@@ -75,6 +76,7 @@ public class StorageNumDbBusiSVImpl {
             if (skuStorage ==null)
                 continue;
             skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
+            /* 取消SKU库存的自动启用和自动停用状态
             //若SKU库存小于等于零,且状态不为"废弃",则设置为"自动停用
             if (skuStorage.getUsableNum()<=0
                     && !StorageConstants.SkuStorage.State.AUTO_DISCARD.equals(skuStorage.getState())){
@@ -83,7 +85,7 @@ public class StorageNumDbBusiSVImpl {
             } else if (skuStorage.getUsableNum()>0
                     && StorageConstants.SkuStorage.State.AUTO_STOP.equals(skuStorage.getState())){
                 skuStorage.setState(StorageConstants.SkuStorage.State.ACTIVE);
-            }
+            }*/
             skuStorageAtomSV.updateById(skuStorage);
 
             //更新库存信息
@@ -108,7 +110,7 @@ public class StorageNumDbBusiSVImpl {
         Product product = prodSku==null?null:productAtomSV.selectByProductId(tenantId,prodSku.getProdId());
         //若为回退,且为售罄下架,则需要进行上架处理
         if (!isUser && product!=null
-                && ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+                && ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
             productBusiSV.changeToSaleForStop(tenantId,prodSku.getProdId(),null);
 
         }
@@ -236,8 +238,6 @@ public class StorageNumDbBusiSVImpl {
 
         //(B)
         String serialPriceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority.toString());
-
-
         //设置优先级下SKU价格
         for (SkuStorage skuStorage:skuStorageList){
             //设置SKU价格
