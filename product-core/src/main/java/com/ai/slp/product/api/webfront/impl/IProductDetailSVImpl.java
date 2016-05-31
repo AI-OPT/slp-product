@@ -62,8 +62,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		skuAttrValue2.setAttrValueName("黑色");
 		skuAttrValue2.setIsOwn(false);
 		ProductImage image2 = new ProductImage();
-		//image2.setIdpsId("574551b4d601800009c0b0d9");
-		//image2.setExtension(".jpg");
+		image2.setVfsid("574551b4d601800009c0b0d9");
+		image2.setImagetype(".jpg");
 		skuAttrValue2.setImage(image2);
 		attrValueList.add(skuAttrValue2);
 		skuAttr1.setAttrValueList(attrValueList);
