@@ -51,8 +51,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		skuAttrValue1.setAttrValueName("白色");
 		skuAttrValue1.setIsOwn(true);
 		ProductImage image1 = new ProductImage();
-		image1.setIdpsId("57454f50d601800009c0b0cf");
-		image1.setExtension(".jpg");
+		image1.setVfsid("57454f50d601800009c0b0cf");
+		image1.setImagetype(".jpg");
 		skuAttrValue1.setImage(image1);
 		attrValueList.add(skuAttrValue1);
 		skuAttr1.setAttrValueList(attrValueList);
@@ -62,8 +62,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		skuAttrValue2.setAttrValueName("黑色");
 		skuAttrValue2.setIsOwn(false);
 		ProductImage image2 = new ProductImage();
-		image2.setIdpsId("574551b4d601800009c0b0d9");
-		image2.setExtension(".jpg");
+		//image2.setIdpsId("574551b4d601800009c0b0d9");
+		//image2.setExtension(".jpg");
 		skuAttrValue2.setImage(image2);
 		attrValueList.add(skuAttrValue2);
 		skuAttr1.setAttrValueList(attrValueList);
@@ -73,8 +73,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		skuAttrValue3.setAttrValueName("紫色");
 		skuAttrValue3.setIsOwn(false);
 		ProductImage image3 = new ProductImage();
-		image3.setIdpsId("57455205d601800009c0b0df");
-		image3.setExtension(".jpg");
+		image3.setVfsid("57455205d601800009c0b0df");
+		image3.setImagetype(".jpg");
 		skuAttrValue3.setImage(image3);
 		attrValueList.add(skuAttrValue3);
 		skuAttr1.setAttrValueList(attrValueList);
@@ -111,16 +111,16 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		// 设置图片
 		List<ProductImage> productImageList = new LinkedList<ProductImage>();
 		ProductImage productImage1 = new ProductImage();
-		productImage1.setExtension(".jpg");
-		productImage1.setIdpsId("57454f50d601800009c0b0cf");
+		image3.setImagetype(".jpg");
+		productImage1.setVfsid("57454f50d601800009c0b0cf");
 		productImageList.add(productImage1);
 		ProductImage productImage2 = new ProductImage();
-		productImage2.setExtension(".jpg");
-		productImage2.setIdpsId("5745516fd601800009c0b0d5");
+		image3.setImagetype(".jpg");
+		productImage2.setVfsid("5745516fd601800009c0b0d5");
 		productImageList.add(productImage2);
 		ProductImage productImage3 = new ProductImage();
-		productImage3.setExtension(".jpg");
-		productImage3.setIdpsId("57455191d601800009c0b0d7");
+		image3.setImagetype(".jpg");
+		productImage3.setVfsid("57455191d601800009c0b0d7");
 		productImageList.add(productImage3);
 		productSKUResponse.setProductImageList(productImageList);
 

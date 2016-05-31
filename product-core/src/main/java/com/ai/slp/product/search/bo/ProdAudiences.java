@@ -10,6 +10,11 @@ public class ProdAudiences {
     private String audiencecode;
 
 
+    public ProdAudiences() {
+        super();
+    }
+
+
     public ProdAudiences(String audiencecode) {
         this.audiencecode = audiencecode;
     }

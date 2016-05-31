@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.slp.product.api.webfront.param.ProductHome;
+import com.ai.slp.product.api.webfront.param.ProductHomeResponse;
+import com.ai.slp.product.api.webfront.param.ProductHomeRequest;
 
 public interface IProductHomeSV {
     /**
-     * 获取流量
+     * 获取首页流量、话费数据
      * @param productHomeRequest
      * @return
      * @throws BusinessException
@@ -16,16 +17,7 @@ public interface IProductHomeSV {
      * @author zhanglh
      * @ApiCode
      */
-    public List<ProductHome> queryFlowDataProduct()throws BusinessException, SystemException;
-    /**
-     * 获取话费
-     * @return
-     * @throws BusinessException
-     * @throws SystemException
-     * @author zhanglh
-     * @ApiCode
-     */
-    public List<ProductHome> queryPhoneBillProduct()throws BusinessException, SystemException;
+    public List<ProductHomeResponse> queryHomeDataProduct(ProductHomeRequest request)throws BusinessException, SystemException;
     /**
      * 获取推荐产品
      * @return
@@ -34,6 +26,6 @@ public interface IProductHomeSV {
      * @author zhanglh
      * @ApiCode
      */
-    public List<ProductHome> queryHotProduct()throws BusinessException, SystemException;
+    public List<ProductHomeResponse> queryHotProduct(ProductHomeRequest request)throws BusinessException, SystemException;
     
 }

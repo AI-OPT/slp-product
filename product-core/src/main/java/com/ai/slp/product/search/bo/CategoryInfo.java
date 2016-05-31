@@ -11,6 +11,11 @@ public class CategoryInfo {
     private String categoryname;
 
 
+    public CategoryInfo() {
+        super();
+    }
+
+
     public CategoryInfo(String categorid, String categoryname) {
         this.categorid = categorid;
         this.categoryname = categoryname;
