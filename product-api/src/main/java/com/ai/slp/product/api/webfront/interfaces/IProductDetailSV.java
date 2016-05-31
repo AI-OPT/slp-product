@@ -22,11 +22,20 @@ public interface IProductDetailSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @ApiDocMethod
-     * @ApiCode 
+     * @ApiCode PRODUCTWEB_001
 	 */
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest productSKURequest) throws BusinessException,SystemException;
 	@interface QueryProducSKUById{}
 	
+	/**
+	 * 查询商品SKU配置参数
+	 * @param productSKURequest
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @ApiDocMethod
+     * @ApiCode PRODUCTWEB_002
+	 */
 	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest productSKURequest) throws BusinessException,SystemException;
 	@interface QueryProductSKUConfig{}
 }

@@ -58,6 +58,10 @@ public class SKUInfo {
     private long uptime;
 
 
+    public SKUInfo() {
+        super();
+    }
+
     public SKUInfo(String tenantid, String skuid, String skuname) {
         this.tenantid = tenantid;
         this.skuid = skuid;
@@ -169,4 +173,81 @@ public class SKUInfo {
     public void setUptime(long uptime) {
         this.uptime = uptime;
     }
+
+    public String getTenantid() {
+        return tenantid;
+    }
+
+    public void setTenantid(String tenantid) {
+        this.tenantid = tenantid;
+    }
+
+    public String getSkuname() {
+        return skuname;
+    }
+
+    public void setSkuname(String skuname) {
+        this.skuname = skuname;
+    }
+
+    public List<CategoryInfo> getCategoryinfos() {
+        return categoryinfos;
+    }
+
+    public void setCategoryinfos(List<CategoryInfo> categoryinfos) {
+        this.categoryinfos = categoryinfos;
+    }
+
+    public List<ProdAudiences> getAudiences() {
+        return audiences;
+    }
+
+    public void setAudiences(List<ProdAudiences> audiences) {
+        this.audiences = audiences;
+    }
+
+    public List<ImageInfo> getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(List<ImageInfo> thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getProductname() {
+        return productname;
+    }
+
+    public String getProductsellpoint() {
+        return productsellpoint;
+    }
+
+    public List<AttrInfo> getAttrInfos() {
+        return attrInfos;
+    }
+
+    public int getSalenum() {
+        return salenum;
+    }
+
+    public ImageInfo getImageinfo() {
+        return imageinfo;
+    }
+
+    public String getRechagetype() {
+        return rechagetype;
+    }
+
+    public long getUptime() {
+        return uptime;
+    }
+
+    public void setSkuid(String skuid) {
+        this.skuid = skuid;
+    }
+
+    public void setSaleareainfos(List<SaleAreaInfo> saleareainfos) {
+        this.saleareainfos = saleareainfos;
+    }
+    
 }

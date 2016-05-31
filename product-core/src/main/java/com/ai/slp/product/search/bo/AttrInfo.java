@@ -11,6 +11,10 @@ public class AttrInfo {
     @Expose
     private String attrid;
 
+    public AttrInfo() {
+        super();
+    }
+
     public AttrInfo(String attrID) {
         this.attrid = attrID;
     }

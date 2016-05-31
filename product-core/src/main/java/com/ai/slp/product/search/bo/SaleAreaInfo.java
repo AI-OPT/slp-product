@@ -9,6 +9,10 @@ public class SaleAreaInfo {
     @Expose
     private String provcode;
 
+    public SaleAreaInfo() {
+        super();
+    }
+
     public SaleAreaInfo(String provcode) {
         this.provcode = provcode;
     }

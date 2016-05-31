@@ -4,45 +4,35 @@ import java.io.Serializable;
 
 public class ProductImage implements Serializable{
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
+    /**
      * 上传后的图片ID
      */
-    private String idpsId;
+    private String vfsid;
 
     /**
      * 图片扩展名
      */
-    private String extension;
+    private String imagetype;
 
-    /**
-     * 图片尺寸
-     */
-    private String size;
-
-    public String getIdpsId() {
-        return idpsId;
+    public String getVfsid() {
+        return vfsid;
     }
 
-    public void setIdpsId(String idpsId) {
-        this.idpsId = idpsId;
+    public void setVfsid(String vfsid) {
+        this.vfsid = vfsid;
     }
 
-    public String getExtension() {
-        return extension;
+    public String getImagetype() {
+        return imagetype;
     }
 
-    public void setExtension(String extension) {
-        this.extension = extension;
+    public void setImagetype(String imagetype) {
+        this.imagetype = imagetype;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
+   
+   
 
 }
