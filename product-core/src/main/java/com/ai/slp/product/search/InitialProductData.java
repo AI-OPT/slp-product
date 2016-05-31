@@ -23,7 +23,7 @@ import java.util.List;
 public class InitialProductData {
 
     private static final String MAIN_SQL = "SELECT product.BASIC_ORG_ID as basicOrgId, product.UP_TIME AS UP_TIME, product.RECHARGE_TYPE AS rechageType, product.IS_SALE_NATIONWIDE as SaleNationwide,product.TENANT_ID as tenantid, sku.SKU_ID as skuid ,sku.SKU_NAME as skuname,product.PROD_ID as producetid,product.PRODUCT_SELL_POINT as productsellpoint,product.PROD_NAME as producetname,product.PRODUCT_CAT_ID as productCatId FROM prod_sku sku INNER JOIN product product ON sku.PROD_ID = product.PROD_ID AND product.STATE = '5'  LIMIT ?,?";
-    private static final String FETCH_ATTR_INFO_SQL = "SELECT standed_prod_attr.ATTR_ID as attrID, standed_prod_attr.ATTR_VALUE_NAME as attrValue from product inner join standed_prod_attr on product.STANDED_PROD_ID = standed_prod_attr.STANDED_PROD_ID where product.PROD_ID = ?";
+    private static final String FETCH_ATTR_INFO_SQL = "SELECT standed_prod_attr.ATTRVALUE_DEF_ID as attrvalueDefID,standed_prod_attr.ATTR_ID as attrID, standed_prod_attr.ATTR_VALUE_NAME as attrValue from product inner join standed_prod_attr on product.STANDED_PROD_ID = standed_prod_attr.STANDED_PROD_ID where product.PROD_ID = ?";
     private static final String FETCH_CATEGORY_INFO_SQL = "select PRODUCT_CAT_ID,PRODUCT_CAT_NAME,PARENT_PRODUCT_CAT_ID from product_cat a where a.PRODUCT_CAT_ID = ? ";
     private static final String FETCH_SALE_NUMBER_SQL = "select  SALE_NUM  from PROD_SALE_ALL where PROD_ID = ?";
     private static final String FETCH_IMAGE_FROM_SKU_SQL = "SELECT  PIC_TYPE, VFS_ID FROM PROD_CAT_ATTR catAttr, PROD_SKU_ATTR skuAttr, PROD_PICTURE picture WHERE catAttr.ATTR_ID = skuAttr.ATTR_ID AND skuAttr.ATTRVALUE_DEF_ID = picture.ATTRVALUE_DEF_ID AND catAttr.PRODUCT_CAT_ID = ? AND catAttr.ATTR_TYPE = '2' AND catAttr.IS_PICTURE = 'Y' AND skuAttr.SKU_ID = ? AND picture.IS_MAIN_PIC = 'Y'";
@@ -75,6 +75,7 @@ public class InitialProductData {
                 while (resultSet.next()) {
                     AttrInfo attrInfo = new AttrInfo(resultSet.getString("attrID"));
                     attrInfo.setAttrvalue(resultSet.getString("attrValue"));
+                    attrInfo.setAttrvaluedefid(resultSet.getString("attrvalueDefID"));
                     attrInfos.add(attrInfo);
                 }
                 skuInfo.setAttrInfos(attrInfos);

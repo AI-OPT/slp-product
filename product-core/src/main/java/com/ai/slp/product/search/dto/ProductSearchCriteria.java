@@ -98,17 +98,24 @@ public class ProductSearchCriteria {
             return this;
         }
 
-        // 属性值名字
+        //属性值
         public ProductSearchCriteriaBuilder attrValueLike(String attrValue){
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.ATTR_VALUE,
                     attrValue, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
             return this;
         }
         
-     // 属性值ID名字
+        //属性ID
         public ProductSearchCriteriaBuilder attrIDLike(String attrValue){
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.ATTR_ID,
                     attrValue, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
+            return this;
+        }
+        
+        //属性值ID
+        public ProductSearchCriteriaBuilder attrValueDefIDLike(String attrValueDefId){
+            productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.ATTRVALUE_DEF_ID,
+                    attrValueDefId, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
             return this;
         }
 

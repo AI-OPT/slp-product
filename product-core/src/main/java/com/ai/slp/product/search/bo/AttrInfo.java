@@ -10,6 +10,8 @@ public class AttrInfo {
     private String attrvalue;
     @Expose
     private String attrid;
+    @Expose
+    private String attrvaluedefid;
 
     public AttrInfo() {
         super();
@@ -22,4 +24,26 @@ public class AttrInfo {
     public void setAttrvalue(String attrvalue) {
         this.attrvalue = attrvalue;
     }
+
+	public String getAttrid() {
+		return attrid;
+	}
+
+	public void setAttrid(String attrid) {
+		this.attrid = attrid;
+	}
+
+
+	public String getAttrvaluedefid() {
+		return attrvaluedefid;
+	}
+
+	public void setAttrvaluedefid(String attrvaluedefid) {
+		this.attrvaluedefid = attrvaluedefid;
+	}
+
+	public String getAttrvalue() {
+		return attrvalue;
+	}
+    
 }
