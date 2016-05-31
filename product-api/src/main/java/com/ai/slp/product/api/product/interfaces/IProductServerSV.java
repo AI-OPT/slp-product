@@ -2,6 +2,8 @@ package com.ai.slp.product.api.product.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.ProductRoute;
 import com.ai.slp.product.api.product.param.ProductSkuInfo;
 import com.ai.slp.product.api.product.param.SkuInfoQuery;
 
@@ -27,4 +29,18 @@ public interface IProductServerSV {
     public ProductSkuInfo queryProductSkuById(SkuInfoQuery skuInfoQuery)
             throws BusinessException,SystemException;
     @interface QueryProducSkutById{}
+
+    /**
+     * 根据销售商品关联路由组ID
+     * @param productInfoQuery
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_SERVER_0101
+     */
+    public ProductRoute queryRouteGroupOfProd(ProductInfoQuery productInfoQuery)
+            throws BusinessException,SystemException;
+    @interface QueryRouteGroupOfProd{}
 }

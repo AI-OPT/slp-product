@@ -3,7 +3,10 @@ package com.ai.slp.product.service.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.slp.product.api.product.param.ProductRoute;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
@@ -264,5 +267,34 @@ public class ProductBusiSVImpl implements IProductBusiSV {
 		
 		return product4ListPage;
 	}
+
+    /**
+     * 查询销售商品关联的路由组ID
+     *
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    @Override
+    public ProductRoute queryRouteGroupOfProd(String tenantId, String productId) {
+        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        if (product==null) {
+            logger.warn("未查询到对应销售商品,租户ID:{},商品标识:{}",tenantId,productId);
+            throw new BusinessException("", "未查询到对应销售商品,租户ID:" + tenantId + ",商品标识:" + productId);
+        }
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
+        if (storageGroup==null){
+            logger.warn("未查询销售商品对应库存组,租户ID:{},商品标识:{}",tenantId,productId);
+            throw new BusinessException("", "未查询销售商品对应库存组,租户ID:" + tenantId + ",商品标识:" + productId);
+        }
+        ProductRoute productRoute = new ProductRoute();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
+        productRoute.setResponseHeader(responseHeader);
+        productRoute.setProductId(productId);
+        productRoute.setRouteGroupId(storageGroup.getRouteGroupId());
+        return productRoute;
+    }
 
 }

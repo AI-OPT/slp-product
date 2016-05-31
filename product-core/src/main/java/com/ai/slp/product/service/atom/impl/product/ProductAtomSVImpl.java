@@ -63,11 +63,10 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	 */
 	@Override
 	public Product selectByProductId(String tenantId, String prodId) {
-		ProductCriteria example = new ProductCriteria();
-		example.setOrderByClause("CREATE_TIME desc");
-		example.createCriteria().andTenantIdEqualTo(tenantId).andProdIdEqualTo(prodId);
-		List<Product> products = productMapper.selectByExample(example);
-		return products == null || products.isEmpty() ? null : products.get(0);
+		Product product = productMapper.selectByPrimaryKey(prodId);
+		if (product!=null && !product.getTenantId().equals(tenantId))
+			product = null;
+		return product;
 	}
 
 	/**

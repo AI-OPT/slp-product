@@ -3,6 +3,7 @@ package com.ai.slp.product.service.business.interfaces;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.Product4List;
 import com.ai.slp.product.api.product.param.ProductListQuery;
+import com.ai.slp.product.api.product.param.ProductRoute;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 
@@ -50,6 +51,14 @@ public interface IProductBusiSV {
      * @author lipeng16
      */
     public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery);
+
+    /**
+     * 查询销售商品关联的路由组ID
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    public ProductRoute queryRouteGroupOfProd(String tenantId,String productId);
     
 
 }
