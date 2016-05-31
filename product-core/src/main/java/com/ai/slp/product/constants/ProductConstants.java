@@ -125,4 +125,28 @@ public final class ProductConstants {
         }
     }
 
+    public final class ProdPicture{
+        public final class PicType{
+            /**
+             * 商品预览图
+             */
+            public static final String PRODUCT = "P";
+            /**
+             * 属性预览图
+             */
+            public static final String ATTR = "A";
+        }
+        public final class IsMainPic{
+            /**
+             * 是
+             */
+            public static final String YES = "Y";
+            /**
+             * 否
+             */
+            public static final String NO = "N";
+
+        }
+    }
+
 }

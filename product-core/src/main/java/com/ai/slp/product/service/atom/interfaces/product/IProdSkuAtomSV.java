@@ -39,4 +39,12 @@ public interface IProdSkuAtomSV {
      * @author lipeng16
      */
     public ProdSku querySkuById(String tenantId,String skuId);
+
+    /**
+     * 根据属性串查询SKU信息
+     * @param tenantId
+     * @param attrs
+     * @return
+     */
+    public ProdSku querySkuByAttrs(String tenantId,String attrs);
 }

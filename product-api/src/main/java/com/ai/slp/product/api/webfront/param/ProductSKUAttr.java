@@ -9,7 +9,7 @@ public class ProductSKUAttr implements Serializable{
 	/**
 	 * 属性标识
 	 */
-	private String attrId;
+	private Long attrId;
 	/**
 	 * 属性名称
 	 */
@@ -18,13 +18,15 @@ public class ProductSKUAttr implements Serializable{
 	 * 属性值集合
 	 */
 	private List<ProductSKUAttrValue> attrValueList;
-	
-	public String getAttrId() {
+
+	public Long getAttrId() {
 		return attrId;
 	}
-	public void setAttrId(String attrId) {
+
+	public void setAttrId(Long attrId) {
 		this.attrId = attrId;
 	}
+
 	public String getAttrName() {
 		return attrName;
 	}

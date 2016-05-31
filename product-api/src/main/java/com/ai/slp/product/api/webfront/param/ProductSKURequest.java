@@ -10,10 +10,16 @@ public class ProductSKURequest extends BaseInfo{
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * SKU 单品标识
+	 * SKU单品标识,与属性串不能都为空<br>
+	 * 当单品标识不为空时,则不处理属性串
 	 */
-	@NotBlank(message = "SKU单品标识不能为空",groups = {IProductDetailSV.QueryProducSKUById.class,IProductDetailSV.QueryProductSKUConfig.class})
 	private String skuId;
+
+	/**
+	 * SKU属性串,与单品标识不能都为空<br>
+	 * 当单品标识不为空时,则不处理属性串
+	 */
+	private String skuAttrs;
 
 	public String getSkuId() {
 		return skuId;
@@ -22,5 +28,12 @@ public class ProductSKURequest extends BaseInfo{
 	public void setSkuId(String skuId) {
 		this.skuId = skuId;
 	}
-	
+
+	public String getSkuAttrs() {
+		return skuAttrs;
+	}
+
+	public void setSkuAttrs(String skuAttrs) {
+		this.skuAttrs = skuAttrs;
+	}
 }

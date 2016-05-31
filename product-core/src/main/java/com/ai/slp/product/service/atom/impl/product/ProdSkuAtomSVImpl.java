@@ -73,4 +73,20 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 		return CollectionUtil.isEmpty(prodSkuList) ? null : prodSkuList.get(0);
 	}
 
+	/**
+	 * 根据属性串查询SKU信息
+	 *
+	 * @param tenantId
+	 * @param attrs
+	 * @return
+	 */
+	@Override
+	public ProdSku querySkuByAttrs(String tenantId, String attrs) {
+		ProdSkuCriteria example = new ProdSkuCriteria();
+		example.createCriteria().andTenantIdEqualTo(tenantId)
+				.andSaleAttrsEqualTo(attrs);
+		List<ProdSku> prodSkuList = prodSkuMapper.selectByExample(example);
+		return CollectionUtil.isEmpty(prodSkuList)?null:prodSkuList.get(0);
+	}
+
 }

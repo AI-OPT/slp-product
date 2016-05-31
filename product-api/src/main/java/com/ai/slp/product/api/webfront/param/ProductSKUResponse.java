@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.webfront.param;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -28,11 +29,11 @@ public class ProductSKUResponse extends BaseResponse{
     /**
      * 销售商品标识
      */
-    private String productId;
+    private String prodId;
     /**
      * 商品名称
      */
-    private String productName;
+    private String prodName;
     /**
      * 商品卖点
      */
@@ -44,11 +45,11 @@ public class ProductSKUResponse extends BaseResponse{
     /**
      * 生效时间
      */
-    private Date activeTime;
+    private Timestamp activeTime;
     /**
      * 失效时间
      */
-    private Date inactiveTime;
+    private Timestamp inactiveTime;
     /**
      * 有效周期
      */
@@ -106,18 +107,6 @@ public class ProductSKUResponse extends BaseResponse{
 	public void setState(String state) {
 		this.state = state;
 	}
-	public String getProductId() {
-		return productId;
-	}
-	public void setProductId(String productId) {
-		this.productId = productId;
-	}
-	public String getProductName() {
-		return productName;
-	}
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
 	public String getProductSellPoint() {
 		return productSellPoint;
 	}
@@ -166,18 +155,6 @@ public class ProductSKUResponse extends BaseResponse{
 	public void setActiveType(String activeType) {
 		this.activeType = activeType;
 	}
-	public Date getActiveTime() {
-		return activeTime;
-	}
-	public void setActiveTime(Date activeTime) {
-		this.activeTime = activeTime;
-	}
-	public Date getInactiveTime() {
-		return inactiveTime;
-	}
-	public void setInactiveTime(Date inactiveTime) {
-		this.inactiveTime = inactiveTime;
-	}
 	public Integer getActiveCycle() {
 		return activeCycle;
 	}
@@ -189,5 +166,37 @@ public class ProductSKUResponse extends BaseResponse{
 	}
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+
+	public String getProdId() {
+		return prodId;
+	}
+
+	public void setProdId(String prodId) {
+		this.prodId = prodId;
+	}
+
+	public String getProdName() {
+		return prodName;
+	}
+
+	public void setProdName(String prodName) {
+		this.prodName = prodName;
+	}
+
+	public Timestamp getActiveTime() {
+		return activeTime;
+	}
+
+	public void setActiveTime(Timestamp activeTime) {
+		this.activeTime = activeTime;
+	}
+
+	public Timestamp getInactiveTime() {
+		return inactiveTime;
+	}
+
+	public void setInactiveTime(Timestamp inactiveTime) {
+		this.inactiveTime = inactiveTime;
 	}
 }

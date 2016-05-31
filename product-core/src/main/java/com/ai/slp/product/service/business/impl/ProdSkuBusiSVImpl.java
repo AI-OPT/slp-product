@@ -4,16 +4,17 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.webfront.param.ProductImage;
+import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
+import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
+import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSkuLog;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.product.*;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -21,16 +22,14 @@ import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +70,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     IStorageLogAtomSV storageLogAtomSV;
     @Autowired
     IStorageBusiSV storageBusiSV;
+    @Autowired
+    IProdPictureAtomSV pictureAtomSV;
     /**
      * 更新商品SKU信息
      *
@@ -211,6 +212,87 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     }
 
     /**
+     * 根据SKU标识或SKU属性串查询SKU的信息
+     *
+     * @param tenantId
+     * @param skuId
+     * @param skuAttrs
+     * @return
+     */
+    @Override
+    public ProductSKUResponse querySkuDetail(String tenantId, String skuId, String skuAttrs) {
+        ProdSku prodSku = null;
+        //通过SKU标识查询
+        if (StringUtils.isNotBlank(skuId)){
+            prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
+        }
+        //通过属性串查询
+        else if (StringUtils.isNotBlank(skuAttrs)){
+            prodSku = prodSkuAtomSV.querySkuByAttrs(tenantId,skuAttrs);
+        }
+        if (prodSku==null){
+            logger.warn("未查询到指定的SKU信息,租户ID:{},SKU标识:{},SKU属性串:{}",tenantId,skuId,skuAttrs);
+            throw new BusinessException("","未查询到指定的SKU信息,租户ID:"+tenantId+",SKU标识:"+skuId
+                        +"SKU属性串:"+skuAttrs);
+        }
+        //查询商品
+        Product product = productAtomSV.selectByProductId(tenantId,prodSku.getProdId());
+        if (product==null){
+            logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}"
+                    ,tenantId,prodSku.getSkuId(),prodSku.getProdId());
+            throw new BusinessException("","未查询到指定的SKU信息,租户ID:"+tenantId+",SKU标识:"+prodSku.getSkuId()
+                    +"商品ID:"+prodSku.getProdId());
+        }
+        ProductSKUResponse skuResponse = new ProductSKUResponse();
+        skuResponse.setProductAttrList(new ArrayList<ProductSKUAttr>());
+        skuResponse.setProductImageList(new ArrayList<ProductImage>());
+        //查询商品对应标准品的销售属性,已按照属性属性排序
+        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
+                tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+        //SKU图片
+        String skuPic = null;
+        //查询已设置SKU的属性和属性值信息
+        for (ProdCatAttrAttch attrAttch:catAttrAttches){
+            ProductSKUAttr productSKUAttr = new ProductSKUAttr();
+            productSKUAttr.setAttrId(attrAttch.getAttrId());
+            productSKUAttr.setAttrName(attrAttch.getAttrName());
+            List<ProductSKUAttrValue> attrValueList = new ArrayList<>();
+            //查询属性对应属性值集合
+            List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(
+                    tenantId,product.getProdId(),attrAttch.getAttrId());
+            for (StandedProdAttr prodAttr:prodAttrs){
+                //若SKU不包含当前属性值,则查询下一个属性值
+                if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId,product.getProdId(),prodAttr.getAttrvalueDefId())<=0)
+                    continue;
+                ProductSKUAttrValue skuAttrValue = new ProductSKUAttrValue();
+                //查询此属性值是否有图片信息
+                ProdPicture prodPicture = pictureAtomSV.queryMainOfProdIdAndAttrVal(
+                        product.getProdId(),prodAttr.getAttrvalueDefId());
+                if (prodPicture!=null){
+                    ProductImage productImage = new ProductImage();
+                    productImage.setImagetype(prodPicture.getPicType());
+                    productImage.setVfsid(prodPicture.getVfsId());
+                    skuAttrValue.setImage(productImage);
+                }
+                skuAttrValue.setAttrvalueDefId(prodAttr.getAttrvalueDefId());
+                skuAttrValue.setAttrValueName(prodAttr.getAttrValueName());
+                String attAndVal = attrAttch.getAttrId()
+                        +ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT
+                        +prodAttr.getAttrvalueDefId();
+                //该属性值含有图片
+                if (prodSku.getSaleAttrs().contains(attAndVal)){
+                    skuAttrValue.setIsOwn(true);
+
+                }
+                attrValueList.add(skuAttrValue);
+            }
+            productSKUAttr.setAttrValueList(attrValueList);
+            skuResponse.getProductAttrList().add(productSKUAttr);
+        }
+        return skuResponse;
+    }
+
+    /**
      * 返回下级属性的属性值的跨行数
      *
      * @param entryIterator
@@ -317,5 +399,12 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
             prodSkuAttr.setOperId(prodSku.getOperId());
             prodSkuAttrAtomSV.createAttr(prodSkuAttr);
         }
+    }
+
+    /**
+     *
+     */
+    private void addProductPic(){
+
     }
 }

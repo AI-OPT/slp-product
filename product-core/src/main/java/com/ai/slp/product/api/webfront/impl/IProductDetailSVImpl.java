@@ -3,6 +3,8 @@ package com.ai.slp.product.api.webfront.impl;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.ai.slp.product.util.CommonCheckUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.ai.opt.base.exception.BusinessException;
@@ -25,13 +27,21 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 
 	@Override
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest productSKURequest) throws BusinessException, SystemException {
+		CommonCheckUtils.checkTenantId(productSKURequest.getTenantId(),"");
+		if (StringUtils.isBlank(productSKURequest.getSkuId())
+				&& StringUtils.isBlank(productSKURequest.getSkuAttrs())){
+			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
+		}
+		//查询SKU信息
+		//根据SKU查询商品信息
+		//查询销售商品的SKU属性
 		// TODO Auto-generated method stub
 
 		ProductSKUResponse productSKUResponse = new ProductSKUResponse();
 
 		productSKUResponse.setCommentNum(1000L);
-		productSKUResponse.setProductId("0001");
-		productSKUResponse.setProductName("小米5 全网通 标准版 ");
+		productSKUResponse.setProdId("0001");
+		productSKUResponse.setProdName("小米5 全网通 标准版 ");
 		productSKUResponse.setProductSellPoint("套餐更实惠，千元畅机！高通晓龙650处理器，轻薄4000mAH电池，5.5英寸1080p高清大屏！5.5英寸1080p高清大屏！");
 		productSKUResponse.setSaleNum(2000L);
 		productSKUResponse.setSalePrice(1999D);
@@ -42,12 +52,11 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		// 设置属性
 		List<ProductSKUAttr> productAttrList = new LinkedList<ProductSKUAttr>();
 		ProductSKUAttr skuAttr1 = new ProductSKUAttr();
-		skuAttr1.setAttrId("001");
+		skuAttr1.setAttrId(1l);
 		skuAttr1.setAttrName("选择颜色");
 		List<ProductSKUAttrValue> attrValueList = new LinkedList<ProductSKUAttrValue>();
 		ProductSKUAttrValue skuAttrValue1 = new ProductSKUAttrValue();
-		skuAttrValue1.setAttrvalueDefId(1001L);
-		skuAttrValue1.setAttrValueId("001");
+		skuAttrValue1.setAttrvalueDefId("1001");
 		skuAttrValue1.setAttrValueName("白色");
 		skuAttrValue1.setIsOwn(true);
 		ProductImage image1 = new ProductImage();
@@ -57,8 +66,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		attrValueList.add(skuAttrValue1);
 		skuAttr1.setAttrValueList(attrValueList);
 		ProductSKUAttrValue skuAttrValue2 = new ProductSKUAttrValue();
-		skuAttrValue2.setAttrvalueDefId(1002L);
-		skuAttrValue2.setAttrValueId("002");
+		skuAttrValue2.setAttrvalueDefId("1002");
 		skuAttrValue2.setAttrValueName("黑色");
 		skuAttrValue2.setIsOwn(false);
 		ProductImage image2 = new ProductImage();
@@ -68,8 +76,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		attrValueList.add(skuAttrValue2);
 		skuAttr1.setAttrValueList(attrValueList);
 		ProductSKUAttrValue skuAttrValue3 = new ProductSKUAttrValue();
-		skuAttrValue3.setAttrvalueDefId(1003L);
-		skuAttrValue3.setAttrValueId("003");
+		skuAttrValue3.setAttrvalueDefId("1002");
 		skuAttrValue3.setAttrValueName("紫色");
 		skuAttrValue3.setIsOwn(false);
 		ProductImage image3 = new ProductImage();
@@ -81,26 +88,23 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		productAttrList.add(skuAttr1);
 
 		ProductSKUAttr skuAttr2 = new ProductSKUAttr();
-		skuAttr2.setAttrId("002");
+		skuAttr2.setAttrId(2l);
 		skuAttr2.setAttrName("选择版本");
 		List<ProductSKUAttrValue> attrValueList2 = new LinkedList<ProductSKUAttrValue>();
 		ProductSKUAttrValue skuAttrValue4 = new ProductSKUAttrValue();
-		skuAttrValue4.setAttrvalueDefId(1004L);
-		skuAttrValue4.setAttrValueId("004");
+		skuAttrValue4.setAttrvalueDefId("1004");
 		skuAttrValue4.setAttrValueName("标准版");
 		skuAttrValue4.setIsOwn(false);
 		attrValueList2.add(skuAttrValue4);
 		skuAttr2.setAttrValueList(attrValueList);
 		ProductSKUAttrValue skuAttrValue5 = new ProductSKUAttrValue();
-		skuAttrValue5.setAttrvalueDefId(1005L);
-		skuAttrValue5.setAttrValueId("005");
+		skuAttrValue5.setAttrvalueDefId("1005");
 		skuAttrValue5.setAttrValueName("高配版");
 		skuAttrValue5.setIsOwn(true);
 		attrValueList2.add(skuAttrValue5);
 		skuAttr2.setAttrValueList(attrValueList);
 		ProductSKUAttrValue skuAttrValue6 = new ProductSKUAttrValue();
-		skuAttrValue6.setAttrvalueDefId(1006L);
-		skuAttrValue6.setAttrValueId("006");
+		skuAttrValue6.setAttrvalueDefId("1006");
 		skuAttrValue6.setAttrValueName("尊享版");
 		skuAttrValue6.setIsOwn(false);
 		attrValueList2.add(skuAttrValue6);

@@ -2,6 +2,7 @@ package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.slp.product.api.product.param.SkuInfoMultSave;
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
+import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 
 /**
@@ -31,4 +32,13 @@ public interface IProdSkuBusiSV {
      * @return
      */
     public int addSku(ProdSku prodSku);
+
+    /**
+     * 根据SKU标识或SKU属性串查询SKU的信息
+     * @param tenantId
+     * @param skuId
+     * @param skuAttrs
+     * @return
+     */
+    public ProductSKUResponse querySkuDetail(String tenantId,String skuId,String skuAttrs);
 }
