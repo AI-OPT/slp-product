@@ -9,6 +9,7 @@ import com.ai.slp.product.api.storageserver.interfaces.IStorageNumSV;
 import com.ai.slp.product.api.storageserver.param.StorageNumBackReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
 import com.ai.slp.product.api.storageserver.param.StorageNumUserReq;
+import com.ai.slp.product.service.business.interfaces.IProdSaleAllBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Component;
 public class IStorageNumSVImpl implements IStorageNumSV {
     @Autowired
     IStorageNumBusiSV storageNumBusiSV;
+    @Autowired
+    IProdSaleAllBusiSV prodSaleAllBusiSV;
     /**
      * 使用库存,即减库存量<br>
      *
@@ -55,6 +58,30 @@ public class IStorageNumSVImpl implements IStorageNumSV {
     public BaseResponse backStorageNum(StorageNumBackReq backReq) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(backReq.getTenantId(),"");
         storageNumBusiSV.backStorageNum(backReq.getTenantId(),backReq.getSkuId(),backReq.getStorageNum());
+        BaseResponse response = new BaseResponse();
+        ResponseHeader header = new ResponseHeader();
+        header.setResultCode(ExceptCodeConstants.Special.SUCCESS);
+        header.setIsSuccess(true);
+        header.setResultMessage("OK");
+        response.setResponseHeader(header);
+        return response;
+    }
+
+    /**
+     * 增加商品销量<br>
+     *
+     * @param numReq SKU销量信息
+     * @return 增加结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_NUM_0102
+     */
+    @Override
+    public BaseResponse addSaleNumOfProduct(StorageNumUserReq numReq) throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
+        prodSaleAllBusiSV.addSaleNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum());
         BaseResponse response = new BaseResponse();
         ResponseHeader header = new ResponseHeader();
         header.setResultCode(ExceptCodeConstants.Special.SUCCESS);

@@ -2,10 +2,11 @@ package com.ai.slp.product.api.product.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
+import com.ai.slp.product.api.product.interfaces.IProductServerSV;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 商城商品详情对象<br>
+ * 商城商品标识信息<br>
  *
  *
  * Date: 2016年4月22日 <br>
@@ -17,7 +18,8 @@ public class ProductInfoQuery extends BaseInfo {
 	/**
      * 商品标识,必填
      */
-    @NotBlank(message = "商品标识不能为空",groups = {IProductSV.QueryProductById.class})
+    @NotBlank(message = "商品标识不能为空",groups = {
+            IProductSV.QueryProductById.class, IProductServerSV.QueryRouteGroupOfProd.class})
     private String productId;
 
     public String getProductId() {

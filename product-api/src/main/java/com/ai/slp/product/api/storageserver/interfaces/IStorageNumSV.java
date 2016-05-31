@@ -30,6 +30,7 @@ public interface IStorageNumSV {
     public StorageNumRes useStorageNum(StorageNumUserReq numReq)
         throws BusinessException,SystemException;
     @interface UseStorageNum{};
+
     /**
      * 退回库存量<br>
      *
@@ -44,4 +45,19 @@ public interface IStorageNumSV {
     public BaseResponse backStorageNum(StorageNumBackReq backReq)
         throws BusinessException,SystemException;
     @interface BackStorageNum{}
+
+    /**
+     * 增加商品销量<br>
+     *
+     * @param numReq SKU销量信息
+     * @return 增加结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_NUM_0102
+     */
+    public BaseResponse addSaleNumOfProduct(StorageNumUserReq numReq)
+            throws BusinessException,SystemException;
+    @interface AddSaleNumOfProduct{};
 }

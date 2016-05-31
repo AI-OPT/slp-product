@@ -29,6 +29,7 @@ public final class SequenceUtil {
     private static final String PROD_SKU_LOG$LOG_ID$SEQ = "PROD_SKU_LOG$LOG_ID$SEQ";
     private static final String PROD_SKU_ATTR$SKU_ATTR_ID$SEQ = "PROD_SKU_ATTR$SKU_ATTR_ID$SEQ";
     private static final String SKU_STORAGE$SKU_STORAGE_ID$SEQ = "SKU_STORAGE$SKU_STORAGE_ID$SEQ";
+    private static final String PROD_SALE_ALL$PRO_SALE_ID$SEQ = "PROD_SALE_ALL$PRO_SALE_ID$SEQ";
 
     public static Long createAttrDefId() {
         return SeqUtil.getNewId(PROD_ATTR_DEF$ATTR_ID$SEQ);
@@ -112,4 +113,8 @@ public final class SequenceUtil {
 	public static String genskuStorageId() {
 		return SeqUtil.getNewId(SKU_STORAGE$SKU_STORAGE_ID$SEQ,19);
 	}
+
+    public static Long genProdSaleAllId(){
+        return SeqUtil.getNewId(PROD_SALE_ALL$PRO_SALE_ID$SEQ);
+    }
 }

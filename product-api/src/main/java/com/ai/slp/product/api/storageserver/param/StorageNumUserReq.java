@@ -17,12 +17,14 @@ public class StorageNumUserReq extends BaseInfo {
     /**
      * 单品SKU标识
      */
-    @NotBlank(message = "单品标识不能为空",groups = IStorageNumSV.UseStorageNum.class)
+    @NotBlank(message = "单品标识不能为空",groups = {
+            IStorageNumSV.UseStorageNum.class,IStorageNumSV.AddSaleNumOfProduct.class})
     private String skuId;
     /**
      *单品数量
      */
-    @Min(value = 1,message = "单品数量不能小于1",groups = IStorageNumSV.UseStorageNum.class)
+    @Min(value = 1,message = "单品数量不能小于1",groups = {
+            IStorageNumSV.UseStorageNum.class,IStorageNumSV.AddSaleNumOfProduct.class})
     private int skuNum;
 
     public String getSkuId() {
