@@ -16,4 +16,7 @@ public class SearchMetaFieldConfig {
     public static final String CATEGORY_ID = "productcategoryid";
     public static final String UP_TIME = "uptime";
     public static final String SALE_NUM = "salenum";
+    
+    public static final String ATTR_ID = "attrid";
+    public static final String ATTRVALUE_DEF_ID = "attrvaluedefid";
 }
