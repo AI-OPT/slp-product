@@ -111,15 +111,15 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		// 设置图片
 		List<ProductImage> productImageList = new LinkedList<ProductImage>();
 		ProductImage productImage1 = new ProductImage();
-		image3.setImagetype(".jpg");
+		productImage1.setImagetype(".jpg");
 		productImage1.setVfsid("57454f50d601800009c0b0cf");
 		productImageList.add(productImage1);
 		ProductImage productImage2 = new ProductImage();
-		image3.setImagetype(".jpg");
+		productImage2.setImagetype(".jpg");
 		productImage2.setVfsid("5745516fd601800009c0b0d5");
 		productImageList.add(productImage2);
 		ProductImage productImage3 = new ProductImage();
-		image3.setImagetype(".jpg");
+		productImage3.setImagetype(".jpg");
 		productImage3.setVfsid("57455191d601800009c0b0d7");
 		productImageList.add(productImage3);
 		productSKUResponse.setProductImageList(productImageList);
