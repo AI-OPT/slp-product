@@ -27,28 +27,28 @@ public class IPassUtils {
      * 库存组优先级的价格KEY(B)
      * @param tenantId
      * @param groupId
-     * @param serial
+     * @param priority
      * @return
      */
-    public static String genMcsGroupSerialPriceKey(String tenantId,String groupId,String serial){
+    public static String genMcsGroupSerialPriceKey(String tenantId,String groupId,String priority){
         return StorageConstants.IPass.McsParams.SALE_PRICE_TAG+CACHE_KEY_SEPARATE
                 +tenantId+CACHE_KEY_SEPARATE
                 +groupId+CACHE_KEY_SEPARATE
-                +serial;
+                +priority;
     }
 
     /**
      * 库存组优先级下SKU的可用量KEY(C)
      * @param tenantId
      * @param groupId
-     * @param serial
+     * @param priority
      * @return
      */
-    public static String genMcsSerialSkuUsableKey(String tenantId, String groupId, String serial){
+    public static String genMcsSerialSkuUsableKey(String tenantId, String groupId, String priority){
         return StorageConstants.IPass.McsParams.SKU_USABLE_TAG +CACHE_KEY_SEPARATE
                 +tenantId+CACHE_KEY_SEPARATE
                 +groupId+CACHE_KEY_SEPARATE
-                +serial;
+                + priority;
     }
 
     /**
@@ -84,13 +84,13 @@ public class IPassUtils {
      * 库存组内优先级内库存可用量的KEY(F)
      * @param tenantId
      * @param groupId
-     * @param serial
+     * @param priority
      * @return
      */
-    public static String genMcsPriorityUsableKey(String tenantId,String groupId,String serial){
+    public static String genMcsPriorityUsableKey(String tenantId,String groupId,String priority){
         return StorageConstants.IPass.McsParams.PRIORITY_USABLE_TAG+CACHE_KEY_SEPARATE
                 +tenantId+CACHE_KEY_SEPARATE
                 +groupId+CACHE_KEY_SEPARATE
-                +serial;
+                + priority;
     }
 }

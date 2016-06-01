@@ -247,16 +247,16 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
      * 查询标准品下指定类型的属性及属性值信息
      *
      * @param tenantId
-     * @param productId
+     * @param standedProdId
      * @param attrType
      * @return
      */
     @Override
-    public AttrMap queryAttrOfProduct(String tenantId, String productId, String attrType) {
+    public AttrMap queryAttrOfProduct(String tenantId, String standedProdId, String attrType) {
         // 查询标准品信息
-        StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
+        StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
         if (standedProduct == null)
-            throw new BusinessException("", "未找到对应标准品信息,租户ID:" + tenantId + ",标准品标识:" + productId);
+            throw new BusinessException("", "未找到对应标准品信息,租户ID:" + tenantId + ",标准品标识:" + standedProdId);
         AttrMap attrMapOfNormProd = new AttrMap();
         Map<Long, List<Long>> attrAndValMap = new HashMap<>();
         Map<Long, ProdCatAttrInfo> attrDefMap = new HashMap<>();
@@ -273,7 +273,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             attrDefMap.put(catAttrDef.getAttrId(), catAttrDef);
             // 查询属性值
             List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(tenantId,
-                    productId, catAttrAttch.getAttrId());
+                    standedProdId, catAttrAttch.getAttrId());
             for (StandedProdAttr prodAttr : prodAttrs) {
                 AttrValInfo valDef = new AttrValInfo();
                 BeanUtils.copyProperties(valDef, prodAttr);
