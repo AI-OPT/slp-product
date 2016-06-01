@@ -4,5 +4,7 @@ public interface ISKUIndexManage {
 
     boolean updateSKUIndex(String productId);
 
-    boolean deleteProductIndex(String skuId);
+    boolean deleteSKUIndexBySKUId(String skuId);
+
+    boolean deleteSKUIndexByProductId(String productId);
 }

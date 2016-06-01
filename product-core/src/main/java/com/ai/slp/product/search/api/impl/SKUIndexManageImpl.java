@@ -1,10 +1,12 @@
 package com.ai.slp.product.search.api.impl;
 
 import com.ai.opt.sdk.components.ses.SESClientFactory;
-import com.ai.paas.ipaas.search.service.ISearchClient;
+import com.ai.paas.ipaas.search.vo.SearchOption;
+import com.ai.paas.ipaas.search.vo.SearchfieldVo;
 import com.ai.slp.product.search.api.ISKUIndexManage;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.search.constants.Constants;
+import com.ai.slp.product.search.constants.SearchMetaFieldConfig;
 import com.ai.slp.product.search.service.ISKUService;
 import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +37,7 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
 
             SESClientFactory.getSearchClient(Constants.SearchNameSpace).bulkInsertData(string);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("Failed to update sku info", e);
         }
 
@@ -43,7 +45,28 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
     }
 
     @Override
-    public boolean deleteProductIndex(String skuId) {
+    public boolean deleteSKUIndexBySKUId(String skuId) {
+        try {
+            List<SearchfieldVo> searchfieldVos = new ArrayList<SearchfieldVo>();
+            searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.SKU_ID, skuId, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
+            return SESClientFactory.getSearchClient(Constants.SearchNameSpace).deleteData(searchfieldVos);
+        } catch (Exception e) {
+            logger.error("Failed to delete sku info", e);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean deleteSKUIndexByProductId(String productId) {
+        try {
+            List<SearchfieldVo> searchfieldVos = new ArrayList<SearchfieldVo>();
+            searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.PRODUCT_ID, productId, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
+            return SESClientFactory.getSearchClient(Constants.SearchNameSpace).deleteData(searchfieldVos);
+        } catch (Exception e) {
+            logger.error("Failed to delete sku info", e);
+        }
+
         return false;
     }
 }
