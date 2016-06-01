@@ -37,6 +37,16 @@ public class ProductQueryRequest extends BaseInfo {
      */
     private String userId;
 
+    /**
+     * sku名称
+     */
+    private String skuName;
+
+    /**
+     * skuID
+     */
+    private String skuId;
+
     private PageInfo<ProductData> pageInfo;
 
     public PageInfo<ProductData> getPageInfo() {
@@ -93,6 +103,22 @@ public class ProductQueryRequest extends BaseInfo {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getSkuName() {
+        return skuName;
+    }
+
+    public void setSkuName(String skuName) {
+        this.skuName = skuName;
+    }
+
+    public String getSkuId() {
+        return skuId;
+    }
+
+    public void setSkuId(String skuId) {
+        this.skuId = skuId;
     }
 
 }

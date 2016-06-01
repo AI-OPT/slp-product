@@ -3,6 +3,8 @@ package com.ai.slp.product.constants;
 public class ProductHomeConstants {
     //首页查询最大条数限制
     public static final int MAX_SIZE = 8;
+    //热门搜索查询最大条数限制
+    public static final int HOT_MAX_SIZE = 5;
     //热点查询排序字段
     public static final String ORDER_FILE_NAME = "salenum";
     public final class UserType{

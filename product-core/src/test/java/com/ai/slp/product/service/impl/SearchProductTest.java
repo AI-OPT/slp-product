@@ -37,6 +37,7 @@ public class SearchProductTest {
     @Test
     public void serachHotProduct(){
         ProductQueryRequest request = new ProductQueryRequest();
+        request.setProductCatId("10000010010000");
         request.setAreaCode("81");
         List<ProductData> response = iSearchProductSV.queryHotSellProduct(request);
         System.out.println("result="+JSON.toJSONString(response));
