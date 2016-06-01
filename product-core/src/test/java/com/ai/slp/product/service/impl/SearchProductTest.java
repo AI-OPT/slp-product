@@ -21,11 +21,13 @@ public class SearchProductTest {
     @Test
     public void serachProduct(){
         ProductQueryRequest request = new ProductQueryRequest();
-        request.setTenantId("432");
-        request.setSkuId("31312");
         PageInfo<ProductData> pageInfo = new PageInfo<ProductData>();
         pageInfo.setPageNo(1);
         pageInfo.setPageSize(10);
+        request.setAreaCode("81");
+        request.setProductCatId("10000010010000");
+        request.setBasicOrgIdIs("12");
+        request.setAttrDefId("100004");
         request.setPageInfo(pageInfo);
         ProductQueryResponse response = iSearchProductSV.queryProductPage(request);
         System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));

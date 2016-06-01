@@ -13,9 +13,9 @@ public class IProductSearchTest {
     public static void main(String[] args) {
         IProductSearch productSearch = new ProductSearchImpl();
         ProductSearchCriteria productSearchCriteria =
-                new ProductSearchCriteria.ProductSearchCriteriaBuilder("120000",
-                        new UserSearchAuthority(UserSearchAuthority.UserType.PERSONAL,""))
-                .basicOrgIdIs("100001").categoryIdIs("10000010020000").build();
+                new ProductSearchCriteria.ProductSearchCriteriaBuilder("81",
+                        new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,""))
+                .build();
         System.out.println(JSON.toJSONString(productSearch.search(productSearchCriteria)));
         System.out.println(productSearch.search(productSearchCriteria).getCount() == 2);
     }

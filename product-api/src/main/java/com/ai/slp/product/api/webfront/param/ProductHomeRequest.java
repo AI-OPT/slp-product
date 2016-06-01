@@ -33,6 +33,10 @@ public class ProductHomeRequest extends BaseInfo{
      * 用户ID
      */
     private String userid;
+    /**
+     * 属性值定义ID
+     */
+    private String attrValueDefID;
     
     public String getProductCatId() {
         return productCatId;
@@ -76,8 +80,11 @@ public class ProductHomeRequest extends BaseInfo{
     public void setBasicOrgIdIs(String basicOrgIdIs) {
         this.basicOrgIdIs = basicOrgIdIs;
     }
-    
-    
-    
+    public String getAttrValueDefID() {
+        return attrValueDefID;
+    }
+    public void setAttrValueDefID(String attrValueDefID) {
+        this.attrValueDefID = attrValueDefID;
+    } 
 
 }
