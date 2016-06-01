@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.impl;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,12 @@ public class SearchProductTest {
         request.setPageInfo(pageInfo);
         ProductQueryResponse response = iSearchProductSV.queryProductPage(request);
         System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));
-
+    }
+    @Test
+    public void serachHotProduct(){
+        ProductQueryRequest request = new ProductQueryRequest();
+        request.setAreaCode("81");
+        List<ProductData> response = iSearchProductSV.queryHotSellProduct(request);
+        System.out.println("result="+JSON.toJSONString(response));
     }
 }

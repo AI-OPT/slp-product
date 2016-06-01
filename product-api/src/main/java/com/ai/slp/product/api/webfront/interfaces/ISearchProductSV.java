@@ -36,5 +36,5 @@ public interface ISearchProductSV {
      * @author zhanglh
      * @ApiCode
      */
-    List<ProductData> queryHotSellProduct() throws BusinessException, SystemException;
+    List<ProductData> queryHotSellProduct(ProductQueryRequest request) throws BusinessException, SystemException;
 }
