@@ -11,9 +11,9 @@ public class SearchMetaFieldConfig {
     public static final String RECHAGE_TYPE = "rechagetype";
     public static final String BASIC_ORG = "basicorgid";
     public static final String SALE_NATIONWIDE = "salenationwide";
-    public static final String CATEGORY = "categorid";
+    public static final String CATEGORY_ID = "categorid";
     public static final String ATTR_VALUE = "attrvalue";
-    public static final String CATEGORY_ID = "productcategoryid";
+    public static final String PRODUCT_CATEGORY_ID = "productcategoryid";
     public static final String UP_TIME = "uptime";
     public static final String SALE_NUM = "salenum";
     

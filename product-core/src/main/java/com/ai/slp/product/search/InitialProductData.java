@@ -36,7 +36,7 @@ public class InitialProductData {
     private static final int MAX_SIZE = 1000;
 
     public static void main(String[] args) throws SQLException, UnknownHostException {
-
+        System.out.println(">>>>>>刷新数据开始");
         GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:context/core-context.xml");
         DataSource dataSource = applicationContext.getBean(DataSource.class);
@@ -159,6 +159,7 @@ public class InitialProductData {
 
             start += MAX_SIZE;
         }
+        System.out.println(">>>>>>刷新数据结束");
     }
 
     private static void fetchCategory(SKUInfo skuInfo, String productCategoryId, Connection connection) throws SQLException {

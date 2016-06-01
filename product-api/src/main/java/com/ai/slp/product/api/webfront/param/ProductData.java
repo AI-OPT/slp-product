@@ -11,10 +11,12 @@ public class ProductData extends BaseResponse {
      * sku名称
      */
     private String skuName;
+
     /**
      * sku单品标识
      */
     private String skuId;
+
     /**
      * 商品ID
      */
@@ -28,7 +30,7 @@ public class ProductData extends BaseResponse {
     /**
      * 销售价格
      */
-    private Double salePrice;
+    private float salePrice;
 
     /**
      * 评价数量
@@ -38,12 +40,12 @@ public class ProductData extends BaseResponse {
     /**
      * 主图片路径
      */
-    private String pictureUrl;
+    private ProductImage imageinfo;
 
     /**
      * 副图片组
      */
-    private List<String> pictureUrlList;
+    private List<ProductImage> thumbnail;
 
     public String getSkuName() {
         return skuName;
@@ -53,11 +55,11 @@ public class ProductData extends BaseResponse {
         this.skuName = skuName;
     }
 
-    public Double getSalePrice() {
+    public float getSalePrice() {
         return salePrice;
     }
 
-    public void setSalePrice(Double salePrice) {
+    public void setSalePrice(float salePrice) {
         this.salePrice = salePrice;
     }
 
@@ -69,20 +71,20 @@ public class ProductData extends BaseResponse {
         this.commentIdCount = commentIdCount;
     }
 
-    public String getPictureUrl() {
-        return pictureUrl;
+    public ProductImage getImageinfo() {
+        return imageinfo;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setImageinfo(ProductImage imageinfo) {
+        this.imageinfo = imageinfo;
     }
 
-    public List<String> getPictureUrlList() {
-        return pictureUrlList;
+    public List<ProductImage> getThumbnail() {
+        return thumbnail;
     }
 
-    public void setPictureUrlList(List<String> pictureUrlList) {
-        this.pictureUrlList = pictureUrlList;
+    public void setThumbnail(List<ProductImage> thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public String getSkuId() {

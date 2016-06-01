@@ -87,17 +87,22 @@ public class ProductSearchCriteria {
         // 基础运营商
         public ProductSearchCriteriaBuilder basicOrgIdIs(String basicorgid) {
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.BASIC_ORG,
-                    basicorgid, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
+                    basicorgid, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
             return this;
         }
 
         //类目
         public ProductSearchCriteriaBuilder categoryIdIs(String categoryId){
-            productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.CATEGORY,
-                    categoryId, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
+            productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.CATEGORY_ID,
+                    categoryId, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
             return this;
         }
-
+       //子类目
+        public ProductSearchCriteriaBuilder productCategoryIdIs(String productcategoryid){
+            productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.PRODUCT_CATEGORY_ID,
+                    productcategoryid, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
+            return this;
+        }
         //属性值
         public ProductSearchCriteriaBuilder attrValueLike(String attrValue){
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.ATTR_VALUE,
@@ -106,14 +111,14 @@ public class ProductSearchCriteria {
         }
         
         //属性ID
-        public ProductSearchCriteriaBuilder attrIDLike(String attrValue){
+        public ProductSearchCriteriaBuilder attrID(String attrValue){
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.ATTR_ID,
-                    attrValue, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
+                    attrValue, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
             return this;
         }
         
         //属性值ID
-        public ProductSearchCriteriaBuilder attrValueDefIDLike(String attrValueDefId){
+        public ProductSearchCriteriaBuilder attrValueDefID(String attrValueDefId){
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.ATTRVALUE_DEF_ID,
                     attrValueDefId, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
             return this;
