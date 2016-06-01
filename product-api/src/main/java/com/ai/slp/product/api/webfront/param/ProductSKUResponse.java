@@ -84,6 +84,10 @@ public class ProductSKUResponse extends BaseResponse{
      * 评价条数
      */
     private Long commentNum;
+	/**
+	 * 商品详情
+	 */
+	private String proDetailContent;
     
 	public String getSkuId() {
 		return skuId;
@@ -203,5 +207,13 @@ public class ProductSKUResponse extends BaseResponse{
 
 	public void setInactiveTime(Timestamp inactiveTime) {
 		this.inactiveTime = inactiveTime;
+	}
+
+	public String getProDetailContent() {
+		return proDetailContent;
+	}
+
+	public void setProDetailContent(String proDetailContent) {
+		this.proDetailContent = proDetailContent;
 	}
 }

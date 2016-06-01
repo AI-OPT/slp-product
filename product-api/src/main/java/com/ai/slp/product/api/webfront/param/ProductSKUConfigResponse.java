@@ -7,18 +7,17 @@ import com.ai.opt.base.vo.BaseResponse;
 public class ProductSKUConfigResponse extends BaseResponse{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * 商品配置参数
+	 * 商品属性集合
 	 */
-	private List<ProductSKUConfigParamter> configParamterList;
+	private List<ProductSKUAttr> productAttrList;
 
-	public List<ProductSKUConfigParamter> getConfigParamterList() {
-		return configParamterList;
+	public List<ProductSKUAttr> getProductAttrList() {
+		return productAttrList;
 	}
 
-	public void setConfigParamterList(List<ProductSKUConfigParamter> configParamterList) {
-		this.configParamterList = configParamterList;
+	public void setProductAttrList(List<ProductSKUAttr> productAttrList) {
+		this.productAttrList = productAttrList;
 	}
-
 }
