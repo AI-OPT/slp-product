@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttrCriteria;
@@ -9,6 +10,8 @@ import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/10.
@@ -59,6 +62,25 @@ public class ProdSkuAttrAtomSV implements IProdSkuAttrAtomSV {
         prodSkuAttr.setSkuAttrId(SequenceUtil.genSkuAttrId());
         prodSkuAttr.setOperTime(DateUtils.currTimeStamp());
         return skuAttrMapper.insert(prodSkuAttr);
+    }
+
+    /**
+     * 查询SKU单品中某个属性的属性值
+     *
+     * @param tenantId
+     * @param skuId
+     * @param attrId
+     * @return
+     */
+    @Override
+    public ProdSkuAttr queryAttrValBySkuIdAndAttr(String tenantId, String skuId, Long attrId) {
+        ProdSkuAttrCriteria example = new ProdSkuAttrCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andSkuIdEqualTo(skuId)
+                .andAttrIdEqualTo(attrId)
+                .andStateEqualTo(ProductConstants.ProdSkuAttr.State.ACTIVE);
+        List<ProdSkuAttr> prodSkuAttrList = skuAttrMapper.selectByExample(example);
+        return CollectionUtil.isEmpty(prodSkuAttrList)?null:prodSkuAttrList.get(0);
     }
 
 

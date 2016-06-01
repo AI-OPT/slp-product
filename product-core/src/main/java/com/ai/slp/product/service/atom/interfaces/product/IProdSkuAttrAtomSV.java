@@ -27,4 +27,13 @@ public interface IProdSkuAttrAtomSV {
      */
     public int createAttr(ProdSkuAttr prodSkuAttr);
 
+    /**
+     * 查询SKU单品中某个属性的属性值
+     * @param tenantId
+     * @param skuId
+     * @param attrId
+     * @return
+     */
+    public ProdSkuAttr queryAttrValBySkuIdAndAttr(String tenantId,String skuId,Long attrId);
+
 }

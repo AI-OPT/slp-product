@@ -5,7 +5,7 @@ import com.ai.opt.base.vo.BaseResponse;
 import java.sql.Timestamp;
 
 /**
- * 标准品属性值返回信息<br>
+ * 标准品/销售商品属性值返回信息<br>
  *
  * Date: 2016年4月19日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
@@ -18,11 +18,11 @@ public class AttrValInfo extends BaseResponse {
      */
     private String tenantId;
     /**
-     * 标准品属性值ID
+     * 标准品/销售属性值ID
      */
     private Long productAttrValId;
     /**
-     * 标准品标识
+     * 标准品/销售商品标识
      */
     private String productId;
     /**
