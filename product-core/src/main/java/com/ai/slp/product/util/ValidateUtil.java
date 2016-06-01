@@ -31,8 +31,5 @@ public  final class ValidateUtil {
         if(StringUtil.isBlank(request.getAreaCode())){
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
         }
-        if(StringUtil.isBlank(request.getProductCatId())){
-            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "类目不能为空");
-        }
     }
 }

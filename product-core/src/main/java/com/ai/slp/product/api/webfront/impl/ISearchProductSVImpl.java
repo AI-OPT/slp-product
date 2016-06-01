@@ -47,9 +47,16 @@ public class ISearchProductSVImpl implements ISearchProductSV {
         }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUserType())){
             user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
         }
-        ProductSearchCriteria productSearchCriteria =
-                new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+         ProductSearchCriteria productSearchCriteria ;
+         if(StringUtil.isBlank(request.getSkuName())){
+              productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+         }else{
+              productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .skuNameLike(request.getSkuName()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+         }
         Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
         List<Map<String,Object>> reslist = result.getSearchList();
         String info = JSON.toJSONString(reslist);
@@ -91,9 +98,16 @@ public class ISearchProductSVImpl implements ISearchProductSV {
         }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUserType())){
             user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
         }
-        ProductSearchCriteria productSearchCriteria =
-                new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                .categoryIdIs(request.getProductCatId()).orderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
+         ProductSearchCriteria productSearchCriteria;
+         if(StringUtil.isBlank(request.getProductCatId())){
+              productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .orderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
+         }else{
+              productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .categoryIdIs(request.getProductCatId()).orderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
+         }
         Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
         List<Map<String,Object>> objList = result.getSearchList();
         String info = JSON.toJSONString(objList);
