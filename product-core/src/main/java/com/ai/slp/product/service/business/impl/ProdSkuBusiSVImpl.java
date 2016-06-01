@@ -29,6 +29,8 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.vo.SkuStorageVo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +74,10 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     IStorageBusiSV storageBusiSV;
     @Autowired
     IProdPictureAtomSV pictureAtomSV;
+    @Autowired
+    IProdSaleAllAtomSV prodSaleAllAtomSV;
+    @Autowired
+    IStorageNumBusiSV storageNumBusiSV;
     /**
      * 更新商品SKU信息
      *
@@ -243,53 +249,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
             throw new BusinessException("","未查询到指定的SKU信息,租户ID:"+tenantId+",SKU标识:"+prodSku.getSkuId()
                     +"商品ID:"+prodSku.getProdId());
         }
-        ProductSKUResponse skuResponse = new ProductSKUResponse();
-        skuResponse.setProductAttrList(new ArrayList<ProductSKUAttr>());
-        skuResponse.setProductImageList(new ArrayList<ProductImage>());
-        //查询商品对应标准品的销售属性,已按照属性属性排序
-        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
-                tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-        //SKU图片
-        String skuPic = null;
-        //查询已设置SKU的属性和属性值信息
-        for (ProdCatAttrAttch attrAttch:catAttrAttches){
-            ProductSKUAttr productSKUAttr = new ProductSKUAttr();
-            productSKUAttr.setAttrId(attrAttch.getAttrId());
-            productSKUAttr.setAttrName(attrAttch.getAttrName());
-            List<ProductSKUAttrValue> attrValueList = new ArrayList<>();
-            //查询属性对应属性值集合
-            List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(
-                    tenantId,product.getProdId(),attrAttch.getAttrId());
-            for (StandedProdAttr prodAttr:prodAttrs){
-                //若SKU不包含当前属性值,则查询下一个属性值
-                if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId,product.getProdId(),prodAttr.getAttrvalueDefId())<=0)
-                    continue;
-                ProductSKUAttrValue skuAttrValue = new ProductSKUAttrValue();
-                //查询此属性值是否有图片信息
-                ProdPicture prodPicture = pictureAtomSV.queryMainOfProdIdAndAttrVal(
-                        product.getProdId(),prodAttr.getAttrvalueDefId());
-                if (prodPicture!=null){
-                    ProductImage productImage = new ProductImage();
-                    productImage.setImagetype(prodPicture.getPicType());
-                    productImage.setVfsid(prodPicture.getVfsId());
-                    skuAttrValue.setImage(productImage);
-                }
-                skuAttrValue.setAttrvalueDefId(prodAttr.getAttrvalueDefId());
-                skuAttrValue.setAttrValueName(prodAttr.getAttrValueName());
-                String attAndVal = attrAttch.getAttrId()
-                        +ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT
-                        +prodAttr.getAttrvalueDefId();
-                //该属性值含有图片
-                if (prodSku.getSaleAttrs().contains(attAndVal)){
-                    skuAttrValue.setIsOwn(true);
-
-                }
-                attrValueList.add(skuAttrValue);
-            }
-            productSKUAttr.setAttrValueList(attrValueList);
-            skuResponse.getProductAttrList().add(productSKUAttr);
-        }
-        return skuResponse;
+        return genSkuResponse(tenantId,product,prodSku);
     }
 
     /**
@@ -401,10 +361,81 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         }
     }
 
-    /**
-     *
-     */
-    private void addProductPic(){
+    private ProductSKUResponse genSkuResponse(String tenantId,Product product,ProdSku prodSku){
+        ProductSKUResponse skuResponse = new ProductSKUResponse();
+        BeanUtils.copyProperties(skuResponse,prodSku);
+        BeanUtils.copyProperties(skuResponse,product);
+        skuResponse.setProductAttrList(new ArrayList<ProductSKUAttr>());
+        skuResponse.setProductImageList(new ArrayList<ProductImage>());
+        //查询商品对应标准品的销售属性,已按照属性属性排序
+        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
+                tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+        //SKU图片
+        String attrPic = null;
+        //查询已设置SKU的属性和属性值信息
+        for (ProdCatAttrAttch attrAttch:catAttrAttches){
+            ProductSKUAttr productSKUAttr = new ProductSKUAttr();
+            productSKUAttr.setAttrId(attrAttch.getAttrId());
+            productSKUAttr.setAttrName(attrAttch.getAttrName());
+            List<ProductSKUAttrValue> attrValueList = new ArrayList<>();
+            //查询属性对应属性值集合
+            List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(
+                    tenantId,product.getProdId(),attrAttch.getAttrId());
+            for (StandedProdAttr prodAttr:prodAttrs){
+                //若SKU不包含当前属性值,则查询下一个属性值
+                if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId,product.getProdId(),prodAttr.getAttrvalueDefId())<=0)
+                    continue;
+                ProductSKUAttrValue skuAttrValue = new ProductSKUAttrValue();
+                //查询此属性值是否有图片信息
+                ProdPicture prodPicture = pictureAtomSV.queryMainOfProdIdAndAttrVal(
+                        product.getProdId(),prodAttr.getAttrvalueDefId());
+                if (prodPicture!=null){
+                    ProductImage productImage = new ProductImage();
+                    BeanUtils.copyProperties(productImage,prodPicture);
+                    skuAttrValue.setImage(productImage);
+                }
+                skuAttrValue.setAttrvalueDefId(prodAttr.getAttrvalueDefId());
+                skuAttrValue.setAttrValueName(prodAttr.getAttrValueName());
+                String attAndVal = attrAttch.getAttrId()
+                        +ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT
+                        +prodAttr.getAttrvalueDefId();
+                //该属性值含有图片
+                if (prodSku.getSaleAttrs().contains(attAndVal)){
+                    skuAttrValue.setIsOwn(true);
+                    if (StringUtils.isBlank(attrPic))
+                        attrPic = prodAttr.getAttrvalueDefId();
+                }
+                attrValueList.add(skuAttrValue);
+            }
+            productSKUAttr.setAttrValueList(attrValueList);
+            skuResponse.getProductAttrList().add(productSKUAttr);
+        }
+        //设置主图
+        skuResponse.setProductImageList(getProductSkuPic(attrPic,product));
+        //设置商品销量
+        skuResponse.setSaleNum(prodSaleAllAtomSV.queryNumOfProduc(tenantId,product.getProdId()));
+        //获取当前库存和价格
+        SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(tenantId,prodSku.getSkuId());
+        skuResponse.setUsableNum(skuStorageVo.getUsableNum());
+        skuResponse.setSalePrice(skuStorageVo.getSalePrice());
+        return skuResponse;
+    }
 
+    /**
+     * 获取SKU商品的展示图片
+     */
+    private List<ProductImage> getProductSkuPic(String attrPic,Product product){
+        List<ProdPicture> pictureList = null;
+        List<ProductImage> productImageList = new ArrayList<>();
+        if (StringUtils.isNotBlank(attrPic)){
+            pictureList = pictureAtomSV.queryProdIdAndAttrVal(product.getProdId(),attrPic);
+        }else
+            pictureList = pictureAtomSV.queryPicOfProd(product.getProdId());
+        for (ProdPicture picture:pictureList){
+            ProductImage productImage = new ProductImage();
+            BeanUtils.copyProperties(productImage,picture);
+            productImageList.add(productImage);
+        }
+        return productImageList;
     }
 }

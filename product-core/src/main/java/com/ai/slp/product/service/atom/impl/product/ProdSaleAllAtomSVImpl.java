@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.atom.impl.product;
 
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.slp.product.dao.mapper.attach.ProdSaleAllAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSaleAll;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSaleAllCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdSaleAllMapper;
@@ -19,6 +20,8 @@ import java.util.List;
 public class ProdSaleAllAtomSVImpl implements IProdSaleAllAtomSV {
     @Autowired
     ProdSaleAllMapper saleAllMapper;
+    @Autowired
+    ProdSaleAllAttachMapper saleAllAttachMapper;
 
     /**
      * 插入SKU销量信息
@@ -60,5 +63,18 @@ public class ProdSaleAllAtomSVImpl implements IProdSaleAllAtomSV {
     public int updateById(ProdSaleAll prodSaleAll) {
         prodSaleAll.setUpdateTime(DateUtils.currTimeStamp());
         return saleAllMapper.updateByPrimaryKey(prodSaleAll);
+    }
+
+    /**
+     * 查询指定销售商品的销量
+     *
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    @Override
+    public long queryNumOfProduc(String tenantId, String productId) {
+        Long num = saleAllAttachMapper.selectCatAttr(tenantId,productId);
+        return num==null?0:num.longValue();
     }
 }

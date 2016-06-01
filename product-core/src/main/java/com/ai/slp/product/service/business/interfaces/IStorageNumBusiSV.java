@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
+import com.ai.slp.product.vo.SkuStorageVo;
 
 import java.util.Map;
 
@@ -25,4 +26,12 @@ public interface IStorageNumBusiSV {
      * @param storageNum 库存回退集合
      */
     public void backStorageNum(String tenantId,String skuId,Map<String,Integer> storageNum);
+
+    /**
+     * 查询SKU的库存和价格信息
+     * @param tenantId
+     * @param skuId
+     * @return
+     */
+    public SkuStorageVo queryStorageOfSku(String tenantId,String skuId);
 }

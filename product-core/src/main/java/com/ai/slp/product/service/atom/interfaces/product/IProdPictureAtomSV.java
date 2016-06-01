@@ -23,4 +23,10 @@ public interface IProdPictureAtomSV {
      * @return
      */
     public List<ProdPicture> queryProdIdAndAttrVal(String prodId,String attrValId);
+
+    /**
+     * 查询商品的图片
+     * @return
+     */
+    public List<ProdPicture> queryPicOfProd(String prodId);
 }

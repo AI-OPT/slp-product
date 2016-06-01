@@ -19,6 +19,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.util.IPassUtils;
+import com.ai.slp.product.vo.SkuStorageVo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -201,6 +202,18 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         }
         //调用数据库异步处理方法
         numDbBusiSV.storageNumChange(tenantId,skuId,storageNum,false,false);
+    }
+
+    /**
+     * 查询SKU的库存和价格信息
+     *
+     * @param tenantId
+     * @param skuId
+     * @return
+     */
+    @Override
+    public SkuStorageVo queryStorageOfSku(String tenantId, String skuId) {
+        return null;
     }
 
     /**

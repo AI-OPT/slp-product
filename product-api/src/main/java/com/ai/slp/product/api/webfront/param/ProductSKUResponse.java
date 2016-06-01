@@ -23,7 +23,9 @@ public class ProductSKUResponse extends BaseResponse{
      */
     private String saleAttrs;
     /**
-     * SKU单品的状态
+     * SKU单品的状态<br>
+	 * SKU有效时,状态同商品状态
+	 * sku无效时,状态为无效
      */
     private String state;
     /**
@@ -71,9 +73,9 @@ public class ProductSKUResponse extends BaseResponse{
      */
     private Long usableNum;
     /**
-     * 销售价
+     * 销售价,单位:厘
      */
-    private Double salePrice;
+    private Long salePrice;
     /**
      * 销量
      */
@@ -125,12 +127,15 @@ public class ProductSKUResponse extends BaseResponse{
 	public void setUsableNum(Long usableNum) {
 		this.usableNum = usableNum;
 	}
-	public Double getSalePrice() {
+
+	public Long getSalePrice() {
 		return salePrice;
 	}
-	public void setSalePrice(Double salePrice) {
+
+	public void setSalePrice(Long salePrice) {
 		this.salePrice = salePrice;
 	}
+
 	public Long getSaleNum() {
 		return saleNum;
 	}

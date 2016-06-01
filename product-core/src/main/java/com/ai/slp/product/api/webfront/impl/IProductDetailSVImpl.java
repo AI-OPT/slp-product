@@ -3,8 +3,16 @@ package com.ai.slp.product.api.webfront.impl;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ai.opt.base.exception.BusinessException;
@@ -24,19 +32,52 @@ import com.alibaba.dubbo.config.annotation.Service;
 @Service(validation = "true")
 @Component
 public class IProductDetailSVImpl implements IProductDetailSV {
+	private static Logger logger = LoggerFactory.getLogger(IProductDetailSVImpl.class);
+	@Autowired
+	IProdSkuAtomSV prodSkuAtomSV;
+	@Autowired
+	IProductAtomSV productAtomSV;
+	@Autowired
+	IProdSkuBusiSV prodSkuBusiSV;
 
 	@Override
-	public ProductSKUResponse queryProducSKUById(ProductSKURequest productSKURequest) throws BusinessException, SystemException {
-		CommonCheckUtils.checkTenantId(productSKURequest.getTenantId(),"");
-		if (StringUtils.isBlank(productSKURequest.getSkuId())
-				&& StringUtils.isBlank(productSKURequest.getSkuAttrs())){
+	public ProductSKUResponse queryProducSKUById(ProductSKURequest skuReq) throws BusinessException, SystemException {
+		CommonCheckUtils.checkTenantId(skuReq.getTenantId(),"");
+		if (StringUtils.isBlank(skuReq.getSkuId())
+				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
-		//查询SKU信息
-		//根据SKU查询商品信息
-		//查询销售商品的SKU属性
+		//TODO... 正式返回
+		prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+
+		return demoResponse();
+	}
+
+	@Override
+	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest productSKURequest) throws BusinessException, SystemException {
 		// TODO Auto-generated method stub
 
+		ProductSKUConfigResponse ProductSKUConfigResponse = new ProductSKUConfigResponse();
+		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
+		ProductSKUConfigResponse.setResponseHeader(responseHeader);
+		List<ProductSKUConfigParamter> configParamterList = new LinkedList<ProductSKUConfigParamter>();
+		String[] keyArray = new String[] { "品牌", "型号", "颜色", "上市年份", "输入方式", "智能机", "操作系统版本", "CPU品牌", "CPU型号", "CPU频率" };
+		String[] valueArray = new String[] { "小米（MI）", "小米手机 5", "白色", "2016年", "触控", "是", "MIUI", "Qualcomm 骁龙", "骁龙820", "最高主频 1.8GHz" };
+		for (int i = 0; i < keyArray.length; i++) {
+			ProductSKUConfigParamter configParamter = new ProductSKUConfigParamter();
+			configParamter.setConfigName(keyArray[i]);
+			configParamter.setConfigValue(valueArray[i]);
+			configParamterList.add(configParamter);
+		}
+		ProductSKUConfigResponse.setConfigParamterList(configParamterList);
+		return ProductSKUConfigResponse;
+	}
+
+	/**
+	 * 示例返回值
+	 * @return
+     */
+	private ProductSKUResponse demoResponse(){
 		ProductSKUResponse productSKUResponse = new ProductSKUResponse();
 
 		productSKUResponse.setCommentNum(1000L);
@@ -44,7 +85,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		productSKUResponse.setProdName("小米5 全网通 标准版 ");
 		productSKUResponse.setProductSellPoint("套餐更实惠，千元畅机！高通晓龙650处理器，轻薄4000mAH电池，5.5英寸1080p高清大屏！5.5英寸1080p高清大屏！");
 		productSKUResponse.setSaleNum(2000L);
-		productSKUResponse.setSalePrice(1999D);
+		productSKUResponse.setSalePrice(1999l);
 		productSKUResponse.setSkuId("0001");
 		productSKUResponse.setSkuName("小米5 全网通 标准版");
 		productSKUResponse.setUsableNum(5000L);
@@ -60,8 +101,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		skuAttrValue1.setAttrValueName("白色");
 		skuAttrValue1.setIsOwn(true);
 		ProductImage image1 = new ProductImage();
-		image1.setVfsid("57454f50d601800009c0b0cf");
-		image1.setImagetype(".jpg");
+		image1.setVfsId("57454f50d601800009c0b0cf");
+		image1.setPicType(".jpg");
 		skuAttrValue1.setImage(image1);
 		attrValueList.add(skuAttrValue1);
 		skuAttr1.setAttrValueList(attrValueList);
@@ -70,8 +111,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		skuAttrValue2.setAttrValueName("黑色");
 		skuAttrValue2.setIsOwn(false);
 		ProductImage image2 = new ProductImage();
-		image2.setVfsid("574551b4d601800009c0b0d9");
-		image2.setImagetype(".jpg");
+		image2.setVfsId("574551b4d601800009c0b0d9");
+		image2.setPicType(".jpg");
 		skuAttrValue2.setImage(image2);
 		attrValueList.add(skuAttrValue2);
 		skuAttr1.setAttrValueList(attrValueList);
@@ -80,8 +121,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		skuAttrValue3.setAttrValueName("紫色");
 		skuAttrValue3.setIsOwn(false);
 		ProductImage image3 = new ProductImage();
-		image3.setVfsid("57455205d601800009c0b0df");
-		image3.setImagetype(".jpg");
+		image3.setVfsId("57455205d601800009c0b0df");
+		image3.setPicType(".jpg");
 		skuAttrValue3.setImage(image3);
 		attrValueList.add(skuAttrValue3);
 		skuAttr1.setAttrValueList(attrValueList);
@@ -115,42 +156,22 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		// 设置图片
 		List<ProductImage> productImageList = new LinkedList<ProductImage>();
 		ProductImage productImage1 = new ProductImage();
-		productImage1.setImagetype(".jpg");
-		productImage1.setVfsid("57454f50d601800009c0b0cf");
+		productImage1.setPicType(".jpg");
+		productImage1.setVfsId("57454f50d601800009c0b0cf");
 		productImageList.add(productImage1);
 		ProductImage productImage2 = new ProductImage();
-		productImage2.setImagetype(".jpg");
-		productImage2.setVfsid("5745516fd601800009c0b0d5");
+		productImage2.setPicType(".jpg");
+		productImage2.setVfsId("5745516fd601800009c0b0d5");
 		productImageList.add(productImage2);
 		ProductImage productImage3 = new ProductImage();
-		productImage3.setImagetype(".jpg");
-		productImage3.setVfsid("57455191d601800009c0b0d7");
+		productImage3.setPicType(".jpg");
+		productImage3.setVfsId("57455191d601800009c0b0d7");
 		productImageList.add(productImage3);
 		productSKUResponse.setProductImageList(productImageList);
 
 		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
 		productSKUResponse.setResponseHeader(responseHeader);
 		return productSKUResponse;
-	}
-
-	@Override
-	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest productSKURequest) throws BusinessException, SystemException {
-		// TODO Auto-generated method stub
-
-		ProductSKUConfigResponse ProductSKUConfigResponse = new ProductSKUConfigResponse();
-		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
-		ProductSKUConfigResponse.setResponseHeader(responseHeader);
-		List<ProductSKUConfigParamter> configParamterList = new LinkedList<ProductSKUConfigParamter>();
-		String[] keyArray = new String[] { "品牌", "型号", "颜色", "上市年份", "输入方式", "智能机", "操作系统版本", "CPU品牌", "CPU型号", "CPU频率" };
-		String[] valueArray = new String[] { "小米（MI）", "小米手机 5", "白色", "2016年", "触控", "是", "MIUI", "Qualcomm 骁龙", "骁龙820", "最高主频 1.8GHz" };
-		for (int i = 0; i < keyArray.length; i++) {
-			ProductSKUConfigParamter configParamter = new ProductSKUConfigParamter();
-			configParamter.setConfigName(keyArray[i]);
-			configParamter.setConfigValue(valueArray[i]);
-			configParamterList.add(configParamter);
-		}
-		ProductSKUConfigResponse.setConfigParamterList(configParamterList);
-		return ProductSKUConfigResponse;
 	}
 
 }

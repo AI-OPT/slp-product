@@ -9,30 +9,26 @@ public class ProductImage implements Serializable{
     /**
      * 上传后的图片ID
      */
-    private String vfsid;
+    private String vfsId;
 
     /**
      * 图片扩展名
      */
-    private String imagetype;
+    private String picType;
 
-    public String getVfsid() {
-        return vfsid;
+    public String getVfsId() {
+        return vfsId;
     }
 
-    public void setVfsid(String vfsid) {
-        this.vfsid = vfsid;
+    public void setVfsId(String vfsId) {
+        this.vfsId = vfsId;
     }
 
-    public String getImagetype() {
-        return imagetype;
+    public String getPicType() {
+        return picType;
     }
 
-    public void setImagetype(String imagetype) {
-        this.imagetype = imagetype;
+    public void setPicType(String picType) {
+        this.picType = picType;
     }
-
-   
-   
-
 }

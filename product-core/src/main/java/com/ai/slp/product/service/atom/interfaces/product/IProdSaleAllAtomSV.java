@@ -28,4 +28,12 @@ public interface IProdSaleAllAtomSV {
      * @return
      */
     public int updateById(ProdSaleAll prodSaleAll);
+
+    /**
+     * 查询指定销售商品的销量
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    public long queryNumOfProduc(String tenantId,String productId);
 }
