@@ -11,15 +11,15 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.paas.ipaas.search.vo.Results;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.webfront.interfaces.IProductHomeSV;
-import com.ai.slp.product.api.webfront.param.ProductHomeResponse;
 import com.ai.slp.product.api.webfront.param.ProductHomeRequest;
-import com.ai.slp.product.api.webfront.param.ProductImage;
+import com.ai.slp.product.api.webfront.param.ProductHomeResponse;
 import com.ai.slp.product.constants.ProductHomeConstants;
 import com.ai.slp.product.search.api.IProductSearch;
 import com.ai.slp.product.search.api.impl.ProductSearchImpl;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.search.dto.ProductSearchCriteria;
 import com.ai.slp.product.search.dto.UserSearchAuthority;
+import com.ai.slp.product.util.ConvertImageUtil;
 import com.ai.slp.product.util.ValidateUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -57,7 +57,9 @@ public class IProductHomeSVImpl implements IProductHomeSV {
             product.setProdName(sku.getProductname());
             product.setProductSellPoint(sku.getProductsellpoint());
             product.setProdId(sku.getProductid());
-            product.setProductImage(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
+            String imageinfo = JSON.toJSONString(sku.getImageinfo());
+            product.setProductImage(ConvertImageUtil.convert(imageinfo));
+            //product.setProductImage(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
             productList.add(product);
         }
         return productList;
@@ -92,7 +94,9 @@ public class IProductHomeSVImpl implements IProductHomeSV {
             product.setProdName(sku.getProductname());
             product.setProductSellPoint(sku.getProductsellpoint());
             product.setProdId(sku.getProductid());
-            product.setProductImage(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
+            String imageinfo = JSON.toJSONString(sku.getImageinfo());
+            product.setProductImage(ConvertImageUtil.convert(imageinfo));
+            //product.setProductImage(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
             productList.add(product);
         }
         return productList;

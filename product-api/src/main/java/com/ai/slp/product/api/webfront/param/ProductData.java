@@ -47,6 +47,7 @@ public class ProductData extends BaseResponse {
      */
     private List<ProductImage> thumbnail;
 
+
     public String getSkuName() {
         return skuName;
     }
