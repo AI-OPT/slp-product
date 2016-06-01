@@ -48,9 +48,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
 		//TODO... 正式返回
-		prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
-
-		return demoResponse();
+		return prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+//		return demoResponse();
 	}
 
 	@Override
