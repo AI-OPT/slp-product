@@ -1,14 +1,24 @@
 package com.ai.slp.product.service.business.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.slp.product.api.normproduct.param.AttrMap;
+import com.ai.slp.product.api.normproduct.param.AttrValInfo;
+import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
 import com.ai.slp.product.api.product.param.ProductRoute;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttrCriteria;
+import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
+import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import org.slf4j.Logger;
@@ -35,11 +45,6 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAttachAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.vo.ProductPageQueryVo;
@@ -56,8 +61,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     @Autowired
     IStandedProductAtomSV standedProductAtomSV;
     @Autowired
-    IStandedProdAttrAtomSV standedProdAttrAtomSV;
-    @Autowired
     IProductAtomSV productAtomSV;
     @Autowired
     IProductLogAtomSV productLogAtomSV;
@@ -69,6 +72,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     IStorageAtomSV storageAtomSV;
     @Autowired
     IProdSkuAtomSV prodSkuAtomSV;
+    @Autowired
+    IProdAttrAtomSV prodAttrAtomSV;
     @Autowired
     IProdSkuAttrAtomSV prodSkuAttrAtomSV;
     @Autowired
@@ -295,6 +300,61 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         productRoute.setProductId(productId);
         productRoute.setRouteGroupId(storageGroup.getRouteGroupId());
         return productRoute;
+    }
+
+    /**
+     * 查询商品的非关键属性
+     *
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    @Override
+    public AttrMap queryNoKeyAttrOfProduct(String tenantId, String productId) {
+        //查询商品信息
+        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        if (product==null){
+            logger.warn("未找到对应销售商品信息,租户ID:{},销售商品ID:{}",tenantId,productId);
+            throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
+        }
+        AttrMap attrMapOfNormProd = new AttrMap();
+        Map<Long, List<Long>> attrAndValMap = new HashMap<>();
+        Map<Long, ProdCatAttrInfo> attrDefMap = new HashMap<>();
+        Map<Long, AttrValInfo> attrValDefMap = new HashMap<>();
+        // 查询对应类目非关键属性
+        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
+                product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
+        // 查询标准品对应属性的属性值
+        for (ProdCatAttrAttch catAttrAttch : catAttrAttches) {
+            ProdCatAttrInfo catAttrDef = new ProdCatAttrInfo();
+            BeanUtils.copyProperties(catAttrDef, catAttrAttch);
+            List<Long> attrValDefList = new ArrayList<>();
+            attrAndValMap.put(catAttrDef.getAttrId(), attrValDefList);
+            attrDefMap.put(catAttrDef.getAttrId(), catAttrDef);
+            // 查询销售商品非关键属性值
+            List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(tenantId,productId,catAttrAttch.getAttrId());
+            for (ProdAttr prodAttr : prodAttrs) {
+                AttrValInfo valDef = new AttrValInfo();
+                BeanUtils.copyProperties(valDef, prodAttr);
+                valDef.setProductId(prodAttr.getProdId());
+                valDef.setAttrValId(prodAttr.getAttrvalueDefId());
+                valDef.setAttrVal(prodAttr.getAttrValueName());
+                valDef.setAttrVal2(prodAttr.getAttrValueName2());
+                if (prodAttr.getAttrvalueDefId() != null) {
+//                    ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId,
+//                            prodAttr.getAttrvalueDefId());
+//                    if (attrvalueDef != null)
+//                        valDef.setAttrVal(attrvalueDef.getAttrValueName());
+                }
+                attrValDefMap.put(valDef.getProductAttrValId(), valDef);
+                attrValDefList.add(valDef.getProductAttrValId());
+            }
+        }
+        attrMapOfNormProd.setAttrAndVal(attrAndValMap);
+        attrMapOfNormProd.setAttrDefMap(attrDefMap);
+        attrMapOfNormProd.setAttrValDefMap(attrValDefMap);
+        return attrMapOfNormProd;
+
     }
 
 }

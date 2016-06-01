@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.product.param.Product4List;
 import com.ai.slp.product.api.product.param.ProductListQuery;
 import com.ai.slp.product.api.product.param.ProductRoute;
@@ -59,6 +60,10 @@ public interface IProductBusiSV {
      * @return
      */
     public ProductRoute queryRouteGroupOfProd(String tenantId,String productId);
-    
 
+    /**
+     * 查询商品的非关键属性
+     * @return
+     */
+    public AttrMap queryNoKeyAttrOfProduct(String tenantId,String productId);
 }

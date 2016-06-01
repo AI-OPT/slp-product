@@ -12,6 +12,7 @@ import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.*;
@@ -19,6 +20,7 @@ import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
+import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
@@ -81,6 +83,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     IStorageNumBusiSV storageNumBusiSV;
     @Autowired
     INormProductBusiSV normProductBusiSV;
+    @Autowired
+    IProdAttrValDefAtomSV attrValDefAtomSV;
     /**
      * 更新商品SKU信息
      *
@@ -269,6 +273,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         //查询非关键属性
 
         //查询SKU对应销售属性
+        configResponse.getProductAttrList().addAll(getSkuAttr(product,skuId));
         return configResponse;
     }
 
@@ -509,6 +514,36 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
                 attrValue.setAttrValueName(valInfo.getAttrVal());
                 attrValue.setAttrValueName2(valInfo.getAttrVal2());
                 attrValueList.add(attrValue);
+            }
+            skuAttrList.add(productSKUAttr);
+        }
+        return skuAttrList;
+    }
+
+    /**
+     * 获取SKU的属性信息
+     * @param product
+     * @param skuId
+     * @return
+     */
+    private List<ProductSKUAttr> getSkuAttr(Product product,String skuId){
+        List<ProductSKUAttr> skuAttrList = new ArrayList<>();
+        //查询商品对应标准品的销售属性,已按照属性属性排序
+        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
+                product.getTenantId(),product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+        for (ProdCatAttrAttch attrAttch:catAttrAttches){
+            ProductSKUAttr productSKUAttr = new ProductSKUAttr();
+            BeanUtils.copyProperties(productSKUAttr,attrAttch);
+            productSKUAttr.setAttrValueList(new ArrayList<ProductSKUAttrValue>());
+            //查询sku在当前属性对应的属性值
+            ProdSkuAttr prodSkuAttr = prodSkuAttrAtomSV.queryAttrValBySkuIdAndAttr(
+                    product.getTenantId(),skuId,attrAttch.getAttrId());
+            if (prodSkuAttr!=null){
+                ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(
+                        product.getTenantId(),prodSkuAttr.getAttrvalueDefId());
+                ProductSKUAttrValue attrValue = new ProductSKUAttrValue();
+                BeanUtils.copyProperties(attrValue,attrvalueDef);
+                productSKUAttr.getAttrValueList().add(attrValue);
             }
             skuAttrList.add(productSKUAttr);
         }

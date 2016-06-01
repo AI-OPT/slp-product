@@ -149,4 +149,16 @@ public final class ProductConstants {
         }
     }
 
+    public final class ProdAttr{
+        public final class State {
+            /**
+             * 有效状态
+             */
+            public static final String ACTIVE = "1";
+            /**
+             * 无效状态
+             */
+            public static final String INACTIVE = "0";
+        }
+    }
 }
