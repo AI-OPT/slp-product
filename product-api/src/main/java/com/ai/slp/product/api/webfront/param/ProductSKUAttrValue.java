@@ -7,7 +7,8 @@ public class ProductSKUAttrValue implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	/**
-	 * 商品属性值标识
+	 * 商品属性值标识<br>
+	 * 值输入方式为1下拉单选、2多选时存在
 	 */
 	private String attrvalueDefId;
 	/**

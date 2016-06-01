@@ -50,11 +50,11 @@ public interface INormProductBusiSV {
      * 查询标准品下指定类型的属性及属性值信息
      *
      * @param tenantId
-     * @param productId
+     * @param standedProdId
      * @param attrType
      * @return
      */
-    public AttrMap queryAttrOfProduct(String tenantId, String productId, String attrType);
+    public AttrMap queryAttrOfProduct(String tenantId, String standedProdId, String attrType);
     
     /**
      * 更新标准品的市场价
