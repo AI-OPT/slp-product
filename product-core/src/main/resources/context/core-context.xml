@@ -55,7 +55,12 @@
 	<!-- 配置myBatis的sqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="mapperLocations" value="classpath*:mybatis/mapper/*.xml"/>
+        <property name="mapperLocations">
+            <list>
+                <value>classpath*:mybatis/mapper/*.xml</value>
+                <value>classpath*:mybatis/mapper/**/*.xml</value>
+            </list>
+        </property>
     </bean>
     
     <!-- 扫描Mapper,需要添加mybatis前缀绑定 -->
