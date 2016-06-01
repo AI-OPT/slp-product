@@ -63,18 +63,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     @Override
     public StorageNumRes userStorageNum(String tenantId, String skuId, int skuNum) {
         //查询SKU所属销售商品
-        ProdSku skuInfo = skuAtomSV.querySkuById(tenantId,skuId);
-        if (skuInfo==null){
-            logger.warn("单品信息不存在,租户ID:{},SKU标识:{},SKU数量:{}",tenantId,skuId,skuNum);
-            throw new BusinessException("","单品信息不存在,单品标识:"+skuId);
-        }
-        //1. 查询商品是否为"在售"状态
-        Product product = productAtomSV.selectByProductId(tenantId,skuInfo.getProdId());
-        if (product==null || ProductConstants.Product.State.IN_SALE.equals(product.getState())){
-            logger.warn("销售商品不存在,或已下架,租户ID:{},SKU标识:{},SKU数量:{},销售商品标识{}"
-                    ,tenantId,skuId,skuNum,skuInfo.getProdId());
-            throw new BusinessException("","销售商品不存在,或已下架状态");
-        }
+        Product product = getProductBySkuId(tenantId,skuId);
         String groupId = product.getStorageGroupId();
         //获取缓存客户端
         ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
@@ -92,18 +81,11 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 
         //3. 确认当前使用优先级
         //3.1 确认当前是否在促销期内
-        String serialsKey = IPassUtils.genMcsGroupSerialStartTimeKey(tenantId,groupId);
-        long nowTime = System.currentTimeMillis();
-        //使用优先级
-        String serial = "";
-        Set<String> serialSet = cacheClient.zrevrangeByScore(serialsKey,nowTime,0);
-        if (!CollectionUtil.isEmpty(serialSet)){
-            serial = serialSet.toArray(new String[0])[0];
-        }
+        String priority = getPromotionPriority(cacheClient,tenantId,groupId);
         //优先级价格对应KEY
-        String priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,serial);
+        String priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority);
         //优先级中库存可用量对应KEY
-        String priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,serial);
+        String priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
 
         /*3.2 以下情况使用正常优先级
          *  .未找到促销优先级
@@ -111,15 +93,15 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
          *  .促销优先级库存可用量不存在,则表明促销已过期
          *  .促销优先级库存可用量小于1,则表明促销商品已售完,切换正常优先级.
          */
-        if (StringUtils.isBlank(serial)
+        if (StringUtils.isBlank(priority)
                 || !cacheClient.exists(priceKey)
                 || !cacheClient.exists(priorityUsable)
                 || Long.parseLong(cacheClient.get(priorityUsable))<1){
             //使用库存组指定优先级
-            serial = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
-            priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,serial);
+            priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
+            priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority);
             //库存组当前优先级库存可用量
-            priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,serial);
+            priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
             //若促销价格不存在,表明促销已过期,删除当前优先级的促销时间
             if (!cacheClient.exists(priceKey)) {
                 //TODO...删除促销期的优先级时间 ZREM serialsKey serial
@@ -130,7 +112,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         //4.获取当前优先级中SKU的销售价
         long salePrice = Long.parseLong(cacheClient.hget(priceKey,skuId));
         //5.进行减sku库存
-        String usableNumKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,serial);
+        String usableNumKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
         //若减少库存之后,剩余库存小于零,表示库存不足
         if (cacheClient.hincrBy(usableNumKey,skuId,-skuNum)<0){
             cacheClient.hincrBy(usableNumKey,skuId,skuNum);//需要将库存加回
@@ -140,12 +122,12 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         }
         //6.进行减少优先级库存可用量
         Long priorityUsableNum = cacheClient.decrBy(priorityUsable,skuNum);
-        String skuStoragekey = IPassUtils.genMcsSkuStorageUsableKey(tenantId,groupId,serial,skuId);
+        String skuStoragekey = IPassUtils.genMcsSkuStorageUsableKey(tenantId,groupId,priority,skuId);
         //8.组装返回值
         StorageNumRes numRes = new StorageNumRes();
         BeanUtils.copyProperties(numRes,product);
         numRes.setSkuId(skuId);
-        numRes.setSkuName(skuInfo.getSkuName());
+        numRes.setSkuName(product.getProdName());
         numRes.setSalePrice(salePrice);
         numRes.setStorageNum(getSkuNumSource(cacheClient,skuStoragekey,new Double(skuNum)));
         //变更数据库信息
@@ -213,7 +195,44 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
      */
     @Override
     public SkuStorageVo queryStorageOfSku(String tenantId, String skuId) {
-        return null;
+        ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+        Product product = getProductBySkuId(tenantId,skuId);
+        String groupId = product.getStorageGroupId();
+        //获取库存组的cacheKey
+        String groupKey = IPassUtils.genMcsStorageGroupKey(tenantId,groupId);
+        //使用当前优先级
+        String priority = getPromotionPriority(cacheClient,tenantId,groupId);
+        //优先级价格对应KEY
+        String priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority);
+        //优先级中库存可用量对应KEY
+        String priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
+
+        /* 以下情况使用正常优先级
+         *  .未找到促销优先级
+         *  .促销价格不存在,则表明促销已过期;
+         *  .促销优先级库存可用量不存在,则表明促销已过期
+         *  .促销优先级库存可用量小于1,则表明促销商品已售完,切换正常优先级.
+         */
+        if (StringUtils.isBlank(priority)
+                || !cacheClient.exists(priceKey)
+                || !cacheClient.exists(priorityUsable)
+                || Long.parseLong(cacheClient.get(priorityUsable))<1){
+            //使用库存组指定优先级
+            priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
+            priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority);
+            //库存组当前优先级库存可用量
+            priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
+        }
+        //获取当前优先级中SKU的销售价
+        long salePrice = Long.parseLong(cacheClient.hget(priceKey,skuId));
+        String skuUsableKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
+        //
+        Long skuUsable = Long.parseLong(cacheClient.hget(skuUsableKey,skuId));
+        SkuStorageVo skuStorageVo = new SkuStorageVo();
+        skuStorageVo.setUsableNum(skuUsable);
+        skuStorageVo.setSalePrice(salePrice);
+        skuStorageVo.setSkuId(skuId);
+        return skuStorageVo;
     }
 
     /**
@@ -251,5 +270,47 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         }
         skuNumMap.putAll(getSkuNumSource(cacheClient,cacheKey,-skuStorage));
         return skuNumMap;
+    }
+
+    /**
+     * 获取促销优先级
+     * @param cacheClient
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    private String getPromotionPriority(ICacheClient cacheClient,String tenantId,String groupId){
+        String serialsKey = IPassUtils.genMcsGroupSerialStartTimeKey(tenantId,groupId);
+        long nowTime = System.currentTimeMillis();
+        //使用优先级
+        String serial = "";
+        Set<String> serialSet = cacheClient.zrevrangeByScore(serialsKey,nowTime,0);
+        if (!CollectionUtil.isEmpty(serialSet)){
+            serial = serialSet.toArray(new String[0])[0];
+        }
+        return serial;
+    }
+
+    /**
+     * 根据SKU标识查询商品信息
+     * @param tenantId
+     * @param skuId
+     * @return
+     */
+    private Product getProductBySkuId(String tenantId,String skuId){
+        //查询SKU所属销售商品
+        ProdSku skuInfo = skuAtomSV.querySkuById(tenantId,skuId);
+        if (skuInfo==null){
+            logger.warn("单品信息不存在,租户ID:{},SKU标识:{}",tenantId,skuId);
+            throw new BusinessException("","单品信息不存在,单品标识:"+skuId);
+        }
+        //1. 查询商品是否为"在售"状态
+        Product product = productAtomSV.selectByProductId(tenantId,skuInfo.getProdId());
+        if (product==null || ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+            logger.warn("销售商品不存在,或已下架,租户ID:{},SKU标识:{},销售商品标识{}"
+                    ,tenantId,skuId,skuInfo.getProdId());
+            throw new BusinessException("","销售商品不存在,或已下架状态");
+        }
+        return product;
     }
 }

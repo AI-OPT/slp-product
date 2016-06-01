@@ -34,10 +34,6 @@ import com.alibaba.dubbo.config.annotation.Service;
 public class IProductDetailSVImpl implements IProductDetailSV {
 	private static Logger logger = LoggerFactory.getLogger(IProductDetailSVImpl.class);
 	@Autowired
-	IProdSkuAtomSV prodSkuAtomSV;
-	@Autowired
-	IProductAtomSV productAtomSV;
-	@Autowired
 	IProdSkuBusiSV prodSkuBusiSV;
 
 	@Override
@@ -47,30 +43,19 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
-		//TODO... 正式返回
-		prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
-
-		return demoResponse();
+		return prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+//		return demoResponse();
 	}
 
 	@Override
-	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest productSKURequest) throws BusinessException, SystemException {
-		// TODO Auto-generated method stub
-
-		ProductSKUConfigResponse ProductSKUConfigResponse = new ProductSKUConfigResponse();
-		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
-		ProductSKUConfigResponse.setResponseHeader(responseHeader);
-		List<ProductSKUConfigParamter> configParamterList = new LinkedList<ProductSKUConfigParamter>();
-		String[] keyArray = new String[] { "品牌", "型号", "颜色", "上市年份", "输入方式", "智能机", "操作系统版本", "CPU品牌", "CPU型号", "CPU频率" };
-		String[] valueArray = new String[] { "小米（MI）", "小米手机 5", "白色", "2016年", "触控", "是", "MIUI", "Qualcomm 骁龙", "骁龙820", "最高主频 1.8GHz" };
-		for (int i = 0; i < keyArray.length; i++) {
-			ProductSKUConfigParamter configParamter = new ProductSKUConfigParamter();
-			configParamter.setConfigName(keyArray[i]);
-			configParamter.setConfigValue(valueArray[i]);
-			configParamterList.add(configParamter);
+	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest skuReq)
+			throws BusinessException, SystemException {
+		CommonCheckUtils.checkTenantId(skuReq.getTenantId(),"");
+		if (StringUtils.isBlank(skuReq.getSkuId())
+				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
+			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
-		ProductSKUConfigResponse.setConfigParamterList(configParamterList);
-		return ProductSKUConfigResponse;
+		return prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
 	}
 
 	/**
@@ -174,4 +159,20 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		return productSKUResponse;
 	}
 
+	private ProductSKUConfigResponse demoConfigResponse(){
+		ProductSKUConfigResponse ProductSKUConfigResponse = new ProductSKUConfigResponse();
+		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
+		ProductSKUConfigResponse.setResponseHeader(responseHeader);
+		List<ProductSKUConfigParamter> configParamterList = new LinkedList<ProductSKUConfigParamter>();
+		String[] keyArray = new String[] { "品牌", "型号", "颜色", "上市年份", "输入方式", "智能机", "操作系统版本", "CPU品牌", "CPU型号", "CPU频率" };
+		String[] valueArray = new String[] { "小米（MI）", "小米手机 5", "白色", "2016年", "触控", "是", "MIUI", "Qualcomm 骁龙", "骁龙820", "最高主频 1.8GHz" };
+		for (int i = 0; i < keyArray.length; i++) {
+			ProductSKUConfigParamter configParamter = new ProductSKUConfigParamter();
+			configParamter.setConfigName(keyArray[i]);
+			configParamter.setConfigValue(valueArray[i]);
+			configParamterList.add(configParamter);
+		}
+//		ProductSKUConfigResponse.setConfigParamterList(configParamterList);
+		return ProductSKUConfigResponse;
+	}
 }

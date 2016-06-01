@@ -15,6 +15,10 @@ public class ProductSKUAttr implements Serializable{
 	 */
 	private String attrName;
 	/**
+	 * 属性类型
+	 */
+	private String attrType;
+	/**
 	 * 属性值集合
 	 */
 	private List<ProductSKUAttrValue> attrValueList;
@@ -38,5 +42,13 @@ public class ProductSKUAttr implements Serializable{
 	}
 	public void setAttrValueList(List<ProductSKUAttrValue> attrValueList) {
 		this.attrValueList = attrValueList;
+	}
+
+	public String getAttrType() {
+		return attrType;
+	}
+
+	public void setAttrType(String attrType) {
+		this.attrType = attrType;
 	}
 }
