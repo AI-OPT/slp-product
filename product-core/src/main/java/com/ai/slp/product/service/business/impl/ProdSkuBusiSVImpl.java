@@ -233,6 +233,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
      */
     @Override
     public ProductSKUResponse querySkuDetail(String tenantId, String skuId, String skuAttrs) {
+        logger.info("--== querySkuDetail start time:"+System.currentTimeMillis());
         ProdSku prodSku = selectSkuBySkuIdOrAttrs(tenantId,skuId,skuAttrs);
 
         //查询商品
@@ -414,6 +415,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     }
 
     private ProductSKUResponse genSkuResponse(String tenantId,Product product,ProdSku prodSku){
+        logger.info("--== genSkuResponse start time:"+System.currentTimeMillis());
         ProductSKUResponse skuResponse = new ProductSKUResponse();
         BeanUtils.copyProperties(skuResponse,prodSku);
         BeanUtils.copyProperties(skuResponse,product);
@@ -470,6 +472,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(tenantId,prodSku.getSkuId());
         skuResponse.setUsableNum(skuStorageVo.getUsableNum());
         skuResponse.setSalePrice(skuStorageVo.getSalePrice());
+        logger.info("--== genSkuResponse end time:"+System.currentTimeMillis());
         return skuResponse;
     }
 

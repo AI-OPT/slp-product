@@ -28,6 +28,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 
 	@Override
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest skuReq) throws BusinessException, SystemException {
+		logger.info("---= queryProducSKUById start time:"+System.currentTimeMillis());
 		CommonCheckUtils.checkTenantId(skuReq.getTenantId(),"");
 		if (StringUtils.isBlank(skuReq.getSkuId())
 				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
