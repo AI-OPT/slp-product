@@ -144,7 +144,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		productImage3.setVfsId("57455191d601800009c0b0d7");
 		productImageList.add(productImage3);
 		productSKUResponse.setProductImageList(productImageList);
-		String productInfoHtml = "<p><A href=\"#\"><img src=\"${_slpbase }/images/parameter-a.png\"></A></p>" + "<p><img src=\"${_slpbase }/images/parameter-b.png\"></p>"
+		String productInfoHtml = "<p><A><img src=\"${_slpbase }/images/parameter-a.png\"></A></p>" + "<p><img src=\"${_slpbase }/images/parameter-b.png\"></p>"
 				+ "<p><img src=\"${_slpbase }/images/parameter-c.png\"></p>" + "<p><img src=\"${_slpbase }/images/parameter-d.jpg\"></p>"
 				+ "<p><img src=\"${_slpbase }/images/parameter-e.png\"></p>";
 		productSKUResponse.setProDetailContent(productInfoHtml);
