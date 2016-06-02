@@ -69,6 +69,8 @@ public class IProductHomeSVImpl implements IProductHomeSV {
 
     @Override
     public List<ProductHomeResponse> queryHotProduct(ProductHomeRequest request) throws BusinessException, SystemException {
+        //入参校验
+        ValidateUtil.validateHomeHotProduct(request);
         IProductSearch productSearch = new ProductSearchImpl();
         String userid="";
         if(!StringUtil.isBlank(request.getUserid())){

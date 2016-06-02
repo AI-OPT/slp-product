@@ -32,4 +32,12 @@ public  final class ValidateUtil {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
         }
     }
+    public static void validateHomeHotProduct(ProductHomeRequest request) throws BusinessException {
+        if (request == null) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "商品首页查询入参不能为空");
+        }
+        if(StringUtil.isBlank(request.getAreaCode())){
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
+        }
+    }
 }
