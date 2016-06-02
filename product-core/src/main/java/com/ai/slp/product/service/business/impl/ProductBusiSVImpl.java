@@ -6,12 +6,7 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.slp.product.api.normproduct.param.AttrMap;
-import com.ai.slp.product.api.normproduct.param.AttrValInfo;
-import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
-import com.ai.slp.product.api.product.param.Product4List;
-import com.ai.slp.product.api.product.param.ProductListQuery;
-import com.ai.slp.product.api.product.param.ProductRoute;
+import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -309,23 +304,23 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @return
      */
     @Override
-    public AttrMap queryNoKeyAttrOfProduct(String tenantId, String productId) {
+    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String productId) {
         //查询商品信息
         Product product = productAtomSV.selectByProductId(tenantId,productId);
         if (product==null){
             logger.warn("未找到对应销售商品信息,租户ID:{},销售商品ID:{}",tenantId,productId);
             throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
         }
-        AttrMap attrMapOfNormProd = new AttrMap();
+        ProdAttrMap attrMapOfNormProd = new ProdAttrMap();
         Map<Long, List<Long>> attrAndValMap = new HashMap<>();
-        Map<Long, ProdCatAttrInfo> attrDefMap = new HashMap<>();
-        Map<Long, AttrValInfo> attrValDefMap = new HashMap<>();
+        Map<Long, CatAttrInfoForProd> attrDefMap = new HashMap<>();
+        Map<Long, ProdAttrValInfo> attrValDefMap = new HashMap<>();
         // 查询对应类目非关键属性
         List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
                 product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
         // 查询标准品对应属性的属性值
         for (ProdCatAttrAttch catAttrAttch : catAttrAttches) {
-            ProdCatAttrInfo catAttrDef = new ProdCatAttrInfo();
+            CatAttrInfoForProd catAttrDef = new CatAttrInfoForProd();
             BeanUtils.copyProperties(catAttrDef, catAttrAttch);
             List<Long> attrValDefList = new ArrayList<>();
             attrAndValMap.put(catAttrDef.getAttrId(), attrValDefList);
@@ -333,7 +328,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             // 查询销售商品非关键属性值
             List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(tenantId,productId,catAttrAttch.getAttrId());
             for (ProdAttr prodAttr : prodAttrs) {
-                AttrValInfo valDef = new AttrValInfo();
+                ProdAttrValInfo valDef = new ProdAttrValInfo();
                 BeanUtils.copyProperties(valDef, prodAttr);
                 valDef.setProductAttrValId(prodAttr.getProdAttrId());
                 valDef.setProductId(prodAttr.getProdId());

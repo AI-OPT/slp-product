@@ -19,7 +19,9 @@ public class ProductInfoQuery extends BaseInfo {
      * 商品标识,必填
      */
     @NotBlank(message = "商品标识不能为空",groups = {
-            IProductSV.QueryProductById.class, IProductServerSV.QueryRouteGroupOfProd.class})
+            IProductSV.QueryProductById.class,
+            IProductServerSV.QueryRouteGroupOfProd.class,
+            IProductSV.QueryNoKeyAttrInfo.class})
     private String productId;
 
     public String getProductId() {
