@@ -21,7 +21,7 @@ public class FastProductReq extends BaseInfo {
      * 销售地域省份编码,必填
      */
     @NotNull(message = "销售地域编码不能为空",groups = {IProductHomeSV.QueryFastProduct.class})
-    private Long provCode;
+    private Integer provCode;
     /**
      * 运营商,必填
      */
@@ -45,11 +45,11 @@ public class FastProductReq extends BaseInfo {
         this.productCatId = productCatId;
     }
 
-    public Long getProvCode() {
+    public Integer getProvCode() {
         return provCode;
     }
 
-    public void setProvCode(Long provCode) {
+    public void setProvCode(Integer provCode) {
         this.provCode = provCode;
     }
 
