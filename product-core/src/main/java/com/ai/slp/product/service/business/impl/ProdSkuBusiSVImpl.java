@@ -273,8 +273,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
                 tenantId,product.getStandedProdId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
         configResponse.getProductAttrList().addAll(getKeyAttr(keyAttrMap));
         //查询非关键属性
-        AttrMap noKeyAttrMap = productBusiSV.queryNoKeyAttrOfProduct(tenantId,product.getProdId());
-        configResponse.getProductAttrList().addAll(getKeyAttr(noKeyAttrMap));
+        ProdAttrMap noKeyAttrMap = productBusiSV.queryNoKeyAttrOfProduct(tenantId,product.getProdId());
+        configResponse.getProductAttrList().addAll(getNoKeyAttr(noKeyAttrMap));
         //查询SKU对应销售属性
         configResponse.getProductAttrList().addAll(getSkuAttr(product,skuId));
         return configResponse;
@@ -489,13 +489,17 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         for (ProdPicture picture:pictureList){
             ProductImage productImage = new ProductImage();
             BeanUtils.copyProperties(productImage,picture);
-            productImageList.add(productImage);
+            //将主图放在第一个位置
+            if (ProductConstants.ProdPicture.IsMainPic.YES.equals(picture.getIsMainPic())){
+                productImageList.add(0,productImage);
+            }else
+                productImageList.add(productImage);
         }
         return productImageList;
     }
 
     /**
-     * 获取关键/非关键属性的属性信息
+     * 获取关键属性的属性信息
      * @param attrMap
      * @return
      */
@@ -512,6 +516,35 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
             //查询对应属性值
             for (Long valId:attrAndVal.get(attrInfo.getAttrId())){
                 AttrValInfo valInfo = attrValDefMap.get(valId);
+                ProductSKUAttrValue attrValue = new ProductSKUAttrValue();
+                attrValue.setAttrvalueDefId(valInfo.getAttrValId());
+                attrValue.setAttrValueName(valInfo.getAttrVal());
+                attrValue.setAttrValueName2(valInfo.getAttrVal2());
+                attrValueList.add(attrValue);
+            }
+            skuAttrList.add(productSKUAttr);
+        }
+        return skuAttrList;
+    }
+
+    /**
+     * 获取关键属性的属性信息
+     * @param attrMap
+     * @return
+     */
+    private List<ProductSKUAttr> getNoKeyAttr(ProdAttrMap attrMap){
+        List<ProductSKUAttr> skuAttrList = new ArrayList<>();
+        Collection<CatAttrInfoForProd> attrInfos = attrMap.getAttrDefMap().values();
+        Map<Long,ProdAttrValInfo> attrValDefMap = attrMap.getAttrValDefMap();
+        Map<Long,List<Long>> attrAndVal = attrMap.getAttrAndVal();
+        for (CatAttrInfoForProd attrInfo:attrInfos){
+            ProductSKUAttr productSKUAttr = new ProductSKUAttr();
+            BeanUtils.copyProperties(productSKUAttr,attrInfo);
+            List<ProductSKUAttrValue> attrValueList = new ArrayList<>();
+            productSKUAttr.setAttrValueList(attrValueList);
+            //查询对应属性值
+            for (Long valId:attrAndVal.get(attrInfo.getAttrId())){
+                ProdAttrValInfo valInfo = attrValDefMap.get(valId);
                 ProductSKUAttrValue attrValue = new ProductSKUAttrValue();
                 attrValue.setAttrvalueDefId(valInfo.getAttrValId());
                 attrValue.setAttrValueName(valInfo.getAttrVal());

@@ -1,28 +1,20 @@
 package com.ai.slp.product.api.product.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
-import com.ai.slp.product.api.product.param.ProdSkuSalPrice;
-import com.ai.slp.product.api.product.param.Product4List;
-import com.ai.slp.product.api.product.param.ProductInfo;
-import com.ai.slp.product.api.product.param.ProductInfoQuery;
-import com.ai.slp.product.api.product.param.ProductListQuery;
-import com.ai.slp.product.api.product.param.SkuInfoMultSave;
-import com.ai.slp.product.api.product.param.SkuSetForProduct;
-import com.ai.slp.product.api.product.param.SkuSetForProductQuery;
+import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by jackieliu on 16/4/27.
@@ -120,5 +112,22 @@ public class IProductSVImpl implements IProductSV {
     public SkuSetForProduct querySkuSetForProduct(SkuSetForProductQuery query) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(query.getTenantId(),"");
         return prodSkuBusiSV.querySkuByProdId(query.getTenantId(),query.getProdId());
+    }
+
+    /**
+     * 查询单个商品的非关键属性
+     *
+     * @param queryInfo 商品标识信息
+     * @return 非关键属性
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0105
+     */
+    @Override
+    public ProdAttrMap queryNoKeyAttrInfo(ProductInfoQuery queryInfo) throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(queryInfo.getTenantId(),"");
+        return productBusiSV.queryNoKeyAttrOfProduct(queryInfo.getTenantId(),queryInfo.getProductId());
     }
 }

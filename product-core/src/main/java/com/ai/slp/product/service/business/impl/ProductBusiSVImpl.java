@@ -1,44 +1,41 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
+import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.slp.product.api.normproduct.param.AttrMap;
-import com.ai.slp.product.api.normproduct.param.AttrValInfo;
-import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
-import com.ai.slp.product.api.product.param.ProductRoute;
+import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
+import com.ai.slp.product.dao.mapper.attach.ProductAttach;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.*;
-import com.ai.slp.product.service.atom.interfaces.*;
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
+import com.ai.slp.product.vo.ProductPageQueryVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.product.param.Product4List;
-import com.ai.slp.product.api.product.param.ProductListQuery;
-import com.ai.slp.product.constants.ProductCatConstants;
-import com.ai.slp.product.constants.ProductConstants;
-import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
-import com.ai.slp.product.dao.mapper.attach.ProductAttach;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.storage.Storage;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
-import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.vo.ProductPageQueryVo;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -307,23 +304,23 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @return
      */
     @Override
-    public AttrMap queryNoKeyAttrOfProduct(String tenantId, String productId) {
+    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String productId) {
         //查询商品信息
         Product product = productAtomSV.selectByProductId(tenantId,productId);
         if (product==null){
             logger.warn("未找到对应销售商品信息,租户ID:{},销售商品ID:{}",tenantId,productId);
             throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
         }
-        AttrMap attrMapOfNormProd = new AttrMap();
+        ProdAttrMap attrMapOfNormProd = new ProdAttrMap();
         Map<Long, List<Long>> attrAndValMap = new HashMap<>();
-        Map<Long, ProdCatAttrInfo> attrDefMap = new HashMap<>();
-        Map<Long, AttrValInfo> attrValDefMap = new HashMap<>();
+        Map<Long, CatAttrInfoForProd> attrDefMap = new HashMap<>();
+        Map<Long, ProdAttrValInfo> attrValDefMap = new HashMap<>();
         // 查询对应类目非关键属性
         List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
                 product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
         // 查询标准品对应属性的属性值
         for (ProdCatAttrAttch catAttrAttch : catAttrAttches) {
-            ProdCatAttrInfo catAttrDef = new ProdCatAttrInfo();
+            CatAttrInfoForProd catAttrDef = new CatAttrInfoForProd();
             BeanUtils.copyProperties(catAttrDef, catAttrAttch);
             List<Long> attrValDefList = new ArrayList<>();
             attrAndValMap.put(catAttrDef.getAttrId(), attrValDefList);
@@ -331,8 +328,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             // 查询销售商品非关键属性值
             List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(tenantId,productId,catAttrAttch.getAttrId());
             for (ProdAttr prodAttr : prodAttrs) {
-                AttrValInfo valDef = new AttrValInfo();
+                ProdAttrValInfo valDef = new ProdAttrValInfo();
                 BeanUtils.copyProperties(valDef, prodAttr);
+                valDef.setProductAttrValId(prodAttr.getProdAttrId());
                 valDef.setProductId(prodAttr.getProdId());
                 valDef.setAttrValId(prodAttr.getAttrvalueDefId());
                 valDef.setAttrVal(prodAttr.getAttrValueName());

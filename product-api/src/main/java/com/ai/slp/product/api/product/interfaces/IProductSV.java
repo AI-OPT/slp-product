@@ -91,5 +91,18 @@ public interface IProductSV {
             throws BusinessException,SystemException;
     @interface QuerySkuSetForProduct{}
 
-
+    /**
+     * 查询单个商品的非关键属性
+     *
+     * @param productInfoQuery 商品标识信息
+     * @return 非关键属性
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode PRODUCT_0105
+     */
+    public ProdAttrMap queryNoKeyAttrInfo(ProductInfoQuery productInfoQuery)
+            throws BusinessException,SystemException;
+    @interface QueryNoKeyAttrInfo{}
 }
