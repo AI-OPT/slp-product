@@ -1,19 +1,28 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
+import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.constants.*;
+import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
+import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.*;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.util.IPassUtils;
 import com.ai.slp.route.api.routequery.interfaces.IRouteQuerySV;
 import com.ai.slp.route.api.routequery.param.RouteGroupQueryResult;
 import org.apache.commons.lang.StringUtils;
@@ -23,17 +32,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.storage.Storage;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
-import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 库存组操作 Created by jackieliu on 16/5/5.
@@ -62,6 +64,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	IStorageBusiSV storageBusiSV;
 	@Autowired
 	ISkuStorageAtomSV skuStorageAtomSV;
+	@Autowired
+	StorageNumDbBusiSVImpl storageNumDbBusiSV;
 
 	/**
 	 * 添加库存组
@@ -285,17 +289,24 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		{
 			throw new BusinessException("", groupId + "库存组已废弃,不允许变更状态");
 		}
-		// 启用
-		if (StorageConstants.StorageGroup.State.ACTIVE.equals(state)) {
-			startGroup(storageGroup, operId);
-			// 停用
-		} else if (StorageConstants.StorageGroup.State.STOP.equals(state)) {
-			stopGroup(storageGroup, operId);
-			// 废弃处理
-		} else if (StorageConstants.StorageGroup.State.DISCARD.equals(state)) {
-			discardGroup(storageGroup, operId);
-		} else
-			throw new BusinessException("", "无法识别的状态");
+		switch (state){
+			//启用
+			case StorageConstants.StorageGroup.State.ACTIVE:
+				startGroup(storageGroup, operId);
+				break;
+			//停用
+			case StorageConstants.StorageGroup.State.STOP:
+				stopGroup(storageGroup, operId);
+				break;
+			//废弃
+			case StorageConstants.StorageGroup.State.DISCARD:
+				discardGroup(storageGroup, operId);
+				break;
+			//不识别
+			default:
+				logger.warn("无法识别库存组状态:{}",state);
+				throw new BusinessException("", "无法识别的状态:" + state);
+		}
 	}
 
 	/**
@@ -439,6 +450,38 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		//查看当前优先级下是否有可用的库存量
 
 		//
+	}
+
+	/**
+	 * 刷新库存组缓存
+	 * @param storageGroup
+     */
+	public void flushStorageCache(StorageGroup storageGroup){
+		String tenantId = storageGroup.getTenantId(),groupId = storageGroup.getStorageGroupId();
+		ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+		//获取库存组的cacheKey
+		String groupKey = IPassUtils.genMcsStorageGroupKey(tenantId,groupId);
+		//设置库存组状态
+		cacheClient.hset(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE,storageGroup.getState());
+		//查询所有截止时间在当前时间之后的促销的库存,不包括废弃库存
+		List<Storage> storageList = storageAtomSV.queryTimeStorageOfGroup(storageGroup.getStorageGroupId(),false);
+		List<Short> priorityNumList = new ArrayList<>();
+		for (Storage storage:storageList){
+			//若已经处理,则进行下一个
+			if (priorityNumList.contains(storage.getPriorityNumber()))
+				continue;
+			priorityNumList.add(storage.getPriorityNumber());
+			storageNumDbBusiSV.flushPriorityStorage(tenantId,groupId,storage.getPriorityNumber(),false);
+		}
+		//查询当前启用库存
+		List<Storage> activeList = storageAtomSV.queryActive(tenantId,groupId,false);
+		//存在当前启用库存,则加载当前启用库存所属优先级
+		if (!CollectionUtil.isEmpty(activeList)){
+			Storage storage = activeList.get(0);
+			storageNumDbBusiSV.flushPriorityStorage(tenantId,groupId,storage.getPriorityNumber(),false);
+			//设置当前启用优先级
+			cacheClient.hset(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE,storage.getPriorityNumber().toString());
+		}
 	}
 
 }

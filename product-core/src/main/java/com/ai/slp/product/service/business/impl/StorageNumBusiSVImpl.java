@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import scala.Int;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -306,7 +305,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         }
         //1. 查询商品是否为"在售"状态
         Product product = productAtomSV.selectByProductId(tenantId,skuInfo.getProdId());
-        if (product==null || ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+        if (product==null || !ProductConstants.Product.State.IN_SALE.equals(product.getState())){
             logger.warn("销售商品不存在,或已下架,租户ID:{},SKU标识:{},销售商品标识{}"
                     ,tenantId,skuId,skuInfo.getProdId());
             throw new BusinessException("","销售商品不存在,或已下架状态");

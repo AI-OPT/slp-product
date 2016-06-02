@@ -2,6 +2,7 @@ package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 import java.util.List;
 
@@ -80,4 +81,10 @@ public interface IStorageGroupBusiSV {
      * @param nowPriority
      */
     public void changeUsePriority(String tenantId,String groupId,int nowPriority);
+
+    /**
+     * 刷新库存组缓存
+     * @param storageGroup
+     */
+    public void flushStorageCache(StorageGroup storageGroup);
 }

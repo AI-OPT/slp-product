@@ -1,10 +1,9 @@
 package com.ai.slp.product.api.webfront.param;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-
 import com.ai.opt.base.vo.BaseResponse;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 public class ProductSKUResponse extends BaseResponse{
 
@@ -55,7 +54,7 @@ public class ProductSKUResponse extends BaseResponse{
     /**
      * 有效周期
      */
-    private Integer activeCycle;
+    private Short activeCycle;
     /**
      * 单位
      */
@@ -164,12 +163,15 @@ public class ProductSKUResponse extends BaseResponse{
 	public void setActiveType(String activeType) {
 		this.activeType = activeType;
 	}
-	public Integer getActiveCycle() {
+
+	public Short getActiveCycle() {
 		return activeCycle;
 	}
-	public void setActiveCycle(Integer activeCycle) {
+
+	public void setActiveCycle(Short activeCycle) {
 		this.activeCycle = activeCycle;
 	}
+
 	public String getUnit() {
 		return unit;
 	}
@@ -215,5 +217,30 @@ public class ProductSKUResponse extends BaseResponse{
 
 	public void setProDetailContent(String proDetailContent) {
 		this.proDetailContent = proDetailContent;
+	}
+
+	@Override
+	public String toString() {
+		return "ProductSKUResponse{" +
+				"skuId='" + skuId + '\'' +
+				", skuName='" + skuName + '\'' +
+				", saleAttrs='" + saleAttrs + '\'' +
+				", state='" + state + '\'' +
+				", prodId='" + prodId + '\'' +
+				", prodName='" + prodName + '\'' +
+				", productSellPoint='" + productSellPoint + '\'' +
+				", activeType='" + activeType + '\'' +
+				", activeTime=" + activeTime +
+				", inactiveTime=" + inactiveTime +
+				", activeCycle=" + activeCycle +
+				", unit='" + unit + '\'' +
+				", productAttrList=" + productAttrList +
+				", productImageList=" + productImageList +
+				", usableNum=" + usableNum +
+				", salePrice=" + salePrice +
+				", saleNum=" + saleNum +
+				", commentNum=" + commentNum +
+				", proDetailContent='" + proDetailContent + '\'' +
+				'}';
 	}
 }

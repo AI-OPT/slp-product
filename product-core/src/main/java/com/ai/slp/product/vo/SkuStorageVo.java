@@ -41,4 +41,13 @@ public class SkuStorageVo {
     public void setSalePrice(Long salePrice) {
         this.salePrice = salePrice;
     }
+
+    @Override
+    public String toString() {
+        return "SkuStorageVo{" +
+                "skuId='" + skuId + '\'' +
+                ", usableNum=" + usableNum +
+                ", salePrice=" + salePrice +
+                '}';
+    }
 }

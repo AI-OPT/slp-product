@@ -1,13 +1,5 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.StorageConstants;
@@ -17,6 +9,13 @@ import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -212,11 +211,11 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	 * 查询现在正促销优先级的库存,可用量大于零
 	 *
 	 * @param groupId
-	 * @param hasDestory 是否包括废弃的库存
+	 * @param hasDiscard 是否包括废弃的库存
 	 * @return
 	 */
 	@Override
-	public List<Storage> queryTimeActiveOfNow(String groupId, boolean hasDestory) {
+	public List<Storage> queryTimeActiveOfNow(String groupId, boolean hasDiscard) {
 		StorageCriteria example = new StorageCriteria();
 		example.setOrderByClause("PRIORITY_NUMBER");
 		StorageCriteria.Criteria criteria = example.createCriteria();
@@ -225,9 +224,30 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 				.andUsableNumGreaterThan(0l)
 				.andActiveTimeLessThanOrEqualTo(nowTime)
 				.andInactiveTimeGreaterThan(nowTime);
-		if (!hasDestory){
+		if (!hasDiscard)
 			criteria.andStateNotIn(DISCARD_LIST);
-		}
+
+		return storageMapper.selectByExample(example);
+	}
+
+	/**
+	 * 查询库组组下促销的库存,促销截止时间在当前时间之后
+	 *
+	 * @param groupId
+	 * @param hasDiscard
+	 * @return
+	 */
+	@Override
+	public List<Storage> queryTimeStorageOfGroup(String groupId, boolean hasDiscard) {
+		StorageCriteria example = new StorageCriteria();
+		example.setOrderByClause("PRIORITY_NUMBER");
+		StorageCriteria.Criteria criteria = example.createCriteria();
+		Timestamp nowTime = DateUtils.currTimeStamp();
+		criteria.andStorageGroupIdEqualTo(groupId)
+				.andInactiveTimeGreaterThan(nowTime);
+		if (!hasDiscard)
+			criteria.andStateNotIn(DISCARD_LIST);
+
 		return storageMapper.selectByExample(example);
 	}
 

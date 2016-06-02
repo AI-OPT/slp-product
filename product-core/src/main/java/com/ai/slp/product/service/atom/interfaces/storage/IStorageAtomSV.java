@@ -109,8 +109,17 @@ public interface IStorageAtomSV {
     /**
      * 查询现在正促销优先级的库存,可用量大于零
      * @param groupId
-     * @param hasDestory 是否包括废弃的库存
+     * @param hasDiscard 是否包括废弃的库存
      * @return
      */
-    public List<Storage> queryTimeActiveOfNow(String groupId,boolean hasDestory);
+    public List<Storage> queryTimeActiveOfNow(String groupId,boolean hasDiscard);
+
+    /**
+     * 查询库组组下促销的库存,促销截止时间在当前时间之后
+     * @param groupId
+     * @param hasDiscard
+     * @return
+     */
+    public List<Storage> queryTimeStorageOfGroup(String groupId,boolean hasDiscard);
+
 }
