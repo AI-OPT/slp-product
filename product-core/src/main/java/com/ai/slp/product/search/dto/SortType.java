@@ -4,7 +4,7 @@ package com.ai.slp.product.search.dto;
  * Created by xin on 16-5-25.
  */
 public enum SortType {
-    DESC("desc"), ASC("desc");
+    DESC("desc"), ASC("asc");
 
     private String value;
 

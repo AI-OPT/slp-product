@@ -69,6 +69,8 @@ public class IProductHomeSVImpl implements IProductHomeSV {
 
     @Override
     public List<ProductHomeResponse> queryHotProduct(ProductHomeRequest request) throws BusinessException, SystemException {
+        //入参校验
+        ValidateUtil.validateHomeHotProduct(request);
         IProductSearch productSearch = new ProductSearchImpl();
         String userid="";
         if(!StringUtil.isBlank(request.getUserid())){
@@ -82,7 +84,7 @@ public class IProductHomeSVImpl implements IProductHomeSV {
         }
         ProductSearchCriteria productSearchCriteria =
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                .orderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.MAX_SIZE).build();
+                .addOrderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.MAX_SIZE).build();
         Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
         List<Map<String,Object>> list = result.getSearchList();
         String info = JSON.toJSONString(list);

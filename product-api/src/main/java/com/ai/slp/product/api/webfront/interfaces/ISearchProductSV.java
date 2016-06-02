@@ -37,4 +37,14 @@ public interface ISearchProductSV {
      * @ApiCode
      */
     List<ProductData> queryHotSellProduct(ProductQueryRequest request) throws BusinessException, SystemException;
+    /**
+     * 商品搜索查询
+     * @param request
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author zhanglh
+     * @ApiCode
+     */
+    ProductQueryResponse searchProduct(ProductQueryRequest request) throws BusinessException, SystemException;
 }

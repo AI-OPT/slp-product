@@ -33,6 +33,8 @@ public class ISearchProductSVImpl implements ISearchProductSV {
     @Override
     public ProductQueryResponse queryProductPage(ProductQueryRequest request)
             throws BusinessException, SystemException {
+        //参数校验
+        ValidateUtil.validateQueryProduct(request);
         ProductQueryResponse response = new ProductQueryResponse();
         PageInfo<ProductData> pageinfo = new PageInfo<ProductData>();
         List<ProductData> results = new ArrayList<ProductData>();
@@ -47,16 +49,9 @@ public class ISearchProductSVImpl implements ISearchProductSV {
         }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUserType())){
             user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
         }
-         ProductSearchCriteria productSearchCriteria ;
-         if(StringUtil.isBlank(request.getSkuName())){
-              productSearchCriteria =
+         ProductSearchCriteria productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
                      .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
-         }else{
-              productSearchCriteria =
-                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .skuNameLike(request.getSkuName()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
-         }
         Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
         List<Map<String,Object>> reslist = result.getSearchList();
         String info = JSON.toJSONString(reslist);
@@ -102,11 +97,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
          if(StringUtil.isBlank(request.getProductCatId())){
               productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .orderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
+                     .addOrderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
          }else{
               productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .categoryIdIs(request.getProductCatId()).orderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
+                     .categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
          }
         Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
         List<Map<String,Object>> objList = result.getSearchList();
@@ -123,6 +118,57 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             proList.add(product);
         }
         return proList;
+    }
+
+    @Override
+    public ProductQueryResponse searchProduct(ProductQueryRequest request)
+            throws BusinessException, SystemException {
+        //参数校验
+        ValidateUtil.validateSearch(request);
+        ProductQueryResponse response = new ProductQueryResponse();
+        PageInfo<ProductData> pageinfo = new PageInfo<ProductData>();
+        List<ProductData> results = new ArrayList<ProductData>();
+        IProductSearch productSearch = new ProductSearchImpl();
+        String userid="";
+        if(!StringUtil.isBlank(request.getUserId())){
+            userid = request.getUserId();
+        }
+        UserSearchAuthority user = new UserSearchAuthority(UserSearchAuthority.UserType.PERSONAL,userid);
+         if(ProductHomeConstants.UserType.ENTERPRISE.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,userid);
+        }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
+        }
+         ProductSearchCriteria productSearchCriteria;
+         Results<Map<String, Object>>  result = new  Results<Map<String, Object>>();
+         if(!StringUtil.isBlank(request.getSkuName())){
+             productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
+               result = productSearch.search(productSearchCriteria);
+         }
+        List<Map<String,Object>> reslist = result.getSearchList();
+        String info = JSON.toJSONString(reslist);
+        List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){}); 
+        for(SKUInfo sku:skuList){
+            ProductData product = new ProductData();
+            product.setSalePrice(sku.getPrice());
+            product.setProdName(sku.getProductname());
+            product.setProdId(sku.getProductid());
+            String imageinfo = JSON.toJSONString(sku.getImageinfo());
+            product.setImageinfo(ConvertImageUtil.convert(imageinfo));
+            //product.setImageinfo(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
+            String images = JSON.toJSONString(sku.getThumbnail());
+            //List<ProductImage> imageList = JSON.parseObject(images,new TypeReference<List<ProductImage>>(){}); 
+            product.setThumbnail(ConvertImageUtil.convertThum(images));
+            results.add(product);
+        }
+        pageinfo.setResult(results);
+        pageinfo.setPageSize(request.getPageInfo().getPageSize());
+        pageinfo.setPageNo(request.getPageInfo().getPageNo());
+        pageinfo.setCount(skuList.size());
+        response.setPageInfo(pageinfo);
+        return response;
     }
 
 }
