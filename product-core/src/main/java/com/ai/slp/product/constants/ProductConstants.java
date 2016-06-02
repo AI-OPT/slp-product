@@ -72,6 +72,21 @@ public final class ProductConstants {
              */
             public static final String DISCARD = "7";
         }
+
+        public final class basicOrgId{
+            /**
+             * 中国移动
+             */
+            public static final String MOBILE = "10";
+            /**
+             * 中国联通
+             */
+            public static final String UNICOM = "12";
+            /**
+             * 中国电信
+             */
+            public static final String TELECOM = "11";
+        }
     }
 
 
@@ -159,6 +174,27 @@ public final class ProductConstants {
              * 无效状态
              */
             public static final String INACTIVE = "0";
+        }
+    }
+
+    public final class ProdAudiences{
+        public final class userType{
+            /**
+             * 个人
+             */
+            public static final String PERSON = "10";
+            /**
+             * 企业
+             */
+            public static final String ENTERPRISE = "11";
+            /**
+             * 代理商
+             */
+            public static final String AGENT = "12";
+            /**
+             * 供应商
+             */
+            public static final String SUPPLIER = "13";
         }
     }
 }

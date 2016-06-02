@@ -5,7 +5,11 @@ import com.ai.slp.product.api.product.param.ProdAttrMap;
 import com.ai.slp.product.api.product.param.Product4List;
 import com.ai.slp.product.api.product.param.ProductListQuery;
 import com.ai.slp.product.api.product.param.ProductRoute;
+import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
+import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+
+import java.util.List;
 
 
 /**
@@ -66,4 +70,11 @@ public interface IProductBusiSV {
      * @return
      */
     public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String productId);
+
+    /**
+     * 查询相关的快充产品
+     * @param req
+     * @return
+     */
+    public List<FastProductInfoRes> queryFastInfoList(FastProductReq req);
 }

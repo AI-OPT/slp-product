@@ -7,6 +7,8 @@ import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
+import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -351,6 +353,12 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         attrMapOfNormProd.setAttrValDefMap(attrValDefMap);
         return attrMapOfNormProd;
 
+    }
+
+    @Override
+    public List<FastProductInfoRes> queryFastInfoList(FastProductReq req) {
+
+        return null;
     }
 
 }
