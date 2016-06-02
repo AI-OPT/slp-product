@@ -2,12 +2,11 @@ package com.ai.slp.product.search.dto;
 
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.paas.ipaas.search.vo.SearchfieldVo;
+import com.ai.paas.ipaas.search.vo.SortField;
 import com.ai.slp.product.search.constants.SearchMetaFieldConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//import com.ai.paas.ipaas.search.vo.SortField;
 
 /**
  * Created by xin on 16-5-25.
@@ -15,7 +14,7 @@ import java.util.List;
 public class ProductSearchCriteria {
 
     private List<SearchfieldVo> searchfieldVos;
-//    private List<SortField> sortFields = new ArrayList<SortField>();
+    private List<SortField> sortFields = new ArrayList<SortField>();
     //private String orderByField = SearchMetaFieldConfig.SALE_NUM;
     //private SortType sortType = SortType.DESC;
     private int maxSearchSize = 100;
@@ -129,7 +128,7 @@ public class ProductSearchCriteria {
 
         // 排序
         public ProductSearchCriteriaBuilder addOrderBy(String orderByField, SortType sortType) {
-//            productSearchCriteria.sortFields.add(new SortField(orderByField, sortType.getValue()));
+            productSearchCriteria.sortFields.add(new SortField(orderByField, sortType.getValue()));
             return this;
         }
 
@@ -161,9 +160,9 @@ public class ProductSearchCriteria {
         return searchfieldVos;
     }
 
-//    public List<SortField> getSortFields() {
-//        return sortFields;
-//    }
+    public List<SortField> getSortFields() {
+        return sortFields;
+    }
 
     public int getMaxSearchSize() {
         return maxSearchSize;
