@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business;
 
+import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import org.junit.Test;
@@ -22,5 +23,11 @@ public class IProdSkuBusiSVTest {
     public void querySkuDetailTest(){
         ProductSKUResponse skuResponse = prodSkuBusiSV.querySkuDetail("SLP","1000000000002401",null);
         System.out.println(skuResponse.toString());
+    }
+
+    @Test
+    public void querySkuAttrTest(){
+        ProductSKUConfigResponse skuConfigResponse = prodSkuBusiSV.querySkuAttr("SLP","1000000000002401",null);
+        System.out.println(skuConfigResponse.getProductAttrList().size());
     }
 }
