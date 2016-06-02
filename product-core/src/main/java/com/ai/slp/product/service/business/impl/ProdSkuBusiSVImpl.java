@@ -489,7 +489,11 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         for (ProdPicture picture:pictureList){
             ProductImage productImage = new ProductImage();
             BeanUtils.copyProperties(productImage,picture);
-            productImageList.add(productImage);
+            //将主图放在第一个位置
+            if (ProductConstants.ProdPicture.IsMainPic.YES.equals(picture.getIsMainPic())){
+                productImageList.add(0,productImage);
+            }else
+                productImageList.add(productImage);
         }
         return productImageList;
     }

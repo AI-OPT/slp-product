@@ -1,12 +1,6 @@
 package com.ai.slp.product.service.atom.impl.product;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuCriteria;
@@ -14,6 +8,10 @@ import com.ai.slp.product.dao.mapper.interfaces.product.ProdSkuMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/6.
@@ -83,7 +81,8 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 	@Override
 	public ProdSku querySkuByAttrs(String tenantId, String attrs) {
 		ProdSkuCriteria example = new ProdSkuCriteria();
-		example.createCriteria().andTenantIdEqualTo(tenantId)
+		example.createCriteria().andStateEqualTo(ProductConstants.ProdSku.State.ACTIVE)
+				.andTenantIdEqualTo(tenantId)
 				.andSaleAttrsEqualTo(attrs);
 		List<ProdSku> prodSkuList = prodSkuMapper.selectByExample(example);
 		return CollectionUtil.isEmpty(prodSkuList)?null:prodSkuList.get(0);

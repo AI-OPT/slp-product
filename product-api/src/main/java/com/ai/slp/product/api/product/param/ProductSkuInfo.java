@@ -13,13 +13,17 @@ public class ProductSkuInfo extends BaseResponse {
      */
     private String skuId;
     /**
+     * sku名称
+     */
+    private String skuName;
+    /**
      * 销售商品标识
      */
-    private String productId;
+    private String prodId;
     /**
      * 商品名称
      */
-    private String productName;
+    private String prodName;
     /**
      * 属性串
      */
@@ -33,9 +37,13 @@ public class ProductSkuInfo extends BaseResponse {
      */
     private String vfsId;
     /**
+     * 图片扩展名
+     */
+    private String picType;
+    /**
      * 库存可用量
      */
-    private long usableNum;
+    private Long usableNum;
     /**
      * 销售价
      */
@@ -47,22 +55,6 @@ public class ProductSkuInfo extends BaseResponse {
 
     public void setSkuId(String skuId) {
         this.skuId = skuId;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
     }
 
     public String getSaleAttrs() {
@@ -103,5 +95,41 @@ public class ProductSkuInfo extends BaseResponse {
 
     public void setSalePrice(Long salePrice) {
         this.salePrice = salePrice;
+    }
+
+    public String getSkuName() {
+        return skuName;
+    }
+
+    public void setSkuName(String skuName) {
+        this.skuName = skuName;
+    }
+
+    public String getProdId() {
+        return prodId;
+    }
+
+    public void setProdId(String prodId) {
+        this.prodId = prodId;
+    }
+
+    public String getProdName() {
+        return prodName;
+    }
+
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
+    }
+
+    public String getPicType() {
+        return picType;
+    }
+
+    public void setPicType(String picType) {
+        this.picType = picType;
+    }
+
+    public void setUsableNum(Long usableNum) {
+        this.usableNum = usableNum;
     }
 }
