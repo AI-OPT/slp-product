@@ -46,6 +46,10 @@ public class ProductQueryRequest extends BaseInfo {
      * skuID
      */
     private String skuId;
+    /**
+     * 卖点
+     */
+    private String productSellPoint;
 
     private PageInfo<ProductData> pageInfo;
 
@@ -119,6 +123,14 @@ public class ProductQueryRequest extends BaseInfo {
 
     public void setSkuId(String skuId) {
         this.skuId = skuId;
+    }
+
+    public String getProductSellPoint() {
+        return productSellPoint;
+    }
+
+    public void setProductSellPoint(String productSellPoint) {
+        this.productSellPoint = productSellPoint;
     }
 
 }

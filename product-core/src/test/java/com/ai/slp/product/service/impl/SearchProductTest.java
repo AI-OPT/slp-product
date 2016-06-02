@@ -25,7 +25,7 @@ public class SearchProductTest {
         ProductQueryRequest request = new ProductQueryRequest();
         PageInfo<ProductData> pageInfo = new PageInfo<ProductData>();
         pageInfo.setPageNo(1);
-        pageInfo.setPageSize(10);
+       pageInfo.setPageSize(10);
         request.setAreaCode("81");
         request.setProductCatId("10000010010000");
         request.setBasicOrgIdIs("12");
@@ -41,5 +41,17 @@ public class SearchProductTest {
         request.setAreaCode("81");
         List<ProductData> response = iSearchProductSV.queryHotSellProduct(request);
         System.out.println("result="+JSON.toJSONString(response));
+    }
+    @Test
+    public void serach(){
+        ProductQueryRequest request = new ProductQueryRequest();
+        PageInfo<ProductData> pageInfo = new PageInfo<ProductData>();
+        pageInfo.setPageNo(1);
+        pageInfo.setPageSize(10);
+        //request.setAreaCode("81");
+        request.setSkuName("天津");
+        request.setPageInfo(pageInfo);
+        ProductQueryResponse response = iSearchProductSV.searchProduct(request);
+        System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));
     }
 }

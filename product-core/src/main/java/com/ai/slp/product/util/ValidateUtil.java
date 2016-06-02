@@ -1,43 +1,95 @@
 package com.ai.slp.product.util;
 
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.webfront.param.ProductHomeRequest;
 import com.ai.slp.product.api.webfront.param.ProductQueryRequest;
 import com.ai.slp.product.constants.ProductExceptCode;
 
+public final class ValidateUtil {
 
-public  final class ValidateUtil {
-    
     public static void validateHomeProduct(ProductHomeRequest request) throws BusinessException {
         if (request == null) {
-            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "商品首页查询入参不能为空");
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
+                    "入参不能为空");
         }
-        if(StringUtil.isBlank(request.getAreaCode())){
+        if (StringUtil.isBlank(request.getAreaCode())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
         }
-        if(StringUtil.isBlank(request.getBasicOrgIdIs())){
+        if (StringUtil.isBlank(request.getBasicOrgIdIs())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "代理商不能为空");
         }
-        if(StringUtil.isBlank(request.getProductCatId())){
+        if (StringUtil.isBlank(request.getProductCatId())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "类目不能为空");
         }
     }
+
     public static void validateHotProduct(ProductQueryRequest request) throws BusinessException {
         if (request == null) {
-            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "商品首页查询入参不能为空");
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
+                    "入参不能为空");
         }
-        if(StringUtil.isBlank(request.getAreaCode())){
+        if (StringUtil.isBlank(request.getAreaCode())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
         }
     }
+
     public static void validateHomeHotProduct(ProductHomeRequest request) throws BusinessException {
         if (request == null) {
-            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "商品首页查询入参不能为空");
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
+                    "入参不能为空");
         }
-        if(StringUtil.isBlank(request.getAreaCode())){
+        if (StringUtil.isBlank(request.getAreaCode())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
+        }
+    }
+
+    public static void validateQueryProduct(ProductQueryRequest request) throws BusinessException {
+        if (request == null) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
+                    "入参不能为空");
+        }
+        if (StringUtil.isBlank(request.getAreaCode())) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
+        }
+        if (StringUtil.isBlank(request.getBasicOrgIdIs())) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "代理商不能为空");
+        }
+        if (StringUtil.isBlank(request.getProductCatId())) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "类目不能为空");
+        }
+        if (StringUtil.isBlank(request.getAttrDefId())) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
+                    "属性定义值ID不能为空");
+        }
+        if (request.getPageInfo() == null) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "分页信息不能为空");
+        } else {
+            if (request.getPageInfo().getPageNo() == null) {
+                throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "页码不能为空");
+            } else if (request.getPageInfo().getPageSize() == null) {
+                throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
+                        "分页大小不能为空");
+            }
+        }
+    }
+    public static void validateSearch(ProductQueryRequest request) throws BusinessException {
+        if (request == null) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
+                    "入参不能为空");
+        }
+        if (StringUtil.isBlank(request.getAreaCode())) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
+        }
+        if (request.getPageInfo() == null) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "分页信息不能为空");
+        } else {
+            if (request.getPageInfo().getPageNo() == null) {
+                throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "页码不能为空");
+            } else if (request.getPageInfo().getPageSize() == null) {
+                throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
+                        "分页大小不能为空");
+            }
         }
     }
 }
