@@ -18,7 +18,7 @@ public class ProductSearchImpl implements IProductSearch {
     public Results<Map<String, Object>> search(ProductSearchCriteria criteria) {
         ISearchClient searchClient = SESClientFactory.getSearchClient(Constants.SearchNameSpace);
         return searchClient.search(criteria.getSearchfieldVos(), criteria.getStartSize(), criteria.getMaxSearchSize(),
-                criteria.getOrderByField(), criteria.getSortType().getValue());
+                criteria.getSortFields());
     }
 
     @Override

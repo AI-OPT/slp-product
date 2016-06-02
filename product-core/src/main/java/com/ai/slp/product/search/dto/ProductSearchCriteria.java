@@ -2,6 +2,7 @@ package com.ai.slp.product.search.dto;
 
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.paas.ipaas.search.vo.SearchfieldVo;
+import com.ai.paas.ipaas.search.vo.SortField;
 import com.ai.slp.product.search.constants.SearchMetaFieldConfig;
 
 import java.util.ArrayList;
@@ -13,9 +14,9 @@ import java.util.List;
 public class ProductSearchCriteria {
 
     private List<SearchfieldVo> searchfieldVos;
-
-    private String orderByField = SearchMetaFieldConfig.SALE_NUM;
-    private SortType sortType = SortType.DESC;
+    private List<SortField> sortFields = new ArrayList<SortField>();
+    //private String orderByField = SearchMetaFieldConfig.SALE_NUM;
+    //private SortType sortType = SortType.DESC;
     private int maxSearchSize = 100;
     private int startSize = 0;
 
@@ -126,15 +127,14 @@ public class ProductSearchCriteria {
 
 
         // 排序
-        public ProductSearchCriteriaBuilder orderBy(String orderByField, SortType sortType) {
-            productSearchCriteria.orderByField = orderByField;
-            productSearchCriteria.sortType = sortType;
+        public ProductSearchCriteriaBuilder addOrderBy(String orderByField, SortType sortType) {
+            productSearchCriteria.sortFields.add(new SortField(orderByField, sortType.getValue()));
             return this;
         }
 
         // 排序，默认降序排，字段名称在Constants类中
-        public ProductSearchCriteriaBuilder orderBy(String orderByField) {
-            return orderBy(orderByField, SortType.DESC);
+        public ProductSearchCriteriaBuilder addOrderBy(String orderByField) {
+            return addOrderBy(orderByField, SortType.DESC);
         }
 
         // 开始的个数
@@ -160,12 +160,8 @@ public class ProductSearchCriteria {
         return searchfieldVos;
     }
 
-    public String getOrderByField() {
-        return orderByField;
-    }
-
-    public SortType getSortType() {
-        return sortType;
+    public List<SortField> getSortFields() {
+        return sortFields;
     }
 
     public int getMaxSearchSize() {

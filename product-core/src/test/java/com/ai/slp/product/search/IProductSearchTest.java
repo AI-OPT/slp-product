@@ -2,6 +2,7 @@ package com.ai.slp.product.search;
 
 import com.ai.slp.product.search.api.IProductSearch;
 import com.ai.slp.product.search.api.impl.ProductSearchImpl;
+import com.ai.slp.product.search.constants.SearchMetaFieldConfig;
 import com.ai.slp.product.search.dto.ProductSearchCriteria;
 import com.ai.slp.product.search.dto.UserSearchAuthority;
 import com.alibaba.fastjson.JSON;
@@ -15,7 +16,7 @@ public class IProductSearchTest {
         ProductSearchCriteria productSearchCriteria =
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder("81",
                         new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,""))
-                .build();
+                .addOrderBy(SearchMetaFieldConfig.SALE_NUM).build();
         System.out.println(JSON.toJSONString(productSearch.search(productSearchCriteria)));
         System.out.println(productSearch.search(productSearchCriteria).getCount() == 2);
     }
