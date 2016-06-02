@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.search.vo.Results;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.webfront.interfaces.ISearchProductSV;
@@ -141,11 +142,30 @@ public class ISearchProductSVImpl implements ISearchProductSV {
         }
          ProductSearchCriteria productSearchCriteria;
          Results<Map<String, Object>>  result = new  Results<Map<String, Object>>();
+         //类目集合
+         Results<Map<String, Long>>  productCatIds = new  Results<Map<String, Long>>();
+         //类目ID
+         String productCatId ="";
+         //根据卖点或单品名称查询类目
          if(!StringUtil.isBlank(request.getSkuName())){
              productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
                      .skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
-               result = productSearch.search(productSearchCriteria);
+             productCatIds = productSearch.searchCategory(productSearchCriteria);
+         }
+         if(!CollectionUtil.isEmpty(productCatIds.getSearchList())){
+             //获取第一个类目
+           List<Map<String,Long>> proIdlist = productCatIds.getSearchList();
+           Map<String,Long> idMap = proIdlist.get(0);
+           for (String obj : idMap.keySet()) {
+                productCatId=obj;
+           }
+         }
+         if(!StringUtil.isBlank(productCatId) && !StringUtil.isBlank(request.getSkuName())){
+             productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .productCategoryIdIs(productCatId).skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
+            result = productSearch.search(productSearchCriteria); 
          }
         List<Map<String,Object>> reslist = result.getSearchList();
         String info = JSON.toJSONString(reslist);

@@ -17,7 +17,7 @@ public class IProductSearchTest {
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder("81",
                         new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,""))
                 .addOrderBy(SearchMetaFieldConfig.SALE_NUM).build();
-        System.out.println(JSON.toJSONString(productSearch.search(productSearchCriteria)));
+        System.out.println(JSON.toJSONString(productSearch.searchCategory(productSearchCriteria)));
         System.out.println(productSearch.search(productSearchCriteria).getCount() == 2);
     }
 }
