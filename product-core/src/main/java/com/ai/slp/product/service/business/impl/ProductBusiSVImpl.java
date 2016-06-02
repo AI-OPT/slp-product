@@ -14,13 +14,10 @@ import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
 import com.ai.slp.product.api.product.param.ProductRoute;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-import com.ai.slp.product.dao.mapper.bo.ProdCatAttrCriteria;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
+import com.ai.slp.product.dao.mapper.bo.product.*;
+import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
-import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +34,8 @@ import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.attach.ProductAttach;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.vo.ProductPageQueryVo;
@@ -57,8 +48,6 @@ import com.ai.slp.product.vo.ProductPageQueryVo;
 public class ProductBusiSVImpl implements IProductBusiSV {
     private static Logger logger = LoggerFactory.getLogger(ProductBusiSVImpl.class);
     @Autowired
-    IProdSkuBusiSV prodSkuBusiSV;
-    @Autowired
     IStandedProductAtomSV standedProductAtomSV;
     @Autowired
     IProductAtomSV productAtomSV;
@@ -67,11 +56,15 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     @Autowired
     IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
     @Autowired
+    IProdAttrValDefAtomSV attrValDefAtomSV;
+    @Autowired
     IStorageGroupAtomSV storageGroupAtomSV;
     @Autowired
     IStorageAtomSV storageAtomSV;
     @Autowired
     IProdSkuAtomSV prodSkuAtomSV;
+    @Autowired
+    IProdSkuLogAtomSV prodSkuLogAtomSV;
     @Autowired
     IProdAttrAtomSV prodAttrAtomSV;
     @Autowired
@@ -128,7 +121,11 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                 prodSku.setSerialNumber((short)0);
                 prodSku.setState(ProductConstants.ProdSku.State.ACTIVE);
                 prodSku.setOperId(operId);
-                prodSkuBusiSV.addSku(prodSku);
+                if (prodSkuAtomSV.createObj(prodSku)>0){
+                    ProdSkuLog prodSkuLog = new ProdSkuLog();
+                    BeanUtils.copyProperties(prodSkuLog,prodSku);
+                    prodSkuLogAtomSV.install(prodSkuLog);
+                }
             }
         }
         return installNum;
@@ -340,11 +337,12 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                 valDef.setAttrValId(prodAttr.getAttrvalueDefId());
                 valDef.setAttrVal(prodAttr.getAttrValueName());
                 valDef.setAttrVal2(prodAttr.getAttrValueName2());
+                //查询属性值
                 if (prodAttr.getAttrvalueDefId() != null) {
-//                    ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId,
-//                            prodAttr.getAttrvalueDefId());
-//                    if (attrvalueDef != null)
-//                        valDef.setAttrVal(attrvalueDef.getAttrValueName());
+                    ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId,
+                            prodAttr.getAttrvalueDefId());
+                    if (attrvalueDef != null)
+                        valDef.setAttrVal(attrvalueDef.getAttrValueName());
                 }
                 attrValDefMap.put(valDef.getProductAttrValId(), valDef);
                 attrValDefList.add(valDef.getProductAttrValId());

@@ -29,10 +29,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
-import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
-import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
-import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
-import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.service.business.interfaces.*;
 import com.ai.slp.product.vo.SkuStorageVo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -53,6 +50,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     private static Logger logger = LoggerFactory.getLogger(ProdSkuBusiSVImpl.class);
     @Autowired
     IProductAtomSV productAtomSV;
+    @Autowired
+    IProductBusiSV productBusiSV;
     @Autowired
     IProdCatAttrAtomSV prodCatAttrAtomSV;
     @Autowired
@@ -269,9 +268,12 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         ProductSKUConfigResponse configResponse = new ProductSKUConfigResponse();
         configResponse.setProductAttrList(new ArrayList<ProductSKUAttr>());
         //查询关键属性
-        configResponse.getProductAttrList().addAll(getKeyAttr(product));
+        AttrMap keyAttrMap = normProductBusiSV.queryAttrOfProduct(
+                tenantId,product.getStandedProdId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
+        configResponse.getProductAttrList().addAll(getKeyAttr(keyAttrMap));
         //查询非关键属性
-
+        AttrMap noKeyAttrMap = productBusiSV.queryNoKeyAttrOfProduct(tenantId,product.getProdId());
+        configResponse.getProductAttrList().addAll(getKeyAttr(noKeyAttrMap));
         //查询SKU对应销售属性
         configResponse.getProductAttrList().addAll(getSkuAttr(product,skuId));
         return configResponse;
@@ -490,13 +492,11 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     }
 
     /**
-     * 获取关键属性的属性信息
-     * @param product
+     * 获取关键/非关键属性的属性信息
+     * @param attrMap
      * @return
      */
-    private List<ProductSKUAttr> getKeyAttr(Product product){
-        AttrMap attrMap = normProductBusiSV.queryAttrOfProduct(
-                product.getTenantId(),product.getStandedProdId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
+    private List<ProductSKUAttr> getKeyAttr(AttrMap attrMap){
         List<ProductSKUAttr> skuAttrList = new ArrayList<>();
         Collection<ProdCatAttrInfo> attrInfos = attrMap.getAttrDefMap().values();
         Map<Long,AttrValInfo> attrValDefMap = attrMap.getAttrValDefMap();

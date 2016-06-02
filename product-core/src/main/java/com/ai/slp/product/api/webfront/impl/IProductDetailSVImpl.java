@@ -1,33 +1,23 @@
 package com.ai.slp.product.api.webfront.impl;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.slp.product.api.webfront.interfaces.IProductDetailSV;
+import com.ai.slp.product.api.webfront.param.*;
+import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
+import com.alibaba.dubbo.config.annotation.Service;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.slp.product.api.webfront.interfaces.IProductDetailSV;
-import com.ai.slp.product.api.webfront.param.ProductImage;
-import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
-import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
-import com.ai.slp.product.api.webfront.param.ProductSKUConfigParamter;
-import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
-import com.ai.slp.product.api.webfront.param.ProductSKURequest;
-import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
-import com.ai.slp.product.constants.ResultCodeConstants;
-import com.alibaba.dubbo.config.annotation.Service;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service(validation = "true")
 @Component
@@ -43,7 +33,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
-		//return prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+//		return prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
 		return demoResponse();
 	}
 
@@ -55,7 +45,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
-		return prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+//		return prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+		return demoConfigResponse();
 	}
 
 	/**
@@ -163,16 +154,21 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		ProductSKUConfigResponse ProductSKUConfigResponse = new ProductSKUConfigResponse();
 		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
 		ProductSKUConfigResponse.setResponseHeader(responseHeader);
-		List<ProductSKUConfigParamter> configParamterList = new LinkedList<ProductSKUConfigParamter>();
+		List<ProductSKUAttr> configParamterList = new LinkedList<ProductSKUAttr>();
 		String[] keyArray = new String[] { "品牌", "型号", "颜色", "上市年份", "输入方式", "智能机", "操作系统版本", "CPU品牌", "CPU型号", "CPU频率" };
 		String[] valueArray = new String[] { "小米（MI）", "小米手机 5", "白色", "2016年", "触控", "是", "MIUI", "Qualcomm 骁龙", "骁龙820", "最高主频 1.8GHz" };
 		for (int i = 0; i < keyArray.length; i++) {
-			ProductSKUConfigParamter configParamter = new ProductSKUConfigParamter();
-			configParamter.setConfigName(keyArray[i]);
-			configParamter.setConfigValue(valueArray[i]);
+			ProductSKUAttr configParamter = new ProductSKUAttr();
+			configParamter.setAttrId(new Long(i));
+			configParamter.setAttrName(keyArray[i]);
+			configParamter.setAttrValueList(new ArrayList<ProductSKUAttrValue>());
+			ProductSKUAttrValue attrValue = new ProductSKUAttrValue();
+			attrValue.setAttrvalueDefId(Integer.toString(i+5));
+			attrValue.setAttrValueName2(valueArray[i]);
+			configParamter.getAttrValueList().add(attrValue);
 			configParamterList.add(configParamter);
 		}
-//		ProductSKUConfigResponse.setConfigParamterList(configParamterList);
+		ProductSKUConfigResponse.setProductAttrList(configParamterList);
 		return ProductSKUConfigResponse;
 	}
 }
