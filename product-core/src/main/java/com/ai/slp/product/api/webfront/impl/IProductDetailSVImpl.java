@@ -28,32 +28,32 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 
 	@Override
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest skuReq) throws BusinessException, SystemException {
-		CommonCheckUtils.checkTenantId(skuReq.getTenantId(),"");
-		if (StringUtils.isBlank(skuReq.getSkuId())
-				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
-			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
+		CommonCheckUtils.checkTenantId(skuReq.getTenantId(), "");
+		if (StringUtils.isBlank(skuReq.getSkuId()) && StringUtils.isBlank(skuReq.getSkuAttrs())) {
+			throw new BusinessException("", "SKU标识和SKU属性为空,无法处理");
 		}
-//		return prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+		// return
+		// prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
 		return demoResponse();
 	}
 
 	@Override
-	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest skuReq)
-			throws BusinessException, SystemException {
-		CommonCheckUtils.checkTenantId(skuReq.getTenantId(),"");
-		if (StringUtils.isBlank(skuReq.getSkuId())
-				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
-			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
+	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest skuReq) throws BusinessException, SystemException {
+		CommonCheckUtils.checkTenantId(skuReq.getTenantId(), "");
+		if (StringUtils.isBlank(skuReq.getSkuId()) && StringUtils.isBlank(skuReq.getSkuAttrs())) {
+			throw new BusinessException("", "SKU标识和SKU属性为空,无法处理");
 		}
-//		return prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+		// return
+		// prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
 		return demoConfigResponse();
 	}
 
 	/**
 	 * 示例返回值
+	 * 
 	 * @return
-     */
-	private ProductSKUResponse demoResponse(){
+	 */
+	private ProductSKUResponse demoResponse() {
 		ProductSKUResponse productSKUResponse = new ProductSKUResponse();
 
 		productSKUResponse.setCommentNum(1000L);
@@ -144,13 +144,16 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		productImage3.setVfsId("57455191d601800009c0b0d7");
 		productImageList.add(productImage3);
 		productSKUResponse.setProductImageList(productImageList);
-
+		String productInfoHtml = "<p><A href=\"#\"><img src=\"${_slpbase }/images/parameter-a.png\"></A></p>" + "<p><img src=\"${_slpbase }/images/parameter-b.png\"></p>"
+				+ "<p><img src=\"${_slpbase }/images/parameter-c.png\"></p>" + "<p><img src=\"${_slpbase }/images/parameter-d.jpg\"></p>"
+				+ "<p><img src=\"${_slpbase }/images/parameter-e.png\"></p>";
+		productSKUResponse.setProDetailContent(productInfoHtml);
 		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
 		productSKUResponse.setResponseHeader(responseHeader);
 		return productSKUResponse;
 	}
 
-	private ProductSKUConfigResponse demoConfigResponse(){
+	private ProductSKUConfigResponse demoConfigResponse() {
 		ProductSKUConfigResponse ProductSKUConfigResponse = new ProductSKUConfigResponse();
 		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
 		ProductSKUConfigResponse.setResponseHeader(responseHeader);
@@ -163,7 +166,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			configParamter.setAttrName(keyArray[i]);
 			configParamter.setAttrValueList(new ArrayList<ProductSKUAttrValue>());
 			ProductSKUAttrValue attrValue = new ProductSKUAttrValue();
-			attrValue.setAttrvalueDefId(Integer.toString(i+5));
+			attrValue.setAttrvalueDefId(Integer.toString(i + 5));
 			attrValue.setAttrValueName2(valueArray[i]);
 			configParamter.getAttrValueList().add(attrValue);
 			configParamterList.add(configParamter);
