@@ -1,10 +1,10 @@
 package com.ai.slp.product.api.productcat.param;
 
+import com.ai.opt.base.vo.BaseResponse;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-
-import com.ai.opt.base.vo.BaseResponse;
 
 /**
  * 包含返回相关属性的封装map<br>
@@ -113,7 +113,7 @@ public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
      */
     @Override
     public V get(Object key) {
-        return isEmpty()?null:objMap.get(key);
+        return objMap.get(key);
     }
 
     /**
@@ -142,7 +142,7 @@ public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
      */
     @Override
     public V put(K key, V value) {
-        return null;
+        return objMap.put(key,value);
     }
 
     /**
@@ -177,7 +177,7 @@ public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
      */
     @Override
     public V remove(Object key) {
-        return null;
+        return objMap.remove(key);
     }
 
     /**
@@ -201,7 +201,7 @@ public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
      */
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
-
+        objMap.putAll(m);
     }
 
     /**
@@ -213,7 +213,8 @@ public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
      */
     @Override
     public void clear() {
-
+        if (objMap!=null)
+            objMap.clear();
     }
 
     /**
@@ -233,7 +234,7 @@ public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
      */
     @Override
     public Set<K> keySet() {
-        return null;
+        return objMap.keySet();
     }
 
     /**
@@ -253,7 +254,7 @@ public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
      */
     @Override
     public Collection<V> values() {
-        return null;
+        return objMap.values();
     }
 
     /**
@@ -274,6 +275,6 @@ public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
      */
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return null;
+        return objMap.entrySet();
     }
 }
