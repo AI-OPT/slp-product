@@ -121,7 +121,7 @@ public class IProductHomeSVImpl implements IProductHomeSV {
     public ListWrapperForRes<FastProductInfoRes> queryFastProduct(FastProductReq request) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(request.getTenantId(),"");
         ListWrapperForRes<FastProductInfoRes> resList = new ListWrapperForRes<FastProductInfoRes>();
-//        resList.setObjList(productBusiSV.queryFastInfoList(request));
+//        resList.setObjList(productBusiSV.queryFastInfoList(request));//TODO...
         resList.setObjList(getDemoFastInfo());
         return resList;
     }
@@ -188,7 +188,7 @@ public class IProductHomeSVImpl implements IProductHomeSV {
         attrValue10000.setAttrValueName("省内");
         //流量面额属性
         ProductSKUAttr skuAttr101 = new ProductSKUAttr();
-        skuAttrList10.add(skuAttr001);
+        skuAttrList10.add(skuAttr101);
         skuAttr101.setAttrName("流量面额");
         skuAttr101.setAttrId(100003l);
         skuAttr101.setAttrType("1");
