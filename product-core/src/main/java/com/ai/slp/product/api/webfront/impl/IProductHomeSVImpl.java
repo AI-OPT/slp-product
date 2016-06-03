@@ -5,7 +5,10 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.paas.ipaas.search.vo.Results;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.webfront.interfaces.IProductHomeSV;
-import com.ai.slp.product.api.webfront.param.*;
+import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
+import com.ai.slp.product.api.webfront.param.FastProductReq;
+import com.ai.slp.product.api.webfront.param.ProductHomeRequest;
+import com.ai.slp.product.api.webfront.param.ProductHomeResponse;
 import com.ai.slp.product.constants.ProductHomeConstants;
 import com.ai.slp.product.search.api.IProductSearch;
 import com.ai.slp.product.search.api.impl.ProductSearchImpl;
@@ -23,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 @Service(validation = "true")
@@ -121,32 +123,6 @@ public class IProductHomeSVImpl implements IProductHomeSV {
     @Override
     public FastProductInfoRes queryFastProduct(FastProductReq request) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(request.getTenantId(),"");
-        return getDemoFastInfo();
-    }
-
-    private FastProductInfoRes getDemoFastInfo(){
-        FastProductInfoRes resList = new FastProductInfoRes();
-
-        Map<String,FastSkuProdInfo> nationMap = new HashMap<>();
-        FastSkuProdInfo f1 = new FastSkuProdInfo();
-        f1.setSkuId("123");
-        f1.setSalePrice(998l);
-        nationMap.put("10元",f1);
-        FastSkuProdInfo f2 = new FastSkuProdInfo();
-        f2.setSkuId("1234");
-        f2.setSalePrice(1996l);
-        nationMap.put("20元",f2);
-
-        Map<String,FastSkuProdInfo> localMap = new HashMap<>();
-        FastSkuProdInfo f11 = new FastSkuProdInfo();
-        f11.setSkuId("1123");
-        f11.setSalePrice(5998l);
-        localMap.put("50元",f11);
-        FastSkuProdInfo f21 = new FastSkuProdInfo();
-        f21.setSkuId("11234");
-        f21.setSalePrice(99996l);
-        localMap.put("100元",f21);
-
-        return resList;
+        return productBusiSV.queryFastInfoList(request);
     }
 }
