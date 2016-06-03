@@ -18,13 +18,13 @@ import com.ai.slp.product.api.webfront.param.ProductQueryResponse;
  */
 public interface ISearchProductSV {
     /**
-     * 查询商品
+     * 首页跳转查询商品
      * @param request
      * @return
      * @throws BusinessException
      * @throws SystemException
      * @author zhanglh
-     * @ApiCode
+     * @ApiCode PROD_HOME_0111
      */
     ProductQueryResponse queryProductPage(ProductQueryRequest request) throws BusinessException, SystemException;
     
@@ -34,7 +34,7 @@ public interface ISearchProductSV {
      * @throws BusinessException
      * @throws SystemException
      * @author zhanglh
-     * @ApiCode
+     * @ApiCode PROD_HOME_0112
      */
     List<ProductData> queryHotSellProduct(ProductQueryRequest request) throws BusinessException, SystemException;
     /**
@@ -44,7 +44,7 @@ public interface ISearchProductSV {
      * @throws BusinessException
      * @throws SystemException
      * @author zhanglh
-     * @ApiCode
+     * @ApiCode PROD_HOME_0113
      */
     ProductQueryResponse searchProduct(ProductQueryRequest request) throws BusinessException, SystemException;
 }
