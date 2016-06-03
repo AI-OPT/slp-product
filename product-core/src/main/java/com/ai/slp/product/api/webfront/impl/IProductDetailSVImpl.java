@@ -35,7 +35,16 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
-		return prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+		ProductSKUResponse skuDetail = prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+		if(skuDetail!=null){
+			ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
+			skuDetail.setResponseHeader(responseHeader);
+		}else{
+			ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.FAIL_CODE, "查询失败");
+			skuDetail = new ProductSKUResponse();
+			skuDetail.setResponseHeader(responseHeader);
+		}
+		return skuDetail;
 //		return demoResponse();
 	}
 
@@ -47,7 +56,16 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
-		return prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+		ProductSKUConfigResponse skuAttr = prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
+		if(skuAttr != null){
+			ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
+			skuAttr.setResponseHeader(responseHeader);
+		}else{
+			skuAttr = new ProductSKUConfigResponse();
+			ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "无数据");
+			skuAttr.setResponseHeader(responseHeader);
+		}
+		return skuAttr;
 		//return demoConfigResponse();
 	}
 
