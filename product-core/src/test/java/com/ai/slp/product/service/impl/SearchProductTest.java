@@ -26,6 +26,7 @@ public class SearchProductTest {
         PageInfo<ProductData> pageInfo = new PageInfo<ProductData>();
         pageInfo.setPageNo(1);
        pageInfo.setPageSize(10);
+       request.setTenantId("SLP");
         request.setAreaCode("81");
         request.setProductCatId("10000010010000");
         request.setBasicOrgIdIs("12");
@@ -39,6 +40,7 @@ public class SearchProductTest {
         ProductQueryRequest request = new ProductQueryRequest();
         request.setProductCatId("10000010010000");
         request.setAreaCode("81");
+        request.setTenantId("SLP");
         List<ProductData> response = iSearchProductSV.queryHotSellProduct(request);
         System.out.println("result="+JSON.toJSONString(response));
     }
@@ -49,7 +51,8 @@ public class SearchProductTest {
         pageInfo.setPageNo(1);
         pageInfo.setPageSize(10);
         request.setAreaCode("11");
-        request.setSkuName("天津");
+        request.setTenantId("SLP");
+        request.setSkuName("联通");
         request.setPageInfo(pageInfo);
         ProductQueryResponse response = iSearchProductSV.searchProduct(request);
         System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));

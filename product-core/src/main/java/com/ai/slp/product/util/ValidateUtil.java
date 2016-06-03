@@ -13,6 +13,9 @@ public final class ValidateUtil {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
                     "入参不能为空");
         }
+        if (StringUtil.isBlank(request.getTenantId())) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "租户ID不能为空");
+        }
         if (StringUtil.isBlank(request.getAreaCode())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
         }
@@ -29,6 +32,9 @@ public final class ValidateUtil {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
                     "入参不能为空");
         }
+        if (StringUtil.isBlank(request.getTenantId())) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "租户ID不能为空");
+        }
         if (StringUtil.isBlank(request.getAreaCode())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
         }
@@ -39,6 +45,9 @@ public final class ValidateUtil {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
                     "入参不能为空");
         }
+        if (StringUtil.isBlank(request.getTenantId())) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "租户ID不能为空");
+        }
         if (StringUtil.isBlank(request.getAreaCode())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
         }
@@ -48,6 +57,9 @@ public final class ValidateUtil {
         if (request == null) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
                     "入参不能为空");
+        }
+        if (StringUtil.isBlank(request.getTenantId())) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "租户ID不能为空");
         }
         if (StringUtil.isBlank(request.getAreaCode())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
@@ -77,6 +89,9 @@ public final class ValidateUtil {
         if (request == null) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
                     "入参不能为空");
+        }
+        if (StringUtil.isBlank(request.getTenantId())) {
+            throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "租户ID不能为空");
         }
         if (StringUtil.isBlank(request.getAreaCode())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");

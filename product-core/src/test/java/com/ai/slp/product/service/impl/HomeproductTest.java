@@ -21,6 +21,7 @@ public class HomeproductTest {
     @Test
     public void serachProduct(){
         ProductHomeRequest request = new ProductHomeRequest();
+        request.setTenantId("SLP");
         request.setAreaCode("81");
         request.setProductCatId("10000010010000");
         request.setBasicOrgIdIs("12");
@@ -31,6 +32,7 @@ public class HomeproductTest {
     @Test
     public void serachHotProduct(){
         ProductHomeRequest request = new ProductHomeRequest();
+        request.setTenantId("SLP");
         request.setAreaCode("120000");
         List<ProductHomeResponse>  response = iProductHomeSV.queryHotProduct(request);
         System.out.println("result="+JSON.toJSONString(response));

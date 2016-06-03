@@ -22,7 +22,7 @@ public class ProductHomeRequest extends BaseInfo{
      */
     private String basicOrgIdIs;
     /**
-     * 所属地区
+     * 所属地区，必填
      */
     private String areaCode;
     /**
