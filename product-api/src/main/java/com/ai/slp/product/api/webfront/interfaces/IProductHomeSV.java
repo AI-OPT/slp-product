@@ -2,7 +2,10 @@ package com.ai.slp.product.api.webfront.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.slp.product.api.webfront.param.*;
+import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
+import com.ai.slp.product.api.webfront.param.FastProductReq;
+import com.ai.slp.product.api.webfront.param.ProductHomeRequest;
+import com.ai.slp.product.api.webfront.param.ProductHomeResponse;
 
 import java.util.List;
 
@@ -37,7 +40,7 @@ public interface IProductHomeSV {
      * @author liutong5
      * @ApiCode PROD_HOME_0102
      */
-    public ListWrapperForRes<FastProductInfoRes> queryFastProduct(FastProductReq request)throws BusinessException, SystemException;
+    public FastProductInfoRes queryFastProduct(FastProductReq request)throws BusinessException, SystemException;
     @interface QueryFastProduct{}
 
 }

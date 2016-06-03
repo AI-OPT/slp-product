@@ -1,7 +1,7 @@
 package com.ai.slp.product.api.webfront.param;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
 
 /**
  * 快充返回信息
@@ -9,40 +9,24 @@ import java.util.List;
  */
 public class FastProductInfoRes implements Serializable {
     private static final long serialVersionUID = 1l;
-    /**
-     * SkuId
-     */
-    private String skuId;
-    /**
-     * 销售价
-     */
-    private Long salePrice;
-    /**
-     * 属性集合
-     */
-    private List<ProductSKUAttr> skuAttrList;
 
-    public String getSkuId() {
-        return skuId;
+    private Map<String,FastSkuProdInfo> nationMap;
+
+    private Map<String,FastSkuProdInfo> localMap;
+
+    public Map<String, FastSkuProdInfo> getNationMap() {
+        return nationMap;
     }
 
-    public void setSkuId(String skuId) {
-        this.skuId = skuId;
+    public void setNationMap(Map<String, FastSkuProdInfo> nationMap) {
+        this.nationMap = nationMap;
     }
 
-    public Long getSalePrice() {
-        return salePrice;
+    public Map<String, FastSkuProdInfo> getLocalMap() {
+        return localMap;
     }
 
-    public void setSalePrice(Long salePrice) {
-        this.salePrice = salePrice;
-    }
-
-    public List<ProductSKUAttr> getSkuAttrList() {
-        return skuAttrList;
-    }
-
-    public void setSkuAttrList(List<ProductSKUAttr> skuAttrList) {
-        this.skuAttrList = skuAttrList;
+    public void setLocalMap(Map<String, FastSkuProdInfo> localMap) {
+        this.localMap = localMap;
     }
 }
