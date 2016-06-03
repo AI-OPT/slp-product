@@ -23,7 +23,7 @@ public class ProductQueryRequest extends BaseInfo {
     private String basicOrgIdIs;
 
     /**
-     * 所在地区
+     * 所在地区，必填
      */
     private String areaCode;
 
