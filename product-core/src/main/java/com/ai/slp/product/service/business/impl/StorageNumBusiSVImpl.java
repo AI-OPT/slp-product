@@ -245,7 +245,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     private Map<String,Integer> getSkuNumSource(ICacheClient cacheClient,String cacheKey,Double skuNum){
         Map<String,Integer> skuNumMap = new HashMap<>();
         //查询库存量大于零的 ZRANGE 1  +inf
-        Set<String> storageSet = cacheClient.zrange(cacheKey,1,Long.MAX_VALUE);
+        Set<String> storageSet = cacheClient.zrangeByScore(cacheKey,1,Long.MAX_VALUE);
         //获取库存大于1的SKU库存标识
         String storageId = storageSet.toArray(new String[0])[0];
         //修改库存 ZINCRBY -skuNum
