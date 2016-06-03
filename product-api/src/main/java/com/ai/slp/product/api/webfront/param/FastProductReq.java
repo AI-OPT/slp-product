@@ -13,7 +13,9 @@ import javax.validation.constraints.NotNull;
 public class FastProductReq extends BaseInfo {
     private static final long serialVersionUID = 1L;
     /**
-     * 商品类目标识,必填
+     * 商品类目标识,必填<br>
+     * 10000010020000:流量快充<br>
+     * 10000010010000:话费快充
      */
     @NotBlank(message = "商品类目不能为空",groups = {IProductHomeSV.QueryFastProduct.class})
     private String productCatId;
@@ -23,12 +25,19 @@ public class FastProductReq extends BaseInfo {
     @NotNull(message = "销售地域编码不能为空",groups = {IProductHomeSV.QueryFastProduct.class})
     private Integer provCode;
     /**
-     * 运营商,必填
+     * 运营商,必填<br>
+     * 10：中国移动<br>
+     * 11：中国电信<br>
+     * 12：中国联通
      */
     @NotNull(message = "运营商不能为空",groups = {IProductHomeSV.QueryFastProduct.class})
     private String basicOrgId;
     /**
-     * 用户类型,必填
+     * 用户类型,必填<br>
+     * 10：个人<br>
+     * 11：企业<br>
+     * 12：代理商<br>
+     * 13：供应商
      */
     @NotNull(message = "用户类型不能为空",groups = {IProductHomeSV.QueryFastProduct.class})
     private String userType;
