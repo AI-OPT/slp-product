@@ -141,11 +141,11 @@ public class IProductHomeSVImpl implements IProductHomeSV {
         FastSkuProdInfo f11 = new FastSkuProdInfo();
         f11.setSkuId("1123");
         f11.setSalePrice(5998l);
-        nationMap.put("50元",f11);
+        localMap.put("50元",f11);
         FastSkuProdInfo f21 = new FastSkuProdInfo();
         f21.setSkuId("11234");
         f21.setSalePrice(99996l);
-        nationMap.put("100元",f21);
+        localMap.put("100元",f21);
 
         return resList;
     }
