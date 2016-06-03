@@ -47,6 +47,20 @@ public class ProductData extends BaseResponse {
      */
     private List<ProductImage> thumbnail;
 
+    /**
+     * 代理商集合
+     */
+    private List<ProductAttrInfo> agentList;
+
+    /**
+     * 面额集合
+     */
+    private List<ProductAttrInfo> accountList;
+
+    /**
+     * 地区
+     */
+    private List<ProductAttrInfo> areaList;
 
     public String getSkuName() {
         return skuName;
@@ -110,6 +124,30 @@ public class ProductData extends BaseResponse {
 
     public void setProdName(String prodName) {
         this.prodName = prodName;
+    }
+
+    public List<ProductAttrInfo> getAgentList() {
+        return agentList;
+    }
+
+    public void setAgentList(List<ProductAttrInfo> agentList) {
+        this.agentList = agentList;
+    }
+
+    public List<ProductAttrInfo> getAccountList() {
+        return accountList;
+    }
+
+    public void setAccountList(List<ProductAttrInfo> accountList) {
+        this.accountList = accountList;
+    }
+
+    public List<ProductAttrInfo> getAreaList() {
+        return areaList;
+    }
+
+    public void setAreaList(List<ProductAttrInfo> areaList) {
+        this.areaList = areaList;
     }
 
 }

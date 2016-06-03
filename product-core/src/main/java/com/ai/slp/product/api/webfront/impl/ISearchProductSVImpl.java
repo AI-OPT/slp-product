@@ -24,13 +24,14 @@ import com.ai.slp.product.search.dto.ProductSearchCriteria;
 import com.ai.slp.product.search.dto.UserSearchAuthority;
 import com.ai.slp.product.util.ConvertImageUtil;
 import com.ai.slp.product.util.ValidateUtil;
+import com.ai.slp.product.util.initDataUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 @Service(validation = "true")
 @Component
 public class ISearchProductSVImpl implements ISearchProductSV {
-
+    
     @Override
     public ProductQueryResponse queryProductPage(ProductQueryRequest request)
             throws BusinessException, SystemException {
@@ -68,6 +69,12 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             String images = JSON.toJSONString(sku.getThumbnail());
             //List<ProductImage> imageList = JSON.parseObject(images,new TypeReference<List<ProductImage>>(){}); 
             product.setThumbnail(ConvertImageUtil.convertThum(images));
+            //添加地区、代理商、面额
+            if(!StringUtil.isBlank(request.getProductCatId())){
+                product.setAccountList(initDataUtil.getAccountsOrFlow(request.getProductCatId()));
+                product.setAgentList(initDataUtil.getAgent());
+                product.setAreaList(initDataUtil.getArea());
+            }
             results.add(product);
         }
         pageinfo.setResult(results);
@@ -153,8 +160,8 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                      .skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
              productCatIds = productSearch.searchCategory(productSearchCriteria);
          }
+       //获取第一个类目
          if(!CollectionUtil.isEmpty(productCatIds.getSearchList())){
-             //获取第一个类目
            List<Map<String,Long>> proIdlist = productCatIds.getSearchList();
            Map<String,Long> idMap = proIdlist.get(0);
            for (String obj : idMap.keySet()) {
@@ -181,6 +188,12 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             String images = JSON.toJSONString(sku.getThumbnail());
             //List<ProductImage> imageList = JSON.parseObject(images,new TypeReference<List<ProductImage>>(){}); 
             product.setThumbnail(ConvertImageUtil.convertThum(images));
+            //添加地区、代理商、面额
+            if(!StringUtil.isBlank(productCatId)){
+                product.setAccountList(initDataUtil.getAccountsOrFlow(productCatId));
+                product.setAgentList(initDataUtil.getAgent());
+                product.setAreaList(initDataUtil.getArea());
+            }
             results.add(product);
         }
         pageinfo.setResult(results);
