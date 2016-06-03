@@ -1,13 +1,14 @@
 package com.ai.slp.product.api.webfront.param;
 
-import java.io.Serializable;
+import com.ai.opt.base.vo.BaseResponse;
+
 import java.util.Map;
 
 /**
  * 快充返回信息
  * Created by jackieliu on 16/6/2.
  */
-public class FastProductInfoRes implements Serializable {
+public class FastProductInfoRes extends BaseResponse{
     private static final long serialVersionUID = 1l;
 
     private Map<String,FastSkuProdInfo> nationMap;
