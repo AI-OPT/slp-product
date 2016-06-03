@@ -9,10 +9,12 @@ import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
+import com.ai.slp.product.api.webfront.param.FastSkuProdInfo;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
+import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
 import com.ai.slp.product.dao.mapper.attach.ProductAttach;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
@@ -27,7 +29,9 @@ import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.vo.ProductPageQueryVo;
+import com.ai.slp.product.vo.SkuStorageVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +76,12 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     IProdCatAttrAtomSV prodCatAttrAtomSV;
     @Autowired
     IProductAttachAtomSV productAttachAtomSV;
+    @Autowired
+    IProdAudiencesAtomSV prodAudiencesAtomSV;
+    @Autowired
+    IProdTargetAreaAtomSV targetAreaAtomSV;
+    @Autowired
+    IStorageNumBusiSV storageNumBusiSV;
 
     /**
      * 添加商城商品
@@ -356,9 +366,36 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     }
 
     @Override
-    public List<FastProductInfoRes> queryFastInfoList(FastProductReq req) {
+    public FastProductInfoRes queryFastInfoList(FastProductReq req) {
+        //话费面额
+        Long attrId = 100002l;
+        String catId = req.getProductCatId();
+        //若为流量类目,则修改流量面额属性
+        if ("10000010020000".equals(catId))
+            attrId = 100003l;
 
-        return null;
+        List<ProdFastSkuAttach> nationSkuList = prodSkuAtomSV.queryNationFastProd(req.getTenantId(),
+                req.getProductCatId(),req.getBasicOrgId(),req.getUserType(),req.getUserId(),attrId);
+        List<ProdFastSkuAttach> localSkuList = prodSkuAtomSV.queryLocalFastProd(req.getTenantId(),
+                req.getProductCatId(),req.getBasicOrgId(),req.getUserType(),req.getUserId(),attrId,req.getProvCode());
+
+        FastProductInfoRes infoRes = new FastProductInfoRes();
+        infoRes.setNationMap(queryFastProd(req.getTenantId(),nationSkuList));
+        infoRes.setLocalMap(queryFastProd(req.getTenantId(),localSkuList));
+        return infoRes;
+    }
+
+    public Map<String,FastSkuProdInfo> queryFastProd(String tenantId,List<ProdFastSkuAttach> skuAttachList){
+        Map<String,FastSkuProdInfo> prodInfoMap = new HashMap<>();
+
+        for (ProdFastSkuAttach skuAttach:skuAttachList){
+            SkuStorageVo storageVo = storageNumBusiSV.queryStorageOfSku(tenantId,skuAttach.getSkuId());
+            FastSkuProdInfo prodInfo = new FastSkuProdInfo();
+            prodInfo.setSkuId(skuAttach.getSkuId());
+            prodInfo.setSalePrice(storageVo.getSalePrice());
+            prodInfoMap.put(skuAttach.getAttrValueName(),prodInfo);
+        }
+        return prodInfoMap;
     }
 
 }

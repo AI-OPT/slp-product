@@ -73,7 +73,7 @@ public final class ProductConstants {
             public static final String DISCARD = "7";
         }
 
-        public final class basicOrgId{
+        public final class BasicOrgId {
             /**
              * 中国移动
              */
@@ -87,8 +87,17 @@ public final class ProductConstants {
              */
             public static final String TELECOM = "11";
         }
-    }
 
+        public final class IsSaleNationwide{
+            public static final String YES = "Y";
+            public static final String NO = "N";
+        }
+
+        public final class RechargeType{
+            public static final String DIRECT = "D";
+            public static final String CARD = "C";
+        }
+    }
 
     public final class ProdSkuAttr{
 
@@ -196,5 +205,17 @@ public final class ProductConstants {
              */
             public static final String SUPPLIER = "13";
         }
+
+        public final class userId{
+            /**
+             * 此类用户
+             */
+            public static final String USER_TYPE = "-1";
+            /**
+             * 待指定
+             */
+            public static final String WAIT_SET = "-2";
+        }
     }
+
 }

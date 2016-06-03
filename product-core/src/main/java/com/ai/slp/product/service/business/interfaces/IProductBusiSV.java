@@ -9,8 +9,6 @@ import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
-import java.util.List;
-
 
 /**
  * 商城商品业务操作
@@ -76,5 +74,5 @@ public interface IProductBusiSV {
      * @param req
      * @return
      */
-    public List<FastProductInfoRes> queryFastInfoList(FastProductReq req);
+    public FastProductInfoRes queryFastInfoList(FastProductReq req);
 }

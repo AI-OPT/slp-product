@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.atom;
 
+import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import org.junit.Test;
@@ -30,4 +32,24 @@ public class IProdSkuAtomSVTest {
         ProdSku prodSku = prodSkuAtomSV.querySkuById("SLP","1000000000002404");
         System.out.println("=====\r"+prodSku.getProdId());
     }
+
+    @Test
+    public void queryFastProdTest(){
+        List<ProdFastSkuAttach> attachList = prodSkuAtomSV.queryNationFastProd(
+                CommonConstants.COMMON_TENANT_ID,"10000010010000","10","10",null,100002l
+        );
+
+        System.out.println("\r======Nation");
+        for (ProdFastSkuAttach skuAttach:attachList){
+            System.out.println(skuAttach.toString());
+        }
+        List<ProdFastSkuAttach> localList = prodSkuAtomSV.queryLocalFastProd(
+                CommonConstants.COMMON_TENANT_ID,"10000010010000","10","10",null,100002l,11
+        );
+        System.out.println("======Local");
+        for (ProdFastSkuAttach skuAttach:localList){
+            System.out.println(skuAttach.toString());
+        }
+    }
+
 }

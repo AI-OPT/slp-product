@@ -2,6 +2,8 @@ package com.ai.slp.product.service.atom.impl.product;
 
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
+import com.ai.slp.product.dao.mapper.attach.ProdSkuAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdSkuMapper;
@@ -20,7 +22,8 @@ import java.util.List;
 public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 	@Autowired
 	ProdSkuMapper prodSkuMapper;
-
+	@Autowired
+	ProdSkuAttachMapper prodSkuAttachMapper;
 	/**
 	 * 查询商品的SKU信息
 	 *
@@ -87,5 +90,40 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 		List<ProdSku> prodSkuList = prodSkuMapper.selectByExample(example);
 		return CollectionUtil.isEmpty(prodSkuList)?null:prodSkuList.get(0);
 	}
+
+
+	/**
+	 * 查询全国范围的快充产品
+	 *
+	 * @param tenantId
+	 * @param productCatId
+	 * @param basicOrgId
+	 * @param userType
+	 * @param userId
+	 * @param attrId
+	 * @return
+	 */
+	@Override
+	public List<ProdFastSkuAttach> queryNationFastProd(String tenantId, String productCatId, String basicOrgId, String userType, String userId, Long attrId) {
+		return prodSkuAttachMapper.queryNationwideFast(tenantId,productCatId,basicOrgId,userType,userId,attrId);
+	}
+
+	/**
+	 * 查询指定地域的快充产品
+	 *
+	 * @param tenantId
+	 * @param productCatId
+	 * @param basicOrgId
+	 * @param userType
+	 * @param userId
+	 * @param attrId
+	 * @param provCode
+	 * @return
+	 */
+	@Override
+	public List<ProdFastSkuAttach> queryLocalFastProd(String tenantId, String productCatId, String basicOrgId, String userType, String userId, Long attrId, Integer provCode) {
+		return prodSkuAttachMapper.queryLocalFast(tenantId,productCatId,basicOrgId,userType,userId,attrId,provCode);
+	}
+
 
 }

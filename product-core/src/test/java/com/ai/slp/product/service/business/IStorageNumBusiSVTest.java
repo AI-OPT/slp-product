@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business;
 
+import com.ai.slp.product.api.storageserver.param.StorageNumRes;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.vo.SkuStorageVo;
@@ -22,5 +23,10 @@ public class IStorageNumBusiSVTest {
     public void queryStorageOfSku(){
         SkuStorageVo storageVo = storageNumBusiSV.queryStorageOfSku(CommonConstants.COMMON_TENANT_ID,"1000000000002401");
         System.out.println(storageVo.toString());
+    }
+
+    @Test
+    public void userStorageNum(){
+        StorageNumRes numRes = storageNumBusiSV.userStorageNum(CommonConstants.COMMON_TENANT_ID,"1000000000002401",4);
     }
 }
