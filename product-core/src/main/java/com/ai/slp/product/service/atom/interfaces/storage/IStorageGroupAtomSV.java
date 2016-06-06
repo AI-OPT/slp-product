@@ -1,10 +1,10 @@
 package com.ai.slp.product.service.atom.interfaces.storage;
 
-import java.util.List;
-
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
+
+import java.util.List;
 
 /**
  * 库存组原子操作
@@ -103,4 +103,20 @@ public interface IStorageGroupAtomSV {
      * @author lipeng16
      */
     public PageInfoResponse<StorageGroup> queryPageOfSearch(StorageGroupPageQueryVo storageGroupPageQueryVo);
+
+    /**
+     * 统计所有非废弃库存组
+     * @return
+     */
+    public int countOfNoDiscard();
+
+    /**
+     * 查询指定分页的集合
+     *
+     * @param pageNum 要查询页码
+     * @param pageSize 每页的条目数
+     * @param hasDiscard 是否包含废弃库存组
+     * @return
+     */
+    public List<StorageGroup> queryOfPage(int pageNum,int pageSize,boolean hasDiscard);
 }

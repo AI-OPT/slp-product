@@ -457,6 +457,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @param storageGroup
      */
 	public void flushStorageCache(StorageGroup storageGroup){
+		if (storageGroup==null)
+			return;
 		String tenantId = storageGroup.getTenantId(),groupId = storageGroup.getStorageGroupId();
 		ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
 		//获取库存组的cacheKey

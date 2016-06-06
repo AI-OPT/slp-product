@@ -1,11 +1,5 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -16,6 +10,11 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 库存组原子操作 Created by jackieliu on 16/4/29.
@@ -26,7 +25,12 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	StorageGroupMapper storageGroupMapper;
 	@Autowired
 	IStandedProductAtomSV standedProductAtomSV;
+	private static List<String> discardList = new ArrayList<>();
 
+	static {
+		discardList.add(StorageConstants.StorageGroup.State.DISCARD);
+		discardList.add(StorageConstants.StorageGroup.State.AUTO_DISCARD);
+	}
 	/**
 	 * 没有废弃的库存组数量
 	 * 
@@ -206,5 +210,37 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 			StorageGroupPage.setPageCount(count%storageGroupPageQueryVo.getPageSize() + 1);
 			
 		return StorageGroupPage;
+	}
+
+	/**
+	 * 统计所有非废弃库存组
+	 *
+	 * @return
+	 */
+	@Override
+	public int countOfNoDiscard() {
+		StorageGroupCriteria example = new StorageGroupCriteria();
+		example.createCriteria().andStateNotIn(discardList);
+		return storageGroupMapper.countByExample(example);
+	}
+
+	/**
+	 * 查询指定分页的集合
+	 *
+	 * @param pageNum 要查询页码
+	 * @param pageSize 每页的条目数
+	 * @param hasDiscard 是否包含废弃库存组
+	 * @return
+	 */
+	@Override
+	public List<StorageGroup> queryOfPage(int pageNum, int pageSize, boolean hasDiscard) {
+		StorageGroupCriteria example = new StorageGroupCriteria();
+		//设置页码相关参数
+		example.setLimitStart((pageNum - 1) * pageSize);
+		example.setLimitEnd(pageSize);
+		if (!hasDiscard){
+			example.createCriteria().andStateNotIn(discardList);
+		}
+		return storageGroupMapper.selectByExample(example);
 	}
 }
