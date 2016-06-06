@@ -69,4 +69,22 @@ public class ProdPictureAtomSVImpl implements IProdPictureAtomSV {
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return prodPictureMapper.selectByExample(example);
     }
+
+    /**
+     * 查询商品主图
+     *
+     * @param prodId
+     * @return
+     */
+    @Override
+    public ProdPicture queryMainOfProd(String prodId) {
+        ProdPictureCriteria example = new ProdPictureCriteria();
+        example.createCriteria().andProdIdEqualTo(prodId)
+                .andPicUsesEqualTo(ProductConstants.ProdPicture.PicType.PRODUCT)
+                .andIsMainPicEqualTo(ProductConstants.ProdPicture.IsMainPic.YES)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        List<ProdPicture> pictureList = prodPictureMapper.selectByExample(example);
+        return CollectionUtil.isEmpty(pictureList)?null:pictureList.get(0);
+    }
+
 }

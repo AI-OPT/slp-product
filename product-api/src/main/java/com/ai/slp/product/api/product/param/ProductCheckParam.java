@@ -1,7 +1,7 @@
 package com.ai.slp.product.api.product.param;
 
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.product.interfaces.IProductEditUpSV;
+import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -20,13 +20,13 @@ public class ProductCheckParam extends BaseInfo {
 	/**
      * 商品ID
      */
-    @NotBlank(message = "商品标识不能为空",groups = {IProductEditUpSV.ProductCheck.class})
+    @NotBlank(message = "商品标识不能为空",groups = {IProductManagerSV.ProductCheck.class})
     private String prodId;
     /**
      * 状态,必填<br>
      * 3审核中4审核未通过
      */
-    @NotBlank(message = "状态不能为空",groups = {IProductEditUpSV.ProductCheck.class})
+    @NotBlank(message = "状态不能为空",groups = {IProductManagerSV.ProductCheck.class})
     private String state;
     /**
      * 拒绝原因-被拒绝参数,拒绝状态必填
@@ -41,7 +41,7 @@ public class ProductCheckParam extends BaseInfo {
      * 操作人,必填
      */
     @NotNull(message = "操作人标识不能为空",groups = {
-            IProductEditUpSV.ProductCheck.class
+            IProductManagerSV.ProductCheck.class
     })
     private Long operId;
 

@@ -38,6 +38,16 @@ public class ProductEditUp implements Serializable{
      * 商品图ID
      */
     private Long proPictureId;
+
+    /**
+     * 图片文件模块ID
+     */
+    private String vfsId;
+
+    /**
+     * 图片类型
+     */
+    private String picType;
     
     /**
      * 商品名称
@@ -45,24 +55,18 @@ public class ProductEditUp implements Serializable{
     private String prodName;
     
     /**
-     * 价格
-     */
-    private long salePrice;
-    
-    /**
      * 总库存
      */
     private long totalNum;
-    
+
     /**
-     * 状态,必填
+     * 状态
      * 0:新增
      * 1:未编辑;2:已编辑
      * 3:审核中;4:审核未通过
      * 5:在售
-     * 6:仓库中（审核通过放入） 61售罄下架62废弃下架63自动下架
-     * 7:停用
-     * 8:废弃
+     * 6:仓库中（审核通过放入） 61:售罄下架 62:废弃下架
+     * 7:废弃
      */
     private String state;
     
@@ -79,7 +83,7 @@ public class ProductEditUp implements Serializable{
     /**
      * 生成时间-排序按时间升序
      */
-    private Timestamp creatTime;
+    private Timestamp createTime;
     /**
      * 申请优先
      */
@@ -132,28 +136,12 @@ public class ProductEditUp implements Serializable{
         this.productType = productType;
     }
 
-    public long getProPictureId() {
-        return proPictureId;
-    }
-
-    public void setProPictureId(long proPictureId) {
-        this.proPictureId = proPictureId;
-    }
-
     public String getProdName() {
         return prodName;
     }
 
     public void setProdName(String prodName) {
         this.prodName = prodName;
-    }
-
-    public long getSalePrice() {
-        return salePrice;
-    }
-
-    public void setSalePrice(long salePrice) {
-        this.salePrice = salePrice;
     }
 
     public long getTotalNum() {
@@ -212,16 +200,12 @@ public class ProductEditUp implements Serializable{
         this.precedence = precedence;
     }
 
-    public void setProPictureId(Long proPictureId) {
-        this.proPictureId = proPictureId;
+    public Timestamp getCreateTime() {
+        return createTime;
     }
 
-    public Timestamp getCreatTime() {
-        return creatTime;
-    }
-
-    public void setCreatTime(Timestamp creatTime) {
-        this.creatTime = creatTime;
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
     }
 
     public Timestamp getOperTime() {
@@ -230,5 +214,29 @@ public class ProductEditUp implements Serializable{
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public Long getProPictureId() {
+        return proPictureId;
+    }
+
+    public void setProPictureId(Long proPictureId) {
+        this.proPictureId = proPictureId;
+    }
+
+    public String getVfsId() {
+        return vfsId;
+    }
+
+    public void setVfsId(String vfsId) {
+        this.vfsId = vfsId;
+    }
+
+    public String getPicType() {
+        return picType;
+    }
+
+    public void setPicType(String picType) {
+        this.picType = picType;
     }
 }
