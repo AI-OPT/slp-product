@@ -182,6 +182,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             product.setSalePrice(sku.getPrice());
             product.setProdName(sku.getProductname());
             product.setProdId(sku.getProductid());
+            product.setProductCatId(productCatId);
             String imageinfo = JSON.toJSONString(sku.getImageinfo());
             product.setImageinfo(ConvertImageUtil.convert(imageinfo));
             //product.setImageinfo(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));

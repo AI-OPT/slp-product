@@ -61,6 +61,10 @@ public class ProductData extends BaseResponse {
      * 地区
      */
     private List<ProductAttrInfo> areaList;
+    /**
+     * 类目条件
+     */
+    private String productCatId;
 
     public String getSkuName() {
         return skuName;
@@ -148,6 +152,14 @@ public class ProductData extends BaseResponse {
 
     public void setAreaList(List<ProductAttrInfo> areaList) {
         this.areaList = areaList;
+    }
+
+    public String getProductCatId() {
+        return productCatId;
+    }
+
+    public void setProductCatId(String productCatId) {
+        this.productCatId = productCatId;
     }
 
 }
