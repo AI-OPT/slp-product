@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class IProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
+public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     @Autowired
     IProductAtomSV productAtomSV;
     @Autowired

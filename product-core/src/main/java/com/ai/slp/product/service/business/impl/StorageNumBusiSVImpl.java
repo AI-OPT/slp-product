@@ -235,6 +235,42 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     }
 
     /**
+     * 查询当前库存组的可用量
+     *
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    @Override
+    public Long queryNowUsableNumOfGroup(String tenantId, String groupId) {
+        ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+        //获取库存组的cacheKey
+        String groupKey = IPassUtils.genMcsStorageGroupKey(tenantId,groupId);
+        //使用当前优先级
+        String priority = getPromotionPriority(cacheClient,tenantId,groupId);
+        //优先级价格对应KEY
+        String priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority);
+        //优先级中库存可用量对应KEY
+        String priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
+        /* 以下情况使用正常优先级
+         *  .未找到促销优先级
+         *  .促销价格不存在,则表明促销已过期;
+         *  .促销优先级库存可用量不存在,则表明促销已过期
+         *  .促销优先级库存可用量小于1,则表明促销商品已售完,切换正常优先级.
+         */
+        if (StringUtils.isBlank(priority)
+                || !cacheClient.exists(priceKey)
+                || !cacheClient.exists(priorityUsable)
+                || Long.parseLong(cacheClient.get(priorityUsable))<1){
+            //使用库存组指定优先级
+            priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
+            //库存组当前优先级库存可用量
+            priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
+        }
+        return Long.parseLong(cacheClient.get(priorityUsable));
+    }
+
+    /**
      * 获知商品使用量的SKU库存来源
      *
      * @param cacheClient

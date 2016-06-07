@@ -34,4 +34,12 @@ public interface IStorageNumBusiSV {
      * @return
      */
     public SkuStorageVo queryStorageOfSku(String tenantId,String skuId);
+
+    /**
+     * 查询当前库存组的可用量
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    public Long queryNowUsableNumOfGroup(String tenantId,String groupId);
 }

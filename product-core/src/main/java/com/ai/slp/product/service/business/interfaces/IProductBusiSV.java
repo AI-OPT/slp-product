@@ -75,4 +75,12 @@ public interface IProductBusiSV {
      * @return
      */
     public FastProductInfoRes queryFastInfoList(FastProductReq req);
+
+    /**
+     * 对销售商品进行上架处理
+     *
+     * @param tenantId
+     * @param prodId
+     */
+    public void changeToInSale(String tenantId, String prodId, Long opeId);
 }
