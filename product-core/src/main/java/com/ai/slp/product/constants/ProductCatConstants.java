@@ -36,6 +36,10 @@ public final class ProductCatConstants {
              */
             public static final String ATTR_TYPE_NONKEY = "3";
         }
+        public final class IsPicture{
+            public static final String YES = "Y";
+            public static final String NO = "N";
+        }
     }
 
 }

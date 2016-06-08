@@ -440,26 +440,30 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
                 if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId,product.getProdId(),prodAttr.getAttrvalueDefId())<=0)
                     continue;
                 ProductSKUAttrValue skuAttrValue = new ProductSKUAttrValue();
-                //查询此属性值是否有图片信息
-                ProdPicture prodPicture = pictureAtomSV.queryMainOfProdIdAndAttrVal(
-                        product.getProdId(),prodAttr.getAttrvalueDefId());
-                if (prodPicture!=null){
-                    ProductImage productImage = new ProductImage();
-                    BeanUtils.copyProperties(productImage,prodPicture);
-                    skuAttrValue.setImage(productImage);
-                }
                 skuAttrValue.setAttrvalueDefId(prodAttr.getAttrvalueDefId());
                 skuAttrValue.setAttrValueName(prodAttr.getAttrValueName());
                 String attAndVal = attrAttch.getAttrId()
                         +ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT
                         +prodAttr.getAttrvalueDefId();
-                //该属性值含有图片
+                //当前SKU是否包含当前属性值
                 if (prodSku.getSaleAttrs().contains(attAndVal)){
                     skuAttrValue.setIsOwn(true);
-                    if (StringUtils.isBlank(attrPic))
-                        attrPic = prodAttr.getAttrvalueDefId();
                 }
                 attrValueList.add(skuAttrValue);
+                //若此属性是否包含图片
+                if (ProductCatConstants.ProductCatAttr.IsPicture.YES.equals(attrAttch.getIsPicture())){
+                    //查询主图
+                    ProdPicture prodPicture = pictureAtomSV.queryMainOfProdIdAndAttrVal(
+                            product.getProdId(),prodAttr.getAttrvalueDefId());
+                    if (prodPicture!=null){
+                        ProductImage productImage = new ProductImage();
+                        BeanUtils.copyProperties(productImage,prodPicture);
+                        skuAttrValue.setImage(productImage);
+                    }
+                    //当前SKU包含当前属性值,且
+                    if (StringUtils.isBlank(attrPic) && skuAttrValue.getIsOwn())
+                        attrPic = prodAttr.getAttrvalueDefId();
+                }
             }
             productSKUAttr.setAttrValueList(attrValueList);
             skuResponse.getProductAttrList().add(productSKUAttr);
