@@ -13,7 +13,7 @@ public class ProductQueryRequest extends BaseInfo {
     private String productCatId;
 
     /**
-     * 属性值ID
+     * 面额属性值ID
      */
     private String attrDefId;
 
