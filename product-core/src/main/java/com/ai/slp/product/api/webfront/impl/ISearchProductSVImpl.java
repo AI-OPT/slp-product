@@ -21,6 +21,7 @@ import com.ai.slp.product.search.api.IProductSearch;
 import com.ai.slp.product.search.api.impl.ProductSearchImpl;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.search.dto.ProductSearchCriteria;
+import com.ai.slp.product.search.dto.SortType;
 import com.ai.slp.product.search.dto.UserSearchAuthority;
 import com.ai.slp.product.util.ConvertImageUtil;
 import com.ai.slp.product.util.ValidateUtil;
@@ -53,21 +54,211 @@ public class ISearchProductSVImpl implements ISearchProductSV {
         }
          ProductSearchCriteria productSearchCriteria =null;
          if(!StringUtil.isBlank(request.getAttrDefId()) && !StringUtil.isBlank(request.getBasicOrgIdIs())){
-              productSearchCriteria =
-                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+             //如果销量排序不为空
+             if(!StringUtil.isBlank(request.getSaleNumOrderFlag())){
+                 //如果配送地区不为空
+                     if(!StringUtil.isBlank(request.getDistributionArea())){
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                                 .attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                     }else{
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                                 .addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();  
+                     }
+                    
+             }else{
+               //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                 }
+                    
+             }
+             //如果价格排序不为空
+             if(!StringUtil.isBlank(request.getPriceOrderFlag())){
+               //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
+                 }
+                
+             }else{
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
+                 }
+                     
+             }
+             //
          }else if(StringUtil.isBlank(request.getAttrDefId()) && !StringUtil.isBlank(request.getBasicOrgIdIs())){
-             productSearchCriteria =
-                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+             //如果销量排序不为空
+             if(!StringUtil.isBlank(request.getSaleNumOrderFlag())){
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build(); 
+                 }
+                    
+             }else{
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                 }
+                     
+             }
+             //如果价格排序不为空
+             if(!StringUtil.isBlank(request.getPriceOrderFlag())){
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                 }
+                    
+             }else{
+               //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build(); 
+                 }
+             }
          }else  if(!StringUtil.isBlank(request.getAttrDefId()) && StringUtil.isBlank(request.getBasicOrgIdIs())){
-             productSearchCriteria =
-                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .attrValueDefID(request.getAttrDefId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+             //如果销量排序不为空
+             if(!StringUtil.isBlank(request.getSaleNumOrderFlag())){
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build(); 
+                 }
+             }else{
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
+                 }
+                
+             }
+           //如果价格排序不为空
+             if(!StringUtil.isBlank(request.getPriceOrderFlag())){
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build();
+                 }
+             }else{
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build(); 
+                 }
+             }
          }else{
-              productSearchCriteria =
-                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .categoryIdIs(request.getProductCatId()).build();
+             //如果销量排序不为空
+             if(!StringUtil.isBlank(request.getSaleNumOrderFlag())){
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build(); 
+                 }
+               
+             }else{
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).build(); 
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .categoryIdIs(request.getProductCatId()).build();  
+                 }
+             }
+           //如果价格排序不为空
+             if(!StringUtil.isBlank(request.getPriceOrderFlag())){
+               //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build(); 
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build(); 
+                 }
+             }else{
+               //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).build();  
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                             .categoryIdIs(request.getProductCatId()).build(); 
+                 }
+             }
          }
          
         Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);

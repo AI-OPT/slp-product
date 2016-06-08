@@ -8,7 +8,7 @@ public class ProductHomeConstants {
     //热点查询排序字段
     public static final String ORDER_SALE_NUM_NAME = "salenum";
    //按价格查询排序字段
-    public static final String ORDER_PRICE_NAME = "salePrice";
+    public static final String ORDER_PRICE_NAME = "price";
     //话费充值类目ID
     public static final String PHONE_BILL_PRO_CAT_ID = "10000010010000";
     //流量充值类目ID
