@@ -30,6 +30,10 @@ public class StorageNumRes extends BaseResponse {
      */
     private String prodId;
     /**
+     * 商品类目标识
+     */
+    private String productCatId;
+    /**
      * 销售价,单位:厘
      */
     private long salePrice;
@@ -146,5 +150,13 @@ public class StorageNumRes extends BaseResponse {
 
     public void setStorageNum(Map<String, Integer> storageNum) {
         this.storageNum = storageNum;
+    }
+
+    public String getProductCatId() {
+        return productCatId;
+    }
+
+    public void setProductCatId(String productCatId) {
+        this.productCatId = productCatId;
     }
 }

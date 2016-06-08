@@ -125,6 +125,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         //8.组装返回值
         StorageNumRes numRes = new StorageNumRes();
         BeanUtils.copyProperties(numRes,product);
+        numRes.setProductCatId(product.getProductCatId());
         numRes.setSkuId(skuId);
         numRes.setSkuName(product.getProdName());
         numRes.setSalePrice(salePrice);
