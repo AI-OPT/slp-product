@@ -51,9 +51,25 @@ public class ISearchProductSVImpl implements ISearchProductSV {
         }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUserType())){
             user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
         }
-         ProductSearchCriteria productSearchCriteria =
+         ProductSearchCriteria productSearchCriteria =null;
+         if(!StringUtil.isBlank(request.getAttrDefId()) && !StringUtil.isBlank(request.getBasicOrgIdIs())){
+              productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
                      .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+         }else if(StringUtil.isBlank(request.getAttrDefId()) && !StringUtil.isBlank(request.getBasicOrgIdIs())){
+             productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+         }else  if(!StringUtil.isBlank(request.getAttrDefId()) && StringUtil.isBlank(request.getBasicOrgIdIs())){
+             productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .attrValueDefID(request.getAttrDefId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+         }else{
+              productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .categoryIdIs(request.getProductCatId()).build();
+         }
+         
         Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
         List<Map<String,Object>> reslist = result.getSearchList();
         String info = JSON.toJSONString(reslist);
@@ -105,11 +121,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
          if(StringUtil.isBlank(request.getProductCatId())){
               productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .addOrderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
+                     .addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
          }else{
               productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
+                     .categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
          }
         Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
         List<Map<String,Object>> objList = result.getSearchList();

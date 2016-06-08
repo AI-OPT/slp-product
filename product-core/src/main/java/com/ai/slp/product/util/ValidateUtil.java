@@ -64,16 +64,16 @@ public final class ValidateUtil {
         if (StringUtil.isBlank(request.getAreaCode())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "地区入参不能为空");
         }
-        if (StringUtil.isBlank(request.getBasicOrgIdIs())) {
+        /*if (StringUtil.isBlank(request.getBasicOrgIdIs())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "代理商不能为空");
-        }
+        }*/
         if (StringUtil.isBlank(request.getProductCatId())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "类目不能为空");
         }
-        if (StringUtil.isBlank(request.getAttrDefId())) {
+       /* if (StringUtil.isBlank(request.getAttrDefId())) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
                     "属性定义值ID不能为空");
-        }
+        }*/
         if (request.getPageInfo() == null) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR, "分页信息不能为空");
         } else {

@@ -28,10 +28,11 @@ public class SearchProductTest {
        pageInfo.setPageSize(10);
        request.setTenantId("SLP");
         request.setAreaCode("81");
-        request.setProductCatId("10000010010000");
-        request.setBasicOrgIdIs("12");
-        request.setAttrDefId("100004");
+        //request.setProductCatId("10000010010000");
+        //request.setBasicOrgIdIs("12");
+        //request.setAttrDefId("100004");
         request.setPageInfo(pageInfo);
+        request.setPriceOrderFlag("");
         ProductQueryResponse response = iSearchProductSV.queryProductPage(request);
         System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));
     }

@@ -90,7 +90,7 @@ public class IProductHomeSVImpl implements IProductHomeSV {
         }
         ProductSearchCriteria productSearchCriteria =
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                .addOrderBy(ProductHomeConstants.ORDER_FILE_NAME).maxSearchSize(ProductHomeConstants.MAX_SIZE).build();
+                .addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME).maxSearchSize(ProductHomeConstants.MAX_SIZE).build();
         Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
         List<Map<String,Object>> list = result.getSearchList();
         String info = JSON.toJSONString(list);

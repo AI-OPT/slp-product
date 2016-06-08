@@ -46,10 +46,26 @@ public class ProductQueryRequest extends BaseInfo {
      * skuID
      */
     private String skuId;
+
     /**
      * 卖点
      */
     private String productSellPoint;
+
+    /**
+     * 是否按销售量排序
+     */
+    private String saleNumOrderFlag;
+
+    /**
+     * 是否按价格排序
+     */
+    private String priceOrderFlag;
+
+    /**
+     * 配货地区
+     */
+    private String distributionArea;
 
     private PageInfo<ProductData> pageInfo;
 
@@ -131,6 +147,30 @@ public class ProductQueryRequest extends BaseInfo {
 
     public void setProductSellPoint(String productSellPoint) {
         this.productSellPoint = productSellPoint;
+    }
+
+    public String getSaleNumOrderFlag() {
+        return saleNumOrderFlag;
+    }
+
+    public void setSaleNumOrderFlag(String saleNumOrderFlag) {
+        this.saleNumOrderFlag = saleNumOrderFlag;
+    }
+
+    public String getPriceOrderFlag() {
+        return priceOrderFlag;
+    }
+
+    public void setPriceOrderFlag(String priceOrderFlag) {
+        this.priceOrderFlag = priceOrderFlag;
+    }
+
+    public String getDistributionArea() {
+        return distributionArea;
+    }
+
+    public void setDistributionArea(String distributionArea) {
+        this.distributionArea = distributionArea;
     }
 
 }
