@@ -60,6 +60,10 @@ public class ProductSKUResponse extends BaseResponse{
      */
     private String unit;
     /**
+     * 商品类目
+     */
+    private String productCatId;
+    /**
      * 商品属性集合
      */
     private List<ProductSKUAttr> productAttrList;
@@ -242,5 +246,11 @@ public class ProductSKUResponse extends BaseResponse{
 				", commentNum=" + commentNum +
 				", proDetailContent='" + proDetailContent + '\'' +
 				'}';
+	}
+	public String getProductCatId() {
+		return productCatId;
+	}
+	public void setProductCatId(String productCatId) {
+		this.productCatId = productCatId;
 	}
 }
