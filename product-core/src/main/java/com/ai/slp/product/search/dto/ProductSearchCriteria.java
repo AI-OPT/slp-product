@@ -118,13 +118,12 @@ public class ProductSearchCriteria {
             return this;
         }
         
-        //属性值ID
+        //属性值定义ID
         public ProductSearchCriteriaBuilder attrValueDefID(String attrValueDefId){
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.ATTRVALUE_DEF_ID,
                     attrValueDefId, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
             return this;
         }
-
 
         // 排序
         public ProductSearchCriteriaBuilder addOrderBy(String orderByField, SortType sortType) {
