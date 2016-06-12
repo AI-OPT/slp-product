@@ -20,7 +20,7 @@ public class initDataUtil {
         areas = new ArrayList<ProductAttrInfo>();
        List<GnAreaVo>   areaList =  iGnAreaQuerySV.getProvinceList();
        ProductAttrInfo attrinfo = new ProductAttrInfo();
-       attrinfo.setAttrDefId("");
+       attrinfo.setAttrDefId("0000");
        attrinfo.setAttrDefValue("全国通用");
        areas.add(attrinfo);
        if(!CollectionUtil.isEmpty(areaList)){
