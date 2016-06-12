@@ -28,17 +28,19 @@ public class StorageCache extends AbstractCache {
 
     @Override
     public void write() throws Exception {
+        logger.info("=====刷新库存缓存(开始)=====");
         //获取库存组总数,进行多线程刷新
         //查询总条数
         int total = groupAtomSV.countOfNoDiscard();
         //获取分页数
         int pageNum = (total+PAGE_SIZE-1)/PAGE_SIZE;
+        logger.info("=====库存组总数量{},分页数:{}",total,pageNum);
         ExecutorService pool=null;
         try{
-
             //ExecutorService pool = Executors.newFixedThreadPool(threadCount);
             pool = Executors.newCachedThreadPool();
             for (int i = 1; i <= pageNum; i++){
+                logger.info("开始刷新第[{}]页",i);
                 List<StorageGroup> groupList = groupAtomSV.queryOfPage(i,PAGE_SIZE,false);
                 Thread t =new StorageCacheFlushThread(groupBusiSV,groupList);
                 pool.execute(t);
@@ -50,5 +52,6 @@ public class StorageCache extends AbstractCache {
                 pool.shutdown();
             }
         }
+        logger.info("=====刷新库存缓存(结束)=====");
     }
 }
