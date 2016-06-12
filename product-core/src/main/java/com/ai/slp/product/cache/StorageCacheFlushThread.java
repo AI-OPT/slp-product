@@ -21,7 +21,7 @@ public class StorageCacheFlushThread extends Thread {
     }
 
     @Override
-    public synchronized void start() {
+    public void run() {
         logger.info("库存组数量{}",groupList.size());
         if (CollectionUtil.isEmpty(groupList))
             return;
