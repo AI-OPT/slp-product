@@ -465,9 +465,11 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		String groupKey = IPassUtils.genMcsStorageGroupKey(tenantId,groupId);
 		//设置库存组状态
 		cacheClient.hset(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE,storageGroup.getState());
+		logger.info("库存组当前状态:{}",storageGroup.getState());
 		//查询所有截止时间在当前时间之后的促销的库存,不包括废弃库存
 		List<Storage> storageList = storageAtomSV.queryTimeStorageOfGroup(storageGroup.getStorageGroupId(),false);
 		List<Short> priorityNumList = new ArrayList<>();
+		logger.info("====刷新促销优先级缓存(开始)====");
 		for (Storage storage:storageList){
 			//若已经处理,则进行下一个
 			if (priorityNumList.contains(storage.getPriorityNumber()))
@@ -475,8 +477,10 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			priorityNumList.add(storage.getPriorityNumber());
 			storageNumDbBusiSV.flushPriorityStorage(tenantId,groupId,storage.getPriorityNumber(),false);
 		}
+		logger.info("====刷新促销优先级缓存(结束)====");
 		//查询当前启用库存
 		List<Storage> activeList = storageAtomSV.queryActive(tenantId,groupId,false);
+		logger.info("====刷新[非]促销优先级缓存(开始)====");
 		//存在当前启用库存,则加载当前启用库存所属优先级
 		if (!CollectionUtil.isEmpty(activeList)){
 			Storage storage = activeList.get(0);
@@ -484,6 +488,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			//设置当前启用优先级
 			cacheClient.hset(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE,storage.getPriorityNumber().toString());
 		}
+		logger.info("====刷新[非]促销优先级缓存(结束)====");
 	}
 
 }

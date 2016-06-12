@@ -4,7 +4,6 @@ import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
-import com.ai.slp.product.api.storageserver.param.StorageNumRes;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
@@ -18,20 +17,19 @@ import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.util.IPassUtils;
-import org.elasticsearch.search.lookup.DocLookup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.Lifecycle;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import scala.Int;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jackieliu on 16/5/26.
@@ -163,6 +161,7 @@ public class StorageNumDbBusiSVImpl {
      * @param autoActive 是否自动启用
      */
     public void flushPriorityStorage(String tenantId,String groupId,Short priority,boolean autoActive){
+        logger.info("===刷新优先级的库存信息(开始),库存组ID:{},优先级:{},是否自动切换:{}",groupId,priority,autoActive);
         //查询已"启用"状态库存.
         List<Storage> storageList = storageAtomSV.queryActive(tenantId,groupId,false);
         //若"启用"状态库存为空,或启用库存所属优先级与当前不一致
@@ -184,6 +183,8 @@ public class StorageNumDbBusiSVImpl {
         //优先级总可用量(F)
         String priorityUsableKey = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
         for (Storage storage:storageList){
+            logger.info("当前库存信息,库存ID:{},库存总量:{},库存可用量:{}",
+                    storage.getStorageId(),storage.getTotalNum(),storage.getUsableNum());
             //将可用量大于零,且停用的库存,设置为"自动启用"
             if (autoActive && storage.getUsableNum() > 0
                     && stopList.contains(storage.getState())){
@@ -197,6 +198,8 @@ public class StorageNumDbBusiSVImpl {
             //查询库存下SKU库存
             List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storage.getStorageId());
             for (SkuStorage skuStorage:skuStorageList){
+                logger.info("当前SKU库存信息,库存ID:{},SKU库存ID:{},库存总量:{},库存可用量:{}",
+                        storage.getStorageId(),skuStorage.getSkuStorageId(),skuStorage.getTotalNum(),skuStorage.getUsableNum());
                 //设置SKU库存
                 String skuStorageKey = IPassUtils.genMcsSkuStorageUsableKey(
                         tenantId,groupId,priority.toString(),skuStorage.getSkuId());
@@ -207,6 +210,7 @@ public class StorageNumDbBusiSVImpl {
                 cacheClient.incrBy(priorityUsableKey,skuStorage.getUsableNum());
             }
         }
+        logger.info("===刷新指定优先级库存(结束)");
         initCacheKey(tenantId,priority,storageList.get(0));
     }
 
@@ -216,6 +220,7 @@ public class StorageNumDbBusiSVImpl {
      * @param storage 库存信息
      */
     public void initCacheKey(String tenantId,Short priority,Storage storage){
+        logger.info("===设置相关缓存的指定失效时间(开始)");
         ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
         String groupId = storage.getStorageGroupId();
         //查询库存下SKU库存
@@ -262,5 +267,6 @@ public class StorageNumDbBusiSVImpl {
             String priorityUsableKey = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
             cacheClient.expireAt(priorityUsableKey,expireTime);
         }
+        logger.info("===设置相关缓存的指定失效时间(结束)");
     }
 }
