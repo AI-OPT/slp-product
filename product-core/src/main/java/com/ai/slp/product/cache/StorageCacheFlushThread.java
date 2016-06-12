@@ -26,7 +26,7 @@ public class StorageCacheFlushThread extends Thread {
             return;
         for (StorageGroup group:groupList){
             logger.info("Start flush----TenantId={},GroupId={},",group.getTenantId(),group.getStorageGroupId());
-//            groupBusiSV.flushStorageCache(group);
+            groupBusiSV.flushStorageCache(group);
             logger.info("End flush");
         }
     }
