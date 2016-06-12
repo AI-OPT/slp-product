@@ -34,12 +34,12 @@ public class initDataUtil {
         List<ProductAttrInfo> agents = new ArrayList<ProductAttrInfo>();
         agents = new ArrayList<ProductAttrInfo>();
        ProductAttrInfo agent = new ProductAttrInfo();
-       agent.setAttrDefId("100001");
-       agent.setAttrDefValue("中国电信");
+       agent.setAttrDefValue("中国移动");
+       agent.setAttrDefId("100002");
        agents.add(agent);
        agent = new ProductAttrInfo();
-       agent.setAttrDefId("100002");
-       agent.setAttrDefValue("中国移动");
+       agent.setAttrDefValue("中国电信");
+       agent.setAttrDefId("100001");
        agents.add(agent);
        agent = new ProductAttrInfo();
        agent.setAttrDefId("100003");
