@@ -3,12 +3,17 @@ package com.ai.slp.product.service.business;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.productcat.param.ProductCatInfo;
 import com.ai.slp.product.api.productcat.param.ProductCatParam;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
+import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.util.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 /**
  * Created by jackieliu on 16/4/30.
@@ -16,7 +21,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:context/core-context.xml")
 public class IProductCatBusiSVTest {
-
+    @Autowired
+    IProductCatBusiSV productCatBusiSV;
     @Test
     public void copyProTest(){
         ProductCatParam catParam = new ProductCatParam();
@@ -34,5 +40,13 @@ public class IProductCatBusiSVTest {
         productCat.setSerialNumber((short)1);
         BeanUtils.copyProperties(productCatInfo,productCat);
         System.out.println(productCatInfo.getCatLevel());
+    }
+
+    @Test
+    public void queryLinkOfCatById(){
+        List<ProductCatInfo> catInfoList = productCatBusiSV.queryLinkOfCatById(CommonConstants.COMMON_TENANT_ID,"10000010010000");
+        for (ProductCatInfo catInfo:catInfoList){
+            System.out.print(catInfo.getProductCatName()+"-->");
+        }
     }
 }

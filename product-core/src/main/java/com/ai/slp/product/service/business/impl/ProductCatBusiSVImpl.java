@@ -4,7 +4,6 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
@@ -411,7 +410,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             return;
         //若不是跟类目,则继续查询
         }else
-            queryCatFoLinkById(catInfoList,tenantId,productCatId);
+            queryCatFoLinkById(catInfoList,tenantId,catInfo.getParentProductCatId());
             catInfoList.add(catInfo);
     }
 }
