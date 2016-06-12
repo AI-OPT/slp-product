@@ -14,7 +14,7 @@ public class IProductSearchTest {
     public static void main(String[] args) {
         IProductSearch productSearch = new ProductSearchImpl();
         ProductSearchCriteria productSearchCriteria =
-                new ProductSearchCriteria.ProductSearchCriteriaBuilder("81",
+                new ProductSearchCriteria.ProductSearchCriteriaBuilder("",
                         new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,""))
                 .addOrderBy(SearchMetaFieldConfig.SALE_NUM).build();
         System.out.println(JSON.toJSONString(productSearch.search(productSearchCriteria)));

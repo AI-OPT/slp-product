@@ -27,7 +27,7 @@ public class SearchProductTest {
         pageInfo.setPageNo(1);
        pageInfo.setPageSize(10);
        request.setTenantId("SLP");
-        request.setAreaCode("81");
+        request.setAreaCode("");
         request.setProductCatId("10000010010000");
         request.setBasicOrgIdIs("12");
        request.setAttrDefId("100004");

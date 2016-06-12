@@ -19,6 +19,10 @@ public class initDataUtil {
         IGnAreaQuerySV iGnAreaQuerySV = DubboConsumerFactory.getService("iGnAreaQuerySV");
         areas = new ArrayList<ProductAttrInfo>();
        List<GnAreaVo>   areaList =  iGnAreaQuerySV.getProvinceList();
+       ProductAttrInfo attrinfo = new ProductAttrInfo();
+       attrinfo.setAttrDefId("");
+       attrinfo.setAttrDefValue("全国通用");
+       areas.add(attrinfo);
        if(!CollectionUtil.isEmpty(areaList)){
            for(GnAreaVo vo: areaList){
                ProductAttrInfo info = new ProductAttrInfo();
