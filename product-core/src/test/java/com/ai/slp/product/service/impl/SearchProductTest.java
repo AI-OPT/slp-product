@@ -27,14 +27,14 @@ public class SearchProductTest {
         pageInfo.setPageNo(1);
        pageInfo.setPageSize(10);
        request.setTenantId("SLP");
-        request.setAreaCode("");
+        request.setAreaCode("11");
         request.setProductCatId("10000010010000");
-        request.setBasicOrgIdIs("12");
-       request.setAttrDefId("100004");
+       // request.setBasicOrgIdIs("12");
+       //request.setAttrDefId("100004");
         request.setPageInfo(pageInfo);
         //request.setPriceOrderFlag("12");
         //request.setSaleNumOrderFlag("lll");
-        request.setDistributionArea("100013");
+       // request.setDistributionArea("100013");
         ProductQueryResponse response = iSearchProductSV.queryProductPage(request);
         System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));
     }
@@ -42,7 +42,7 @@ public class SearchProductTest {
     public void serachHotProduct(){
         ProductQueryRequest request = new ProductQueryRequest();
         request.setProductCatId("10000010010000");
-        request.setAreaCode("81");
+        request.setAreaCode("11");
         request.setTenantId("SLP");
         List<ProductData> response = iSearchProductSV.queryHotSellProduct(request);
         System.out.println("result="+JSON.toJSONString(response));
@@ -55,7 +55,7 @@ public class SearchProductTest {
         pageInfo.setPageSize(10);
         request.setAreaCode("11");
         request.setTenantId("SLP");
-        request.setSkuName("联通");
+        request.setSkuName("fsdfsd");
         request.setPageInfo(pageInfo);
         ProductQueryResponse response = iSearchProductSV.searchProduct(request);
         System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));
