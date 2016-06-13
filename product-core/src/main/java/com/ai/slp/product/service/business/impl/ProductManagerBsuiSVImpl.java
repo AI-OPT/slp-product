@@ -2,6 +2,7 @@ package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.AudiencesSetOfProduct;
@@ -18,6 +19,9 @@ import com.ai.slp.product.service.atom.interfaces.product.IProdAudiencesAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
+import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
+import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
+import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,6 +95,14 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         if (CollectionUtil.isEmpty(boList)){
             ProdAudiencesInfo audiencesInfo = new ProdAudiencesInfo();
             BeanUtils.copyProperties(audiencesInfo,boList.get(0));
+            IUcUserSV ucUserSV = DubboConsumerFactory.getService("IUcUserSV");
+            SearchUserRequest userRequest = new SearchUserRequest();
+            userRequest.setTenantId(tenantId);
+            userRequest.setUserId(audiencesInfo.getUserId());
+            SearchUserResponse userResponse = ucUserSV.queryBaseInfo(userRequest);
+            if (userResponse!=null && userResponse.getResponseHeader().isSuccess()){
+                audiencesInfo.setUserName(userResponse.getUserNickname());
+            }
             audiencesSet.setPersonAudiences(audiencesInfo);
         }
         //企业
@@ -105,9 +117,17 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         List<ProdAudiences> boList = prodAudiencesAtomSV.queryByUserType(
                 tenantId,prodId, userType,null,false);
         Map<String,ProdAudiencesInfo> audiencesMap = new HashMap<>();
+        IUcUserSV ucUserSV = DubboConsumerFactory.getService("IUcUserSV");
         for (ProdAudiences audiences:boList){
             ProdAudiencesInfo audiencesInfo = new ProdAudiencesInfo();
             BeanUtils.copyProperties(audiencesInfo,audiences);
+            SearchUserRequest userRequest = new SearchUserRequest();
+            userRequest.setTenantId(tenantId);
+            userRequest.setUserId(audiencesInfo.getUserId());
+            SearchUserResponse userResponse = ucUserSV.queryBaseInfo(userRequest);
+            if (userResponse!=null && userResponse.getResponseHeader().isSuccess()){
+                audiencesInfo.setUserName(userResponse.getUserNickname());
+            }
             audiencesMap.put(audiences.getUserId(),audiencesInfo);
         }
         return audiencesMap;
