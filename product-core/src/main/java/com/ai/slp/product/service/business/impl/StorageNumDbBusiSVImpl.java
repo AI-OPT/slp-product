@@ -26,10 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by jackieliu on 16/5/26.
@@ -182,6 +179,10 @@ public class StorageNumDbBusiSVImpl {
         String skuUsableKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
         //优先级总可用量(F)
         String priorityUsableKey = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
+        //将优先级的库存量初始化为零
+        cacheClient.set(priorityUsableKey,new Long(0).toString());
+        //该优先级下,sku可用量已经做过初始化的SKU标识
+        Set<String> skuIds = new HashSet<>();
         for (Storage storage:storageList){
             logger.info("当前库存信息,库存ID:{},库存总量:{},库存可用量:{}",
                     storage.getStorageId(),storage.getTotalNum(),storage.getUsableNum());
@@ -200,6 +201,10 @@ public class StorageNumDbBusiSVImpl {
             for (SkuStorage skuStorage:skuStorageList){
                 logger.info("当前SKU库存信息,库存ID:{},SKU库存ID:{},库存总量:{},库存可用量:{}",
                         storage.getStorageId(),skuStorage.getSkuStorageId(),skuStorage.getTotalNum(),skuStorage.getUsableNum());
+                //若没有将sku可用量进行初始操作,则需要将sku可用量设置为零
+                if (!skuIds.contains(skuStorage.getSkuId())){
+                    cacheClient.hset(skuUsableKey,skuStorage.getSkuId(),new Long(0).toString());
+                }
                 //设置SKU库存
                 String skuStorageKey = IPassUtils.genMcsSkuStorageUsableKey(
                         tenantId,groupId,priority.toString(),skuStorage.getSkuId());

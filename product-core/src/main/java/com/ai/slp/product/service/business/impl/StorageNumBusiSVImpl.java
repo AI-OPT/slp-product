@@ -96,16 +96,17 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
                 || !cacheClient.exists(priceKey)
                 || !cacheClient.exists(priorityUsable)
                 || Long.parseLong(cacheClient.get(priorityUsable))<1){
+            //若促销价格不存在,表明促销已过期,删除当前优先级的促销时间
+            if (StringUtils.isNotBlank(priceKey) && !cacheClient.exists(priceKey)) {
+                String serialsKey = IPassUtils.genMcsGroupSerialStartTimeKey(tenantId,groupId);
+                //删除促销期的优先级时间 ZREM serialsKey serial
+                cacheClient.zrem(serialsKey,priority);
+            }
             //使用库存组指定优先级
             priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
             priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority);
             //库存组当前优先级库存可用量
             priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
-            //若促销价格不存在,表明促销已过期,删除当前优先级的促销时间
-            if (!cacheClient.exists(priceKey)) {
-                //TODO...删除促销期的优先级时间 ZREM serialsKey serial
-
-            }
         }
 
         //4.获取当前优先级中SKU的销售价
