@@ -21,6 +21,7 @@ import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.*;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.search.api.ISKUIndexManage;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
@@ -82,6 +83,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     IProdTargetAreaAtomSV targetAreaAtomSV;
     @Autowired
     IStorageNumBusiSV storageNumBusiSV;
+    @Autowired
+    ISKUIndexManage skuIndexManage;
 
     /**
      * 添加商城商品
@@ -343,7 +346,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToInSale(String tenantId, String prodId, Long operId) {
-        Product product = productAtomSV.selectByGroupId(tenantId,prodId);
+        Product product = productAtomSV.selectByProductId(tenantId,prodId);
         if (prodId == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
@@ -353,7 +356,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             changeToSaleForStop(product, operId);
             return;
         }
-        //若商品不是"停用下架","售罄下架","仓库中",则不允许上架
+        //若商品既不是"停用下架"和"售罄下架",也不是"仓库中",则不允许上架
         else if(!ProductConstants.Product.State.IN_STORE.equals(product.getState())){
             logger.warn("商品当前状态不允许上架,租户ID:{},商品标识:{},当前状态:{}",
                     tenantId,prodId,product.getState());
@@ -387,6 +390,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             ProductLog productLog = new ProductLog();
             BeanUtils.copyProperties(productLog,product);
             productLogAtomSV.install(productLog);
+            //将商品添加至搜索引擎
+            skuIndexManage.updateSKUIndex(prodId);
         }
     }
 

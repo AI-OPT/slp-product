@@ -87,7 +87,7 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0104
      */
-    public SkuSetForProduct querySkuSetForProduct(SkuSetForProductQuery query)
+    public SkuSetForProduct querySkuSetForProduct(ProductInfoQuery query)
             throws BusinessException,SystemException;
     @interface QuerySkuSetForProduct{}
 

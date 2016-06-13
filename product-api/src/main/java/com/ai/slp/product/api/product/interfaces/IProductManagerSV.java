@@ -125,6 +125,18 @@ public interface IProductManagerSV {
     public PageInfoResponse<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) throws BusinessException,SystemException;
     @interface QueryStorageProdByState {}
 
+    /**
+     * 对商品进行上架处理
+     * @param query
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PROMAN_0107
+     */
+    public BaseResponse changeToInSale(ProductInfoQuery query)
+        throws BusinessException,SystemException;
+    @interface ChangeToInSale {}
 }
 
 

@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * Created by xin on 16-6-1.
  */
+@Component
 public class SKUIndexManageImpl implements ISKUIndexManage {
 
     private Logger logger = LogManager.getLogger(SKUIndexManageImpl.class);
