@@ -31,17 +31,18 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
      * @return
      */
     @Override
-    public List<ProdAudiences> queryByUserType(String tenantId, String userType, String userId, boolean hasDiscard) {
+    public List<ProdAudiences> queryByUserType(String tenantId,String prodId, String userType, String userId, boolean hasDiscard) {
         if (StringUtils.isBlank(userType) && StringUtils.isBlank(userId))
             return Collections.emptyList();
         ProdAudiencesCriteria example = new ProdAudiencesCriteria();
         ProdAudiencesCriteria.Criteria criteria = example.createCriteria();
         criteria.andTenantIdEqualTo(tenantId)
-                .andUsrrIdEqualTo(ProductConstants.ProdAudiences.userId.USER_TYPE);
+                .andProdIdEqualTo(prodId)
+                .andUserIdEqualTo(ProductConstants.ProdAudiences.userId.USER_TYPE);
         if (StringUtils.isNotBlank(userType))
             criteria.andUserTypeEqualTo(userType);
         if (StringUtils.isNotBlank(userId))
-            criteria.andUsrrIdEqualTo(userId);
+            criteria.andUserIdEqualTo(userId);
         if (!hasDiscard){
             criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         }

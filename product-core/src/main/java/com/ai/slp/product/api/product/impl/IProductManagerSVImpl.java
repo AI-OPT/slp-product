@@ -122,7 +122,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public AudiencesSetOfProduct queryAudiencesOfProduct(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(productInfoQuery.getTenantId(),"");
+        return productManagerBsuiSV.queryAudiencesOfProd(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
     }
 
     /**
@@ -176,6 +177,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public ProdNoKeyAttr queryNoKeyAttrOfProd(ProductInfoQuery query) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(query.getTenantId(),"");
+        return productBusiSV.queryNoKeyAttrForEdit(query.getTenantId(),query.getProductId());
     }
 }

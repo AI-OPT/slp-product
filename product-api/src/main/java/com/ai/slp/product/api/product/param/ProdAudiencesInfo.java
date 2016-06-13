@@ -1,6 +1,6 @@
 package com.ai.slp.product.api.product.param;
 
-import com.ai.opt.base.vo.BaseInfo;
+import java.io.Serializable;
 
 /**
  * 商品受众信息<br>
@@ -10,12 +10,12 @@ import com.ai.opt.base.vo.BaseInfo;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class ProdAudiences extends BaseInfo {
+public class ProdAudiencesInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 	/**
      * 商品受众标识id
      */
-    private Long audiencesId;
+    private Long prodAudiencesId;
     /**
      * 商品标识id
      */
@@ -27,7 +27,7 @@ public class ProdAudiences extends BaseInfo {
     /**
      * 用户唯一标识
      */
-    private Long userId;
+    private String userId;
     /**
      * 状态
      */
@@ -36,14 +36,6 @@ public class ProdAudiences extends BaseInfo {
      * 操作人标识id
      */
     private long operId;
-
-    public Long getAudiencesId() {
-        return audiencesId;
-    }
-
-    public void setAudiencesId(Long audiencesId) {
-        this.audiencesId = audiencesId;
-    }
 
     public String getProdId() {
         return prodId;
@@ -61,14 +53,6 @@ public class ProdAudiences extends BaseInfo {
         this.userType = userType;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
     public String getState() {
         return state;
     }
@@ -83,5 +67,21 @@ public class ProdAudiences extends BaseInfo {
 
     public void setOperId(long operId) {
         this.operId = operId;
+    }
+
+    public Long getProdAudiencesId() {
+        return prodAudiencesId;
+    }
+
+    public void setProdAudiencesId(Long prodAudiencesId) {
+        this.prodAudiencesId = prodAudiencesId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

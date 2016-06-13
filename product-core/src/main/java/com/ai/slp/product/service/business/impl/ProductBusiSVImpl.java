@@ -449,6 +449,24 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         return noKeyAttr;
     }
 
+    /**
+     * 查询销售商品信息
+     *
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    @Override
+    public ProductInfo queryByProdId(String tenantId, String productId) {
+        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        if (product==null){
+            throw new BusinessException("","未查询到指定的商品信息,租户ID:"+tenantId+",商品标识:"+productId);
+        }
+        ProductInfo productInfo = new ProductInfo();
+        BeanUtils.copyProperties(productInfo,product);
+        return productInfo;
+    }
+
     public Map<String,FastSkuProdInfo> queryFastProd(String tenantId,List<ProdFastSkuAttach> skuAttachList){
         Map<String,FastSkuProdInfo> prodInfoMap = new HashMap<>();
 

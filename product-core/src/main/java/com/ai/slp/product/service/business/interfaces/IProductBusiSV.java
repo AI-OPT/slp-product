@@ -88,4 +88,12 @@ public interface IProductBusiSV {
      * @return
      */
     public ProdNoKeyAttr queryNoKeyAttrForEdit(String tenantId, String productId);
+
+    /**
+     * 查询销售商品信息
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    public ProductInfo queryByProdId(String tenantId, String productId);
 }

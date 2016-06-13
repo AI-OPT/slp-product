@@ -57,7 +57,8 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public ProductInfo queryProductById(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(productInfoQuery.getTenantId(),"");
+        return productBusiSV.queryByProdId(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
     }
 
     /**

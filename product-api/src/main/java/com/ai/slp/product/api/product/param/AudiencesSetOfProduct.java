@@ -1,7 +1,7 @@
 package com.ai.slp.product.api.product.param;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * 单个商品各受众类型的信息集合<br>
@@ -16,38 +16,40 @@ public class AudiencesSetOfProduct implements Serializable {
 	/**
      * 个人受众信息
      */
-    private ProdAudiences personAudiences;
+    private ProdAudiencesInfo personAudiences;
 
     /**
-     * 企业用户受众集合
+     * 企业用户受众集合<br>
+     * K:用户标识; V:受众信息
      */
-    private Set<ProdAudiences> enterpriseSet;
+    private Map<String,ProdAudiencesInfo> enterpriseMap;
     /**
      * 代理商受众集合
+     * K:用户标识; V:受众信息
      */
-    private Set<ProdAudiences> agentsSet;
+    private Map<String,ProdAudiencesInfo> agentsMap;
 
-    public ProdAudiences getPersonAudiences() {
+    public ProdAudiencesInfo getPersonAudiences() {
         return personAudiences;
     }
 
-    public void setPersonAudiences(ProdAudiences personAudiences) {
+    public void setPersonAudiences(ProdAudiencesInfo personAudiences) {
         this.personAudiences = personAudiences;
     }
 
-    public Set<ProdAudiences> getEnterpriseSet() {
-        return enterpriseSet;
+    public Map<String, ProdAudiencesInfo> getEnterpriseMap() {
+        return enterpriseMap;
     }
 
-    public void setEnterpriseSet(Set<ProdAudiences> enterpriseSet) {
-        this.enterpriseSet = enterpriseSet;
+    public void setEnterpriseMap(Map<String, ProdAudiencesInfo> enterpriseMap) {
+        this.enterpriseMap = enterpriseMap;
     }
 
-    public Set<ProdAudiences> getAgentsSet() {
-        return agentsSet;
+    public Map<String, ProdAudiencesInfo> getAgentsMap() {
+        return agentsMap;
     }
 
-    public void setAgentsSet(Set<ProdAudiences> agentsSet) {
-        this.agentsSet = agentsSet;
+    public void setAgentsMap(Map<String, ProdAudiencesInfo> agentsMap) {
+        this.agentsMap = agentsMap;
     }
 }
