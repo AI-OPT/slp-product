@@ -5,7 +5,6 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
@@ -241,7 +240,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
             throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
-        return productCatBusiSV.querAttrOfCatByIdAndType(
+        return productCatBusiSV.queryAttrOfCatByIdAndType(
                 attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
     }
 

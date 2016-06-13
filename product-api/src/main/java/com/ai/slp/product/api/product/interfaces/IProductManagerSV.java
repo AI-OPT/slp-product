@@ -137,6 +137,16 @@ public interface IProductManagerSV {
     public BaseResponse changeToInSale(ProductInfoQuery query)
         throws BusinessException,SystemException;
     @interface ChangeToInSale {}
+
+    /**
+     * 为编辑页面查询商品非关键属性
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     */
+    public ProdNoKeyAttr queryNoKeyAttrOfProd(ProductInfoQuery query)
+            throws BusinessException,SystemException;
+    @interface QueryNoKeyAttrOfProd {}
 }
 
 

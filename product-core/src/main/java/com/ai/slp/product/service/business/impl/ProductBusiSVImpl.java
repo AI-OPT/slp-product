@@ -10,6 +10,7 @@ import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.api.webfront.param.FastSkuProdInfo;
+import com.ai.slp.product.constants.ProdAttrAndValDefConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -30,6 +31,7 @@ import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.vo.ProductPageQueryVo;
 import com.ai.slp.product.vo.SkuStorageVo;
@@ -51,6 +53,8 @@ import java.util.Map;
 @Transactional
 public class ProductBusiSVImpl implements IProductBusiSV {
     private static Logger logger = LoggerFactory.getLogger(ProductBusiSVImpl.class);
+    @Autowired
+    IProductCatBusiSV productCatBusiSV;
     @Autowired
     IStandedProductAtomSV standedProductAtomSV;
     @Autowired
@@ -395,6 +399,56 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
     }
 
+    /**
+     * 查询管理界面中的非关键属性
+     *
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    @Override
+    public ProdNoKeyAttr queryNoKeyAttrForEdit(String tenantId, String productId) {
+        //查询商品信息
+        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        if (product==null){
+            logger.warn("未找到对应销售商品信息,租户ID:{},销售商品ID:{}",tenantId,productId);
+            throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
+        }
+        ProdNoKeyAttr noKeyAttr = new ProdNoKeyAttr();
+        Map<CatAttrInfoForProd, List<ProdAttrValInfo>> attrValDefMap = new HashMap<>();
+
+        // 查询对应类目非关键属性
+        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
+                product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
+        // 查询标准品对应属性的属性值
+        for (ProdCatAttrAttch catAttrAttch : catAttrAttches) {
+            CatAttrInfoForProd catAttrDef = new CatAttrInfoForProd();
+            BeanUtils.copyProperties(catAttrDef, catAttrAttch);
+            if (!ProdAttrAndValDefConstants.ProdAttrDef.ValueWay.SELECT.equals(catAttrAttch.getValueWay())
+                    && !ProdAttrAndValDefConstants.ProdAttrDef.ValueWay.MULTI_CHOSE.equals(catAttrAttch.getValueWay())){
+                List<ProdAttrValInfo> valInfoList = new ArrayList<>();
+                //查询属性对应的属性值
+                List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(tenantId,productId,catAttrAttch.getAttrId());
+                if (!CollectionUtil.isEmpty(prodAttrs)){
+                    ProdAttr prodAttr = prodAttrs.get(0);
+                    ProdAttrValInfo valInfo = new ProdAttrValInfo();
+                    BeanUtils.copyProperties(valInfo,prodAttr);
+                    valInfo.setProductAttrValId(prodAttr.getProdAttrId());
+                    valInfo.setProductId(productId);
+                    valInfo.setAttrValId(prodAttr.getAttrvalueDefId());
+                    valInfo.setAttrVal(prodAttr.getAttrValueName());
+                    valInfo.setAttrVal2(prodAttr.getAttrValueName2());
+                    valInfoList.add(valInfo);
+                }
+                attrValDefMap.put(catAttrDef,valInfoList);
+            }else {
+                attrValDefMap.put(catAttrDef, getAttrValsOfAttr(product, catAttrAttch.getAttrId()));
+            }
+        }
+        noKeyAttr.setAttrMap(attrValDefMap);
+        return noKeyAttr;
+    }
+
     public Map<String,FastSkuProdInfo> queryFastProd(String tenantId,List<ProdFastSkuAttach> skuAttachList){
         Map<String,FastSkuProdInfo> prodInfoMap = new HashMap<>();
 
@@ -455,7 +509,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
     private void changeToStop(StorageGroup group,Product product,Long operId){
-//        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
         //若库存组为"停用"或"自动停用"则设置为"停用下架"
         if (StorageConstants.StorageGroup.State.AUTO_STOP.equals(group.getState())
                 || StorageConstants.StorageGroup.State.STOP.equals(group.getState())) {
@@ -473,5 +526,32 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             BeanUtils.copyProperties(productLog,product);
             productLogAtomSV.install(productLog);
         }
+    }
+
+
+    private List<ProdAttrValInfo> getAttrValsOfAttr (Product product,long attrId){
+        List<ProdAttrValInfo> valInfoList = new ArrayList<>();
+        String tenantId = product.getTenantId(),prodId = product.getProdId();
+        //查询属性对应的属性值集合
+        List<ProdAttrvalueDef> valDefList = productCatBusiSV.queryAttrValOfAttrAndType(tenantId
+                ,product.getProductCatId(),attrId,ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
+        for (ProdAttrvalueDef valDef:valDefList){
+            ProdAttrValInfo valInfo = new ProdAttrValInfo();
+            valInfo.setTenantId(tenantId);
+            valInfo.setProductId(prodId);
+            valInfo.setAttrId(attrId);
+            valInfo.setAttrValId(valDef.getAttrValueId());
+            valInfo.setAttrVal(valDef.getAttrValueName());
+            //查询此属性值是否存在
+            ProdAttr prodAttr = prodAttrAtomSV.queryByProdAndAttrAndAttrVal(
+                    tenantId,prodId,attrId,valDef.getAttrvalueDefId());
+            if (prodAttr!=null){
+                valInfo.setProductAttrValId(prodAttr.getProdAttrId());
+                valInfo.setOperId(prodAttr.getOperId());
+                valInfo.setOperTime(prodAttr.getOperTime());
+            }
+            valInfoList.add(valInfo);
+        }
+        return valInfoList;
     }
 }

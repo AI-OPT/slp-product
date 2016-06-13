@@ -1,10 +1,7 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.product.param.ProdAttrMap;
-import com.ai.slp.product.api.product.param.Product4List;
-import com.ai.slp.product.api.product.param.ProductListQuery;
-import com.ai.slp.product.api.product.param.ProductRoute;
+import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -83,4 +80,12 @@ public interface IProductBusiSV {
      * @param prodId
      */
     public void changeToInSale(String tenantId, String prodId, Long opeId);
+
+    /**
+     * 查询管理界面中的非关键属性
+     * @param tenantId
+     * @param productId
+     * @return
+     */
+    public ProdNoKeyAttr queryNoKeyAttrForEdit(String tenantId, String productId);
 }

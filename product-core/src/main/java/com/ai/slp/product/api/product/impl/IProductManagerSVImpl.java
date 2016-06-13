@@ -165,4 +165,17 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         baseResponse.setResponseHeader(responseHeader);
         return baseResponse;
     }
+
+    /**
+     * 为编辑页面查询商品非关键属性
+     *
+     * @param query
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     */
+    @Override
+    public ProdNoKeyAttr queryNoKeyAttrOfProd(ProductInfoQuery query) throws BusinessException, SystemException {
+        return null;
+    }
 }

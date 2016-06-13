@@ -1,7 +1,6 @@
 package com.ai.slp.product.api.product.param;
 
-import com.ai.opt.base.vo.BaseResponse;
-
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -11,14 +10,15 @@ import java.sql.Timestamp;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class ProdAttrValInfo extends BaseResponse {
+public class ProdAttrValInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 	/**
      * 租户Id，必填
      */
     private String tenantId;
     /**
-     * 标准品/销售属性值ID
+     * 标准品/销售商品的属性值ID<br>
+     * 若存在,则表示已经设置此值,否则没有设置
      */
     private Long productAttrValId;
     /**

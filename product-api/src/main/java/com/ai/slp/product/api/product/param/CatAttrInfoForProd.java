@@ -1,6 +1,6 @@
 package com.ai.slp.product.api.product.param;
 
-import com.ai.opt.base.vo.BaseInfo;
+import java.io.Serializable;
 
 /**
  * 类目属性对象<br>
@@ -11,7 +11,7 @@ import com.ai.opt.base.vo.BaseInfo;
  *
  * @author liutong5
  */
-public class CatAttrInfoForProd extends BaseInfo {
+public class CatAttrInfoForProd implements Serializable {
     private static final long serialVersionUID = 1L;
 	/**
      * 类目与属性关系标识
