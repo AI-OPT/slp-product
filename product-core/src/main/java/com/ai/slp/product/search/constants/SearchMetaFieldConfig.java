@@ -21,6 +21,8 @@ public class SearchMetaFieldConfig {
     
     public static final String ATTRVALUE_DEF_ID = "attrvaluedefid";
     
+    public static final String TENANT_ID = "tenantid";
+    
 
     public static final String SKU_ID = "skuid";
     public static final String PRODUCT_ID = "productid";

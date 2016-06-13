@@ -124,7 +124,12 @@ public class ProductSearchCriteria {
                     attrValueDefId, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
             return this;
         }
-
+        //租户ID
+        public ProductSearchCriteriaBuilder tenantID(String tenantId){
+            productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.TENANT_ID,
+                    tenantId, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
+            return this;
+        }
         // 排序
         public ProductSearchCriteriaBuilder addOrderBy(String orderByField, SortType sortType) {
             productSearchCriteria.sortFields.add(new SortField(orderByField, sortType.getValue()));
