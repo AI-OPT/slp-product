@@ -6,6 +6,7 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
+import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
@@ -197,7 +198,18 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     @Override
     public SkuStorageVo queryStorageOfSku(String tenantId, String skuId) {
         ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
-        Product product = getProductBySkuId(tenantId,skuId);
+        //查询SKU所属销售商品
+        ProdSku skuInfo = skuAtomSV.querySkuById(tenantId,skuId);
+        if (skuInfo==null){
+            logger.warn("单品信息不存在,租户ID:{},SKU标识:{}",tenantId,skuId);
+            throw new BusinessException(ErrorCodeConstants.Product.SKU_NO_EXIST,"单品信息不存在,单品标识:"+skuId);
+        }
+        //
+        Product product = productAtomSV.selectByProductId(tenantId,skuInfo.getProdId());
+        if (product==null){
+            logger.warn("销售商品不存在,租户ID:{},商品标识:{}",tenantId,skuInfo.getProdId());
+            throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"销售商品不存在,单品标识:"+skuId);
+        }
         String groupId = product.getStorageGroupId();
         //获取库存组的cacheKey
         String groupKey = IPassUtils.genMcsStorageGroupKey(tenantId,groupId);
@@ -339,7 +351,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         ProdSku skuInfo = skuAtomSV.querySkuById(tenantId,skuId);
         if (skuInfo==null){
             logger.warn("单品信息不存在,租户ID:{},SKU标识:{}",tenantId,skuId);
-            throw new BusinessException("","单品信息不存在,单品标识:"+skuId);
+            throw new BusinessException("1001","单品信息不存在,单品标识:"+skuId);
         }
         //1. 查询商品是否为"在售"状态
         Product product = productAtomSV.selectByProductId(tenantId,skuInfo.getProdId());
