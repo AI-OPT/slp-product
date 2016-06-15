@@ -16,8 +16,9 @@ public class IProductSearchTest {
         ProductSearchCriteria productSearchCriteria =
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder("11",
                         new UserSearchAuthority(UserSearchAuthority.UserType.PERSONAL,""))
-                .skuNameLike("大海").build();
+                .attrValueDefID("100050").categoryIdIs("10000010020000").basicOrgIdIs("10").build();
         System.out.println(JSON.toJSONString(productSearch.search(productSearchCriteria)));
         System.out.println(productSearch.search(productSearchCriteria).getCount() == 2);
     }
+    
 }
