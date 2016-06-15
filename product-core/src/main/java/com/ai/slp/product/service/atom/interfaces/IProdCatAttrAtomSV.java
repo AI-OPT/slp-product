@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.atom.interfaces;
 
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
+
 import java.util.List;
 
 /**
@@ -107,4 +108,13 @@ public interface IProdCatAttrAtomSV {
      * 通过属性标识查看商品类目属性信息
      */
     public List<ProdCatAttr> queryCatAttrByAttrId(String tenantId,Long attrId);
+
+    /**
+     * 查询类目销售属性中需要上传图片的属性
+     *
+     * @param tenantId
+     * @param catId
+     * @return
+     */
+    public List<ProdCatAttr> queryAttrOfPicByIdAndSale(String tenantId, String catId);
 }

@@ -1,7 +1,7 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.product.param.AudiencesSetOfProduct;
+import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductEditUp;
 
@@ -18,10 +18,10 @@ public interface IProductManagerBsuiSV {
     public PageInfoResponse<ProductEditUp> queryPageForEdit(ProductEditQueryReq queryReq);
 
     /**
-     * 查询商品的受众信息
+     * 查询商品的其他设置内容
      * @param tenantId
      * @param prodId
      * @return
      */
-    public AudiencesSetOfProduct queryAudiencesOfProd(String tenantId,String prodId);
+    public OtherSetOfProduct queryOtherSetOfProd(String tenantId, String prodId);
 }

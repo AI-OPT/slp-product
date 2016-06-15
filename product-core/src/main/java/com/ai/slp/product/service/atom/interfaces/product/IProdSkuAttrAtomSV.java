@@ -2,6 +2,8 @@ package com.ai.slp.product.service.atom.interfaces.product;
 
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr;
 
+import java.util.List;
+
 /**
  * Created by jackieliu on 16/5/10.
  */
@@ -35,5 +37,15 @@ public interface IProdSkuAttrAtomSV {
      * @return
      */
     public ProdSkuAttr queryAttrValBySkuIdAndAttr(String tenantId,String skuId,Long attrId);
+
+    /**
+     * 根据商品标识和属性标识查询对应的属性值标识
+     *
+     * @param tenantId
+     * @param prodId
+     * @param attrId
+     * @return
+     */
+    public List<String> queryAttrValIdByProdIdAndAttrId(String tenantId, String prodId, Long attrId);
 
 }

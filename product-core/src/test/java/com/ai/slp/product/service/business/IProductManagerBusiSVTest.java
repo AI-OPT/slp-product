@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.business;
 
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.constants.CommonConstants;
@@ -29,5 +30,15 @@ public class IProductManagerBusiSVTest {
         queryReq.setProductCatId("1");//
         PageInfoResponse<ProductEditUp> response = productManagerBsuiSV.queryPageForEdit(queryReq);
         System.out.println("\r"+response.getCount()+",size="+response.getResult().size());
+    }
+
+    @Test
+    public void queryOtherSetOfProdTest(){
+        OtherSetOfProduct otherSet = productManagerBsuiSV.queryOtherSetOfProd(
+                CommonConstants.COMMON_TENANT_ID,"1");
+        if (otherSet!=null && otherSet.getPersonAudiences()!=null){
+            System.out.println(otherSet.getPersonAudiences().getUserId());
+        }
+
     }
 }
