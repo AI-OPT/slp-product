@@ -135,6 +135,7 @@ public class SKUInfoUtil {
         while (resultSet.next()) {
             AttrInfo attrInfo = new AttrInfo(resultSet.getString("attrID"));
             attrInfo.setAttrvalue(resultSet.getString("attrValue"));
+            attrInfo.setAttrvaluedefid(resultSet.getString("attrValueDefId"));
             attrInfos.add(attrInfo);
         }
         skuInfo.setAttrInfos(attrInfos);
