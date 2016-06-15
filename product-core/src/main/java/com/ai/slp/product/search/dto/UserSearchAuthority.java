@@ -21,7 +21,7 @@ public class UserSearchAuthority {
     }
 
     public enum UserType {
-        PERSONAL("10"), ENTERPRISE("11"), AGENCY("12");
+        SUPPLY("13"),PERSONAL("10"), ENTERPRISE("11"), AGENCY("12");
 
         private String value;
 

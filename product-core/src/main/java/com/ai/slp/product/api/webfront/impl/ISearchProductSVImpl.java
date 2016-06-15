@@ -51,6 +51,8 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             user = new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,userid);
         }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUserType())){
             user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
+        }else if(ProductHomeConstants.UserType.SUPPLY.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.SUPPLY,userid); 
         }
          ProductSearchCriteria productSearchCriteria =null;
          if(!StringUtil.isBlank(request.getAttrDefId()) && !StringUtil.isBlank(request.getBasicOrgIdIs())){
@@ -308,6 +310,8 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             user = new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,userid);
         }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUserType())){
             user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
+        }else if(ProductHomeConstants.UserType.SUPPLY.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.SUPPLY,userid); 
         }
          ProductSearchCriteria productSearchCriteria;
          if(StringUtil.isBlank(request.getProductCatId())){
@@ -355,6 +359,8 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             user = new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,userid);
         }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUserType())){
             user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
+        }else if(ProductHomeConstants.UserType.SUPPLY.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.SUPPLY,userid); 
         }
          ProductSearchCriteria productSearchCriteria;
          Results<Map<String, Object>>  result = new  Results<Map<String, Object>>();

@@ -29,6 +29,7 @@ public class SearchProductTest {
        request.setTenantId("SLP");
         request.setAreaCode("11");
         request.setProductCatId("10000010010000");
+        request.setUserType("12");
        // request.setBasicOrgIdIs("12");
        //request.setAttrDefId("100004");
         request.setPageInfo(pageInfo);
@@ -44,6 +45,7 @@ public class SearchProductTest {
         request.setProductCatId("10000010010000");
         request.setAreaCode("11");
         request.setTenantId("SLP");
+        request.setUserType("12");
         List<ProductData> response = iSearchProductSV.queryHotSellProduct(request);
         System.out.println("result="+JSON.toJSONString(response));
     }
