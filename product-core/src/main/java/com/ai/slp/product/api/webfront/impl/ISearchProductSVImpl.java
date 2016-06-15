@@ -372,7 +372,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
          if(!StringUtil.isBlank(request.getSkuName())){
              productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .tenantID(request.getTenantId()).skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
+                     .tenantID(request.getTenantId()).skuNameCat(request.getSkuName()).sellPointLike(request.getSkuName()).build();
              productCatIds = productSearch.searchCategory(productSearchCriteria);
          }
        //获取第一个类目

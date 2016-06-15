@@ -63,7 +63,12 @@ public class ProductSearchCriteria {
                     skuName, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
             return this;
         }
-
+        // 根据单品名字获取类目
+        public ProductSearchCriteriaBuilder skuNameCat(String skuName) {
+            productSearchCriteria.searchfieldVos.get(0).addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.SKUNAME,
+                    skuName, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+            return this;
+        }
         // 卖点
         public ProductSearchCriteriaBuilder sellPointLike(String sellPoint) {
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.SELL_POINT,
