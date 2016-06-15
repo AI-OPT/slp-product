@@ -94,16 +94,16 @@ public interface IProductManagerSV {
     
 
     /**
-     * 查询单个商品的受众信息<br>
+     * 查询单个商品的其他设置内容<br>
      *
      * @param productInfoQuery 单个商品的标识信息
-     * @return 单个商品的受众信息
+     * @return 单个商品的其他设置内容
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
      * @ApiCode PROMAN_0105
      */
-    public AudiencesSetOfProduct queryAudiencesOfProduct(ProductInfoQuery productInfoQuery)
+    public OtherSetOfProduct queryOtherSetOfProduct(ProductInfoQuery productInfoQuery)
             throws BusinessException,SystemException;
     @interface QueryAudiencesOfProduct{}
 

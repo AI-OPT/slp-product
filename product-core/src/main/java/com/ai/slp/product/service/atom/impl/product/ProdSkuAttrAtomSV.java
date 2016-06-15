@@ -2,6 +2,7 @@ package com.ai.slp.product.service.atom.impl.product;
 
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.dao.mapper.attach.ProdSkuAttrMapperExt;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdSkuAttrMapper;
@@ -20,6 +21,8 @@ import java.util.List;
 public class ProdSkuAttrAtomSV implements IProdSkuAttrAtomSV {
     @Autowired
     ProdSkuAttrMapper skuAttrMapper;
+    @Autowired
+    ProdSkuAttrMapperExt skuAttrMapperExt;
     @Override
     public int queryAttrValNumOfSku(String tenantId, String prodId, String valId) {
         ProdSkuAttrCriteria example = new ProdSkuAttrCriteria();
@@ -83,5 +86,14 @@ public class ProdSkuAttrAtomSV implements IProdSkuAttrAtomSV {
         return CollectionUtil.isEmpty(prodSkuAttrList)?null:prodSkuAttrList.get(0);
     }
 
-
+    @Override
+    public List<String> queryAttrValIdByProdIdAndAttrId(String tenantId,String prodId,Long attrId){
+        ProdSkuAttrCriteria example = new ProdSkuAttrCriteria();
+        example.setDistinct(true);
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andProdIdEqualTo(prodId)
+                .andAttrIdEqualTo(attrId)
+                .andStateEqualTo(ProductConstants.ProdSkuAttr.State.ACTIVE);
+        return skuAttrMapperExt.selectAttrValId(example);
+    }
 }

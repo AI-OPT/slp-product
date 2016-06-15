@@ -1,19 +1,19 @@
 package com.ai.slp.product.service.atom.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ai.slp.product.constants.CommonSatesConstants;
-import com.ai.slp.product.util.DateUtils;
-import com.ai.slp.product.util.SequenceUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
+import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
@@ -149,4 +149,22 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
 				.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
 		return prodCatAttrMapper.selectByExample(example);
 	}
+
+    /**
+     * 查询类目销售属性中需要上传图片的属性
+     *
+     * @param tenantId
+     * @param catId
+     * @return
+     */
+    @Override
+    public List<ProdCatAttr> queryAttrOfPicByIdAndSale(String tenantId, String catId) {
+        ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andProductCatIdEqualTo(catId)
+                .andAttrTypeEqualTo(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE)
+                .andIsPictureEqualTo(ProductCatConstants.ProductCatAttr.IsPicture.YES)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        return prodCatAttrMapper.selectByExample(example);
+    }
 }

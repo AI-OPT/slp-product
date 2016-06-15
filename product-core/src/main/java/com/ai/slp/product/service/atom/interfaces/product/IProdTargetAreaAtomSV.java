@@ -14,11 +14,11 @@ public interface IProdTargetAreaAtomSV {
      * 根据地域编码查询目标地域信息
      *
      * @param tenantId 租户ID
+     * @param prodId 销售商品标识
      * @param provCode 省份编码
-     * @param cityCode 城市编码
-     * @param countyCode 区县编码
      * @param hasDiscard 是否包含废弃状态
      * @return
      */
-    public List<ProdTargetArea> queryByAreaCode(String tenantId,Integer provCode,Integer cityCode,Integer countyCode,boolean hasDiscard);
+    public List<ProdTargetArea> queryByAreaCode(String tenantId,String prodId,Integer provCode,boolean hasDiscard);
+
 }

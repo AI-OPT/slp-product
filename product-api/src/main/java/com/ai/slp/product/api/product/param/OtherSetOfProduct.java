@@ -1,16 +1,17 @@
 package com.ai.slp.product.api.product.param;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
- * 单个商品各受众类型的信息集合<br>
+ * 单个商品其他设置信息集合<br>
  *
  * Date: 2016年4月26日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class AudiencesSetOfProduct implements Serializable {
+public class OtherSetOfProduct implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	/**
@@ -23,11 +24,25 @@ public class AudiencesSetOfProduct implements Serializable {
      * K:用户标识; V:受众信息
      */
     private Map<String,ProdAudiencesInfo> enterpriseMap;
+
     /**
      * 代理商受众集合
      * K:用户标识; V:受众信息
      */
     private Map<String,ProdAudiencesInfo> agentsMap;
+
+    /**
+     * 商品目标地域
+     */
+    private List<ProdTargetAreaInfo> areaInfos;
+    /**
+     * 商品主图图片
+     */
+    private List<ProdPicInfo> productPics;
+    /**
+     * 属性值对应的图片信息
+     */
+    private Map<ProdAttrValInfo,List<ProdPicInfo>> attrValPics;
 
     public ProdAudiencesInfo getPersonAudiences() {
         return personAudiences;
@@ -51,5 +66,29 @@ public class AudiencesSetOfProduct implements Serializable {
 
     public void setAgentsMap(Map<String, ProdAudiencesInfo> agentsMap) {
         this.agentsMap = agentsMap;
+    }
+
+    public List<ProdTargetAreaInfo> getAreaInfos() {
+        return areaInfos;
+    }
+
+    public void setAreaInfos(List<ProdTargetAreaInfo> areaInfos) {
+        this.areaInfos = areaInfos;
+    }
+
+    public List<ProdPicInfo> getProductPics() {
+        return productPics;
+    }
+
+    public void setProductPics(List<ProdPicInfo> productPics) {
+        this.productPics = productPics;
+    }
+
+    public Map<ProdAttrValInfo, List<ProdPicInfo>> getAttrValPics() {
+        return attrValPics;
+    }
+
+    public void setAttrValPics(Map<ProdAttrValInfo, List<ProdPicInfo>> attrValPics) {
+        this.attrValPics = attrValPics;
     }
 }

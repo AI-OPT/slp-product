@@ -121,9 +121,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @ApiCode PROMAN_0105
      */
     @Override
-    public AudiencesSetOfProduct queryAudiencesOfProduct(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
+    public OtherSetOfProduct queryOtherSetOfProduct(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(productInfoQuery.getTenantId(),"");
-        return productManagerBsuiSV.queryAudiencesOfProd(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
+        return productManagerBsuiSV.queryOtherSetOfProd(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
     }
 
     /**
