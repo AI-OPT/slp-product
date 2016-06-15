@@ -48,6 +48,8 @@ public class IProductHomeSVImpl implements IProductHomeSV {
             user = new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,userid);
         }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUsertype())){
             user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
+        }else if(ProductHomeConstants.UserType.SUPPLY.equals(request.getUsertype())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.SUPPLY,userid); 
         }
         ProductSearchCriteria productSearchCriteria =
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
@@ -88,6 +90,8 @@ public class IProductHomeSVImpl implements IProductHomeSV {
             user = new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,userid);
         }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUsertype())){
             user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
+        }else if(ProductHomeConstants.UserType.SUPPLY.equals(request.getUsertype())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.SUPPLY,userid); 
         }
         ProductSearchCriteria productSearchCriteria =
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)

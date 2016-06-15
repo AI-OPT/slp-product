@@ -23,15 +23,20 @@ public class ProductHomeConstants {
         /**
          * 企业
          */
-        public static final String ENTERPRISE = "ENTERPRISE";
+        public static final String ENTERPRISE = "11";
         /**
          * 个人 
          */
-        public static final String PERSONAL = "PERSONAL";
+        public static final String PERSONAL = "10";
         /**
          * 代理
          */
-        public static final String AGENCY = "AGENCY";
+        public static final String AGENCY = "12";
+        /**
+         * 供应商
+         */
+        public static final String SUPPLY = "13";
+       
         
     }
 }
