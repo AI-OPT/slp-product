@@ -140,7 +140,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         List<ProdAudiences> boList = prodAudiencesAtomSV.queryByUserType(
                 tenantId,prodId, userType,null,false);
         Map<String,ProdAudiencesInfo> audiencesMap = new HashMap<>();
-        IUcUserSV ucUserSV = DubboConsumerFactory.getService("IUcUserSV");
+        IUcUserSV ucUserSV = DubboConsumerFactory.getService("iUcUserSV");
         for (ProdAudiences audiences:boList){
             ProdAudiencesInfo audiencesInfo = new ProdAudiencesInfo();
             BeanUtils.copyProperties(audiencesInfo,audiences);
