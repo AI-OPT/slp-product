@@ -389,6 +389,20 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                      .tenantID(request.getTenantId()).productCategoryIdIs(productCatId).skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
             result = productSearch.search(productSearchCriteria); 
          }
+         //如果销量不为空
+         if(!StringUtil.isBlank(request.getSaleNumOrderFlag()) && !StringUtil.isBlank(productCatId) && !StringUtil.isBlank(request.getSkuName())){
+             productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).tenantID(request.getTenantId()).productCategoryIdIs(productCatId).skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
+            result = productSearch.search(productSearchCriteria); 
+         }
+         //如果价格不为空
+         if(!StringUtil.isBlank(request.getPriceOrderFlag()) && !StringUtil.isBlank(productCatId) && !StringUtil.isBlank(request.getSkuName())){
+             productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
+                     .addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).tenantID(request.getTenantId()).productCategoryIdIs(productCatId).skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
+            result = productSearch.search(productSearchCriteria); 
+         }
         List<Map<String,Object>> reslist = result.getSearchList();
         String info = JSON.toJSONString(reslist);
         List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){}); 
