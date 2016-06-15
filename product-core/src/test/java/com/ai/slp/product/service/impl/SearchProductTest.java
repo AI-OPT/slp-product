@@ -55,9 +55,9 @@ public class SearchProductTest {
         PageInfo<ProductData> pageInfo = new PageInfo<ProductData>();
         pageInfo.setPageNo(1);
         pageInfo.setPageSize(10);
-        request.setAreaCode("11");
+        request.setAreaCode("31");
         request.setTenantId("SLP");
-        request.setSkuName("fsdfsd");
+        request.setSkuName("上海移动");
         request.setPageInfo(pageInfo);
         ProductQueryResponse response = iSearchProductSV.searchProduct(request);
         System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));
