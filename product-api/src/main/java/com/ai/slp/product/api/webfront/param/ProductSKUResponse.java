@@ -39,6 +39,12 @@ public class ProductSKUResponse extends BaseResponse{
      * 商品卖点
      */
     private String productSellPoint;
+    
+    /**
+     * 充值类型
+     */
+    private String rechargeType;
+    
     /**
      * 有效期类型
      */
@@ -252,5 +258,11 @@ public class ProductSKUResponse extends BaseResponse{
 	}
 	public void setProductCatId(String productCatId) {
 		this.productCatId = productCatId;
+	}
+	public String getRechargeType() {
+		return rechargeType;
+	}
+	public void setRechargeType(String rechargeType) {
+		this.rechargeType = rechargeType;
 	}
 }
