@@ -11,7 +11,7 @@ public class ProdAudiences {
 
     private String userType;
 
-    private String usrrId;
+    private String userId;
 
     private String state;
 
@@ -51,12 +51,12 @@ public class ProdAudiences {
         this.userType = userType == null ? null : userType.trim();
     }
 
-    public String getUsrrId() {
-        return usrrId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsrrId(String usrrId) {
-        this.usrrId = usrrId == null ? null : usrrId.trim();
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public String getState() {

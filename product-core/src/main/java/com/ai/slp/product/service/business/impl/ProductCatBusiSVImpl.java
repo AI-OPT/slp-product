@@ -169,7 +169,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
      * @return
      */
     @Override
-    public Map<ProdCatAttrDef, List<AttrValInfo>> querAttrOfCatByIdAndType(
+    public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrOfCatByIdAndType(
             String tenantId, String productCatId, String attrType) {
         Map<ProdCatAttrDef, List<AttrValInfo>> catAttrDefListMap = new HashMap<>();
         //查询类目属性集合
@@ -397,6 +397,28 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
 
         }
         return successNum;
+    }
+
+    /**
+     * 查询类目下指定类型和指定属性的属性值
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrId
+     * @param attrType
+     * @return
+     */
+    @Override
+    public List<ProdAttrvalueDef> queryAttrValOfAttrAndType(String tenantId, String catId, long attrId, String attrType) {
+        //查询对应关系
+        ProdCatAttr catAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(tenantId,catId,attrId,attrType);
+        if (catAttr==null){
+            logger.error("未查询到属性和类目的对应关系,租户ID:{},类目标识:{},属性标识:{},查询类型:{}",
+                    tenantId,catId,attrId,attrType);
+            throw new BusinessException("","未查询到属性和类目的对应关系");
+        }
+        //查询属性对应的属性值
+        return catAttrAttachAtomSV.queryValListByCatAttr(tenantId,catAttr.getCatAttrId());
     }
 
 

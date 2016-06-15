@@ -11,13 +11,14 @@ import java.util.List;
 public interface IProdAudiencesAtomSV {
 
     /**
-     * 查询符合用户类型和用户ID的受众新,用户类型和用户ID不能均为空
+     * 查询某个商品下符合用户类型和用户ID的受众群,用户类型和用户ID不能均为空
      *
      * @param tenantId
+     * @param prodId
      * @param userType
      * @param userId
      * @param hasDiscard
      * @return
      */
-    public List<ProdAudiences> queryByUserType(String tenantId,String userType,String userId,boolean hasDiscard);
+    public List<ProdAudiences> queryByUserType(String tenantId,String prodId,String userType,String userId,boolean hasDiscard);
 }

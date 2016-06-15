@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttrCriteria;
@@ -33,5 +34,26 @@ public class ProdAttrAtomSVImpl implements IProdAttrAtomSV {
                 .andAttrIdEqualTo(attrId)
                 .andStateEqualTo(ProductConstants.ProdAttr.State.ACTIVE);
         return prodAttrMapper.selectByExample(example);
+    }
+
+    /**
+     * 查询某个商品中某个属性对应的属性值信息
+     *
+     * @param tenantId
+     * @param prodId
+     * @param attrId
+     * @param attrValId
+     * @return
+     */
+    @Override
+    public ProdAttr queryByProdAndAttrAndAttrVal(String tenantId, String prodId, Long attrId, String attrValId) {
+        ProdAttrCriteria example = new ProdAttrCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andProdIdEqualTo(prodId)
+                .andAttrIdEqualTo(attrId)
+                .andAttrvalueDefIdEqualTo(attrValId)
+                .andStateEqualTo(ProductConstants.ProdAttr.State.ACTIVE);
+        List<ProdAttr> prodAttrs = prodAttrMapper.selectByExample(example);
+        return CollectionUtil.isEmpty(prodAttrs)?null:prodAttrs.get(0);
     }
 }

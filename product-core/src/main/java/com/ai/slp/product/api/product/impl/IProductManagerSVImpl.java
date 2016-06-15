@@ -4,8 +4,11 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -20,6 +23,8 @@ import org.springframework.stereotype.Component;
 public class IProductManagerSVImpl implements IProductManagerSV {
     @Autowired
     IProductManagerBsuiSV productManagerBsuiSV;
+    @Autowired
+    IProductBusiSV productBusiSV;
     /**
      * 商品管理查询商品编辑状态<br>
      * 状态 1未编辑2已编辑<br>
@@ -117,7 +122,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public AudiencesSetOfProduct queryAudiencesOfProduct(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(productInfoQuery.getTenantId(),"");
+        return productManagerBsuiSV.queryAudiencesOfProd(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
     }
 
     /**
@@ -137,5 +143,41 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Override
     public PageInfoResponse<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) throws BusinessException, SystemException {
         return null;
+    }
+
+    /**
+     * 对商品进行上架处理
+     *
+     * @param query
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PROMAN_0107
+     */
+    @Override
+    public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(query.getTenantId(),"");
+        productBusiSV.changeToInSale(query.getTenantId(),query.getProductId(),query.getOperId());
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
+    }
+
+    /**
+     * 为编辑页面查询商品非关键属性
+     *
+     * @param query
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     */
+    @Override
+    public ProdNoKeyAttr queryNoKeyAttrOfProd(ProductInfoQuery query) throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(query.getTenantId(),"");
+        return productBusiSV.queryNoKeyAttrForEdit(query.getTenantId(),query.getProductId());
     }
 }

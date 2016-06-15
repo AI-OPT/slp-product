@@ -18,4 +18,14 @@ public interface IProdAttrAtomSV {
      * @return
      */
     public List<ProdAttr> queryOfProdAndAttr(String tenantId,String prodId,Long attrId);
+
+    /**
+     * 查询某个商品中某个属性对应的属性值信息
+     * @param tenantId
+     * @param prodId
+     * @param attrId
+     * @param attrValId
+     * @return
+     */
+    public ProdAttr queryByProdAndAttrAndAttrVal(String tenantId,String prodId,Long attrId,String attrValId);
 }

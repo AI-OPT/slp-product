@@ -21,7 +21,7 @@ public class IProdSkuBusiSVTest {
 
     @Test
     public void querySkuDetailTest(){
-        ProductSKUResponse skuResponse = prodSkuBusiSV.querySkuDetail("SLP","1",null);
+        ProductSKUResponse skuResponse = prodSkuBusiSV.querySkuDetail("SLP","4",null);
         System.out.println(skuResponse.toString());
     }
 

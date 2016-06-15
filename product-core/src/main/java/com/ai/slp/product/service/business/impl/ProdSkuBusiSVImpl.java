@@ -8,6 +8,7 @@ import com.ai.slp.product.api.normproduct.param.AttrValInfo;
 import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.*;
+import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -241,7 +242,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         if (product==null){
             logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}"
                     ,tenantId,prodSku.getSkuId(),prodSku.getProdId());
-            throw new BusinessException("","未查询到指定的SKU信息,租户ID:"+tenantId+",SKU标识:"+prodSku.getSkuId()
+            throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
+                    "未查询到指定的SKU信息,租户ID:"+tenantId+",SKU标识:"+prodSku.getSkuId()
                     +"商品ID:"+prodSku.getProdId());
         }
         return genSkuResponse(tenantId,product,prodSku);
@@ -408,8 +410,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         }
         if (prodSku==null){
             logger.warn("未查询到指定的SKU信息,租户ID:{},SKU标识:{},SKU属性串:{}",tenantId,skuId,skuAttrs);
-            throw new BusinessException("","未查询到指定的SKU信息,租户ID:"+tenantId+",SKU标识:"+skuId
-                    +"SKU属性串:"+skuAttrs);
+            throw new BusinessException(ErrorCodeConstants.Product.SKU_NO_EXIST,
+                    "未查询到指定的SKU信息,租户ID:"+tenantId+",SKU标识:"+skuId+"SKU属性串:"+skuAttrs);
         }
         return prodSku;
     }

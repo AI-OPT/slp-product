@@ -1,8 +1,8 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.param.*;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 
 import java.util.List;
 import java.util.Map;
@@ -59,13 +59,13 @@ public interface IProductCatBusiSV {
     public List<ProductCatInfo> queryLinkOfCatById(String tenantId,String productCatId);
 
     /**
-     *
+     * 查询类目下某个类型的属性标识和属性值
      * @param tenantId
      * @param productCatId
      * @param attrType
      * @return
      */
-    public Map<ProdCatAttrDef, List<AttrValInfo>> querAttrOfCatByIdAndType(
+    public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrOfCatByIdAndType(
             String tenantId,String productCatId,String attrType);
 
     /**
@@ -107,4 +107,14 @@ public interface IProductCatBusiSV {
      * @return 更新成功条目数
      */
     public int updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams);
+
+    /**
+     * 查询类目下指定类型和指定属性的属性值
+     * @param tenantId
+     * @param catId
+     * @param attrId
+     * @param attrType
+     * @return
+     */
+    public List<ProdAttrvalueDef> queryAttrValOfAttrAndType(String tenantId, String catId, long attrId, String attrType);
 }

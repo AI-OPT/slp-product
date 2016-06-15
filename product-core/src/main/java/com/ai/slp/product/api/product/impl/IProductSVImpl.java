@@ -57,7 +57,8 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public ProductInfo queryProductById(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(productInfoQuery.getTenantId(),"");
+        return productBusiSV.queryByProdId(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
     }
 
     /**
@@ -109,9 +110,9 @@ public class IProductSVImpl implements IProductSV {
      * @ApiCode PRODUCT_0104
      */
     @Override
-    public SkuSetForProduct querySkuSetForProduct(SkuSetForProductQuery query) throws BusinessException, SystemException {
+    public SkuSetForProduct querySkuSetForProduct(ProductInfoQuery query) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(query.getTenantId(),"");
-        return prodSkuBusiSV.querySkuByProdId(query.getTenantId(),query.getProdId());
+        return prodSkuBusiSV.querySkuByProdId(query.getTenantId(),query.getProductId());
     }
 
     /**

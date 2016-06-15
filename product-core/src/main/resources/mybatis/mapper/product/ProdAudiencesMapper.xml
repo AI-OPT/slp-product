@@ -6,7 +6,7 @@
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
     <result column="USER_TYPE" property="userType" jdbcType="VARCHAR" />
-    <result column="USRR_ID" property="usrrId" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
     <result column="STATE" property="state" jdbcType="VARCHAR" />
     <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
@@ -70,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    PROD_AUDIENCES_ID, TENANT_ID, PROD_ID, USER_TYPE, USRR_ID, STATE, OPER_ID, OPER_TIME
+    PROD_AUDIENCES_ID, TENANT_ID, PROD_ID, USER_TYPE, USER_ID, STATE, OPER_ID, OPER_TIME
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdAudiencesCriteria" >
     select
@@ -108,10 +108,10 @@
   </delete>
   <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdAudiences" >
     insert into prod_audiences (PROD_AUDIENCES_ID, TENANT_ID, PROD_ID, 
-      USER_TYPE, USRR_ID, STATE, 
+      USER_TYPE, USER_ID, STATE, 
       OPER_ID, OPER_TIME)
     values (#{prodAudiencesId,jdbcType=DECIMAL}, #{tenantId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, 
-      #{userType,jdbcType=VARCHAR}, #{usrrId,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
+      #{userType,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
       #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProdAudiences" >
@@ -129,8 +129,8 @@
       <if test="userType != null" >
         USER_TYPE,
       </if>
-      <if test="usrrId != null" >
-        USRR_ID,
+      <if test="userId != null" >
+        USER_ID,
       </if>
       <if test="state != null" >
         STATE,
@@ -155,8 +155,8 @@
       <if test="userType != null" >
         #{userType,jdbcType=VARCHAR},
       </if>
-      <if test="usrrId != null" >
-        #{usrrId,jdbcType=VARCHAR},
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="state != null" >
         #{state,jdbcType=VARCHAR},
@@ -190,8 +190,8 @@
       <if test="record.userType != null" >
         USER_TYPE = #{record.userType,jdbcType=VARCHAR},
       </if>
-      <if test="record.usrrId != null" >
-        USRR_ID = #{record.usrrId,jdbcType=VARCHAR},
+      <if test="record.userId != null" >
+        USER_ID = #{record.userId,jdbcType=VARCHAR},
       </if>
       <if test="record.state != null" >
         STATE = #{record.state,jdbcType=VARCHAR},
@@ -213,7 +213,7 @@
       TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       PROD_ID = #{record.prodId,jdbcType=VARCHAR},
       USER_TYPE = #{record.userType,jdbcType=VARCHAR},
-      USRR_ID = #{record.usrrId,jdbcType=VARCHAR},
+      USER_ID = #{record.userId,jdbcType=VARCHAR},
       STATE = #{record.state,jdbcType=VARCHAR},
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
       OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
@@ -233,8 +233,8 @@
       <if test="userType != null" >
         USER_TYPE = #{userType,jdbcType=VARCHAR},
       </if>
-      <if test="usrrId != null" >
-        USRR_ID = #{usrrId,jdbcType=VARCHAR},
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=VARCHAR},
       </if>
       <if test="state != null" >
         STATE = #{state,jdbcType=VARCHAR},
@@ -253,7 +253,7 @@
     set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       PROD_ID = #{prodId,jdbcType=VARCHAR},
       USER_TYPE = #{userType,jdbcType=VARCHAR},
-      USRR_ID = #{usrrId,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=VARCHAR},
       STATE = #{state,jdbcType=VARCHAR},
       OPER_ID = #{operId,jdbcType=DECIMAL},
       OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
