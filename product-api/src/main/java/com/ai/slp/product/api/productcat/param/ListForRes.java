@@ -19,6 +19,8 @@ public class ListForRes<T> extends BaseResponse implements List {
         this.objList = objList;
     }
 
+    public ListForRes(){}
+
     public ListForRes(List<T> objList){
         this.objList = objList;
     }
