@@ -59,6 +59,7 @@ public class SearchProductTest {
         request.setTenantId("SLP");
         request.setSkuName("上海移动");
         request.setPageInfo(pageInfo);
+        request.setPriceOrderFlag("DESC");
         ProductQueryResponse response = iSearchProductSV.searchProduct(request);
         System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));
     }
