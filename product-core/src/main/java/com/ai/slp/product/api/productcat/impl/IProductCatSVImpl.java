@@ -133,11 +133,11 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @ApiCode PRODUCT_CAT_0105
      */
     @Override
-    public MapForRes<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
+    public Map<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
         Map<Long, Set<String>> map= productCatBusiSV.queryAttrAndValIdByCatIdAndType(
                 attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
-        return new MapForRes<Long, Set<String>>(map);
+        return map;
     }
 
 
@@ -222,10 +222,10 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @ApiCode PRODUCT_CAT_0110
      */
     @Override
-    public ListForRes<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
+    public List<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),"");
         List<ProductCatInfo> list = productCatBusiSV.queryLinkOfCatById(catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
-        return new ListForRes<ProductCatInfo>(list);
+        return list;
     }
 
     /**
@@ -240,12 +240,10 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @ApiCode PRODUCT_CAT_0111
      */
     @Override
-    public MapForRes<ProdCatAttrDef, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
+    public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
             throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
-        Map<ProdCatAttrDef, List<AttrValInfo>> attrMap = productCatBusiSV.queryAttrOfCatByIdAndType(
-                attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
-        return new MapForRes<ProdCatAttrDef, List<AttrValInfo>>(attrMap);
+        return productCatBusiSV.queryAttrOfCatByIdAndType(attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
     }
 
     /**
@@ -259,9 +257,10 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @ApiCode PRODUCT_CAT_0112
      */
     @Override
-    public ListForRes<ProdCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery) throws BusinessException, SystemException {
+    public List<ProdCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(catQuery.getTenantId(),"");
-        return new ListForRes<ProdCatInfo>(productCatBusiSV.queryByNameOrFirst(catQuery));
+//        ListForRes<ProdCatInfo> catInfoList = new ListForRes<ProdCatInfo>(productCatBusiSV.queryByNameOrFirst(catQuery));
+        return productCatBusiSV.queryByNameOrFirst(catQuery);
     }
 
     /**
