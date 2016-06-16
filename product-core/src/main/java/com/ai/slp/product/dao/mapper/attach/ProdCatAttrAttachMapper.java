@@ -1,7 +1,10 @@
 package com.ai.slp.product.dao.mapper.attach;
 
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.type.JdbcType;
 
 import java.util.List;
@@ -55,7 +58,7 @@ public interface ProdCatAttrAttachMapper {
             @Result(property ="serialNumber",column = "serial_number",javaType = Short.class,jdbcType = JdbcType.NUMERIC),
     })
     @Select("SELECT pcav.tenant_id,pcav.attvalue_def_id,pad.attr_id,pad.attr_value_id,pad.attr_value_name,pad.first_letter,pcav.state,pcav.serial_number " +
-            "FROM prod_cat_attr_value pcav LEFT JOIN prod_attrvalue_def pad WHER ON pcav.attrvalue_def_id = pad.attrvalue_def_id WHERE pcav.tenant_id=#{tenantId} " +
+            "FROM prod_cat_attr_value pcav LEFT JOIN prod_attrvalue_def pad ON pcav.attrvalue_def_id = pad.attrvalue_def_id WHERE pcav.tenant_id=#{tenantId} " +
             "AND pcav.cat_attr_id = #{catAttrId} AND pcav.state = '1' order by pcav.serial_number")
     List<ProdAttrvalueDef> selectCatAttrVal(@Param("tenantId")String tenantId,@Param("catAttrId")String catAttrId);
 }
