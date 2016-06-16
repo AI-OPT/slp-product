@@ -1,8 +1,10 @@
 package com.ai.slp.product.service.business;
 
+import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
+import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +31,13 @@ public class INormProductBusiSVTest {
         System.out.println(count);
         
 
+    }
+
+    @Test
+    public void queryAttrOfProductTest(){
+        //标准品关键属性
+        AttrMap attrMap = normProductBusiSV.queryAttrOfProduct(
+                CommonConstants.COMMON_TENANT_ID,"2",ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
+        System.out.println(attrMap.toString());
     }
 }
