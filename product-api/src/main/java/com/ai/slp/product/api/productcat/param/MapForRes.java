@@ -15,6 +15,10 @@ public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
     private static final long serialVersionUID = 1L;
 	Map<K,V> objMap;
 
+    public MapForRes(Map<K, V> objMap){
+        this.objMap = objMap;
+    }
+
     public void setObjMap(Map<K, V> objMap) {
         this.objMap = objMap;
     }

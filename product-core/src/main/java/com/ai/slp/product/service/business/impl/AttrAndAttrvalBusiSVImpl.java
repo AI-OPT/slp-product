@@ -1,29 +1,10 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.ai.opt.base.vo.PageInfoResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.productcat.param.AttrDef;
-import com.ai.slp.product.api.productcat.param.AttrDefInfo;
-import com.ai.slp.product.api.productcat.param.AttrDefParam;
-import com.ai.slp.product.api.productcat.param.AttrInfo;
-import com.ai.slp.product.api.productcat.param.AttrPam;
-import com.ai.slp.product.api.productcat.param.AttrParam;
-import com.ai.slp.product.api.productcat.param.AttrVal;
-import com.ai.slp.product.api.productcat.param.AttrValDef;
-import com.ai.slp.product.api.productcat.param.AttrValInfo;
-import com.ai.slp.product.api.productcat.param.AttrValPageQuery;
-import com.ai.slp.product.api.productcat.param.AttrValParam;
-import com.ai.slp.product.api.productcat.param.AttrValUniqueReq;
-import com.ai.slp.product.api.productcat.param.MapForRes;
+import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
@@ -32,6 +13,14 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -188,8 +177,8 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId) {
-        MapForRes<AttrDef, List<AttrValDef>> attrAndValues = new MapForRes<>();
+    public Map<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId) {
+        Map<AttrDef, List<AttrValDef>> attrAndValues = new HashMap<>();
         //属性集合
         List<ProdAttrDef> prodAttrList = prodAttrDefAtomSV.selectAllAttrs(tenantId);
         for (ProdAttrDef prodAttr : prodAttrList) {

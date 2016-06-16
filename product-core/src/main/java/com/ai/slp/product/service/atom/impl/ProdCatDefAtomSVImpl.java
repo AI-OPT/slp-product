@@ -4,6 +4,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.ProductCatCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProductCatMapper;
@@ -85,6 +86,9 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         if (productCat==null)
             return 0;
         productCat.setProductCatId(SequenceUtil.genProductCatId());
+        //若为设置父类目标识,则为根类目
+        if (StringUtils.isBlank(productCat.getParentProductCatId()))
+            productCat.setParentProductCatId(ProductCatConstants.ProductCat.ParentProductCatId.ROOT_CAT);
         if (productCat.getOperTime()==null)
             productCat.setOperTime(DateUtils.currTimeStamp());
         productCat.setState(CommonSatesConstants.STATE_ACTIVE);
@@ -140,10 +144,9 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         ProductCatCriteria.Criteria criteria = example.createCriteria();
         criteria.andTenantIdEqualTo(tenantId)
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
-        if (parentCatId!=null)
-            criteria.andParentProductCatIdEqualTo(parentCatId);
-        else
-            criteria.andParentProductCatIdIsNull();
+        //若为设置父类目标识,则使用根类目
+        criteria.andParentProductCatIdEqualTo(
+                StringUtils.isBlank(parentCatId)? ProductCatConstants.ProductCat.ParentProductCatId.ROOT_CAT:parentCatId);
 
         if (StringUtils.isNotBlank(query))
             if (isName)

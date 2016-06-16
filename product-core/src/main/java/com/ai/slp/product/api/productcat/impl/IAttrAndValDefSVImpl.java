@@ -1,33 +1,20 @@
 package com.ai.slp.product.api.productcat.impl;
 
-import java.util.List;
-
-import com.ai.opt.base.vo.PageInfoResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.slp.product.api.productcat.param.MapForRes;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
-import com.ai.slp.product.api.productcat.param.AttrDef;
-import com.ai.slp.product.api.productcat.param.AttrDefInfo;
-import com.ai.slp.product.api.productcat.param.AttrDefParam;
-import com.ai.slp.product.api.productcat.param.AttrInfo;
-import com.ai.slp.product.api.productcat.param.AttrPam;
-import com.ai.slp.product.api.productcat.param.AttrParam;
-import com.ai.slp.product.api.productcat.param.AttrVal;
-import com.ai.slp.product.api.productcat.param.AttrValDef;
-import com.ai.slp.product.api.productcat.param.AttrValInfo;
-import com.ai.slp.product.api.productcat.param.AttrValPageQuery;
-import com.ai.slp.product.api.productcat.param.AttrValParam;
-import com.ai.slp.product.api.productcat.param.AttrValUniqueReq;
+import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by jackieliu on 16/4/27.
@@ -264,7 +251,7 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo)
             throws BusinessException, SystemException {
     	CommonCheckUtils.checkTenantId(baseInfo.getTenantId(),"");
-        return attrAndAttrvalBusiSV.queryAllAttrAndVals(baseInfo.getTenantId());
+        return new MapForRes<AttrDef, List<AttrValDef>>(attrAndAttrvalBusiSV.queryAllAttrAndVals(baseInfo.getTenantId()));
     }
 
 }

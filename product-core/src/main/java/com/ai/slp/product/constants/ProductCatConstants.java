@@ -19,6 +19,13 @@ public final class ProductCatConstants {
              */
             public static final String NO_CHILD = "N";
         }
+
+        public final class ParentProductCatId {
+            /**
+             * 根类目标识
+             */
+            public static final String ROOT_CAT = "0";
+        }
     }
 
     public final class ProductCatAttr{

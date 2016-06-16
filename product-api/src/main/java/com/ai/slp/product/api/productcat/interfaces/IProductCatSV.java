@@ -1,15 +1,13 @@
 package com.ai.slp.product.api.productcat.interfaces;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
 import com.ai.slp.product.api.productcat.param.*;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 商品类目管理接口<br>
@@ -87,7 +85,7 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0105
 	 */
-	public Map<Long,Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery)
+	public MapForRes<Long,Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery)
 			throws BusinessException,SystemException;
 	@interface QueryAttrAndValIdByCatAndType{}
     
@@ -141,7 +139,7 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0110
 	 */
-	public List<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq)
+	public ListForRes<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq)
 			throws BusinessException,SystemException;
 	@interface QueryLinkOfCatById{}
 
@@ -156,7 +154,7 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0111
 	 */
-	public Map<ProdCatAttrDef,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
+	public MapForRes<ProdCatAttrDef,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
 			throws BusinessException,SystemException;
 	@interface QueryAttrByCatAndType{}
 
@@ -170,7 +168,7 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0112
      */
-	public List<ProductCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery)
+	public ListForRes<ProductCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery)
 			throws BusinessException,SystemException;
 	@interface QueryCatByNameOrFirst{}
 

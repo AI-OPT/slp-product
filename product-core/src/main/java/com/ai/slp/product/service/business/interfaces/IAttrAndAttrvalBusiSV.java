@@ -1,21 +1,10 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import java.util.List;
-
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.productcat.param.MapForRes;
-import com.ai.slp.product.api.productcat.param.AttrDef;
-import com.ai.slp.product.api.productcat.param.AttrDefInfo;
-import com.ai.slp.product.api.productcat.param.AttrDefParam;
-import com.ai.slp.product.api.productcat.param.AttrInfo;
-import com.ai.slp.product.api.productcat.param.AttrPam;
-import com.ai.slp.product.api.productcat.param.AttrParam;
-import com.ai.slp.product.api.productcat.param.AttrVal;
-import com.ai.slp.product.api.productcat.param.AttrValDef;
-import com.ai.slp.product.api.productcat.param.AttrValInfo;
-import com.ai.slp.product.api.productcat.param.AttrValPageQuery;
-import com.ai.slp.product.api.productcat.param.AttrValParam;
-import com.ai.slp.product.api.productcat.param.AttrValUniqueReq;
+import com.ai.slp.product.api.productcat.param.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 属性与属性值的相关操作
@@ -125,5 +114,5 @@ public interface IAttrAndAttrvalBusiSV {
      * @return 由属性对象对应的属性值List的Map
      * @author lipeng16
      */
-    public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId);
+    public Map<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId);
 }
