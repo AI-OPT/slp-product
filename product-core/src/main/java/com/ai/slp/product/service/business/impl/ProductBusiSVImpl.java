@@ -472,6 +472,12 @@ public class ProductBusiSVImpl implements IProductBusiSV {
 
         for (ProdFastSkuAttach skuAttach:skuAttachList){
             SkuStorageVo storageVo = storageNumBusiSV.queryStorageOfSku(tenantId,skuAttach.getSkuId());
+            //若此商品没有库存,则不处理
+            if (storageVo==null
+                    || storageVo.getUsableNum()==null
+                    || storageVo.getUsableNum()<1){
+                continue;
+            }
             FastSkuProdInfo prodInfo = new FastSkuProdInfo();
             prodInfo.setSkuId(skuAttach.getSkuId());
             prodInfo.setSalePrice(storageVo.getSalePrice());
