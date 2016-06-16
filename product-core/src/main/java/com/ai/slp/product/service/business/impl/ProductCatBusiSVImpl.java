@@ -260,7 +260,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
      * @return
      */
     @Override
-    public List<ProductCatInfo> queryByNameOrFirst(ProductCatQuery query) {
+    public List<ProdCatInfo> queryByNameOrFirst(ProductCatQuery query) {
         //判断是名称还是首字母
         String queryVal = query.getQueryVal();
         boolean isName = true;
@@ -271,11 +271,11 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             queryVal = queryVal.substring(0,1);
             isName = false;
         }
-        List<ProductCatInfo> catInfoList = new ArrayList<>();
+        List<ProdCatInfo> catInfoList = new ArrayList<>();
         List<ProductCat> catList = prodCatDefAtomSV.queryByNameOrFirst(
                 query.getTenantId(),query.getParentProductCatId(),queryVal,isName);
         for (ProductCat cat:catList){
-            ProductCatInfo catInfo = new ProductCatInfo();
+            ProdCatInfo catInfo = new ProdCatInfo();
             BeanUtils.copyProperties(catInfo,cat);
             catInfoList.add(catInfo);
         }

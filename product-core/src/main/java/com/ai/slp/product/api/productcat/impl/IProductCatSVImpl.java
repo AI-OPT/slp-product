@@ -259,9 +259,9 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @ApiCode PRODUCT_CAT_0112
      */
     @Override
-    public ListForRes<ProductCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery) throws BusinessException, SystemException {
+    public ListForRes<ProdCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(catQuery.getTenantId(),"");
-        return new ListForRes<ProductCatInfo>(productCatBusiSV.queryByNameOrFirst(catQuery));
+        return new ListForRes<ProdCatInfo>(productCatBusiSV.queryByNameOrFirst(catQuery));
     }
 
     /**

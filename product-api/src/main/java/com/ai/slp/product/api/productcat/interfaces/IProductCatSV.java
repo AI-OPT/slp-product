@@ -168,7 +168,7 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0112
      */
-	public ListForRes<ProductCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery)
+	public ListForRes<ProdCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery)
 			throws BusinessException,SystemException;
 	@interface QueryCatByNameOrFirst{}
 
