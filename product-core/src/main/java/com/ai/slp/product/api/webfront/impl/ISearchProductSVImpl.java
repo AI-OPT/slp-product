@@ -62,11 +62,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                      if(!StringUtil.isBlank(request.getDistributionArea())){
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
                      }else{
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();  
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();  
                      }
                     
              }else{
@@ -74,11 +74,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
                  }
                     
              }
@@ -90,22 +90,22 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                      if(!StringUtil.isBlank(request.getDistributionArea())){
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
                      }else{
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
                      }
                  }else{
                    //如果配送地区不为空
                      if(!StringUtil.isBlank(request.getDistributionArea())){
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
                      }else{
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
                      }
                  }
                
@@ -115,11 +115,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
                  }
                      
              }
@@ -131,11 +131,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build(); 
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build(); 
                  }
                     
              }else{
@@ -143,11 +143,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
                  }
                      
              }
@@ -159,22 +159,22 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                      if(!StringUtil.isBlank(request.getDistributionArea())){
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
                      }else{
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
                      }
                  }else{
                      //如果配送地区不为空
                      if(!StringUtil.isBlank(request.getDistributionArea())){
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
                      }else{
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
                      }
                  }
              }else{
@@ -182,11 +182,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build(); 
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build(); 
                  }
              }
          }else  if(!StringUtil.isBlank(request.getAttrDefId()) && StringUtil.isBlank(request.getBasicOrgIdIs())){
@@ -196,22 +196,22 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build();
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build(); 
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build(); 
                  }
              }else{
                  //如果配送地区不为空
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
                  }
                 
              }
@@ -223,22 +223,22 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                      if(!StringUtil.isBlank(request.getDistributionArea())){
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build();
                      }else{
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build();
                      } 
                  }else{
                    //如果配送地区不为空
                      if(!StringUtil.isBlank(request.getDistributionArea())){
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build();
                      }else{
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build();
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build();
                      }
                  }
                  
@@ -247,11 +247,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build(); 
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build(); 
                  }
              }
          }else{
@@ -261,11 +261,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build();
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build();
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build(); 
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build(); 
                  }
                
              }else{
@@ -273,11 +273,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).build(); 
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).build(); 
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).build();  
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).build();  
                  }
              }
            //如果价格排序不为空
@@ -288,22 +288,22 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                      if(!StringUtil.isBlank(request.getDistributionArea())){
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build(); 
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build(); 
                      }else{
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build(); 
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build(); 
                      }
                  }else{
                      //如果配送地区不为空
                      if(!StringUtil.isBlank(request.getDistributionArea())){
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build(); 
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build(); 
                      }else{
                          productSearchCriteria =
                                  new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                                 .tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build(); 
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build(); 
                      }
                  }
               
@@ -312,11 +312,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                  if(!StringUtil.isBlank(request.getDistributionArea())){
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).build();  
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).build();  
                  }else{
                      productSearchCriteria =
                              new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                             .tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).build(); 
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).build(); 
                  }
              }
          }
@@ -375,11 +375,11 @@ public class ISearchProductSVImpl implements ISearchProductSV {
          if(StringUtil.isBlank(request.getProductCatId())){
               productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
+                     .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
          }else{
               productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
+                     .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME).maxSearchSize(ProductHomeConstants.HOT_MAX_SIZE).build();
          }
         Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
         List<Map<String,Object>> objList = result.getSearchList();
@@ -430,7 +430,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
          if(!StringUtil.isBlank(request.getSkuName())){
              productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .tenantID(request.getTenantId()).skuNameCat(request.getSkuName()).sellPointLike(request.getSkuName()).build();
+                     .tenantID(request.getTenantId()).skuNameLike(request.getSkuName()).build();
              productCatIds = productSearch.searchCategory(productSearchCriteria);
          }
        //获取第一个类目
@@ -441,30 +441,30 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                 productCatId=obj;
            }
          }
-         if(!StringUtil.isBlank(productCatId) && !StringUtil.isBlank(request.getSkuName())){
+         if(!StringUtil.isBlank(request.getSkuName())){
              productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .tenantID(request.getTenantId()).productCategoryIdIs(productCatId).skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
+                     .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).skuNameOrSellport(request.getSkuName(),request.getSkuName()).build();
             result = productSearch.search(productSearchCriteria); 
          }
          //如果销量不为空
-         if(!StringUtil.isBlank(request.getSaleNumOrderFlag()) && !StringUtil.isBlank(productCatId) && !StringUtil.isBlank(request.getSkuName())){
+         if(!StringUtil.isBlank(request.getSaleNumOrderFlag()) && !StringUtil.isBlank(request.getSkuName())){
              productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                     .addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).tenantID(request.getTenantId()).productCategoryIdIs(productCatId).skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
+                     .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).tenantID(request.getTenantId()).skuNameOrSellport(request.getSkuName(),request.getSkuName()).build();
             result = productSearch.search(productSearchCriteria); 
          }
          //如果价格不为空
-         if(!StringUtil.isBlank(request.getPriceOrderFlag()) && !StringUtil.isBlank(productCatId) && !StringUtil.isBlank(request.getSkuName())){
+         if(!StringUtil.isBlank(request.getPriceOrderFlag()) && !StringUtil.isBlank(request.getSkuName())){
              if(request.getPriceOrderFlag().equals(ProductHomeConstants.ORDER_ASC_ID)){
                  productSearchCriteria =
                          new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                         .addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).tenantID(request.getTenantId()).productCategoryIdIs(productCatId).skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
+                         .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).tenantID(request.getTenantId()).skuNameOrSellport(request.getSkuName(),request.getSkuName()).build();
                 result = productSearch.search(productSearchCriteria); 
              }else{
                  productSearchCriteria =
                          new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),user)
-                         .addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).tenantID(request.getTenantId()).productCategoryIdIs(productCatId).skuNameLike(request.getSkuName()).sellPointLike(request.getSkuName()).build();
+                         .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).tenantID(request.getTenantId()).skuNameOrSellport(request.getSkuName(),request.getSkuName()).build();
                 result = productSearch.search(productSearchCriteria); 
              }
              
@@ -476,6 +476,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             ProductData product = new ProductData();
             product.setSalePrice(sku.getPrice());
             product.setProdName(sku.getProductname());
+            product.setSkuName(sku.getSkuname());
             product.setProdId(sku.getProductid());
             product.setSkuId(sku.getSkuid());
             product.setProductCatId(productCatId);

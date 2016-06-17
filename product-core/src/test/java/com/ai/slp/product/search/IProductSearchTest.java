@@ -16,7 +16,7 @@ public class IProductSearchTest {
         ProductSearchCriteria productSearchCriteria =
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder("11",
                         new UserSearchAuthority(UserSearchAuthority.UserType.PERSONAL,""))
-                .attrValueDefID("100050").categoryIdIs("10000010020000").basicOrgIdIs("10").build();
+                .skuNameMust("100").build();
         System.out.println(JSON.toJSONString(productSearch.search(productSearchCriteria)));
         System.out.println(productSearch.search(productSearchCriteria).getCount() == 2);
     }

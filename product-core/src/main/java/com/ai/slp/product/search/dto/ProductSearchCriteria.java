@@ -3,6 +3,8 @@ package com.ai.slp.product.search.dto;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.paas.ipaas.search.vo.SearchfieldVo;
 import com.ai.paas.ipaas.search.vo.SortField;
+import com.ai.paas.ipaas.search.vo.SearchOption.SearchLogic;
+import com.ai.paas.ipaas.search.vo.SearchOption.SearchType;
 import com.ai.slp.product.search.constants.SearchMetaFieldConfig;
 
 import java.util.ArrayList;
@@ -57,6 +59,15 @@ public class ProductSearchCriteria {
                     skuName, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.querystring)));
             return this;
         }
+        
+        //单品名称与卖点整合
+        public ProductSearchCriteriaBuilder skuNameOrSellport(String skuName,String sellPort) {
+            SearchfieldVo vo = new SearchfieldVo();
+            vo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.SKUNAME, skuName, new SearchOption(SearchLogic.should, SearchType.querystring)));
+            vo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.SELL_POINT, sellPort, new SearchOption(SearchLogic.should, SearchType.querystring)));
+            productSearchCriteria.searchfieldVos.add(vo);
+            return this;
+        }
         // 单品名字
         public ProductSearchCriteriaBuilder skuNameMust(String skuName) {
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.SKUNAME,
@@ -89,7 +100,12 @@ public class ProductSearchCriteria {
                     rechagetype, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
             return this;
         }
-
+       //充值方式not in
+        public ProductSearchCriteriaBuilder rechargeTypeNotIs(String rechagetype) {
+            productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.RECHAGE_TYPE,
+                    rechagetype, new SearchOption(SearchOption.SearchLogic.must_not,SearchOption.SearchType.term)));
+            return this;
+        }
         // 基础运营商
         public ProductSearchCriteriaBuilder basicOrgIdIs(String basicorgid) {
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.BASIC_ORG,

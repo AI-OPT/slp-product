@@ -17,6 +17,8 @@ public class ProductHomeConstants {
     public static final String ORDER_DESC_ID = "DESC";
     //升序排序
     public static final String ORDER_ASC_ID = "ASC";
+    //充值方式
+    public static final String FILL_TYPE = "D";
     
     
     public final class UserType{
