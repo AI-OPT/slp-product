@@ -19,6 +19,8 @@ public class ProductHomeConstants {
     public static final String ORDER_ASC_ID = "ASC";
     //充值方式
     public static final String FILL_TYPE = "D";
+    //全国销售代码
+    public static final String TYPENATION_WIDE = "Y";
     
     
     public final class UserType{

@@ -2,7 +2,6 @@ package com.ai.slp.product.search;
 
 import com.ai.slp.product.search.api.IProductSearch;
 import com.ai.slp.product.search.api.impl.ProductSearchImpl;
-import com.ai.slp.product.search.constants.SearchMetaFieldConfig;
 import com.ai.slp.product.search.dto.ProductSearchCriteria;
 import com.ai.slp.product.search.dto.UserSearchAuthority;
 import com.alibaba.fastjson.JSON;
@@ -14,9 +13,9 @@ public class IProductSearchTest {
     public static void main(String[] args) {
         IProductSearch productSearch = new ProductSearchImpl();
         ProductSearchCriteria productSearchCriteria =
-                new ProductSearchCriteria.ProductSearchCriteriaBuilder("11",
+                new ProductSearchCriteria.ProductSearchCriteriaBuilder("11","00",
                         new UserSearchAuthority(UserSearchAuthority.UserType.PERSONAL,""))
-                .skuNameMust("100").build();
+                .tenantID("SLP").build();
         System.out.println(JSON.toJSONString(productSearch.search(productSearchCriteria)));
         System.out.println(productSearch.search(productSearchCriteria).getCount() == 2);
     }
