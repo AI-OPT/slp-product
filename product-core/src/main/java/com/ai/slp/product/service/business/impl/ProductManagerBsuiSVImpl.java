@@ -109,7 +109,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         //查询个人
         List<ProdAudiences> boList = prodAudiencesAtomSV.queryByUserType(
                 tenantId, prodId,ProductConstants.ProdAudiences.userType.PERSON,null,false);
-        if (CollectionUtil.isEmpty(boList)){
+        if (!CollectionUtil.isEmpty(boList)){
             ProdAudiencesInfo audiencesInfo = new ProdAudiencesInfo();
             BeanUtils.copyProperties(audiencesInfo,boList.get(0));
             IUcUserSV ucUserSV = DubboConsumerFactory.getService("IUcUserSV");
