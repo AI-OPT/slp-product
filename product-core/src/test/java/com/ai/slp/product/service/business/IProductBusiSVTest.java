@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business;
 
+import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.constants.CommonConstants;
@@ -30,5 +31,11 @@ public class IProductBusiSVTest {
         FastProductInfoRes infoRes = productBusiSV.queryFastInfoList(request);
         System.out.println("\rlocal size:"+infoRes.getLocalMap().size());
         System.out.println("nation size:"+infoRes.getNationMap().size());
+    }
+
+    @Test
+    public void queryNoKeyAttrForEditTest(){
+        ProdNoKeyAttr noKeyAttr = productBusiSV.queryNoKeyAttrForEdit(CommonConstants.COMMON_TENANT_ID,"3");
+        System.out.println(noKeyAttr.toString());
     }
 }

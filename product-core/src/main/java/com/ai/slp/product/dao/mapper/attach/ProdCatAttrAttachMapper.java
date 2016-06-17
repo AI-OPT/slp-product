@@ -48,11 +48,11 @@ public interface ProdCatAttrAttachMapper {
      * @param catAttrId
      * @return
      */
-    @Results({@Result(id = true,property = "attrvalueDefId",column = "attvalue_def_id",javaType = String.class),
+    @Results({@Result(id = true,property = "attrvalueDefId",column = "attrvalue_def_id",javaType = String.class),
             @Result(property="tenantId",column="tenant_id",javaType=String.class,jdbcType= JdbcType.VARBINARY),
             @Result(property ="attrId",column = "attr_id",javaType = Long.class,jdbcType = JdbcType.DECIMAL),
             @Result(property ="attrValueId",column = "attr_value_id",javaType = String.class,jdbcType = JdbcType.VARCHAR),
-            @Result(property ="valueWay",column = "attr_value_name",javaType = String.class,jdbcType = JdbcType.VARCHAR),
+            @Result(property ="attrValueName",column = "attr_value_name",javaType = String.class,jdbcType = JdbcType.VARCHAR),
             @Result(property ="firstLetter",column = "first_letter",javaType = String.class,jdbcType = JdbcType.VARCHAR),
             @Result(property ="state",column = "state",javaType = String.class,jdbcType = JdbcType.VARCHAR),
             @Result(property ="serialNumber",column = "serial_number",javaType = Short.class,jdbcType = JdbcType.NUMERIC),
