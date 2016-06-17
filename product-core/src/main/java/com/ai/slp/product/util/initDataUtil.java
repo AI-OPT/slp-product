@@ -148,14 +148,14 @@ public class initDataUtil {
         agents = new ArrayList<ProductAttrInfo>();
        ProductAttrInfo agent = new ProductAttrInfo();
        agent.setAttrDefValue("中国移动");
-       agent.setAttrDefId("100002");
+       agent.setAttrDefId("10");
        agents.add(agent);
        agent = new ProductAttrInfo();
        agent.setAttrDefValue("中国电信");
-       agent.setAttrDefId("100001");
+       agent.setAttrDefId("11");
        agents.add(agent);
        agent = new ProductAttrInfo();
-       agent.setAttrDefId("100003");
+       agent.setAttrDefId("12");
        agent.setAttrDefValue("中国联通");
        agents.add(agent);
        return agents;
