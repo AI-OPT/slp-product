@@ -180,4 +180,16 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         CommonCheckUtils.checkTenantId(query.getTenantId(),"");
         return productBusiSV.queryNoKeyAttrForEdit(query.getTenantId(),query.getProductId());
     }
+
+    /**
+     * 更新商品信息
+     * @param product
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     */
+    @Override
+    public BaseResponse updateProduct(ProductInfoForUpdate product) throws BusinessException, SystemException {
+        return null;
+    }
 }

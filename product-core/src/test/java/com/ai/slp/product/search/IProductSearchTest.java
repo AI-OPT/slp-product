@@ -13,9 +13,9 @@ public class IProductSearchTest {
     public static void main(String[] args) {
         IProductSearch productSearch = new ProductSearchImpl();
         ProductSearchCriteria productSearchCriteria =
-                new ProductSearchCriteria.ProductSearchCriteriaBuilder("11","00",
+                new ProductSearchCriteria.ProductSearchCriteriaBuilder("11","Y",
                         new UserSearchAuthority(UserSearchAuthority.UserType.PERSONAL,""))
-                .tenantID("SLP").build();
+                .skuNameMust("中国").build();
         System.out.println(JSON.toJSONString(productSearch.search(productSearchCriteria)));
         System.out.println(productSearch.search(productSearchCriteria).getCount() == 2);
     }
