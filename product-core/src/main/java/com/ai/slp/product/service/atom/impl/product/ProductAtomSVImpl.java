@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.atom.impl.product;
 
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
@@ -93,17 +94,17 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public PageInfo<Product> selectPageForEdit(ProductEditQueryReq queryReq) {
 		ProductCriteria example = new ProductCriteria();
-		if (ProductConstants.Product.State.ADD.equals(queryReq.getState()))
-			example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
-		else
+//		if (ProductConstants.Product.State.ADD.equals(queryReq.getState()))
+//			example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
+//		else
 			example.setOrderByClause("OPER_TIME desc");//操作时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
 		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
 		if (StringUtils.isNotBlank(queryReq.getProductType()))
 			criteria.andProductTypeEqualTo(queryReq.getProductType());
-		if (StringUtils.isNotBlank(queryReq.getState()))
-			criteria.andStateEqualTo(queryReq.getState());
+		if (CollectionUtil.isEmpty(queryReq.getStateList()))
+			criteria.andStateIn(queryReq.getStateList());
 		if (StringUtils.isNotBlank(queryReq.getProdId()))
 			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
 		if (StringUtils.isNotBlank(queryReq.getProdName()))
