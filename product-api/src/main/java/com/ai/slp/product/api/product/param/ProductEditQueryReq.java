@@ -1,7 +1,10 @@
 package com.ai.slp.product.api.product.param;
 
-import com.ai.opt.base.vo.BaseInfo;
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.ai.opt.base.vo.BaseInfo;
 
 /**
  * 商品管理待编辑查询参数
@@ -44,7 +47,7 @@ public class ProductEditQueryReq extends BaseInfo{
     private String productType;
 
     /**
-     * 状态
+     * 状态集合
      * 0:新增
      * 1:未编辑;2:已编辑
      * 3:审核中;4:审核未通过
@@ -53,7 +56,7 @@ public class ProductEditQueryReq extends BaseInfo{
      * 7:废弃
      */
 
-    private String state;
+    private List<String> stateList;
 
     public String getProdName() {
         return prodName;
@@ -87,15 +90,15 @@ public class ProductEditQueryReq extends BaseInfo{
         this.productType = productType;
     }
 
-    public String getState() {
-        return state;
-    }
+    public List<String> getStateList() {
+		return stateList;
+	}
 
-    public void setState(String state) {
-        this.state = state;
-    }
+	public void setStateList(List<String> stateList) {
+		this.stateList = stateList;
+	}
 
-    public Integer getPageNo() {
+	public Integer getPageNo() {
         return pageNo;
     }
 
