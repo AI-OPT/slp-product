@@ -33,16 +33,20 @@ public class ProductSearchCriteria {
         public ProductSearchCriteriaBuilder(String saleArea, String qg,UserSearchAuthority userSearchAuthority) {
             productSearchCriteria = new ProductSearchCriteria();
 
-            // sale Area search filed vo
+           /* // sale Area search filed vo
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.SALE_AREA, saleArea,
                     new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
 
             //saleArea
             productSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.SALE_NATIONWIDE, qg,
-                    new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
-            
-            
+                    new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));*/
+            //地区
+            SearchfieldVo searchfieldAreaVo = new SearchfieldVo();
+            searchfieldAreaVo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.SALE_AREA,saleArea, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
+            searchfieldAreaVo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.SALE_NATIONWIDE,qg, new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
             SearchfieldVo searchfieldVo = new SearchfieldVo();
+          
+            
             searchfieldVo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.USER_AUTHORITY, userSearchAuthority.getUsertype()
                     .getValue(), new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
             searchfieldVo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.SALE_NATIONWIDE, userSearchAuthority.getUsertype()
@@ -52,7 +56,7 @@ public class ProductSearchCriteria {
                 searchfieldVo.addSubSearchFieldVo(new SearchfieldVo(SearchMetaFieldConfig.USER_AUTHORITY, userSearchAuthority.getUserId()
                         , new SearchOption(SearchOption.SearchLogic.should, SearchOption.SearchType.term)));
             }
-
+            productSearchCriteria.searchfieldVos.add(searchfieldAreaVo);
             productSearchCriteria.searchfieldVos.add(searchfieldVo);
 
         }
