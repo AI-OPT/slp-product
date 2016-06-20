@@ -1,20 +1,20 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
-import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -94,10 +94,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public PageInfo<Product> selectPageForEdit(ProductEditQueryReq queryReq) {
 		ProductCriteria example = new ProductCriteria();
-//		if (ProductConstants.Product.State.ADD.equals(queryReq.getState()))
-//			example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
-//		else
-			example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
 		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
@@ -112,14 +109,22 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 
 		PageInfo<Product> pageInfo = new PageInfo<>();
 		// 设置总数
-		pageInfo.setCount(productMapper.countByExample(example));
-		if (queryReq.getPageNo() != null && queryReq.getPageSize() != null) {
-			example.setLimitStart((queryReq.getPageNo()-1)*queryReq.getPageSize());
-			example.setLimitEnd(queryReq.getPageSize());
-		}
-		pageInfo.setPageNo(queryReq.getPageNo());
-		pageInfo.setPageSize(queryReq.getPageSize());
+		int count = productMapper.countByExample(example);
+		pageInfo.setCount(count);
+		//获取页数和每页条数
+		int pageNo = queryReq.getPageNo();
+		int pageSize = queryReq.getPageSize();
+		//设置分页查询条件
+		example.setLimitStart((pageNo-1)*pageSize);
+		example.setLimitEnd(pageSize);
+		//设置页数和每页条数
+		pageInfo.setPageNo(pageNo);
+		pageInfo.setPageSize(pageSize);
+		//设置结果集
 		pageInfo.setResult(productMapper.selectByExample(example));
+		//设置总页数
+		int pageCount = count/pageSize+(count%pageSize>0 ? 1 : 0);
+		pageInfo.setPageCount(pageCount);
 		return pageInfo;
 	}
 
