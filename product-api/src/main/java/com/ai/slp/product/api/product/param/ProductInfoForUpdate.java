@@ -103,7 +103,7 @@ public class ProductInfoForUpdate extends BaseInfo {
      * 0:全部不可见；-1:全部可见
      */
     @NotNull(message = "个人受众不能为空",groups = {IProductManagerSV.SaveProduct.class})
-    private Boolean audiencesPerson;
+    private String audiencesPerson;
     /**
      * 企业受众，必填<br>
      * 0:全部不可见；-1:全部可见;1:部分可见
@@ -267,11 +267,11 @@ public class ProductInfoForUpdate extends BaseInfo {
         this.basicOrgId = basicOrgId;
     }
 
-    public Boolean getAudiencesPerson() {
+    public String getAudiencesPerson() {
         return audiencesPerson;
     }
 
-    public void setAudiencesPerson(Boolean audiencesPerson) {
+    public void setAudiencesPerson(String audiencesPerson) {
         this.audiencesPerson = audiencesPerson;
     }
 
