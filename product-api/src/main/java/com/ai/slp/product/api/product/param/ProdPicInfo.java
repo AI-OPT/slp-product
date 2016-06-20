@@ -1,5 +1,8 @@
 package com.ai.slp.product.api.product.param;
 
+import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 
 /**
@@ -16,8 +19,9 @@ public class ProdPicInfo implements Serializable {
      */
     private Long proPictureId;
     /**
-     * 商品标识
+     * 商品标识，必填
      */
+    @NotBlank(message="商品标识不能为空",groups={IProductManagerSV.SaveProduct.class})
     private String prodId;
     /**
      * 属性值
@@ -28,20 +32,24 @@ public class ProdPicInfo implements Serializable {
      */
     private String picUses;
     /**
-     * 文件类型
+     * 文件类型，必填
      */
+    @NotBlank(message="文件类型不能为空",groups={IProductManagerSV.SaveProduct.class})
     private String picType;
     /**
-     * 文件附件模块ID
+     * 文件附件模块ID，必填
      */
+    @NotBlank(message="文件附件ID不能为空",groups={IProductManagerSV.SaveProduct.class})
     private String vfsId;
     /**
-     * 是否主图
+     * 是否主图，必填
      */
+    @NotBlank(message="是否主图不能为空",groups={IProductManagerSV.SaveProduct.class})
     private String isMainPic;
     /**
-     * 序列号
+     * 序列号，必填
      */
+    @NotBlank(message="序列号不能为空",groups={IProductManagerSV.SaveProduct.class})
     private Short serialNumber;
     /**
      * 状态

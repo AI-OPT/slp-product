@@ -140,13 +140,29 @@ public interface IProductManagerSV {
 
     /**
      * 为编辑页面查询商品非关键属性
+     * @param query
      * @return
      * @throws BusinessException
      * @throws SystemException
+     * @author liutong5
+     * @ApiCode PROMAN_0108
      */
     public ProdNoKeyAttr queryNoKeyAttrOfProd(ProductInfoQuery query)
             throws BusinessException,SystemException;
     @interface QueryNoKeyAttrOfProd {}
+    
+    /**
+     * 商品信息进行更新
+     * @param product
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PROMAN_0109
+     */
+    public BaseResponse updateProduct(ProductInfoForUpdate product)
+    		throws BusinessException,SystemException;
+    @interface SaveProduct{}
 }
 
 
