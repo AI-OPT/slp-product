@@ -48,6 +48,10 @@ public class ProductEditUp implements Serializable{
      * 图片类型
      */
     private String picType;
+    /**
+     * 图片地址,为前端预留字段
+     */
+    private String picUrl;
     
     /**
      * 商品名称
@@ -239,4 +243,12 @@ public class ProductEditUp implements Serializable{
     public void setPicType(String picType) {
         this.picType = picType;
     }
+
+	public String getPicUrl() {
+		return picUrl;
+	}
+
+	public void setPicUrl(String picUrl) {
+		this.picUrl = picUrl;
+	}
 }
