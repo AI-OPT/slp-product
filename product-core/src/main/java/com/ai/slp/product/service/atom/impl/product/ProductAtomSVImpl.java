@@ -100,7 +100,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
 		if (StringUtils.isNotBlank(queryReq.getProductType()))
 			criteria.andProductTypeEqualTo(queryReq.getProductType());
-		if (CollectionUtil.isEmpty(queryReq.getStateList()))
+		if (!CollectionUtil.isEmpty(queryReq.getStateList()))
 			criteria.andStateIn(queryReq.getStateList());
 		if (StringUtils.isNotBlank(queryReq.getProdId()))
 			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
