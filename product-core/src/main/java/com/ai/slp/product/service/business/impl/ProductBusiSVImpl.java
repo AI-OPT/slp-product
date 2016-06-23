@@ -564,7 +564,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             valInfo.setTenantId(tenantId);
             valInfo.setProductId(prodId);
             valInfo.setAttrId(attrId);
-            valInfo.setAttrValId(valDef.getAttrValueId());
+            valInfo.setAttrValId(valDef.getAttrvalueDefId());
             valInfo.setAttrVal(valDef.getAttrValueName());
             //查询此属性值是否存在
             ProdAttr prodAttr = prodAttrAtomSV.queryByProdAndAttrAndAttrVal(
