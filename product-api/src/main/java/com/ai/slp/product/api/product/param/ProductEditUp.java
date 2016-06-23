@@ -33,6 +33,10 @@ public class ProductEditUp implements Serializable{
      * 商品类型
      */
     private String productType;
+    /**
+     * 商品类型名称，页面展示类型名称
+     */
+    private String productTypeName;
     
     /**
      * 商品图ID
@@ -69,12 +73,32 @@ public class ProductEditUp implements Serializable{
      * 1:未编辑;2:已编辑
      * 3:审核中;4:审核未通过
      * 5:在售
-     * 6:仓库中（审核通过放入） 61:售罄下架 62:废弃下架
+     * 6:仓库中（审核通过放入、手动下架放入） 61:售罄下架 62:废弃下架
      * 7:废弃
      */
     private String state;
-    
     /**
+     * 状态名称，页面展示状态名称
+     */
+    private String stateName;
+    
+    public String getProductTypeName() {
+		return productTypeName;
+	}
+
+	public void setProductTypeName(String productTypeName) {
+		this.productTypeName = productTypeName;
+	}
+
+	public String getStateName() {
+		return stateName;
+	}
+
+	public void setStateName(String stateName) {
+		this.stateName = stateName;
+	}
+
+	/**
      * 申请优先级:1优先0普通
      */
     private int priorityNumber;
