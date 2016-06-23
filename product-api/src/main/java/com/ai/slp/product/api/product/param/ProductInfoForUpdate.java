@@ -138,6 +138,10 @@ public class ProductInfoForUpdate extends BaseInfo {
      * 目标地域的省份编码集合
      */
     private List<Long> provCodes;
+    /**
+     * 销售商品非关键属性
+     */
+    private Map<String,List<ProdAttrValInfo>> noKeyAttrValMap;
 
     public String getProdId() {
         return prodId;
@@ -329,5 +333,13 @@ public class ProductInfoForUpdate extends BaseInfo {
 
     public void setProvCodes(List<Long> provCodes) {
         this.provCodes = provCodes;
+    }
+
+    public Map<String, List<ProdAttrValInfo>> getNoKeyAttrValMap() {
+        return noKeyAttrValMap;
+    }
+
+    public void setNoKeyAttrValMap(Map<String, List<ProdAttrValInfo>> noKeyAttrValMap) {
+        this.noKeyAttrValMap = noKeyAttrValMap;
     }
 }
