@@ -125,7 +125,7 @@ public class ProductInfoForUpdate extends BaseInfo {
     /**
      * 商品属性值图片集合
      */
-    private Map<String,List<ProductInfo>> attrValPics;
+    private Map<String,List<ProdPicInfo>> attrValPics;
     /**
      * 企业受众集合,企业用户ID标识
      */
@@ -299,11 +299,11 @@ public class ProductInfoForUpdate extends BaseInfo {
         this.prodPics = prodPics;
     }
 
-    public Map<String, List<ProductInfo>> getAttrValPics() {
+    public Map<String, List<ProdPicInfo>> getAttrValPics() {
         return attrValPics;
     }
 
-    public void setAttrValPics(Map<String, List<ProductInfo>> attrValPics) {
+    public void setAttrValPics(Map<String, List<ProdPicInfo>> attrValPics) {
         this.attrValPics = attrValPics;
     }
 
