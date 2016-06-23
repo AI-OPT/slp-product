@@ -1,4 +1,4 @@
-package com.ai.slp.product.api;
+package com.ai.slp.product.api.product;
 
 import com.ai.slp.product.api.product.interfaces.IProductServerSV;
 import com.ai.slp.product.api.product.param.SkuInfoQuery;

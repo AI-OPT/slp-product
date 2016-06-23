@@ -103,7 +103,7 @@ public class ProductInfoForUpdate extends BaseInfo {
      * 0:全部不可见；-1:全部可见
      */
     @NotNull(message = "个人受众不能为空",groups = {IProductManagerSV.SaveProduct.class})
-    private Boolean audiencesPerson;
+    private String audiencesPerson;
     /**
      * 企业受众，必填<br>
      * 0:全部不可见；-1:全部可见;1:部分可见
@@ -125,7 +125,7 @@ public class ProductInfoForUpdate extends BaseInfo {
     /**
      * 商品属性值图片集合
      */
-    private Map<String,List<ProductInfo>> attrValPics;
+    private Map<String,List<ProdPicInfo>> attrValPics;
     /**
      * 企业受众集合,企业用户ID标识
      */
@@ -267,11 +267,11 @@ public class ProductInfoForUpdate extends BaseInfo {
         this.basicOrgId = basicOrgId;
     }
 
-    public Boolean getAudiencesPerson() {
+    public String getAudiencesPerson() {
         return audiencesPerson;
     }
 
-    public void setAudiencesPerson(Boolean audiencesPerson) {
+    public void setAudiencesPerson(String audiencesPerson) {
         this.audiencesPerson = audiencesPerson;
     }
 
@@ -299,11 +299,11 @@ public class ProductInfoForUpdate extends BaseInfo {
         this.prodPics = prodPics;
     }
 
-    public Map<String, List<ProductInfo>> getAttrValPics() {
+    public Map<String, List<ProdPicInfo>> getAttrValPics() {
         return attrValPics;
     }
 
-    public void setAttrValPics(Map<String, List<ProductInfo>> attrValPics) {
+    public void setAttrValPics(Map<String, List<ProdPicInfo>> attrValPics) {
         this.attrValPics = attrValPics;
     }
 
