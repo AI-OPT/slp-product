@@ -332,11 +332,13 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             product.setProdId(sku.getProductid());
             product.setSkuId(sku.getSkuid());
             String imageinfo = JSON.toJSONString(sku.getImageinfo());
-            product.setImageinfo(ConvertImageUtil.convert(imageinfo));
-            //product.setImageinfo(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
+            if(sku.getImageinfo()!=null){
+                product.setImageinfo(ConvertImageUtil.convert(imageinfo));
+            }
             String images = JSON.toJSONString(sku.getThumbnail());
-            //List<ProductImage> imageList = JSON.parseObject(images,new TypeReference<List<ProductImage>>(){}); 
-            product.setThumbnail(ConvertImageUtil.convertThum(images));
+            if(!CollectionUtil.isEmpty(sku.getThumbnail())){
+                product.setThumbnail(ConvertImageUtil.convertThum(images)); 
+            }
             //添加地区、代理商、面额
             if(!StringUtil.isBlank(request.getProductCatId())){
                 product.setAccountList(initDataUtil.getAccountsOrFlow(request.getProductCatId()));
@@ -392,8 +394,9 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             product.setProdId(sku.getProductid());
             product.setSkuId(sku.getSkuid());
             String imageinfo = JSON.toJSONString(sku.getImageinfo());
-            product.setImageinfo(ConvertImageUtil.convert(imageinfo));
-            //product.setImageinfo(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
+            if(sku.getImageinfo()!=null){
+                product.setImageinfo(ConvertImageUtil.convert(imageinfo));  
+            }
             proList.add(product);
         }
         return proList;
@@ -481,11 +484,15 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             product.setSkuId(sku.getSkuid());
             product.setProductCatId(productCatId);
             String imageinfo = JSON.toJSONString(sku.getImageinfo());
-            product.setImageinfo(ConvertImageUtil.convert(imageinfo));
+            if(sku.getImageinfo()!=null){
+                product.setImageinfo(ConvertImageUtil.convert(imageinfo));   
+            }
             //product.setImageinfo(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
             String images = JSON.toJSONString(sku.getThumbnail());
             //List<ProductImage> imageList = JSON.parseObject(images,new TypeReference<List<ProductImage>>(){}); 
-            product.setThumbnail(ConvertImageUtil.convertThum(images));
+            if(!CollectionUtil.isEmpty(sku.getThumbnail())){
+                product.setThumbnail(ConvertImageUtil.convertThum(images)); 
+            }
             //添加地区、代理商、面额
             if(!StringUtil.isBlank(productCatId)){
                 product.setAccountList(initDataUtil.getAccountsOrFlow(productCatId));

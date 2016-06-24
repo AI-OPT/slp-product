@@ -57,7 +57,7 @@ public class SearchProductTest {
         pageInfo.setPageSize(10);
         request.setAreaCode("11");
         request.setTenantId("SLP");
-        request.setSkuName("移动");
+        request.setSkuName("三");
         request.setPageInfo(pageInfo);
         //request.setPriceOrderFlag("DESC");
         ProductQueryResponse response = iSearchProductSV.searchProduct(request);

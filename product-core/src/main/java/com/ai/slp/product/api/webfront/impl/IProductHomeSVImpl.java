@@ -67,8 +67,9 @@ public class IProductHomeSVImpl implements IProductHomeSV {
             product.setProdId(sku.getProductid());
             product.setSkuId(sku.getSkuid());
             String imageinfo = JSON.toJSONString(sku.getImageinfo());
-            product.setProductImage(ConvertImageUtil.convert(imageinfo));
-            //product.setProductImage(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
+            if(sku.getImageinfo()!=null){
+                product.setProductImage(ConvertImageUtil.convert(imageinfo));
+            }
             productList.add(product);
         }
         return productList;
@@ -109,8 +110,9 @@ public class IProductHomeSVImpl implements IProductHomeSV {
             product.setProdId(sku.getProductid());
             product.setSkuId(sku.getSkuid());
             String imageinfo = JSON.toJSONString(sku.getImageinfo());
-            product.setProductImage(ConvertImageUtil.convert(imageinfo));
-            //product.setProductImage(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
+            if(sku.getImageinfo()!=null){
+                product.setProductImage(ConvertImageUtil.convert(imageinfo));
+            }
             productList.add(product);
         }
         return productList;

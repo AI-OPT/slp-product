@@ -15,7 +15,7 @@ public class IProductSearchTest {
         ProductSearchCriteria productSearchCriteria =
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder("11","Y",
                         new UserSearchAuthority(UserSearchAuthority.UserType.PERSONAL,""))
-                .skuNameMust("中国").build();
+                .tenantID("SLP").skuNameOrSellport("三", "三").rechargeTypeNotIs("D").build();
         System.out.println(JSON.toJSONString(productSearch.search(productSearchCriteria)));
         System.out.println(productSearch.search(productSearchCriteria).getCount() == 2);
     }
