@@ -45,7 +45,9 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     @Autowired
     IProdCatDefAtomSV catDefAtomSV;
     @Autowired
-    IProdPictureAtomSV pictureAtomSV;
+    IProdPictureAtomSV prodPictureAtomSV;
+    @Autowired
+    IProdPictureLogAtomSV prodPictureLogAtomSV;
     @Autowired
     IProdCatAttrAtomSV prodCatAttrAtomSV;
     @Autowired
@@ -80,7 +82,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             if (cat!=null)
                 productEditUp.setProductCatName(cat.getProductCatName());
             //查询主预览图
-            ProdPicture prodPicture = pictureAtomSV.queryMainOfProd(product.getProdId());
+            ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
             if (prodPicture!=null){
                 productEditUp.setProPictureId(prodPicture.getProPictureId());
                 productEditUp.setVfsId(prodPicture.getVfsId());
@@ -132,7 +134,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         //查询目标地域
         otherSet.setAreaInfos(getTargetOfProd(tenantId,prodId));
         //查询商品主图
-        List<ProdPicture> picList = pictureAtomSV.queryPicOfProd(prodId);
+        List<ProdPicture> picList = prodPictureAtomSV.queryPicOfProd(prodId);
         otherSet.setProductPics(getProdPicInfo(picList));
         //添加属性值图片
         otherSet.setAttrValPics(getProdPicOfAttrVal(tenantId,product));
@@ -175,7 +177,14 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         updateGroupAudiences(tenantId,productId,ProductConstants.ProdAudiences.userType.AGENT,
                 productInfo.getAudiencesAgents(),productInfo.getAgentIds(),operId);
         //更新商品图片信息
-
+        updateProdPic(tenantId,productId,"0",productInfo.getProdPics(),operId);
+        //更新属性值图片信息
+        Map<String, List<ProdPicInfo>> picMap =productInfo.getAttrValPics();
+        Iterator<String> attrValIterator = picMap.keySet().iterator();
+        while (attrValIterator.hasNext()){
+            String attrValId = attrValIterator.next();
+            updateProdPic(tenantId,productId,attrValId,picMap.get(attrValId),operId);
+        }
         //更新目标地域
         updateTargetArea(tenantId,productId,productInfo.getIsSaleNationwide(),productInfo.getProvCodes(),operId);
         //更新商品主信息
@@ -245,7 +254,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                     throw new BusinessException("","未找到对应的属性值信息,租户:"+tenantId+",属性值id:"+attrValId);
                 }
                 //查询属性值对应图片
-                List<ProdPicture> pictureList = pictureAtomSV.queryProdIdAndAttrVal(product.getProdId(),attrValId);
+                List<ProdPicture> pictureList = prodPictureAtomSV.queryProdIdAndAttrVal(product.getProdId(),attrValId);
                 ProdAttrValInfo valInfo = new ProdAttrValInfo();
                 valInfo.setTenantId(product.getTenantId());
                 valInfo.setProductId(product.getProdId());
@@ -366,6 +375,37 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             targetArea.setState(CommonSatesConstants.STATE_ACTIVE);
             targetArea.setOperId(operId);
             prodTargetAreaAtomSV.installArea(targetArea);
+        }
+    }
+
+    /**
+     * 更新属性值图片信息
+     */
+    private void updateProdPic(String tenantId,String prodId,String attrValId,List<ProdPicInfo> picInfoList,Long operId){
+        //废弃该属性值下的原图片信息
+        List<ProdPicture> pictureList = prodPictureAtomSV.queryProdIdAndAttrVal(prodId,attrValId);
+        prodPictureAtomSV.discardPic(prodId,attrValId,operId);
+        //添加日志
+        for (ProdPicture prodPicture:pictureList){
+            ProdPictureLog pictureLog = new ProdPictureLog();
+            BeanUtils.copyProperties(pictureLog,prodPicture);
+            pictureLog.setOperId(operId);
+            pictureLog.setState(CommonSatesConstants.STATE_INACTIVE);
+            prodPictureLogAtomSV.installLog(pictureLog);
+        }
+        //添加新图片
+        for (ProdPicInfo picInfo:picInfoList){
+            ProdPicture prodPicture = new ProdPicture();
+            BeanUtils.copyProperties(prodPicture,picInfo);
+            //属性值为0,表示为商品属性图片
+            prodPicture.setPicUses("0".equals(attrValId)?
+                    ProductConstants.ProdPicture.PicType.PRODUCT:ProductConstants.ProdPicture.PicType.ATTR);
+            prodPicture.setOperId(operId);
+            if (prodPictureAtomSV.installPic(prodPicture)>0){
+                ProdPictureLog pictureLog = new ProdPictureLog();
+                BeanUtils.copyProperties(pictureLog,prodPicture);
+                prodPictureLogAtomSV.installLog(pictureLog);
+            }
         }
     }
 }

@@ -7,6 +7,8 @@ import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPictureCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdPictureMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
+import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -85,6 +87,26 @@ public class ProdPictureAtomSVImpl implements IProdPictureAtomSV {
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         List<ProdPicture> pictureList = prodPictureMapper.selectByExample(example);
         return CollectionUtil.isEmpty(pictureList)?null:pictureList.get(0);
+    }
+
+    @Override
+    public int discardPic(String prodId, String attrValId,Long operId) {
+        ProdPictureCriteria example = new ProdPictureCriteria();
+        example.createCriteria().andProdIdEqualTo(prodId)
+                .andAttrvalueDefIdEqualTo(attrValId)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        ProdPicture prodPicture = new ProdPicture();
+        prodPicture.setState(CommonSatesConstants.STATE_INACTIVE);
+        prodPicture.setOperId(operId);
+        prodPicture.setOperTime(DateUtils.currTimeStamp());
+        return prodPictureMapper.updateByExampleSelective(prodPicture,example);
+    }
+
+    @Override
+    public int installPic(ProdPicture prodPicture) {
+        prodPicture.setProPictureId(SequenceUtil.genProdPictureId());
+        prodPicture.setOperTime(DateUtils.currTimeStamp());
+        return prodPictureMapper.insert(prodPicture);
     }
 
 }

@@ -36,4 +36,19 @@ public interface IProdPictureAtomSV {
      * @return
      */
     public ProdPicture queryMainOfProd(String prodId);
+
+    /**
+     * 废除指定商品图片
+     * @param prodId
+     * @param attrValId
+     * @return
+     */
+    public int discardPic(String prodId,String attrValId,Long operId);
+
+    /**
+     * 添加指定商品图片
+     * @param prodPicture
+     * @return
+     */
+    public int installPic(ProdPicture prodPicture);
 }
