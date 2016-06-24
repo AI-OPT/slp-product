@@ -1,11 +1,5 @@
 package com.ai.slp.product.service.atom.impl.product;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
@@ -15,6 +9,11 @@ import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -23,8 +22,7 @@ import com.ai.slp.product.util.SequenceUtil;
 public class ProductAtomSVImpl implements IProductAtomSV {
 	@Autowired
 	ProductMapper productMapper;
-//	@Autowired
-//	ProductAttachMapper productAttachMapper;
+
 
 	/**
 	 * 添加销售商品信息

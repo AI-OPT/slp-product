@@ -21,11 +21,14 @@ import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
 import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
 import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,10 +41,13 @@ import java.util.*;
 @Service
 @Transactional
 public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
+    private static Logger logger = LoggerFactory.getLogger(ProductManagerBsuiSVImpl.class);
     @Autowired
     IProdAttrValDefAtomSV attrValDefAtomSV;
     @Autowired
     IProductAtomSV productAtomSV;
+    @Autowired
+    IProductLogAtomSV productLogAtomSV;
     @Autowired
     IProdCatDefAtomSV catDefAtomSV;
     @Autowired
@@ -61,7 +67,17 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     @Autowired
     IProdAttrLogAtomSV prodAttrLogAtomSV;
     @Autowired
+    IProductBusiSV productBusiSV;
+    @Autowired
     ProdAttrMapper prodAttrMapper;
+    public static List<String> editStatus = new ArrayList<>();
+    //	@Autowired
+//	ProductAttachMapper productAttachMapper;
+    static {
+        editStatus.add(ProductConstants.Product.State.ADD);
+        editStatus.add(ProductConstants.Product.State.UNEDIT);
+        editStatus.add(ProductConstants.Product.State.EDITED);
+    }
     /**
      * 商品管理中分页查询商品信息
      *
@@ -145,6 +161,14 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     public void updateProdEdit(ProductInfoForUpdate productInfo) {
         String tenantId = productInfo.getTenantId(),
                 productId = productInfo.getProdId();
+        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        if (product == null){
+            logger.warn("未找到对应销售商品,租户ID:{},商品标识:{}",tenantId,productId);
+            throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
+                    "未找到对应商品信息,租户ID:"+tenantId+",商品标识:"+productId);
+        }else if (editStatus.contains(product.getState())){
+            throw new BusinessException("","商品没有处于可编辑状态,不允许编辑更新.");
+        }
         Long operId = productInfo.getOperId();
         //更新商品非关键属性信息
         updateNoKeyAttr(tenantId,productId,productInfo.getNoKeyAttrValMap(),operId);
@@ -188,8 +212,17 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         //更新目标地域
         updateTargetArea(tenantId,productId,productInfo.getIsSaleNationwide(),productInfo.getProvCodes(),operId);
         //更新商品主信息
-
-
+        BeanUtils.copyProperties(product,productInfo);
+        //目前设置为仓库中
+        product.setState(ProductConstants.Product.State.IN_STORE);
+        //添加日志
+        if (productAtomSV.updateById(product)>0){
+            ProductLog log = new ProductLog();
+            BeanUtils.copyProperties(product,log);
+            productLogAtomSV.install(log);
+        }
+        //进行上架
+        productBusiSV.changeToInSale(tenantId,productId,operId);
     }
 
     private Map<String,ProdAudiencesInfo> getAudiencesInfo(String tenantId,String prodId,String userType){
