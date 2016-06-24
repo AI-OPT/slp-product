@@ -6,6 +6,8 @@ import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdAttrMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
+import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -55,5 +57,12 @@ public class ProdAttrAtomSVImpl implements IProdAttrAtomSV {
                 .andStateEqualTo(ProductConstants.ProdAttr.State.ACTIVE);
         List<ProdAttr> prodAttrs = prodAttrMapper.selectByExample(example);
         return CollectionUtil.isEmpty(prodAttrs)?null:prodAttrs.get(0);
+    }
+
+    @Override
+    public int installProdAttr(ProdAttr prodAttr) {
+        prodAttr.setProdAttrId(SequenceUtil.genProdAttrId());
+        prodAttr.setOperTime(DateUtils.currTimeStamp());
+        return prodAttrMapper.insert(prodAttr);
     }
 }

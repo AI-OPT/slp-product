@@ -15,15 +15,14 @@ import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
-import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
-import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
-import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.product.*;
+import com.ai.slp.product.dao.mapper.interfaces.product.ProdAttrMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
+import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
 import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
 import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
@@ -31,10 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by jackieliu on 16/6/6.
@@ -58,6 +54,12 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     IProdTargetAreaAtomSV prodTargetAreaAtomSV;
     @Autowired
     IProdSkuAttrAtomSV skuAttrAtomSV;
+    @Autowired
+    IProdAttrAtomSV prodAttrAtomSV;
+    @Autowired
+    IProdAttrLogAtomSV prodAttrLogAtomSV;
+    @Autowired
+    ProdAttrMapper prodAttrMapper;
     /**
      * 商品管理中分页查询商品信息
      *
@@ -143,8 +145,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                 productId = productInfo.getProdId();
         Long operId = productInfo.getOperId();
         //更新商品非关键属性信息
-        Map<String, List<ProdAttrValInfo>> noKeyValMap =productInfo.getNoKeyAttrValMap();
-
+        updateNoKeyAttr(tenantId,productId,productInfo.getNoKeyAttrValMap(),operId);
         //更新商品受众信息
         //* 个人受众
         String perAudi = productInfo.getAudiencesPerson();
@@ -267,6 +268,49 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         return picInfoList;
     }
 
+    /**
+     * 更新非关键属性
+     */
+    private void updateNoKeyAttr(String tenantId,String productId,
+                                 Map<Long, List<ProdAttrValInfo>> attrValMap,Long operId){
+        //查询原非关键属性
+        Iterator<Long> attrIdIterator = attrValMap.keySet().iterator();
+        while (attrIdIterator.hasNext()) {
+            Long attrId = attrIdIterator.next();
+            List<ProdAttr> prodAttrList = prodAttrAtomSV.queryOfProdAndAttr(tenantId, productId, attrId);
+            for (ProdAttr prodAttr:prodAttrList){
+                //废弃原
+                prodAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+                prodAttr.setOperId(operId);
+                prodAttr.setOperTime(DateUtils.currTimeStamp());
+                //添加日志
+                if (prodAttrMapper.updateByPrimaryKey(prodAttr)>0){
+                    ProdAttrLog prodAttrLog = new ProdAttrLog();
+                    BeanUtils.copyProperties(prodAttrLog,prodAttr);
+                    prodAttrLogAtomSV.installLog(prodAttrLog);
+                }
+            }
+            List<ProdAttrValInfo> attrValInfoList = attrValMap.get(attrId);
+            for (ProdAttrValInfo valInfo:attrValInfoList){
+                //添加新
+                ProdAttr prodAttr = new ProdAttr();
+                prodAttr.setTenantId(tenantId);
+                prodAttr.setProdId(productId);
+                prodAttr.setAttrId(attrId);
+                prodAttr.setAttrvalueDefId(valInfo.getAttrValId());
+                prodAttr.setAttrValueName(valInfo.getAttrVal());
+                prodAttr.setAttrValueName2(valInfo.getAttrVal2());
+                prodAttr.setState(CommonSatesConstants.STATE_ACTIVE);
+                prodAttr.setOperId(operId);
+                //添加日志
+                if (prodAttrMapper.insert(prodAttr)>0){
+                    ProdAttrLog prodAttrLog = new ProdAttrLog();
+                    BeanUtils.copyProperties(prodAttrLog,prodAttr);
+                    prodAttrLogAtomSV.installLog(prodAttrLog);
+                }
+            }
+        }
+    }
     /**
      * 更新组织类型受众,暂时包括企业和代理商
      */

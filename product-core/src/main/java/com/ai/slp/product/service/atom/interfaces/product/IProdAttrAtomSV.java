@@ -28,4 +28,11 @@ public interface IProdAttrAtomSV {
      * @return
      */
     public ProdAttr queryByProdAndAttrAndAttrVal(String tenantId,String prodId,Long attrId,String attrValId);
+
+    /**
+     * 添加属性值信息
+     * @param prodAttr
+     * @return
+     */
+    public int installProdAttr(ProdAttr prodAttr);
 }
