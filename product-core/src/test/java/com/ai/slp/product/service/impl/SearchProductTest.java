@@ -29,8 +29,8 @@ public class SearchProductTest {
        request.setTenantId("SLP");
         request.setAreaCode("11");
         request.setProductCatId("10000010010000");
-        //request.setUserType("12");
-        request.setBasicOrgIdIs("10");
+        request.setUserType("11");
+        //request.setBasicOrgIdIs("10");
        //request.setAttrDefId("100004");
         request.setPageInfo(pageInfo);
         //request.setPriceOrderFlag("12");
@@ -57,7 +57,7 @@ public class SearchProductTest {
         pageInfo.setPageSize(10);
         request.setAreaCode("11");
         request.setTenantId("SLP");
-        request.setSkuName("三");
+        request.setSkuName("电信");
         request.setPageInfo(pageInfo);
         //request.setPriceOrderFlag("DESC");
         ProductQueryResponse response = iSearchProductSV.searchProduct(request);
