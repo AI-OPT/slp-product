@@ -281,7 +281,8 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             //库存组当前优先级库存可用量
             priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
         }
-        return Long.parseLong(cacheClient.get(priorityUsable));
+        String usableNumStr = cacheClient.get(priorityUsable);
+        return StringUtils.isBlank(usableNumStr)?0:Long.parseLong(usableNumStr);
     }
 
     /**
