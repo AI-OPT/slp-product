@@ -141,7 +141,7 @@ public class ProductInfoForUpdate extends BaseInfo {
     /**
      * 销售商品非关键属性
      */
-    private Map<String,List<ProdAttrValInfo>> noKeyAttrValMap;
+    private Map<Long,List<ProdAttrValInfo>> noKeyAttrValMap;
 
     public String getProdId() {
         return prodId;
@@ -335,11 +335,11 @@ public class ProductInfoForUpdate extends BaseInfo {
         this.provCodes = provCodes;
     }
 
-    public Map<String, List<ProdAttrValInfo>> getNoKeyAttrValMap() {
+    public Map<Long, List<ProdAttrValInfo>> getNoKeyAttrValMap() {
         return noKeyAttrValMap;
     }
 
-    public void setNoKeyAttrValMap(Map<String, List<ProdAttrValInfo>> noKeyAttrValMap) {
+    public void setNoKeyAttrValMap(Map<Long, List<ProdAttrValInfo>> noKeyAttrValMap) {
         this.noKeyAttrValMap = noKeyAttrValMap;
     }
 }
