@@ -345,7 +345,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                 prodAttr.setState(CommonSatesConstants.STATE_ACTIVE);
                 prodAttr.setOperId(operId);
                 //添加日志
-                if (prodAttrMapper.insert(prodAttr)>0){
+                if (prodAttrAtomSV.installProdAttr(prodAttr)>0){
                     ProdAttrLog prodAttrLog = new ProdAttrLog();
                     BeanUtils.copyProperties(prodAttrLog,prodAttr);
                     prodAttrLogAtomSV.installLog(prodAttrLog);
