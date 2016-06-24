@@ -22,9 +22,9 @@ public class HomeproductTest {
     public void serachProduct(){
         ProductHomeRequest request = new ProductHomeRequest();
         request.setTenantId("SLP");
-        request.setAreaCode("81");
-        request.setProductCatId("10000010010000");
-        request.setBasicOrgIdIs("12");
+        request.setAreaCode("11");
+        request.setProductCatId("10000010020000");
+        request.setBasicOrgIdIs("10");
         List<ProductHomeResponse>  response = iProductHomeSV.queryHomeDataProduct(request);
         System.out.println("result="+JSON.toJSONString(response));
 

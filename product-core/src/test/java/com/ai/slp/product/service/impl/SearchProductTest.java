@@ -28,9 +28,9 @@ public class SearchProductTest {
        pageInfo.setPageSize(10);
        request.setTenantId("SLP");
         request.setAreaCode("11");
-        request.setProductCatId("10000010010000");
-        request.setUserType("11");
-        //request.setBasicOrgIdIs("10");
+        request.setProductCatId("10000010020000");
+        //request.setUserType("11");
+        request.setBasicOrgIdIs("10");
        //request.setAttrDefId("100004");
         request.setPageInfo(pageInfo);
         //request.setPriceOrderFlag("12");
@@ -54,13 +54,13 @@ public class SearchProductTest {
         ProductQueryRequest request = new ProductQueryRequest();
         PageInfo<ProductData> pageInfo = new PageInfo<ProductData>();
         pageInfo.setPageNo(1);
-        pageInfo.setPageSize(10);
+        pageInfo.setPageSize(13);
         request.setAreaCode("11");
         request.setTenantId("SLP");
         request.setSkuName("电信");
         request.setPageInfo(pageInfo);
         //request.setPriceOrderFlag("DESC");
         ProductQueryResponse response = iSearchProductSV.searchProduct(request);
-        System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));
+        System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult().size()));
     }
 }
