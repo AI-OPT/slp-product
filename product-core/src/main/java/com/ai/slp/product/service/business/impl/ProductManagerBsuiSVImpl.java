@@ -218,7 +218,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         //添加日志
         if (productAtomSV.updateById(product)>0){
             ProductLog log = new ProductLog();
-            BeanUtils.copyProperties(product,log);
+            BeanUtils.copyProperties(log,product);
             productLogAtomSV.install(log);
         }
         //进行上架
