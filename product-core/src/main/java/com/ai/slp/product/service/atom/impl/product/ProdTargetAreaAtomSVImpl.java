@@ -5,6 +5,8 @@ import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetAreaCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdTargetAreaMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProdTargetAreaAtomSV;
+import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -45,5 +47,25 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
             criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         }
         return areaMapper.selectByExample(example);
+    }
+
+    @Override
+    public int discardForProduct(String tenantId, String prodId, Long operId) {
+        ProdTargetAreaCriteria example = new ProdTargetAreaCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andProdIdEqualTo(prodId)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        ProdTargetArea targetArea = new ProdTargetArea();
+        targetArea.setState(CommonSatesConstants.STATE_INACTIVE);
+        targetArea.setOperId(operId);
+        targetArea.setOperTime(DateUtils.currTimeStamp());
+        return areaMapper.updateByExampleSelective(targetArea,example);
+    }
+
+    @Override
+    public int installArea(ProdTargetArea targetArea) {
+        targetArea.setTargetAreaId(SequenceUtil.genProdTargetAreaId());
+        targetArea.setOperTime(DateUtils.currTimeStamp());
+        return areaMapper.insert(targetArea);
     }
 }

@@ -190,6 +190,11 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public BaseResponse updateProduct(ProductInfoForUpdate product) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(product.getTenantId(),"");
+        productManagerBsuiSV.updateProdEdit(product);
+        BaseResponse response = new BaseResponse();
+        ResponseHeader header = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
+        response.setResponseHeader(header);
+        return response;
     }
 }

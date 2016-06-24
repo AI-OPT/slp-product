@@ -141,6 +141,12 @@ public class SKUInfoUtil {
         skuInfo.setAttrInfos(attrInfos);
     }
 
+    /**
+     * 填充SKU相关信息
+     * @param connection
+     * @param skuInfo
+     * @throws SQLException
+     */
     public static void fillSKUInfo(Connection connection, SKUInfo skuInfo) throws SQLException {
         // 属性
         SKUInfoUtil.fillSKUAttrInfo(connection, skuInfo);

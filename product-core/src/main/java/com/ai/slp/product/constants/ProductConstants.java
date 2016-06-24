@@ -208,7 +208,15 @@ public final class ProductConstants {
 
         public final class userId{
             /**
-             * 此类用户
+             * 全部不可见
+             */
+            public static final String NO_USER = "0";
+            /**
+             * 部分可见
+             */
+            public static final String PART_USER = "1";
+            /**
+             * 此类用户全部可见
              */
             public static final String USER_TYPE = "-1";
             /**

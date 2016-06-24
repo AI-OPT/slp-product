@@ -1,5 +1,17 @@
 package com.ai.slp.product.search.ses;
 
+import com.ai.opt.sdk.components.ses.base.AbstractSES;
+import com.ai.slp.product.search.bo.SKUInfo;
+import com.ai.slp.product.search.utils.SKUInfoUtil;
+import com.alibaba.fastjson.JSON;
+import com.google.gson.GsonBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,20 +20,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.sql.DataSource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
-
-import com.ai.opt.sdk.components.ses.base.AbstractSES;
-import com.ai.slp.product.search.bo.SKUInfo;
-import com.ai.slp.product.search.utils.SKUInfoUtil;
-import com.alibaba.fastjson.JSON;
-import com.google.gson.GsonBuilder;
-
+/**
+ * 刷新搜索引擎数据
+ */
 @Component
 public class ProductDataSES extends AbstractSES {
 	private static final Logger LOG=LoggerFactory.getLogger(ProductDataSES.class);
@@ -42,6 +43,7 @@ public class ProductDataSES extends AbstractSES {
 		        List<SKUInfo> skuInfoList;
 		        int start = 0;
 		        while (true) {
+					//获取指定条目的sku信息
 		            PreparedStatement ps = connection.prepareStatement(MAIN_SQL);
 		            ps.setInt(1, start);
 		            ps.setInt(2, MAX_SIZE);

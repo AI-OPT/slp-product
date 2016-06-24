@@ -9,6 +9,7 @@ import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.slp.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
@@ -136,6 +137,51 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         return otherSet;
     }
 
+    @Override
+    public void updateProdEdit(ProductInfoForUpdate productInfo) {
+        String tenantId = productInfo.getTenantId(),
+                productId = productInfo.getProdId();
+        Long operId = productInfo.getOperId();
+        //更新商品非关键属性信息
+        Map<String, List<ProdAttrValInfo>> noKeyValMap =productInfo.getNoKeyAttrValMap();
+
+        //更新商品受众信息
+        //* 个人受众
+        String perAudi = productInfo.getAudiencesPerson();
+        //全部可见
+        if (ProductConstants.ProdAudiences.userId.USER_TYPE.equals(perAudi)) {
+            List<ProdAudiences> personAudiList = prodAudiencesAtomSV.queryByUserType(tenantId, productId,
+                    ProductConstants.ProdAudiences.userType.PERSON, null, false);
+            //为空,且全部可见
+            if (CollectionUtil.isEmpty(personAudiList)) {
+                ProdAudiences prodAudiences = new ProdAudiences();
+                prodAudiences.setTenantId(tenantId);
+                prodAudiences.setProdId(productId);
+                prodAudiences.setUserId(perAudi);
+                prodAudiences.setOperId(operId);
+                prodAudiencesAtomSV.installAudiences(prodAudiences);
+            }
+        }//全部不可见
+        else if(ProductConstants.ProdAudiences.userId.NO_USER.equals(perAudi)) {
+            //设置此类型为无效
+            prodAudiencesAtomSV.updateNoUser(tenantId,productId,
+                    ProductConstants.ProdAudiences.userType.PERSON,operId);
+        }
+        //* 企业受众
+        updateGroupAudiences(tenantId,productId,ProductConstants.ProdAudiences.userType.ENTERPRISE,
+                productInfo.getAudiencesEnterprise(),productInfo.getEnterpriseIds(),operId);
+        //* 代理商受众
+        updateGroupAudiences(tenantId,productId,ProductConstants.ProdAudiences.userType.AGENT,
+                productInfo.getAudiencesAgents(),productInfo.getAgentIds(),operId);
+        //更新商品图片信息
+
+        //更新目标地域
+        updateTargetArea(tenantId,productId,productInfo.getIsSaleNationwide(),productInfo.getProvCodes(),operId);
+        //更新商品主信息
+
+
+    }
+
     private Map<String,ProdAudiencesInfo> getAudiencesInfo(String tenantId,String prodId,String userType){
         List<ProdAudiences> boList = prodAudiencesAtomSV.queryByUserType(
                 tenantId,prodId, userType,null,false);
@@ -219,5 +265,63 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             picInfoList.add(picInfo);
         }
         return picInfoList;
+    }
+
+    /**
+     * 更新组织类型受众,暂时包括企业和代理商
+     */
+    private void updateGroupAudiences(String tenantId,String productId,String userType,
+                                      String audiType,List<String> userIdS,Long operId) {
+        //将原来受众全部设置为无效
+        //设置此类型为无效
+        prodAudiencesAtomSV.updateNoUser(tenantId,productId,audiType,operId);
+        //1.受众为全部不可见
+        if (ProductConstants.ProdAudiences.userId.NO_USER.equals(audiType)){
+            return;
+        }//2.受众为全部可见
+        else if(ProductConstants.ProdAudiences.userId.USER_TYPE.equals(audiType)){
+            ProdAudiences prodAudiences = new ProdAudiences();
+            prodAudiences.setTenantId(tenantId);
+            prodAudiences.setProdId(productId);
+            prodAudiences.setUserType(userType);
+            prodAudiences.setUserId(ProductConstants.ProdAudiences.userId.USER_TYPE);
+            prodAudiences.setState(CommonSatesConstants.STATE_ACTIVE);
+            prodAudiences.setOperId(operId);
+            prodAudiencesAtomSV.installAudiences(prodAudiences);
+        }//3.受众为部分可见
+        else if(ProductConstants.ProdAudiences.userId.PART_USER.equals(audiType)){
+            for (String userId:userIdS){
+                ProdAudiences prodAudiences = new ProdAudiences();
+                prodAudiences.setTenantId(tenantId);
+                prodAudiences.setProdId(productId);
+                prodAudiences.setUserType(userType);
+                prodAudiences.setUserId(userId);
+                prodAudiences.setState(CommonSatesConstants.STATE_ACTIVE);
+                prodAudiences.setOperId(operId);
+                prodAudiencesAtomSV.installAudiences(prodAudiences);
+            }
+        }
+    }
+
+    /**
+     * 更新商品目标地域
+     */
+    private void updateTargetArea(String tenantId,String prodId,
+                                  String isSaleNationwide,List<Long> provCodes,Long operId){
+        //如果为全国范围,则使原目标地域失效
+        prodTargetAreaAtomSV.discardForProduct(tenantId,prodId,operId);
+        if (ProductConstants.Product.IsSaleNationwide.YES.equals(isSaleNationwide)){
+            return;
+        }
+        //部分地域
+        for (Long provCode:provCodes){
+            ProdTargetArea targetArea = new ProdTargetArea();
+            targetArea.setTenantId(tenantId);
+            targetArea.setProdId(prodId);
+            targetArea.setProvCode(provCode.intValue());
+            targetArea.setState(CommonSatesConstants.STATE_ACTIVE);
+            targetArea.setOperId(operId);
+            prodTargetAreaAtomSV.installArea(targetArea);
+        }
     }
 }

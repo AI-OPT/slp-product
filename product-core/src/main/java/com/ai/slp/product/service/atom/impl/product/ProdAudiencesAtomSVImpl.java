@@ -6,6 +6,8 @@ import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAudiencesCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdAudiencesMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProdAudiencesAtomSV;
+import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,5 +49,26 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
             criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         }
         return audiencesMapper.selectByExample(example);
+    }
+
+    @Override
+    public int installAudiences(ProdAudiences prodAudiences) {
+        prodAudiences.setProdAudiencesId(SequenceUtil.genProdAudiencesId());
+        prodAudiences.setOperTime(DateUtils.currTimeStamp());
+        return audiencesMapper.insert(prodAudiences);
+    }
+
+    @Override
+    public int updateNoUser(String tenantId, String prodId, String userType,Long operId) {
+        ProdAudiencesCriteria example = new ProdAudiencesCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andProdIdEqualTo(prodId)
+                .andUserTypeEqualTo(userType)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        ProdAudiences prodAudiences = new ProdAudiences();
+        prodAudiences.setState(CommonSatesConstants.STATE_INACTIVE);
+        prodAudiences.setOperId(operId);
+        prodAudiences.setOperTime(DateUtils.currTimeStamp());
+        return audiencesMapper.updateByExampleSelective(prodAudiences,example);
     }
 }

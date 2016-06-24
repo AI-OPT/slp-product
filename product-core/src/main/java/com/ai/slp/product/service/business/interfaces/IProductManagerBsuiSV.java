@@ -4,6 +4,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductEditUp;
+import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
 
 /**
  * 销售商品管理
@@ -24,4 +25,10 @@ public interface IProductManagerBsuiSV {
      * @return
      */
     public OtherSetOfProduct queryOtherSetOfProd(String tenantId, String prodId);
+
+    /**
+     * 更新产品编辑信息
+     * @param productInfo
+     */
+    public void updateProdEdit(ProductInfoForUpdate productInfo);
 }

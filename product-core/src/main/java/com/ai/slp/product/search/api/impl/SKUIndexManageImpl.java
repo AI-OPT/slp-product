@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 搜索信息管理
  * Created by xin on 16-6-1.
  */
 @Component
@@ -28,6 +29,11 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
     @Autowired
     private ISKUService iskuService;
 
+    /**
+     * 更新搜索信息
+     * @param productId 商品标识
+     * @return
+     */
     @Override
     public boolean updateSKUIndex(String productId) {
         try {
@@ -46,11 +52,17 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
         return false;
     }
 
+    /**
+     * 删除指定SKU搜索信息
+     * @param skuId sku标识
+     * @return
+     */
     @Override
     public boolean deleteSKUIndexBySKUId(String skuId) {
         try {
             List<SearchfieldVo> searchfieldVos = new ArrayList<SearchfieldVo>();
-            searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.SKU_ID, skuId, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
+            searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.SKU_ID, skuId,
+                    new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
             return SESClientFactory.getSearchClient(Constants.SearchNameSpace).deleteData(searchfieldVos);
         } catch (Exception e) {
             logger.error("Failed to delete sku info", e);
@@ -59,11 +71,17 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
         return false;
     }
 
+    /**
+     * 删除指定商品搜索信息
+     * @param productId 商品标识
+     * @return
+     */
     @Override
     public boolean deleteSKUIndexByProductId(String productId) {
         try {
             List<SearchfieldVo> searchfieldVos = new ArrayList<SearchfieldVo>();
-            searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.PRODUCT_ID, productId, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
+            searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.PRODUCT_ID, productId,
+                    new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
             return SESClientFactory.getSearchClient(Constants.SearchNameSpace).deleteData(searchfieldVos);
         } catch (Exception e) {
             logger.error("Failed to delete sku info", e);

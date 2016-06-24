@@ -11,6 +11,7 @@ import com.ai.slp.product.search.dto.ProductSearchCriteria;
 import java.util.Map;
 
 /**
+ * 商品搜索
  * Created by xin on 16-5-25.
  */
 public class ProductSearchImpl implements IProductSearch {

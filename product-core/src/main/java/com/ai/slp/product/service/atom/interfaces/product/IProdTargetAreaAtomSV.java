@@ -21,4 +21,19 @@ public interface IProdTargetAreaAtomSV {
      */
     public List<ProdTargetArea> queryByAreaCode(String tenantId,String prodId,Integer provCode,boolean hasDiscard);
 
+    /**
+     * 设置指定商品的目标地域失效
+     * @param tenantId
+     * @param prodId
+     * @param operId
+     * @return
+     */
+    public int discardForProduct(String tenantId,String prodId,Long operId);
+
+    /**
+     * 添加目标地域
+     * @param targetArea
+     * @return
+     */
+    public int installArea(ProdTargetArea targetArea);
 }

@@ -30,6 +30,12 @@ public final class SequenceUtil {
     private static final String PROD_SKU_ATTR$SKU_ATTR_ID$SEQ = "PROD_SKU_ATTR$SKU_ATTR_ID$SEQ";
     private static final String SKU_STORAGE$SKU_STORAGE_ID$SEQ = "SKU_STORAGE$SKU_STORAGE_ID$SEQ";
     private static final String PROD_SALE_ALL$PRO_SALE_ID$SEQ = "PROD_SALE_ALL$PRO_SALE_ID$SEQ";
+    private static final String PROD_AUDIENCES$PROD_AUDIENCES_ID$SEQ = "PROD_AUDIENCES$PROD_AUDIENCES_ID$SEQ";
+    private static final String PROD_TARGET_AREA$TARGET_AREA_ID$SEQ = "PROD_TARGET_AREA$TARGET_AREA_ID$SEQ";
+    private static final String PROD_PICTURE$PRO_PICTURE_ID$SEQ = "PROD_PICTURE$PRO_PICTURE_ID$SEQ";
+    private static final String PROD_PICTURE_LOG$LOG_ID$SEQ = "PROD_PICTURE_LOG$LOG_ID$SEQ";
+    private static final String PROD_ATTR$PROD_ATTR_ID$SEQ = "PROD_ATTR$PROD_ATTR_ID$SEQ";
+    private static final String PROD_ATTR_LOG$LOG_ID$SEQ = "PROD_ATTR_LOG$LOG_ID$SEQ";
 
     public static Long createAttrDefId() {
         return SeqUtil.getNewId(PROD_ATTR_DEF$ATTR_ID$SEQ);
@@ -117,4 +123,29 @@ public final class SequenceUtil {
     public static Long genProdSaleAllId(){
         return SeqUtil.getNewId(PROD_SALE_ALL$PRO_SALE_ID$SEQ);
     }
+
+    public static Long genProdAudiencesId(){
+        return SeqUtil.getNewId(PROD_AUDIENCES$PROD_AUDIENCES_ID$SEQ);
+    }
+
+    public static Long genProdTargetAreaId() {
+        return SeqUtil.getNewId(PROD_TARGET_AREA$TARGET_AREA_ID$SEQ);
+    }
+
+    public static Long genProdPictureId(){
+        return SeqUtil.getNewId(PROD_PICTURE$PRO_PICTURE_ID$SEQ);
+    }
+
+    public static String genProdPictureLogId(){
+        return SeqUtil.getNewId(PROD_PICTURE_LOG$LOG_ID$SEQ,16);
+    }
+
+    public static Long genProdAttrId(){
+        return SeqUtil.getNewId(PROD_ATTR$PROD_ATTR_ID$SEQ);
+    }
+
+    public static String genProdAttrLogId(){
+        return SeqUtil.getNewId(PROD_ATTR_LOG$LOG_ID$SEQ,16);
+    }
+
 }

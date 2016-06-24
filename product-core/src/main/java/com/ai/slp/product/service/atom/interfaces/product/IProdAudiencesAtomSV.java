@@ -21,4 +21,21 @@ public interface IProdAudiencesAtomSV {
      * @return
      */
     public List<ProdAudiences> queryByUserType(String tenantId,String prodId,String userType,String userId,boolean hasDiscard);
+
+    /**
+     * 插入受众信息
+     * @param prodAudiences
+     * @return
+     */
+    public int installAudiences(ProdAudiences prodAudiences);
+
+    /**
+     * 设置某用户类型不可见
+     *
+     * @param tenantId
+     * @param prodId
+     * @param userType
+     * @return
+     */
+    public int updateNoUser(String tenantId,String prodId,String userType,Long operId);
 }
