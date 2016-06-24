@@ -53,7 +53,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             int pageNo = request.getPageInfo().getPageNo();
             int size = request.getPageInfo().getPageSize();
             if(request.getPageInfo().getPageNo()==1){
-                startSize=1;
+                startSize=0;
             }else{
                 startSize = (pageNo-1)*size+1;
             }
@@ -443,7 +443,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
              int pageNo = request.getPageInfo().getPageNo();
              int size = request.getPageInfo().getPageSize();
              if(request.getPageInfo().getPageNo()==1){
-                 startSize=1;
+                 startSize=0;
              }else{
                  startSize = (pageNo-1)*size+1;
              }
