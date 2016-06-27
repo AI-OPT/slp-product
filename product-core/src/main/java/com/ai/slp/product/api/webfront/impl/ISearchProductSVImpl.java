@@ -55,7 +55,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             if(request.getPageInfo().getPageNo()==1){
                 startSize=0;
             }else{
-                startSize = (pageNo-1)*size+1;
+                startSize = (pageNo-1)*size;
             }
             maxSize=pageNo*size;
         }
@@ -445,7 +445,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
              if(request.getPageInfo().getPageNo()==1){
                  startSize=0;
              }else{
-                 startSize = (pageNo-1)*size+1;
+                 startSize = (pageNo-1)*size;
              }
              maxSize=pageNo*size;
          }
