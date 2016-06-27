@@ -53,7 +53,7 @@ public class SearchProductTest {
     public void serach(){
         ProductQueryRequest request = new ProductQueryRequest();
         PageInfo<ProductData> pageInfo = new PageInfo<ProductData>();
-        pageInfo.setPageNo(2);
+        pageInfo.setPageNo(1);
         pageInfo.setPageSize(12);
         request.setAreaCode("11");
         request.setTenantId("SLP");
@@ -61,6 +61,6 @@ public class SearchProductTest {
         request.setPageInfo(pageInfo);
         //request.setPriceOrderFlag("DESC");
         ProductQueryResponse response = iSearchProductSV.searchProduct(request);
-        System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));
+        System.out.println("result="+JSON.toJSONString(response.getPageInfo().getCount()));
     }
 }

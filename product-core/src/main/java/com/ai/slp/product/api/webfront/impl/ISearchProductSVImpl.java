@@ -363,7 +363,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
         pageinfo.setResult(results);
         pageinfo.setPageSize(request.getPageInfo().getPageSize());
         pageinfo.setPageNo(request.getPageInfo().getPageNo());
-        pageinfo.setCount(skuList.size());
+        pageinfo.setCount(queryProductPageCount(request));
         response.setPageInfo(pageinfo);
         return response;
     }
@@ -530,9 +530,356 @@ public class ISearchProductSVImpl implements ISearchProductSV {
         pageinfo.setResult(results);
         pageinfo.setPageSize(request.getPageInfo().getPageSize());
         pageinfo.setPageNo(request.getPageInfo().getPageNo());
-        pageinfo.setCount(skuList.size());
+        pageinfo.setCount(searchProductCount(request));
         response.setPageInfo(pageinfo);
         return response;
     }
-
+    //获取搜索条数
+    public int searchProductCount(ProductQueryRequest request)
+            throws BusinessException, SystemException {
+        IProductSearch productSearch = new ProductSearchImpl();
+        String userid="";
+        if(!StringUtil.isBlank(request.getUserId())){
+            userid = request.getUserId();
+        }
+        UserSearchAuthority user = new UserSearchAuthority(UserSearchAuthority.UserType.PERSONAL,userid);
+         if(ProductHomeConstants.UserType.ENTERPRISE.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,userid);
+        }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
+        }else if(ProductHomeConstants.UserType.SUPPLY.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.SUPPLY,userid); 
+        }
+         ProductSearchCriteria productSearchCriteria;
+         Results<Map<String, Object>>  result = new  Results<Map<String, Object>>();
+         if(!StringUtil.isBlank(request.getSkuName())){
+             productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                     .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).skuNameOrSellport(request.getSkuName(),request.getSkuName()).build();
+            result = productSearch.search(productSearchCriteria); 
+         }
+         //如果销量不为空
+         if(!StringUtil.isBlank(request.getSaleNumOrderFlag()) && !StringUtil.isBlank(request.getSkuName())){
+             productSearchCriteria =
+                     new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                     .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).tenantID(request.getTenantId()).skuNameOrSellport(request.getSkuName(),request.getSkuName()).build();
+            result = productSearch.search(productSearchCriteria); 
+         }
+         //如果价格不为空
+         if(!StringUtil.isBlank(request.getPriceOrderFlag()) && !StringUtil.isBlank(request.getSkuName())){
+             if(request.getPriceOrderFlag().equals(ProductHomeConstants.ORDER_ASC_ID)){
+                 productSearchCriteria =
+                         new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                         .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).tenantID(request.getTenantId()).skuNameOrSellport(request.getSkuName(),request.getSkuName()).build();
+                result = productSearch.search(productSearchCriteria); 
+             }else{
+                 productSearchCriteria =
+                         new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                         .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).tenantID(request.getTenantId()).skuNameOrSellport(request.getSkuName(),request.getSkuName()).build();
+                result = productSearch.search(productSearchCriteria); 
+             }
+             
+         }
+        List<Map<String,Object>> reslist = result.getSearchList();
+        String info = JSON.toJSONString(reslist);
+        List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){}); 
+        if(!CollectionUtil.isEmpty(skuList)){
+            return skuList.size();  
+        }else{
+            return 0;
+        }
+    }
+    //获取条数
+    public int queryProductPageCount(ProductQueryRequest request)
+            throws BusinessException, SystemException {
+        IProductSearch productSearch = new ProductSearchImpl();
+        String userid="";
+        if(!StringUtil.isBlank(request.getUserId())){
+            userid = request.getUserId();
+        }
+        UserSearchAuthority user = new UserSearchAuthority(UserSearchAuthority.UserType.PERSONAL,userid);
+         if(ProductHomeConstants.UserType.ENTERPRISE.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.ENTERPRISE,userid);
+        }else if(ProductHomeConstants.UserType.AGENCY.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.AGENCY,userid);
+        }else if(ProductHomeConstants.UserType.SUPPLY.equals(request.getUserType())){
+            user = new UserSearchAuthority(UserSearchAuthority.UserType.SUPPLY,userid); 
+        }
+         ProductSearchCriteria productSearchCriteria =null;
+         if(!StringUtil.isBlank(request.getAttrDefId()) && !StringUtil.isBlank(request.getBasicOrgIdIs())){
+             //如果销量排序不为空
+             if(!StringUtil.isBlank(request.getSaleNumOrderFlag())){
+                 //如果配送地区不为空
+                     if(!StringUtil.isBlank(request.getDistributionArea())){
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                     }else{
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();  
+                     }
+                    
+             }else{
+               //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                 }
+                    
+             }
+             //如果价格排序不为空
+             if(!StringUtil.isBlank(request.getPriceOrderFlag())){
+                 //如果降序
+                 if(request.getPriceOrderFlag().equals(ProductHomeConstants.ORDER_ASC_ID)){
+                   //如果配送地区不为空
+                     if(!StringUtil.isBlank(request.getDistributionArea())){
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                     }else{
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
+                     }
+                 }else{
+                   //如果配送地区不为空
+                     if(!StringUtil.isBlank(request.getDistributionArea())){
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                     }else{
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
+                     }
+                 }
+               
+                
+             }else{
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).attrValueDefID(request.getAttrDefId()).build(); 
+                 }
+                     
+             }
+             //
+         }else if(StringUtil.isBlank(request.getAttrDefId()) && !StringUtil.isBlank(request.getBasicOrgIdIs())){
+             //如果销量排序不为空
+             if(!StringUtil.isBlank(request.getSaleNumOrderFlag())){
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build(); 
+                 }
+                    
+             }else{
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                 }
+                     
+             }
+             //如果价格排序不为空
+             if(!StringUtil.isBlank(request.getPriceOrderFlag())){
+                 //如果是降序
+                 if(request.getPriceOrderFlag().equals(ProductHomeConstants.ORDER_ASC_ID)){
+                     //如果配送地区不为空
+                     if(!StringUtil.isBlank(request.getDistributionArea())){
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                     }else{
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                     }
+                 }else{
+                     //如果配送地区不为空
+                     if(!StringUtil.isBlank(request.getDistributionArea())){
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                     }else{
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                     }
+                 }
+             }else{
+               //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).basicOrgIdIs(request.getBasicOrgIdIs()).categoryIdIs(request.getProductCatId()).build(); 
+                 }
+             }
+         }else  if(!StringUtil.isBlank(request.getAttrDefId()) && StringUtil.isBlank(request.getBasicOrgIdIs())){
+             //如果销量排序不为空
+             if(!StringUtil.isBlank(request.getSaleNumOrderFlag())){
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build(); 
+                 }
+             }else{
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
+                 }
+                
+             }
+           //如果价格排序不为空
+             if(!StringUtil.isBlank(request.getPriceOrderFlag())){
+                 //如果是降序
+                 if(request.getPriceOrderFlag().equals(ProductHomeConstants.ORDER_ASC_ID)){
+                   //如果配送地区不为空
+                     if(!StringUtil.isBlank(request.getDistributionArea())){
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build();
+                     }else{
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build();
+                     } 
+                 }else{
+                   //如果配送地区不为空
+                     if(!StringUtil.isBlank(request.getDistributionArea())){
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build();
+                     }else{
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build();
+                     }
+                 }
+                 
+             }else{
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getAttrDefId()).categoryIdIs(request.getProductCatId()).build(); 
+                 }
+             }
+         }else{
+             //如果销量排序不为空
+             if(!StringUtil.isBlank(request.getSaleNumOrderFlag())){
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build();
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME, SortType.ASC).build(); 
+                 }
+               
+             }else{
+                 //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).build(); 
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).build();  
+                 }
+             }
+           //如果价格排序不为空
+             if(!StringUtil.isBlank(request.getPriceOrderFlag())){
+                 //如果是降序
+                 if(request.getPriceOrderFlag().equals(ProductHomeConstants.ORDER_ASC_ID)){
+                     //如果配送地区不为空
+                     if(!StringUtil.isBlank(request.getDistributionArea())){
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build(); 
+                     }else{
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.ASC).build(); 
+                     }
+                 }else{
+                     //如果配送地区不为空
+                     if(!StringUtil.isBlank(request.getDistributionArea())){
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build(); 
+                     }else{
+                         productSearchCriteria =
+                                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).addOrderBy(ProductHomeConstants.ORDER_PRICE_NAME, SortType.DESC).build(); 
+                     }
+                 }
+              
+             }else{
+               //如果配送地区不为空
+                 if(!StringUtil.isBlank(request.getDistributionArea())){
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).attrValueDefID(request.getDistributionArea()).categoryIdIs(request.getProductCatId()).build();  
+                 }else{
+                     productSearchCriteria =
+                             new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
+                             .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).build(); 
+                 }
+             }
+         }
+         
+        Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
+        List<Map<String,Object>> reslist = result.getSearchList();
+        String info = JSON.toJSONString(reslist);
+        List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){}); 
+       if(!CollectionUtil.isEmpty(skuList)){
+           return skuList.size();
+       }else{
+           return 0;  
+       }
+    }
 }
