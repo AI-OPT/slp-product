@@ -1,13 +1,13 @@
-package com.ai.slp.product.search.api.impl;
+package com.ai.slp.product.service.business.impl.search;
 
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.paas.ipaas.search.vo.SearchfieldVo;
-import com.ai.slp.product.search.api.ISKUIndexManage;
+import com.ai.slp.product.constants.SearchConstants;
+import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.search.bo.SKUInfo;
-import com.ai.slp.product.search.constants.Constants;
-import com.ai.slp.product.search.constants.SearchMetaFieldConfig;
-import com.ai.slp.product.search.service.ISKUService;
+import com.ai.slp.product.service.atom.interfaces.search.ISKUService;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +43,7 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
                 string.add(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(skuInfo));
             }
 
-            SESClientFactory.getSearchClient(Constants.SearchNameSpace).bulkInsertData(string);
+            SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsertData(string);
             return true;
         } catch (Exception e) {
             logger.error("Failed to update sku info", e);
@@ -61,9 +61,9 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
     public boolean deleteSKUIndexBySKUId(String skuId) {
         try {
             List<SearchfieldVo> searchfieldVos = new ArrayList<SearchfieldVo>();
-            searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.SKU_ID, skuId,
+            searchfieldVos.add(new SearchfieldVo(SearchFieldConfConstants.SKU_ID, skuId,
                     new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
-            return SESClientFactory.getSearchClient(Constants.SearchNameSpace).deleteData(searchfieldVos);
+            return SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).deleteData(searchfieldVos);
         } catch (Exception e) {
             logger.error("Failed to delete sku info", e);
         }
@@ -80,9 +80,9 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
     public boolean deleteSKUIndexByProductId(String productId) {
         try {
             List<SearchfieldVo> searchfieldVos = new ArrayList<SearchfieldVo>();
-            searchfieldVos.add(new SearchfieldVo(SearchMetaFieldConfig.PRODUCT_ID, productId,
+            searchfieldVos.add(new SearchfieldVo(SearchFieldConfConstants.PRODUCT_ID, productId,
                     new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
-            return SESClientFactory.getSearchClient(Constants.SearchNameSpace).deleteData(searchfieldVos);
+            return SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).deleteData(searchfieldVos);
         } catch (Exception e) {
             logger.error("Failed to delete sku info", e);
         }

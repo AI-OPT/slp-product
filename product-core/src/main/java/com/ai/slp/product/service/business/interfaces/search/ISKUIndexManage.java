@@ -1,4 +1,4 @@
-package com.ai.slp.product.search.api;
+package com.ai.slp.product.service.business.interfaces.search;
 
 public interface ISKUIndexManage {
 

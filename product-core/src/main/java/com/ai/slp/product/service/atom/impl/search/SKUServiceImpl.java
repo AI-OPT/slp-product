@@ -1,8 +1,8 @@
-package com.ai.slp.product.search.service.impl;
+package com.ai.slp.product.service.atom.impl.search;
 
 import com.ai.slp.product.search.bo.SKUInfo;
-import com.ai.slp.product.search.service.ISKUService;
-import com.ai.slp.product.search.utils.SKUInfoUtil;
+import com.ai.slp.product.service.atom.interfaces.search.ISKUService;
+import com.ai.slp.product.util.SearchSKUInfoUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ai.slp.product.search.constants.Constants.QUERY_SQL.MAIN_SQL;
+import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.MAIN_SQL;
 
 /**
  * Created by xin on 16-6-1.
@@ -39,12 +39,12 @@ public class SKUServiceImpl implements ISKUService {
             ps.setString(1, productId);
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                SKUInfo skuInfo = SKUInfoUtil.fillSKUMainInfo(resultSet);
+                SKUInfo skuInfo = SearchSKUInfoUtil.fillSKUMainInfo(resultSet);
                 skuInfoList.add(skuInfo);
             }
 
             for (SKUInfo skuInfo : skuInfoList) {
-                SKUInfoUtil.fillSKUInfo(connection, skuInfo);
+                SearchSKUInfoUtil.fillSKUInfo(connection, skuInfo);
             }
         } catch (Exception e) {
             logger.error(e);

@@ -1,11 +1,5 @@
 package com.ai.slp.product.api.webfront.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
@@ -17,18 +11,23 @@ import com.ai.slp.product.api.webfront.param.ProductData;
 import com.ai.slp.product.api.webfront.param.ProductQueryRequest;
 import com.ai.slp.product.api.webfront.param.ProductQueryResponse;
 import com.ai.slp.product.constants.ProductHomeConstants;
-import com.ai.slp.product.search.api.IProductSearch;
-import com.ai.slp.product.search.api.impl.ProductSearchImpl;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.search.dto.ProductSearchCriteria;
 import com.ai.slp.product.search.dto.SortType;
 import com.ai.slp.product.search.dto.UserSearchAuthority;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.ConvertImageUtil;
 import com.ai.slp.product.util.ValidateUtil;
 import com.ai.slp.product.util.initDataUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 @Service(validation = "true")
 @Component
 public class ISearchProductSVImpl implements ISearchProductSV {

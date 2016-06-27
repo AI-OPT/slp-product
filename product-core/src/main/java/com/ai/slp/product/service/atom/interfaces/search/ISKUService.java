@@ -1,4 +1,4 @@
-package com.ai.slp.product.search.service;
+package com.ai.slp.product.service.atom.interfaces.search;
 
 import com.ai.slp.product.search.bo.SKUInfo;
 

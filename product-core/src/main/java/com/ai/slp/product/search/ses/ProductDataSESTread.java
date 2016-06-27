@@ -1,18 +1,17 @@
 package com.ai.slp.product.search.ses;
 
-import java.util.List;
-
+import com.ai.opt.sdk.components.ses.SESClientFactory;
+import com.ai.paas.ipaas.search.service.ISearchClient;
+import com.ai.slp.product.constants.SearchConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ai.opt.sdk.components.ses.SESClientFactory;
-import com.ai.paas.ipaas.search.service.ISearchClient;
-import com.ai.slp.product.search.constants.Constants;
+import java.util.List;
 
 public class ProductDataSESTread extends Thread{
 	private static final Logger LOG=LoggerFactory.getLogger(ProductDataSESTread.class);
     private List<String> resultList;
-    ISearchClient searchClient = SESClientFactory.getSearchClient(Constants.SearchNameSpace);
+    ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
     
     public ProductDataSESTread(List<String> resultList){
         this.resultList=resultList;

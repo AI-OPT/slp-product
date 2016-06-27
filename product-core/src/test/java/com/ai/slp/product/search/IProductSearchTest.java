@@ -1,9 +1,9 @@
 package com.ai.slp.product.search;
 
-import com.ai.slp.product.search.api.IProductSearch;
-import com.ai.slp.product.search.api.impl.ProductSearchImpl;
 import com.ai.slp.product.search.dto.ProductSearchCriteria;
 import com.ai.slp.product.search.dto.UserSearchAuthority;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.alibaba.fastjson.JSON;
 
 /**

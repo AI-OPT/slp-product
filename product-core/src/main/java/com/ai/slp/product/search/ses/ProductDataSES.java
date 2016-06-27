@@ -2,7 +2,7 @@ package com.ai.slp.product.search.ses;
 
 import com.ai.opt.sdk.components.ses.base.AbstractSES;
 import com.ai.slp.product.search.bo.SKUInfo;
-import com.ai.slp.product.search.utils.SKUInfoUtil;
+import com.ai.slp.product.util.SearchSKUInfoUtil;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
@@ -50,11 +50,11 @@ public class ProductDataSES extends AbstractSES {
 		            ResultSet resultSet = ps.executeQuery();
 		            skuInfoList = new ArrayList<SKUInfo>();
 		            while (resultSet.next()) {
-		                SKUInfo skuInfo = SKUInfoUtil.fillSKUMainInfo(resultSet);
+		                SKUInfo skuInfo = SearchSKUInfoUtil.fillSKUMainInfo(resultSet);
 		                skuInfoList.add(skuInfo);
 		            }
 		            for (SKUInfo skuInfo : skuInfoList) {
-		                SKUInfoUtil.fillSKUInfo(connection, skuInfo);
+		                SearchSKUInfoUtil.fillSKUInfo(connection, skuInfo);
 		            }
 
 		            List<String> sesDataList = new ArrayList<String>();
