@@ -5,7 +5,6 @@ import com.ai.slp.product.dao.mapper.bo.product.ProdSaleAll;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSaleAllAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProdSaleAllBusiSV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ public class ProdSaleAllBusiSVImpl implements IProdSaleAllBusiSV {
      * @param saleNum
      */
     @Override
-    public void addSaleNum(String tenantId, String skuId, int saleNum) {
+    public void updateSaleNum(String tenantId, String skuId, int saleNum) {
         ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
         if (prodSku==null){
             logger.warn("未查询相应SKU信息,租户ID:{},SKU标识:{}",tenantId,skuId);

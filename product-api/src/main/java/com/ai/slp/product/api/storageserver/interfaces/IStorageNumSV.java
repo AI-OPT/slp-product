@@ -4,8 +4,8 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.storageserver.param.StorageNumBackReq;
-import com.ai.slp.product.api.storageserver.param.StorageNumUserReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
+import com.ai.slp.product.api.storageserver.param.StorageNumUserReq;
 
 /**
  * 库存数量操作<br>
@@ -60,4 +60,19 @@ public interface IStorageNumSV {
     public BaseResponse addSaleNumOfProduct(StorageNumUserReq numReq)
             throws BusinessException,SystemException;
     @interface AddSaleNumOfProduct{};
+
+    /**
+     * 减少商品销量<br>
+     *
+     * @param numReq SKU销量信息
+     * @return 减少结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_NUM_0103
+     */
+    public BaseResponse backSaleNumOfProduct(StorageNumUserReq numReq)
+            throws BusinessException,SystemException;
+    @interface BackSaleNumOfProduct{};
 }

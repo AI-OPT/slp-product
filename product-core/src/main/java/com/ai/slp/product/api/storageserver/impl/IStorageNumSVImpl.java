@@ -81,13 +81,21 @@ public class IStorageNumSVImpl implements IStorageNumSV {
     @Override
     public BaseResponse addSaleNumOfProduct(StorageNumUserReq numReq) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
-        prodSaleAllBusiSV.addSaleNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum());
+        //添加使用正数
+        prodSaleAllBusiSV.updateSaleNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum());
         BaseResponse response = new BaseResponse();
-        ResponseHeader header = new ResponseHeader();
-        header.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        header.setIsSuccess(true);
-        header.setResultMessage("OK");
-        response.setResponseHeader(header);
+        response.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
+        return response;
+    }
+
+    @Override
+    public BaseResponse backSaleNumOfProduct(StorageNumUserReq numReq) throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
+        //减少使用负数
+        prodSaleAllBusiSV.updateSaleNum(numReq.getTenantId(),numReq.getSkuId(),-numReq.getSkuNum());
+        BaseResponse response = new BaseResponse();
+        response.setResponseHeader(
+                new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
         return response;
     }
 }
