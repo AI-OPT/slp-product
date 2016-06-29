@@ -133,7 +133,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         if (!CollectionUtil.isEmpty(boList)){
             ProdAudiencesInfo audiencesInfo = new ProdAudiencesInfo();
             BeanUtils.copyProperties(audiencesInfo,boList.get(0));
-            IUcUserSV ucUserSV = DubboConsumerFactory.getService("IUcUserSV");
+            IUcUserSV ucUserSV = DubboConsumerFactory.getService("iUcUserSV");
             SearchUserRequest userRequest = new SearchUserRequest();
             userRequest.setTenantId(tenantId);
             userRequest.setUserId(audiencesInfo.getUserId());

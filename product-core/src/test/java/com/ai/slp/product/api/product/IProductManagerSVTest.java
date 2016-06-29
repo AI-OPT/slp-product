@@ -1,6 +1,9 @@
 package com.ai.slp.product.api.product;
 
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
+import com.ai.slp.product.api.product.param.OtherSetOfProduct;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -15,5 +18,13 @@ public class IProductManagerSVTest {
     @Autowired
     IProductManagerSV productManagerSV;
 
+    @Test
+    public void queryOtherSetOfProductTest(){
+        ProductInfoQuery infoQuery = new ProductInfoQuery();
+        infoQuery.setTenantId("SLP");
+        infoQuery.setProductId("1000000000000001");
+        OtherSetOfProduct otherSet = productManagerSV.queryOtherSetOfProduct(infoQuery);
+        System.out.println(otherSet.toString());
+    }
 
 }
