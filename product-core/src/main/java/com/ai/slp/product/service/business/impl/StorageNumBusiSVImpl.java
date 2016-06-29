@@ -6,13 +6,16 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
+import com.ai.slp.product.api.storageserver.param.StorageNumUseReq;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAudiencesAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
@@ -28,10 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by jackieliu on 16/5/25.
@@ -44,6 +44,8 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     IProdSkuAtomSV skuAtomSV;
     @Autowired
     IProductAtomSV productAtomSV;
+    @Autowired
+    IProdAudiencesAtomSV prodAudiencesAtomSV;
     @Autowired
     IStorageGroupAtomSV storageGroupAtomSV;
     @Autowired
@@ -64,6 +66,34 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     public StorageNumRes userStorageNum(String tenantId, String skuId, int skuNum) {
         //查询SKU所属销售商品
         Product product = getProductBySkuId(tenantId,skuId);
+        return userStorageNum(product,skuId,skuNum,null);
+    }
+
+    /**
+     * 使用库存量
+     *
+     * @param useReq 使用信息
+     * @return
+     */
+    @Override
+    public StorageNumRes userNumWithAudiAndPrice(StorageNumUseReq useReq) {
+        String tenantId = useReq.getTenantId(),skuId = useReq.getSkuId();
+        //查询SKU所属销售商品
+        Product product = getProductBySkuId(tenantId,skuId);
+        //判断受众
+        List<ProdAudiences> audiList = prodAudiencesAtomSV.queryByUserType(
+                tenantId,product.getProdId(),useReq.getUserType(),useReq.getUserId(),false);
+        if (CollectionUtil.isEmpty(audiList)){
+            logger.warn("此商品部适用于该用户,租户ID:{},skuId:{},用户类型:{},用户标识:{}",
+                    tenantId,skuId,useReq.getUserType(),useReq.getUserId());
+            throw new BusinessException(ErrorCodeConstants.ProdAudiences.UNMATCHED,"此商品部适用于该用户");
+        }
+        return userStorageNum(product,skuId,useReq.getSkuNum(),useReq.getSalePrice());
+    }
+
+
+    private StorageNumRes userStorageNum(Product product, String skuId, int skuNum,Long price){
+        String tenantId = product.getTenantId();
         String groupId = product.getStorageGroupId();
         //获取缓存客户端
         ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
@@ -112,6 +142,11 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 
         //4.获取当前优先级中SKU的销售价
         long salePrice = Long.parseLong(cacheClient.hget(priceKey,skuId));
+        //若价格不为空,则进行价格判断
+        if (price!=null && price.longValue()!=salePrice){
+            logger.warn("商品价格不符,SkuId:{},传入价格:{},当前价格:{}",skuId,price,salePrice);
+            throw new BusinessException(ErrorCodeConstants.Storage.PRICE_UN_MATCH,"商品价格不符");
+        }
         //5.进行减sku库存
         String usableNumKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
         //若减少库存之后,剩余库存小于零,表示库存不足
@@ -119,7 +154,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             cacheClient.hincrBy(usableNumKey,skuId,skuNum);//需要将库存加回
             logger.warn("该商品库存不足,租户ID:{},库存组ID:{}"
                     ,tenantId,groupId);
-            throw new BusinessException("","该商品库存不足");
+            throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
         }
         //6.进行减少优先级库存可用量
         Long priorityUsableNum = cacheClient.decrBy(priorityUsable,skuNum);
@@ -352,15 +387,16 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         ProdSku skuInfo = skuAtomSV.querySkuById(tenantId,skuId);
         if (skuInfo==null){
             logger.warn("单品信息不存在,租户ID:{},SKU标识:{}",tenantId,skuId);
-            throw new BusinessException("1001","单品信息不存在,单品标识:"+skuId);
+            throw new BusinessException(ErrorCodeConstants.Product.SKU_NO_EXIST,"单品信息不存在,单品标识:"+skuId);
         }
         //1. 查询商品是否为"在售"状态
         Product product = productAtomSV.selectByProductId(tenantId,skuInfo.getProdId());
         if (product==null || !ProductConstants.Product.State.IN_SALE.equals(product.getState())){
             logger.warn("销售商品不存在,或已下架,租户ID:{},SKU标识:{},销售商品标识{}"
                     ,tenantId,skuId,skuInfo.getProdId());
-            throw new BusinessException("","销售商品不存在,或已下架状态");
+            throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"销售商品不存在,或已下架状态");
         }
         return product;
     }
+
 }

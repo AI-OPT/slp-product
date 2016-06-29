@@ -8,6 +8,7 @@ import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.storageserver.interfaces.IStorageNumSV;
 import com.ai.slp.product.api.storageserver.param.StorageNumBackReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
+import com.ai.slp.product.api.storageserver.param.StorageNumUseReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumUserReq;
 import com.ai.slp.product.service.business.interfaces.IProdSaleAllBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
@@ -38,6 +39,7 @@ public class IStorageNumSVImpl implements IStorageNumSV {
      * @ApiCode STORAGE_NUM_0100
      */
     @Override
+    @Deprecated
     public StorageNumRes useStorageNum(StorageNumUserReq numReq) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
         return storageNumBusiSV.userStorageNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum());
@@ -97,5 +99,11 @@ public class IStorageNumSVImpl implements IStorageNumSV {
         response.setResponseHeader(
                 new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
         return response;
+    }
+
+    @Override
+    public StorageNumRes useStorageNum(StorageNumUseReq numReq) throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
+        return storageNumBusiSV.userNumWithAudiAndPrice(numReq);
     }
 }

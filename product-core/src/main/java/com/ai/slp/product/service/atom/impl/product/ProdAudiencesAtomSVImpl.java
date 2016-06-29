@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,12 +40,17 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
         ProdAudiencesCriteria example = new ProdAudiencesCriteria();
         ProdAudiencesCriteria.Criteria criteria = example.createCriteria();
         criteria.andTenantIdEqualTo(tenantId)
-                .andProdIdEqualTo(prodId)
-                .andUserIdEqualTo(ProductConstants.ProdAudiences.userId.USER_TYPE);
+                .andProdIdEqualTo(prodId);
         if (StringUtils.isNotBlank(userType))
             criteria.andUserTypeEqualTo(userType);
-        if (StringUtils.isNotBlank(userId))
-            criteria.andUserIdEqualTo(userId);
+        if (StringUtils.isNotBlank(userId)) {
+            List<String> userIdList = new ArrayList<>();
+            userIdList.add(userId);
+            userIdList.add(ProductConstants.ProdAudiences.userId.USER_TYPE);
+            criteria.andUserIdIn(userIdList);
+        }else {
+            criteria.andUserIdEqualTo(ProductConstants.ProdAudiences.userId.USER_TYPE);
+        }
         if (!hasDiscard){
             criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         }

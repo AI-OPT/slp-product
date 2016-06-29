@@ -5,6 +5,7 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.storageserver.param.StorageNumBackReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
+import com.ai.slp.product.api.storageserver.param.StorageNumUseReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumUserReq;
 
 /**
@@ -18,6 +19,7 @@ public interface IStorageNumSV {
 
     /**
      * 使用库存,即减库存量<br>
+     * 接口无法满足需求,逐步废弃,使用新方法STORAGE_NUM_0104代替
      *
      * @param numReq 使用单品数量信息
      * @return 库存量减少信息
@@ -27,6 +29,7 @@ public interface IStorageNumSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0100
      */
+    @Deprecated
     public StorageNumRes useStorageNum(StorageNumUserReq numReq)
         throws BusinessException,SystemException;
     @interface UseStorageNum{};
@@ -75,4 +78,19 @@ public interface IStorageNumSV {
     public BaseResponse backSaleNumOfProduct(StorageNumUserReq numReq)
             throws BusinessException,SystemException;
     @interface BackSaleNumOfProduct{};
+
+    /**
+     * 使用库存,即减库存量<br>
+     *
+     * @param numReq 使用单品数量信息
+     * @return 库存量减少信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_NUM_0104
+     */
+    public StorageNumRes useStorageNum(StorageNumUseReq numReq)
+            throws BusinessException,SystemException;
+
 }
