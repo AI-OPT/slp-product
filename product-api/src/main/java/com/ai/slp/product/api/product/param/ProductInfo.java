@@ -59,7 +59,7 @@ public class ProductInfo extends BaseResponse {
     /**
      * 有效周期
      */
-    private Integer activeCycle;
+    private Short activeCycle;
     /**
      * 周期
      */
@@ -197,11 +197,11 @@ public class ProductInfo extends BaseResponse {
         this.inactiveTime = inactiveTime;
     }
 
-    public Integer getActiveCycle() {
+    public Short getActiveCycle() {
         return activeCycle;
     }
 
-    public void setActiveCycle(Integer activeCycle) {
+    public void setActiveCycle(Short activeCycle) {
         this.activeCycle = activeCycle;
     }
 

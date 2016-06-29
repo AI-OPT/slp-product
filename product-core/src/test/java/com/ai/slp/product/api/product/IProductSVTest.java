@@ -23,7 +23,7 @@ public class IProductSVTest {
     public void queryProductByIdTest(){
         ProductInfoQuery infoQuery = new ProductInfoQuery();
         infoQuery.setTenantId(CommonConstants.COMMON_TENANT_ID);
-        infoQuery.setProductId("3");
+        infoQuery.setProductId("1000000000000001");
         ProductInfo productInfo = productSV.queryProductById(infoQuery);
         System.out.println(productInfo.getState());
     }
