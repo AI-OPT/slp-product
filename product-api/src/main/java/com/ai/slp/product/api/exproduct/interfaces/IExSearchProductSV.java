@@ -21,7 +21,7 @@ public interface IExSearchProductSV {
      * @throws BusinessException
      * @throws SystemException
      * @author zhanglh
-     * @ApiCode
+     * @ApiCode EX_PROD_0001
      */
     QueryProductResponse queryProductPage(QueryProductRequest request) throws BusinessException, SystemException;
     
