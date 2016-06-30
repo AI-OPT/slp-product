@@ -42,7 +42,9 @@ public class IStorageNumSVImpl implements IStorageNumSV {
     @Deprecated
     public StorageNumRes useStorageNum(StorageNumUserReq numReq) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
-        return storageNumBusiSV.userStorageNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum());
+        StorageNumRes numRes = storageNumBusiSV.userStorageNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum());
+        numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
+        return numRes;
     }
 
     /**
@@ -61,11 +63,7 @@ public class IStorageNumSVImpl implements IStorageNumSV {
         CommonCheckUtils.checkTenantId(backReq.getTenantId(),"");
         storageNumBusiSV.backStorageNum(backReq.getTenantId(),backReq.getSkuId(),backReq.getStorageNum());
         BaseResponse response = new BaseResponse();
-        ResponseHeader header = new ResponseHeader();
-        header.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        header.setIsSuccess(true);
-        header.setResultMessage("OK");
-        response.setResponseHeader(header);
+        response.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
         return response;
     }
 
@@ -104,6 +102,8 @@ public class IStorageNumSVImpl implements IStorageNumSV {
     @Override
     public StorageNumRes useStorageNum(StorageNumUseReq numReq) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
-        return storageNumBusiSV.userNumWithAudiAndPrice(numReq);
+        StorageNumRes numRes = storageNumBusiSV.userNumWithAudiAndPrice(numReq);
+        numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
+        return numRes;
     }
 }

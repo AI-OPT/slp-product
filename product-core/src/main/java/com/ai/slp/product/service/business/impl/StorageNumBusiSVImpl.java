@@ -332,6 +332,12 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         Map<String,Integer> skuNumMap = new HashMap<>();
         //查询库存量大于零的 ZRANGE 1  +inf
         Set<String> storageSet = cacheClient.zrangeByScore(cacheKey,1,Long.MAX_VALUE);
+        if (CollectionUtil.isEmpty(storageSet)){
+            logger.error("Query storage is error,cache key is [{}]",cacheKey);
+        }else {
+
+            logger.info("storage num:{}", storageSet.size());
+        }
         //获取库存大于1的SKU库存标识
         String storageId = storageSet.toArray(new String[0])[0];
         //修改库存 ZINCRBY -skuNum
