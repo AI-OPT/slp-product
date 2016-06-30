@@ -56,7 +56,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
             }else{
                 startSize = (pageNo-1)*size;
             }
-            maxSize=pageNo*size;
+            maxSize=size;
         }
         UserSearchAuthority user = new UserSearchAuthority(UserSearchAuthority.UserType.PERSONAL,userid);
          if(ProductHomeConstants.UserType.ENTERPRISE.equals(request.getUserType())){
@@ -446,7 +446,7 @@ public class ISearchProductSVImpl implements ISearchProductSV {
              }else{
                  startSize = (pageNo-1)*size;
              }
-             maxSize=pageNo*size;
+             maxSize=size;
          }
          ProductSearchCriteria productSearchCriteria;
          Results<Map<String, Object>>  result = new  Results<Map<String, Object>>();

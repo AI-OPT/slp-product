@@ -12,6 +12,15 @@ public class AttrInfo {
     private String attrid;
     @Expose
     private String attrvaluedefid;
+    @Expose
+    private String attrname;
+    public String getAttrname() {
+        return attrname;
+    }
+
+    public void setAttrname(String attrname) {
+        this.attrname = attrname;
+    }
 
     public AttrInfo() {
         super();
