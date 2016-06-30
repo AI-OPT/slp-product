@@ -6,6 +6,7 @@ package com.ai.slp.product.constants;
 public final class SearchFieldConfConstants {
     public static final String SALE_AREA = "provcode";
     public static final String USER_AUTHORITY = "audiencecode";
+    public static final String USER_ID = "userid";
     public static final String SKUNAME = "skuname";
     public static final String SELL_POINT = "productsellpoint";
     public static final String RECHAGE_TYPE = "rechagetype";
@@ -17,6 +18,7 @@ public final class SearchFieldConfConstants {
     public static final String UP_TIME = "uptime";
     public static final String SALE_NUM = "salenum";
     public static final String ATTR_ID = "attrid";
+    public static final String ATTR_NAME = "attrname";
     
     
     public static final String ATTRVALUE_DEF_ID = "attrvaluedefid";

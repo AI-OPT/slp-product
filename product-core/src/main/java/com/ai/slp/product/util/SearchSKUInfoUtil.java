@@ -71,11 +71,11 @@ public class SearchSKUInfoUtil {
         ps.setString(1, skuInfo.getProductid());
         resultSet = ps.executeQuery();
         while (resultSet.next()) {
-            if ("-1".equals(resultSet.getString("USER_ID"))) {
-                skuInfo.addProductAudiences(new ProdAudiences(resultSet.getString("USER_TYPE")));
-            } else {
-                skuInfo.addProductAudiences(new ProdAudiences(resultSet.getString("USER_TYPE") + resultSet.getString("USER_ID")));
-            }
+            //if ("-1".equals(resultSet.getString("USER_ID"))) {
+                //skuInfo.addProductAudiences(new ProdAudiences(resultSet.getString("USER_TYPE")));
+            //} else {
+                skuInfo.addProductAudiences(new ProdAudiences(resultSet.getString("USER_TYPE"),resultSet.getString("USER_ID")));
+            //}
 
         }
     }
@@ -136,6 +136,7 @@ public class SearchSKUInfoUtil {
             AttrInfo attrInfo = new AttrInfo(resultSet.getString("attrID"));
             attrInfo.setAttrvalue(resultSet.getString("attrValue"));
             attrInfo.setAttrvaluedefid(resultSet.getString("attrValueDefId"));
+            attrInfo.setAttrname(resultSet.getString("attrName"));
             attrInfos.add(attrInfo);
         }
         skuInfo.setAttrInfos(attrInfos);
