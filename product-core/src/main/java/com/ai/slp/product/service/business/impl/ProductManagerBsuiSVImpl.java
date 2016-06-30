@@ -434,6 +434,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             prodPicture.setPicUses("0".equals(attrValId)?
                     ProductConstants.ProdPicture.PicType.PRODUCT:ProductConstants.ProdPicture.PicType.ATTR);
             prodPicture.setOperId(operId);
+            prodPicture.setState(CommonSatesConstants.STATE_ACTIVE);
             if (prodPictureAtomSV.installPic(prodPicture)>0){
                 ProdPictureLog pictureLog = new ProdPictureLog();
                 BeanUtils.copyProperties(pictureLog,prodPicture);
