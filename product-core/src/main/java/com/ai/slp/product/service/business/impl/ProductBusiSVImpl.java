@@ -33,6 +33,7 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
+import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.ProductPageQueryVo;
 import com.ai.slp.product.vo.SkuStorageVo;
 import org.slf4j.Logger;
@@ -377,7 +378,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         //查询当前库存组可用量
         Long usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,storageGroup.getStorageGroupId());
-        //库存组停用或当前库存可用为零
+        //库存组停用或当前库存可用为零,
+        //直接切换至"售罄下架"
         if (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())
                 ||StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())
                 ||usableNum==null || usableNum<=0){
@@ -385,10 +387,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             return;
         }
         //进行上架处理
-        //直接切换至"售罄下架"
         product.setState(ProductConstants.Product.State.IN_SALE);
         if (operId!=null)
             product.setOperId(operId);
+        product.setUpTime(DateUtils.currTimeStamp());
         //添加日志
         if (productAtomSV.updateById(product)>0){
             ProductLog productLog = new ProductLog();
