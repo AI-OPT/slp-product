@@ -95,9 +95,11 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                product.setBasicOrgId(sku.getBasicorgid());
                //获取受众id
                List<ProdAudiences> list = sku.getAudiences();
-               ProdAudiences p = list.get(0);
-               product.setProdRangeType( p.getUserid());
-               product.setSaleNationWide(sku.getSalenationwide());
+               if(!CollectionUtil.isEmpty(list)){
+            	   ProdAudiences p = list.get(0);
+                   product.setProdRangeType( p.getUserid());
+                   product.setSaleNationWide(sku.getSalenationwide());
+               }
                //省份列表
                List<SaleArea> proList = new ArrayList<SaleArea>();
                List<SaleAreaInfo>areaList = sku.getSaleareainfos();
