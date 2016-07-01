@@ -131,6 +131,8 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                product.setSaleAreaInfos(proList);
                results.add(product);
            }
+           pageinfo.setPageNo(request.getPageNo());
+           pageinfo.setPageSize(request.getPageSize());
            pageinfo.setResult(results);
            pageinfo.setCount(getProductCount(request));
            response.setPageInfo(pageinfo);
