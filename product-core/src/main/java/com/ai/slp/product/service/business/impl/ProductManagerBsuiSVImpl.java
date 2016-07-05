@@ -388,7 +388,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                                       String audiType,List<String> userIdS,Long operId) {
         //将原来受众全部设置为无效
         //设置此类型为无效
-        prodAudiencesAtomSV.updateNoUser(tenantId,productId,audiType,operId);
+        prodAudiencesAtomSV.updateNoUser(tenantId,productId,userType,operId);
         //1.受众为全部不可见
         if (ProductConstants.ProdAudiences.userId.NO_USER.equals(audiType)){
             return;
