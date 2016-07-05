@@ -1,6 +1,19 @@
 package com.ai.slp.product.service.business.impl;
 
-import com.ai.opt.base.exception.BusinessException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
@@ -8,32 +21,47 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.slp.common.api.area.param.GnAreaVo;
-import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.product.param.OtherSetOfProduct;
+import com.ai.slp.product.api.product.param.ProdAttrValInfo;
+import com.ai.slp.product.api.product.param.ProdAudiencesInfo;
+import com.ai.slp.product.api.product.param.ProdPicInfo;
+import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductEditUp;
+import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
-import com.ai.slp.product.dao.mapper.bo.product.*;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAttrLog;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
+import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
+import com.ai.slp.product.dao.mapper.bo.product.ProdPictureLog;
+import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdAttrMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAttrLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAudiencesAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdPictureLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdTargetAreaAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
 import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
 import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 /**
  * Created by jackieliu on 16/6/6.
@@ -123,7 +151,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     public OtherSetOfProduct queryOtherSetOfProd(String tenantId, String prodId) {
         Product product = productAtomSV.selectByProductId(tenantId,prodId);
         if (product==null){
-            throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
+            throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
                     "未查询到指定商品,租户ID:"+tenantId+",销售商品标示:"+prodId);
         }
         OtherSetOfProduct otherSet = new OtherSetOfProduct();
@@ -164,10 +192,10 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         Product product = productAtomSV.selectByProductId(tenantId,productId);
         if (product == null){
             logger.warn("未找到对应销售商品,租户ID:{},商品标识:{}",tenantId,productId);
-            throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
+            throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
                     "未找到对应商品信息,租户ID:"+tenantId+",商品标识:"+productId);
         }else if (!editStatus.contains(product.getState())){
-            throw new BusinessException("","商品没有处于可编辑状态,不允许编辑更新.");
+            throw new SystemException("","商品没有处于可编辑状态,不允许编辑更新.");
         }
         Long operId = productInfo.getOperId();
         //更新商品非关键属性信息
@@ -284,7 +312,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                 //查询属性值
                 ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId,attrValId);
                 if (attrvalueDef==null){
-                    throw new BusinessException("","未找到对应的属性值信息,租户:"+tenantId+",属性值id:"+attrValId);
+                    throw new SystemException("","未找到对应的属性值信息,租户:"+tenantId+",属性值id:"+attrValId);
                 }
                 //查询属性值对应图片
                 List<ProdPicture> pictureList = prodPictureAtomSV.queryProdIdAndAttrVal(product.getProdId(),attrValId);
