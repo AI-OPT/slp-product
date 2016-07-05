@@ -87,7 +87,7 @@ public class StorageNumDbBusiSVImpl {
             Storage storage = storageAtomSV.queryById(skuStorage.getStorageId());
             if (storage==null)
                 continue;
-            storage.setUsableNum(skuStorage.getUsableNum()+skuNum);
+            storage.setUsableNum(storage.getUsableNum()+skuNum);
             //若库存小于等于零,且状态不为"废弃",则状态变更为"自动停用"
             if (skuStorage.getUsableNum()<1
                     && !StorageConstants.Storage.State.DISCARD.equals(storage.getState())
