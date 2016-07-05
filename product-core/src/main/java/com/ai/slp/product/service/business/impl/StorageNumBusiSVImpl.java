@@ -345,17 +345,17 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         Integer num = (int)(skuStorage+skuNum);
 
         //若库存还有剩余,表示库存足够,直接返回
-        if (skuStorage>0){
+        if (skuStorage>=0){
             skuNumMap.put(storageId,skuNum.intValue());
             return skuNumMap;
         }
-        //若库存小于1,且操作数与数量之和大于零,则表示从该库存中出库一部分
-        else if (skuStorage<1 && num>0){
+        //若库存小于0,且操作数与数量之和大于零,则表示从该库存中出库一部分
+        else if (skuStorage<0 && num>0){
             cacheClient.zincrby(cacheKey,-skuStorage,storageId);//返回多减
             skuNumMap.put(storageId,num);
         }
-        //库存小于1,且操作数与使用量之和小于零,则标识库存不足
-        else if(skuStorage<1 && num<0){
+        //库存小于0,且操作数与使用量之和小于零,则标识库存不足
+        else if(skuStorage<0 && num<0){
             skuStorage = -skuNum;
             cacheClient.zincrby(cacheKey,skuNum,storageId);//返回多减
         }
