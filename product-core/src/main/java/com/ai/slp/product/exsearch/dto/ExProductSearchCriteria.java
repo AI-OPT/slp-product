@@ -41,6 +41,12 @@ public class ExProductSearchCriteria {
                     userId, new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
             return this;
         }
+        //查询用户
+        public ExProductSearchCriteriaBuilder userId(String userId) {
+            exProductSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchFieldConfConstants.USER_ID,
+            		userId, new SearchOption(SearchOption.SearchLogic.should,SearchOption.SearchType.querystring)));
+            return this;
+        }
         //查询用户类型商品
         public ExProductSearchCriteriaBuilder userTypeMust(String userType) {
             exProductSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchFieldConfConstants.USER_AUTHORITY,
