@@ -20,6 +20,7 @@ import com.ai.slp.product.api.exproduct.param.ProductDataResponse;
 import com.ai.slp.product.api.exproduct.param.QueryProductRequest;
 import com.ai.slp.product.api.exproduct.param.QueryProductResponse;
 import com.ai.slp.product.api.exproduct.param.SaleArea;
+import com.ai.slp.product.constants.ExproductConstants;
 import com.ai.slp.product.exsearch.dto.ExProductSearchCriteria;
 import com.ai.slp.product.search.bo.AttrInfo;
 import com.ai.slp.product.search.bo.ProdAudiences;
@@ -64,15 +65,15 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userId("-1").userId(request.getUserId()).build();
+                           .startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userId(ExproductConstants.USER_ID).userId(request.getUserId()).build();
                        result = exProductSearch.search(exProductSearchCriteria); 
                }else{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userId("-1").userId(request.getUserId()).build();
+                           .startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userId(ExproductConstants.USER_ID).userId(request.getUserId()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
-           }else if(request.getProdRangeType().equals("-1")){
+           }else if(request.getProdRangeType().equals(ExproductConstants.PROD_RANGE_TYPE)){
                //判断充值类型
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
@@ -165,15 +166,15 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userId("-1").userId(request.getUserId()).build();
+                           .categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userId(ExproductConstants.USER_ID).userId(request.getUserId()).build();
                        result = exProductSearch.search(exProductSearchCriteria); 
                }else{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).userId("-1").tenantID(request.getTenantId()).userId(request.getUserId()).build();
+                           .rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).userId(ExproductConstants.USER_ID).tenantID(request.getTenantId()).userId(request.getUserId()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
-           }else if(request.getProdRangeType().equals("-1")){
+           }else if(request.getProdRangeType().equals(ExproductConstants.PROD_RANGE_TYPE)){
                //判断充值类型
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
