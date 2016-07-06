@@ -64,12 +64,12 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                           .startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userId("-1").userId(request.getUserId()).build();
                        result = exProductSearch.search(exProductSearchCriteria); 
                }else{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                           .startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userId("-1").userId(request.getUserId()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
            }else if(request.getProdRangeType().equals("-1")){
@@ -83,6 +83,19 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
                            .startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userTypeMust(request.getUserType()).build();
+                   result = exProductSearch.search(exProductSearchCriteria);
+               }
+           }else{
+        	 //判断充值类型
+               if(StringUtil.isBlank(request.getRechargeType())){
+                   exProductSearchCriteria =
+                           new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
+                           .startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                       result = exProductSearch.search(exProductSearchCriteria); 
+               }else{
+                   exProductSearchCriteria =
+                           new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
+                           .startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
            }
@@ -152,12 +165,12 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                           .categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userId("-1").userId(request.getUserId()).build();
                        result = exProductSearch.search(exProductSearchCriteria); 
                }else{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                           .rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).userId("-1").tenantID(request.getTenantId()).userId(request.getUserId()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
            }else if(request.getProdRangeType().equals("-1")){
@@ -171,6 +184,19 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
                            .rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userTypeMust(request.getUserType()).build();
+                   result = exProductSearch.search(exProductSearchCriteria);
+               }
+           }else{
+        	 //判断充值类型
+               if(StringUtil.isBlank(request.getRechargeType())){
+                   exProductSearchCriteria =
+                           new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
+                          .categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                       result = exProductSearch.search(exProductSearchCriteria); 
+               }else{
+                   exProductSearchCriteria =
+                           new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
+                           .rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
            }
