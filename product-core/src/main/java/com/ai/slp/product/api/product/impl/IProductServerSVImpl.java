@@ -39,7 +39,6 @@ public class IProductServerSVImpl implements IProductServerSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_SERVER_0100
      */
     @Override
     public ProductSkuInfo queryProductSkuById(SkuInfoQuery skuInfoQuery) throws BusinessException, SystemException {
@@ -65,7 +64,6 @@ public class IProductServerSVImpl implements IProductServerSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_SERVER_0101
      */
     @Override
     public ProductRoute queryRouteGroupOfProd(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {

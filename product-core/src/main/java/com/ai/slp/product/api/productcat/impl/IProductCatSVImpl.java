@@ -36,7 +36,6 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode PRODUCT_CAT_0100
      */
     @Override
     public PageInfoResponse<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery) throws BusinessException, SystemException {
@@ -57,7 +56,6 @@ public class IProductCatSVImpl implements IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng16
-	*  @ApiCode PRODUCT_CAT_0101
 	 */
     @Override
     public BaseResponse createProductCat(List<ProductCatParam> pcpList)
@@ -81,7 +79,6 @@ public class IProductCatSVImpl implements IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng16
-	*  @ApiCode PRODUCT_CAT_0102
 	 */
     @Override
     public BaseResponse updateProductCat(ProductCatParam productCatParam)
@@ -106,7 +103,6 @@ public class IProductCatSVImpl implements IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng16
-	*  @ApiCode PRODUCT_CAT_0104
 	 */
     @Override
     public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
@@ -130,7 +126,6 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode PRODUCT_CAT_0105
      */
     @Override
     public Map<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
@@ -150,7 +145,6 @@ public class IProductCatSVImpl implements IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author lipeng16
-	 * @ApiCode PRODUCT_CAT_0108
 	 */
     @Override
     public BaseResponse addAttrForCatAndType(ProdCatAttrAddParam addCatAttrParam)
@@ -176,7 +170,6 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode PRODUCT_CAT_0107
      */
     @Override
     public BaseResponse deleteProductCatAttrOrVal(ProdCatAttrVal productAttrValParam)
@@ -199,7 +192,6 @@ public class IProductCatSVImpl implements IProductCatSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author liutong5
-	 * @ApiCode PRODUCT_CAT_0109
 	 */
     @Override
     public ProductCatInfo queryByCatId(ProductCatUniqueReq catUniqueReq)
@@ -219,7 +211,6 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode PRODUCT_CAT_0110
      */
     @Override
     public List<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
@@ -237,7 +228,6 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode PRODUCT_CAT_0111
      */
     @Override
     public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
@@ -254,7 +244,6 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode PRODUCT_CAT_0112
      */
     @Override
     public List<ProdCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery) throws BusinessException, SystemException {
@@ -271,7 +260,6 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode PRODUCT_CAT_0113
      */
     @Override
     public BaseResponse updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams) throws BusinessException, SystemException {

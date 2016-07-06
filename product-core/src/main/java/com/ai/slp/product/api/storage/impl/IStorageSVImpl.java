@@ -5,7 +5,6 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
@@ -41,7 +40,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0100
 	 */
 	@Override
 	public BaseResponse createStorageGroup(STOStorageGroup storageGroup) throws BusinessException, SystemException {
@@ -65,7 +63,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0101
 	 */
 	@Override
 	public StorageGroupRes queryGroupInfoByGroupId(StorageGroupQuery infoQuery)
@@ -84,7 +81,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0102
 	 */
 	@Override
 	public List<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery)
@@ -104,7 +100,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0103
 	 */
 	@Override
 	public BaseResponse chargeStorageGroupStatus(StorageGroupStatus groupStatus)
@@ -130,7 +125,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0104
 	 */
 	@Override
 	public PageInfoResponse<StorageGroup4List> queryGroup(StorageGroupQueryPage groupQuery)
@@ -148,7 +142,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0105
 	 */
 	@Override
 	public BaseResponse saveStorage(STOStorage stoStorage) throws BusinessException, SystemException {
@@ -172,7 +165,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0106
 	 */
 	@Override
 	public StorageRes queryStorageById(String storageId) throws BusinessException, SystemException {
@@ -193,7 +185,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0107
 	 */
 	@Override
 	public BaseResponse chargeStorageStatus(StorageStatus storageStatus) throws BusinessException, SystemException {
@@ -218,7 +209,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0108
 	 */
 	@Override
 	public BaseResponse chargeStoragePriority(StoragePriorityCharge priorityCharge)
@@ -243,7 +233,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0109
 	 */
 	@Override
 	public BaseResponse updateStorageGroupName(StorageGroupUpName storageGroup)
@@ -268,7 +257,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0110
 	 */
 	@Override
 	public BaseResponse updateStorageGroupSalePrice(StorageGroupSalePrice salePrice)
@@ -294,7 +282,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0111
 	 */
 	@Override
 	public PageInfoResponse<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery)
@@ -314,7 +301,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0112
 	 */
 	@Override
 	public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery)
@@ -333,7 +319,6 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0113
 	 */
 	@Override
 	public BaseResponse updateMultiStorageSalePrice(StorageSalePrice salePrice)
@@ -358,7 +343,6 @@ public class IStorageSVImpl implements IStorageSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-     * @ApiCode STORAGE_0114
      */
 	@Override
 	public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) throws BusinessException, SystemException {
@@ -377,7 +361,6 @@ public class IStorageSVImpl implements IStorageSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-     * @ApiCode STORAGE_0115
      */
 	@Override
 	public BaseResponse addSkuStorage(List<SkuStorageAdd> skuStorageAddList) throws BusinessException, SystemException {

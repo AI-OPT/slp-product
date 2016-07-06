@@ -32,7 +32,6 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode WARN_RECE_0100
      */
     @Override
     public List<WarnReceStaff> queryByObjectIdOfStorage(
@@ -49,7 +48,6 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode WARN_RECE_0101
      */
     @Override
     public BaseResponse installWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
@@ -75,7 +73,6 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode WARN_RECE_0102
      */
     @Override
     public BaseResponse deleteWarnReceiveStaff(List<WarnReceiveStaffOper> operList)

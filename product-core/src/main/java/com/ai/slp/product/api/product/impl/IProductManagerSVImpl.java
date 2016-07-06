@@ -35,7 +35,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-     * @ApiCode PROMAN_0100
      */
     @Override
     public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq productEditParam) throws BusinessException, SystemException {
@@ -52,7 +51,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-     * @ApiCode PROMAN_0101
      */
     @Override
     public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam) throws BusinessException, SystemException {
@@ -69,7 +67,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-     * @ApiCode PROMAN_0102
      */
     @Override
     public PageInfoResponse<ProductEditUp> queryProductCheck(ProductEditQueryReq productCheckingParam) throws BusinessException, SystemException {
@@ -88,7 +85,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-     * @ApiCode PROMAN_0103
      */
     @Override
     public BaseResponse productCheck(ProductCheckParam productCheckParam) throws BusinessException, SystemException {
@@ -103,7 +99,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-     * @ApiCode PROMAN_0104
      */
     @Override
     public BaseResponse productPriority(ProductPriorityParam productPriorityParam) throws BusinessException, SystemException {
@@ -118,7 +113,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode PROMAN_0105
      */
     @Override
     public OtherSetOfProduct queryOtherSetOfProduct(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
@@ -138,7 +132,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-     * @ApiCode PROMAN_0106
      */
     @Override
     public PageInfoResponse<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) throws BusinessException, SystemException {
@@ -153,7 +146,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode PROMAN_0107
      */
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {

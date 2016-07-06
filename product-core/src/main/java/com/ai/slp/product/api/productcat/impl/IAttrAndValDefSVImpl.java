@@ -33,7 +33,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode ATTR_VAL_0200
      */
     @Override
     public PageInfoResponse<AttrDefInfo> queryPageAttrs(AttrDefParam attrDefParam)
@@ -50,7 +49,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode ATTR_VAL_0201
      */
     @Override
     public AttrInfo queryAttr(AttrPam attrPam) throws BusinessException, SystemException {
@@ -66,7 +64,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode ATTR_VAL_0202
      */
     @Override
     public BaseResponse createAttrs(List<AttrParam> attrParamList)
@@ -93,7 +90,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode ATTR_VAL_0203
      */
     @Override
     public BaseResponse updateAttr(AttrParam attrParam) throws BusinessException, SystemException {
@@ -116,7 +112,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode ATTR_VAL_0204
      */
     @Override
     public BaseResponse deleteAttr(AttrPam attrPam) throws BusinessException, SystemException {
@@ -139,7 +134,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode ATTR_VAL_0205
      */
     @Override
     public PageInfoResponse<AttrValInfo> queryPageAttrvalue(AttrValPageQuery pageQuery)
@@ -156,7 +150,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode ATTR_VAL_0206
      */
     @Override
     public BaseResponse createAttrvalue(List<AttrValParam> attrValParamList)
@@ -183,7 +176,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode ATTR_VAL_0207
      */
     @Override
     public BaseResponse updateAttrvalue(AttrValParam attrValParam)
@@ -206,7 +198,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode ATTR_VAL_0208
      */
     @Override
     public BaseResponse deleteAttrvalue(AttrValUniqueReq attrValUniqueReq)
@@ -229,7 +220,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-     * @ApiCode ATTR_VAL_0209
      */
     @Override
     public AttrVal queryAttrvalue(AttrValUniqueReq attrValUniqueReq)
@@ -245,7 +235,6 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode ATTR_VAL_0210
      */
     @Override
     public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo)

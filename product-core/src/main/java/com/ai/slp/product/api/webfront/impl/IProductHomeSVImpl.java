@@ -126,7 +126,6 @@ public class IProductHomeSVImpl implements IProductHomeSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode
      */
     @Override
     public FastProductInfoRes queryFastProduct(FastProductReq request) throws BusinessException, SystemException {
