@@ -24,9 +24,9 @@ public class IProductHomeSVTest {
         FastProductReq fastProductReq = new FastProductReq();
         fastProductReq.setTenantId("SLP");
         fastProductReq.setUserType("10");
-        fastProductReq.setProductCatId("10000010020000");
-        fastProductReq.setBasicOrgId("12");
-        fastProductReq.setProvCode(10);
+        fastProductReq.setProductCatId("10000010010000");
+        fastProductReq.setBasicOrgId("10");
+        fastProductReq.setProvCode(38);
         FastProductInfoRes infoRes = productHomeSV.queryFastProduct(fastProductReq);
         System.out.print(infoRes.getLocalMap().size());
     }

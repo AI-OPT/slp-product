@@ -470,13 +470,18 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		List<Storage> storageList = storageAtomSV.queryTimeStorageOfGroup(storageGroup.getStorageGroupId(),false);
 		List<Short> priorityNumList = new ArrayList<>();
 		logger.info("====刷新促销优先级缓存(开始)====");
-		for (Storage storage:storageList){
-			//若已经处理,则进行下一个
-			if (priorityNumList.contains(storage.getPriorityNumber()))
-				continue;
-			priorityNumList.add(storage.getPriorityNumber());
-			storageNumDbBusiSV.flushPriorityStorage(tenantId,groupId,storage.getPriorityNumber(),false);
-		}
+		//如果为空,则查询所有有效期截止时间在当前时间之后的促销优先级,包括已废弃
+		if (CollectionUtil.isEmpty(storageList)){
+			storageList = storageAtomSV.queryTimeStorageOfGroup(storageGroup.getStorageGroupId(),true);
+			cleanTimeStorageCache(tenantId,groupId,storageList);
+		} else
+			for (Storage storage : storageList) {
+				//若已经处理,则进行下一个
+				if (priorityNumList.contains(storage.getPriorityNumber()))
+					continue;
+				priorityNumList.add(storage.getPriorityNumber());
+				storageNumDbBusiSV.flushPriorityStorage(tenantId, groupId, storage.getPriorityNumber(), false);
+			}
 		logger.info("====刷新促销优先级缓存(结束)====");
 		//查询当前启用库存
 		List<Storage> activeList = storageAtomSV.queryActive(tenantId,groupId,false);
@@ -488,7 +493,50 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			//设置当前启用优先级
 			cacheClient.hset(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE,storage.getPriorityNumber().toString());
 		}
+		//若无启用库存,则将当前的库存设置为零
+		else {
+			//获取当前优先级,
+			String priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
+			cleanStorageCache(tenantId,groupId,priority);
+		}
 		logger.info("====刷新[非]促销优先级缓存(结束)====");
+	}
+
+	/**
+	 * 清空缓存中库存数据
+	 */
+	private void cleanStorageCache(String tenantId,String groupId,String priority){
+		//将对应的c,e,f库存使用量设置为零
+		ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+		//c 利用HINCRBY的特性,会将没有的field设置为零,然后进行处理
+		String usableNumKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
+		Map<String,String> usableNumMap = cacheClient.hgetAll(usableNumKey);
+		String[] mapKey = new String[usableNumMap.size()];
+		usableNumMap.keySet().toArray(mapKey);
+		cacheClient.hdel(usableNumKey,mapKey);
+		//e 的数量先不做处理
+		//f 将优先级库存可用量设置为零
+		String priorityUsableKey = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
+		cacheClient.set(priorityUsableKey,new Long(0).toString());
+	}
+
+	/**
+	 * 清空促销库存
+	 */
+	private void cleanTimeStorageCache(String tenantId,String groupId,List<Storage> storageList){
+		if (CollectionUtil.isEmpty(storageList))
+			return;
+		ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+		List<String> cKeyList = new ArrayList<>();
+		List<String> fKeyList = new ArrayList<>();
+		for (Storage storage:storageList){
+			String priority = storage.getPriorityNumber().toString();
+			cKeyList.add(IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority));
+			fKeyList.add(IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority));
+		}
+		cacheClient.del(cKeyList.toArray(new String[cKeyList.size()]));
+		cacheClient.del(fKeyList.toArray(new String[fKeyList.size()]));
+
 	}
 
 }
