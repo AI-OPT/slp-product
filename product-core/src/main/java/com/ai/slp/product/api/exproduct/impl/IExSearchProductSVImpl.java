@@ -65,12 +65,12 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
+                           .userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
                        result = exProductSearch.search(exProductSearchCriteria); 
                }else{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
+                           .userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
            }else if(request.getProdRangeType().equals(ExproductConstants.PROD_RANGE_TYPE)){
@@ -91,12 +91,12 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                           .userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
                        result = exProductSearch.search(exProductSearchCriteria); 
                }else{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                           .userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
            }
@@ -166,12 +166,12 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
+                           .userTypeMust(request.getUserType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
                        result = exProductSearch.search(exProductSearchCriteria); 
                }else{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
+                           .userTypeMust(request.getUserType()).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
            }else if(request.getProdRangeType().equals(ExproductConstants.PROD_RANGE_TYPE)){
@@ -192,12 +192,12 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                          .categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                           .userTypeMust(request.getUserType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
                        result = exProductSearch.search(exProductSearchCriteria); 
                }else{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                           .userTypeMust(request.getUserType()).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
            }
