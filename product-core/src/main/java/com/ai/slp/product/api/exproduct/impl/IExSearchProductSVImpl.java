@@ -145,6 +145,11 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                product.setAttrList(attrList);
                product.setAttrValueList(attrValueList);
                product.setSaleAreaInfos(proList);
+               product.setActiveTime("");
+               product.setInactiveTime("");
+               product.setActiveCycle("");
+               product.setActiveUnit("");
+               product.setActiveType("");
                results.add(product);
            }
            pageinfo.setPageNo(request.getPageNo());
