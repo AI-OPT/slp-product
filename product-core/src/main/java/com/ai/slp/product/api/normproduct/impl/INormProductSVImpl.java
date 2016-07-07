@@ -33,7 +33,6 @@ public class INormProductSVImpl implements INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode NORM_PRODUCT_0100
      */
     @Override
     public PageInfoResponse<NormProdResponse> queryNormProduct(NormProdRequest productRequest) throws BusinessException, SystemException {
@@ -49,7 +48,6 @@ public class INormProductSVImpl implements INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode NORM_PRODUCT_0102
      */
     @Override
     public NormProdInfoResponse queryProducById(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
@@ -65,7 +63,6 @@ public class INormProductSVImpl implements INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode NORM_PRODUCT_0103
      */
     @Override
     public BaseResponse createProductInfo(NormProdSaveRequest productInfoRequest) throws BusinessException, SystemException {
@@ -88,7 +85,6 @@ public class INormProductSVImpl implements INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode NORM_PRODUCT_0104
      */
     @Override
     public BaseResponse updateProductInfo(NormProdSaveRequest productInfoRequest) throws BusinessException, SystemException {
@@ -113,7 +109,6 @@ public class INormProductSVImpl implements INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode NORM_PRODUCT_0105
      */
     @Override
     public BaseResponse discardProduct(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
@@ -137,7 +132,6 @@ public class INormProductSVImpl implements INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode NORM_PRODUCT_0106
      */
     @Override
     public BaseResponse updateMarketPrice(MarketPriceUpdate marketPrice) throws BusinessException, SystemException {
@@ -160,7 +154,6 @@ public class INormProductSVImpl implements INormProductSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode NORM_PRODUCT_0107
      */
     @Override
     public AttrMap queryAttrByNormProduct(AttrQuery attrQuery) throws BusinessException, SystemException {
@@ -177,7 +170,6 @@ public class INormProductSVImpl implements INormProductSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode NORM_PRODUCT_0108
      */
     @Override
     public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest) throws BusinessException, SystemException {

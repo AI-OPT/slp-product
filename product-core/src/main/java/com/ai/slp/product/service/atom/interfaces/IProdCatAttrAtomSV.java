@@ -21,7 +21,6 @@ public interface IProdCatAttrAtomSV {
      * @param productCatId
      * @return
      * @author lipeng16
-    *  @ApiCode
      */
     public ProdCatAttr selectById(String tenantId,String productCatId);
     
@@ -31,7 +30,6 @@ public interface IProdCatAttrAtomSV {
      * @param prodCatAttr
      * @return
      * @author lipeng16
-    *  @ApiCode
      */
     public int insertProdCatAttr(ProdCatAttr prodCatAttr);
 
@@ -100,7 +98,6 @@ public interface IProdCatAttrAtomSV {
      * @param attrId
      * @return
      * @author lipeng16
-    *  @ApiCode
      */
     public int selectCatNumByAttrId(String tenantId, Long attrId );
     

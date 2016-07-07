@@ -5,6 +5,8 @@ import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
+import com.ai.slp.product.api.product.param.ProductStorageSale;
+import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 
 /**
  * 销售商品管理
@@ -31,4 +33,12 @@ public interface IProductManagerBsuiSV {
      * @param productInfo
      */
     public void updateProdEdit(ProductInfoForUpdate productInfo);
+    
+    /**
+     * 根据状态查询仓库中商品
+     * @param productStorageSaleParam
+     * @return
+     */
+    public PageInfoResponse<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) ;
+    
 }

@@ -51,7 +51,6 @@ public interface IStorageGroupBusiSV {
      * @param salePrice
      * @return
      * @author lipeng16
-    *  @ApiCode
      */
     public int updateStorageGroupPrice(StorageGroupSalePrice salePrice);
 

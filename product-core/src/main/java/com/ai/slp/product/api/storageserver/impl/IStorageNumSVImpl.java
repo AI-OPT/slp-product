@@ -36,7 +36,6 @@ public class IStorageNumSVImpl implements IStorageNumSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_NUM_0100
      */
     @Override
     @Deprecated
@@ -56,7 +55,6 @@ public class IStorageNumSVImpl implements IStorageNumSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_NUM_0100
      */
     @Override
     public BaseResponse backStorageNum(StorageNumBackReq backReq) throws BusinessException, SystemException {
@@ -76,7 +74,6 @@ public class IStorageNumSVImpl implements IStorageNumSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode STORAGE_NUM_0102
      */
     @Override
     public BaseResponse addSaleNumOfProduct(StorageNumUserReq numReq) throws BusinessException, SystemException {

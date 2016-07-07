@@ -36,7 +36,6 @@ public class IProductSVImpl implements IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0100
      */
     @Override
     public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery) throws BusinessException, SystemException {
@@ -53,7 +52,6 @@ public class IProductSVImpl implements IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0101
      */
     @Override
     public ProductInfo queryProductById(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
@@ -70,7 +68,6 @@ public class IProductSVImpl implements IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0102
      */
     @Override
     public BaseResponse updateMultSKUSalePrice(List<ProdSkuSalPrice> skuSalPrices) throws BusinessException, SystemException {
@@ -86,7 +83,6 @@ public class IProductSVImpl implements IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0103
      */
     @Override
     public BaseResponse saveMultSKUInfo(SkuInfoMultSave saveInfo) throws BusinessException, SystemException {
@@ -107,7 +103,6 @@ public class IProductSVImpl implements IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0104
      */
     @Override
     public SkuSetForProduct querySkuSetForProduct(ProductInfoQuery query) throws BusinessException, SystemException {
@@ -124,7 +119,6 @@ public class IProductSVImpl implements IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @ApiCode PRODUCT_0105
      */
     @Override
     public ProdAttrMap queryNoKeyAttrInfo(ProductInfoQuery queryInfo) throws BusinessException, SystemException {
