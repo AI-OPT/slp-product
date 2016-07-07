@@ -89,7 +89,11 @@ public class ProductStorageSale implements Serializable{
      * 7停用8废弃
      */
     private String state;
-
+    /**
+     * 状态名称，页面展示状态名称
+     */
+    private String stateName;
+    
     public String getProdName() {
         return prodName;
     }
@@ -201,6 +205,14 @@ public class ProductStorageSale implements Serializable{
 
 	public void setPicUrl(String picUrl) {
 		this.picUrl = picUrl;
+	}
+
+	public String getStateName() {
+		return stateName;
+	}
+
+	public void setStateName(String stateName) {
+		this.stateName = stateName;
 	}
 
 }
