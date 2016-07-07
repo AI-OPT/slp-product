@@ -3,6 +3,7 @@ package com.ai.slp.product.service.atom.impl.product;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
@@ -104,14 +105,18 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
 		if (StringUtils.isNotBlank(queryReq.getProdName()))
 			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+		//获取页数和每页条数
+		int pageNo = queryReq.getPageNo();
+		int pageSize = queryReq.getPageSize();
 
+		return pageQuery(example, pageNo, pageSize);
+	}
+
+	private PageInfo<Product> pageQuery(ProductCriteria example, int pageNo, int pageSize) {
 		PageInfo<Product> pageInfo = new PageInfo<>();
 		// 设置总数
 		int count = productMapper.countByExample(example);
 		pageInfo.setCount(count);
-		//获取页数和每页条数
-		int pageNo = queryReq.getPageNo();
-		int pageSize = queryReq.getPageSize();
 		//设置分页查询条件
 		example.setLimitStart((pageNo-1)*pageSize);
 		example.setLimitEnd(pageSize);
@@ -131,5 +136,27 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		ProductCriteria example = new ProductCriteria();
 		example.createCriteria().andTenantIdEqualTo(tenantId).andStorageGroupIdEqualTo(groupId);
 		return productMapper.selectByExample(example).get(0);
+	}
+
+	@Override
+	public PageInfo<Product> selectStorProdByState(ProductStorageSaleParam queryReq) {
+		ProductCriteria example = new ProductCriteria();
+		example.setOrderByClause("OPER_TIME asc");//操作时间倒序
+		ProductCriteria.Criteria criteria = example.createCriteria();
+		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
+			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
+		if (StringUtils.isNotBlank(queryReq.getProductType()))
+			criteria.andProductTypeEqualTo(queryReq.getProductType());
+		if (!CollectionUtil.isEmpty(queryReq.getStateList()))
+			criteria.andStateIn(queryReq.getStateList());
+		if (StringUtils.isNotBlank(queryReq.getProdId()))
+			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
+		if (StringUtils.isNotBlank(queryReq.getProdName()))
+			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+		//获取页数和每页条数
+		int pageNo = queryReq.getPageNo();
+		int pageSize = queryReq.getPageSize();
+
+		return pageQuery(example, pageNo, pageSize);
 	}
 }
