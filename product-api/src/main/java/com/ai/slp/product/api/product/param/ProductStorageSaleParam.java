@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.product.param;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.ai.opt.base.vo.BaseInfo;
 
@@ -88,16 +89,17 @@ public class ProductStorageSaleParam extends BaseInfo{
     private long lowStorageNum;
     
     /**
-     * 状态
-     * 0新增
-     * 1未编辑2已编辑
-     * 3审核中4审核未通过
-     * 5在售
-     * 6仓库中（审核通过放入） 61售罄下架62废弃下架63自动下架
-     * 7停用8废弃
+     * 状态集合
+     * 0:新增
+     * 1:未编辑;2:已编辑
+     * 3:审核中;4:审核未通过
+     * 5:在售
+     * 6:仓库中（审核通过放入） 61:售罄下架 62:废弃下架
+     * 7:废弃
      */
-    private String state;
 
+    private List<String> stateList;
+    
     public String getProdName() {
         return prodName;
     }
@@ -194,14 +196,6 @@ public class ProductStorageSaleParam extends BaseInfo{
         this.lowStorageNum = lowStorageNum;
     }
 
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
 	public Integer getPageSize() {
 		return pageSize;
 	}
@@ -216,6 +210,14 @@ public class ProductStorageSaleParam extends BaseInfo{
 
 	public void setPageNo(Integer pageNo) {
 		this.pageNo = pageNo;
+	}
+
+	public List<String> getStateList() {
+		return stateList;
+	}
+
+	public void setStateList(List<String> stateList) {
+		this.stateList = stateList;
 	}
 
     

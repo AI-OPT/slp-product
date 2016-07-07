@@ -2,6 +2,7 @@ package com.ai.slp.product.service.atom.interfaces.product;
 
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 
 /**
@@ -62,4 +63,12 @@ public interface IProductAtomSV {
      * @author lipeng16
      */
     public Product queryProductByGroupId(String tenantId,String groupId);
+    
+    /**
+     * 仓库中商品分页查询
+     * 
+     * @param productStorageSaleParam
+     * @return
+     */
+    public PageInfo<Product> selectStorProdByState(ProductStorageSaleParam productStorageSaleParam);
 }

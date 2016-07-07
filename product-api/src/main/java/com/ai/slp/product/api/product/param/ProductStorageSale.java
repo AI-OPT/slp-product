@@ -38,11 +38,31 @@ public class ProductStorageSale implements Serializable{
      * 商品类型
      */
     private String productType;
+   
+	/**
+     * 商品类型名称，页面展示类型名称
+     */
+    private String productTypeName;
     
     /**
      * 商品图ID
      */
     private Long proPictureId;
+
+    /**
+     * 图片文件模块ID
+     */
+    private String vfsId;
+
+    /**
+     * 图片类型
+     */
+    private String picType;
+    
+    /**
+     * 图片地址,为前端预留字段
+     */
+    private String picUrl;
     
     /**
      * 价格
@@ -151,4 +171,36 @@ public class ProductStorageSale implements Serializable{
     }
 
     
+    public String getProductTypeName() {
+		return productTypeName;
+	}
+
+	public void setProductTypeName(String productTypeName) {
+		this.productTypeName = productTypeName;
+	}
+
+	public String getVfsId() {
+		return vfsId;
+	}
+
+	public void setVfsId(String vfsId) {
+		this.vfsId = vfsId;
+	}
+
+	public String getPicType() {
+		return picType;
+	}
+
+	public void setPicType(String picType) {
+		this.picType = picType;
+	}
+
+	public String getPicUrl() {
+		return picUrl;
+	}
+
+	public void setPicUrl(String picUrl) {
+		this.picUrl = picUrl;
+	}
+
 }

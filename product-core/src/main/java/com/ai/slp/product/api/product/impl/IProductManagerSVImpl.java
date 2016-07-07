@@ -135,7 +135,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public PageInfoResponse<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) throws BusinessException, SystemException {
-        return null;
+    	CommonCheckUtils.checkTenantId(productStorageSaleParam.getTenantId(),"");
+        return productManagerBsuiSV.queryStorageProdByState(productStorageSaleParam);
     }
 
     /**

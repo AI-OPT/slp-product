@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
@@ -29,6 +28,8 @@ import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
+import com.ai.slp.product.api.product.param.ProductStorageSale;
+import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductConstants;
@@ -470,4 +471,33 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             }
         }
     }
+
+	@Override
+	public PageInfoResponse<ProductStorageSale> queryStorageProdByState(
+			ProductStorageSaleParam productStorageSaleParam) {
+		String tenantId = productStorageSaleParam.getTenantId();
+        //查询所有符合条件商品
+        PageInfo<Product> productPage = productAtomSV.selectStorProdByState(productStorageSaleParam);
+        List<ProductStorageSale> prodStorList = new ArrayList<>();
+        for (Product product:productPage.getResult()){
+        	ProductStorageSale productStorageSale = new ProductStorageSale();
+            BeanUtils.copyProperties(productStorageSale,product);
+            //设置类目名称
+            ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
+            if (cat!=null)
+                productStorageSale.setProductCatName(cat.getProductCatName());
+            //查询主预览图
+            ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
+            if (prodPicture!=null){
+                productStorageSale.setProPictureId(prodPicture.getProPictureId());
+                productStorageSale.setVfsId(prodPicture.getVfsId());
+                productStorageSale.setPicType(prodPicture.getPicType());
+            }
+            prodStorList.add(productStorageSale);
+        }
+        PageInfoResponse<ProductStorageSale> response = new PageInfoResponse<>();
+        BeanUtils.copyProperties(response,productPage);
+        response.setResult(prodStorList);
+        return response;
+	}
 }
