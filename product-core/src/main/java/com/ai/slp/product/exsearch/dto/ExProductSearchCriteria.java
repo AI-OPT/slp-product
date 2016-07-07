@@ -5,6 +5,7 @@ import com.ai.paas.ipaas.search.vo.SearchOption.SearchLogic;
 import com.ai.paas.ipaas.search.vo.SearchOption.SearchType;
 import com.ai.paas.ipaas.search.vo.SearchfieldVo;
 import com.ai.paas.ipaas.search.vo.SortField;
+import com.ai.slp.product.constants.ExproductConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 
 import java.util.ArrayList;
@@ -42,9 +43,11 @@ public class ExProductSearchCriteria {
             return this;
         }
         //查询用户
-        public ExProductSearchCriteriaBuilder userId(String userId) {
-            exProductSearchCriteria.searchfieldVos.add(new SearchfieldVo(SearchFieldConfConstants.USER_ID,
-            		userId, new SearchOption(SearchOption.SearchLogic.should,SearchOption.SearchType.querystring)));
+        public ExProductSearchCriteriaBuilder userIdRange(String userId) {
+            SearchfieldVo vo = new SearchfieldVo();
+            vo.addSubSearchFieldVo(new SearchfieldVo(SearchFieldConfConstants.USER_ID, userId, new SearchOption(SearchLogic.should, SearchType.querystring)));
+            vo.addSubSearchFieldVo(new SearchfieldVo(SearchFieldConfConstants.USER_ID, ExproductConstants.USER_ID, new SearchOption(SearchLogic.should, SearchType.querystring)));
+            exProductSearchCriteria.searchfieldVos.add(vo);
             return this;
         }
         //查询用户类型商品
