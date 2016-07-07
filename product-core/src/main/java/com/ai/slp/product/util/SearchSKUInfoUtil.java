@@ -87,8 +87,9 @@ public class SearchSKUInfoUtil {
         ps.setString(1, skuInfo.getSkuid());
         ps.setString(2, skuInfo.getProductid());
         resultSet = ps.executeQuery();
-        resultSet.next();
-        skuInfo.setPrice(resultSet.getFloat("SALE_PRICE"));
+        if(resultSet.next()){
+        	skuInfo.setPrice(resultSet.getFloat("SALE_PRICE"));
+        }
     }
 
     public static void fillSKUImageInfo(Connection connection, SKUInfo skuInfo) throws SQLException {
