@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.product.param;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * 商品管理售中与仓库商品返回类
@@ -94,7 +95,47 @@ public class ProductStorageSale implements Serializable{
      */
     private String stateName;
     
-    public String getProdName() {
+    private Timestamp upTime;
+
+    private Timestamp downTime;
+
+    private Timestamp createTime;
+
+    private Timestamp operTime;
+    
+    public Timestamp getUpTime() {
+		return upTime;
+	}
+
+	public void setUpTime(Timestamp upTime) {
+		this.upTime = upTime;
+	}
+
+	public Timestamp getDownTime() {
+		return downTime;
+	}
+
+	public void setDownTime(Timestamp downTime) {
+		this.downTime = downTime;
+	}
+
+	public Timestamp getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
+	}
+
+	public Timestamp getOperTime() {
+		return operTime;
+	}
+
+	public void setOperTime(Timestamp operTime) {
+		this.operTime = operTime;
+	}
+
+	public String getProdName() {
         return prodName;
     }
 
