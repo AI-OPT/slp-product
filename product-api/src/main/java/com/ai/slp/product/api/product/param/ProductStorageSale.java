@@ -94,13 +94,21 @@ public class ProductStorageSale implements Serializable{
      * 状态名称，页面展示状态名称
      */
     private String stateName;
-    
+    /**
+     * 上架时间
+     */
     private Timestamp upTime;
-
+    /**
+     * 下架时间
+     */
     private Timestamp downTime;
-
+    /**
+     * 创建时间
+     */
     private Timestamp createTime;
-
+    /**
+     * 操作时间
+     */
     private Timestamp operTime;
     
     public Timestamp getUpTime() {
