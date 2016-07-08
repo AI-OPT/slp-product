@@ -1,12 +1,5 @@
 package com.ai.slp.product.api.productcat.interfaces;
 
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
@@ -16,6 +9,12 @@ import com.ai.slp.product.api.productcat.param.AttrValParam;
 import com.ai.slp.product.api.productcat.param.ProAttrGroup;
 import com.ai.slp.product.api.productcat.param.ProAttrGroupParam;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
+
 /**
  * 类目属性组接口
  * 
@@ -24,7 +23,7 @@ import com.ai.slp.product.api.productcat.param.ProAttrGroupParam;
  * 
  * @author lipeng16
  */
-@Path("/prodcatattr")
+@Path("/catAttrGroup")
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface ICatAttrGroupSV {

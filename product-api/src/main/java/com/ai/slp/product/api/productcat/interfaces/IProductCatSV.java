@@ -6,14 +6,13 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 商品类目管理接口<br>
@@ -23,7 +22,7 @@ import javax.ws.rs.core.MediaType;
  * 
  * @author lipeng16
  */
-@Path("/prodcat")
+@Path("/productCat")
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface IProductCatSV {

@@ -6,12 +6,11 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.param.*;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * 标准品库存操作<br>
@@ -20,7 +19,7 @@ import javax.ws.rs.core.MediaType;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-@Path("/storagegroup")
+@Path("/storage")
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface IStorageSV {

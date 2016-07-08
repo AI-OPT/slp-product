@@ -1,30 +1,17 @@
 package com.ai.slp.product.api.productcat.interfaces;
 
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.productcat.param.MapForRes;
-import com.ai.slp.product.api.productcat.param.AttrDef;
-import com.ai.slp.product.api.productcat.param.AttrDefInfo;
-import com.ai.slp.product.api.productcat.param.AttrDefParam;
-import com.ai.slp.product.api.productcat.param.AttrInfo;
-import com.ai.slp.product.api.productcat.param.AttrPam;
-import com.ai.slp.product.api.productcat.param.AttrParam;
-import com.ai.slp.product.api.productcat.param.AttrVal;
-import com.ai.slp.product.api.productcat.param.AttrValDef;
-import com.ai.slp.product.api.productcat.param.AttrValInfo;
-import com.ai.slp.product.api.productcat.param.AttrValPageQuery;
-import com.ai.slp.product.api.productcat.param.AttrValParam;
-import com.ai.slp.product.api.productcat.param.AttrValUniqueReq;
+import com.ai.slp.product.api.productcat.param.*;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * 属性及属性值管理接口
@@ -34,7 +21,7 @@ import com.ai.slp.product.api.productcat.param.AttrValUniqueReq;
  * 
  * @author lipeng16
  */
-@Path("/prodattr")
+@Path("/attrAndValDef")
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface IAttrAndValDefSV {
