@@ -1,6 +1,12 @@
 package com.ai.slp.product.api.exproduct.interfaces;
 
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.slp.product.api.exproduct.param.QueryProductRequest;
@@ -13,6 +19,9 @@ import com.ai.slp.product.api.exproduct.param.QueryProductResponse;
  * 
  * @author zhanglh
  */
+@Path("/productsearch")
+@Consumes({ MediaType.APPLICATION_JSON })
+@Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface IExSearchProductSV {
     /**
      * 查询商品
@@ -22,7 +31,10 @@ public interface IExSearchProductSV {
      * @throws SystemException
      * @author zhanglh
      * @ApiCode EX_PROD_0001
+     * @RestRelativeURL productsearch/search
      */
+	@POST
+	@Path("/search")
     QueryProductResponse queryProductPage(QueryProductRequest request) throws BusinessException, SystemException;
     
 }
