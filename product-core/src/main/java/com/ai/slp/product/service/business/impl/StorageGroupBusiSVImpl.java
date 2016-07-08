@@ -511,9 +511,11 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		//c 利用HINCRBY的特性,会将没有的field设置为零,然后进行处理
 		String usableNumKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
 		Map<String,String> usableNumMap = cacheClient.hgetAll(usableNumKey);
-		String[] mapKey = new String[usableNumMap.size()];
-		usableNumMap.keySet().toArray(mapKey);
-		cacheClient.hdel(usableNumKey,mapKey);
+		if (usableNumMap!=null && usableNumMap.size()>0) {
+			String[] mapKey = new String[usableNumMap.size()];
+			usableNumMap.keySet().toArray(mapKey);
+			cacheClient.hdel(usableNumKey, mapKey);
+		}
 		//e 的数量先不做处理
 		//f 将优先级库存可用量设置为零
 		String priorityUsableKey = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
@@ -534,8 +536,10 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			cKeyList.add(IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority));
 			fKeyList.add(IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority));
 		}
-		cacheClient.del(cKeyList.toArray(new String[cKeyList.size()]));
-		cacheClient.del(fKeyList.toArray(new String[fKeyList.size()]));
+		if (!CollectionUtil.isEmpty(cKeyList))
+			cacheClient.del(cKeyList.toArray(new String[cKeyList.size()]));
+		if (!CollectionUtil.isEmpty(fKeyList))
+			cacheClient.del(fKeyList.toArray(new String[fKeyList.size()]));
 
 	}
 
