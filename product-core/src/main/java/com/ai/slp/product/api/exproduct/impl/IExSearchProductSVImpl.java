@@ -78,12 +78,12 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
                if(StringUtil.isBlank(request.getRechargeType())){
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userTypeMust(request.getUserType()).build();
+                           .userIdMust(ExproductConstants.USER_ID).startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userTypeMust(request.getUserType()).build();
                     result = exProductSearch.search(exProductSearchCriteria);
                }else{
                    exProductSearchCriteria =
                            new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                           .startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userTypeMust(request.getUserType()).build();
+                           .userIdMust(ExproductConstants.USER_ID).startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userTypeMust(request.getUserType()).build();
                    result = exProductSearch.search(exProductSearchCriteria);
                }
            }else{
