@@ -60,6 +60,7 @@ public interface ISearchProductSV {
      * @throws SystemException
      * @author zhanglh
      * @ApiCode PROD_HOME_0113
+     * @RestRelativeURL commonsearch/search
      */
 	@POST
 	@Path("/search")
