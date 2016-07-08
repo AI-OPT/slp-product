@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ai.opt.sdk.dubbo.util.HttpClientUtil;
 import com.ai.slp.product.api.exproduct.interfaces.IExSearchProductSV;
 import com.ai.slp.product.api.exproduct.param.QueryProductRequest;
 import com.ai.slp.product.api.exproduct.param.QueryProductResponse;
@@ -41,10 +42,13 @@ public class IProductSearchTest {
        request.setRechargeType("D");
        request.setPageNo(1);
        request.setPageSize(10);
-       QueryProductResponse response = iSearchProductSV.queryProductPage(request);
-       System.out.println("count="+JSON.toJSONString(response.getPageInfo().getCount()));
-        System.out.println("result="+JSON.toJSONString(response.getPageInfo().getResult()));
-        System.out.println("response="+JSON.toJSONString(response));
+       String param = JSON.toJSONString(request);
+       String url  ="http://127.0.0.1:10882/slp-product/productsearch/search";
+       String result = HttpClientUtil.sendPost(url, param);
+      // QueryProductResponse response = iSearchProductSV.queryProductPage(request);
+       //System.out.println("count="+JSON.toJSONString(response.getPageInfo().getCount()));
+        System.out.println("result="+result);
+        //System.out.println("response="+JSON.toJSONString(response));
     }
     
 }

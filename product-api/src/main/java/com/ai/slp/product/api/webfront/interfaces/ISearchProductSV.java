@@ -3,6 +3,12 @@ package com.ai.slp.product.api.webfront.interfaces;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.slp.product.api.webfront.param.ProductData;
@@ -16,6 +22,9 @@ import com.ai.slp.product.api.webfront.param.ProductQueryResponse;
  * 
  * @author zhanglh
  */
+@Path("/commonsearch")
+@Consumes({ MediaType.APPLICATION_JSON })
+@Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface ISearchProductSV {
     /**
      * 首页跳转查询商品
@@ -25,7 +34,10 @@ public interface ISearchProductSV {
      * @throws SystemException
      * @author zhanglh
      * @ApiCode PROD_HOME_0111
+     * @RestRelativeURL commonsearch/jumpsearch
      */
+	@POST
+	@Path("/jumpsearch")
     ProductQueryResponse queryProductPage(ProductQueryRequest request) throws BusinessException, SystemException;
     
     /**
@@ -35,7 +47,10 @@ public interface ISearchProductSV {
      * @throws SystemException
      * @author zhanglh
      * @ApiCode PROD_HOME_0112
+     * @RestRelativeURL commonsearch/hot
      */
+	@POST
+	@Path("/hot")
     List<ProductData> queryHotSellProduct(ProductQueryRequest request) throws BusinessException, SystemException;
     /**
      * 商品搜索查询
@@ -46,5 +61,7 @@ public interface ISearchProductSV {
      * @author zhanglh
      * @ApiCode PROD_HOME_0113
      */
+	@POST
+	@Path("/search")
     ProductQueryResponse searchProduct(ProductQueryRequest request) throws BusinessException, SystemException;
 }

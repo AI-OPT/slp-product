@@ -8,6 +8,11 @@ import com.ai.slp.product.api.product.param.*;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 /**
  * 商城商品操作<br>
  *
@@ -15,6 +20,9 @@ import java.util.List;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
+@Path("/product")
+@Consumes({ MediaType.APPLICATION_JSON })
+@Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface IProductSV {
     /**
      * 查询商品列表<br>

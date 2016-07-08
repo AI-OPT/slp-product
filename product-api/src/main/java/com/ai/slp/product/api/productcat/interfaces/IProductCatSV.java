@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 /**
  * 商品类目管理接口<br>
  * 
@@ -18,6 +23,9 @@ import java.util.Set;
  * 
  * @author lipeng16
  */
+@Path("/prodcat")
+@Consumes({ MediaType.APPLICATION_JSON })
+@Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface IProductCatSV {
 
     /**
