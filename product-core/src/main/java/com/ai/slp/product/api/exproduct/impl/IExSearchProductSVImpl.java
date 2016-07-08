@@ -105,6 +105,9 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
            List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){}); 
            for(SKUInfo sku:skuList){
                ProductDataResponse product = new ProductDataResponse();
+               if(sku.getPrice()==0){
+            	   continue;
+               }
                product.setSalePrice(sku.getPrice());
                product.setSkuName(sku.getSkuname());
                product.setSkuId(sku.getSkuid());
