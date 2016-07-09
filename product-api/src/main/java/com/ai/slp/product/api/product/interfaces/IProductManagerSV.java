@@ -26,8 +26,11 @@ public interface IProductManagerSV {
     
     /**
      * 商品管理查询商品编辑状态<br>
-     * 状态 1未编辑2已编辑<br>
      * 按生成时间排序<br>
+     * 0新增\n            1未编辑\n            2已编辑\n            
+     * 3审核中\n          4审核未通过\n         5在售\n           
+     * 6仓库中（审核通过、手动下架放入）\n   61售罄下架\n    62停用下架\n           
+     * 7废弃
      * 
      * @param productEditParam
      * @return 满足条件的商品集合

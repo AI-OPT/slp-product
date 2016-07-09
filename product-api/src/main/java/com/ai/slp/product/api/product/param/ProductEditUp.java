@@ -109,7 +109,7 @@ public class ProductEditUp implements Serializable{
     private String priorityReason;
     
     /**
-     * 生成时间-排序按时间升序
+     * 生成时间
      */
     private Timestamp createTime;
     /**
@@ -131,8 +131,32 @@ public class ProductEditUp implements Serializable{
      * 操作时间
      */
     private Timestamp operTime;
+    /**
+     * 上架时间
+     */
+    private Timestamp upTime;
+    /**
+     * 下架时间
+     */
+    private Timestamp downTime;
 
-    public String getProdId() {
+    public Timestamp getUpTime() {
+		return upTime;
+	}
+
+	public void setUpTime(Timestamp upTime) {
+		this.upTime = upTime;
+	}
+
+	public Timestamp getDownTime() {
+		return downTime;
+	}
+
+	public void setDownTime(Timestamp downTime) {
+		this.downTime = downTime;
+	}
+
+	public String getProdId() {
         return prodId;
     }
 
