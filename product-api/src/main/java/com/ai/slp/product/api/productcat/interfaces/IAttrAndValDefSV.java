@@ -8,6 +8,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -36,6 +37,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0200
      */
+	@POST
+	@Path("/pageAttr")
     public PageInfoResponse<AttrDefInfo> queryPageAttrs(AttrDefParam attrDefParam)
             throws BusinessException, SystemException;
     @interface QueryPageAttrs {}
@@ -50,6 +53,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0201
      */
+	@POST
+	@Path("/attr")
     public AttrInfo queryAttr(AttrPam attrPam)
             throws BusinessException, SystemException;
     @interface QueryAttr {}
@@ -64,6 +69,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0202
      */
+	@POST
+	@Path("/addAttrs")
     public BaseResponse createAttrs(List<AttrParam> attrParamList) 
             throws BusinessException, SystemException;
     @interface CreateAttrs{}
@@ -78,6 +85,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0203
      */
+	@POST
+	@Path("/saveAttr")
     public BaseResponse updateAttr(AttrParam attrParam) 
             throws BusinessException, SystemException;
     @interface UpdateAttr{}
@@ -92,6 +101,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0204
      */
+	@POST
+	@Path("/removeAttr")
     public BaseResponse deleteAttr(AttrPam attrPam)
             throws BusinessException, SystemException;
     @interface DeleteAttr{}
@@ -106,6 +117,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0205
      */
+	@POST
+	@Path("/pageAttrval")
     public PageInfoResponse<AttrValInfo> queryPageAttrvalue(AttrValPageQuery pageQuery)
             throws BusinessException, SystemException;
     @interface QueryPageAttrvalue {}
@@ -120,6 +133,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0206
      */
+	@POST
+	@Path("/addAttrval")
     public BaseResponse createAttrvalue(List<AttrValParam> attrValParamList)
             throws BusinessException, SystemException;
     @interface CreateAttrvalue {}
@@ -134,6 +149,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0207
      */
+	@POST
+	@Path("/saveAttrval")
     public BaseResponse updateAttrvalue(AttrValParam attrValParam)
             throws BusinessException, SystemException;
     @interface UpdateAttrvalue {}
@@ -148,6 +165,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0208
      */
+	@POST
+	@Path("/removeAttrval")
     public BaseResponse deleteAttrvalue(AttrValUniqueReq attrValUniqueReq)
             throws BusinessException, SystemException;
     @interface DeleteAttrvalue {}
@@ -162,6 +181,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
      * @ApiCode ATTR_VAL_0209
      */
+	@POST
+	@Path("/attrval")
     public AttrVal queryAttrvalue(AttrValUniqueReq attrValUniqueReq)
             throws BusinessException, SystemException;
     @interface QueryAttrvalue {}
@@ -175,6 +196,8 @@ public interface IAttrAndValDefSV {
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0210
      */
+	@POST
+	@Path("/attrsAndValues")
     public MapForRes<AttrDef,List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo) 
             throws BusinessException, SystemException;
     @interface QueryAllAttrAndVal {}

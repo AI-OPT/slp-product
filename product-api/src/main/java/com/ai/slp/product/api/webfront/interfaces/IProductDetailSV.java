@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.webfront.interfaces;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -31,7 +32,10 @@ public interface IProductDetailSV {
 	 * @throws SystemException
 	 * @ApiDocMethod
      * @ApiCode PRODUCTWEB_001
+     * @RestRelativeURL proddetail/searchsku
 	 */
+	@POST
+	@Path("/searchsku")
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest productSKURequest) throws BusinessException,SystemException;
 	@interface QueryProducSKUById{}
 	
@@ -43,7 +47,10 @@ public interface IProductDetailSV {
 	 * @throws SystemException
 	 * @ApiDocMethod
      * @ApiCode PRODUCTWEB_002
+     * @RestRelativeURL proddetail/searchskuconfig
 	 */
+	@POST
+	@Path("/searchskuconfig")
 	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest productSKURequest) throws BusinessException,SystemException;
 	@interface QueryProductSKUConfig{}
 }

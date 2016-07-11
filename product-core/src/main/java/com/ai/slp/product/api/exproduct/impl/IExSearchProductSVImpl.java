@@ -212,8 +212,18 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
            List<Map<String,Object>> reslist = result.getSearchList();
            String info = JSON.toJSONString(reslist);
            List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){}); 
+           List<SKUInfo> list = new ArrayList<SKUInfo>();
            if(!CollectionUtil.isEmpty(skuList)){
-               return skuList.size();
+        	   for(SKUInfo sku:skuList){
+                   if(sku.getPrice()==0){
+                	   list.add(sku);
+                   }
+               }
+        	   if(!CollectionUtil.isEmpty(list)){
+        		   return skuList.size()-list.size();
+        	   }else{
+        		   return skuList.size();  
+        	   }
            }else{
                return 0;
            }

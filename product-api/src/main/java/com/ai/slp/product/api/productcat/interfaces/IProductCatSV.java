@@ -7,6 +7,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -37,6 +38,8 @@ public interface IProductCatSV {
      * @author lipeng16
     *  @ApiCode PRODUCT_CAT_0100
      */
+	@POST
+	@Path("/pageCat")
 	public PageInfoResponse<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery)
 			throws BusinessException, SystemException;
 	@interface QueryPageProductCat {}
@@ -51,6 +54,8 @@ public interface IProductCatSV {
 	 * @author lipeng16
 	*  @ApiCode PRODUCT_CAT_0101
 	 */
+	@POST
+	@Path("/addCat")
 	public BaseResponse createProductCat(List<ProductCatParam> pcpList) throws BusinessException, SystemException;
 	@interface CreateProductCat {}
 	
@@ -64,6 +69,8 @@ public interface IProductCatSV {
 	 * @author lipeng16
 	*  @ApiCode PRODUCT_CAT_0102
 	 */
+	@POST
+	@Path("/saveCat")
 	public BaseResponse updateProductCat(ProductCatParam productCatParam) throws BusinessException, SystemException;
 	@interface UpdateProductCat {}
 
@@ -79,6 +86,8 @@ public interface IProductCatSV {
 	 * @author lipeng16
 	*  @ApiCode PRODUCT_CAT_0104
 	 */
+	@POST
+	@Path("/removeCat")
 	public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException;
 	@interface DeleteProductCat {}
 
@@ -93,6 +102,8 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0105
 	 */
+	@POST
+	@Path("/catAttrAndVal")
 	public Map<Long,Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery)
 			throws BusinessException,SystemException;
 	@interface QueryAttrAndValIdByCatAndType{}
@@ -106,6 +117,8 @@ public interface IProductCatSV {
      * @author lipeng16
     *  @ApiCode PRODUCT_CAT_0107
      */
+	@POST
+	@Path("/removeCatAttrOrVal")
     public BaseResponse deleteProductCatAttrOrVal(ProdCatAttrVal catAttrVal) throws BusinessException, SystemException;
     @interface DeleteProductCatAttrOrVal {}
 
@@ -120,6 +133,8 @@ public interface IProductCatSV {
 	 * @author lipeng16
 	 * @ApiCode PRODUCT_CAT_0108
 	 */
+	@POST
+	@Path("/addCatAttr")
 	public BaseResponse addAttrForCatAndType(ProdCatAttrAddParam addCatAttrParam) throws BusinessException,SystemException;
 	@interface AddAttrForCatAndType {}
 
@@ -133,6 +148,8 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0109
 	 */
+	@POST
+	@Path("/cat")
 	public ProductCatInfo queryByCatId(ProductCatUniqueReq catUniqueReq)
 			throws BusinessException,SystemException;
 	@interface QueryByCatId{}
@@ -147,6 +164,8 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0110
 	 */
+	@POST
+	@Path("/linkCat")
 	public List<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq)
 			throws BusinessException,SystemException;
 	@interface QueryLinkOfCatById{}
@@ -162,6 +181,8 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0111
 	 */
+	@POST
+	@Path("/catByType")
 	public Map<ProdCatAttrDef,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
 			throws BusinessException,SystemException;
 	@interface QueryAttrByCatAndType{}
@@ -176,6 +197,8 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0112
      */
+	@POST
+	@Path("/catByName")
 	public List<ProdCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery)
 			throws BusinessException,SystemException;
 	@interface QueryCatByNameOrFirst{}
@@ -190,6 +213,8 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0113
 	 */
+	@POST
+	@Path("/saveCatAttr")
 	public BaseResponse updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams)
 			throws BusinessException,SystemException;
 	@interface UpdateCatAttrAndVal{}

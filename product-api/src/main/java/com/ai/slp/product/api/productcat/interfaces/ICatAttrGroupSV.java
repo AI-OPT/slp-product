@@ -10,6 +10,7 @@ import com.ai.slp.product.api.productcat.param.ProAttrGroup;
 import com.ai.slp.product.api.productcat.param.ProAttrGroupParam;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -38,6 +39,8 @@ public interface ICatAttrGroupSV {
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0301
      */
+	@POST
+	@Path("/catGroup")
     public PageInfoResponse<ProAttrGroup> queryProAttrGroup(ProAttrGroupParam proAttrGroupParam)
             throws BusinessException, SystemException;
     @interface QueryProAttrGroup{}
@@ -52,6 +55,8 @@ public interface ICatAttrGroupSV {
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0302
      */
+	@POST
+	@Path("/addCatGroup")
     public BaseResponse addProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
             throws BusinessException, SystemException;
     @interface AddProAttrGroup {}
@@ -66,6 +71,8 @@ public interface ICatAttrGroupSV {
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0303
      */
+	@POST
+	@Path("/saveCatGroup")
     public BaseResponse updateProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
             throws BusinessException, SystemException;
     @interface UpdateProAttrGroup{}
@@ -80,6 +87,8 @@ public interface ICatAttrGroupSV {
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0304
      */
+	@POST
+	@Path("/removeCatGroup")
     public BaseResponse deleteProAttrGroup(ProAttrGroupParam proAttrGroupParam) 
             throws BusinessException, SystemException;
     @interface DeleteProAttrGroup{}
@@ -94,6 +103,8 @@ public interface ICatAttrGroupSV {
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0305
      */
+	@POST
+	@Path("/groupAttr")
     public List<AttrDefInfo> queryGroupAttr(ProAttrGroupParam proAttrGroupParam)
             throws BusinessException, SystemException; 
     @interface QueryGroupAttr {}
@@ -108,6 +119,8 @@ public interface ICatAttrGroupSV {
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0306
      */
+	@POST
+	@Path("/addGroupAttr")
     public BaseResponse addGroupAttr(List<AttrValParam> listProAttrVal)
             throws BusinessException, SystemException; 
     @interface AddGroupAttr {}
@@ -122,6 +135,8 @@ public interface ICatAttrGroupSV {
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0307
      */
+	@POST
+	@Path("/removeGroupAttr")
     public BaseResponse deleteGroupAttr(List<AttrValParam> listProAttrVal)
             throws BusinessException, SystemException; 
     @interface DeleteGroupAttr {}
