@@ -337,27 +337,36 @@ public class ISearchProductSVImpl implements ISearchProductSV {
         List<Map<String,Object>> reslist = result.getSearchList();
         String info = JSON.toJSONString(reslist);
         List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){}); 
-        for(SKUInfo sku:skuList){
-            ProductData product = new ProductData();
-            product.setSalePrice(sku.getPrice());
-            product.setProdName(sku.getProductname());
-            product.setProdId(sku.getProductid());
-            product.setSkuId(sku.getSkuid());
-            String imageinfo = JSON.toJSONString(sku.getImageinfo());
-            if(sku.getImageinfo()!=null){
-                product.setImageinfo(ConvertImageUtil.convert(imageinfo));
-            }
-            String images = JSON.toJSONString(sku.getThumbnail());
-            if(!CollectionUtil.isEmpty(sku.getThumbnail())){
-                product.setThumbnail(ConvertImageUtil.convertThum(images)); 
-            }
-            //添加地区、代理商、面额
-            if(!StringUtil.isBlank(request.getProductCatId())){
+        if(!CollectionUtil.isEmpty(skuList)){
+            for(SKUInfo sku:skuList){
+                ProductData product = new ProductData();
+                product.setSalePrice(sku.getPrice());
+                product.setProdName(sku.getProductname());
+                product.setProdId(sku.getProductid());
+                product.setSkuId(sku.getSkuid());
+                String imageinfo = JSON.toJSONString(sku.getImageinfo());
+                if(sku.getImageinfo()!=null){
+                    product.setImageinfo(ConvertImageUtil.convert(imageinfo));
+                }
+                String images = JSON.toJSONString(sku.getThumbnail());
+                if(!CollectionUtil.isEmpty(sku.getThumbnail())){
+                    product.setThumbnail(ConvertImageUtil.convertThum(images)); 
+                }
+                //添加地区、代理商、面额
+                if(StringUtil.isBlank(request.getProductCatId())){
+                	request.setProductCatId(ProductHomeConstants.PHONE_BILL_PRO_CAT_ID);
+                }
                 product.setAccountList(initDataUtil.getAccountsOrFlow(request.getProductCatId()));
                 product.setAgentList(initDataUtil.getAgent());
                 product.setAreaList(initDataUtil.getArea());
+                results.add(product);
             }
-            results.add(product);
+        }else{
+        	 ProductData product = new ProductData();
+        	 product.setAccountList(initDataUtil.getAccountsOrFlow(ProductHomeConstants.PHONE_BILL_PRO_CAT_ID));
+             product.setAgentList(initDataUtil.getAgent());
+             product.setAreaList(initDataUtil.getArea());
+             results.add(product);
         }
         pageinfo.setResult(results);
         pageinfo.setPageSize(request.getPageInfo().getPageSize());
@@ -500,30 +509,39 @@ public class ISearchProductSVImpl implements ISearchProductSV {
         List<Map<String,Object>> reslist = result.getSearchList();
         String info = JSON.toJSONString(reslist);
         List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){}); 
-        for(SKUInfo sku:skuList){
-            ProductData product = new ProductData();
-            product.setSalePrice(sku.getPrice());
-            product.setProdName(sku.getProductname());
-            product.setSkuName(sku.getSkuname());
-            product.setProdId(sku.getProductid());
-            product.setSkuId(sku.getSkuid());
-            product.setProductCatId(productCatId);
-            String imageinfo = JSON.toJSONString(sku.getImageinfo());
-            if(sku.getImageinfo()!=null){
-                product.setImageinfo(ConvertImageUtil.convert(imageinfo));   
-            }
-            //product.setImageinfo(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
-            String images = JSON.toJSONString(sku.getThumbnail());
-            //List<ProductImage> imageList = JSON.parseObject(images,new TypeReference<List<ProductImage>>(){}); 
-            if(!CollectionUtil.isEmpty(sku.getThumbnail())){
-                product.setThumbnail(ConvertImageUtil.convertThum(images)); 
-            }
-            //添加地区、代理商、面额
-            if(!StringUtil.isBlank(productCatId)){
+        if(!CollectionUtil.isEmpty(skuList)){
+            for(SKUInfo sku:skuList){
+                ProductData product = new ProductData();
+                product.setSalePrice(sku.getPrice());
+                product.setProdName(sku.getProductname());
+                product.setSkuName(sku.getSkuname());
+                product.setProdId(sku.getProductid());
+                product.setSkuId(sku.getSkuid());
+                product.setProductCatId(productCatId);
+                String imageinfo = JSON.toJSONString(sku.getImageinfo());
+                if(sku.getImageinfo()!=null){
+                    product.setImageinfo(ConvertImageUtil.convert(imageinfo));   
+                }
+                //product.setImageinfo(JSON.parseObject(JSON.toJSONString(sku.getImageinfo()),ProductImage.class));
+                String images = JSON.toJSONString(sku.getThumbnail());
+                //List<ProductImage> imageList = JSON.parseObject(images,new TypeReference<List<ProductImage>>(){}); 
+                if(!CollectionUtil.isEmpty(sku.getThumbnail())){
+                    product.setThumbnail(ConvertImageUtil.convertThum(images)); 
+                }
+                //添加地区、代理商、面额
+                if(StringUtil.isBlank(productCatId)){
+                	productCatId=ProductHomeConstants.PHONE_BILL_PRO_CAT_ID;
+                }
                 product.setAccountList(initDataUtil.getAccountsOrFlow(productCatId));
                 product.setAgentList(initDataUtil.getAgent());
                 product.setAreaList(initDataUtil.getArea());
+                results.add(product);
             }
+        }else{
+        	ProductData product = new ProductData();
+        	product.setAccountList(initDataUtil.getAccountsOrFlow(ProductHomeConstants.PHONE_BILL_PRO_CAT_ID));
+            product.setAgentList(initDataUtil.getAgent());
+            product.setAreaList(initDataUtil.getArea());
             results.add(product);
         }
         pageinfo.setResult(results);
