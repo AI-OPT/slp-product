@@ -352,11 +352,12 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                 product.setThumbnail(ConvertImageUtil.convertThum(images)); 
             }
             //添加地区、代理商、面额
-            if(!StringUtil.isBlank(request.getProductCatId())){
-                product.setAccountList(initDataUtil.getAccountsOrFlow(request.getProductCatId()));
-                product.setAgentList(initDataUtil.getAgent());
-                product.setAreaList(initDataUtil.getArea());
+            if(StringUtil.isBlank(request.getProductCatId())){
+            	request.setProductCatId(ProductHomeConstants.PHONE_BILL_PRO_CAT_ID);
             }
+            product.setAccountList(initDataUtil.getAccountsOrFlow(request.getProductCatId()));
+            product.setAgentList(initDataUtil.getAgent());
+            product.setAreaList(initDataUtil.getArea());
             results.add(product);
         }
         pageinfo.setResult(results);
