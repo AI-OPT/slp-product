@@ -48,9 +48,10 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
             userIdList.add(userId);
             userIdList.add(ProductConstants.ProdAudiences.userId.USER_TYPE);
             criteria.andUserIdIn(userIdList);
-        }else {
-            criteria.andUserIdEqualTo(ProductConstants.ProdAudiences.userId.USER_TYPE);
         }
+//        else {
+//            criteria.andUserIdEqualTo(ProductConstants.ProdAudiences.userId.USER_TYPE);
+//        }
         if (!hasDiscard){
             criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         }
