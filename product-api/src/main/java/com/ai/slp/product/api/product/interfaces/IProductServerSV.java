@@ -8,6 +8,7 @@ import com.ai.slp.product.api.product.param.ProductSkuInfo;
 import com.ai.slp.product.api.product.param.SkuInfoQuery;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -34,6 +35,8 @@ public interface IProductServerSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_SERVER_0100
      */
+	@POST
+	@Path("/searchProdInfo")
     public ProductSkuInfo queryProductSkuById(SkuInfoQuery skuInfoQuery)
             throws BusinessException,SystemException;
     @interface QueryProducSkutById{}
@@ -48,6 +51,8 @@ public interface IProductServerSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_SERVER_0101
      */
+    @POST
+	@Path("/routeGroup")
     public ProductRoute queryRouteGroupOfProd(ProductInfoQuery productInfoQuery)
             throws BusinessException,SystemException;
     @interface QueryRouteGroupOfProd{}

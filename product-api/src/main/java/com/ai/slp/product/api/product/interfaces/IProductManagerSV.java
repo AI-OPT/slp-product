@@ -7,6 +7,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -39,6 +40,8 @@ public interface IProductManagerSV {
      * @author lipeng16
     *  @ApiCode PROMAN_0100
      */
+	@POST
+	@Path("/stateSearch")
     public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq productEditParam) throws BusinessException, SystemException;
     @interface QueryProductEdit {}
     
@@ -53,6 +56,8 @@ public interface IProductManagerSV {
      * @author lipeng16
     *  @ApiCode PROMAN_0101
      */
+    @POST
+	@Path("/searchRefuseInfo")
     public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam) throws BusinessException, SystemException;
     @interface QueryProductRefuse {}
     
@@ -68,6 +73,8 @@ public interface IProductManagerSV {
      * @author lipeng16
     *  @ApiCode PROMAN_0102
      */
+    @POST
+	@Path("/searchCheckInfo")
     public PageInfoResponse<ProductEditUp> queryProductCheck(ProductEditQueryReq productCheckingParam) throws BusinessException, SystemException;
     @interface QueryProductCheck {}
 
@@ -85,6 +92,8 @@ public interface IProductManagerSV {
      * @author lipeng16
      *  @ApiCode PROMAN_0103
      */
+    @POST
+	@Path("/check")
     public BaseResponse productCheck(ProductCheckParam productCheckParam)
             throws BusinessException, SystemException;
     @interface ProductCheck {}
@@ -99,6 +108,8 @@ public interface IProductManagerSV {
      * @author lipeng16
      *  @ApiCode PROMAN_0104
      */
+    @POST
+	@Path("/priorityCheck")
     public BaseResponse productPriority(ProductPriorityParam productPriorityParam)
             throws BusinessException, SystemException;
     @interface ProductPriority {}
@@ -114,6 +125,8 @@ public interface IProductManagerSV {
      * @author liutong5
      * @ApiCode PROMAN_0105
      */
+    @POST
+	@Path("/searchOtherInfo")
     public OtherSetOfProduct queryOtherSetOfProduct(ProductInfoQuery productInfoQuery)
             throws BusinessException,SystemException;
     @interface QueryAudiencesOfProduct{}
@@ -133,6 +146,8 @@ public interface IProductManagerSV {
      * @author lipeng16
      *  @ApiCode PROMAN_0106
      */
+    @POST
+	@Path("/searchAll")
     public PageInfoResponse<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) throws BusinessException,SystemException;
     @interface QueryStorageProdByState {}
 
@@ -145,6 +160,8 @@ public interface IProductManagerSV {
      * @author liutong5
      * @ApiCode PROMAN_0107
      */
+    @POST
+	@Path("/toInSale")
     public BaseResponse changeToInSale(ProductInfoQuery query)
         throws BusinessException,SystemException;
     @interface ChangeToInSale {}
@@ -158,6 +175,8 @@ public interface IProductManagerSV {
      * @author liutong5
      * @ApiCode PROMAN_0108
      */
+    @POST
+	@Path("/searchNoKeyInfo")
     public ProdNoKeyAttr queryNoKeyAttrOfProd(ProductInfoQuery query)
             throws BusinessException,SystemException;
     @interface QueryNoKeyAttrOfProd {}
@@ -171,6 +190,8 @@ public interface IProductManagerSV {
      * @author liutong5
      * @ApiCode PROMAN_0109
      */
+    @POST
+	@Path("/update")
     public BaseResponse updateProduct(ProductInfoForUpdate product)
     		throws BusinessException,SystemException;
     @interface SaveProduct{}

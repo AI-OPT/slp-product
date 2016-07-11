@@ -7,6 +7,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -34,6 +35,8 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0100
      */
+	@POST
+	@Path("/searchProdList")
     public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery)
         throws BusinessException,SystemException;
     @interface QueryProductList{}
@@ -49,6 +52,8 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0101
      */
+    @POST
+	@Path("/searchProdInfo")
     public ProductInfo queryProductById(ProductInfoQuery productInfoQuery)
         throws BusinessException,SystemException;
     @interface QueryProductById{}
@@ -64,6 +69,8 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0102
      */
+    @POST
+	@Path("/updateSKUPrice")
     public BaseResponse updateMultSKUSalePrice(List<ProdSkuSalPrice> skuSalPrices)
             throws BusinessException,SystemException;
     @interface UpdateMultSKUSalePrice{}
@@ -79,6 +86,8 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0103
      */
+    @POST
+	@Path("/updateSKUInfo")
     public BaseResponse saveMultSKUInfo(SkuInfoMultSave saveInfo)
             throws BusinessException,SystemException;
     @interface SaveMultSKUInfo{}
@@ -94,6 +103,8 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0104
      */
+    @POST
+	@Path("/searchSKUInfo")
     public SkuSetForProduct querySkuSetForProduct(ProductInfoQuery query)
             throws BusinessException,SystemException;
     @interface QuerySkuSetForProduct{}
@@ -109,6 +120,8 @@ public interface IProductSV {
      * @ApiDocMethod
      * @ApiCode PRODUCT_0105
      */
+    @POST
+	@Path("/searchNoKeyInfo")
     public ProdAttrMap queryNoKeyAttrInfo(ProductInfoQuery productInfoQuery)
             throws BusinessException,SystemException;
     @interface QueryNoKeyAttrInfo{}
