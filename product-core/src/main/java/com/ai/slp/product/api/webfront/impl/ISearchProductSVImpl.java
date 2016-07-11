@@ -458,10 +458,10 @@ public class ISearchProductSVImpl implements ISearchProductSV {
          if(!StringUtil.isBlank(request.getSkuName())){
              productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
-                     .tenantID(request.getTenantId()).build();
+                     .tenantID(request.getTenantId()).skuNameLike(request.getSkuName()).build();
              productCatIds = productSearch.searchCategory(productSearchCriteria);
          }
-       //获取类目
+       //获取第一个类目
          if(!CollectionUtil.isEmpty(productCatIds.getSearchList())){
            List<Map<String,Long>> proIdlist = productCatIds.getSearchList();
            Map<String,Long> idMap = proIdlist.get(0);
@@ -519,11 +519,12 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                 product.setThumbnail(ConvertImageUtil.convertThum(images)); 
             }
             //添加地区、代理商、面额
-            if(!StringUtil.isBlank(productCatId)){
-                product.setAccountList(initDataUtil.getAccountsOrFlow(productCatId));
-                product.setAgentList(initDataUtil.getAgent());
-                product.setAreaList(initDataUtil.getArea());
+            if(StringUtil.isBlank(productCatId)){
+            	productCatId=ProductHomeConstants.PHONE_BILL_PRO_CAT_ID;
             }
+            product.setAccountList(initDataUtil.getAccountsOrFlow(productCatId));
+            product.setAgentList(initDataUtil.getAgent());
+            product.setAreaList(initDataUtil.getArea());
             results.add(product);
         }
         pageinfo.setResult(results);
