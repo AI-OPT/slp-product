@@ -417,7 +417,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
         }
         ProdNoKeyAttr noKeyAttr = new ProdNoKeyAttr();
-        Map<CatAttrInfoForProd, List<ProdAttrValInfo>> attrValDefMap = new HashMap<>();
+        Map<Long, List<ProdAttrValInfo>> attrValDefMap = new HashMap<>();
         List<CatAttrInfoForProd> attrAndValList = new ArrayList<>();
         // 查询对应类目非关键属性
         List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
@@ -442,13 +442,14 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                     valInfo.setAttrVal2(prodAttr.getAttrValueName2());
                     valInfoList.add(valInfo);
                 }
-                catAttrDef.setAttrValInfoList(valInfoList);
+                attrValDefMap.put(catAttrDef.getAttrId(),valInfoList);
             }else {
-                catAttrDef.setAttrValInfoList(getAttrValsOfAttr(product, catAttrAttch.getAttrId()));
+                attrValDefMap.put(catAttrDef.getAttrId(),getAttrValsOfAttr(product, catAttrAttch.getAttrId()));
             }
             attrAndValList.add(catAttrDef);
         }
         noKeyAttr.setAttrInfoForProdList(attrAndValList);
+        noKeyAttr.setAttrValMap(attrValDefMap);
         return noKeyAttr;
     }
 
