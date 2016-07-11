@@ -7,6 +7,7 @@ import com.ai.slp.product.api.storage.param.ProProductParam;
 import com.ai.slp.product.api.storage.param.ProProductRes;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -19,7 +20,7 @@ import javax.ws.rs.core.MediaType;
  * 
  * @author lipeng16
  */
-@Path("/attrAndValDef")
+@Path("/storeProduct")
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface IStoreProductSV {
@@ -34,6 +35,8 @@ public interface IStoreProductSV {
      * @author lipeng16
     *  @ApiCode PROPRO_0100
      */
+    @POST
+    @Path("/queryProducts")
     public PageInfoResponse<ProProductRes> queryProProducts(ProProductParam proProductParam)
             throws BusinessException, SystemException;
     @interface QueryProProducts {}

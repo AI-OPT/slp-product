@@ -8,6 +8,7 @@ import com.ai.slp.product.api.storage.param.WarnReceStaff;
 import com.ai.slp.product.api.storage.param.WarnReceiveStaffOper;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -35,6 +36,8 @@ public interface IWarnReceiveStaffSV {
      * @author liutong5
      * @ApiCode WARN_RECE_0100
      */
+    @POST
+    @Path("/queryReceivesByStorageId")
     public List<WarnReceStaff> queryByObjectIdOfStorage(WarnReceStafForQuery warnReceStafForQuery)
             throws BusinessException,SystemException;
     @interface QueryByObjectIdOfStorage {}
@@ -49,6 +52,8 @@ public interface IWarnReceiveStaffSV {
      * @author liutong5
      * @ApiCode WARN_RECE_0101
      */
+    @POST
+    @Path("/addMultiReceives")
     public BaseResponse installWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
             throws BusinessException,SystemException;
     @interface InstallWarnReceiveStaff{}
@@ -64,6 +69,8 @@ public interface IWarnReceiveStaffSV {
      * @author liutong5
      * @ApiCode WARN_RECE_0102
      */
+    @POST
+    @Path("/delMultiReceives")
     public BaseResponse deleteWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
             throws BusinessException,SystemException;
     @interface DeleteWarnReceiveStaff{}

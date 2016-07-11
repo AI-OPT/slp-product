@@ -9,6 +9,7 @@ import com.ai.slp.product.api.storageserver.param.StorageNumUseReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumUserReq;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -37,6 +38,8 @@ public interface IStorageNumSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0100
      */
+    @POST
+    @Path("/useStorageNum")
     @Deprecated
     public StorageNumRes useStorageNum(StorageNumUserReq numReq)
         throws BusinessException,SystemException;
@@ -53,6 +56,8 @@ public interface IStorageNumSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0101
      */
+    @POST
+    @Path("/backStorageNum")
     public BaseResponse backStorageNum(StorageNumBackReq backReq)
         throws BusinessException,SystemException;
     @interface BackStorageNum{}
@@ -68,6 +73,8 @@ public interface IStorageNumSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0102
      */
+    @POST
+    @Path("/addSaleNumOfSku")
     public BaseResponse addSaleNumOfProduct(StorageNumUserReq numReq)
             throws BusinessException,SystemException;
     @interface AddSaleNumOfProduct{};
@@ -83,6 +90,8 @@ public interface IStorageNumSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0103
      */
+    @POST
+    @Path("/backSaleNumOfSku")
     public BaseResponse backSaleNumOfProduct(StorageNumUserReq numReq)
             throws BusinessException,SystemException;
     @interface BackSaleNumOfProduct{};
@@ -98,6 +107,8 @@ public interface IStorageNumSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0104
      */
+    @POST
+    @Path("/useStorageNumV1")
     public StorageNumRes useStorageNum(StorageNumUseReq numReq)
             throws BusinessException,SystemException;
 

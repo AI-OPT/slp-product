@@ -7,6 +7,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.param.*;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -35,6 +36,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0100
      */
+    @POST
+    @Path("/createGroup")
     public BaseResponse createStorageGroup(STOStorageGroup storageGroup)
         throws BusinessException,SystemException;
     @interface InstallStorage{}
@@ -50,6 +53,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0101
      */
+    @POST
+    @Path("/queryGroupById")
     public StorageGroupRes queryGroupInfoByGroupId(StorageGroupQuery infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupInfoById{}
@@ -65,6 +70,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0102
      */
+    @POST
+    @Path("/queryGroupsByNormProdId")
     public List<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupInfoByProductId{}
@@ -81,6 +88,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0103
      */
+    @POST
+    @Path("/chargeGroupStatus")
     public BaseResponse chargeStorageGroupStatus(StorageGroupStatus groupStatus)
             throws BusinessException,SystemException;
     @interface ChargeStorageGroupStatus{}
@@ -96,6 +105,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0104
      */
+    @POST
+    @Path("/groupList")
     public PageInfoResponse<StorageGroup4List> queryGroup(StorageGroupQueryPage groupQuery)
             throws BusinessException,SystemException;
     @interface QueryGroup{}
@@ -111,6 +122,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0105
      */
+    @POST
+    @Path("/saveStorage")
     public BaseResponse saveStorage(STOStorage stoStorage)
             throws BusinessException,SystemException;
     @interface SaveStorage{}
@@ -126,6 +139,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0106
      */
+    @POST
+    @Path("/queryStorageById")
     public StorageRes queryStorageById(String storageId)
             throws BusinessException,SystemException;
     @interface QueryStorageById{}
@@ -142,6 +157,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0107
      */
+    @POST
+    @Path("/chargeStorageStatus")
     public BaseResponse chargeStorageStatus(StorageStatus storageStatus)
             throws BusinessException,SystemException;
     @interface ChargeStorageStatus{}
@@ -157,6 +174,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0108
      */
+    @POST
+    @Path("/chargeStoragePriority")
     public BaseResponse chargeStoragePriority(StoragePriorityCharge priorityCharge)
             throws BusinessException,SystemException;
     @interface ChargeStoragePriority{}
@@ -172,6 +191,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0109
      */
+    @POST
+    @Path("/updateGroupName")
     public BaseResponse updateStorageGroupName(StorageGroupUpName storageGroup)
         throws BusinessException,SystemException;
     @interface UpdateStorageGroupName{}
@@ -187,6 +208,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0110
      */
+    @POST
+    @Path("/updateGroupSalePrice")
     public BaseResponse updateStorageGroupSalePrice(StorageGroupSalePrice salePrice)
             throws BusinessException,SystemException;
     @interface UpdateStorageGroupSalePrice{}
@@ -203,6 +226,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0111
      */
+    @POST
+    @Path("/queryGroupsForSalePrice")
     public PageInfoResponse<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupListForSalePrice{}
@@ -218,6 +243,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0112
      */
+    @POST
+    @Path("/queryGroupsByIdForSalePrice")
     public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupByProdIdForSalePrice{}
@@ -233,6 +260,8 @@ public interface IStorageSV {
      * @ApiDocMethod
      * @ApiCode STORAGE_0113
      */
+    @POST
+    @Path("/updateStorageSalePrice")
     public BaseResponse updateMultiStorageSalePrice(StorageSalePrice salePrice)
             throws BusinessException,SystemException;
     @interface UpdateMultiStorageSalePrice{}
@@ -248,6 +277,8 @@ public interface IStorageSV {
      * @author lipeng16
      * @ApiCode STORAGE_0114
      */
+    @POST
+    @Path("/querySkuStorageById")
     public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) throws BusinessException,SystemException;
     @interface QuerySkuStorageById{}
     
@@ -261,6 +292,8 @@ public interface IStorageSV {
      * @author lipeng16
      * @ApiCode STORAGE_0115
      */
+    @POST
+    @Path("/addSkuStorages")
     public BaseResponse addSkuStorage(List<SkuStorageAdd> skuStorageAddList) throws BusinessException,SystemException;
     @interface AddSkuStorage {}
 }
