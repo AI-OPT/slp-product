@@ -86,7 +86,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         if (CollectionUtil.isEmpty(audiList)){
             logger.warn("此商品部适用于该用户,租户ID:{},skuId:{},用户类型:{},用户标识:{}",
                     tenantId,skuId,useReq.getUserType(),useReq.getUserId());
-            throw new BusinessException(ErrorCodeConstants.ProdAudiences.UNMATCHED,"此商品部适用于该用户");
+            throw new BusinessException(ErrorCodeConstants.ProdAudiences.UNMATCHED,"此商品不适用于该用户");
         }
         return userStorageNum(product,skuId,useReq.getSkuNum(),useReq.getSalePrice());
     }

@@ -7,6 +7,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.normproduct.param.*;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -34,6 +35,8 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0100
      */
+    @POST
+    @Path("/queryList")
     public PageInfoResponse<NormProdResponse> queryNormProduct(NormProdRequest productRequest)
             throws BusinessException,SystemException;
     @interface QueryNormProduct {}
@@ -49,6 +52,8 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0102
      */
+    @POST
+    @Path("/queryById")
     public NormProdInfoResponse queryProducById(NormProdUniqueReq invalidRequest)
             throws BusinessException,SystemException;
     @interface QueryProducById {}
@@ -64,6 +69,8 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0103
      */
+    @POST
+    @Path("/add")
     public BaseResponse createProductInfo(NormProdSaveRequest productInfoRequest)
             throws BusinessException,SystemException;
     @interface SaveProductInfo {}
@@ -80,6 +87,8 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0104
      */
+    @POST
+    @Path("/update")
     public BaseResponse updateProductInfo(NormProdSaveRequest productInfoRequest)
             throws BusinessException,SystemException;
     @interface UpdateProductInfo {}
@@ -95,6 +104,8 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0105
      */
+    @POST
+    @Path("/discard")
     public BaseResponse discardProduct(NormProdUniqueReq invalidRequest)
             throws BusinessException,SystemException;
     @interface DiscardProduct {}
@@ -110,6 +121,8 @@ public interface INormProductSV {
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0106
      */
+    @POST
+    @Path("/updateMarketPrice")
     public BaseResponse updateMarketPrice(MarketPriceUpdate marketPrice)
             throws BusinessException,SystemException;
     @interface UpdateMarketPrice{}
@@ -127,6 +140,8 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiCode NORM_PRODUCT_0107
      */
+    @POST
+    @Path("/queryAttrsByIdAndType")
     public AttrMap queryAttrByNormProduct(AttrQuery attrQuery)
             throws BusinessException,SystemException;
     @interface QueryAttrByNormProduct{}
@@ -142,6 +157,8 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiCode NORM_PRODUCT_0108
      */
+    @POST
+    @Path("/queryListForSalePrice")
     public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest)
             throws BusinessException,SystemException;
     @interface QueryNormProductForSalePrice {}
