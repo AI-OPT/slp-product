@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.product.param;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 类目属性对象<br>
@@ -60,6 +61,11 @@ public class CatAttrInfoForProd implements Serializable {
      * 序列号
      */
     private Short serialNumber;
+
+    /**
+     * 对应属性值
+     */
+    private List<ProdAttrValInfo> attrValInfoList;
 
     public String getCatAttrId() {
         return catAttrId;
@@ -147,5 +153,13 @@ public class CatAttrInfoForProd implements Serializable {
 
     public void setHasProduct(Boolean hasProduct) {
         this.hasProduct = hasProduct;
+    }
+
+    public List<ProdAttrValInfo> getAttrValInfoList() {
+        return attrValInfoList;
+    }
+
+    public void setAttrValInfoList(List<ProdAttrValInfo> attrValInfoList) {
+        this.attrValInfoList = attrValInfoList;
     }
 }

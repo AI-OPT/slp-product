@@ -418,7 +418,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         ProdNoKeyAttr noKeyAttr = new ProdNoKeyAttr();
         Map<CatAttrInfoForProd, List<ProdAttrValInfo>> attrValDefMap = new HashMap<>();
-
+        List<CatAttrInfoForProd> attrAndValList = new ArrayList<>();
         // 查询对应类目非关键属性
         List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
                 product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
@@ -442,12 +442,13 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                     valInfo.setAttrVal2(prodAttr.getAttrValueName2());
                     valInfoList.add(valInfo);
                 }
-                attrValDefMap.put(catAttrDef,valInfoList);
+                catAttrDef.setAttrValInfoList(valInfoList);
             }else {
-                attrValDefMap.put(catAttrDef, getAttrValsOfAttr(product, catAttrAttch.getAttrId()));
+                catAttrDef.setAttrValInfoList(getAttrValsOfAttr(product, catAttrAttch.getAttrId()));
             }
+            attrAndValList.add(catAttrDef);
         }
-        noKeyAttr.setAttrMap(attrValDefMap);
+        noKeyAttr.setAttrInfoForProdList(attrAndValList);
         return noKeyAttr;
     }
 
