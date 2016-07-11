@@ -458,10 +458,10 @@ public class ISearchProductSVImpl implements ISearchProductSV {
          if(!StringUtil.isBlank(request.getSkuName())){
              productSearchCriteria =
                      new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
-                     .tenantID(request.getTenantId()).skuNameLike(request.getSkuName()).build();
+                     .tenantID(request.getTenantId()).build();
              productCatIds = productSearch.searchCategory(productSearchCriteria);
          }
-       //获取第一个类目
+       //获取类目
          if(!CollectionUtil.isEmpty(productCatIds.getSearchList())){
            List<Map<String,Long>> proIdlist = productCatIds.getSearchList();
            Map<String,Long> idMap = proIdlist.get(0);
