@@ -40,9 +40,14 @@ public class OtherSetOfProduct implements Serializable {
      */
     private List<ProdPicInfo> productPics;
     /**
-     * 属性值对应的图片信息
+     * 可上传图片属性值信息
      */
-    private Map<ProdAttrValInfo,List<ProdPicInfo>> attrValPics;
+    private List<ProdAttrValInfo> attrValInfoList;
+    /**
+     * 属性值对应的图片信息
+     * K:属性值标识,V:图片信息
+     */
+    private Map<String,List<ProdPicInfo>> attrValPics;
 
     public ProdAudiencesInfo getPersonAudiences() {
         return personAudiences;
@@ -84,11 +89,19 @@ public class OtherSetOfProduct implements Serializable {
         this.productPics = productPics;
     }
 
-    public Map<ProdAttrValInfo, List<ProdPicInfo>> getAttrValPics() {
+    public List<ProdAttrValInfo> getAttrValInfoList() {
+        return attrValInfoList;
+    }
+
+    public void setAttrValInfoList(List<ProdAttrValInfo> attrValInfoList) {
+        this.attrValInfoList = attrValInfoList;
+    }
+
+    public Map<String, List<ProdPicInfo>> getAttrValPics() {
         return attrValPics;
     }
 
-    public void setAttrValPics(Map<ProdAttrValInfo, List<ProdPicInfo>> attrValPics) {
+    public void setAttrValPics(Map<String, List<ProdPicInfo>> attrValPics) {
         this.attrValPics = attrValPics;
     }
 }
