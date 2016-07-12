@@ -229,9 +229,11 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             SearchUserRequest userRequest = new SearchUserRequest();
             userRequest.setTenantId(tenantId);
             userRequest.setUserId(audiencesInfo.getUserId());
+            //TODO... 设置登录名和企业名称
             SearchUserResponse userResponse = ucUserSV.queryBaseInfo(userRequest);
             if (userResponse!=null && userResponse.getResponseHeader().isSuccess()){
                 audiencesInfo.setUserName(userResponse.getUserLoginName());
+
             }
             audiencesMap.put(audiences.getUserId(),audiencesInfo);
         }
