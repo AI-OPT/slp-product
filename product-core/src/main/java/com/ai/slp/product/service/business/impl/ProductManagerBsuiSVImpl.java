@@ -238,7 +238,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             userRequest.setUserId(audiencesInfo.getUserId());
             SearchUserResponse userResponse = ucUserSV.queryBaseInfo(userRequest);
             if (userResponse!=null && userResponse.getResponseHeader().isSuccess()){
-                audiencesInfo.setUserName(userResponse.getUserNickname());
+                audiencesInfo.setUserName(userResponse.getUserLoginName());
             }
             audiencesMap.put(audiences.getUserId(),audiencesInfo);
         }
