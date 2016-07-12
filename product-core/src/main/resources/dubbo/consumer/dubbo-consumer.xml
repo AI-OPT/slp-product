@@ -26,4 +26,5 @@
 	
 	<dubbo:reference id="iGnAreaQuerySV" interface="com.ai.slp.common.api.area.interfaces.IGnAreaQuerySV"/>
 	<dubbo:reference id="iUcUserSV" interface="com.ai.slp.user.api.ucuser.intefaces.IUcUserSV"/>
+	<dubbo:reference id="iUcKeyInfoSV" interface="com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV"/>
 </beans>
