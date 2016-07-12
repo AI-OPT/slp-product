@@ -150,6 +150,10 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         return otherSet;
     }
 
+    /**
+     * 更新产品编辑信息
+     * @param productInfo
+     */
     @Override
     public void updateProdEdit(ProductInfoForUpdate productInfo) {
         String tenantId = productInfo.getTenantId(),
@@ -214,8 +218,10 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             BeanUtils.copyProperties(log,product);
             productLogAtomSV.install(log);
         }
-        //进行上架
-        productBusiSV.changeToInSale(tenantId,productId,operId);
+        //如果为立即上架,则进行上架操作
+        if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){
+            productBusiSV.changeToInSale(tenantId,productId,operId);
+        }
     }
 
     private Map<String,ProdAudiencesInfo> getAudiencesInfo(String tenantId,String prodId,String userType){
