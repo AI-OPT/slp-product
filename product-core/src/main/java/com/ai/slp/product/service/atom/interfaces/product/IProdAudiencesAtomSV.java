@@ -20,10 +20,11 @@ public interface IProdAudiencesAtomSV {
      * @param hasDiscard
      * @return
      */
-    public List<ProdAudiences> queryByUserType(String tenantId,String prodId,String userType,String userId,boolean hasDiscard);
+    public List<ProdAudiences> queryByUserType(String tenantId, String prodId, String userType, String userId, boolean hasDiscard);
 
     /**
      * 插入受众信息
+     *
      * @param prodAudiences
      * @return
      */
@@ -37,5 +38,17 @@ public interface IProdAudiencesAtomSV {
      * @param userType
      * @return
      */
-    public int updateNoUser(String tenantId,String prodId,String userType,Long operId);
+    public int updateNoUser(String tenantId, String prodId, String userType, Long operId);
+
+    /**
+     * 查询商品指定类型的受众信息
+     *
+     * @param tenantId
+     * @param prodId
+     * @param userType
+     * @param hasDiscard
+     * @return
+     */
+    public List<ProdAudiences> queryByUserType(String tenantId, String prodId, String userType, boolean hasDiscard);
+
 }

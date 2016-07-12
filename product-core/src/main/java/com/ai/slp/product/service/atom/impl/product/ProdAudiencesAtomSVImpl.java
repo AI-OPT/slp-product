@@ -25,7 +25,7 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
     ProdAudiencesMapper audiencesMapper;
 
     /**
-     * 查询符合用户类型和用户ID的受众新,用户类型和用户ID不能均为空
+     * 查询符合用户类型和用户ID的受众信息,用户类型和用户ID不能均为空
      *
      * @param tenantId
      * @param userType
@@ -49,9 +49,9 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
             userIdList.add(ProductConstants.ProdAudiences.userId.USER_TYPE);
             criteria.andUserIdIn(userIdList);
         }
-//        else {
-//            criteria.andUserIdEqualTo(ProductConstants.ProdAudiences.userId.USER_TYPE);
-//        }
+        else {
+            criteria.andUserIdEqualTo(ProductConstants.ProdAudiences.userId.USER_TYPE);
+        }
         if (!hasDiscard){
             criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         }
@@ -77,5 +77,29 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
         prodAudiences.setOperId(operId);
         prodAudiences.setOperTime(DateUtils.currTimeStamp());
         return audiencesMapper.updateByExampleSelective(prodAudiences,example);
+    }
+
+    /**
+     * 查询商品指定类型的受众信息
+     *
+     * @param tenantId
+     * @param prodId
+     * @param userType
+     * @param hasDiscard
+     * @return
+     */
+    @Override
+    public List<ProdAudiences> queryByUserType(String tenantId, String prodId, String userType, boolean hasDiscard) {
+        if (StringUtils.isBlank(userType))
+            return Collections.emptyList();
+        ProdAudiencesCriteria example = new ProdAudiencesCriteria();
+        ProdAudiencesCriteria.Criteria criteria = example.createCriteria();
+        criteria.andTenantIdEqualTo(tenantId)
+                .andProdIdEqualTo(prodId)
+                .andUserTypeEqualTo(userType);
+        if (!hasDiscard){
+            criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        }
+        return audiencesMapper.selectByExample(example);
     }
 }

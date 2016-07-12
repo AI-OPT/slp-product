@@ -129,18 +129,11 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         OtherSetOfProduct otherSet = new OtherSetOfProduct();
         //查询个人
         List<ProdAudiences> boList = prodAudiencesAtomSV.queryByUserType(
-                tenantId, prodId,ProductConstants.ProdAudiences.userType.PERSON,null,false);
+                tenantId, prodId,ProductConstants.ProdAudiences.userType.PERSON,false);
         if (!CollectionUtil.isEmpty(boList)){
             ProdAudiencesInfo audiencesInfo = new ProdAudiencesInfo();
             BeanUtils.copyProperties(audiencesInfo,boList.get(0));
-            IUcUserSV ucUserSV = DubboConsumerFactory.getService("iUcUserSV");
-            SearchUserRequest userRequest = new SearchUserRequest();
-            userRequest.setTenantId(tenantId);
-            userRequest.setUserId(audiencesInfo.getUserId());
-            SearchUserResponse userResponse = ucUserSV.queryBaseInfo(userRequest);
-            if (userResponse!=null && userResponse.getResponseHeader().isSuccess()){
-                audiencesInfo.setUserName(userResponse.getUserNickname());
-            }
+            //个人为全部可见或全部不可见,没有具体用户名称
             otherSet.setPersonAudiences(audiencesInfo);
         }
         //企业
@@ -178,7 +171,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         //全部可见
         if (ProductConstants.ProdAudiences.userId.USER_TYPE.equals(perAudi)) {
             List<ProdAudiences> personAudiList = prodAudiencesAtomSV.queryByUserType(tenantId, productId,
-                    ProductConstants.ProdAudiences.userType.PERSON, null, false);
+                    ProductConstants.ProdAudiences.userType.PERSON, false);
             //为空,且全部可见
             if (CollectionUtil.isEmpty(personAudiList)) {
                 ProdAudiences prodAudiences = new ProdAudiences();
@@ -227,7 +220,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
 
     private Map<String,ProdAudiencesInfo> getAudiencesInfo(String tenantId,String prodId,String userType){
         List<ProdAudiences> boList = prodAudiencesAtomSV.queryByUserType(
-                tenantId,prodId, userType,null,false);
+                tenantId,prodId, userType,false);
         Map<String,ProdAudiencesInfo> audiencesMap = new HashMap<>();
         IUcUserSV ucUserSV = DubboConsumerFactory.getService("iUcUserSV");
         for (ProdAudiences audiences:boList){

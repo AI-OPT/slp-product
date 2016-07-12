@@ -23,7 +23,7 @@ public class IProductManagerSVTest {
     public void queryOtherSetOfProductTest(){
         ProductInfoQuery infoQuery = new ProductInfoQuery();
         infoQuery.setTenantId("SLP");
-        infoQuery.setProductId("1000000000000001");
+        infoQuery.setProductId("1000000000000004");
         OtherSetOfProduct otherSet = productManagerSV.queryOtherSetOfProduct(infoQuery);
         System.out.println(otherSet.toString());
     }
