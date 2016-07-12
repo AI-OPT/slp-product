@@ -163,8 +163,9 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             logger.warn("未找到对应销售商品,租户ID:{},商品标识:{}",tenantId,productId);
             throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
                     "未找到对应商品信息,租户ID:"+tenantId+",商品标识:"+productId);
-        }else if (!editStatus.contains(product.getState())){
-            throw new SystemException("","商品没有处于可编辑状态,不允许编辑更新.");
+        }//若为废弃状态,不允许编辑.
+        else if (ProductConstants.Product.State.DISCARD.equals(product.getState())){
+            throw new SystemException("","商品已废弃,不允许编辑更新.");
         }
         Long operId = productInfo.getOperId();
         //更新商品非关键属性信息
