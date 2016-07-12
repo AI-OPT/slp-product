@@ -24,7 +24,7 @@ public class DubboStartTest {
         IUcKeyInfoSV ucKeyInfoSV = DubboConsumerFactory.getService(IUcKeyInfoSV.class);
         SearchGroupKeyInfoRequest request = new SearchGroupKeyInfoRequest();
         request.setTenantId("SLP");
-        request.setUserId("000000000000000203");
+        request.setUserId("000000000000000204");
         SearchGroupUserInfoResponse infoResponse = ucKeyInfoSV.searchGroupUserInfo(request);
         System.out.println(infoResponse.toString());
     }
