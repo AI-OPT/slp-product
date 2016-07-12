@@ -236,6 +236,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             SearchGroupKeyInfoRequest request = new SearchGroupKeyInfoRequest();
             request.setTenantId(tenantId);
             request.setUserId(audiences.getUserId());
+            request.setAuditState("11");//TODO... 待用户域服务支持后,删除此参数.
             SearchGroupUserInfoResponse infoResponse = ucKeyInfoSV.searchGroupUserInfo(request);
             if (infoResponse!=null && infoResponse.getResponseHeader().isSuccess()){
                 audiencesInfo.setUserName(infoResponse.getCustName());
