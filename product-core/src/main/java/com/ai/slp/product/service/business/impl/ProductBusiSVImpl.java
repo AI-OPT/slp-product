@@ -172,7 +172,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void offSale(String tenantId, String prodId, Long operId) {
-        Product product = productAtomSV.selectByGroupId(tenantId,prodId);
+        Product product = productAtomSV.selectByProductId(tenantId,prodId);
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }

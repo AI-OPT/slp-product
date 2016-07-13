@@ -36,7 +36,8 @@ public class IStorageGroupBusiSVTest {
 //            StorageGroup storageGroup = groupAtomSV.queryByGroupId(CommonConstants.COMMON_TENANT_ID, groupId);
 //            groupBusiSV.flushStorageCache(storageGroup);
 //        }
-        StorageGroup storageGroup = groupAtomSV.queryByGroupId(CommonConstants.COMMON_TENANT_ID, "1");
+        StorageGroup storageGroup = groupAtomSV.queryByGroupId(
+                CommonConstants.COMMON_TENANT_ID, "100000000008");
         groupBusiSV.flushStorageCache(storageGroup);
     }
 

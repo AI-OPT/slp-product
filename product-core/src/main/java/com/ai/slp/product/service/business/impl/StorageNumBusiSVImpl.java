@@ -128,7 +128,9 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
                 || !cacheClient.exists(priorityUsable)
                 || Long.parseLong(cacheClient.get(priorityUsable))<1){
             //若促销价格不存在,表明促销已过期,删除当前优先级的促销时间
-            if (StringUtils.isNotBlank(priceKey) && !cacheClient.exists(priceKey)) {
+            if (StringUtils.isNotBlank(priority)
+                    && StringUtils.isNotBlank(priceKey)
+                    && !cacheClient.exists(priceKey)) {
                 String serialsKey = IPassUtils.genMcsGroupSerialStartTimeKey(tenantId,groupId);
                 //删除促销期的优先级时间 ZREM serialsKey serial
                 cacheClient.zrem(serialsKey,priority);

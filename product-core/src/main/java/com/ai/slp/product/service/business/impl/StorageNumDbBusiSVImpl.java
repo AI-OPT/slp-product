@@ -71,7 +71,7 @@ public class StorageNumDbBusiSVImpl {
             if (skuStorage ==null)
                 continue;
             skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
-            /* 取消SKU库存的自动启用和自动停用状态
+            /* 取消SKU库存的自动启用和自动停用状态,SKU的状态依赖与库存的状态
             //若SKU库存小于等于零,且状态不为"废弃",则设置为"自动停用
             if (skuStorage.getUsableNum()<=0
                     && !StorageConstants.SkuStorage.State.AUTO_DISCARD.equals(skuStorage.getState())){

@@ -29,9 +29,13 @@ public class ProdAudiencesInfo implements Serializable {
      */
     private String userId;
     /**
-     * 用户名称
+     * 用户名称,企业名称
      */
     private String userName;
+    /**
+     * 用户登录名
+     */
+    private String loginAccount;
     /**
      * 状态
      */
@@ -95,5 +99,13 @@ public class ProdAudiencesInfo implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getLoginAccount() {
+        return loginAccount;
+    }
+
+    public void setLoginAccount(String loginAccount) {
+        this.loginAccount = loginAccount;
     }
 }

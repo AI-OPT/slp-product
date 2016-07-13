@@ -9,7 +9,6 @@ import com.ai.slp.product.dao.mapper.interfaces.storage.SkuStorageMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -139,6 +138,7 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	 */
 	@Override
 	public int updateById(SkuStorage skuStorage) {
+		skuStorage.setOperTime(DateUtils.currTimeStamp());
 		return skuStorageMapper.updateByPrimaryKey(skuStorage);
 	}
 }

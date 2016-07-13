@@ -81,14 +81,6 @@ public class ProductSkuInfo extends BaseResponse {
         this.vfsId = vfsId;
     }
 
-    public long getUsableNum() {
-        return usableNum;
-    }
-
-    public void setUsableNum(long usableNum) {
-        this.usableNum = usableNum;
-    }
-
     public Long getSalePrice() {
         return salePrice;
     }
@@ -127,6 +119,10 @@ public class ProductSkuInfo extends BaseResponse {
 
     public void setPicType(String picType) {
         this.picType = picType;
+    }
+
+    public Long getUsableNum() {
+        return usableNum;
     }
 
     public void setUsableNum(Long usableNum) {
