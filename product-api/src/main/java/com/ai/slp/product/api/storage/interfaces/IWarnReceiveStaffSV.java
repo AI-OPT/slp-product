@@ -35,6 +35,7 @@ public interface IWarnReceiveStaffSV {
      * @throws SystemException
      * @author liutong5
      * @ApiCode WARN_RECE_0100
+     * @RestRelativeURL warnReceive/queryReceivesByStorageId
      */
     @POST
     @Path("/queryReceivesByStorageId")
@@ -51,6 +52,7 @@ public interface IWarnReceiveStaffSV {
      * @throws SystemException
      * @author liutong5
      * @ApiCode WARN_RECE_0101
+     * @RestRelativeURL warnReceive/addMultiReceives
      */
     @POST
     @Path("/addMultiReceives")
@@ -68,6 +70,7 @@ public interface IWarnReceiveStaffSV {
      * @throws SystemException
      * @author liutong5
      * @ApiCode WARN_RECE_0102
+     * @RestRelativeURL warnReceive/delMultiReceives
      */
     @POST
     @Path("/delMultiReceives")
