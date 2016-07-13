@@ -195,6 +195,22 @@ public interface IProductManagerSV {
     public BaseResponse updateProduct(ProductInfoForUpdate product)
     		throws BusinessException,SystemException;
     @interface SaveProduct{}
+    
+    /**
+     * 对商品进行手动下架处理
+     * @param query
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+     * @ApiCode PROMAN_0110
+     */
+    @POST
+	@Path("/toInStore")
+    public BaseResponse changeToInStore(ProductInfoQuery query)
+        throws BusinessException,SystemException;
+    @interface changeToDown {}
+    
 }
 
 

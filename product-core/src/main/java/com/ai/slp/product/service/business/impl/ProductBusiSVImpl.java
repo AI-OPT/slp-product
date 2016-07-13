@@ -582,4 +582,36 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         return valInfoList;
     }
+
+    /**
+     * 对销售商品进行手动下架架处理
+     *
+     * @param tenantId
+     * @param prodId
+     * @param operId
+     */
+	@Override
+	public void changeToInStore(String tenantId, String prodId, Long operId) {
+		Product product = productAtomSV.selectByProductId(tenantId,prodId);
+        if (prodId == null){
+            throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
+        }
+        //若商品状态是"销售中"
+        if (ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
+        	product.setState(ProductConstants.Product.State.IN_STORE);
+        	if (operId!=null)
+                product.setOperId(operId);
+            product.setUpTime(DateUtils.currTimeStamp());
+		}
+        //添加日志
+        if (productAtomSV.updateById(product)>0){
+            ProductLog productLog = new ProductLog();
+            BeanUtils.copyProperties(productLog,product);
+            productLogAtomSV.install(productLog);
+            //将商品添加至搜索引擎
+            skuIndexManage.updateSKUIndex(prodId);
+        }
+		
+	}
+	
 }
