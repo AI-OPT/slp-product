@@ -36,6 +36,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0200
+    *  @RestRelativeURL attrAndValDef/pageAttr
      */
 	@POST
 	@Path("/pageAttr")
@@ -52,6 +53,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0201
+    *  @RestRelativeURL attrAndValDef/attr
      */
 	@POST
 	@Path("/attr")
@@ -68,6 +70,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0202
+    *  @RestRelativeURL attrAndValDef/addAttrs
      */
 	@POST
 	@Path("/addAttrs")
@@ -84,6 +87,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0203
+    *  @RestRelativeURL attrAndValDef/saveAttr
      */
 	@POST
 	@Path("/saveAttr")
@@ -100,6 +104,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0204
+    *  @RestRelativeURL attrAndValDef/removeAttr
      */
 	@POST
 	@Path("/removeAttr")
@@ -116,6 +121,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0205
+    *  @RestRelativeURL attrAndValDef/pageAttrval
      */
 	@POST
 	@Path("/pageAttrval")
@@ -132,6 +138,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0206
+    *  @RestRelativeURL attrAndValDef/addAttrval
      */
 	@POST
 	@Path("/addAttrval")
@@ -148,6 +155,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0207
+    *  @RestRelativeURL attrAndValDef/saveAttrval
      */
 	@POST
 	@Path("/saveAttrval")
@@ -164,6 +172,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0208
+    *  @RestRelativeURL attrAndValDef/removeAttrval
      */
 	@POST
 	@Path("/removeAttrval")
@@ -180,6 +189,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
      * @ApiCode ATTR_VAL_0209
+     * @RestRelativeURL attrAndValDef/attrval
      */
 	@POST
 	@Path("/attrval")
@@ -195,6 +205,7 @@ public interface IAttrAndValDefSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_VAL_0210
+    *  @RestRelativeURL attrAndValDef/attrsAndValues
      */
 	@POST
 	@Path("/attrsAndValues")
