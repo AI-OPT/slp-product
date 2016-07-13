@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -17,6 +19,8 @@ import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 public class ProductEditUpTest {
 	    @Autowired
 	    IProductManagerBsuiSV productManagerBsuiSV;
+	    @Autowired
+	    IProductManagerSV productManagerSV;
 	    @Test
 	    public void queryProdEdit() {
 	    	ProductEditQueryReq queryReq = new ProductEditQueryReq();
@@ -29,5 +33,13 @@ public class ProductEditUpTest {
 			stateList.add("1");
 			queryReq.setStateList(stateList);
 	    	productManagerBsuiSV.queryPageForEdit(queryReq);
+	    }
+	    @Test
+	    public void prodUp(){
+	    	ProductInfoQuery query = new ProductInfoQuery();
+	    	query.setOperId(1l);
+	    	query.setProductId("1000000000000004");
+	    	query.setTenantId("SLP");
+	    	productManagerSV.changeToInSale(query);
 	    }
 }
