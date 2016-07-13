@@ -70,6 +70,8 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     IProductBusiSV productBusiSV;
     @Autowired
     ProdAttrMapper prodAttrMapper;
+    @Autowired
+    IProductStateLogAtomSV productStateLogAtomSV;
     public static List<String> editStatus = new ArrayList<>();
     //	@Autowired
 //	ProductAttachMapper productAttachMapper;
@@ -218,6 +220,10 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             ProductLog log = new ProductLog();
             BeanUtils.copyProperties(log,product);
             productLogAtomSV.install(log);
+            //商品状态日志表
+            ProductStateLog productStateLog = new ProductStateLog();
+            BeanUtils.copyProperties(productStateLog, product);
+            productStateLogAtomSV.insert(productStateLog);
         }
         //如果为立即上架,则进行上架操作
         if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){

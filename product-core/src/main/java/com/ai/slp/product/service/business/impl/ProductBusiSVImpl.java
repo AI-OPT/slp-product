@@ -90,6 +90,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     IStorageNumBusiSV storageNumBusiSV;
     @Autowired
     ISKUIndexManage skuIndexManage;
+    @Autowired
+    IProductStateLogAtomSV productStateLogAtomSV;
 
     /**
      * 添加商城商品
@@ -204,6 +206,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             ProductLog productLog = new ProductLog();
             BeanUtils.copyProperties(productLog,product);
             productLogAtomSV.install(productLog);
+            //商品状态日志表
+            ProductStateLog productStateLog = new ProductStateLog();
+            BeanUtils.copyProperties(productStateLog, product);
+            productStateLogAtomSV.insert(productStateLog);
         }
     }
 
@@ -396,9 +402,14 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             ProductLog productLog = new ProductLog();
             BeanUtils.copyProperties(productLog,product);
             productLogAtomSV.install(productLog);
-            //将商品添加至搜索引擎
-            skuIndexManage.updateSKUIndex(prodId);
+            //商品状态日志表
+            ProductStateLog productStateLog = new ProductStateLog();
+            BeanUtils.copyProperties(productStateLog, product);
+            productStateLogAtomSV.insert(productStateLog);
         }
+        //将商品添加至搜索引擎
+        if(skuIndexManage.updateSKUIndex(prodId))
+        	throw new BusinessException("","商品加入搜索引擎失败,租户ID:"+tenantId+"商品ID:"+prodId);
     }
 
     /**
@@ -527,6 +538,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             ProductLog productLog = new ProductLog();
             BeanUtils.copyProperties(productLog,product);
             productLogAtomSV.install(productLog);
+            //商品状态日志表
+            ProductStateLog productStateLog = new ProductStateLog();
+            BeanUtils.copyProperties(productStateLog, product);
+            productStateLogAtomSV.insert(productStateLog);
         }
     }
 
@@ -553,6 +568,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             ProductLog productLog = new ProductLog();
             BeanUtils.copyProperties(productLog,product);
             productLogAtomSV.install(productLog);
+            //商品状态日志表
+            ProductStateLog productStateLog = new ProductStateLog();
+            BeanUtils.copyProperties(productStateLog, product);
+            productStateLogAtomSV.insert(productStateLog);
         }
     }
 
