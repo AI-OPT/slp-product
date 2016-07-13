@@ -30,6 +30,23 @@ public final class ProductConstants {
             public static final String CHANGE = "2";
         }
 
+        public final class UpShelfType {
+            /**
+             * 立即上架
+             */
+            public static final String NOW = "1";
+
+            /**
+             * 放入仓库中
+             */
+            public static final String IN_STORE = "2";
+
+            /**
+             * 定时上架
+             */
+            public static final String TIMING_UP = "3";
+        }
+
         public final class State{
             /**
              * 新增状态

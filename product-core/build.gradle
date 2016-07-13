@@ -16,6 +16,8 @@ dependencies {
     compile 'com.ai.slp.route:routequery:1.0-SNAPSHOT'
     //用户
     compile 'com.ai.slp.user:ucuser:1.0.1-SNAPSHOT'
+    //企业用户
+    compile 'com.ai.slp.user:keyinfo:1.0-SNAPSHOT'
 
     testCompile(
             "org.springframework:spring-test:4.1.7.RELEASE",

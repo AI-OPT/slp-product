@@ -24,9 +24,9 @@ import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 import com.ai.slp.product.util.DateUtils;
-import com.ai.slp.user.api.ucuser.intefaces.IUcUserSV;
-import com.ai.slp.user.api.ucuser.param.SearchUserRequest;
-import com.ai.slp.user.api.ucuser.param.SearchUserResponse;
+import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
+import com.ai.slp.user.api.keyinfo.param.SearchGroupKeyInfoRequest;
+import com.ai.slp.user.api.keyinfo.param.SearchGroupUserInfoResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +150,10 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         return otherSet;
     }
 
+    /**
+     * 更新产品编辑信息
+     * @param productInfo
+     */
     @Override
     public void updateProdEdit(ProductInfoForUpdate productInfo) {
         String tenantId = productInfo.getTenantId(),
@@ -159,8 +163,9 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             logger.warn("未找到对应销售商品,租户ID:{},商品标识:{}",tenantId,productId);
             throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
                     "未找到对应商品信息,租户ID:"+tenantId+",商品标识:"+productId);
-        }else if (!editStatus.contains(product.getState())){
-            throw new SystemException("","商品没有处于可编辑状态,不允许编辑更新.");
+        }//若为废弃状态,不允许编辑.
+        else if (ProductConstants.Product.State.DISCARD.equals(product.getState())){
+            throw new SystemException("","商品已废弃,不允许编辑更新.");
         }
         Long operId = productInfo.getOperId();
         //更新商品非关键属性信息
@@ -214,26 +219,27 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             BeanUtils.copyProperties(log,product);
             productLogAtomSV.install(log);
         }
-        //进行上架
-        productBusiSV.changeToInSale(tenantId,productId,operId);
+        //如果为立即上架,则进行上架操作
+        if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){
+            productBusiSV.changeToInSale(tenantId,productId,operId);
+        }
     }
 
     private Map<String,ProdAudiencesInfo> getAudiencesInfo(String tenantId,String prodId,String userType){
         List<ProdAudiences> boList = prodAudiencesAtomSV.queryByUserType(
                 tenantId,prodId, userType,false);
         Map<String,ProdAudiencesInfo> audiencesMap = new HashMap<>();
-        IUcUserSV ucUserSV = DubboConsumerFactory.getService("iUcUserSV");
+        IUcKeyInfoSV ucKeyInfoSV = DubboConsumerFactory.getService(IUcKeyInfoSV.class);
         for (ProdAudiences audiences:boList){
             ProdAudiencesInfo audiencesInfo = new ProdAudiencesInfo();
             BeanUtils.copyProperties(audiencesInfo,audiences);
-            SearchUserRequest userRequest = new SearchUserRequest();
-            userRequest.setTenantId(tenantId);
-            userRequest.setUserId(audiencesInfo.getUserId());
-            //TODO... 设置登录名和企业名称
-            SearchUserResponse userResponse = ucUserSV.queryBaseInfo(userRequest);
-            if (userResponse!=null && userResponse.getResponseHeader().isSuccess()){
-                audiencesInfo.setUserName(userResponse.getUserLoginName());
-
+            SearchGroupKeyInfoRequest request = new SearchGroupKeyInfoRequest();
+            request.setTenantId(tenantId);
+            request.setUserId(audiences.getUserId());
+            SearchGroupUserInfoResponse infoResponse = ucKeyInfoSV.searchGroupUserInfo(request);
+            if (infoResponse!=null && infoResponse.getResponseHeader().isSuccess()){
+                audiencesInfo.setUserName(infoResponse.getCustName());
+                audiencesInfo.setLoginAccount(infoResponse.getUserLoginName());
             }
             audiencesMap.put(audiences.getUserId(),audiencesInfo);
         }
