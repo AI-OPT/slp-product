@@ -159,8 +159,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToSaleForStop(String tenantId, String prodId,Long operId) {
-        Product product = productAtomSV.selectByGroupId(tenantId,prodId);
-        if (prodId == null){
+        Product product = productAtomSV.selectByProductId(tenantId,prodId);
+        if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
         changeToSaleForStop(product,operId);
@@ -195,7 +195,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void discardProduct(String tenantId, String prodId,Long operId) {
-        Product product = productAtomSV.selectByGroupId(tenantId,prodId);
+        Product product = productAtomSV.selectByProductId(tenantId,prodId);
         if (prodId == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
@@ -499,16 +499,22 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new BusinessException("","对应库存组不存在,或库存组不是[启用]状态,租户ID:"+tenantId
                     +"库存组ID:"+product.getStorageGroupId());
         }
-
-        //检查商品是否有库存,若没有,则直接切换至"售罄下架"
-        List<Storage> storageList = storageAtomSV.queryActive(tenantId,product.getProdId(),true);
+        //检查缓存中商品的库存是否大于零
+        Long userNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,product.getStorageGroupId());
+        //若缓存中数据为零,则检查数据库中数据
+        if (userNum==null || userNum<1){
+            List<Storage> storageList = storageAtomSV.queryActive(tenantId,product.getProdId(),true);
+            //若存在可用量大于零的库存,则表示有库存,则设置为1,为概数
+            if (!CollectionUtil.isEmpty(storageList)){
+                userNum = 1l;
+            }
+        }
         //若原状态为"售罄下架",且现在没有库存,则不处理
-        if ((storageList==null || storageList.isEmpty())
-                && ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
+        if (userNum<1&& ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
             return;
         }
         //直接切换至"售罄下架"
-        if (storageList==null || storageList.isEmpty()){
+        if (userNum<1){
             product.setState(ProductConstants.Product.State.SALE_OUT);
         }else { //切换至上架
             product.setState(ProductConstants.Product.State.IN_SALE);

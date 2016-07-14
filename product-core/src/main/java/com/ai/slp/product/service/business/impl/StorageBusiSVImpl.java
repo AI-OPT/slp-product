@@ -1,42 +1,16 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.slp.product.api.storage.param.STOStorage;
-import com.ai.slp.product.api.storage.param.SkuStorageAdd;
-import com.ai.slp.product.api.storage.param.SkuStorageAndProd;
-import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
-import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
-import com.ai.slp.product.api.storage.param.StoragePriorityCharge;
-import com.ai.slp.product.api.storage.param.StorageRes;
-import com.ai.slp.product.api.storage.param.StorageSalePrice;
-import com.ai.slp.product.constants.CommonSatesConstants;
-import com.ai.slp.product.constants.ProductCatConstants;
-import com.ai.slp.product.constants.ProductConstants;
-import com.ai.slp.product.constants.SkuStorageConstants;
-import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.constants.*;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSkuLog;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
-import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
+import com.ai.slp.product.dao.mapper.bo.product.*;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -46,17 +20,24 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductStateLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 库存业务操作
@@ -95,6 +76,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	IProductLogAtomSV productLogAtomSV;
 	@Autowired
     IProductStateLogAtomSV productStateLogAtomSV;
+	@Autowired
+	ISKUIndexManage iskuIndexManage;
 
 	/**
 	 * 废弃库存
