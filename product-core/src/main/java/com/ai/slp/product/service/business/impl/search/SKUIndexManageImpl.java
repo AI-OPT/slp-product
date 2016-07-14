@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.impl.search;
 
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.paas.ipaas.search.vo.SearchfieldVo;
@@ -47,9 +48,8 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
             return true;
         } catch (Exception e) {
             logger.error("Failed to update sku info", e);
+            throw new SystemException("","商品加入搜索引擎失败,商品ID:"+productId);
         }
-
-        return false;
     }
 
     /**

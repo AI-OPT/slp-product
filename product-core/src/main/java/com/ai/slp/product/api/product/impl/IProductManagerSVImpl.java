@@ -8,8 +8,10 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     IProductManagerBsuiSV productManagerBsuiSV;
     @Autowired
     IProductBusiSV productBusiSV;
+    @Autowired
+    ISKUIndexManage skuIndexManage;
     /**
      * 商品管理查询商品编辑状态<br>
      * 状态 1未编辑2已编辑<br>
@@ -152,6 +156,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(query.getTenantId(),"");
         productBusiSV.changeToInSale(query.getTenantId(),query.getProductId(),query.getOperId());
+        //将商品添加至搜索引擎
+        skuIndexManage.updateSKUIndex(query.getProductId());
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);
@@ -185,6 +191,10 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     public BaseResponse updateProduct(ProductInfoForUpdate product) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(product.getTenantId(),"");
         productManagerBsuiSV.updateProdEdit(product);
+        //若为立即上架处理,则将数据添加至搜索引擎
+        if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){
+            skuIndexManage.updateSKUIndex(product.getProdId());
+        }
         BaseResponse response = new BaseResponse();
         ResponseHeader header = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
         response.setResponseHeader(header);
