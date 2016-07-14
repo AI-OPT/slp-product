@@ -186,6 +186,8 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                 prodAudiences.setProdId(productId);
                 prodAudiences.setUserId(perAudi);
                 prodAudiences.setOperId(operId);
+                prodAudiences.setUserType(ProductConstants.ProdAudiences.userType.PERSON);
+                prodAudiences.setState(CommonSatesConstants.STATE_ACTIVE);
                 prodAudiencesAtomSV.installAudiences(prodAudiences);
             }
         }//全部不可见
