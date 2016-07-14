@@ -59,7 +59,7 @@ public class IProductManagerSVTest {
     public void prodInStoreTest(){
         ProductInfoQuery infoQuery = new ProductInfoQuery();
         infoQuery.setTenantId("SLP");
-        infoQuery.setProductId("1000000000000008");
+        infoQuery.setProductId("1000000000000007");
         BaseResponse response = productManagerSV.changeToInStore(infoQuery);
         ResponseHeader header = response.getResponseHeader();
         System.out.println(header!=null?header.isSuccess():false);
