@@ -34,6 +34,7 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0100
+     * @RestRelativeURL normProduct/queryList
      */
     @POST
     @Path("/queryList")
@@ -51,6 +52,7 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0102
+     * @RestRelativeURL normProduct/queryById
      */
     @POST
     @Path("/queryById")
@@ -68,6 +70,7 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0103
+     * @RestRelativeURL normProduct/add
      */
     @POST
     @Path("/add")
@@ -86,6 +89,7 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0104
+     * @RestRelativeURL normProduct/update
      */
     @POST
     @Path("/update")
@@ -103,6 +107,7 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0105
+     * @RestRelativeURL normProduct/discard
      */
     @POST
     @Path("/discard")
@@ -120,6 +125,7 @@ public interface INormProductSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0106
+     * @RestRelativeURL normProduct/updateMarketPrice
      */
     @POST
     @Path("/updateMarketPrice")
@@ -139,6 +145,7 @@ public interface INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiCode NORM_PRODUCT_0107
+     * @RestRelativeURL normProduct/queryAttrsByIdAndType
      */
     @POST
     @Path("/queryAttrsByIdAndType")
@@ -156,6 +163,7 @@ public interface INormProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiCode NORM_PRODUCT_0108
+     * @RestRelativeURL normProduct/queryListForSalePrice
      */
     @POST
     @Path("/queryListForSalePrice")

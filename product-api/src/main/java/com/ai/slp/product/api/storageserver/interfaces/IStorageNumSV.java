@@ -37,6 +37,7 @@ public interface IStorageNumSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0100
+     * @RestRelativeURL storageNum/useStorageNum
      */
     @POST
     @Path("/useStorageNum")
@@ -55,6 +56,7 @@ public interface IStorageNumSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0101
+     * @RestRelativeURL storageNum/backStorageNum
      */
     @POST
     @Path("/backStorageNum")
@@ -72,6 +74,7 @@ public interface IStorageNumSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0102
+     * @RestRelativeURL storageNum/addSaleNumOfSku
      */
     @POST
     @Path("/addSaleNumOfSku")
@@ -89,6 +92,7 @@ public interface IStorageNumSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0103
+     * @RestRelativeURL storageNum/backSaleNumOfSku
      */
     @POST
     @Path("/backSaleNumOfSku")
@@ -106,6 +110,7 @@ public interface IStorageNumSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_NUM_0104
+     * @RestRelativeURL storageNum/useStorageNumV1
      */
     @POST
     @Path("/useStorageNumV1")

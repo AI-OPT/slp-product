@@ -33,6 +33,7 @@ public interface IProductServerSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
+     * @RestRelativeURL productManager/searchProdInfo
      * @ApiCode PRODUCT_SERVER_0100
      */
 	@POST
@@ -49,6 +50,7 @@ public interface IProductServerSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
+     * @RestRelativeURL productManager/routeGroup
      * @ApiCode PRODUCT_SERVER_0101
      */
     @POST

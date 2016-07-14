@@ -190,4 +190,24 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         response.setResponseHeader(header);
         return response;
     }
+
+    /**
+     * 对商品进行手动下架处理
+     * @param query
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+     */
+	@Override
+	public BaseResponse changeToInStore(ProductInfoQuery query) throws BusinessException, SystemException {
+		CommonCheckUtils.checkTenantId(query.getTenantId(),"");
+        productBusiSV.changeToInStore(query.getTenantId(),query.getProductId(),query.getOperId());
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
+	}
 }

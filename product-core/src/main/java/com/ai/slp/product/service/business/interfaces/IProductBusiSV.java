@@ -35,7 +35,7 @@ public interface IProductBusiSV {
      * @param prodId
      */
     public void offSale(String tenantId, String prodId, Long operId);
-
+  
     /**
      * 废弃商品
      * @param tenantId
@@ -80,7 +80,14 @@ public interface IProductBusiSV {
      * @param prodId
      */
     public void changeToInSale(String tenantId, String prodId, Long opeId);
-
+    
+    /**
+     * 手动下架
+     * @param tenantId
+     * @param prodId
+     */
+    public void changeToInStore(String tenantId, String prodId, Long operId);
+    
     /**
      * 查询管理界面中的非关键属性
      * @param tenantId

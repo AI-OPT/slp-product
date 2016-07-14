@@ -33,7 +33,8 @@ public interface IStoreProductSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
-    *  @ApiCode PROPRO_0100
+     * @ApiCode PROPRO_0100
+     * @RestRelativeURL storeProduct/queryProducts
      */
     @POST
     @Path("/queryProducts")
