@@ -408,7 +408,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             productStateLogAtomSV.insert(productStateLog);
         }
         //将商品添加至搜索引擎
-        if(skuIndexManage.updateSKUIndex(prodId))
+        if(!skuIndexManage.updateSKUIndex(prodId))
         	throw new BusinessException("","商品加入搜索引擎失败,租户ID:"+tenantId+"商品ID:"+prodId);
     }
 
