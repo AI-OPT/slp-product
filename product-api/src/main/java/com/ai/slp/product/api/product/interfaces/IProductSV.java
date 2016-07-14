@@ -33,6 +33,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
+     * @RestRelativeURL productManager/searchProdList
      * @ApiCode PRODUCT_0100
      */
 	@POST
@@ -50,6 +51,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
+     * @RestRelativeURL productManager/searchProdInfo
      * @ApiCode PRODUCT_0101
      */
     @POST
@@ -67,6 +69,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
+     * @RestRelativeURL productManager/updateSKUPrice
      * @ApiCode PRODUCT_0102
      */
     @POST
@@ -84,6 +87,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
+     * @RestRelativeURL productManager/updateSKUInfo
      * @ApiCode PRODUCT_0103
      */
     @POST
@@ -101,6 +105,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
+     * @RestRelativeURL productManager/searchSKUInfo
      * @ApiCode PRODUCT_0104
      */
     @POST
@@ -118,6 +123,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
+     * @RestRelativeURL productManager/searchNoKeyInfo
      * @ApiCode PRODUCT_0105
      */
     @POST

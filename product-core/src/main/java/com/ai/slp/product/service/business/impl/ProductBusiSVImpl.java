@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
@@ -43,6 +44,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -593,25 +595,30 @@ public class ProductBusiSVImpl implements IProductBusiSV {
 	@Override
 	public void changeToInStore(String tenantId, String prodId, Long operId) {
 		Product product = productAtomSV.selectByProductId(tenantId,prodId);
-        if (prodId == null){
-            throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
-        }
-        //若商品状态是"销售中"
-        if (ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
-        	product.setState(ProductConstants.Product.State.IN_STORE);
-        	if (operId!=null)
-                product.setOperId(operId);
-            product.setUpTime(DateUtils.currTimeStamp());
+        if (prodId != null){
+	        //若商品状态是"销售中"
+	        if (ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
+	        	//修改商品"state"为IN_STORE
+	        	product.setState(ProductConstants.Product.State.IN_STORE);
+	        	//添加下架时间
+	        	product.setDownTime(DateUtils.currTimeStamp());
+	        	
+	        	if (operId!=null){
+	                product.setOperId(operId);
+	        	}
+	        	//添加日志
+	        	if (productAtomSV.updateById(product)>0){
+	        		ProductLog productLog = new ProductLog();
+	        		BeanUtils.copyProperties(productLog,product);
+	        		productLogAtomSV.install(productLog);
+	        		//将商品从搜索引擎中移除
+	        		skuIndexManage.deleteSKUIndexByProductId(prodId);
+	        	}
+			}
+        }else {
+        	throw new SystemException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
 		}
-        //添加日志
-        if (productAtomSV.updateById(product)>0){
-            ProductLog productLog = new ProductLog();
-            BeanUtils.copyProperties(productLog,product);
-            productLogAtomSV.install(productLog);
-            //将商品添加至搜索引擎
-            skuIndexManage.updateSKUIndex(prodId);
-        }
-		
 	}
-	
+		
 }
+	

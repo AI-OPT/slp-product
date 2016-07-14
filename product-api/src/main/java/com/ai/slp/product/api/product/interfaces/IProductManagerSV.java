@@ -38,6 +38,7 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
+     * @RestRelativeURL productManager/stateSearch
     *  @ApiCode PROMAN_0100
      */
 	@POST
@@ -54,6 +55,7 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
+     * @RestRelativeURL productManager/searchRefuseInfo
     *  @ApiCode PROMAN_0101
      */
     @POST
@@ -71,6 +73,7 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
+     * @RestRelativeURL productManager/searchCheckInfo
     *  @ApiCode PROMAN_0102
      */
     @POST
@@ -90,6 +93,7 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
+     * @RestRelativeURL productManager/check
      *  @ApiCode PROMAN_0103
      */
     @POST
@@ -106,6 +110,7 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
+     * @RestRelativeURL productManager/priorityCheck
      *  @ApiCode PROMAN_0104
      */
     @POST
@@ -123,6 +128,7 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
+     * @RestRelativeURL productManager/searchOtherInfo
      * @ApiCode PROMAN_0105
      */
     @POST
@@ -144,6 +150,7 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
+     * @RestRelativeURL productManager/searchAll
      *  @ApiCode PROMAN_0106
      */
     @POST
@@ -158,6 +165,7 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
+     * @RestRelativeURL productManager/toInSale
      * @ApiCode PROMAN_0107
      */
     @POST
@@ -173,6 +181,7 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
+     * @RestRelativeURL productManager/searchNoKeyInfo
      * @ApiCode PROMAN_0108
      */
     @POST
@@ -188,6 +197,7 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
+     * @RestRelativeURL productManager/update
      * @ApiCode PROMAN_0109
      */
     @POST
@@ -203,19 +213,13 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author jiawen
+     * @RestRelativeURL productManager/toInStore
      * @ApiCode PROMAN_0110
      */
     @POST
 	@Path("/toInStore")
     public BaseResponse changeToInStore(ProductInfoQuery query)
         throws BusinessException,SystemException;
-    @interface changeToDown {}
+    @interface ChangeToInStore {}
     
 }
-
-
-
-
-
-
-
