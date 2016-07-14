@@ -51,5 +51,18 @@ public class IProductManagerSVTest {
         ResponseHeader header = response.getResponseHeader();
         System.out.println(header!=null?header.isSuccess():false);
     }
-
+    
+    /**
+     * 手动下架测试
+     */
+    @Test
+    public void prodInStoreTest(){
+        ProductInfoQuery infoQuery = new ProductInfoQuery();
+        infoQuery.setTenantId("SLP");
+        infoQuery.setProductId("1000000000000008");
+        BaseResponse response = productManagerSV.changeToInStore(infoQuery);
+        ResponseHeader header = response.getResponseHeader();
+        System.out.println(header!=null?header.isSuccess():false);
+    }
+    
 }
