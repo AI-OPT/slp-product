@@ -44,7 +44,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -204,15 +203,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         product.setState(ProductConstants.Product.State.DISCARD);
         product.setOperId(operId);
         //添加日志
-        if (productAtomSV.updateById(product)>0){
-            ProductLog productLog = new ProductLog();
-            BeanUtils.copyProperties(productLog,product);
-            productLogAtomSV.install(productLog);
-            //商品状态日志表
-            ProductStateLog productStateLog = new ProductStateLog();
-            BeanUtils.copyProperties(productStateLog, product);
-            productStateLogAtomSV.insert(productStateLog);
-        }
+        updateProdAndStatusLog(product);
     }
 
     /**
@@ -358,6 +349,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
     @Override
+    @Transactional
     public void changeToInSale(String tenantId, String prodId, Long operId) {
         Product product = productAtomSV.selectByProductId(tenantId,prodId);
         if (prodId == null){
@@ -400,18 +392,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             product.setOperId(operId);
         product.setUpTime(DateUtils.currTimeStamp());
         //添加日志
-        if (productAtomSV.updateById(product)>0){
-            ProductLog productLog = new ProductLog();
-            BeanUtils.copyProperties(productLog,product);
-            productLogAtomSV.install(productLog);
-            //商品状态日志表
-            ProductStateLog productStateLog = new ProductStateLog();
-            BeanUtils.copyProperties(productStateLog, product);
-            productStateLogAtomSV.insert(productStateLog);
-        }
-        //将商品添加至搜索引擎
-        if(!skuIndexManage.updateSKUIndex(prodId))
-        	throw new BusinessException("","商品加入搜索引擎失败,租户ID:"+tenantId+"商品ID:"+prodId);
+        updateProdAndStatusLog(product);
     }
 
     /**
@@ -536,15 +517,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if (operId!=null)
             product.setOperId(operId);
         //添加日志
-        if (productAtomSV.updateById(product)>0){
-            ProductLog productLog = new ProductLog();
-            BeanUtils.copyProperties(productLog,product);
-            productLogAtomSV.install(productLog);
-            //商品状态日志表
-            ProductStateLog productStateLog = new ProductStateLog();
-            BeanUtils.copyProperties(productStateLog, product);
-            productStateLogAtomSV.insert(productStateLog);
-        }
+        updateProdAndStatusLog(product);
     }
 
     /**
@@ -566,15 +539,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if (operId!=null)
             product.setOperId(operId);
         //添加日志
-        if (productAtomSV.updateById(product)>0){
-            ProductLog productLog = new ProductLog();
-            BeanUtils.copyProperties(productLog,product);
-            productLogAtomSV.install(productLog);
-            //商品状态日志表
-            ProductStateLog productStateLog = new ProductStateLog();
-            BeanUtils.copyProperties(productStateLog, product);
-            productStateLogAtomSV.insert(productStateLog);
-        }
+        updateProdAndStatusLog(product);
     }
 
 
@@ -638,6 +603,16 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         	throw new SystemException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
 		}
 	}
-		
+    private void updateProdAndStatusLog(Product product){
+        if (productAtomSV.updateById(product)>0){
+            ProductLog log = new ProductLog();
+            BeanUtils.copyProperties(log,product);
+            productLogAtomSV.install(log);
+            //商品状态日志表
+            ProductStateLog productStateLog = new ProductStateLog();
+            BeanUtils.copyProperties(productStateLog, product);
+            productStateLogAtomSV.insert(productStateLog);
+        }
+    }
 }
 	
