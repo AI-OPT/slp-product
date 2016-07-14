@@ -36,6 +36,7 @@ import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuLog;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
+import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -49,6 +50,7 @@ import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductStateLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
@@ -91,6 +93,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	IProdCatAttrAtomSV prodCatAttrAtomSV;
 	@Autowired
 	IProductLogAtomSV productLogAtomSV;
+	@Autowired
+    IProductStateLogAtomSV productStateLogAtomSV;
 
 	/**
 	 * 废弃库存
@@ -197,6 +201,10 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			ProductLog productLog = new ProductLog();
 			BeanUtils.copyProperties(productLog, product);
 			productLogAtomSV.install(productLog);
+			//商品状态日志表
+            ProductStateLog productStateLog = new ProductStateLog();
+            BeanUtils.copyProperties(productStateLog, product);
+            productStateLogAtomSV.insert(productStateLog);
 		}
 	}
 
@@ -302,6 +310,10 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 						ProductLog productLog = new ProductLog();
 						BeanUtils.copyProperties(productLog, product);
 						productLogAtomSV.install(productLog);
+						//商品状态日志表
+			            ProductStateLog productStateLog = new ProductStateLog();
+			            BeanUtils.copyProperties(productStateLog, product);
+			            productStateLogAtomSV.insert(productStateLog);
 					}
 				}
 			} else {
@@ -395,6 +407,11 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		int saveProductNum = productAtomSV.installProduct(product);
 		if (saveProductNum <= 0) {
 			throw new BusinessException("", "新增商城商品失败,商品ID=" + product.getProdId());
+		}else{
+			//商品状态日志表
+            ProductStateLog productStateLog = new ProductStateLog();
+            BeanUtils.copyProperties(productStateLog, product);
+            productStateLogAtomSV.insert(productStateLog);
 		}
 		// 新增库存信息
 		Storage storage = new Storage();

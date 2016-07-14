@@ -35,6 +35,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0100
+     * @RestRelativeURL storage/createGroup
      */
     @POST
     @Path("/createGroup")
@@ -52,6 +53,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0101
+     * @RestRelativeURL storage/queryGroupById
      */
     @POST
     @Path("/queryGroupById")
@@ -69,6 +71,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0102
+     * @RestRelativeURL storage/queryGroupsByNormProdId
      */
     @POST
     @Path("/queryGroupsByNormProdId")
@@ -87,6 +90,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0103
+     * @RestRelativeURL storage/chargeGroupStatus
      */
     @POST
     @Path("/chargeGroupStatus")
@@ -104,6 +108,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0104
+     * @RestRelativeURL storage/groupList
      */
     @POST
     @Path("/groupList")
@@ -121,6 +126,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0105
+     * @RestRelativeURL storage/saveStorage
      */
     @POST
     @Path("/saveStorage")
@@ -138,6 +144,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0106
+     * @RestRelativeURL storage/queryStorageById
      */
     @POST
     @Path("/queryStorageById")
@@ -156,6 +163,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0107
+     * @RestRelativeURL storage/chargeStorageStatus
      */
     @POST
     @Path("/chargeStorageStatus")
@@ -173,6 +181,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0108
+     * @RestRelativeURL storage/chargeStoragePriority
      */
     @POST
     @Path("/chargeStoragePriority")
@@ -190,6 +199,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0109
+     * @RestRelativeURL storage/updateGroupName
      */
     @POST
     @Path("/updateGroupName")
@@ -207,6 +217,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0110
+     * @RestRelativeURL storage/updateGroupSalePrice
      */
     @POST
     @Path("/updateGroupSalePrice")
@@ -225,6 +236,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0111
+     * @RestRelativeURL storage/queryGroupsForSalePrice
      */
     @POST
     @Path("/queryGroupsForSalePrice")
@@ -242,6 +254,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0112
+     * @RestRelativeURL storage/queryGroupsByIdForSalePrice
      */
     @POST
     @Path("/queryGroupsByIdForSalePrice")
@@ -259,6 +272,7 @@ public interface IStorageSV {
      * @author liutong5
      * @ApiDocMethod
      * @ApiCode STORAGE_0113
+     * @RestRelativeURL storage/updateStorageSalePrice
      */
     @POST
     @Path("/updateStorageSalePrice")
@@ -276,6 +290,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author lipeng16
      * @ApiCode STORAGE_0114
+     * @RestRelativeURL storage/querySkuStorageById
      */
     @POST
     @Path("/querySkuStorageById")
@@ -291,6 +306,7 @@ public interface IStorageSV {
      * @throws SystemException
      * @author lipeng16
      * @ApiCode STORAGE_0115
+     * @RestRelativeURL storage/addSkuStorages
      */
     @POST
     @Path("/addSkuStorages")

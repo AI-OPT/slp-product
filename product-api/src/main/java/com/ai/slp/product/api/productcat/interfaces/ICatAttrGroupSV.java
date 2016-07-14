@@ -38,6 +38,7 @@ public interface ICatAttrGroupSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0301
+    *  @RestRelativeURL catAttrGroup/catGroup
      */
 	@POST
 	@Path("/catGroup")
@@ -54,6 +55,7 @@ public interface ICatAttrGroupSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0302
+    *  @RestRelativeURL catAttrGroup/addCatGroup
      */
 	@POST
 	@Path("/addCatGroup")
@@ -70,6 +72,7 @@ public interface ICatAttrGroupSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0303
+    *  @RestRelativeURL catAttrGroup/saveCatGroup
      */
 	@POST
 	@Path("/saveCatGroup")
@@ -86,6 +89,7 @@ public interface ICatAttrGroupSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0304
+    *  @RestRelativeURL catAttrGroup/removeCatGroup
      */
 	@POST
 	@Path("/removeCatGroup")
@@ -102,6 +106,7 @@ public interface ICatAttrGroupSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0305
+    *  @RestRelativeURL catAttrGroup/groupAttr
      */
 	@POST
 	@Path("/groupAttr")
@@ -118,6 +123,7 @@ public interface ICatAttrGroupSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0306
+    *  @RestRelativeURL catAttrGroup/addGroupAttr
      */
 	@POST
 	@Path("/addGroupAttr")
@@ -134,6 +140,7 @@ public interface ICatAttrGroupSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode ATTR_GROUP_0307
+    *  @RestRelativeURL catAttrGroup/removeGroupAttr
      */
 	@POST
 	@Path("/removeGroupAttr")

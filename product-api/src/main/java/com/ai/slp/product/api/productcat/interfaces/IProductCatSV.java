@@ -37,6 +37,7 @@ public interface IProductCatSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode PRODUCT_CAT_0100
+    *  @RestRelativeURL productCat/pageCat
      */
 	@POST
 	@Path("/pageCat")
@@ -53,6 +54,7 @@ public interface IProductCatSV {
 	 * @throws SystemException
 	 * @author lipeng16
 	*  @ApiCode PRODUCT_CAT_0101
+	*  @RestRelativeURL productCat/addCat
 	 */
 	@POST
 	@Path("/addCat")
@@ -68,6 +70,7 @@ public interface IProductCatSV {
 	 * @throws SystemException
 	 * @author lipeng16
 	*  @ApiCode PRODUCT_CAT_0102
+	*  @RestRelativeURL productCat/saveCat
 	 */
 	@POST
 	@Path("/saveCat")
@@ -85,6 +88,7 @@ public interface IProductCatSV {
 	 * @throws SystemException
 	 * @author lipeng16
 	*  @ApiCode PRODUCT_CAT_0104
+	*  @RestRelativeURL productCat/removeCat
 	 */
 	@POST
 	@Path("/removeCat")
@@ -101,6 +105,7 @@ public interface IProductCatSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0105
+	 * @RestRelativeURL productCat/catAttrAndVal
 	 */
 	@POST
 	@Path("/catAttrAndVal")
@@ -116,6 +121,7 @@ public interface IProductCatSV {
      * @throws SystemException
      * @author lipeng16
     *  @ApiCode PRODUCT_CAT_0107
+    *  @RestRelativeURL productCat/removeCatAttrOrVal
      */
 	@POST
 	@Path("/removeCatAttrOrVal")
@@ -132,6 +138,7 @@ public interface IProductCatSV {
 	 * @throws SystemException
 	 * @author lipeng16
 	 * @ApiCode PRODUCT_CAT_0108
+	 * @RestRelativeURL productCat/addCatAttr
 	 */
 	@POST
 	@Path("/addCatAttr")
@@ -147,6 +154,7 @@ public interface IProductCatSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0109
+	 * @RestRelativeURL productCat/cat
 	 */
 	@POST
 	@Path("/cat")
@@ -163,6 +171,7 @@ public interface IProductCatSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0110
+	 * @RestRelativeURL productCat/linkCat
 	 */
 	@POST
 	@Path("/linkCat")
@@ -180,6 +189,7 @@ public interface IProductCatSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0111
+	 * @RestRelativeURL productCat/catByType
 	 */
 	@POST
 	@Path("/catByType")
@@ -196,6 +206,7 @@ public interface IProductCatSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0112
+	 * @RestRelativeURL productCat/catByName
      */
 	@POST
 	@Path("/catByName")
@@ -212,6 +223,7 @@ public interface IProductCatSV {
 	 * @throws SystemException
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0113
+	 * @RestRelativeURL productCat/saveCatAttr
 	 */
 	@POST
 	@Path("/saveCatAttr")
