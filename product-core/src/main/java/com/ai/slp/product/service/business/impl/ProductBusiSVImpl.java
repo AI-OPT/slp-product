@@ -349,7 +349,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
     @Override
-    @Transactional
     public void changeToInSale(String tenantId, String prodId, Long operId) {
         Product product = productAtomSV.selectByProductId(tenantId,prodId);
         if (prodId == null){
