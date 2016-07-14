@@ -22,6 +22,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.*;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.util.IPassUtils;
 import com.ai.slp.route.api.routequery.interfaces.IRouteQuerySV;
 import com.ai.slp.route.api.routequery.param.RouteGroupQueryResult;
@@ -66,6 +67,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	ISkuStorageAtomSV skuStorageAtomSV;
 	@Autowired
 	StorageNumDbBusiSVImpl storageNumDbBusiSV;
+	@Autowired
+	ISKUIndexManage iskuIndexManage;
 
 	/**
 	 * 添加库存组
@@ -394,7 +397,6 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		if (product != null) {
 			productBusiSV.discardProduct(product.getTenantId(), product.getProdId(), operId);
 		}
-		//TODO... 删除搜索引擎中商品信息
 		// 废弃库存组下所有库存和SKU库存
 		List<Storage> storageList = storageAtomSV.queryOfGroup(storageGroup.getTenantId(),storageGroup.getStorageGroupId());
 		for (Storage storage : storageList) {
@@ -409,7 +411,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			BeanUtils.copyProperties(groupLog, groupLog);
 			storageGroupLogAtomSV.install(groupLog);
 		}
-
+		//搜索中删除商品数据
+		iskuIndexManage.deleteSKUIndexByProductId(product.getProdId());
 	}
 
 	@Override
