@@ -590,20 +590,16 @@ public class ProductBusiSVImpl implements IProductBusiSV {
 	        if (ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
 	        	//修改商品"state"为IN_STORE
 	        	product.setState(ProductConstants.Product.State.IN_STORE);
+	        	//将商品从搜索引擎中移除
+	        	skuIndexManage.deleteSKUIndexByProductId(prodId);
 	        	//添加下架时间
 	        	product.setDownTime(DateUtils.currTimeStamp());
 	        	
 	        	if (operId!=null){
 	                product.setOperId(operId);
 	        	}
-	        	//添加日志
-	        	if (productAtomSV.updateById(product)>0){
-	        		ProductLog productLog = new ProductLog();
-	        		BeanUtils.copyProperties(productLog,product);
-	        		productLogAtomSV.install(productLog);
-	        		//将商品从搜索引擎中移除
-	        		skuIndexManage.deleteSKUIndexByProductId(prodId);
-	        	}
+	            //添加日志
+	            updateProdAndStatusLog(product);
 			}
         }else {
         	throw new SystemException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
