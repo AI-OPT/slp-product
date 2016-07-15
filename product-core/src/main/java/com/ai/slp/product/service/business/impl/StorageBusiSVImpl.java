@@ -287,7 +287,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				if(ProductConstants.Product.State.SALE_OUT.equals(product.getState()) || ProductConstants.Product.State.STOP.equals(product.getState())){
 					//是则改为在售
 					product.setState(ProductConstants.Product.State.IN_SALE);
-					storage.setOperId(operId);
+					product.setOperId(operId);
 					//更新商品和日志
 					if(productAtomSV.updateById(product) >0 ){
 						ProductLog productLog = new ProductLog();
