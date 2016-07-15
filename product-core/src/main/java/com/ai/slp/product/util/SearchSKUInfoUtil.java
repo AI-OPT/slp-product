@@ -1,6 +1,14 @@
 package com.ai.slp.product.util;
 
-import com.ai.slp.product.search.bo.*;
+import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.FETCH_ATTR_INFO_SQL;
+import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.FETCH_AUDIENCE_SQL;
+import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.FETCH_CATEGORY_INFO_SQL;
+import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.FETCH_IMAGE_FROM_PROD_SQL;
+import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.FETCH_PRICE_SQL;
+import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.FETCH_SALE_NUMBER_SQL;
+import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.FETCH_SEAL_AREA;
+import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.PIC;
+import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.PRO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +17,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ai.slp.product.constants.SearchConstants.QUERY_SQL.*;
+import com.ai.slp.product.search.bo.AttrInfo;
+import com.ai.slp.product.search.bo.CategoryInfo;
+import com.ai.slp.product.search.bo.ImageInfo;
+import com.ai.slp.product.search.bo.ProdAudiences;
+import com.ai.slp.product.search.bo.SKUInfo;
+import com.ai.slp.product.search.bo.SaleAreaInfo;
 
 /**
  * Created by xin on 16-6-1.
@@ -93,7 +106,8 @@ public class SearchSKUInfoUtil {
     }
 
     public static void fillSKUImageInfo(Connection connection, SKUInfo skuInfo) throws SQLException {
-        PreparedStatement ps;
+        /*
+          PreparedStatement ps;
         ResultSet resultSet;
         ps = connection.prepareStatement(FETCH_IMAGE_FROM_SKU_SQL);
         ps.setString(1, skuInfo.getProductcategoryid());
@@ -113,6 +127,33 @@ public class SearchSKUInfoUtil {
                 }
             }
         }
+         */
+    	PreparedStatement ps;
+        ResultSet resultSet;
+        ps = connection.prepareStatement(PIC);
+        ps.setString(1, skuInfo.getProductcategoryid());
+        ps.setString(2, skuInfo.getSkuid());
+        resultSet = ps.executeQuery();
+        List<SKUInfo> skuList = new ArrayList<SKUInfo>();
+        List<ImageInfo> list = new ArrayList<ImageInfo>();
+        if (resultSet.next()) {
+        	skuInfo.setImageinfo(new ImageInfo(resultSet.getString("PIC_TYPE"), resultSet.getString("VFS_ID")));
+        }else{
+        	 ps = connection.prepareStatement(FETCH_IMAGE_FROM_PROD_SQL);
+             ps.setString(1, skuInfo.getProductid());
+             resultSet = ps.executeQuery();
+             if (resultSet.next()){
+            	 skuInfo.setImageinfo(new ImageInfo(resultSet.getString("PIC_TYPE"), resultSet.getString("VFS_ID")));
+             }
+        }
+        ps = connection.prepareStatement(PRO);
+        ps.setString(1, skuInfo.getProductid());
+        resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+        	ImageInfo info = new ImageInfo(resultSet.getString("PIC_TYPE"), resultSet.getString("VFS_ID"));
+        	list.add(info);
+        }
+        skuInfo.setThumbnail(list);
     }
 
     public static void fillSKUSaleNum(Connection connection, SKUInfo skuInfo) throws SQLException {
