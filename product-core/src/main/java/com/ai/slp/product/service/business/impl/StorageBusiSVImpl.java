@@ -181,13 +181,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		product.setState(ProductConstants.Product.State.STOP);
 		product.setOperId(operId);
 		if(productAtomSV.updateById(product)>0){
-			ProductLog productLog = new ProductLog();
-			BeanUtils.copyProperties(productLog, product);
-			productLogAtomSV.install(productLog);
-			//商品状态日志表
-            ProductStateLog productStateLog = new ProductStateLog();
-            BeanUtils.copyProperties(productStateLog, product);
-            productStateLogAtomSV.insert(productStateLog);
+			insertProdAndStateLog(product);
 		}
 	}
 
@@ -290,13 +284,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 					product.setOperId(operId);
 					//更新商品和日志
 					if(productAtomSV.updateById(product) >0 ){
-						ProductLog productLog = new ProductLog();
-						BeanUtils.copyProperties(productLog, product);
-						productLogAtomSV.install(productLog);
-						//商品状态日志表
-			            ProductStateLog productStateLog = new ProductStateLog();
-			            BeanUtils.copyProperties(productStateLog, product);
-			            productStateLogAtomSV.insert(productStateLog);
+						insertProdAndStateLog(product);
 					}
 				}
 			} else {
@@ -391,10 +379,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		if (saveProductNum <= 0) {
 			throw new BusinessException("", "新增商城商品失败,商品ID=" + product.getProdId());
 		}else{
-			//商品状态日志表
-            ProductStateLog productStateLog = new ProductStateLog();
-            BeanUtils.copyProperties(productStateLog, product);
-            productStateLogAtomSV.insert(productStateLog);
+			insertProdAndStateLog(product);
 		}
 		// 新增库存信息
 		Storage storage = new Storage();
@@ -453,6 +438,22 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		} else {
 			throw new BusinessException("", "不是有效的是否有销售属性状态" + isSaleAttr);
 		}
+	}
+
+	/**
+	 * 更新商品和商品状态日志表
+	 * 
+	 * @param product
+	 */
+	private void insertProdAndStateLog(Product product) {
+		//商品日志表
+		ProductLog productLog = new ProductLog();
+		BeanUtils.copyProperties(productLog, product);
+		productLogAtomSV.install(productLog);
+		//商品状态日志表
+		ProductStateLog productStateLog = new ProductStateLog();
+		BeanUtils.copyProperties(productStateLog, product);
+		productStateLogAtomSV.insert(productStateLog);
 	}
 
 	/**
