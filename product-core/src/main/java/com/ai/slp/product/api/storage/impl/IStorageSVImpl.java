@@ -5,6 +5,7 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
@@ -46,9 +47,7 @@ public class IStorageSVImpl implements IStorageSV {
 		CommonCheckUtils.checkTenantId(storageGroup.getTenantId(), "");
 		storageGroupBusiSV.addGroup(storageGroup);
 		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(true);
-		responseHeader.setResultCode("");
+		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
 	}
@@ -108,9 +107,7 @@ public class IStorageSVImpl implements IStorageSV {
 		storageGroupBusiSV.updateGroupState(groupStatus.getTenantId(), groupStatus.getGroupId(), groupStatus.getState(),
 				groupStatus.getOperId());
 		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(true);
-		responseHeader.setResultCode("");
+		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
 	}
@@ -148,9 +145,7 @@ public class IStorageSVImpl implements IStorageSV {
 		CommonCheckUtils.checkTenantId(stoStorage.getTenantId(), "");
 		storageBusiSV.saveStorage(stoStorage);
 		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(true);
-		responseHeader.setResultCode("");
+		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
 	}
@@ -192,9 +187,7 @@ public class IStorageSVImpl implements IStorageSV {
 		storageBusiSV.changeStorageStats(storageStatus.getTenantId(), storageStatus.getStorageId(),
 				storageStatus.getState(), storageStatus.getOperId());
 		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(true);
-		responseHeader.setResultCode("");
+		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
 	}
@@ -216,9 +209,7 @@ public class IStorageSVImpl implements IStorageSV {
 		CommonCheckUtils.checkTenantId(priorityCharge.getTenantId(), "");
 		storageBusiSV.updateStoragePriority(priorityCharge);
 		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(true);
-		responseHeader.setResultCode("");
+		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
 	}
@@ -240,9 +231,7 @@ public class IStorageSVImpl implements IStorageSV {
 		CommonCheckUtils.checkTenantId(storageGroup.getTenantId(), "");
 		int updateNum = storageGroupBusiSV.updateGroupName(storageGroup);
 		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(updateNum>0 ? true : false);
-		responseHeader.setResultCode("");
+		ResponseHeader responseHeader = new ResponseHeader(updateNum>0 ? true : false,ExceptCodeConstants.Special.SUCCESS,"");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
 	}
@@ -264,9 +253,7 @@ public class IStorageSVImpl implements IStorageSV {
 		CommonCheckUtils.checkTenantId(salePrice.getTenantId(), "");
 		storageGroupBusiSV.updateStorageGroupPrice(salePrice);
 		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(true);
-		responseHeader.setResultCode("");
+		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
 	}
@@ -327,10 +314,7 @@ public class IStorageSVImpl implements IStorageSV {
 		CommonCheckUtils.checkTenantId(salePrice.getTenantId(), "");
 		storageBusiSV.updateMultiStorageSalePrice(salePrice);
 		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(true);
-		responseHeader.setResultCode("");
-		responseHeader.setResultMessage("修改库存销售价成功");
+		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"修改库存销售价成功");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
 	}
@@ -367,11 +351,9 @@ public class IStorageSVImpl implements IStorageSV {
 		if(CollectionUtil.isEmpty(skuStorageAddList)){
 			throw new BusinessException("", "新增信息集合为空");
 		}
+		int addNum = storageBusiSV.insertSkuStorage(skuStorageAddList);
 		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader();
-		responseHeader.setIsSuccess(true);
-		responseHeader.setResultCode("");
-		responseHeader.setResultMessage("新增SKU库存信息成功(有销售属性");
+		ResponseHeader responseHeader = new ResponseHeader(addNum>0 ? true : false,ExceptCodeConstants.Special.SUCCESS,"新增SKU库存信息成功(有销售属性)");
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
 	}

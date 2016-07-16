@@ -80,7 +80,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	public int addGroup(STOStorageGroup storageGroup) {
 		// 查询标准品是否有销售属性
 		String tenantId = storageGroup.getTenantId();
-		String standedProdId = storageGroup.getProdId();
+		String standedProdId = storageGroup.getStandedProdId();
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
 		if (standedProduct == null) {
 			logger.warn("未找到对应标准品,租户ID:{},标准品标识:{}", tenantId, standedProdId);
@@ -238,10 +238,10 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	public int updateStorageGroupPrice(StorageGroupSalePrice salePrice) {
 		if (salePrice == null)
 			return 0;
-		if (salePrice.getGroupId() == null || salePrice.getOperId() == null)
-			throw new BusinessException("", "找不到指定的库存组=" + salePrice.getGroupId() + ",和操作人=" + salePrice.getOperId());
+		if (salePrice.getStorageGroupId() == null || salePrice.getOperId() == null)
+			throw new BusinessException("", "找不到指定的库存组=" + salePrice.getStorageGroupId() + ",和操作人=" + salePrice.getOperId());
 		// 判断库存是否废弃
-		if (storageGroupAtomSV.queryByGroupId(salePrice.getTenantId(), salePrice.getGroupId()).getState().equals("3"))
+		if (storageGroupAtomSV.queryByGroupId(salePrice.getTenantId(), salePrice.getStorageGroupId()).getState().equals("3"))
 			throw new BusinessException("", "废弃状态的库存组不能更新价格信息");
 		// 填充价格等基本信息
 		StorageGroup storageGroup = new StorageGroup();
@@ -375,7 +375,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 添加日志信息
 		if (storageGroupAtomSV.updateById(storageGroup) > 0) {
 			StorageGroupLog groupLog = new StorageGroupLog();
-			BeanUtils.copyProperties(groupLog, groupLog);
+			BeanUtils.copyProperties(groupLog, storageGroup);
 			storageGroupLogAtomSV.install(groupLog);
 		}
 		// 商品进行停用下架
@@ -408,7 +408,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 添加日志
 		if (storageGroupAtomSV.updateById(storageGroup) > 0) {
 			StorageGroupLog groupLog = new StorageGroupLog();
-			BeanUtils.copyProperties(groupLog, groupLog);
+			BeanUtils.copyProperties(groupLog, storageGroup);
 			storageGroupLogAtomSV.install(groupLog);
 		}
 		//搜索中删除商品数据
