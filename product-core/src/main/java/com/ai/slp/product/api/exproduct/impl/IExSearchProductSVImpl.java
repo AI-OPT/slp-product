@@ -23,6 +23,7 @@ import com.ai.slp.product.api.exproduct.param.QueryProductRequest;
 import com.ai.slp.product.api.exproduct.param.QueryProductResponse;
 import com.ai.slp.product.api.exproduct.param.SaleArea;
 import com.ai.slp.product.constants.ExproductConstants;
+import com.ai.slp.product.constants.ProductExceptCode;
 import com.ai.slp.product.exsearch.dto.ExProductSearchCriteria;
 import com.ai.slp.product.search.bo.AttrInfo;
 import com.ai.slp.product.search.bo.ProdAudiences;
@@ -165,6 +166,7 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
            ResponseHeader responseHeader = new ResponseHeader();
            responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
            responseHeader.setIsSuccess(true);
+           responseHeader.setResultMessage(ProductExceptCode.SUCCESS_INFO);
            response.setResponseHeader(responseHeader);
            return response;
     }
