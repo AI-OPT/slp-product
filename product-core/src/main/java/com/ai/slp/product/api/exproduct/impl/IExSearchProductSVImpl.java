@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.search.vo.Results;
 import com.ai.paas.ipaas.util.StringUtil;
@@ -160,6 +162,10 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
            pageinfo.setResult(results);
            pageinfo.setCount(getProductCount(request));
            response.setPageInfo(pageinfo);
+           ResponseHeader responseHeader = new ResponseHeader();
+           responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
+           responseHeader.setIsSuccess(true);
+           response.setResponseHeader(responseHeader);
            return response;
     }
     //获取查询数量
