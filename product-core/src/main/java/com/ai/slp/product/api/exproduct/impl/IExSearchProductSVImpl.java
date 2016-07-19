@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.search.vo.Results;
 import com.ai.paas.ipaas.util.StringUtil;
@@ -21,6 +23,7 @@ import com.ai.slp.product.api.exproduct.param.QueryProductRequest;
 import com.ai.slp.product.api.exproduct.param.QueryProductResponse;
 import com.ai.slp.product.api.exproduct.param.SaleArea;
 import com.ai.slp.product.constants.ExproductConstants;
+import com.ai.slp.product.constants.ProductExceptCode;
 import com.ai.slp.product.exsearch.dto.ExProductSearchCriteria;
 import com.ai.slp.product.search.bo.AttrInfo;
 import com.ai.slp.product.search.bo.ProdAudiences;
@@ -160,6 +163,11 @@ public class IExSearchProductSVImpl implements IExSearchProductSV{
            pageinfo.setResult(results);
            pageinfo.setCount(getProductCount(request));
            response.setPageInfo(pageinfo);
+           ResponseHeader responseHeader = new ResponseHeader();
+           responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
+           responseHeader.setIsSuccess(true);
+           responseHeader.setResultMessage(ProductExceptCode.SUCCESS_INFO);
+           response.setResponseHeader(responseHeader);
            return response;
     }
     //获取查询数量

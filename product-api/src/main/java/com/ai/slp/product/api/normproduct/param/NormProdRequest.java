@@ -34,12 +34,12 @@ public class NormProdRequest extends BaseInfo {
     /**
      * 标准品ID
      */
-    private String productId;
+    private String standedProdId;
 
     /**
      * 标准品名称
      */
-    private String productName;
+    private String standedProductName;
 
     /**
      * 标准品状态<br>
@@ -140,22 +140,6 @@ public class NormProdRequest extends BaseInfo {
         this.productCatId = productCatId;
     }
 
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
     public String getState() {
         return state;
     }
@@ -171,4 +155,20 @@ public class NormProdRequest extends BaseInfo {
     public void setProductType(String productType) {
         this.productType = productType;
     }
+
+	public String getStandedProdId() {
+		return standedProdId;
+	}
+
+	public void setStandedProdId(String standedProdId) {
+		this.standedProdId = standedProdId;
+	}
+
+	public String getStandedProductName() {
+		return standedProductName;
+	}
+
+	public void setStandedProductName(String standedProductName) {
+		this.standedProductName = standedProductName;
+	}
 }

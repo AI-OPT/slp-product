@@ -128,7 +128,8 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	public int insertStorage(Storage storage) {
 		if (storage == null)
 			return 0;
-		storage.setOperTime(DateUtils.currTimeStamp());
+		storage.setCreateTime(DateUtils.currTimeStamp());
+		storage.setOperTime(storage.getCreateTime());
 		storage.setStorageId(SequenceUtil.genStorageId());
 		//新增库存的状态为停用
 		storage.setState(StorageConstants.Storage.State.STOP);

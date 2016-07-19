@@ -1,10 +1,9 @@
 package com.ai.slp.product.api.exproduct.param;
 
+import java.io.Serializable;
 import java.util.List;
 
-import com.ai.opt.base.vo.BaseResponse;
-
-public class ProductDataResponse extends BaseResponse {
+public class ProductDataResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**

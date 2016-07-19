@@ -41,6 +41,10 @@ public class NormProdResponse implements Serializable {
      */
     private String productType;
     /**
+     * 类型名称
+     */
+    private String productTypeName;
+    /**
      * 市场价
      */
     private Long marketPrice;
@@ -191,4 +195,12 @@ public class NormProdResponse implements Serializable {
     public void setStorageGroupNum(int storageGroupNum) {
         this.storageGroupNum = storageGroupNum;
     }
+
+	public String getProductTypeName() {
+		return productTypeName;
+	}
+
+	public void setProductTypeName(String productTypeName) {
+		this.productTypeName = productTypeName;
+	}
 }

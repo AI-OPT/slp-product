@@ -388,6 +388,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		storage.setIsSaleAttr(isSaleAttr);
 		// 设置优先级
 		storage.setPriorityNumber(stoStorage.getPriorityNumber());
+		storage.setCreateId(stoStorage.getOperId());
 		int saveNum = storageAtomSV.insertStorage(storage);
 		if (saveNum <= 0) {
 			// 没有插入成功返回0
