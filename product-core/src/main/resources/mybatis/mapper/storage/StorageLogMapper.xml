@@ -18,6 +18,8 @@
     <result column="STATE" property="state" jdbcType="VARCHAR" />
     <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+    <result column="CREATE_ID" property="createId" jdbcType="DECIMAL" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -80,7 +82,7 @@
   <sql id="Base_Column_List" >
     LOG_ID, STORAGE_ID, ROUTE_GROUP_ID, STORAGE_GROUP_ID, PROD_ID, STORAGE_NAME, SALE_PRICE, 
     TOTAL_NUM, WARN_NUM, ACTIVE_TIME, INACTIVE_TIME, PRIORITY_NUMBER, SERIAL_NUMBER, 
-    STATE, OPER_ID, OPER_TIME
+    STATE, OPER_ID, OPER_TIME, CREATE_ID, CREATE_TIME
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageLogCriteria" >
     select
@@ -122,13 +124,15 @@
       SALE_PRICE, TOTAL_NUM, WARN_NUM, 
       ACTIVE_TIME, INACTIVE_TIME, PRIORITY_NUMBER, 
       SERIAL_NUMBER, STATE, OPER_ID, 
-      OPER_TIME)
+      OPER_TIME, CREATE_ID, CREATE_TIME
+      )
     values (#{logId,jdbcType=VARCHAR}, #{storageId,jdbcType=VARCHAR}, #{routeGroupId,jdbcType=DECIMAL}, 
       #{storageGroupId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{storageName,jdbcType=VARCHAR}, 
       #{salePrice,jdbcType=DECIMAL}, #{totalNum,jdbcType=DECIMAL}, #{warnNum,jdbcType=DECIMAL}, 
       #{activeTime,jdbcType=TIMESTAMP}, #{inactiveTime,jdbcType=TIMESTAMP}, #{priorityNumber,jdbcType=DECIMAL}, 
       #{serialNumber,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, 
-      #{operTime,jdbcType=TIMESTAMP})
+      #{operTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageLog" >
     insert into storage_log
@@ -181,6 +185,12 @@
       <if test="operTime != null" >
         OPER_TIME,
       </if>
+      <if test="createId != null" >
+        CREATE_ID,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="logId != null" >
@@ -230,6 +240,12 @@
       </if>
       <if test="operTime != null" >
         #{operTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -290,6 +306,12 @@
       <if test="record.operTime != null" >
         OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.createId != null" >
+        CREATE_ID = #{record.createId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -312,7 +334,9 @@
       SERIAL_NUMBER = #{record.serialNumber,jdbcType=DECIMAL},
       STATE = #{record.state,jdbcType=VARCHAR},
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
-      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      CREATE_ID = #{record.createId,jdbcType=DECIMAL},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -365,6 +389,12 @@
       <if test="operTime != null" >
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="createId != null" >
+        CREATE_ID = #{createId,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
@@ -384,7 +414,9 @@
       SERIAL_NUMBER = #{serialNumber,jdbcType=DECIMAL},
       STATE = #{state,jdbcType=VARCHAR},
       OPER_ID = #{operId,jdbcType=DECIMAL},
-      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      CREATE_ID = #{createId,jdbcType=DECIMAL},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
 </mapper>

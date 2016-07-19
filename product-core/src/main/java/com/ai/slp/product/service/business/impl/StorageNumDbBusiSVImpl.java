@@ -71,16 +71,6 @@ public class StorageNumDbBusiSVImpl {
             if (skuStorage ==null)
                 continue;
             skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
-            /* 取消SKU库存的自动启用和自动停用状态,SKU的状态依赖与库存的状态
-            //若SKU库存小于等于零,且状态不为"废弃",则设置为"自动停用
-            if (skuStorage.getUsableNum()<=0
-                    && !StorageConstants.SkuStorage.State.AUTO_DISCARD.equals(skuStorage.getState())){
-                skuStorage.setState(StorageConstants.SkuStorage.State.AUTO_STOP);
-            //若SKU库存大于零,且状态为"自动停用",则设置为"启用".
-            } else if (skuStorage.getUsableNum()>0
-                    && StorageConstants.SkuStorage.State.AUTO_STOP.equals(skuStorage.getState())){
-                skuStorage.setState(StorageConstants.SkuStorage.State.ACTIVE);
-            }*/
             skuStorageAtomSV.updateById(skuStorage);
 
             //更新库存信息

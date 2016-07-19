@@ -35,6 +35,10 @@ public class StorageLog {
 
     private Timestamp operTime;
 
+    private Long createId;
+
+    private Timestamp createTime;
+
     public String getLogId() {
         return logId;
     }
@@ -161,5 +165,21 @@ public class StorageLog {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
     }
 }
