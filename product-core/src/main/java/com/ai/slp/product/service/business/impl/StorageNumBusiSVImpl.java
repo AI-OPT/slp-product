@@ -168,6 +168,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         numRes.setSkuId(skuId);
         numRes.setSkuName(product.getProdName());
         numRes.setSalePrice(salePrice);
+        numRes.setBasicOrgId(product.getBasicOrgId());
         numRes.setStorageNum(getSkuNumSource(cacheClient,skuStoragekey,new Double(skuNum)));
         //变更数据库信息
         numDbBusiSV.storageNumChange(tenantId,skuId,numRes.getStorageNum(),true,priorityUsableNum<1?true:false);
@@ -203,7 +204,8 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
                         ,skuStorageId,skuStorage.getStorageId());
                 continue;
             }
-            String groupId = storage.getStorageGroupId(),serial = storage.getSerialNumber().toString();
+            String groupId = storage.getStorageGroupId(),
+                    serial = storage.getSerialNumber().toString();
             //2. 回退缓存中库存所用量
             //2.1 回退优先级中,SKU可用量
             String skuUsableKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,serial);

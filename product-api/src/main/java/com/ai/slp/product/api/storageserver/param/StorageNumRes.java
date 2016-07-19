@@ -60,6 +60,11 @@ public class StorageNumRes extends BaseResponse {
      */
     private String unit;
     /**
+     * 运营商标识<br>
+     * 10：中国移动; 11：中国电信; 12：中国联通
+     */
+    private String basicOrgId;
+    /**
      * 使用数量库存组成,K:SKU库存标识;V:库存提供量
      */
     private Map<String,Integer> storageNum;
@@ -158,5 +163,13 @@ public class StorageNumRes extends BaseResponse {
 
     public void setProductCatId(String productCatId) {
         this.productCatId = productCatId;
+    }
+
+    public String getBasicOrgId() {
+        return basicOrgId;
+    }
+
+    public void setBasicOrgId(String basicOrgId) {
+        this.basicOrgId = basicOrgId;
     }
 }
