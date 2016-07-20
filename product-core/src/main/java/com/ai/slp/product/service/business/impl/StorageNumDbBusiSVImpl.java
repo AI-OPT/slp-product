@@ -18,6 +18,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.util.IPassUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,18 @@ public class StorageNumDbBusiSVImpl {
             String tenantId,String skuId,Map<String,Integer> skuNumMap, boolean isUser, boolean priorityChange) {
         if (skuNumMap==null || skuNumMap.isEmpty())
             return;
+        ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
+        logger.info("tenantId={},skuId={},isUser={},priorityChange={}",tenantId,skuId,isUser,priorityChange);
+        Product product = null;
+        if (prodSku!=null){
+            product = productAtomSV.selectByProductId(tenantId,prodSku.getProdId());
+            logger.info("\r\nthe product[{}] is {} null,status is [{}]",
+                    prodSku.getProdId(),product==null?"":"not",product==null?"null":product.getState());
+        }
+        Short priorityNum = null;
+        Short userPriority = product==null?null:queryPriorityNumOfGroup(tenantId,product.getStorageGroupId());
+        logger.info("\r\nThe product priority num is [{}]",priorityNum);
+        List<Storage> autoActiveStoList = new ArrayList<>();
         Iterator<String> iterator = skuNumMap.keySet().iterator();
         while (iterator.hasNext()){
             String skuStorageId = iterator.next();
@@ -72,12 +85,19 @@ public class StorageNumDbBusiSVImpl {
                 continue;
             skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
             skuStorageAtomSV.updateById(skuStorage);
+            //若未更新任何SKU库存,或sku库存不是"启用",则不进行处理
+            if (skuStorageAtomSV.updateById(skuStorage)<1
+                    ||!StorageConstants.SkuStorage.State.ACTIVE.equals(skuStorage.getState())){
+                continue;
+            }
 
             //更新库存信息
             Storage storage = storageAtomSV.queryById(skuStorage.getStorageId());
             if (storage==null)
                 continue;
+            logger.info("\r\nThe usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
             storage.setUsableNum(storage.getUsableNum()+skuNum);
+            logger.info("\r\nNow,the usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
             //若库存小于等于零,且状态不为"废弃",则状态变更为"自动停用"
             if (storage.getUsableNum()<1
                     && !StorageConstants.Storage.State.DISCARD.equals(storage.getState())
@@ -85,17 +105,45 @@ public class StorageNumDbBusiSVImpl {
                 storage.setState(StorageConstants.Storage.State.AUTO_STOP);
             }
 
+            //回退,且商品"售罄下架"
+            if (!isUser && ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
+                if (priorityNum == null || priorityNum > storage.getPriorityNumber() ) {
+                    priorityNum = storage.getPriorityNumber();
+                    autoActiveStoList.clear();
+                }
+                if (storage.getPriorityNumber().equals(priorityNum))
+                    autoActiveStoList.add(storage);
+            }//若为回退,且当前优先级与库存优先级一致
+            else if(!isUser && userPriority.equals(storage.getPriorityNumber())){
+                storage.setState(StorageConstants.Storage.State.AUTO_ACTIVE);
+                logger.info("\r\nthe state of storage[{}] change to {}.",storage.getStorageId(),storage.getState());
+            }
+
+            if (storageAtomSV.updateById(storage)>0){
+                StorageLog storageLog = new StorageLog();
+                BeanUtils.copyProperties(storageLog,storage);
+                storageLogAtomSV.installLog(storageLog);
+            }
+
+        }
+
+        //若库存不为空,则设置为自动启动
+        logger.info("\r\nthe auto active storage size is {}",autoActiveStoList.size());
+        for (int i=0;!isUser && i<autoActiveStoList.size();i++){
+            Storage storage = autoActiveStoList.get(i);
+            storage.setState(StorageConstants.Storage.State.AUTO_ACTIVE);
+            logger.info("\r\nthe state of storage[{}] change to {}.",storage.getStorageId(),storage.getState());
             if (storageAtomSV.updateById(storage)>0){
                 StorageLog storageLog = new StorageLog();
                 BeanUtils.copyProperties(storageLog,storage);
                 storageLogAtomSV.installLog(storageLog);
             }
         }
-        ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
-        Product product = prodSku==null?null:productAtomSV.selectByProductId(tenantId,prodSku.getProdId());
+
         //若为回退,且为售罄下架,则需要进行上架处理
         if (!isUser && product!=null
                 && ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
+
             productBusiSV.changeToSaleForStop(tenantId,prodSku.getProdId(),null);
 
         }
@@ -263,5 +311,35 @@ public class StorageNumDbBusiSVImpl {
             cacheClient.expireAt(priorityUsableKey,expireTime);
         }
         logger.info("===设置相关缓存的指定失效时间(结束)");
+    }
+
+    /**
+     * 查询商品当前使用且有效(非促销)优先级
+     * 有效:库存组不为废弃,优先级可用量大于零
+     *
+     * @param tenantId
+     * @param groupId
+     * @return null:库存组不存在/停用/废弃.
+     */
+    private Short queryPriorityNumOfGroup(String tenantId, String groupId) {
+        ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+        //获取库存组的cacheKey
+        String groupKey = IPassUtils.genMcsStorageGroupKey(tenantId,groupId);
+        //库存组状态
+        String status = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE);
+        //使用当前优先级
+        String priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
+        //优先级中库存可用量对应KEY
+        String priorityUsableKey = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
+        //优先级库存可用量
+        String usableNumStr = cacheClient.get(priorityUsableKey);
+        long usableNum = StringUtils.isNotBlank(usableNumStr)?Long.parseLong(usableNumStr):0;
+        Short priorityNum = null;
+        if (!StorageConstants.Storage.State.DISCARD.equals(status)
+                && !StorageConstants.Storage.State.AUTO_DISCARD.equals(status)
+                && usableNum>0){
+            priorityNum = new Short(priority);
+        }
+        return priorityNum;
     }
 }

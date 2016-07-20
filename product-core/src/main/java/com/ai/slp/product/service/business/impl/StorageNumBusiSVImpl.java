@@ -272,8 +272,6 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             //使用库存组指定优先级
             priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
             priceKey = IPassUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority);
-            //库存组当前优先级库存可用量
-            priorityUsable = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
         }
         //获取当前优先级中SKU的销售价
         long salePrice = Long.parseLong(cacheClient.hget(priceKey,skuId));

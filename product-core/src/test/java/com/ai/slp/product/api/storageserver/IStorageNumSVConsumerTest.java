@@ -22,10 +22,14 @@ public class IStorageNumSVConsumerTest {
         IStorageNumSV storageNumSV = DubboConsumerFactory.getService(IStorageNumSV.class);
         StorageNumUserReq userReq = new StorageNumUserReq();
         userReq.setTenantId("SLP");
-        userReq.setSkuId("1000000000002534");
+        userReq.setSkuId("1000000000002405");
         userReq.setSkuNum(1);
         StorageNumRes numRes = storageNumSV.useStorageNum(userReq);
         System.out.println(numRes.toString());
+        Map<String,Integer> skuMap = numRes.getStorageNum();
+        for (Map.Entry<String,Integer> skuNum:skuMap.entrySet()){
+            System.out.println("Sku storage="+skuNum.getKey()+",num="+skuNum.getValue());
+        }
     }
 
     @Test
@@ -33,9 +37,9 @@ public class IStorageNumSVConsumerTest {
         IStorageNumSV storageNumSV = DubboConsumerFactory.getService(IStorageNumSV.class);
         StorageNumBackReq backReq = new StorageNumBackReq();
         backReq.setTenantId("SLP");
-        backReq.setSkuId("1000000000002534");
+        backReq.setSkuId("1000000000002405");
         Map<String,Integer> userMap = new HashMap<>();
-        userMap.put("100000100134",1);
+        userMap.put("100000100005",1);
         backReq.setStorageNum(userMap);
         BaseResponse baseResponse = storageNumSV.backStorageNum(backReq);
         ResponseHeader header = baseResponse.getResponseHeader();
