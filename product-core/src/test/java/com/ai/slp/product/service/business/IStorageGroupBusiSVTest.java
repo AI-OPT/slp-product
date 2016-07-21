@@ -5,7 +5,7 @@ import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
-import com.ai.slp.product.util.IPassStorageUtils;
+import com.ai.slp.product.util.IPaasStorageUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +34,10 @@ public class IStorageGroupBusiSVTest {
 
     @Test
     public void cacheTest(){
-        ICacheClient cacheClient = IPassStorageUtils.getClient();
+        ICacheClient cacheClient = IPaasStorageUtils.getClient();
         String tenantId = CommonConstants.COMMON_TENANT_ID,groupId = "100000000001";
         //获取库存组的cacheKey
-        String groupKey = IPassStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
+        String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
         Map<String,String> valMap = cacheClient.hgetAll(groupKey);
         System.out.println(valMap.size());
     }

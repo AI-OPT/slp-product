@@ -16,7 +16,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.util.IPassStorageUtils;
+import com.ai.slp.product.util.IPaasStorageUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,9 +160,9 @@ public class StorageNumDbBusiSVImpl {
      */
     public void changeGroupPriority(String tenantId,String groupId,String productId){
         // 获取缓存客户端
-        ICacheClient cacheClient = IPassStorageUtils.getClient();
+        ICacheClient cacheClient = IPaasStorageUtils.getClient();
         // 获取库存组的cacheKey
-        String groupKey = IPassStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
+        String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
         // 查询当前非促销优先级
         String serial = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
         // 查询当前非促销优先级之后,非促销,非废弃,可用量大于零的优先级
@@ -207,15 +207,15 @@ public class StorageNumDbBusiSVImpl {
         //若当前优先级不存在非废弃的库存,则直接返回.
         if (CollectionUtil.isEmpty(storageList))
             return;
-        ICacheClient cacheClient = IPassStorageUtils.getClient();
+        ICacheClient cacheClient = IPaasStorageUtils.getClient();
 
         List<String> stopList = new ArrayList<>();
         stopList.add(StorageConstants.Storage.State.STOP);
         stopList.add(StorageConstants.Storage.State.AUTO_STOP);
         //(C)
-        String skuUsableKey = IPassStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
+        String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
         //优先级总可用量(F)
-        String priorityUsableKey = IPassStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
+        String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
         //将优先级的库存量初始化为零
         cacheClient.set(priorityUsableKey,new Long(0).toString());
         //该优先级下,sku可用量已经做过初始化的SKU标识
@@ -243,7 +243,7 @@ public class StorageNumDbBusiSVImpl {
                     cacheClient.hset(skuUsableKey,skuStorage.getSkuId(),new Long(0).toString());
                 }
                 //设置SKU库存
-                String skuStorageKey = IPassStorageUtils.genMcsSkuStorageUsableKey(
+                String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(
                         tenantId,groupId,priority.toString(),skuStorage.getSkuId());
                 cacheClient.zadd(skuStorageKey,skuStorage.getUsableNum(),skuStorage.getSkuStorageId());
                 //设置SKU库存可用量
@@ -263,7 +263,7 @@ public class StorageNumDbBusiSVImpl {
      */
     public void initCacheKey(String tenantId,Short priority,Storage storage){
         logger.info("===设置相关缓存的指定失效时间(开始)");
-        ICacheClient cacheClient = IPassStorageUtils.getClient();
+        ICacheClient cacheClient = IPaasStorageUtils.getClient();
         String groupId = storage.getStorageGroupId();
         //查询库存下SKU库存
         List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storage.getStorageId());
@@ -279,12 +279,12 @@ public class StorageNumDbBusiSVImpl {
         //若存在开始时间,则添加优先级开始时间
         if (activeTime!=null){
             //(D)
-            String startPriceKey = IPassStorageUtils.genMcsGroupSerialStartTimeKey(tenantId,groupId);
+            String startPriceKey = IPaasStorageUtils.genMcsGroupSerialStartTimeKey(tenantId,groupId);
             cacheClient.zadd(startPriceKey,new Double(activeTime.getTime()).doubleValue(),priority.toString());
         }
 
         //(B)
-        String serialPriceKey = IPassStorageUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority.toString());
+        String serialPriceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority.toString());
         //设置优先级下SKU价格
         for (SkuStorage skuStorage:skuStorageList){
             //设置SKU价格
@@ -292,7 +292,7 @@ public class StorageNumDbBusiSVImpl {
             //设置SKU库存失效时间
             if (inActiveTime!=null){
                 //设置SKU库存(E)
-                String skuStorageKey = IPassStorageUtils.genMcsSkuStorageUsableKey(
+                String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(
                         tenantId,groupId,priority.toString(),skuStorage.getSkuId());
                 cacheClient.expireAt(skuStorageKey,expireTime);
             }
@@ -303,10 +303,10 @@ public class StorageNumDbBusiSVImpl {
             //(B) 用来判断是否过期,不需要延长
             cacheClient.expireAt(serialPriceKey, inActiveTime.getTime()/1000);
             //优先级中SKU库存量(C)
-            String skuUsableKey = IPassStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
+            String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
             cacheClient.expireAt(skuUsableKey,expireTime);
             //优先级总可用量(F)
-            String priorityUsableKey = IPassStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
+            String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
             cacheClient.expireAt(priorityUsableKey,expireTime);
         }
         logger.info("===设置相关缓存的指定失效时间(结束)");
@@ -321,15 +321,15 @@ public class StorageNumDbBusiSVImpl {
      * @return null:库存组不存在/停用/废弃.
      */
     private Short queryPriorityNumOfGroup(String tenantId, String groupId) {
-        ICacheClient cacheClient = IPassStorageUtils.getClient();
+        ICacheClient cacheClient = IPaasStorageUtils.getClient();
         //获取库存组的cacheKey
-        String groupKey = IPassStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
+        String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
         //库存组状态
         String status = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE);
         //使用当前优先级
         String priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
         //优先级中库存可用量对应KEY
-        String priorityUsableKey = IPassStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
+        String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
         //优先级库存可用量
         String usableNumStr = cacheClient.get(priorityUsableKey);
         long usableNum = StringUtils.isNotBlank(usableNumStr)?Long.parseLong(usableNumStr):0;
