@@ -1,5 +1,6 @@
 package com.ai.slp.product.cache;
 
+import com.ai.slp.product.cache.storage.StorageCache;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

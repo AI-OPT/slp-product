@@ -22,7 +22,7 @@ public class IStorageNumSVConsumerTest {
         IStorageNumSV storageNumSV = DubboConsumerFactory.getService(IStorageNumSV.class);
         StorageNumUserReq userReq = new StorageNumUserReq();
         userReq.setTenantId("SLP");
-        userReq.setSkuId("1000000000002405");
+        userReq.setSkuId("1000000000002409");
         userReq.setSkuNum(1);
         StorageNumRes numRes = storageNumSV.useStorageNum(userReq);
         System.out.println(numRes.toString());
@@ -37,9 +37,9 @@ public class IStorageNumSVConsumerTest {
         IStorageNumSV storageNumSV = DubboConsumerFactory.getService(IStorageNumSV.class);
         StorageNumBackReq backReq = new StorageNumBackReq();
         backReq.setTenantId("SLP");
-        backReq.setSkuId("1000000000002405");
+        backReq.setSkuId("1000000000002409");
         Map<String,Integer> userMap = new HashMap<>();
-        userMap.put("100000100005",1);
+        userMap.put("100000100009",1);
         backReq.setStorageNum(userMap);
         BaseResponse baseResponse = storageNumSV.backStorageNum(backReq);
         ResponseHeader header = baseResponse.getResponseHeader();

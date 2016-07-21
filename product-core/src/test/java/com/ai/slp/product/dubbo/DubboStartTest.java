@@ -17,6 +17,7 @@ public class DubboStartTest {
     public void test1(){
         int num = 9;
         System.out.println(num+":"+(-num));
+        System.out.println((byte)'a');
     }
 
     @Test
