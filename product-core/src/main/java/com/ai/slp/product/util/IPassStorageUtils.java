@@ -1,16 +1,29 @@
 package com.ai.slp.product.util;
 
+import com.ai.opt.sdk.components.mcs.MCSClientFactory;
+import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.slp.product.constants.IPassConstants;
 import com.ai.slp.product.constants.StorageConstants;
 
 /**
  * ipass的工具类
  * Created by jackieliu on 16/5/25.
  */
-public class IPassUtils {
+public final class IPassStorageUtils {
+
     /**
      * 缓存key分割符
      */
     private static final String CACHE_KEY_SEPARATE = ":";
+
+    /**
+     * 获取库存缓存客户端
+     * @return
+     */
+    public static ICacheClient getClient(){
+        return MCSClientFactory.getCacheClient(IPassConstants.McsParams.STORAGE_MCS);
+    }
+
     /**
      * 获取缓存中group的key(A)
      * @param tenantId

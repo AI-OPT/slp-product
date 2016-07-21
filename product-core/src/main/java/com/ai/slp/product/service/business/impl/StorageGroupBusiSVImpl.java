@@ -2,7 +2,6 @@ package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
@@ -23,7 +22,7 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
-import com.ai.slp.product.util.IPassUtils;
+import com.ai.slp.product.util.IPassStorageUtils;
 import com.ai.slp.route.api.routequery.interfaces.IRouteQuerySV;
 import com.ai.slp.route.api.routequery.param.RouteGroupQueryResult;
 import org.apache.commons.lang.StringUtils;
@@ -463,9 +462,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		if (storageGroup==null)
 			return;
 		String tenantId = storageGroup.getTenantId(),groupId = storageGroup.getStorageGroupId();
-		ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+		ICacheClient cacheClient = IPassStorageUtils.getClient();
 		//获取库存组的cacheKey
-		String groupKey = IPassUtils.genMcsStorageGroupKey(tenantId,groupId);
+		String groupKey = IPassStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
 		//设置库存组状态
 		cacheClient.hset(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE,storageGroup.getState());
 		logger.info("库存组当前状态:{}",storageGroup.getState());
@@ -510,9 +509,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 */
 	private void cleanStorageCache(String tenantId,String groupId,String priority){
 		//将对应的c,e,f库存使用量设置为零
-		ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+		ICacheClient cacheClient = IPassStorageUtils.getClient();
 		//c 利用HINCRBY的特性,会将没有的field设置为零,然后进行处理
-		String usableNumKey = IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
+		String usableNumKey = IPassStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
 		Map<String,String> usableNumMap = cacheClient.hgetAll(usableNumKey);
 		if (usableNumMap!=null && usableNumMap.size()>0) {
 			String[] mapKey = new String[usableNumMap.size()];
@@ -521,7 +520,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		}
 		//e 的数量先不做处理
 		//f 将优先级库存可用量设置为零
-		String priorityUsableKey = IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
+		String priorityUsableKey = IPassStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
 		cacheClient.set(priorityUsableKey,new Long(0).toString());
 	}
 
@@ -531,13 +530,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	private void cleanTimeStorageCache(String tenantId,String groupId,List<Storage> storageList){
 		if (CollectionUtil.isEmpty(storageList))
 			return;
-		ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+		ICacheClient cacheClient = IPassStorageUtils.getClient();
 		List<String> cKeyList = new ArrayList<>();
 		List<String> fKeyList = new ArrayList<>();
 		for (Storage storage:storageList){
 			String priority = storage.getPriorityNumber().toString();
-			cKeyList.add(IPassUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority));
-			fKeyList.add(IPassUtils.genMcsPriorityUsableKey(tenantId,groupId,priority));
+			cKeyList.add(IPassStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority));
+			fKeyList.add(IPassStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority));
 		}
 		if (!CollectionUtil.isEmpty(cKeyList))
 			cacheClient.del(cKeyList.toArray(new String[cKeyList.size()]));
