@@ -196,6 +196,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     public PageInfoResponse<NormProdResponse> queryForPage(NormProdRequest productRequest) {
         StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
         BeanUtils.copyProperties(pageQueryVo, productRequest);
+        pageQueryVo.setProductId(productRequest.getStandedProdId());
+        pageQueryVo.setProductName(productRequest.getStandedProductName());
         // 查询结果
         PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
         // 接口输出接口
@@ -440,6 +442,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             NormProdRequest productRequest) {
         StandedProdPageQueryVo standedProdPageQueryVo = new StandedProdPageQueryVo();
         BeanUtils.copyProperties(standedProdPageQueryVo, productRequest);
+        standedProdPageQueryVo.setProductId(productRequest.getStandedProdId());
+        standedProdPageQueryVo.setProductName(productRequest.getStandedProductName());
         // 获取分页查询的标准品信息
         PageInfo<StandedProduct> standedProductPage = standedProductAtomSV
                 .queryForPage(standedProdPageQueryVo);

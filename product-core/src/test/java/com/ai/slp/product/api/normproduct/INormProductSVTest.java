@@ -28,7 +28,7 @@ public class INormProductSVTest {
     public void queryNormProductTest(){
         NormProdRequest infoQuery = new NormProdRequest();
         infoQuery.setTenantId(CommonConstants.COMMON_TENANT_ID);
-        infoQuery.setProductId("100000000100");
+        //infoQuery.setProductId("100000000100");
         PageInfoResponse<NormProdResponse> productInfo = normProductSV.queryNormProduct(infoQuery);
         System.out.println(productInfo.toString());
     }
