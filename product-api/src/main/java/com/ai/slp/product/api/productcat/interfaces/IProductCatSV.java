@@ -192,7 +192,7 @@ public interface IProductCatSV {
 	 * @RestRelativeURL productCat/catByType
 	 */
 	@POST
-	@Path("/catByType")
+	@Path("/catAttrByType")
 	public Map<ProdCatAttrDef,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
 			throws BusinessException,SystemException;
 	@interface QueryAttrByCatAndType{}
