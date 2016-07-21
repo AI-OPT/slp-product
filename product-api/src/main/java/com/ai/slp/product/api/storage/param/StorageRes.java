@@ -49,7 +49,10 @@ public class StorageRes extends BaseResponse {
      * 库存状态
      */
     private String state;
-
+    /**
+     * 状态名称
+     */
+    private String stateName;
     /**
      * 生效时间
      */
@@ -171,4 +174,12 @@ public class StorageRes extends BaseResponse {
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
+
+	public String getStateName() {
+		return stateName;
+	}
+
+	public void setStateName(String stateName) {
+		this.stateName = stateName;
+	}
 }

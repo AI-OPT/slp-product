@@ -65,6 +65,10 @@ public class StorageGroupRes extends BaseResponse {
      */
     private String state;
     /**
+     * 状态名称
+     */
+    private String stateName;
+    /**
      * 创建者ID
      */
     private Long createId;
@@ -208,4 +212,12 @@ public class StorageGroupRes extends BaseResponse {
     public void setIsSaleAttr(String isSaleAttr) {
         this.isSaleAttr = isSaleAttr;
     }
+
+	public String getStateName() {
+		return stateName;
+	}
+
+	public void setStateName(String stateName) {
+		this.stateName = stateName;
+	}
 }
