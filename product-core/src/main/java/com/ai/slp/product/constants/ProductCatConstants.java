@@ -7,6 +7,21 @@ package com.ai.slp.product.constants;
  */
 public final class ProductCatConstants {
 
+    public final class McsParam{
+        /**
+         * 缓存类目详细信息前缀
+         */
+        public static final String CAT_INFO_TAG = "PROD_CAT_INFO";
+        /**
+         * 缓存类目级别信息前缀
+         */
+        public static final String CAT_LEVEL_TAG = "PROD_CAT_LEVEL";
+        /**
+         * 缓存类目子类目信息前缀
+         */
+        public static final String CAT_CHILD_TAG = "PROD_CAT_CHILD";
+    }
+
     public final class ProductCat{
         public final class IsChild{
             /**
