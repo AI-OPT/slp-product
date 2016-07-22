@@ -1,13 +1,11 @@
 package com.ai.slp.product.service.business;
 
-import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.slp.product.constants.CommonConstants;
-import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
-import com.ai.slp.product.util.IPassUtils;
+import com.ai.slp.product.util.IPaasStorageUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +28,16 @@ public class IStorageGroupBusiSVTest {
     @Test
     public void flushStorageCacheTest(){
         StorageGroup storageGroup = groupAtomSV.queryByGroupId(
-                CommonConstants.COMMON_TENANT_ID, "100000000005");
+                CommonConstants.COMMON_TENANT_ID, "100000000009");
         groupBusiSV.flushStorageCache(storageGroup);
     }
 
     @Test
     public void cacheTest(){
-        ICacheClient cacheClient = MCSClientFactory.getCacheClient(StorageConstants.IPass.McsParams.STORAGE_MCS);
+        ICacheClient cacheClient = IPaasStorageUtils.getClient();
         String tenantId = CommonConstants.COMMON_TENANT_ID,groupId = "100000000001";
         //获取库存组的cacheKey
-        String groupKey = IPassUtils.genMcsStorageGroupKey(tenantId,groupId);
+        String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
         Map<String,String> valMap = cacheClient.hgetAll(groupKey);
         System.out.println(valMap.size());
     }

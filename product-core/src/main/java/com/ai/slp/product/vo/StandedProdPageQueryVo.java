@@ -1,5 +1,6 @@
 package com.ai.slp.product.vo;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -58,21 +59,21 @@ public class StandedProdPageQueryVo {
     /**
      * 创建时间范围的开始时间
      */
-    private Date createStartTime;
+    private Timestamp createStartTime;
 
     /**
      * 创建时间范围的截止时间
      */
-    private Date createEndTime;
+    private Timestamp createEndTime;
 
     /**
      * 操作/废弃时间范围的开始时间
      */
-    private Date operStartTime;
+    private Timestamp operStartTime;
     /**
      * 操作/废弃时间范围的截止时间
      */
-    private Date operEndTime;
+    private Timestamp operEndTime;
 
     public Integer getPageNo() {
         return pageNo;
@@ -146,35 +147,37 @@ public class StandedProdPageQueryVo {
         this.operId = operId;
     }
 
-    public Date getCreateStartTime() {
-        return createStartTime;
-    }
+	public Timestamp getCreateStartTime() {
+		return createStartTime;
+	}
 
-    public void setCreateStartTime(Date createStartTime) {
-        this.createStartTime = createStartTime;
-    }
+	public void setCreateStartTime(Timestamp createStartTime) {
+		this.createStartTime = createStartTime;
+	}
 
-    public Date getCreateEndTime() {
-        return createEndTime;
-    }
+	public Timestamp getCreateEndTime() {
+		return createEndTime;
+	}
 
-    public void setCreateEndTime(Date createEndTime) {
-        this.createEndTime = createEndTime;
-    }
+	public void setCreateEndTime(Timestamp createEndTime) {
+		this.createEndTime = createEndTime;
+	}
 
-    public Date getOperStartTime() {
-        return operStartTime;
-    }
+	public Timestamp getOperStartTime() {
+		return operStartTime;
+	}
 
-    public void setOperStartTime(Date operStartTime) {
-        this.operStartTime = operStartTime;
-    }
+	public void setOperStartTime(Timestamp operStartTime) {
+		this.operStartTime = operStartTime;
+	}
 
-    public Date getOperEndTime() {
-        return operEndTime;
-    }
+	public Timestamp getOperEndTime() {
+		return operEndTime;
+	}
 
-    public void setOperEndTime(Date operEndTime) {
-        this.operEndTime = operEndTime;
-    }
+	public void setOperEndTime(Timestamp operEndTime) {
+		this.operEndTime = operEndTime;
+	}
+
+    
 }

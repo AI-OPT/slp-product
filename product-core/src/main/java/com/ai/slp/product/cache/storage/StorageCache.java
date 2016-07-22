@@ -1,4 +1,4 @@
-package com.ai.slp.product.cache;
+package com.ai.slp.product.cache.storage;
 
 import com.ai.opt.sdk.cache.base.AbstractCache;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
