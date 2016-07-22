@@ -7,12 +7,14 @@ import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.ProductCatCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProductCatMapper;
+import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.util.CharUtils;
 import com.ai.slp.product.util.IPaasCatUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -28,6 +30,8 @@ public class ProdCatCache extends AbstractCache {
     private static Logger logger = LoggerFactory.getLogger(ProdCatCache.class);
     @Autowired
     ProductCatMapper productCatMapper;
+    @Autowired
+    IProdCatDefAtomSV catDefAtomSV;
 
     @Override
     public void write() throws Exception {
@@ -46,22 +50,47 @@ public class ProdCatCache extends AbstractCache {
                 tenantIdSet.add(tenantId);
                 clearCacheOfTenant(tenantId);
             }
-            logger.info("Flush cat[{}:{}] cache.",tenantId,cat.getProductCatId());
-            //A
-            cacheClient.hset(IPaasCatUtils.genMcsCatInfoKey(tenantId),
-                    cat.getProductCatId(), JSonUtil.toJSon(cat));
-            //B
-            cacheClient.zadd(IPaasCatUtils.genMcsCatLevelKey(tenantId),
-                    cat.getCatLevel(),cat.getProductCatId());
-            //C
-            String parentCatId = cat.getParentProductCatId();
-            if (StringUtils.isNotBlank(parentCatId)){
-                String parentKey = IPaasCatUtils.genMcsCatChildKey(tenantId,cat.getProductCatId());
-                cacheClient.zadd(parentKey, CharUtils.charToLowAscii(cat.getFirstLetter()),cat.getProductCatId());
-                //D
-                cacheClient.sadd(IPaasCatUtils.genMcsCatParentKey(tenantId),parentKey);
-            }
+            flushCatInfo(cacheClient,cat);
+        }
+        logger.info("Flush cat cache is end!");
+    }
 
+    /**
+     * 刷新单个
+     * @param tenantId
+     * @param catId
+     */
+    @Async
+    public void flushCatInfo(String tenantId,String catId){
+        //查询类目信息
+        ProductCat cat = catDefAtomSV.selectById(tenantId,catId);
+        //刷新缓存
+        if (cat!=null)
+            flushCatInfo(IPaasCatUtils.getCacheClient(),cat);
+    }
+
+    /**
+     * 刷新单个类目缓存
+     *
+     * @param cacheClient
+     * @param cat
+     */
+    private void flushCatInfo(ICacheClient cacheClient,ProductCat cat){
+        String tenantId = cat.getTenantId();
+        logger.info("Flush cat[{}:{}] cache.",tenantId,cat.getProductCatId());
+        //A
+        cacheClient.hset(IPaasCatUtils.genMcsCatInfoKey(tenantId),
+                cat.getProductCatId(), JSonUtil.toJSon(cat));
+        //B
+        cacheClient.zadd(IPaasCatUtils.genMcsCatLevelKey(tenantId),
+                cat.getCatLevel(),cat.getProductCatId());
+        //C
+        String parentCatId = cat.getParentProductCatId();
+        if (StringUtils.isNotBlank(parentCatId)){
+            String parentKey = IPaasCatUtils.genMcsCatChildKey(tenantId,cat.getProductCatId());
+            cacheClient.zadd(parentKey, CharUtils.charToLowAscii(cat.getFirstLetter()),cat.getProductCatId());
+            //D
+            cacheClient.sadd(IPaasCatUtils.genMcsCatParentKey(tenantId),parentKey);
         }
     }
 
