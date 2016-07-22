@@ -8,6 +8,14 @@ public final class ErrorCodeConstants {
      * 租户标识为空
      */
     public static final String TENANT_ID_NULL = "1000";
+
+    public final class ProductCat{
+        /**
+         * 类目不存在
+         */
+        public static final String CAT_NO_EXIST = "1006";
+    }
+
     public final class Product{
         /**
          * sku不存在,或无效

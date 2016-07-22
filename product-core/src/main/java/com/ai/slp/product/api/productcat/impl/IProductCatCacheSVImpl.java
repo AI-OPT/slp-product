@@ -3,10 +3,18 @@ package com.ai.slp.product.api.productcat.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseListResponse;
+import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatCacheSV;
 import com.ai.slp.product.api.productcat.param.ProductCatInfo;
 import com.ai.slp.product.api.productcat.param.ProductCatUniqueReq;
+import com.ai.slp.product.constants.ErrorCodeConstants;
+import com.ai.slp.product.service.business.interfaces.IProductCatQueryBusiSV;
+import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,6 +23,9 @@ import org.springframework.stereotype.Component;
 @Service
 @Component
 public class IProductCatCacheSVImpl implements IProductCatCacheSV {
+    private static Logger logger = LoggerFactory.getLogger(IProductCatCacheSVImpl.class);
+    @Autowired
+    IProductCatQueryBusiSV productCatQueryBusiSV;
     /**
      * 查询指定标识的类目信息
      *
@@ -28,7 +39,12 @@ public class IProductCatCacheSVImpl implements IProductCatCacheSV {
      */
     @Override
     public ProductCatInfo queryByCatId(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
-        return null;
+        String tenantId= catUniqueReq.getTenantId(),
+                catId = catUniqueReq.getProductCatId();
+        CommonCheckUtils.checkTenantId(tenantId,ErrorCodeConstants.TENANT_ID_NULL);
+        ProductCatInfo catInfo = productCatQueryBusiSV.queryById(tenantId,catId);
+        catInfo.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "OK"));
+        return catInfo;
     }
 
     /**
