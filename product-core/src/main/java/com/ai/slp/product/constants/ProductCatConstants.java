@@ -20,6 +20,10 @@ public final class ProductCatConstants {
          * 缓存类目子类目信息前缀
          */
         public static final String CAT_CHILD_TAG = "PROD_CAT_CHILD";
+        /**
+         * 缓存中具有子类目的父类目的信息前缀
+         */
+        public static final String CAT_PARENT_TAG = "PROD_CAT_PARENT";
     }
 
     public final class ProductCat{
