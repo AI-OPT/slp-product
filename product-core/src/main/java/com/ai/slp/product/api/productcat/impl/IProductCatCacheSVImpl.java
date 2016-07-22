@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Created by jackieliu on 16/7/21.
  */
@@ -60,7 +62,13 @@ public class IProductCatCacheSVImpl implements IProductCatCacheSV {
      */
     @Override
     public BaseListResponse<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
-        return null;
+        CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),ErrorCodeConstants.TENANT_ID_NULL);
+        List<ProductCatInfo> catInfoList = productCatQueryBusiSV.queryLinkOfCatById(
+                catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
+        BaseListResponse<ProductCatInfo> catResponse = new BaseListResponse<>();
+        catResponse.setResult(catInfoList);
+        catResponse.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
+        return catResponse;
     }
 
     /**
