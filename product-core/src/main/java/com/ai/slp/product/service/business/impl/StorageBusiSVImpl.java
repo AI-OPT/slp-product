@@ -351,9 +351,10 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 
 	/**
 	 * 保存库存信息
+	 * @return 新增库存ID
 	 */
 	@Override
-	public int saveStorage(STOStorage stoStorage) {
+	public String saveStorage(STOStorage stoStorage) {
 		String tenantId = stoStorage.getTenantId();
 		Long operId = stoStorage.getOperId();
 		// 通过库存组查询库存相关标准品信息及是否有销售属性1.库存组标识查库存组,2.库存组的标准品标识查询标准品信息,3.获取是否有销售属性
@@ -392,7 +393,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		int saveNum = storageAtomSV.insertStorage(storage);
 		if (saveNum <= 0) {
 			// 没有插入成功返回0
-			return 0;
+			return "";
 		}
 		// 添加库存日志
 		StorageLog storageLog = new StorageLog();
@@ -401,7 +402,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		// 通过是否有销售属性判断下一步操作
 		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)) {
 			// 如果有销售属性则返回
-			return saveNum;
+			return "";
 		} else if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.NO)) {
 			// 如果没有销售属性则增加一个SKU对象
 			com.ai.slp.product.dao.mapper.bo.product.ProdSku prodSku = new com.ai.slp.product.dao.mapper.bo.product.ProdSku();
@@ -435,7 +436,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			if (saveSkuStorage <= 0) {
 				throw new BusinessException("", "添加SKU虚拟库存失败,虚拟库存ID=" + skuStorage.getSkuStorageId());
 			}
-			return saveNum;
+			return storage.getStorageId();
 		} else {
 			throw new BusinessException("", "不是有效的是否有销售属性状态" + isSaleAttr);
 		}

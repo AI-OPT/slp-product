@@ -45,11 +45,8 @@ public class IStorageSVImpl implements IStorageSV {
 	@Override
 	public BaseResponse createStorageGroup(STOStorageGroup storageGroup) throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(storageGroup.getTenantId(), "");
-		storageGroupBusiSV.addGroup(storageGroup);
-		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
-		baseResponse.setResponseHeader(responseHeader);
-		return baseResponse;
+		String groupId = storageGroupBusiSV.addGroup(storageGroup);
+		return returnIdToMsg(groupId);
 	}
 
 	/**
@@ -143,9 +140,18 @@ public class IStorageSVImpl implements IStorageSV {
 	@Override
 	public BaseResponse saveStorage(STOStorage stoStorage) throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(stoStorage.getTenantId(), "");
-		storageBusiSV.saveStorage(stoStorage);
+		String storageId = storageBusiSV.saveStorage(stoStorage);
+		return returnIdToMsg(storageId);
+	}
+
+	/**
+	 * 新增库存组合库存返回ID
+	 * @param storageId
+	 * @return
+	 */
+	private BaseResponse returnIdToMsg(String storageId) {
 		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
+		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,storageId);
 		baseResponse.setResponseHeader(responseHeader);
 		return baseResponse;
 	}

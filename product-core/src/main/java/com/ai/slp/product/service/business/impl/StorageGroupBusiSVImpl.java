@@ -73,10 +73,10 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * 添加库存组
 	 *
 	 * @param storageGroup
-	 * @return
+	 * @return 新增库存组ID
 	 */
 	@Override
-	public int addGroup(STOStorageGroup storageGroup) {
+	public String addGroup(STOStorageGroup storageGroup) {
 		// 查询标准品是否有销售属性
 		String tenantId = storageGroup.getTenantId();
 		String standedProdId = storageGroup.getStandedProdId();
@@ -99,7 +99,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		}
 		// 添加商品
 		productBusiSV.addProductWithStorageGroup(group, storageGroup.getCreateId());
-		return installNum;
+		return group.getStorageGroupId();
 	}
 
 	/**
