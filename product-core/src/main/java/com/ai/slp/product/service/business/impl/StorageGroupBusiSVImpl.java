@@ -151,8 +151,11 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 查询出标准品下的所有库存组,创建时间倒序
 		List<StorageGroupRes> groupInfoList = new ArrayList<>();
 		List<StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId, productId);
-		for (StorageGroup storageGroup : groupList) {
-			groupInfoList.add(genStorageGroupInfo(storageGroup));
+//		for (StorageGroup storageGroup : groupList) {
+//			groupInfoList.add(genStorageGroupInfo(storageGroup));
+//		}
+		for(int i= groupList.size()-1;i>=0;i--){
+			groupInfoList.add(genStorageGroupInfo(groupList.get(i)));
 		}
 		return groupInfoList;
 	}
