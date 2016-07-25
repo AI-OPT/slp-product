@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by jackieliu on 16/7/22.
@@ -70,6 +71,35 @@ public class ProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
     public List<ProductCatInfo> queryLinkOfCatById(String tenantId, String productCatId) {
         List<ProductCatInfo> catInfoList = new ArrayList<>();
         queryCatFoLinkById(catInfoList,tenantId,productCatId);
+        return catInfoList;
+    }
+
+    /**
+     * 查询类目的下级类目
+     *
+     * @param tenantId
+     * @param catId
+     * @return
+     */
+    @Override
+    public List<ProductCatInfo> queryChileOfCatById(String tenantId, String catId) {
+        List<ProductCatInfo> catInfoList = new ArrayList<>();
+        ICacheClient cacheClient = IPaasCatUtils.getCacheClient();
+        String parentKey = IPaasCatUtils.genMcsCatChildKey(tenantId, catId);
+        //获取下级类目标识
+        Set<String> catKeySet = cacheClient.smembers(parentKey);
+        String infoKey = IPaasCatUtils.genMcsCatInfoKey(tenantId);
+        for (String childId : catKeySet) {
+            String catStr = cacheClient.hget(infoKey, childId);
+            if (StringUtils.isBlank(catStr))
+                continue;
+            logger.info("catId={},jsonStr={}",childId,catStr);
+            ProductCatInfo catInfo = new ProductCatInfo();
+            ProductCat cat = JSonUtil.fromJSon(catStr, ProductCat.class);
+            BeanUtils.copyProperties(catInfo, cat);
+            catInfoList.add(catInfo);
+        }
+
         return catInfoList;
     }
 

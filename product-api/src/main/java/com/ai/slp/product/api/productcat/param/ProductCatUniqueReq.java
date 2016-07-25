@@ -1,11 +1,11 @@
 package com.ai.slp.product.api.productcat.param;
 
-import javax.validation.constraints.NotNull;
-
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.productcat.interfaces.IProductCatCacheSV;
+import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
+import javax.validation.constraints.NotNull;
 
 /**
  * 类目唯一标识请求信息<br>
@@ -24,7 +24,10 @@ public class ProductCatUniqueReq extends BaseInfo {
     @NotBlank(message = "类目标识不能为空",groups = {
             IProductCatSV.QueryByCatId.class,
             IProductCatSV.DeleteProductCat.class,
-            IProductCatSV.QueryLinkOfCatById.class
+            IProductCatSV.QueryLinkOfCatById.class,
+            IProductCatCacheSV.QueryByCatId.class,
+            IProductCatCacheSV.QueryChildOfCatById.class,
+            IProductCatCacheSV.QueryLinkOfCatById.class
     })
     private String productCatId;
 

@@ -84,6 +84,12 @@ public class IProductCatCacheSVImpl implements IProductCatCacheSV {
      */
     @Override
     public BaseListResponse<ProductCatInfo> queryChildOfCatById(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
+        CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),ErrorCodeConstants.TENANT_ID_NULL);
+        List<ProductCatInfo> catInfoList = productCatQueryBusiSV.queryChileOfCatById(
+                catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
+        BaseListResponse<ProductCatInfo> catResponse = new BaseListResponse<>();
+        catResponse.setResult(catInfoList);
+        catResponse.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
         return null;
     }
 }
