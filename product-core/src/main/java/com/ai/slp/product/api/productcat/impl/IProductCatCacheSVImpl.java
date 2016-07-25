@@ -6,6 +6,7 @@ import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatCacheSV;
+import com.ai.slp.product.api.productcat.param.ProdCatLevelParam;
 import com.ai.slp.product.api.productcat.param.ProductCatInfo;
 import com.ai.slp.product.api.productcat.param.ProductCatUniqueReq;
 import com.ai.slp.product.constants.ErrorCodeConstants;
@@ -90,6 +91,23 @@ public class IProductCatCacheSVImpl implements IProductCatCacheSV {
         BaseListResponse<ProductCatInfo> catResponse = new BaseListResponse<>();
         catResponse.setResult(catInfoList);
         catResponse.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
+        return catResponse;
+    }
+
+    /**
+     * 查询指定级别的类目集合
+     *
+     * @param levelParam
+     * @return 指定级别的类目集合
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PROD_CAT_CACHE_0103
+     * @RestRelativeURL prodCatCache/levelCat
+     */
+    @Override
+    public BaseListResponse<ProductCatInfo> queryByLevel(ProdCatLevelParam levelParam) throws BusinessException, SystemException {
+
         return null;
     }
 }

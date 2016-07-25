@@ -3,6 +3,7 @@ package com.ai.slp.product.api.productcat.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseListResponse;
+import com.ai.slp.product.api.productcat.param.ProdCatLevelParam;
 import com.ai.slp.product.api.productcat.param.ProductCatInfo;
 import com.ai.slp.product.api.productcat.param.ProductCatUniqueReq;
 
@@ -76,5 +77,21 @@ public interface IProductCatCacheSV {
             throws BusinessException,SystemException;
     @interface QueryChildOfCatById{}
 
+    /**
+     * 查询指定级别的类目集合
+     *
+     * @param levelParam
+     * @return 指定级别的类目集合
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode PROD_CAT_CACHE_0103
+     * @RestRelativeURL prodCatCache/levelCat
+     */
+    @POST
+    @Path("/levelCat")
+    public BaseListResponse<ProductCatInfo> queryByLevel(ProdCatLevelParam levelParam)
+            throws BusinessException,SystemException;
+    @interface QueryByLevel{}
 
 }
