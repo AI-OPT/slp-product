@@ -26,7 +26,7 @@ public class IProductCatCacheSVTest {
         uniqueReq.setProductCatId("10000010020000");
         BaseListResponse<ProductCatInfo> catInfoList =  catCacheSV.queryLinkOfCatById(uniqueReq);
         for (ProductCatInfo catInfo:catInfoList.getResult()){
-            System.out.println(catInfo.getProductCatName()+">");
+            System.out.print(catInfo.getProductCatName()+">");
         }
         System.out.println();
     }

@@ -35,6 +35,11 @@ public class IProductCatCacheConsumerSV {
         uniqueReq.setTenantId("SLP");
         uniqueReq.setProductCatId("10000010020000");
         BaseListResponse<ProductCatInfo> listResponse = catCacheSV.queryLinkOfCatById(uniqueReq);
+        ResponseHeader header = listResponse.getResponseHeader();
+        if (header!=null){
+            System.out.println("IsSuccess="+header.getIsSuccess()+",errorCode="+header.getResultCode()
+                    +",errorMsg="+header.getResultMessage());
+        }
         for (ProductCatInfo catInfo:listResponse.getResult()){
             System.out.print(catInfo.getProductCatName()+">");
         }
