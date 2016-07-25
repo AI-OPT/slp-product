@@ -276,7 +276,8 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         long salePrice = Long.parseLong(cacheClient.hget(priceKey,skuId));
         String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
         //
-        Long skuUsable = Long.parseLong(cacheClient.hget(skuUsableKey,skuId));
+        String skuUsableStr = cacheClient.hget(skuUsableKey,skuId);
+        Long skuUsable = StringUtils.isBlank(skuUsableStr)?null:Long.parseLong(cacheClient.hget(skuUsableKey,skuId));
         SkuStorageVo skuStorageVo = new SkuStorageVo();
         skuStorageVo.setUsableNum(skuUsable);
         skuStorageVo.setSalePrice(salePrice);
