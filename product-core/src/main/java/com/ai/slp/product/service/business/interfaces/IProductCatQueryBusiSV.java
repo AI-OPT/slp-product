@@ -36,4 +36,11 @@ public interface IProductCatQueryBusiSV {
      */
     public List<ProductCatInfo> queryChileOfCatById(String tenantId,String catId);
 
+    /**
+     * 查询指定级别下的类目信息
+     * @param tenantId
+     * @param level
+     * @return
+     */
+    public List<ProductCatInfo> queryByLevel(String tenantId,Short level);
 }

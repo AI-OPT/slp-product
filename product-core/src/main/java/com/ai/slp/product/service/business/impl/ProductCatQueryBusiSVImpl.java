@@ -83,13 +83,34 @@ public class ProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
      */
     @Override
     public List<ProductCatInfo> queryChileOfCatById(String tenantId, String catId) {
-        List<ProductCatInfo> catInfoList = new ArrayList<>();
         ICacheClient cacheClient = IPaasCatUtils.getCacheClient();
         String parentKey = IPaasCatUtils.genMcsCatChildKey(tenantId, catId);
         //获取下级类目标识
         Set<String> catKeySet = cacheClient.smembers(parentKey);
+        return fillCatInfoSet(tenantId,catKeySet);
+    }
+
+    /**
+     * 查询指定级别下的类目信息
+     *
+     * @param tenantId
+     * @param level
+     * @return
+     */
+    @Override
+    public List<ProductCatInfo> queryByLevel(String tenantId, Short level) {
+        ICacheClient cacheClient = IPaasCatUtils.getCacheClient();
+        String parentKey = IPaasCatUtils.genMcsCatLevelKey(tenantId);
+        Set<String> catIdSet = cacheClient.zrangeByScore(parentKey,level,level);
+        return fillCatInfoSet(tenantId,catIdSet);
+    }
+
+    private List<ProductCatInfo> fillCatInfoSet(String tenantId,Set<String> catIdSet){
+        ICacheClient cacheClient = IPaasCatUtils.getCacheClient();
+        List<ProductCatInfo> catInfoList = new ArrayList<>();
+        //获取下级类目标识
         String infoKey = IPaasCatUtils.genMcsCatInfoKey(tenantId);
-        for (String childId : catKeySet) {
+        for (String childId : catIdSet) {
             String catStr = cacheClient.hget(infoKey, childId);
             if (StringUtils.isBlank(catStr))
                 continue;
@@ -99,7 +120,6 @@ public class ProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
             BeanUtils.copyProperties(catInfo, cat);
             catInfoList.add(catInfo);
         }
-
         return catInfoList;
     }
 

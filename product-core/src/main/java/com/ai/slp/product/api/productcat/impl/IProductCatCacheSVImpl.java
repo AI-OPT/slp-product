@@ -107,7 +107,12 @@ public class IProductCatCacheSVImpl implements IProductCatCacheSV {
      */
     @Override
     public BaseListResponse<ProductCatInfo> queryByLevel(ProdCatLevelParam levelParam) throws BusinessException, SystemException {
-
-        return null;
+        CommonCheckUtils.checkTenantId(levelParam.getTenantId(),ErrorCodeConstants.TENANT_ID_NULL);
+        List<ProductCatInfo> catInfoList = productCatQueryBusiSV.queryByLevel(
+                levelParam.getTenantId(),levelParam.getCatLevel());
+        BaseListResponse<ProductCatInfo> catResponse = new BaseListResponse<>();
+        catResponse.setResult(catInfoList);
+        catResponse.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
+        return catResponse;
     }
 }
