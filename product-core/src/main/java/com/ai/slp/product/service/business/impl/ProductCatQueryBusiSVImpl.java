@@ -24,8 +24,8 @@ import java.util.List;
  * Created by jackieliu on 16/7/22.
  */
 @Service
-public class IProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
-    private static Logger logger = LoggerFactory.getLogger(IProductCatQueryBusiSVImpl.class);
+public class ProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
+    private static Logger logger = LoggerFactory.getLogger(ProductCatQueryBusiSVImpl.class);
     @Autowired
     IProductCatBusiSV productCatBusiSV;
     @Autowired
@@ -78,7 +78,7 @@ public class IProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
         if (catInfo==null)
             return;
         //已经达到根目录
-        if (catInfo.getParentProductCatId()==null){
+        if (catInfo.getParentProductCatId()==null || "0".equals(catInfo.getParentProductCatId())){
             catInfoList.add(catInfo);
             return;
             //若不是跟类目,则继续查询
