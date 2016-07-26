@@ -70,7 +70,7 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		StandedProductCriteria.Criteria criteria = example.createCriteria();
 		criteria.andTenantIdEqualTo(request.getTenantId());
 		//	example.setOrderByClause("OPER_TIME desc");//操作时间倒序
-		example.setOrderByClause("CREATE_TIME desc");//操作时间倒序
+		example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
 		// 类目id
 		if (StringUtils.isNotBlank(request.getProductCatId()))
 			criteria.andProductCatIdEqualTo(request.getProductCatId());
