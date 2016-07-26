@@ -69,8 +69,6 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		StandedProductCriteria example = new StandedProductCriteria();
 		StandedProductCriteria.Criteria criteria = example.createCriteria();
 		criteria.andTenantIdEqualTo(request.getTenantId());
-		//	example.setOrderByClause("OPER_TIME desc");//操作时间倒序
-		example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
 		// 类目id
 		if (StringUtils.isNotBlank(request.getProductCatId()))
 			criteria.andProductCatIdEqualTo(request.getProductCatId());
@@ -101,6 +99,8 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		// 操作人
 		if (request.getOperId() != null)
 			criteria.andOperIdEqualTo(request.getOperId());
+		//	example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+		example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
 		PageInfo<StandedProduct> pageInfo = new PageInfo<>();
 		// 设置总数
 		pageInfo.setCount(standedProductMapper.countByExample(example));
