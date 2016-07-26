@@ -67,6 +67,7 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 	@Override
 	public PageInfo<StandedProduct> queryForPage(StandedProdPageQueryVo request) {
 		StandedProductCriteria example = new StandedProductCriteria();
+		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
 		StandedProductCriteria.Criteria criteria = example.createCriteria();
 		criteria.andTenantIdEqualTo(request.getTenantId());
 		// 类目id
