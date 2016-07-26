@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by jackieliu on 16/7/22.
@@ -70,6 +71,55 @@ public class ProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
     public List<ProductCatInfo> queryLinkOfCatById(String tenantId, String productCatId) {
         List<ProductCatInfo> catInfoList = new ArrayList<>();
         queryCatFoLinkById(catInfoList,tenantId,productCatId);
+        return catInfoList;
+    }
+
+    /**
+     * 查询类目的下级类目
+     *
+     * @param tenantId
+     * @param catId
+     * @return
+     */
+    @Override
+    public List<ProductCatInfo> queryChileOfCatById(String tenantId, String catId) {
+        ICacheClient cacheClient = IPaasCatUtils.getCacheClient();
+        String parentKey = IPaasCatUtils.genMcsCatChildKey(tenantId, catId);
+        //获取下级类目标识
+        Set<String> catKeySet = cacheClient.smembers(parentKey);
+        return fillCatInfoSet(tenantId,catKeySet);
+    }
+
+    /**
+     * 查询指定级别下的类目信息
+     *
+     * @param tenantId
+     * @param level
+     * @return
+     */
+    @Override
+    public List<ProductCatInfo> queryByLevel(String tenantId, Short level) {
+        ICacheClient cacheClient = IPaasCatUtils.getCacheClient();
+        String parentKey = IPaasCatUtils.genMcsCatLevelKey(tenantId);
+        Set<String> catIdSet = cacheClient.zrangeByScore(parentKey,level,level);
+        return fillCatInfoSet(tenantId,catIdSet);
+    }
+
+    private List<ProductCatInfo> fillCatInfoSet(String tenantId,Set<String> catIdSet){
+        ICacheClient cacheClient = IPaasCatUtils.getCacheClient();
+        List<ProductCatInfo> catInfoList = new ArrayList<>();
+        //获取下级类目标识
+        String infoKey = IPaasCatUtils.genMcsCatInfoKey(tenantId);
+        for (String childId : catIdSet) {
+            String catStr = cacheClient.hget(infoKey, childId);
+            if (StringUtils.isBlank(catStr))
+                continue;
+            logger.info("catId={},jsonStr={}",childId,catStr);
+            ProductCatInfo catInfo = new ProductCatInfo();
+            ProductCat cat = JSonUtil.fromJSon(catStr, ProductCat.class);
+            BeanUtils.copyProperties(catInfo, cat);
+            catInfoList.add(catInfo);
+        }
         return catInfoList;
     }
 

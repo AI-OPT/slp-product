@@ -172,7 +172,9 @@ public interface IProductCatSV {
 	 * @author liutong5
 	 * @ApiCode PRODUCT_CAT_0110
 	 * @RestRelativeURL productCat/linkCat
+	 * @deprecated 请使用IProductCatCacheSV中的queryLinkOfCatById代替
 	 */
+	@Deprecated
 	@POST
 	@Path("/linkCat")
 	public List<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq)

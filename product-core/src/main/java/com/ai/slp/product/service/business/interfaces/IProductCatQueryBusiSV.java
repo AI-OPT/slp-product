@@ -27,4 +27,20 @@ public interface IProductCatQueryBusiSV {
      */
     public List<ProductCatInfo> queryLinkOfCatById(String tenantId, String productCatId);
 
+    /**
+     * 查询类目的下级类目
+     *
+     * @param tenantId
+     * @param catId
+     * @return
+     */
+    public List<ProductCatInfo> queryChileOfCatById(String tenantId,String catId);
+
+    /**
+     * 查询指定级别下的类目信息
+     * @param tenantId
+     * @param level
+     * @return
+     */
+    public List<ProductCatInfo> queryByLevel(String tenantId,Short level);
 }
