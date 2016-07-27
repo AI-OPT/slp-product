@@ -32,4 +32,5 @@
 	<dubbo:reference id="iProductSV" interface="com.ai.slp.product.api.product.interfaces.IProductSV" />
 	<dubbo:reference id="iStorageSV" interface="com.ai.slp.product.api.storage.interfaces.IStorageSV"/>
 	<dubbo:reference id="iStorageNumSV" interface="com.ai.slp.product.api.storageserver.interfaces.IStorageNumSV"/>
+	<dubbo:reference id="iCatCacheSv" interface="com.ai.slp.product.api.productcat.interfaces.IProductCatCacheSV"/>
 </beans>

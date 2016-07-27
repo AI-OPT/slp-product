@@ -42,11 +42,11 @@ public class ProductCatInfo extends BaseResponse{
     /**
      * 类目的级别-用于判断是类目(一级)还是子类目
      */
-    private short catLevel;
+    private Short catLevel;
     /**
      * 序列号-用于排序
      */
-    private short serialNumber;
+    private Short serialNumber;
 
     public String getProductCatId() {
         return productCatId;
@@ -82,19 +82,19 @@ public class ProductCatInfo extends BaseResponse{
         this.firstLetter = firstLetter;
     }
 
-    public short getCatLevel() {
+    public Short getCatLevel() {
         return catLevel;
     }
 
-    public void setCatLevel(short catLevel) {
+    public void setCatLevel(Short catLevel) {
         this.catLevel = catLevel;
     }
 
-    public short getSerialNumber() {
+    public Short getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(short serialNumber) {
+    public void setSerialNumber(Short serialNumber) {
         this.serialNumber = serialNumber;
     }
 }

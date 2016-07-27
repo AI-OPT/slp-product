@@ -24,17 +24,11 @@ public class IPaasCatUtils {
      * 产生类目详细信息的缓存key
      * A
      * @param tenantId
-     * @param catId
      * @return
      */
-    public static String genMcsCatInfoKey(String tenantId,String catId){
-        return ProductCatConstants.McsParam.CAT_INFO_TAG
-                +CACHE_KEY_SEPARATE+tenantId+CACHE_KEY_SEPARATE+catId;
-    }
-
     public static String genMcsCatInfoKey(String tenantId){
         return ProductCatConstants.McsParam.CAT_INFO_TAG
-                +CACHE_KEY_SEPARATE+tenantId+CACHE_KEY_SEPARATE;
+                +CACHE_KEY_SEPARATE+tenantId;
     }
 
     /**
@@ -60,8 +54,14 @@ public class IPaasCatUtils {
                 +CACHE_KEY_SEPARATE+tenantId+CACHE_KEY_SEPARATE+catId;
     }
 
-    public static String genMcsCatChildKey(String tenantId){
-        return ProductCatConstants.McsParam.CAT_CHILD_TAG
-                +CACHE_KEY_SEPARATE+tenantId+CACHE_KEY_SEPARATE;
+    /**
+     * 租户下非叶子类目的缓存KEY
+     * D
+     * @param tenantId
+     * @return
+     */
+    public static String genMcsCatParentKey(String tenantId){
+        return ProductCatConstants.McsParam.CAT_PARENT_TAG
+                +CACHE_KEY_SEPARATE+tenantId;
     }
 }
