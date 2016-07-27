@@ -1,4 +1,4 @@
-package com.ai.slp.product.api.productCat;
+package com.ai.slp.product.api.productcat;
 
 import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatCacheSV;
