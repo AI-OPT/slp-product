@@ -407,30 +407,31 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			// 如果有销售属性则返回
 			return "";
 		} else if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.NO)) {
-			// 如果没有销售属性则增加一个SKU对象
-			com.ai.slp.product.dao.mapper.bo.product.ProdSku prodSku = new com.ai.slp.product.dao.mapper.bo.product.ProdSku();
-			prodSku.setTenantId(tenantId);
-			prodSku.setProdId(product.getProdId());
-			prodSku.setStorageGroupId(product.getStorageGroupId());
-			// 名称为商品名称
-			prodSku.setSkuName(product.getProdName());
-			prodSku.setIsSaleAttr(ProductConstants.Product.IsSaleAttr.NO);
-			// 设置SKU属性串为空
-			prodSku.setSaleAttrs(null);
-			// 状态为有效
-			prodSku.setState(CommonSatesConstants.STATE_ACTIVE);
-			prodSku.setOperId(operId);
-			int saveProdSku = prodSkuAtomSV.createObj(prodSku);
-			if (saveProdSku <= 0) {
-				throw new BusinessException("", "添加单品SKU失败,单品SKU_ID=" + prodSku.getSkuId());
-			}
-			// 添加SKU日志信息
-			ProdSkuLog prodSkuLog = new ProdSkuLog();
-			BeanUtils.copyProperties(prodSkuLog, prodSku);
-			prodSkuLogAtomSV.install(prodSkuLog);
+//			// 如果没有销售属性则增加一个SKU对象
+//			com.ai.slp.product.dao.mapper.bo.product.ProdSku prodSku = new com.ai.slp.product.dao.mapper.bo.product.ProdSku();
+//			prodSku.setTenantId(tenantId);
+//			prodSku.setProdId(product.getProdId());
+//			prodSku.setStorageGroupId(product.getStorageGroupId());
+//			// 名称为商品名称
+//			prodSku.setSkuName(product.getProdName());
+//			prodSku.setIsSaleAttr(ProductConstants.Product.IsSaleAttr.NO);
+//			// 设置SKU属性串为空
+//			prodSku.setSaleAttrs(null);
+//			// 状态为有效
+//			prodSku.setState(CommonSatesConstants.STATE_ACTIVE);
+//			prodSku.setOperId(operId);
+//			int saveProdSku = prodSkuAtomSV.createObj(prodSku);
+//			if (saveProdSku <= 0) {
+//				throw new BusinessException("", "添加单品SKU失败,单品SKU_ID=" + prodSku.getSkuId());
+//			}
+//			// 添加SKU日志信息
+//			ProdSkuLog prodSkuLog = new ProdSkuLog();
+//			BeanUtils.copyProperties(prodSkuLog, prodSku);
+//			prodSkuLogAtomSV.install(prodSkuLog);
 			// 新增SKU虚拟库存,数据来自虚拟库存和单品SKU
 			SkuStorage skuStorage = new SkuStorage();
-			skuStorage.setSkuId(prodSku.getSkuId());
+			//通过商品id查出商品SKU信息,更新SKU库存信息
+			skuStorage.setSkuId(prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId()).get(0).getSkuId());
 			skuStorage.setStorageId(storage.getStorageId());
 			skuStorage.setTotalNum(storage.getTotalNum());
 			skuStorage.setState(SkuStorageConstants.SkuStorage.State.ACTIVE);
