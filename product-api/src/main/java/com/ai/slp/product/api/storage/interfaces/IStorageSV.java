@@ -2,6 +2,7 @@ package com.ai.slp.product.api.storage.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.param.*;
@@ -75,7 +76,7 @@ public interface IStorageSV {
      */
     @POST
     @Path("/queryGroupsByNormProdId")
-    public List<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery)
+    public BaseListResponse<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery)
             throws BusinessException,SystemException;
     @interface QueryGroupInfoByProductId{}
 

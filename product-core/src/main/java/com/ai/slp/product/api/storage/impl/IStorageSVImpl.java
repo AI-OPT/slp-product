@@ -2,6 +2,7 @@ package com.ai.slp.product.api.storage.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
@@ -13,7 +14,6 @@ import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -79,10 +79,14 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @ApiDocMethod
 	 */
 	@Override
-	public List<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery)
+	public BaseListResponse<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery)
 			throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(infoQuery.getTenantId(), "");
-		return storageGroupBusiSV.queryGroupInfoByNormProId(infoQuery.getTenantId(), infoQuery.getProductId());
+		List<StorageGroupRes> groupResList = storageGroupBusiSV.queryGroupInfoByNormProId(
+				infoQuery.getTenantId(), infoQuery.getProductId());
+		BaseListResponse<StorageGroupRes> groupRes = new BaseListResponse<>();
+		groupRes.setResult(groupResList);
+		return groupRes;
 	}
 
 	/**
