@@ -355,7 +355,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	@Override
 	public String saveStorage(STOStorage stoStorage) {
-		String tenantId = CommonConstants.COMMON_TENANT_ID;
+		String tenantId = stoStorage.getTenantId();
 		Long operId = stoStorage.getOperId();
 //		查询指定库存组下的销售商品
 		Product product = productAtomSV.selectByGroupId(tenantId, stoStorage.getStorageGroupId());
