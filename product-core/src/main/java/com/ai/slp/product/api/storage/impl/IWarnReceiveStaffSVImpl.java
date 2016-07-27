@@ -1,21 +1,23 @@
 package com.ai.slp.product.api.storage.impl;
 
-import java.util.List;
-
-import com.alibaba.dubbo.config.annotation.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.storage.interfaces.IWarnReceiveStaffSV;
 import com.ai.slp.product.api.storage.param.WarnReceStafForQuery;
 import com.ai.slp.product.api.storage.param.WarnReceStaff;
 import com.ai.slp.product.api.storage.param.WarnReceiveStaffOper;
+import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.service.business.interfaces.IWarnReceiveStaffBusiSV;
 import com.ai.slp.product.util.CommonCheckUtils;
+import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Service(validation = "true")
 @Component
@@ -34,10 +36,14 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
      * @author liutong5
      */
     @Override
-    public List<WarnReceStaff> queryByObjectIdOfStorage(
+    public BaseListResponse<WarnReceStaff> queryByObjectIdOfStorage(
             WarnReceStafForQuery warnReceStafForQuery) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(warnReceStafForQuery.getTenantId(), "");
-        return warnReceiveStaffBusiSV.queryByObjectId(warnReceStafForQuery);
+        CommonCheckUtils.checkTenantId(warnReceStafForQuery.getTenantId(), ErrorCodeConstants.TENANT_ID_NULL);
+        List<WarnReceStaff> resList = warnReceiveStaffBusiSV.queryByObjectId(warnReceStafForQuery);
+        BaseListResponse<WarnReceStaff> prodRes = new BaseListResponse<>();
+        prodRes.setResult(resList);
+        prodRes.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS,"OK"));
+        return prodRes;
     }
 
     /**
@@ -53,15 +59,12 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
     public BaseResponse installWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
             throws BusinessException, SystemException {
         for(WarnReceiveStaffOper warnReceiveStaffOper : operList){
-            CommonCheckUtils.checkTenantId(warnReceiveStaffOper.getTenantId(), "");
+            CommonCheckUtils.checkTenantId(warnReceiveStaffOper.getTenantId(), ErrorCodeConstants.TENANT_ID_NULL);
         }
         warnReceiveStaffBusiSV.addWarnReceStafList(operList);
         
         BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultCode("");
-        baseResponse.setResponseHeader(responseHeader);
+        baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS,"OK"));
         return baseResponse;
     }
 
@@ -83,10 +86,7 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
         warnReceiveStaffBusiSV.deleteWarnReceStaff(operList);
         
         BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultCode("");
-        baseResponse.setResponseHeader(responseHeader);
+        baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS,"OK"));
         return baseResponse;
     }
 
