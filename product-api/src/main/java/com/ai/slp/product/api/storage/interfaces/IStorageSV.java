@@ -295,7 +295,7 @@ public interface IStorageSV {
      */
     @POST
     @Path("/querySkuStorageById")
-    public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) throws BusinessException,SystemException;
+    public BaseListResponse<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) throws BusinessException,SystemException;
     @interface QuerySkuStorageById{}
     
     /**

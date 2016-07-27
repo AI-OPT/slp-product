@@ -340,12 +340,16 @@ public class IStorageSVImpl implements IStorageSV {
      * @author lipeng16
      */
 	@Override
-	public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) throws BusinessException, SystemException {
+	public BaseListResponse<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) throws BusinessException, SystemException {
 		CommonCheckUtils.checkTenantId(tenantId,"");
 		if(StringUtils.isEmpty(storageId)){
 			throw new BusinessException("", "库存标识不能为空");
 		}
-		return storageBusiSV.querySkuStorageById(tenantId,storageId);
+		List<SkuStorageAndProd> prodList = storageBusiSV.querySkuStorageById(tenantId,storageId);
+		BaseListResponse<SkuStorageAndProd> prodRes = new BaseListResponse<>();
+		prodRes.setResult(prodList);
+		prodRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
+		return prodRes;
 	}
 
 	/**
