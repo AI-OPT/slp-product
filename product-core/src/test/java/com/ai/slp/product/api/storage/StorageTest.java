@@ -1,21 +1,14 @@
-package com.ai.slp.product.product;
+package com.ai.slp.product.api.storage;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.STOStorage;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:context/core-context.xml")
 public class StorageTest {
-	    @Autowired
-	    IStorageSV storageSV;
+	    IStorageSV storageSV = DubboConsumerFactory.getService(IStorageSV.class);
 	    @Test
 	    public void saveStorageTest() {
 	    	STOStorage stoStorage = new STOStorage();
