@@ -357,31 +357,34 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	public String saveStorage(STOStorage stoStorage) {
 		String tenantId = stoStorage.getTenantId();
 		Long operId = stoStorage.getOperId();
-		// 通过库存组查询库存相关标准品信息及是否有销售属性1.库存组标识查库存组,2.库存组的标准品标识查询标准品信息,3.获取是否有销售属性
-		StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId, stoStorage.getStorageGroupId());
-		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, storageGroup.getStandedProdId());
-		// 商品是否有销售属性
-		String isSaleAttr = storageGroup.getIsSaleAttr();
-		// 增加销售商品信息
-		Product product = new Product();
-		product.setTenantId(tenantId);
-		product.setProductCatId(stoStorage.getProductCatId());
-		product.setStandedProdId(standedProduct.getStandedProdId());
-		product.setStorageGroupId(stoStorage.getStorageGroupId());
-		// 设置商品名称为标准品名称,设置商品类型为标准品类型
-		product.setProdName(standedProduct.getStandedProductName());
-		product.setProductType(standedProduct.getProductType());
-		product.setIsSaleAttr(isSaleAttr);
-		product.setOperId(operId);
-		// 设置商品状态为新增状态
-		product.setState(ProductConstants.Product.State.ADD);
-		// 调用方法保存商品
-		int saveProductNum = productAtomSV.installProduct(product);
-		if (saveProductNum <= 0) {
-			throw new BusinessException("", "新增商城商品失败,商品ID=" + product.getProdId());
-		}else{
-			insertProdAndStateLog(product);
-		}
+//		查询指定库存组下的销售商品
+		Product product = productAtomSV.selectByGroupId(tenantId, stoStorage.getStorageGroupId());
+		String isSaleAttr = product.getIsSaleAttr();
+//		// 通过库存组查询库存相关标准品信息及是否有销售属性1.库存组标识查库存组,2.库存组的标准品标识查询标准品信息,3.获取是否有销售属性
+//		StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId, stoStorage.getStorageGroupId());
+//		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, storageGroup.getStandedProdId());
+//		// 商品是否有销售属性
+//		String isSaleAttr = storageGroup.getIsSaleAttr();
+//		// 增加销售商品信息
+//		Product product = new Product();
+//		product.setTenantId(tenantId);
+//		product.setProductCatId(stoStorage.getProductCatId());
+//		product.setStandedProdId(standedProduct.getStandedProdId());
+//		product.setStorageGroupId(stoStorage.getStorageGroupId());
+//		// 设置商品名称为标准品名称,设置商品类型为标准品类型
+//		product.setProdName(standedProduct.getStandedProductName());
+//		product.setProductType(standedProduct.getProductType());
+//		product.setIsSaleAttr(isSaleAttr);
+//		product.setOperId(operId);
+//		// 设置商品状态为新增状态
+//		product.setState(ProductConstants.Product.State.ADD);
+//		// 调用方法保存商品
+//		int saveProductNum = productAtomSV.updateById(product);
+//		if (saveProductNum <= 0) {
+//			throw new BusinessException("", "新增商城商品失败,商品ID=" + product.getProdId());
+//		}else{
+//			insertProdAndStateLog(product);
+//		}
 		// 新增库存信息
 		Storage storage = new Storage();
 		BeanUtils.copyProperties(storage, stoStorage);
