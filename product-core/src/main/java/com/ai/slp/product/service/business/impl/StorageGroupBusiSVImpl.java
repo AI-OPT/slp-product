@@ -1,30 +1,10 @@
 package com.ai.slp.product.service.business.impl;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
-import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
-import com.ai.slp.product.api.storage.param.*;
-import com.ai.slp.product.constants.*;
-import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.dao.mapper.bo.storage.Storage;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
-import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.*;
-import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
-import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
-import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
-import com.ai.slp.product.util.IPaasStorageUtils;
-import com.ai.slp.route.api.routequery.interfaces.IRouteQuerySV;
-import com.ai.slp.route.api.routequery.param.RouteGroupQueryResult;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,10 +12,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
+import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.slp.product.api.storage.param.STOStorageGroup;
+import com.ai.slp.product.api.storage.param.StorageGroupOfNormProdPage;
+import com.ai.slp.product.api.storage.param.StorageGroupRes;
+import com.ai.slp.product.api.storage.param.StorageGroupSalePrice;
+import com.ai.slp.product.api.storage.param.StorageGroupUpName;
+import com.ai.slp.product.api.storage.param.StorageRes;
+import com.ai.slp.product.constants.ProdPriceLogConstants;
+import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.RouteConstants;
+import com.ai.slp.product.constants.StandedProductConstants;
+import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
+import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
+import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
+import com.ai.slp.product.util.IPaasStorageUtils;
+import com.ai.slp.route.api.routequery.interfaces.IRouteQuerySV;
+import com.ai.slp.route.api.routequery.param.RouteGroupQueryResult;
 
 /**
  * 库存组操作 Created by jackieliu on 16/5/5.
@@ -68,6 +85,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	StorageNumDbBusiSVImpl storageNumDbBusiSV;
 	@Autowired
 	ISKUIndexManage iskuIndexManage;
+	@Autowired
+	IProdCatAttrAtomSV prodCatAttrAtomSV;
 
 	/**
 	 * 添加库存组
@@ -85,10 +104,18 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			logger.warn("未找到对应标准品,租户ID:{},标准品标识:{}", tenantId, standedProdId);
 			throw new BusinessException("", "未找到对应标准品信息,租户id:" + tenantId + ",标准品标识:" + standedProdId);
 		}
-		// 添加库存组信息,状态默认为停用
+		//通过标准品查询类目属性类型为销售属性的属性
+		List<ProdCatAttr> prodCatAttrList = 
+		prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId,standedProduct.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+		//通过是否查询到相关属性来设定库存组是否有销售属性
 		StorageGroup group = new StorageGroup();
 		BeanUtils.copyProperties(group, storageGroup);
-		// 默认为停用状态
+		if(prodCatAttrList == null || prodCatAttrList.size() == 0){
+			group.setIsSaleAttr(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR);
+		}else{
+			group.setIsSaleAttr(StorageConstants.StorageGroup.isSaleAttr.HAS_SALE_ATTR);
+		}
+		// 添加库存组信息,状态默认为停用
 		group.setState(StorageConstants.StorageGroup.State.STOP);
 		// 添加库存组日志
 		int installNum = storageGroupAtomSV.installGroup(group);

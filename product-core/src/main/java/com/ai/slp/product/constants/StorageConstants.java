@@ -84,6 +84,16 @@ public final class StorageConstants {
              */
             public static final String AUTO_DISCARD = "31";
         }
+        public final class isSaleAttr{
+            /**
+             * 有销售属性
+             */
+            public static final String HAS_SALE_ATTR = "Y";
+            /**
+             * 无销售属性
+             */
+            public static final String NO_SALE_ATTR = "N";
+        }
     }
 
     public final class Storage{
