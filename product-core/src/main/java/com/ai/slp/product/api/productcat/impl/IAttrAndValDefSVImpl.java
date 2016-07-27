@@ -2,10 +2,8 @@ package com.ai.slp.product.api.productcat.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.base.vo.*;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jackieliu on 16/4/27.
@@ -237,10 +236,14 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @author lipeng16
      */
     @Override
-    public MapForRes<AttrDef, List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo)
+    public BaseMapResponse<AttrDef, List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo)
             throws BusinessException, SystemException {
     	CommonCheckUtils.checkTenantId(baseInfo.getTenantId(),"");
-        return new MapForRes<AttrDef, List<AttrValDef>>(attrAndAttrvalBusiSV.queryAllAttrAndVals(baseInfo.getTenantId()));
+        Map<AttrDef, List<AttrValDef>> attrMap = attrAndAttrvalBusiSV.queryAllAttrAndVals(baseInfo.getTenantId());
+        BaseMapResponse<AttrDef, List<AttrValDef>> attrMapRes = new BaseMapResponse<AttrDef, List<AttrValDef>>();
+        attrMapRes.setResult(attrMap);
+        attrMapRes.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS,"OK"));
+        return attrMapRes;
     }
 
 }
