@@ -3,6 +3,7 @@ package com.ai.slp.product.api.productcat.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseInfo;
+import com.ai.opt.base.vo.BaseMapResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
@@ -209,7 +210,7 @@ public interface IAttrAndValDefSV {
      */
 	@POST
 	@Path("/attrsAndValues")
-    public MapForRes<AttrDef,List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo) 
+    public BaseMapResponse<AttrDef,List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo)
             throws BusinessException, SystemException;
     @interface QueryAllAttrAndVal {}
 }
