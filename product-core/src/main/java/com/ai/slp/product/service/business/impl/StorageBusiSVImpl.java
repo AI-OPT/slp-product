@@ -9,7 +9,6 @@ import com.ai.slp.product.constants.*;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.*;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
@@ -357,8 +356,12 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	public String saveStorage(STOStorage stoStorage) {
 		String tenantId = stoStorage.getTenantId();
 		Long operId = stoStorage.getOperId();
+		String storageGroupId = stoStorage.getStorageGroupId();
 //		查询指定库存组下的销售商品
-		Product product = productAtomSV.selectByGroupId(tenantId, stoStorage.getStorageGroupId());
+		Product product = productAtomSV.selectByGroupId(tenantId, storageGroupId);
+		if(product == null){
+			throw new BusinessException("", "找不到指定标示的商品:" + storageGroupId);
+		}
 		String isSaleAttr = product.getIsSaleAttr();
 //		// 通过库存组查询库存相关标准品信息及是否有销售属性1.库存组标识查库存组,2.库存组的标准品标识查询标准品信息,3.获取是否有销售属性
 //		StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId, stoStorage.getStorageGroupId());
@@ -431,7 +434,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			// 新增SKU虚拟库存,数据来自虚拟库存和单品SKU
 			SkuStorage skuStorage = new SkuStorage();
 			//通过商品id查出商品SKU信息,更新SKU库存信息
-			skuStorage.setSkuId(prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId()).get(0).getSkuId());
+			String skuId = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId()).get(0).getSkuId();
+			skuStorage.setSkuId(skuId);
 			skuStorage.setStorageId(storage.getStorageId());
 			skuStorage.setTotalNum(storage.getTotalNum());
 			skuStorage.setState(SkuStorageConstants.SkuStorage.State.ACTIVE);

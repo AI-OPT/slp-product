@@ -35,7 +35,7 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 	public List<ProdSku> querySkuOfProd(String tenantId, String prodId) {
 		ProdSkuCriteria example = new ProdSkuCriteria();
 		example.createCriteria().andTenantIdEqualTo(tenantId).andProdIdEqualTo(prodId)
-				.andStateNotEqualTo(ProductConstants.ProdSku.State.ACTIVE);
+				.andStateNotEqualTo(ProductConstants.ProdSku.State.INACTIVE);
 		return prodSkuMapper.selectByExample(example);
 	}
 
