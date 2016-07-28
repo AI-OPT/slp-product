@@ -1,16 +1,25 @@
-package com.ai.slp.product.api.storage;
+package com.ai.slp.product.product;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.STOStorage;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
+import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 
-public class StorageTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:context/core-context.xml")
+public class StorageBusiTest {
+		@Autowired
+		IStorageBusiSV storageBusiSV;
 	    @Test
 	    public void saveStorageTest() {
-	    	IStorageSV storageSV = DubboConsumerFactory.getService(IStorageSV.class);
 	    	STOStorage stoStorage = new STOStorage();
 	    	stoStorage.setOperId(1l);
 	    	stoStorage.setPriorityNumber((short)1);
@@ -20,8 +29,7 @@ public class StorageTest {
 	    	stoStorage.setStorageName("1234567890");
 	    	stoStorage.setTotalNum(100l);
 	    	stoStorage.setWarnNum(10l);
-	    	BaseResponse baseResponse = storageSV.saveStorage(stoStorage);
-	    	String id = baseResponse.getResponseHeader().getResultMessage();
+	    	String id  = storageBusiSV.saveStorage(stoStorage);
 	    	System.out.println(id+"-------------------------------");
 	    }
 	    @Test
