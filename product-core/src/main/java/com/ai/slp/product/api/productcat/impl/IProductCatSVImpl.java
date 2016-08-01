@@ -2,6 +2,7 @@ package com.ai.slp.product.api.productcat.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseMapResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
@@ -128,11 +129,14 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @author liutong5
      */
     @Override
-    public Map<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
+    public BaseMapResponse<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
         CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
         Map<Long, Set<String>> map= productCatBusiSV.queryAttrAndValIdByCatIdAndType(
                 attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
-        return map;
+        BaseMapResponse<Long, Set<String>> attrMapRes = new BaseMapResponse();
+        attrMapRes.setResult(map);
+        attrMapRes.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS,"OK"));
+        return attrMapRes;
     }
 
 

@@ -2,6 +2,7 @@ package com.ai.slp.product.api.productcat.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseMapResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
@@ -109,7 +110,7 @@ public interface IProductCatSV {
 	 */
 	@POST
 	@Path("/catAttrAndVal")
-	public Map<Long,Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery)
+	public BaseMapResponse<Long,Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery)
 			throws BusinessException,SystemException;
 	@interface QueryAttrAndValIdByCatAndType{}
     
