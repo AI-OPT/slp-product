@@ -25,8 +25,8 @@ import java.util.List;
 @Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface IProductSV {
     /**
-     * 查询商品列表<br>
-     *
+     * 分页查询非废弃的销售商品列表<br>
+     * 用于销售价设置
      * @param productQuery 查询对象
      * @return 商品信息列表
      * @throws BusinessException

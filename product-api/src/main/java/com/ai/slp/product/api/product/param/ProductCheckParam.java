@@ -24,7 +24,7 @@ public class ProductCheckParam extends BaseInfo {
     private String prodId;
     /**
      * 状态,必填<br>
-     * 3审核中4审核未通过
+     * 0:审核未通过; 1:审核通过
      */
     @NotBlank(message = "状态不能为空",groups = {IProductManagerSV.ProductCheck.class})
     private String state;

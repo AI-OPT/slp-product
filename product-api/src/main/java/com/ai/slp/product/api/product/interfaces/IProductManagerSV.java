@@ -26,12 +26,9 @@ import javax.ws.rs.core.MediaType;
 public interface IProductManagerSV {
     
     /**
-     * 商品管理查询商品编辑状态<br>
-     * 按生成时间排序<br>
-     * 0新增\n            1未编辑\n            2已编辑\n            
-     * 3审核中\n          4审核未通过\n         5在售\n           
-     * 6仓库中（审核通过、手动下架放入）\n   61售罄下架\n    62停用下架\n           
-     * 7废弃
+     * 商品管理分页查询商品待编辑商品列表<br>
+     * 操作时间倒序排列<br>
+     * 0新增\n
      * 
      * @param productEditParam
      * @return 满足条件的商品集合
@@ -48,7 +45,7 @@ public interface IProductManagerSV {
     
     /**
      * 商品管理查询商品被拒绝信息-与商品审核中查询共用<br>
-     * 拒绝时间为操作时间<br>
+     * 操作时间倒序排列<br>
      * 
      * @param productRefuseParam
      * @return 满足条件的商品集合
@@ -82,11 +79,7 @@ public interface IProductManagerSV {
     @interface QueryProductCheck {}
 
     /**
-     * 审核是否通过调用方法<br>
-     * 通过上架类型 1审核通过后立即上架 2审核通过后放入仓库 3定时上架<br>
-     * 判断改变为哪种状态<br>
-     * 销售商品状态 4审核未通过<br>
-     * 拒绝后把拒绝类型和原因存入销售商品流程日志表<br>
+     * 商品审核通过/拒绝<br>
      *
      * @param productCheckParam
      * @return 基本信息
