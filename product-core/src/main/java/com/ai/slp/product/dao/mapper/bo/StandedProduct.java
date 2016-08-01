@@ -35,6 +35,8 @@ public class StandedProduct {
 
     private Timestamp operTime;
 
+    private String supplierId;
+
     public String getStandedProdId() {
         return standedProdId;
     }
@@ -161,5 +163,13 @@ public class StandedProduct {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId == null ? null : supplierId.trim();
     }
 }

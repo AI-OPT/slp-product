@@ -3,13 +3,13 @@ package com.ai.slp.product.dao.mapper.bo;
 import java.sql.Timestamp;
 
 public class StandedProductLog {
-    private String standedProdId;
-
     private String logId;
 
     private String tenantId;
 
     private String productCatId;
+
+    private String standedProdId;
 
     private String standedProductName;
 
@@ -37,13 +37,7 @@ public class StandedProductLog {
 
     private Timestamp operTime;
 
-    public String getStandedProdId() {
-        return standedProdId;
-    }
-
-    public void setStandedProdId(String standedProdId) {
-        this.standedProdId = standedProdId == null ? null : standedProdId.trim();
-    }
+    private String supplierId;
 
     public String getLogId() {
         return logId;
@@ -67,6 +61,14 @@ public class StandedProductLog {
 
     public void setProductCatId(String productCatId) {
         this.productCatId = productCatId == null ? null : productCatId.trim();
+    }
+
+    public String getStandedProdId() {
+        return standedProdId;
+    }
+
+    public void setStandedProdId(String standedProdId) {
+        this.standedProdId = standedProdId == null ? null : standedProdId.trim();
     }
 
     public String getStandedProductName() {
@@ -171,5 +173,13 @@ public class StandedProductLog {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId == null ? null : supplierId.trim();
     }
 }

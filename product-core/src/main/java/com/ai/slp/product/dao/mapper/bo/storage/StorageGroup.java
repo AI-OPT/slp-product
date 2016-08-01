@@ -31,6 +31,8 @@ public class StorageGroup {
 
     private Timestamp operTime;
 
+    private String supplierId;
+
     public String getStorageGroupId() {
         return storageGroupId;
     }
@@ -141,5 +143,13 @@ public class StorageGroup {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId == null ? null : supplierId.trim();
     }
 }

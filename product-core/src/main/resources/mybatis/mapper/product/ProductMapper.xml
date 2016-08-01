@@ -31,6 +31,7 @@
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
     <result column="RECHARGE_TYPE" property="rechargeType" jdbcType="VARCHAR" />
     <result column="BASIC_ORG_ID" property="basicOrgId" jdbcType="VARCHAR" />
+    <result column="SUPPLIER_ID" property="supplierId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -95,7 +96,7 @@
     PROD_NAME, PRODUCT_SELL_POINT, ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, ACTIVE_CYCLE, 
     UNIT, PRO_DETAIL_CONTENT, IS_SALE_ATTR, IS_SALE_NATIONWIDE, IS_REPLACE_SELL, IS_INVOICE, 
     INVOICE_TYPE, AFTER_SALE, UPSHELF_TYPE, UP_TIME, DOWN_TIME, CREATE_TIME, STATE, OPER_ID, 
-    OPER_TIME, RECHARGE_TYPE, BASIC_ORG_ID
+    OPER_TIME, RECHARGE_TYPE, BASIC_ORG_ID, SUPPLIER_ID
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductCriteria" >
     select
@@ -141,7 +142,8 @@
       INVOICE_TYPE, AFTER_SALE, UPSHELF_TYPE, 
       UP_TIME, DOWN_TIME, CREATE_TIME, 
       STATE, OPER_ID, OPER_TIME, 
-      RECHARGE_TYPE, BASIC_ORG_ID)
+      RECHARGE_TYPE, BASIC_ORG_ID, SUPPLIER_ID
+      )
     values (#{prodId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{productCatId,jdbcType=VARCHAR}, 
       #{standedProdId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, 
       #{prodName,jdbcType=VARCHAR}, #{productSellPoint,jdbcType=VARCHAR}, #{activeType,jdbcType=CHAR}, 
@@ -151,7 +153,8 @@
       #{invoiceType,jdbcType=VARCHAR}, #{afterSale,jdbcType=VARCHAR}, #{upshelfType,jdbcType=VARCHAR}, 
       #{upTime,jdbcType=TIMESTAMP}, #{downTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
       #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}, 
-      #{rechargeType,jdbcType=VARCHAR}, #{basicOrgId,jdbcType=VARCHAR})
+      #{rechargeType,jdbcType=VARCHAR}, #{basicOrgId,jdbcType=VARCHAR}, #{supplierId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
     insert into product
@@ -243,6 +246,9 @@
       <if test="basicOrgId != null" >
         BASIC_ORG_ID,
       </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="prodId != null" >
@@ -331,6 +337,9 @@
       </if>
       <if test="basicOrgId != null" >
         #{basicOrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -430,6 +439,9 @@
       <if test="record.basicOrgId != null" >
         BASIC_ORG_ID = #{record.basicOrgId,jdbcType=VARCHAR},
       </if>
+      <if test="record.supplierId != null" >
+        SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -465,7 +477,8 @@
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
       OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
       RECHARGE_TYPE = #{record.rechargeType,jdbcType=VARCHAR},
-      BASIC_ORG_ID = #{record.basicOrgId,jdbcType=VARCHAR}
+      BASIC_ORG_ID = #{record.basicOrgId,jdbcType=VARCHAR},
+      SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -557,6 +570,9 @@
       <if test="basicOrgId != null" >
         BASIC_ORG_ID = #{basicOrgId,jdbcType=VARCHAR},
       </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR},
+      </if>
     </set>
     where PROD_ID = #{prodId,jdbcType=VARCHAR}
   </update>
@@ -589,7 +605,8 @@
       OPER_ID = #{operId,jdbcType=DECIMAL},
       OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       RECHARGE_TYPE = #{rechargeType,jdbcType=VARCHAR},
-      BASIC_ORG_ID = #{basicOrgId,jdbcType=VARCHAR}
+      BASIC_ORG_ID = #{basicOrgId,jdbcType=VARCHAR},
+      SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR}
     where PROD_ID = #{prodId,jdbcType=VARCHAR}
   </update>
 </mapper>

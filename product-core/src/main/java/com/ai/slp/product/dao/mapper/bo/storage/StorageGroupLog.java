@@ -27,6 +27,10 @@ public class StorageGroupLog {
 
     private Timestamp operTime;
 
+    private String supplierId;
+
+    private String isSaleAttr;
+
     public String getLogId() {
         return logId;
     }
@@ -121,5 +125,21 @@ public class StorageGroupLog {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId == null ? null : supplierId.trim();
+    }
+
+    public String getIsSaleAttr() {
+        return isSaleAttr;
+    }
+
+    public void setIsSaleAttr(String isSaleAttr) {
+        this.isSaleAttr = isSaleAttr == null ? null : isSaleAttr.trim();
     }
 }

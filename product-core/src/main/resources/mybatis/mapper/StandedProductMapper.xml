@@ -18,6 +18,7 @@
     <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
     <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+    <result column="SUPPLIER_ID" property="supplierId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -80,7 +81,7 @@
   <sql id="Base_Column_List" >
     STANDED_PROD_ID, TENANT_ID, PRODUCT_CAT_ID, STANDED_PRODUCT_NAME, PRODUCT_TYPE, MARKET_PRICE, 
     ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, ACTIVE_CYCLE, UNIT, STATE, CREATE_ID, CREATE_TIME, 
-    OPER_ID, OPER_TIME
+    OPER_ID, OPER_TIME, SUPPLIER_ID
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductCriteria" >
     select
@@ -122,13 +123,13 @@
       ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, 
       ACTIVE_CYCLE, UNIT, STATE, 
       CREATE_ID, CREATE_TIME, OPER_ID, 
-      OPER_TIME)
+      OPER_TIME, SUPPLIER_ID)
     values (#{standedProdId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{productCatId,jdbcType=VARCHAR}, 
       #{standedProductName,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, #{marketPrice,jdbcType=DECIMAL}, 
       #{activeType,jdbcType=CHAR}, #{activeTime,jdbcType=TIMESTAMP}, #{inactiveTime,jdbcType=TIMESTAMP}, 
       #{activeCycle,jdbcType=DECIMAL}, #{unit,jdbcType=CHAR}, #{state,jdbcType=VARCHAR}, 
       #{createId,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{operId,jdbcType=DECIMAL}, 
-      #{operTime,jdbcType=TIMESTAMP})
+      #{operTime,jdbcType=TIMESTAMP}, #{supplierId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProduct" >
     insert into standed_product
@@ -181,6 +182,9 @@
       <if test="operTime != null" >
         OPER_TIME,
       </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="standedProdId != null" >
@@ -230,6 +234,9 @@
       </if>
       <if test="operTime != null" >
         #{operTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -290,6 +297,9 @@
       <if test="record.operTime != null" >
         OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.supplierId != null" >
+        SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -312,7 +322,8 @@
       CREATE_ID = #{record.createId,jdbcType=DECIMAL},
       CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
-      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -365,6 +376,9 @@
       <if test="operTime != null" >
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR},
+      </if>
     </set>
     where STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR}
   </update>
@@ -384,7 +398,8 @@
       CREATE_ID = #{createId,jdbcType=DECIMAL},
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       OPER_ID = #{operId,jdbcType=DECIMAL},
-      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR}
     where STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR}
   </update>
 </mapper>

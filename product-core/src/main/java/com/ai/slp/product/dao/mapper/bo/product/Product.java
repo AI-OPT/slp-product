@@ -61,6 +61,8 @@ public class Product {
 
     private String basicOrgId;
 
+    private String supplierId;
+
     public String getProdId() {
         return prodId;
     }
@@ -291,5 +293,13 @@ public class Product {
 
     public void setBasicOrgId(String basicOrgId) {
         this.basicOrgId = basicOrgId == null ? null : basicOrgId.trim();
+    }
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId == null ? null : supplierId.trim();
     }
 }

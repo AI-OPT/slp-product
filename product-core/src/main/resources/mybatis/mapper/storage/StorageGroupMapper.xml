@@ -16,6 +16,7 @@
     <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
     <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+    <result column="SUPPLIER_ID" property="supplierId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -78,7 +79,7 @@
   <sql id="Base_Column_List" >
     STORAGE_GROUP_ID, TENANT_ID, STANDED_PROD_ID, ROUTE_GROUP_ID, STORAGE_GROUP_NAME, 
     IS_SALE_ATTR, LOW_SALE_PRICE, HIGH_SALE_PRICE, SERIAL_NUMBER, STATE, CREATE_ID, CREATE_TIME, 
-    OPER_ID, OPER_TIME
+    OPER_ID, OPER_TIME, SUPPLIER_ID
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroupCriteria" >
     select
@@ -119,12 +120,14 @@
       ROUTE_GROUP_ID, STORAGE_GROUP_NAME, IS_SALE_ATTR, 
       LOW_SALE_PRICE, HIGH_SALE_PRICE, SERIAL_NUMBER, 
       STATE, CREATE_ID, CREATE_TIME, 
-      OPER_ID, OPER_TIME)
+      OPER_ID, OPER_TIME, SUPPLIER_ID
+      )
     values (#{storageGroupId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{standedProdId,jdbcType=VARCHAR}, 
       #{routeGroupId,jdbcType=VARCHAR}, #{storageGroupName,jdbcType=VARCHAR}, #{isSaleAttr,jdbcType=CHAR}, 
       #{lowSalePrice,jdbcType=DECIMAL}, #{highSalePrice,jdbcType=DECIMAL}, #{serialNumber,jdbcType=DECIMAL}, 
       #{state,jdbcType=VARCHAR}, #{createId,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP})
+      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}, #{supplierId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageGroup" >
     insert into storage_group
@@ -171,6 +174,9 @@
       <if test="operTime != null" >
         OPER_TIME,
       </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="storageGroupId != null" >
@@ -214,6 +220,9 @@
       </if>
       <if test="operTime != null" >
         #{operTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -268,6 +277,9 @@
       <if test="record.operTime != null" >
         OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.supplierId != null" >
+        SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -288,7 +300,8 @@
       CREATE_ID = #{record.createId,jdbcType=DECIMAL},
       CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
-      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -335,6 +348,9 @@
       <if test="operTime != null" >
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR},
+      </if>
     </set>
     where STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR}
   </update>
@@ -352,7 +368,8 @@
       CREATE_ID = #{createId,jdbcType=DECIMAL},
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       OPER_ID = #{operId,jdbcType=DECIMAL},
-      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR}
     where STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR}
   </update>
 </mapper>

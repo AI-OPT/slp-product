@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ai.slp.product.dao.mapper.interfaces.StandedProductLogMapper" >
   <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.StandedProductLog" >
-    <id column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
-    <result column="LOG_ID" property="logId" jdbcType="VARCHAR" />
+    <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="PRODUCT_CAT_ID" property="productCatId" jdbcType="VARCHAR" />
+    <result column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
     <result column="STANDED_PRODUCT_NAME" property="standedProductName" jdbcType="VARCHAR" />
     <result column="PRODUCT_TYPE" property="productType" jdbcType="VARCHAR" />
     <result column="MARKET_PRICE" property="marketPrice" jdbcType="DECIMAL" />
@@ -19,6 +19,7 @@
     <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
     <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+    <result column="SUPPLIER_ID" property="supplierId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -79,9 +80,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    STANDED_PROD_ID, LOG_ID, TENANT_ID, PRODUCT_CAT_ID, STANDED_PRODUCT_NAME, PRODUCT_TYPE, 
+    LOG_ID, TENANT_ID, PRODUCT_CAT_ID, STANDED_PROD_ID, STANDED_PRODUCT_NAME, PRODUCT_TYPE, 
     MARKET_PRICE, ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, ACTIVE_CYCLE, UNIT, STATE, 
-    CREATE_ID, CREATE_TIME, OPER_ID, OPER_TIME
+    CREATE_ID, CREATE_TIME, OPER_ID, OPER_TIME, SUPPLIER_ID
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductLogCriteria" >
     select
@@ -105,11 +106,11 @@
     select 
     <include refid="Base_Column_List" />
     from standed_product_log
-    where STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from standed_product_log
-    where STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductLogCriteria" >
     delete from standed_product_log
@@ -118,25 +119,24 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductLog" >
-    insert into standed_product_log (STANDED_PROD_ID, LOG_ID, TENANT_ID, 
-      PRODUCT_CAT_ID, STANDED_PRODUCT_NAME, PRODUCT_TYPE, 
+    insert into standed_product_log (LOG_ID, TENANT_ID, PRODUCT_CAT_ID, 
+      STANDED_PROD_ID, STANDED_PRODUCT_NAME, PRODUCT_TYPE, 
       MARKET_PRICE, ACTIVE_TYPE, ACTIVE_TIME, 
       INACTIVE_TIME, ACTIVE_CYCLE, UNIT, 
       STATE, CREATE_ID, CREATE_TIME, 
-      OPER_ID, OPER_TIME)
-    values (#{standedProdId,jdbcType=VARCHAR}, #{logId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, 
-      #{productCatId,jdbcType=VARCHAR}, #{standedProductName,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, 
+      OPER_ID, OPER_TIME, SUPPLIER_ID
+      )
+    values (#{logId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{productCatId,jdbcType=VARCHAR}, 
+      #{standedProdId,jdbcType=VARCHAR}, #{standedProductName,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, 
       #{marketPrice,jdbcType=DECIMAL}, #{activeType,jdbcType=CHAR}, #{activeTime,jdbcType=TIMESTAMP}, 
       #{inactiveTime,jdbcType=TIMESTAMP}, #{activeCycle,jdbcType=DECIMAL}, #{unit,jdbcType=CHAR}, 
       #{state,jdbcType=VARCHAR}, #{createId,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP})
+      #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}, #{supplierId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductLog" >
     insert into standed_product_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="standedProdId != null" >
-        STANDED_PROD_ID,
-      </if>
       <if test="logId != null" >
         LOG_ID,
       </if>
@@ -145,6 +145,9 @@
       </if>
       <if test="productCatId != null" >
         PRODUCT_CAT_ID,
+      </if>
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID,
       </if>
       <if test="standedProductName != null" >
         STANDED_PRODUCT_NAME,
@@ -185,11 +188,11 @@
       <if test="operTime != null" >
         OPER_TIME,
       </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="standedProdId != null" >
-        #{standedProdId,jdbcType=VARCHAR},
-      </if>
       <if test="logId != null" >
         #{logId,jdbcType=VARCHAR},
       </if>
@@ -198,6 +201,9 @@
       </if>
       <if test="productCatId != null" >
         #{productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProdId != null" >
+        #{standedProdId,jdbcType=VARCHAR},
       </if>
       <if test="standedProductName != null" >
         #{standedProductName,jdbcType=VARCHAR},
@@ -238,6 +244,9 @@
       <if test="operTime != null" >
         #{operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductLogCriteria" resultType="java.lang.Integer" >
@@ -249,9 +258,6 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update standed_product_log
     <set >
-      <if test="record.standedProdId != null" >
-        STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
-      </if>
       <if test="record.logId != null" >
         LOG_ID = #{record.logId,jdbcType=VARCHAR},
       </if>
@@ -260,6 +266,9 @@
       </if>
       <if test="record.productCatId != null" >
         PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.standedProdId != null" >
+        STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
       </if>
       <if test="record.standedProductName != null" >
         STANDED_PRODUCT_NAME = #{record.standedProductName,jdbcType=VARCHAR},
@@ -300,6 +309,9 @@
       <if test="record.operTime != null" >
         OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.supplierId != null" >
+        SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -307,10 +319,10 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update standed_product_log
-    set STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
-      LOG_ID = #{record.logId,jdbcType=VARCHAR},
+    set LOG_ID = #{record.logId,jdbcType=VARCHAR},
       TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
       PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
+      STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
       STANDED_PRODUCT_NAME = #{record.standedProductName,jdbcType=VARCHAR},
       PRODUCT_TYPE = #{record.productType,jdbcType=VARCHAR},
       MARKET_PRICE = #{record.marketPrice,jdbcType=DECIMAL},
@@ -323,7 +335,8 @@
       CREATE_ID = #{record.createId,jdbcType=DECIMAL},
       CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
-      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -331,14 +344,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductLog" >
     update standed_product_log
     <set >
-      <if test="logId != null" >
-        LOG_ID = #{logId,jdbcType=VARCHAR},
-      </if>
       <if test="tenantId != null" >
         TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       </if>
       <if test="productCatId != null" >
         PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
       </if>
       <if test="standedProductName != null" >
         STANDED_PRODUCT_NAME = #{standedProductName,jdbcType=VARCHAR},
@@ -379,14 +392,17 @@
       <if test="operTime != null" >
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR},
+      </if>
     </set>
-    where STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.StandedProductLog" >
     update standed_product_log
-    set LOG_ID = #{logId,jdbcType=VARCHAR},
-      TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+    set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
+      STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
       STANDED_PRODUCT_NAME = #{standedProductName,jdbcType=VARCHAR},
       PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
       MARKET_PRICE = #{marketPrice,jdbcType=DECIMAL},
@@ -399,7 +415,8 @@
       CREATE_ID = #{createId,jdbcType=DECIMAL},
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       OPER_ID = #{operId,jdbcType=DECIMAL},
-      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
-    where STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR}
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
 </mapper>
