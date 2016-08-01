@@ -1,7 +1,11 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.attach.StorageGroupAttach4List;
+import com.ai.slp.product.dao.mapper.attach.StorageGroupAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageGroupMapper;
@@ -9,6 +13,7 @@ import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
+import com.ai.slp.product.vo.StoGroupPageQueryVo;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +30,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	StorageGroupMapper storageGroupMapper;
 	@Autowired
 	IStandedProductAtomSV standedProductAtomSV;
+	@Autowired
+	StorageGroupAttachMapper attachMapper;
+
 	private static List<String> discardList = new ArrayList<>();
 
 	static {
@@ -185,7 +193,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		if (storageGroupPageQueryVo.getStandedProductName() != null) {
 			List<String> standedProductIdList = standedProductAtomSV
 					.queryIdByName("%" + storageGroupPageQueryVo.getStandedProductName() + "%");
-			if(standedProductIdList != null){
+			if(!CollectionUtil.isEmpty(standedProductIdList)){
 				request.andStandedProdIdIn(standedProductIdList);
 			}
 		}
@@ -242,5 +250,30 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 			example.createCriteria().andStateNotIn(discardList);
 		}
 		return storageGroupMapper.selectByExample(example);
+	}
+
+	@Override
+	public PageInfo<StorageGroupAttach4List> queryForGroupList(StoGroupPageQueryVo queryVo){
+		//获取结果总数
+		int count = attachMapper.count(queryVo);
+		int pageSize = queryVo.getPageSize(),
+				pageNo = queryVo.getPageNo();
+		if (pageNo<1)
+			pageNo = 1;
+		queryVo.setOrderByClause("OPER_TIME desc");
+		//设置页码相关参数
+		int start = (pageNo - 1) * pageSize;
+		String limitStr = "limit "+start+","+pageSize;
+		//新建返回对象
+		PageInfo<StorageGroupAttach4List> StorageGroupPage = new PageInfo<>();
+		StorageGroupPage.setCount(count);
+		StorageGroupPage.setPageNo(pageNo);
+		StorageGroupPage.setPageSize(pageSize);
+		StorageGroupPage.setResult(attachMapper.query(queryVo,limitStr));
+		//设置总页数
+		boolean isDivisible = count%pageSize == 0;
+		int pageCount = count/pageSize;
+		StorageGroupPage.setPageCount(isDivisible?pageCount:pageCount+1);
+		return StorageGroupPage;
 	}
 }

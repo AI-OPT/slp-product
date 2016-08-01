@@ -2,6 +2,9 @@ package com.ai.slp.product.vo;
 
 import java.sql.Timestamp;
 
+/**
+ * 价格管理中设置最低最高销售价中库存组列表查询条件
+ */
 public class StorageGroupPageQueryVo {
 	/**
 	 * 租户Id，必填

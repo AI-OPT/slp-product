@@ -1,7 +1,10 @@
 package com.ai.slp.product.service.atom.interfaces.storage;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.dao.mapper.attach.StorageGroupAttach4List;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.vo.StoGroupPageQueryVo;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
 
 import java.util.List;
@@ -119,4 +122,12 @@ public interface IStorageGroupAtomSV {
      * @return
      */
     public List<StorageGroup> queryOfPage(int pageNum,int pageSize,boolean hasDiscard);
+
+    /**
+     * 根据查询条件进行分页查询库存组信息
+     *
+     * @param queryVo
+     * @return
+     */
+    public PageInfo<StorageGroupAttach4List> queryForGroupList(StoGroupPageQueryVo queryVo);
 }
