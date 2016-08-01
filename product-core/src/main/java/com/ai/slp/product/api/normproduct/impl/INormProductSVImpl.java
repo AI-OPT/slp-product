@@ -8,7 +8,7 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
-import com.ai.slp.product.util.CommonCheckUtils;
+import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,7 +135,7 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public BaseResponse updateMarketPrice(MarketPriceUpdate marketPrice) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(marketPrice.getTenantId(),"");
+        CommonUtils.checkTenantId(marketPrice.getTenantId(),"");
         normProductBusiSV.updateMarketPrice(marketPrice);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
@@ -157,7 +157,7 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public AttrMap queryAttrByNormProduct(AttrQuery attrQuery) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
+        CommonUtils.checkTenantId(attrQuery.getTenantId(),"");
         return normProductBusiSV.queryAttrOfProduct(attrQuery.getTenantId(),attrQuery.getProductId(),attrQuery.getAttrType());
     }
 

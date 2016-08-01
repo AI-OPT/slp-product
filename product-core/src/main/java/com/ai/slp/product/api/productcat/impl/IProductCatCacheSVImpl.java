@@ -11,7 +11,7 @@ import com.ai.slp.product.api.productcat.param.ProductCatInfo;
 import com.ai.slp.product.api.productcat.param.ProductCatUniqueReq;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.service.business.interfaces.IProductCatQueryBusiSV;
-import com.ai.slp.product.util.CommonCheckUtils;
+import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class IProductCatCacheSVImpl implements IProductCatCacheSV {
     public ProductCatInfo queryByCatId(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
         String tenantId= catUniqueReq.getTenantId(),
                 catId = catUniqueReq.getProductCatId();
-        CommonCheckUtils.checkTenantId(tenantId,ErrorCodeConstants.TENANT_ID_NULL);
+        CommonUtils.checkTenantId(tenantId,ErrorCodeConstants.TENANT_ID_NULL);
         ProductCatInfo catInfo = productCatQueryBusiSV.queryById(tenantId,catId);
         catInfo.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "OK"));
         return catInfo;
@@ -63,7 +63,7 @@ public class IProductCatCacheSVImpl implements IProductCatCacheSV {
      */
     @Override
     public BaseListResponse<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),ErrorCodeConstants.TENANT_ID_NULL);
+        CommonUtils.checkTenantId(catUniqueReq.getTenantId(),ErrorCodeConstants.TENANT_ID_NULL);
         List<ProductCatInfo> catInfoList = productCatQueryBusiSV.queryLinkOfCatById(
                 catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
         BaseListResponse<ProductCatInfo> catResponse = new BaseListResponse<>();
@@ -85,7 +85,7 @@ public class IProductCatCacheSVImpl implements IProductCatCacheSV {
      */
     @Override
     public BaseListResponse<ProductCatInfo> queryChildOfCatById(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),ErrorCodeConstants.TENANT_ID_NULL);
+        CommonUtils.checkTenantId(catUniqueReq.getTenantId(),ErrorCodeConstants.TENANT_ID_NULL);
         List<ProductCatInfo> catInfoList = productCatQueryBusiSV.queryChileOfCatById(
                 catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
         BaseListResponse<ProductCatInfo> catResponse = new BaseListResponse<>();
@@ -107,7 +107,7 @@ public class IProductCatCacheSVImpl implements IProductCatCacheSV {
      */
     @Override
     public BaseListResponse<ProductCatInfo> queryByLevel(ProdCatLevelParam levelParam) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(levelParam.getTenantId(),ErrorCodeConstants.TENANT_ID_NULL);
+        CommonUtils.checkTenantId(levelParam.getTenantId(),ErrorCodeConstants.TENANT_ID_NULL);
         List<ProductCatInfo> catInfoList = productCatQueryBusiSV.queryByLevel(
                 levelParam.getTenantId(),levelParam.getCatLevel());
         BaseListResponse<ProductCatInfo> catResponse = new BaseListResponse<>();
