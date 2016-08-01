@@ -42,11 +42,11 @@ public class StorageGroup4List implements Serializable {
     /**
      *虚拟库存量
     */
-    private long storageTotal;
+    private Long storageTotal;
     /**
      * 组内库存数量
      */
-    private int storageNum;
+    private Integer storageNum;
     /**
      * 生成日期
      */
@@ -116,19 +116,19 @@ public class StorageGroup4List implements Serializable {
         this.serialNumber = serialNumber;
     }
 
-    public long getStorageTotal() {
+    public Long getStorageTotal() {
         return storageTotal;
     }
 
-    public void setStorageTotal(long storageTotal) {
+    public void setStorageTotal(Long storageTotal) {
         this.storageTotal = storageTotal;
     }
 
-    public int getStorageNum() {
+    public Integer getStorageNum() {
         return storageNum;
     }
 
-    public void setStorageNum(int storageNum) {
+    public void setStorageNum(Integer storageNum) {
         this.storageNum = storageNum;
     }
 

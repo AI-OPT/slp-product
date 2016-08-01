@@ -15,6 +15,7 @@ import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.StoGroupPageQueryVo;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -264,6 +265,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		//设置页码相关参数
 		int start = (pageNo - 1) * pageSize;
 		String limitStr = "limit "+start+","+pageSize;
+		genLikeStr(queryVo);
 		//新建返回对象
 		PageInfo<StorageGroupAttach4List> StorageGroupPage = new PageInfo<>();
 		StorageGroupPage.setCount(count);
@@ -275,5 +277,23 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		int pageCount = count/pageSize;
 		StorageGroupPage.setPageCount(isDivisible?pageCount:pageCount+1);
 		return StorageGroupPage;
+	}
+
+	/**
+	 * 完善like检查信息
+	 */
+	private void genLikeStr(StoGroupPageQueryVo queryVo){
+		//库存组ID
+		if (StringUtils.isNotBlank(queryVo.getStorageGroupId()))
+			queryVo.setStorageGroupId("%"+queryVo.getStorageGroupId()+"%");
+		//库存组名称
+		if (StringUtils.isNotBlank(queryVo.getStorageGroupName()))
+			queryVo.setStorageGroupId("%"+queryVo.getStorageGroupName()+"%");
+		//标准品id
+		if (StringUtils.isNotBlank(queryVo.getStandedProdId()))
+			queryVo.setStorageGroupId("%"+queryVo.getStandedProdId()+"%");
+		//标准品名称
+		if (StringUtils.isNotBlank(queryVo.getStandedProductName()))
+			queryVo.setStorageGroupId("%"+queryVo.getStandedProductName()+"%");
 	}
 }

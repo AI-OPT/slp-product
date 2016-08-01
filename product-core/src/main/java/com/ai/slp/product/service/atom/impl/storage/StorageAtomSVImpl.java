@@ -3,6 +3,7 @@ package com.ai.slp.product.service.atom.impl.storage;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.attach.StorageAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
@@ -24,6 +25,8 @@ import java.util.List;
 public class StorageAtomSVImpl implements IStorageAtomSV {
 	@Autowired
 	StorageMapper storageMapper;
+	@Autowired
+	StorageAttachMapper storageAttachMapper;
 	/*
 	 * 废弃状态标记集合
 	 */
@@ -250,6 +253,42 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 			criteria.andStateNotIn(DISCARD_LIST);
 
 		return storageMapper.selectByExample(example);
+	}
+
+	/**
+	 * 统计库存组下库存总量的和
+	 *
+	 * @param groupId
+	 * @param hasDiscard
+	 * @return
+	 */
+	@Override
+	public Long sumTotalOfGroup(String groupId, boolean hasDiscard) {
+		StorageCriteria example = new StorageCriteria();
+		StorageCriteria.Criteria criteria = example.createCriteria();
+		criteria.andStorageGroupIdEqualTo(groupId);
+		//不包含废弃的
+		if (!hasDiscard)
+			criteria.andStateNotIn(DISCARD_LIST);
+		return storageAttachMapper.sumTotalByExample(example);
+	}
+
+	/**
+	 * 统计库存组下库存的数量
+	 *
+	 * @param groupId
+	 * @param hasDiscard
+	 * @return
+	 */
+	@Override
+	public Integer countOfGroup(String groupId, boolean hasDiscard) {
+		StorageCriteria example = new StorageCriteria();
+		StorageCriteria.Criteria criteria = example.createCriteria();
+		criteria.andStorageGroupIdEqualTo(groupId);
+		//不包含废弃的
+		if (!hasDiscard)
+			criteria.andStateNotIn(DISCARD_LIST);
+		return storageMapper.countByExample(example);
 	}
 
 }

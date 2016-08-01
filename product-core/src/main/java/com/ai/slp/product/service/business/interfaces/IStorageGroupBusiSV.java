@@ -86,4 +86,10 @@ public interface IStorageGroupBusiSV {
      * @param storageGroup
      */
     public void flushStorageCache(StorageGroup storageGroup);
+
+    /**
+     * 分页查询指定条件的库存组
+     * @return
+     */
+    public PageInfoResponse<StorageGroup4List> queryPageForGroupList(StorageGroupQueryPage groupQuery);
 }

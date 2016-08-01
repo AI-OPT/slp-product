@@ -122,4 +122,19 @@ public interface IStorageAtomSV {
      */
     public List<Storage> queryTimeStorageOfGroup(String groupId,boolean hasDiscard);
 
+    /**
+     * 统计库存组下库存总量的和
+     * @param groupId
+     * @param hasDiscard
+     * @return
+     */
+    public Long sumTotalOfGroup(String groupId,boolean hasDiscard);
+
+    /**
+     * 统计库存组下库存的数量
+     * @param groupId
+     * @param hasDiscard
+     * @return
+     */
+    public Integer countOfGroup(String groupId,boolean hasDiscard);
 }

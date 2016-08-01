@@ -127,8 +127,11 @@ public class IStorageSVImpl implements IStorageSV {
 	@Override
 	public PageInfoResponse<StorageGroup4List> queryGroup(StorageGroupQueryPage groupQuery)
 			throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(groupQuery.getTenantId());
 		//根据查询条件查询符合条件的库存组
-		return null;
+		PageInfoResponse<StorageGroup4List> groupRes = storageGroupBusiSV.queryPageForGroupList(groupQuery);
+		CommonUtils.addSuccessResHeader(groupRes,"");
+		return groupRes;
 	}
 
 	/**

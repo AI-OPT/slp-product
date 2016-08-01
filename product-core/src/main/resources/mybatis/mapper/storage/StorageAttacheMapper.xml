@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.attach.StorageAttachMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.Storage" >
+    <id column="STORAGE_ID" property="storageId" jdbcType="VARCHAR" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="VARCHAR" />
+    <result column="STORAGE_NAME" property="storageName" jdbcType="VARCHAR" />
+    <result column="IS_SALE_ATTR" property="isSaleAttr" jdbcType="CHAR" />
+    <result column="SALE_PRICE" property="salePrice" jdbcType="DECIMAL" />
+    <result column="TOTAL_NUM" property="totalNum" jdbcType="DECIMAL" />
+    <result column="USABLE_NUM" property="usableNum" jdbcType="DECIMAL" />
+    <result column="WARN_NUM" property="warnNum" jdbcType="DECIMAL" />
+    <result column="ACTIVE_TIME" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="INACTIVE_TIME" property="inactiveTime" jdbcType="TIMESTAMP" />
+    <result column="PRIORITY_NUMBER" property="priorityNumber" jdbcType="DECIMAL" />
+    <result column="SERIAL_NUMBER" property="serialNumber" jdbcType="DECIMAL" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+    <result column="CREATE_ID" property="createId" jdbcType="DECIMAL" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    STORAGE_ID, PROD_ID, STORAGE_GROUP_ID, STORAGE_NAME, IS_SALE_ATTR, SALE_PRICE, TOTAL_NUM, 
+    USABLE_NUM, WARN_NUM, ACTIVE_TIME, INACTIVE_TIME, PRIORITY_NUMBER, SERIAL_NUMBER, 
+    STATE, OPER_ID, OPER_TIME, CREATE_ID, CREATE_TIME
+  </sql>
+  <select id="sumTotalByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria" resultType="java.lang.Long" >
+    select sum(TOTAL_NUM) from storage
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+</mapper>
