@@ -462,7 +462,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             normProdResponse.setCatName(catName);
             // 获取库存组数量
             normProdResponse.setStorageGroupNum(storageGroupAtomSV.countStorGroupByProdID(
-                    standedProduct.getTenantId(), standedProduct.getStandedProdId()));
+                    standedProduct.getTenantId(),productRequest.getSupplierId(), standedProduct.getStandedProdId()));
             NormProdResponseList.add(normProdResponse);
         }
         //新建返回对象

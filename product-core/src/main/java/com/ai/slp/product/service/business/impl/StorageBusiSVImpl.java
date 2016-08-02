@@ -5,11 +5,17 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.param.*;
-import com.ai.slp.product.constants.*;
+import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.SkuStorageConstants;
+import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.product.*;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
+import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -117,7 +123,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * @param operId
 	 */
 	@Override
-	public void changeStorageStats(String tenantId, String storageId, String state, Long operId) {
+	public void changeStorageStats(String tenantId,String supplierId, String storageId, String state, Long operId) {
 		// 查询库存是否存在
 		Storage storage = storageAtomSV.queryById(storageId);
 		if (storage == null) {
@@ -137,7 +143,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		switch (state) {
 		case StorageConstants.Storage.State.ACTIVE:// 转启用
 			// 调用启用库存方法
-			activeStorage(tenantId,storage,operId);
+			activeStorage(tenantId,supplierId,storage,operId);
 			break;
 		case StorageConstants.Storage.State.STOP:// 转停用
 			// 调用停用库存方法
@@ -213,7 +219,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				continue;
 			}
 			// 获取当前库存对应库存组
-			StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId, storage0.getStorageGroupId());
+			StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(
+					tenantId, storageSalePrice.getSupplierId(),storage0.getStorageGroupId());
 			if (storageGroup == null || storageGroup.getHighSalePrice() == null
 					|| storageGroup.getLowSalePrice() == null)
 			{
@@ -251,7 +258,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * 
 	 * @param storage
 	 */
-	private void activeStorage(String tenantId,Storage storage, Long operId) {
+	private void activeStorage(String tenantId,String supplierId,Storage storage, Long operId) {
 		// 检查库存可用量,若有库存,则检查库存组是否自动停用,若是,则自动启用
 		if (storage.getUsableNum() > 0) {
 			// 通过库存组ID查询启用或自动启用的库存
@@ -268,11 +275,10 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				}
 				// 检查库存组状态
 				String state = storageGroupAtomSV
-						.queryByGroupId(tenantId, storage.getStorageGroupId()).getState();
+						.queryByGroupId(tenantId, supplierId,storage.getStorageGroupId()).getState();
 				// 库存组状态不为启用或不启用则不进行下一步操作
 				if (!StorageConstants.StorageGroup.State.ACTIVE.equals(state)
-						|| !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(state))
-				{
+						|| !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(state)){
 					return;
 				}
 				// 查询销售商品的状态是否为售罄下架或停用下架
@@ -556,7 +562,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		}
 		// 检查库存组是否存在
 		if (stoPriorityCharge == null
-				|| storageGroupAtomSV.queryByGroupId(tenantId, groupId) == null) {
+				|| storageGroupAtomSV.queryByGroupId(tenantId,stoPriorityCharge.getSupplierId(), groupId) == null) {
 			logger.warn("找不到指定的库存组,租户表{},库存组标识{}",tenantId,groupId );
 			throw new BusinessException("","指定库存组不存在,租户ID:"+tenantId+",库存组ID:"+groupId);
 		}

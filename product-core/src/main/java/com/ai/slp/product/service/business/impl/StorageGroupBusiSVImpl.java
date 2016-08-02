@@ -98,7 +98,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		//通过是否查询到相关属性来设定库存组是否有销售属性
 		StorageGroup group = new StorageGroup();
 		BeanUtils.copyProperties(group, storageGroup);
-		if(prodCatAttrList == null || prodCatAttrList.size() == 0){
+		//确认是否有销售属性
+		if(CollectionUtil.isEmpty(prodCatAttrList)){
 			group.setIsSaleAttr(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR);
 		}else{
 			group.setIsSaleAttr(StorageConstants.StorageGroup.isSaleAttr.HAS_SALE_ATTR);
@@ -126,7 +127,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	@Override
 	public int updateGroupName(StorageGroupUpName storageGroup) {
 		// 查询库存组是否存在
-		StorageGroup group = storageGroupAtomSV.queryByGroupId(storageGroup.getTenantId(),
+		StorageGroup group = storageGroupAtomSV.queryByGroupId(storageGroup.getTenantId(),storageGroup.getSupplierId(),
 				storageGroup.getStorageGroupId());
 		if (group == null)
 			throw new BusinessException("",
@@ -159,13 +160,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @return
 	 */
 	@Override
-	public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId, String productId) {
+	public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId) {
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
 		if (standedProduct == null)
 			throw new BusinessException("", "未找到对应的标准品信息,租户ID:" + tenantId + ",标准品标识:" + productId);
 		// 查询出标准品下的所有库存组,创建时间倒序
 		List<StorageGroupRes> groupInfoList = new ArrayList<>();
-		List<StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId, productId);
+		List<StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId,supplierId, productId);
 //		for (StorageGroup storageGroup : groupList) {
 //			groupInfoList.add(genStorageGroupInfo(storageGroup));
 //		}
@@ -183,8 +184,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @return
 	 */
 	@Override
-	public StorageGroupRes queryGroupInfoByGroupId(String tenantId, String groupId) {
-		StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId, groupId);
+	public StorageGroupRes queryGroupInfoByGroupId(String tenantId,String supplierId, String groupId) {
+		StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,supplierId, groupId);
 		if (storageGroup == null) {
 			logger.warn("租户ID:" + tenantId + ",库存组标识:" + groupId);
 			throw new BusinessException("", "未找到对应的标准品信息,租户ID:" + tenantId + ",库存组标识:" + groupId);
@@ -255,11 +256,11 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	public int updateStorageGroupPrice(StorageGroupSalePrice salePrice) {
 		if (salePrice == null)
 			return 0;
-		if (salePrice.getStorageGroupId() == null || salePrice.getOperId() == null)
-			throw new BusinessException("", "找不到指定的库存组=" + salePrice.getStorageGroupId() + ",和操作人=" + salePrice.getOperId());
 		// 判断库存是否废弃
-		if (storageGroupAtomSV.queryByGroupId(salePrice.getTenantId(), salePrice.getStorageGroupId()).getState().equals("3"))
-			throw new BusinessException("", "废弃状态的库存组不能更新价格信息");
+		StorageGroup group = storageGroupAtomSV.queryByGroupId(
+				salePrice.getTenantId(),salePrice.getSupplierId(),salePrice.getStorageGroupId());
+		if (group == null || group.getState().equals("3"))
+			throw new BusinessException("", "库存组不存在或已废弃");
 		// 填充价格等基本信息
 		StorageGroup storageGroup = new StorageGroup();
 		BeanUtils.copyProperties(storageGroup, salePrice);
@@ -276,7 +277,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 				prodPriceLog.setUpdatePeice2(storageGroup.getHighSalePrice());
 			prodPriceLogAtomSV.insert(prodPriceLog);
 		}
-		return storageGroupAtomSV.updateStorGroupPrice(storageGroup);
+		return updateNum;
 	}
 
 	/**
@@ -292,9 +293,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 *            操作者ID
 	 */
 	@Override
-	public void updateGroupState(String tenantId, String groupId, String state, Long operId) {
+	public void updateGroupState(String tenantId,String supplierId, String groupId, String state, Long operId) {
 		// 查询库存组是否存在
-		StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId, groupId);
+		StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,supplierId, groupId);
 		if (storageGroup == null) {
 			logger.warn("要查询库存组不存在,租户ID:" + tenantId + ",库存组标识:" + groupId);
 			throw new BusinessException("", "库存组不存在,租户ID:" + tenantId + ",库存组标识:" + groupId);
@@ -398,7 +399,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 商品进行停用下架
 		Product product = productAtomSV.selectByGroupId(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
 		if (product != null && ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
-			productBusiSV.offSale(product.getTenantId(), product.getProdId(), operId);
+			productBusiSV.offSale(product.getTenantId(),storageGroup.getSupplierId(), product.getProdId(), operId);
 		}
 	}
 
@@ -436,7 +437,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	public PageInfoResponse<StorageGroupRes> queryGroupByProdIdForSalePrice(StorageGroupOfNormProdPage infoQuery) {
 		// 分页查询库存组信息
 		PageInfoResponse<StorageGroup> StorageGroupPage = storageGroupAtomSV.queryPageOfStandedProd(
-				infoQuery.getTenantId(), infoQuery.getStandedProdId(), infoQuery.getPageNo(), infoQuery.getPageSize());
+				infoQuery.getTenantId(), infoQuery.getSupplierId(),infoQuery.getStandedProdId(),
+				infoQuery.getPageNo(), infoQuery.getPageSize());
 		// 统计条件结果数量
 		int count = storageGroupAtomSV.queryCountNoDiscard(infoQuery.getTenantId(), infoQuery.getStandedProdId());
 		if (StorageGroupPage == null)

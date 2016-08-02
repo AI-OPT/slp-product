@@ -45,10 +45,11 @@ public interface IStorageGroupAtomSV {
      * 查询指定标识的库存组
      *
      * @param tenantId
+     * @param supplierId
      * @param groupId
      * @return
      */
-    public StorageGroup queryByGroupId(String tenantId,String groupId);
+    public StorageGroup queryByGroupId(String tenantId,String supplierId,String groupId);
 
     /**
      * 更新指定库存组标识的库存组信息
@@ -65,7 +66,7 @@ public interface IStorageGroupAtomSV {
      * @param standedProdId
      * @return
      */
-    public List<StorageGroup> queryOfStandedProd(String tenantId,String standedProdId);
+    public List<StorageGroup> queryOfStandedProd(String tenantId,String supplierId,String standedProdId);
     
     /**
      * 更新库存组的最低最高销售价
@@ -84,7 +85,7 @@ public interface IStorageGroupAtomSV {
      * @return 标准品下库存组数量
      * @author lipeng16
      */
-    public int countStorGroupByProdID(String tenantId,String standedProdId);
+    public int countStorGroupByProdID(String tenantId,String supplierId,String standedProdId);
     
     /**
      * 分页查询某个标准品下的库存组列表
@@ -96,7 +97,7 @@ public interface IStorageGroupAtomSV {
      * @return
      * @author lipeng16
      */
-    public PageInfoResponse<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId, Integer pageNo, Integer pageSize);
+    public PageInfoResponse<StorageGroup> queryPageOfStandedProd(String tenantId, String supplierId,String standedProdId, Integer pageNo, Integer pageSize);
     
     /**
      * 根据搜索条件分页查询库存组列表

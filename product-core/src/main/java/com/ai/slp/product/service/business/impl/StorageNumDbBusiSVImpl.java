@@ -148,7 +148,7 @@ public class StorageNumDbBusiSVImpl {
         }
         //若为减少,且需要切换优先级检查,则进行优先级切换
         else if (isUser && product!=null && priorityChange){
-            changeGroupPriority(tenantId,product.getStorageGroupId(),product.getProdId());
+            changeGroupPriority(tenantId,product.getSupplierId(),product.getStorageGroupId(),product.getProdId());
         }
 
     }
@@ -158,7 +158,7 @@ public class StorageNumDbBusiSVImpl {
      * @param tenantId
      * @param groupId
      */
-    public void changeGroupPriority(String tenantId,String groupId,String productId){
+    public void changeGroupPriority(String tenantId,String supplierId,String groupId,String productId){
         // 获取缓存客户端
         ICacheClient cacheClient = IPaasStorageUtils.getClient();
         // 获取库存组的cacheKey
@@ -177,7 +177,7 @@ public class StorageNumDbBusiSVImpl {
         if (CollectionUtil.isEmpty(storageList)
                 && CollectionUtil.isEmpty(storageAtomSV.queryTimeActiveOfNow(groupId,false))){
             //进行售罄操作
-            productBusiSV.offSale(tenantId,productId,null);
+            productBusiSV.offSale(tenantId,supplierId,productId,null);
             return;
         }
         //刷新下一使用优先级

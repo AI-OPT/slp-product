@@ -8,6 +8,10 @@ public final class ErrorCodeConstants {
      * 租户标识为空
      */
     public static final String TENANT_ID_NULL = "1000";
+    /**
+     * 销售商（商户）标识为空
+     */
+    public static final String SUPPLIER_ID_NULL = "2000";
 
     public final class ProductCat{
         /**

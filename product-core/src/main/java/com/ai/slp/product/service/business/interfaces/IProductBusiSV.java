@@ -34,7 +34,7 @@ public interface IProductBusiSV {
      * @param tenantId
      * @param prodId
      */
-    public void offSale(String tenantId, String prodId, Long operId);
+    public void offSale(String tenantId,String supplierId, String prodId, Long operId);
   
     /**
      * 废弃商品
@@ -58,7 +58,7 @@ public interface IProductBusiSV {
      * @param productId
      * @return
      */
-    public ProductRoute queryRouteGroupOfProd(String tenantId,String productId);
+    public ProductRoute queryRouteGroupOfProd(String tenantId,String supplierId,String productId);
 
     /**
      * 查询商品的非关键属性
@@ -79,7 +79,7 @@ public interface IProductBusiSV {
      * @param tenantId
      * @param prodId
      */
-    public void changeToInSale(String tenantId, String prodId, Long opeId);
+    public void changeToInSale(String tenantId,String supplierId, String prodId, Long opeId);
     
     /**
      * 手动下架

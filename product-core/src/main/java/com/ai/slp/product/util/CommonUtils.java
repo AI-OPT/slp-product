@@ -28,6 +28,20 @@ public class CommonUtils {
         if (StringUtils.isBlank(tenantId))
             throw new BusinessException(nullErrorCode,"租户标识不能为空");
     }
+    /**
+     * 检查销售商（商户）id是否为空，错误码为2000
+     */
+    public static void checkSupplierId(String supplierId){
+    	checkSupplierId(supplierId,ErrorCodeConstants.SUPPLIER_ID_NULL);
+    }
+    /**
+     * 检查销售商（商户）id是否为空
+     */
+    public static void checkSupplierId(String supplierId,String errCode){
+    	String nullErrorCode = StringUtils.isBlank(errCode)? ErrorCodeConstants.SUPPLIER_ID_NULL:errCode;
+        if (StringUtils.isBlank(supplierId))
+            throw new BusinessException(nullErrorCode,"销售商（商户）标识不能为空");
+    }
 
     /**
      * 添加操作成功的responseHeader

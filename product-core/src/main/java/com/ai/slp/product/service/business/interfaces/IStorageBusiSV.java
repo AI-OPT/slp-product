@@ -1,17 +1,10 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import java.util.List;
-
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.storage.param.STOStorage;
-import com.ai.slp.product.api.storage.param.SkuStorageAdd;
-import com.ai.slp.product.api.storage.param.SkuStorageAndProd;
-import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
-import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
-import com.ai.slp.product.api.storage.param.StoragePriorityCharge;
-import com.ai.slp.product.api.storage.param.StorageRes;
-import com.ai.slp.product.api.storage.param.StorageSalePrice;
+import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
+
+import java.util.List;
 
 /**
  * 库存业务操作
@@ -39,7 +32,7 @@ public interface IStorageBusiSV {
      * @param state
      * @param operId
      */
-    public void changeStorageStats(String tenantId,String storageId,String state,Long operId);
+    public void changeStorageStats(String tenantId,String supplierId,String storageId,String state,Long operId);
 	 /**
 	  * 批量更新库存销售价
 	  *

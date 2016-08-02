@@ -64,7 +64,8 @@ public class IStorageSVImpl implements IStorageSV {
 	public StorageGroupRes queryGroupInfoByGroupId(StorageGroupQuery infoQuery)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(infoQuery.getTenantId());
-		return storageGroupBusiSV.queryGroupInfoByGroupId(infoQuery.getTenantId(), infoQuery.getGroupId());
+		return storageGroupBusiSV.queryGroupInfoByGroupId(
+				infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getGroupId());
 	}
 
 	/**
@@ -83,7 +84,7 @@ public class IStorageSVImpl implements IStorageSV {
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(infoQuery.getTenantId());
 		List<StorageGroupRes> groupResList = storageGroupBusiSV.queryGroupInfoByNormProId(
-				infoQuery.getTenantId(), infoQuery.getProductId());
+				infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getProductId());
 		BaseListResponse<StorageGroupRes> groupRes = new BaseListResponse<>();
 		groupRes.setResult(groupResList);
 		groupRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,""));
@@ -106,8 +107,8 @@ public class IStorageSVImpl implements IStorageSV {
 	public BaseResponse chargeStorageGroupStatus(StorageGroupStatus groupStatus)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(groupStatus.getTenantId());
-		storageGroupBusiSV.updateGroupState(groupStatus.getTenantId(), groupStatus.getGroupId(), groupStatus.getState(),
-				groupStatus.getOperId());
+		storageGroupBusiSV.updateGroupState(groupStatus.getTenantId(), groupStatus.getSupplierId(),
+				groupStatus.getGroupId(),groupStatus.getState(),groupStatus.getOperId());
 		BaseResponse baseResponse = new BaseResponse();
 		CommonUtils.addSuccessResHeader(baseResponse,"");
 		return baseResponse;
@@ -198,8 +199,8 @@ public class IStorageSVImpl implements IStorageSV {
 	@Override
 	public BaseResponse chargeStorageStatus(StorageStatus storageStatus) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(storageStatus.getTenantId());
-		storageBusiSV.changeStorageStats(storageStatus.getTenantId(), storageStatus.getStorageId(),
-				storageStatus.getState(), storageStatus.getOperId());
+		storageBusiSV.changeStorageStats(storageStatus.getTenantId(), storageStatus.getSupplierId(),
+				storageStatus.getStorageId(),storageStatus.getState(), storageStatus.getOperId());
 		BaseResponse baseResponse = new BaseResponse();
 		CommonUtils.addSuccessResHeader(baseResponse,"");
 		return baseResponse;

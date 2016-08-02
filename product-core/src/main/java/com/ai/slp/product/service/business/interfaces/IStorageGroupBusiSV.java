@@ -35,7 +35,7 @@ public interface IStorageGroupBusiSV {
      * @param productId
      * @return
      */
-    public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId, String productId);
+    public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId);
 
     /**
      * 查询单个库存组的信息
@@ -44,7 +44,7 @@ public interface IStorageGroupBusiSV {
      * @param groupId
      * @return
      */
-    public StorageGroupRes queryGroupInfoByGroupId(String tenantId, String groupId);
+    public StorageGroupRes queryGroupInfoByGroupId(String tenantId,String supplierId, String groupId);
     
     /**
      * 更新库存组价格信息
@@ -61,7 +61,7 @@ public interface IStorageGroupBusiSV {
      * @param state 要变更状态
      * @param operId 操作者ID
      */
-    public void updateGroupState(String tenantId,String groupId,String state,Long operId);
+    public void updateGroupState(String tenantId,String supplierId,String groupId,String state,Long operId);
     
     /**
      * 根据标准品标识分页查询库存组信息<br>

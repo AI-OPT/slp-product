@@ -174,7 +174,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param prodId
      */
     @Override
-    public void offSale(String tenantId, String prodId, Long operId) {
+    public void offSale(String tenantId,String supplierId, String prodId, Long operId) {
         Product product = productAtomSV.selectByProductId(tenantId,prodId);
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
@@ -183,7 +183,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if(!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
             return;
         }
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(
+                tenantId,supplierId,product.getStorageGroupId());
         changeToStop(storageGroup,product,operId);
     }
 
@@ -243,13 +244,13 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @return
      */
     @Override
-    public ProductRoute queryRouteGroupOfProd(String tenantId, String productId) {
+    public ProductRoute queryRouteGroupOfProd(String tenantId, String supplierId,String productId) {
         Product product = productAtomSV.selectByProductId(tenantId,productId);
         if (product==null) {
             logger.warn("未查询到对应销售商品,租户ID:{},商品标识:{}",tenantId,productId);
             throw new BusinessException("", "未查询到对应销售商品,租户ID:" + tenantId + ",商品标识:" + productId);
         }
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,supplierId,product.getStorageGroupId());
         if (storageGroup==null){
             logger.warn("未查询销售商品对应库存组,租户ID:{},商品标识:{}",tenantId,productId);
             throw new BusinessException("", "未查询销售商品对应库存组,租户ID:" + tenantId + ",商品标识:" + productId);
@@ -349,7 +350,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
     @Override
-    public void changeToInSale(String tenantId, String prodId, Long operId) {
+    public void changeToInSale(String tenantId,String supplierId, String prodId, Long operId) {
         Product product = productAtomSV.selectByProductId(tenantId,prodId);
         if (prodId == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
@@ -368,7 +369,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         //将仓库中商品进行上架,不判断价格,应由库存启用时检查
         //1.库存组不存在,或已废弃
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,supplierId,product.getStorageGroupId());
         if (storageGroup==null
                 || StorageConstants.StorageGroup.State.DISCARD.equals(storageGroup.getState())
                 || StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(storageGroup.getState())){
@@ -491,7 +492,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             return;
         }
         //查询库存组是否为"启用"状态
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,product.getStorageGroupId());
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(
+                tenantId,product.getSupplierId(),product.getStorageGroupId());
         if (storageGroup==null
                 || (!StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState()))
                 && !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storageGroup.getState())){

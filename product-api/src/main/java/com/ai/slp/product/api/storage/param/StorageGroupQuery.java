@@ -1,9 +1,8 @@
 package com.ai.slp.product.api.storage.param;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 库存组信息查询条件<br>
@@ -15,6 +14,11 @@ import com.ai.slp.product.api.storage.interfaces.IStorageSV;
  */
 public class StorageGroupQuery extends BaseInfo {
     private static final long serialVersionUID = 1L;
+    /**
+     * 销售商（商户）标识，必填<br>
+     */
+    @NotBlank(message = "销售商（商户）标识不能为空")
+    private String supplierId;
 	/**
      * 库存组标识
      * 在根据库存组查询时,必填.其他情况忽略
@@ -44,5 +48,13 @@ public class StorageGroupQuery extends BaseInfo {
 
     public void setProductId(String productId) {
         this.productId = productId;
+    }
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
     }
 }

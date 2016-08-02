@@ -229,7 +229,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         }
         //如果为立即上架,则进行上架操作
         if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){
-            productBusiSV.changeToInSale(tenantId,productId,operId);
+            productBusiSV.changeToInSale(tenantId,productInfo.getSupplierId(),productId,operId);
         }
     }
 

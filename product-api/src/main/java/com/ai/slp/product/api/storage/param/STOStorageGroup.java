@@ -1,11 +1,10 @@
 package com.ai.slp.product.api.storage.param;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 虚拟库存组信息<br>
@@ -17,6 +16,13 @@ import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 public class STOStorageGroup extends BaseInfo {
 
     private static final long serialVersionUID = 1L;
+    /**
+     * 销售商（商户）标识，必填<br>
+     * -1:自营平台;其他为销售商标识
+     */
+    @NotBlank(message = "销售商（商户）标识不能为空",
+            groups = { IStorageSV.InstallStorage.class})
+    private String supplierId;
 	/**
      * 标准品标识<br>
      * 设置为null,则不进行更新操作
@@ -74,5 +80,15 @@ public class STOStorageGroup extends BaseInfo {
     public void setCreateId(Long createId) {
         this.createId = createId;
     }
+
+	public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+    
+    
 
 }

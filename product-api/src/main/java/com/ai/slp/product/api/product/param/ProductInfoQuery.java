@@ -16,6 +16,12 @@ import javax.validation.constraints.NotNull;
  */
 public class ProductInfoQuery extends BaseInfo {
     private static final long serialVersionUID = 1L;
+    /**
+     * 销售商（商户）标识，必填<br>
+     */
+    @NotBlank(message = "销售商（商户）标识不能为空")
+    private String supplierId;
+
 	/**
      * 商品标识,必填
      */
@@ -28,6 +34,14 @@ public class ProductInfoQuery extends BaseInfo {
      */
     @NotNull(message = "操作人不能为空",groups = {IProductManagerSV.ChangeToInSale.class})
     private Long operId;
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
 
     public String getProductId() {
         return productId;

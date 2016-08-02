@@ -100,7 +100,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 * @return
 	 */
 	@Override
-	public StorageGroup queryByGroupId(String tenantId, String groupId) {
+	public StorageGroup queryByGroupId(String tenantId, String supplierId,String groupId) {
 		StorageGroup group = storageGroupMapper.selectByPrimaryKey(groupId);
 		if (group!=null && !group.getTenantId().equals(tenantId)){
 			group = null;
@@ -128,7 +128,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 * @return
 	 */
 	@Override
-	public List<StorageGroup> queryOfStandedProd(String tenantId, String standedProdId) {
+	public List<StorageGroup> queryOfStandedProd(String tenantId,String supplierId, String standedProdId) {
 		StorageGroupCriteria example = new StorageGroupCriteria();
 		example.setOrderByClause(" CREATE_TIME desc");
 		example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
@@ -145,7 +145,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	}
 
 	@Override
-	public int countStorGroupByProdID(String tenantId, String standedProdId) {
+	public int countStorGroupByProdID(String tenantId,String supplierId, String standedProdId) {
 		StorageGroupCriteria example = new StorageGroupCriteria();
 		example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(tenantId).andStateNotEqualTo("3")
 				.andStateNotEqualTo("31");
@@ -156,7 +156,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 * 分页查询某个标准品下的库存组列表
 	 */
 	@Override
-	public PageInfoResponse<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId, Integer pageNo,
+	public PageInfoResponse<StorageGroup> queryPageOfStandedProd(String tenantId, String supplierId,String standedProdId, Integer pageNo,
 			Integer pageSize)
 	{
 		StorageGroupCriteria example = new StorageGroupCriteria();

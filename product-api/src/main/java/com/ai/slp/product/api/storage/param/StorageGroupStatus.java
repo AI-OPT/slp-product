@@ -15,6 +15,12 @@ import javax.validation.constraints.NotNull;
  */
 public class StorageGroupStatus extends BaseInfo {
     private static final long serialVersionUID = 1L;
+    /**
+     * 销售商（商户）标识，必填<br>
+     */
+    @NotBlank(message = "销售商（商户）标识不能为空",
+            groups = { IStorageSV.ChargeStorageGroupStatus.class})
+    private String supplierId;
 	/**
      * 库存组标识
      */
@@ -35,6 +41,14 @@ public class StorageGroupStatus extends BaseInfo {
     @NotNull(message = "操作者不能为空",
             groups = { IStorageSV.ChargeStorageGroupStatus.class})
     private Long operId;
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
 
     public String getGroupId() {
         return groupId;
