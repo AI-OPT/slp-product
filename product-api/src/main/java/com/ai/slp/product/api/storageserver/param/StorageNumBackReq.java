@@ -17,6 +17,11 @@ import java.util.Map;
  */
 public class StorageNumBackReq extends BaseInfo {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * 单品SKU标识
      */
     @NotBlank(message = "单品标识不能为空",groups = IStorageNumSV.BackStorageNum.class)

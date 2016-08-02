@@ -14,6 +14,10 @@ import java.util.Map;
  */
 public class StorageNumRes extends BaseResponse {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
      * 单品SKU标识
      */
     private String skuId;
