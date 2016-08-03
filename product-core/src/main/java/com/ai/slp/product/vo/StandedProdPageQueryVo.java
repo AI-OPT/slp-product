@@ -74,8 +74,22 @@ public class StandedProdPageQueryVo {
      * 操作/废弃时间范围的截止时间
      */
     private Timestamp operEndTime;
+    /**
+     * (新增字段)
+     * 商户ID--(-1:自运营)
+     */
+    private String supplierId;
+    
 
-    public Integer getPageNo() {
+    public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	public Integer getPageNo() {
         return pageNo;
     }
 

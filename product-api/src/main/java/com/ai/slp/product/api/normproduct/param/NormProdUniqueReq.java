@@ -30,8 +30,24 @@ public class NormProdUniqueReq extends BaseInfo {
     @NotNull(message = "操作人ID不能为空",
             groups = { INormProductSV.DiscardProduct.class })
     private Long operId;
+    /**
+     * (新增字段)
+     * 商户ID--(-1:自运营)
+     */
+    @NotBlank(message = "商户ID不能为空",
+            groups = { INormProductSV.DiscardProduct.class })
+    private String supplierId;
+    
+    
+    public String getSupplierId() {
+		return supplierId;
+	}
 
-    public String getProductId() {
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	public String getProductId() {
         return productId;
     }
 

@@ -83,8 +83,22 @@ public class NormProdResponse implements Serializable {
      * 操作者名称
      */
     private String operName;
+    /**
+     * (新增字段)
+     * 商户ID--(-1:自运营)
+     */
+    private String supplierId;
+    
 
-    public String getCatId() {
+    public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	public String getCatId() {
         return catId;
     }
 

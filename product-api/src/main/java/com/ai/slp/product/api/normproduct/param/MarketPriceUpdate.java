@@ -37,8 +37,25 @@ public class MarketPriceUpdate extends BaseInfo {
     @NotNull(message = "创建人ID不能为空",
             groups = { INormProductSV.UpdateMarketPrice.class})
     private Long operId;
+    
+    /**
+     * (新增字段)
+     * 商户ID--(-1:自运营)
+     */
+    @NotBlank(message = "商户ID不能为空",
+            groups = { INormProductSV.UpdateMarketPrice.class})
+    private String supplierId;
+    
 
-    public String getProductId() {
+    public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	public String getProductId() {
         return productId;
     }
 

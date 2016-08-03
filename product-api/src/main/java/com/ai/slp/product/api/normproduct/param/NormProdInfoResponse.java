@@ -85,8 +85,22 @@ public class NormProdInfoResponse extends BaseResponse {
      * 属性与属性值对应关系
      */
     private Map<Long,Set<String>> attrAndValueIds;
+    /**
+     * (新增字段)
+     * 商户ID--(-1:自运营)
+     */
+    private String supplierId;
+    
 
-    public String getTenantId() {
+    public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	public String getTenantId() {
         return tenantId;
     }
 

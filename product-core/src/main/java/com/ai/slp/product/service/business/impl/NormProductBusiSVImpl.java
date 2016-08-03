@@ -119,6 +119,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
         if (standedProduct == null)
             throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
+        //判断商户ID是否传入的商户ID
+        if (!normProdct.getSupplierId().equals(standedProduct.getSupplierId())) 
+        	throw new BusinessException("", "标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + normProdct.getSupplierId() + "不一致!");
+        	
         /*
          * 总共有6种状态变化, 1.不允许变更为废弃状态;2.已废弃标准品不允许变更状态;3.可用变为不可用,需要检查.
          */
@@ -225,10 +229,14 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     }
 
     @Override
-    public void discardProduct(String tenantId, String productId, Long operId) {
+    public void discardProduct(String tenantId, String productId, Long operId, String supplierId) {
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
         if (standedProduct == null)
             throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
+        
+        if (!standedProduct.getSupplierId().equals(supplierId)) 
+        	throw new BusinessException("", "标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + supplierId + "不一致!");
+        
         // 查询没有废弃的库存组
         int noDiscardNum = storageGroupAtomSV.queryCountNoDiscard(tenantId, productId);
         if (noDiscardNum > 0)

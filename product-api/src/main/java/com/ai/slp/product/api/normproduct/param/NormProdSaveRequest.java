@@ -78,8 +78,25 @@ public class NormProdSaveRequest extends BaseInfo {
      * 标准品属性值集合
      */
     private List<AttrValRequest> attrValList;
+    /**
+     * (新增字段)
+     * 商户ID--(-1:自运营)
+     */
+    @NotBlank(message = "商户ID不能为空",
+            groups = { INormProductSV.SaveProductInfo.class,
+                    INormProductSV.UpdateProductInfo.class })
+    private String supplierId;
+    
 
-    public String getProductCatId() {
+    public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	public String getProductCatId() {
         return productCatId;
     }
 

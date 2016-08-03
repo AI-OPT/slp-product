@@ -99,6 +99,12 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		// 操作人
 		if (request.getOperId() != null)
 			criteria.andOperIdEqualTo(request.getOperId());
+		
+		//商户ID	(需求新增)
+		if (StringUtils.isNotBlank(request.getSupplierId())) {
+			criteria.andSupplierIdEqualTo(request.getSupplierId());
+		}
+		
 		//	example.setOrderByClause("OPER_TIME desc");//操作时间倒序
 		example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
 		PageInfo<StandedProduct> pageInfo = new PageInfo<>();

@@ -2,7 +2,10 @@ package com.ai.slp.product.api.normproduct.param;
 
 import java.sql.Timestamp;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 
 /**
  * 标准品列表查询参数<br>
@@ -75,8 +78,24 @@ public class NormProdRequest extends BaseInfo {
      * 操作/废弃时间范围的截止时间
      */
     private Timestamp operEndTime;
+    /**
+     * (新增字段)
+     * 商户ID--(-1:自运营)
+     */
+    @NotBlank(message = "商户ID不能为空",
+            groups = { INormProductSV.QueryNormProduct.class})
+    private String supplierId;
+    
+    
+    public String getSupplierId() {
+		return supplierId;
+	}
 
-    public Integer getPageNo() {
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	public Integer getPageNo() {
         return pageNo;
     }
 
