@@ -2,7 +2,7 @@ package com.ai.slp.product.api.product;
 
 import com.ai.slp.product.api.product.interfaces.IProductServerSV;
 import com.ai.slp.product.api.product.param.SkuInfoQuery;
-import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.CommonTestConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class IProductServerSVTest {
     @Test
     public void queryProductSkuById(){
         SkuInfoQuery skuInfoQuery = new SkuInfoQuery();
-        skuInfoQuery.setTenantId(CommonConstants.COMMON_TENANT_ID);
+        skuInfoQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
         skuInfoQuery.setSkuId("1000000000002405");
         productServerSV.queryProductSkuById(skuInfoQuery);
     }

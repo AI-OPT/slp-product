@@ -3,7 +3,7 @@ package com.ai.slp.product.service.business;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.productcat.param.ProductCatInfo;
 import com.ai.slp.product.api.productcat.param.ProductCatParam;
-import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.util.DateUtils;
@@ -44,7 +44,7 @@ public class IProductCatBusiSVTest {
 
     @Test
     public void queryLinkOfCatById(){
-        List<ProductCatInfo> catInfoList = productCatBusiSV.queryLinkOfCatById(CommonConstants.COMMON_TENANT_ID,"10000010010000");
+        List<ProductCatInfo> catInfoList = productCatBusiSV.queryLinkOfCatById(CommonTestConstants.COMMON_TENANT_ID,"10000010010000");
         for (ProductCatInfo catInfo:catInfoList){
             System.out.print(catInfo.getProductCatName()+"-->");
         }

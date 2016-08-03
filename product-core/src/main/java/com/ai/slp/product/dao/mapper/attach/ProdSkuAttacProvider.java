@@ -1,6 +1,6 @@
 package com.ai.slp.product.dao.mapper.attach;
 
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import org.apache.commons.lang.StringUtils;
 
@@ -25,9 +25,9 @@ public class ProdSkuAttacProvider {
         stringBuffer.append(" WHERE a.IS_SALE_NATIONWIDE = 'Y' AND a.recharge_type = 'D'");
         stringBuffer.append(" AND a.PROD_ID = d.PROD_ID AND a.STANDED_PROD_ID = c.STANDED_PROD_ID");
         stringBuffer.append(" AND a.PROD_ID = e.PROD_ID AND a.STATE = '"+ ProductConstants.Product.State.IN_SALE+"'");
-        stringBuffer.append(" AND c.STATE = '" + CommonSatesConstants.STATE_ACTIVE + "'");
-        stringBuffer.append(" AND d.STATE = '" + CommonSatesConstants.STATE_ACTIVE + "'");
-        stringBuffer.append(" AND e.STATE = '" + CommonSatesConstants.STATE_ACTIVE + "'");
+        stringBuffer.append(" AND c.STATE = '" + CommonConstants.STATE_ACTIVE + "'");
+        stringBuffer.append(" AND d.STATE = '" + CommonConstants.STATE_ACTIVE + "'");
+        stringBuffer.append(" AND e.STATE = '" + CommonConstants.STATE_ACTIVE + "'");
         stringBuffer.append(" AND d.USER_TYPE = '"+param.get("userType")+"' AND c.ATTR_ID = "+param.get("attrId"));
         stringBuffer.append(" AND a.TENANT_ID = '"+param.get("tenantId")+"' AND c.TENANT_ID = '"+param.get("tenantId")+"'");
         stringBuffer.append(" AND d.TENANT_ID = '"+param.get("tenantId")+"' AND e.TENANT_ID = '"+param.get("tenantId")+"'");
@@ -57,10 +57,10 @@ public class ProdSkuAttacProvider {
         stringBuffer.append(" AND a.PROD_ID = d.PROD_ID AND a.STANDED_PROD_ID = c.STANDED_PROD_ID AND a.PROD_ID = b.PROD_ID");
         stringBuffer.append(" AND a.PROD_ID = e.PROD_ID AND a.STATE = '"+ ProductConstants.Product.State.IN_SALE+"'");
         stringBuffer.append(" AND b.PROV_CODE = " + param.get("provCode"));
-        stringBuffer.append(" AND b.STATE = '" + CommonSatesConstants.STATE_ACTIVE + "'");
-        stringBuffer.append(" AND c.STATE = '" + CommonSatesConstants.STATE_ACTIVE + "'");
-        stringBuffer.append(" AND d.STATE = '" + CommonSatesConstants.STATE_ACTIVE + "'");
-        stringBuffer.append(" AND e.STATE = '" + CommonSatesConstants.STATE_ACTIVE + "'");
+        stringBuffer.append(" AND b.STATE = '" + CommonConstants.STATE_ACTIVE + "'");
+        stringBuffer.append(" AND c.STATE = '" + CommonConstants.STATE_ACTIVE + "'");
+        stringBuffer.append(" AND d.STATE = '" + CommonConstants.STATE_ACTIVE + "'");
+        stringBuffer.append(" AND e.STATE = '" + CommonConstants.STATE_ACTIVE + "'");
         stringBuffer.append(" AND d.USER_TYPE = '"+param.get("userType")+"' AND c.ATTR_ID = "+param.get("attrId"));
         stringBuffer.append(" AND a.TENANT_ID = '"+param.get("tenantId")+"' AND c.TENANT_ID = '"+param.get("tenantId")+"'");
         stringBuffer.append(" AND d.TENANT_ID = '"+param.get("tenantId")+"' AND e.TENANT_ID = '"+param.get("tenantId")+"'");

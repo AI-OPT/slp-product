@@ -2,7 +2,7 @@ package com.ai.slp.product.service.atom;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.dao.mapper.attach.StorageGroupAttach4List;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.vo.StoGroupPageQueryVo;
@@ -27,7 +27,7 @@ public class IStorageGroupAtomSVTest {
     @Test
     public void queryForGroupListTest(){
         StoGroupPageQueryVo queryVo = new StoGroupPageQueryVo();
-        queryVo.setTenantId(CommonConstants.COMMON_TENANT_ID);
+        queryVo.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
         queryVo.setPageSize(10);
         DateTime dateTime = new DateTime(2016,5,20,0,0);//2016年5月20日0点0分
         queryVo.setOperTimeStart(new Timestamp(dateTime.getMillis()));
@@ -41,5 +41,11 @@ public class IStorageGroupAtomSVTest {
             System.out.println(groupAttach.getStorageGroupId()+":"+groupAttach.getStorageGroupName()+":"
             +groupAttach.getStandedProdId()+":"+groupAttach.getStandedProductName());
         }
+    }
+
+    @Test
+    public void countStorGroupByProdIDTest(){
+        int num = groupAtomSV.countStorGroupByProdID("SLP","-1","100000000176");
+        System.out.println("======="+num);
     }
 }

@@ -1,7 +1,7 @@
 package com.ai.slp.product.service.atom.impl.product;
 
 import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPictureCriteria;
@@ -35,7 +35,7 @@ public class ProdPictureAtomSVImpl implements IProdPictureAtomSV {
                 .andAttrvalueDefIdEqualTo(attrValId)
                 .andPicUsesEqualTo(ProductConstants.ProdPicture.PicType.ATTR)
                 .andIsMainPicEqualTo(ProductConstants.ProdPicture.IsMainPic.YES)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<ProdPicture> pictureList = prodPictureMapper.selectByExample(example);
         return CollectionUtil.isEmpty(pictureList)?null:pictureList.get(0);
     }
@@ -53,7 +53,7 @@ public class ProdPictureAtomSVImpl implements IProdPictureAtomSV {
         example.createCriteria().andProdIdEqualTo(prodId)
                 .andAttrvalueDefIdEqualTo(attrValId)
                 .andPicUsesEqualTo(ProductConstants.ProdPicture.PicType.ATTR)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodPictureMapper.selectByExample(example);
     }
 
@@ -68,7 +68,7 @@ public class ProdPictureAtomSVImpl implements IProdPictureAtomSV {
         ProdPictureCriteria example = new ProdPictureCriteria();
         example.createCriteria().andProdIdEqualTo(prodId)
                 .andPicUsesEqualTo(ProductConstants.ProdPicture.PicType.PRODUCT)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodPictureMapper.selectByExample(example);
     }
 
@@ -84,7 +84,7 @@ public class ProdPictureAtomSVImpl implements IProdPictureAtomSV {
         example.createCriteria().andProdIdEqualTo(prodId)
                 .andPicUsesEqualTo(ProductConstants.ProdPicture.PicType.PRODUCT)
                 .andIsMainPicEqualTo(ProductConstants.ProdPicture.IsMainPic.YES)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<ProdPicture> pictureList = prodPictureMapper.selectByExample(example);
         return CollectionUtil.isEmpty(pictureList)?null:pictureList.get(0);
     }
@@ -94,9 +94,9 @@ public class ProdPictureAtomSVImpl implements IProdPictureAtomSV {
         ProdPictureCriteria example = new ProdPictureCriteria();
         example.createCriteria().andProdIdEqualTo(prodId)
                 .andAttrvalueDefIdEqualTo(attrValId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         ProdPicture prodPicture = new ProdPicture();
-        prodPicture.setState(CommonSatesConstants.STATE_INACTIVE);
+        prodPicture.setState(CommonConstants.STATE_INACTIVE);
         prodPicture.setOperId(operId);
         prodPicture.setOperTime(DateUtils.currTimeStamp());
         return prodPictureMapper.updateByExampleSelective(prodPicture,example);

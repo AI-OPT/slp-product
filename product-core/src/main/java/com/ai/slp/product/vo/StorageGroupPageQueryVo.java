@@ -11,6 +11,10 @@ public class StorageGroupPageQueryVo {
 	 */
 	private String tenantId;
 	/**
+	 * 销售商(商户)标识
+	 */
+	private String supplierId;
+	/**
      * 请求查询的页码
      * 默认为1
      */
@@ -50,6 +54,15 @@ public class StorageGroupPageQueryVo {
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
 	}
+
+	public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
 	public Integer getPageNo() {
 		return pageNo;
 	}

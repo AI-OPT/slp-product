@@ -1,13 +1,7 @@
 package com.ai.slp.product.service.atom.impl;
 
-import java.util.List;
-
-import com.ai.slp.product.util.SequenceUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDefCriteria;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
@@ -15,7 +9,12 @@ import com.ai.slp.product.dao.mapper.interfaces.ProdAttrDefMapper;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * 属性定义原子操作
@@ -39,7 +38,7 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     @Override
     public ProdAttrDef selectById(String tenantId, Long attrId) {
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
-        example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<ProdAttrDef> prodAttrDefList = prodAttrDefMapper.selectByExample(example);
         return (prodAttrDefList==null|| prodAttrDefList.isEmpty())?null:prodAttrDefList.get(0);
     }
@@ -47,7 +46,7 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     @Override
     public int deleteById(String tenantId, Long attrId, Long operId) {
         ProdAttrDef prodAttrDef = new ProdAttrDef();
-        prodAttrDef.setState(CommonSatesConstants.STATE_INACTIVE);
+        prodAttrDef.setState(CommonConstants.STATE_INACTIVE);
         prodAttrDef.setOperId(operId);
         prodAttrDef.setOperTime(DateUtils.currTimeStamp());
         
@@ -70,7 +69,7 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         if(attrAndValPageQueryVo.getValueWay() != null)
             request.andValueWayEqualTo(attrAndValPageQueryVo.getValueWay());
         //设置数据的查询状态为有效状态
-        request.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        request.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         //获取查询到的条目数
         int count = prodAttrDefMapper.countByExample(example);
         
@@ -91,7 +90,7 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     @Override
     public int selectAttrvalNum(String tenantId, Long attrId) {
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
-        example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodAttrvalueDefMapper.countByExample(example);
     }
 
@@ -105,7 +104,7 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     public List<ProdAttrDef> selectAllAttrs(String tenantId) {
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
         example.setOrderByClause("firstLetter");
-        example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodAttrDefMapper.selectByExample(example);
     }
 

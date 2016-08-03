@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface IStorageGroupAtomSV {
     /**
-     * 查询标准品下已经不是废弃状态的库存组
+     * 查询标准品下没有废弃的库存组数量
      *
      * @param tenantId
      * @param standedProdId
@@ -106,7 +106,7 @@ public interface IStorageGroupAtomSV {
      * @return
      * @author lipeng16
      */
-    public PageInfoResponse<StorageGroup> queryPageOfSearch(StorageGroupPageQueryVo storageGroupPageQueryVo);
+    public PageInfo<StorageGroup> queryPageOfSearch(StorageGroupPageQueryVo storageGroupPageQueryVo);
 
     /**
      * 统计所有非废弃库存组

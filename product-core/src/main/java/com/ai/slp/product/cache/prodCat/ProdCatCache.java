@@ -3,7 +3,7 @@ package com.ai.slp.product.cache.prodCat;
 import com.ai.opt.sdk.cache.base.AbstractCache;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.paas.ipaas.util.JSonUtil;
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.ProductCatCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProductCatMapper;
@@ -38,7 +38,7 @@ public class ProdCatCache extends AbstractCache {
         ICacheClient cacheClient = IPaasCatUtils.getCacheClient();
         //查询所有有效的类目信息
         ProductCatCriteria example = new ProductCatCriteria();
-        example.createCriteria().andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        example.createCriteria().andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<ProductCat> catList = productCatMapper.selectByExample(example);
         //租户
         Set<String> tenantIdSet = new HashSet<>();

@@ -3,7 +3,7 @@ package com.ai.slp.product.service.business;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
-import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ public class IProductBusiSVTest {
     @Test
     public void queryFastInfoListTest(){
         FastProductReq request = new FastProductReq();
-        request.setTenantId(CommonConstants.COMMON_TENANT_ID);
+        request.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
         request.setBasicOrgId("10");
         request.setProvCode(17);
         request.setUserType("10");
@@ -35,7 +35,7 @@ public class IProductBusiSVTest {
 
     @Test
     public void queryNoKeyAttrForEditTest(){
-        ProdNoKeyAttr noKeyAttr = productBusiSV.queryNoKeyAttrForEdit(CommonConstants.COMMON_TENANT_ID,"3");
+        ProdNoKeyAttr noKeyAttr = productBusiSV.queryNoKeyAttrForEdit(CommonTestConstants.COMMON_TENANT_ID,"3");
         System.out.println(noKeyAttr.toString());
     }
 }

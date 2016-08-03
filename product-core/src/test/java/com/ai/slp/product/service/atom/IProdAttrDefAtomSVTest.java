@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.atom;
 
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import org.junit.Assert;
@@ -31,7 +31,7 @@ public class IProdAttrDefAtomSVTest {
         prodAttrDef.setFirstLetter("C");
         prodAttrDef.setOperId(1l);
         prodAttrDef.setOperTime(new Timestamp(System.currentTimeMillis()));
-        prodAttrDef.setState(CommonSatesConstants.STATE_ACTIVE);
+        prodAttrDef.setState(CommonConstants.STATE_ACTIVE);
         prodAttrDef.setValueWay("1");
 //        int ret = prodAttrDefAtomSV.installObj(prodAttrDef);
 //        Assert.assertEquals(1,ret);

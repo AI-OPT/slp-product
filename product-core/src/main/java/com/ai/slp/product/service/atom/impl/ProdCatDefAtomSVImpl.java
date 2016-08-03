@@ -3,7 +3,7 @@ package com.ai.slp.product.service.atom.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.ProductCatCriteria;
@@ -30,7 +30,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
             String tenantId, String productCatId, String productCatName, String isChild) {
         ProductCatCriteria example = new ProductCatCriteria();
         ProductCatCriteria.Criteria criteria = example.createCriteria();
-        criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         if (StringUtils.isNotBlank(tenantId))
             criteria.andTenantIdEqualTo(tenantId);
         if (StringUtils.isNotBlank(productCatId))
@@ -59,7 +59,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         ProductCatCriteria example = new ProductCatCriteria();
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<ProductCat> productCatList = productCatMapper.selectByExample(example);
         return CollectionUtil.isEmpty(productCatList)?null:productCatList.get(0);
     }
@@ -91,7 +91,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
             productCat.setParentProductCatId(ProductCatConstants.ProductCat.ParentProductCatId.ROOT_CAT);
         if (productCat.getOperTime()==null)
             productCat.setOperTime(DateUtils.currTimeStamp());
-        productCat.setState(CommonSatesConstants.STATE_ACTIVE);
+        productCat.setState(CommonConstants.STATE_ACTIVE);
         return productCatMapper.insertSelective(productCat);
     }
 
@@ -143,7 +143,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         example.setOrderByClause("SERIAL_NUMBER ");
         ProductCatCriteria.Criteria criteria = example.createCriteria();
         criteria.andTenantIdEqualTo(tenantId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         //若为设置父类目标识,则使用根类目
         criteria.andParentProductCatIdEqualTo(
                 StringUtils.isBlank(parentCatId)? ProductCatConstants.ProductCat.ParentProductCatId.ROOT_CAT:parentCatId);

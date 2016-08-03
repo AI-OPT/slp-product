@@ -19,6 +19,10 @@ public class StoGroupPageQueryVo {
      */
     private Integer pageSize =20;
     /**
+     * 销售商(商户)标识
+     */
+    private String supplierId;
+    /**
      * 库存组标识
      */
     private String storageGroupId;
@@ -174,5 +178,13 @@ public class StoGroupPageQueryVo {
 
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
+    }
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
     }
 }

@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.atom.impl;
 
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrCriteria;
@@ -43,7 +43,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     public List<ProdCatAttr> queryAttrsByCatId(String tenantId, String catId) {
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodCatAttrMapper.selectByExample(example);
     }
 
@@ -59,7 +59,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     @Override
     public int deleteByCatAttrId(String tenantId, String catId, Long attrId, Long operId) {
         ProdCatAttr prodCatAttr = new ProdCatAttr();
-        prodCatAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+        prodCatAttr.setState(CommonConstants.STATE_INACTIVE);
         prodCatAttr.setOperId(operId);
         prodCatAttr.setOperTime(DateUtils.currTimeStamp());
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
@@ -71,7 +71,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     @Override
     public int deleteByCatId(String tenantId,String catAttrId,Long operId) {
         ProdCatAttr prodCatAttr = new ProdCatAttr();
-        prodCatAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+        prodCatAttr.setState(CommonConstants.STATE_INACTIVE);
         prodCatAttr.setOperId(operId);
         prodCatAttr.setOperTime(DateUtils.currTimeStamp());
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
@@ -92,7 +92,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
                 .andAttrTypeEqualTo(attrType)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodCatAttrMapper.selectByExample(example);
     }
 
@@ -112,7 +112,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         criteria.andTenantIdEqualTo(tenantId)
                 .andProductCatIdEqualTo(catId)
                 .andAttrIdEqualTo(attrId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         if (StringUtils.isNotBlank(attrType))
             criteria.andAttrTypeEqualTo(attrType);
         List<ProdCatAttr> attrList = prodCatAttrMapper.selectByExample(example);
@@ -135,7 +135,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     public int selectCatNumByAttrId(String tenantId, Long attrId) {
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).
-        andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        andAttrIdEqualTo(attrId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodCatAttrMapper.countByExample(example);
     }
 
@@ -146,7 +146,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
 		}
 		ProdCatAttrCriteria example = new ProdCatAttrCriteria();
 		example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId)
-				.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+				.andStateEqualTo(CommonConstants.STATE_ACTIVE);
 		return prodCatAttrMapper.selectByExample(example);
 	}
 
@@ -164,7 +164,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
                 .andProductCatIdEqualTo(catId)
                 .andAttrTypeEqualTo(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE)
                 .andIsPictureEqualTo(ProductCatConstants.ProductCatAttr.IsPicture.YES)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodCatAttrMapper.selectByExample(example);
     }
 }

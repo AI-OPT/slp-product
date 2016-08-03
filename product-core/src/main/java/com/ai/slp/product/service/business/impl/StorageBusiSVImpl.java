@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.business.impl;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
@@ -328,9 +329,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	@Override
 	public PageInfoResponse<StorageGroup4SaleList> queryGroupsForSalePrice(StorageGroupQueryPage groupQuery) {
-		StorageGroupPageQueryVo storageGroupPageQueryVo = new StorageGroupPageQueryVo();
-		BeanUtils.copyProperties(storageGroupPageQueryVo, groupQuery);
-		PageInfoResponse<StorageGroup> StorageGroupPage = storageGroupAtomSV.queryPageOfSearch(storageGroupPageQueryVo);
+		StorageGroupPageQueryVo queryVo = new StorageGroupPageQueryVo();
+		BeanUtils.copyProperties(queryVo, groupQuery);
+		PageInfo<StorageGroup> StorageGroupPage = storageGroupAtomSV.queryPageOfSearch(queryVo);
 		// 设置返回对象
 		PageInfoResponse<StorageGroup4SaleList> StorageGroup4SaleListPage = new PageInfoResponse<>();
 		StorageGroup4SaleListPage.setPageNo(groupQuery.getPageNo());

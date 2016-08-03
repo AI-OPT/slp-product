@@ -2,7 +2,7 @@ package com.ai.slp.product.service.business;
 
 import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
-import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class INormProductBusiSVTest {
     public void queryAttrOfProductTest(){
         //标准品关键属性
         AttrMap attrMap = normProductBusiSV.queryAttrOfProduct(
-                CommonConstants.COMMON_TENANT_ID,"2",ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
+                CommonTestConstants.COMMON_TENANT_ID,"2",ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
         System.out.println(attrMap.toString());
     }
 }

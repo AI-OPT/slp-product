@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.atom.impl.product;
 
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAudiencesCriteria;
@@ -53,7 +53,7 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
             criteria.andUserIdEqualTo(ProductConstants.ProdAudiences.userId.USER_TYPE);
         }
         if (!hasDiscard){
-            criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+            criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         }
         return audiencesMapper.selectByExample(example);
     }
@@ -71,9 +71,9 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
         example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andProdIdEqualTo(prodId)
                 .andUserTypeEqualTo(userType)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         ProdAudiences prodAudiences = new ProdAudiences();
-        prodAudiences.setState(CommonSatesConstants.STATE_INACTIVE);
+        prodAudiences.setState(CommonConstants.STATE_INACTIVE);
         prodAudiences.setOperId(operId);
         prodAudiences.setOperTime(DateUtils.currTimeStamp());
         return audiencesMapper.updateByExampleSelective(prodAudiences,example);
@@ -98,7 +98,7 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
                 .andProdIdEqualTo(prodId)
                 .andUserTypeEqualTo(userType);
         if (!hasDiscard){
-            criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+            criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         }
         return audiencesMapper.selectByExample(example);
     }

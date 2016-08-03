@@ -24,6 +24,10 @@ public class StorageGroupQueryPage extends BaseInfo {
      * 每页显示条数,默认每页20条
      */
     private Integer pageSize =20;
+	/**
+	 * 销售商(商户)标识
+	 */
+	private String supplierId;
     /**
      * 库存组标识
      */
@@ -141,4 +145,11 @@ public class StorageGroupQueryPage extends BaseInfo {
 		return serialVersionUID;
 	}
 
+	public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
 }
