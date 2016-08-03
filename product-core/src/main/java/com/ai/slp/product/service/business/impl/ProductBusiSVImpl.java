@@ -183,7 +183,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if(!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
             return;
         }
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(
                 tenantId,supplierId,product.getStorageGroupId());
         changeToStop(storageGroup,product,operId);
     }
@@ -205,6 +205,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         product.setOperId(operId);
         //添加日志
         updateProdAndStatusLog(product);
+        //搜索中删除商品数据
+        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
     }
 
     /**
@@ -250,7 +252,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             logger.warn("未查询到对应销售商品,租户ID:{},商品标识:{}",tenantId,productId);
             throw new BusinessException("", "未查询到对应销售商品,租户ID:" + tenantId + ",商品标识:" + productId);
         }
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,supplierId,product.getStorageGroupId());
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,supplierId,product.getStorageGroupId());
         if (storageGroup==null){
             logger.warn("未查询销售商品对应库存组,租户ID:{},商品标识:{}",tenantId,productId);
             throw new BusinessException("", "未查询销售商品对应库存组,租户ID:" + tenantId + ",商品标识:" + productId);
@@ -369,7 +371,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         //将仓库中商品进行上架,不判断价格,应由库存启用时检查
         //1.库存组不存在,或已废弃
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(tenantId,supplierId,product.getStorageGroupId());
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,supplierId,product.getStorageGroupId());
         if (storageGroup==null
                 || StorageConstants.StorageGroup.State.DISCARD.equals(storageGroup.getState())
                 || StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(storageGroup.getState())){
@@ -492,7 +494,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             return;
         }
         //查询库存组是否为"启用"状态
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(
                 tenantId,product.getSupplierId(),product.getStorageGroupId());
         if (storageGroup==null
                 || (!StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState()))
@@ -547,6 +549,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             product.setOperId(operId);
         //添加日志
         updateProdAndStatusLog(product);
+        //搜索中删除商品数据
+        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
     }
 
 

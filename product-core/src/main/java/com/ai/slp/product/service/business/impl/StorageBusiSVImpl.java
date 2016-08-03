@@ -220,7 +220,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				continue;
 			}
 			// 获取当前库存对应库存组
-			StorageGroup storageGroup = storageGroupAtomSV.queryByGroupId(
+			StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(
 					tenantId, storageSalePrice.getSupplierId(),storage0.getStorageGroupId());
 			if (storageGroup == null || storageGroup.getHighSalePrice() == null
 					|| storageGroup.getLowSalePrice() == null)
@@ -276,7 +276,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				}
 				// 检查库存组状态
 				String state = storageGroupAtomSV
-						.queryByGroupId(tenantId, supplierId,storage.getStorageGroupId()).getState();
+						.queryByGroupIdAndSupplierId(tenantId, supplierId,storage.getStorageGroupId()).getState();
 				// 库存组状态不为启用或不启用则不进行下一步操作
 				if (!StorageConstants.StorageGroup.State.ACTIVE.equals(state)
 						|| !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(state)){
@@ -563,7 +563,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		}
 		// 检查库存组是否存在
 		if (stoPriorityCharge == null
-				|| storageGroupAtomSV.queryByGroupId(tenantId,stoPriorityCharge.getSupplierId(), groupId) == null) {
+				|| storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,stoPriorityCharge.getSupplierId(), groupId) == null) {
 			logger.warn("找不到指定的库存组,租户表{},库存组标识{}",tenantId,groupId );
 			throw new BusinessException("","指定库存组不存在,租户ID:"+tenantId+",库存组ID:"+groupId);
 		}

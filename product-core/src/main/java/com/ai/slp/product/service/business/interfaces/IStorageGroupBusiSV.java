@@ -88,8 +88,22 @@ public interface IStorageGroupBusiSV {
     public void flushStorageCache(StorageGroup storageGroup);
 
     /**
+     * 刷新库存组缓存
+     * @param tenantId
+     * @param groupId 
+     */
+    public void flushStorageCache(String tenantId,String groupId);
+
+    /**
      * 分页查询指定条件的库存组
      * @return
      */
     public PageInfoResponse<StorageGroup4List> queryPageForGroupList(StorageGroupQueryPage groupQuery);
+
+    /**
+     * 清空库存组下的缓存信息
+     * @param tenantId
+     * @param groupId
+     */
+    public void cleanGroupCache(String tenantId,String groupId);
 }

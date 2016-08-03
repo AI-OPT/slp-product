@@ -98,7 +98,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         	logger.warn("未找到指定商品,租户ID{},商品标识{}:"+tenantId+","+productId);
         	throw new BusinessException("","未找到指定商品,租户ID:"+tenantId+",商品标识:"+productId);
         }
-        StorageGroup group = storageGroupAtomSV.queryByGroupId(
+        StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(
                 tenantId,saveInfo.getSupplierId(),product.getStorageGroupId());
         if (group==null){
         	logger.warn("未找到指定商品,租户ID{},库存组标识{}:"+tenantId+","+product.getStorageGroupId());

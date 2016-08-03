@@ -33,11 +33,28 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 	 */
 	@Override
 	public List<ProdSku> querySkuOfProd(String tenantId, String prodId) {
+		return querySkuOfProd(tenantId,prodId,false);
+	}
+
+	/**
+	 * 查询商品的SKU信息
+	 *
+	 * @param tenantId
+	 * @param prodId
+	 * @param hasDiscard 是否包含废弃状态
+	 * @return
+	 */
+	@Override
+	public List<ProdSku> querySkuOfProd(String tenantId, String prodId, boolean hasDiscard) {
 		ProdSkuCriteria example = new ProdSkuCriteria();
-		example.createCriteria().andTenantIdEqualTo(tenantId).andProdIdEqualTo(prodId)
-				.andStateNotEqualTo(ProductConstants.ProdSku.State.INACTIVE);
+		ProdSkuCriteria.Criteria criteria = example.createCriteria().
+				andTenantIdEqualTo(tenantId).andProdIdEqualTo(prodId);
+		//如果不包含废弃状态
+		if (!hasDiscard)
+			criteria.andStateNotEqualTo(ProductConstants.ProdSku.State.INACTIVE);
 		return prodSkuMapper.selectByExample(example);
 	}
+
 
 	/**
 	 * 废弃指定SKU单品

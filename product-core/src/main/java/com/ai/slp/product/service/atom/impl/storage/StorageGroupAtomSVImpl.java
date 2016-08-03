@@ -101,11 +101,28 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 * @return
 	 */
 	@Override
-	public StorageGroup queryByGroupId(String tenantId, String supplierId,String groupId) {
+	public StorageGroup queryByGroupIdAndSupplierId(String tenantId, String supplierId, String groupId) {
 		StorageGroup group = storageGroupMapper.selectByPrimaryKey(groupId);
 		if (group==null
 				|| !group.getTenantId().equals(tenantId)
 				|| !group.getSupplierId().equals(supplierId)){
+			group = null;
+		}
+		return group;
+	}
+
+	/**
+	 * 查询指定租户下指定标识的库存组
+	 *
+	 * @param tenantId
+	 * @param groupId
+	 * @return
+	 */
+	@Override
+	public StorageGroup queryByGroupId(String tenantId, String groupId) {
+		StorageGroup group = storageGroupMapper.selectByPrimaryKey(groupId);
+		if (group==null
+				|| !group.getTenantId().equals(tenantId)){
 			group = null;
 		}
 		return group;

@@ -10,6 +10,7 @@ import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonUtils;
@@ -46,7 +47,7 @@ public class IStorageSVImpl implements IStorageSV {
 	public BaseResponse createStorageGroup(STOStorageGroup storageGroup) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(storageGroup.getTenantId());
 		String groupId = storageGroupBusiSV.addGroup(storageGroup);
-		return returnIdToMsg(groupId);
+		return CommonUtils.addSuccessResHeader(new BaseResponse(),groupId);
 	}
 
 	/**
@@ -64,8 +65,10 @@ public class IStorageSVImpl implements IStorageSV {
 	public StorageGroupRes queryGroupInfoByGroupId(StorageGroupQuery infoQuery)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(infoQuery.getTenantId());
-		return storageGroupBusiSV.queryGroupInfoByGroupId(
+		StorageGroupRes groupRes = storageGroupBusiSV.queryGroupInfoByGroupId(
 				infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getGroupId());
+		CommonUtils.addSuccessResHeader(groupRes,"");
+		return groupRes;
 	}
 
 	/**
@@ -107,11 +110,17 @@ public class IStorageSVImpl implements IStorageSV {
 	public BaseResponse chargeStorageGroupStatus(StorageGroupStatus groupStatus)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(groupStatus.getTenantId());
-		storageGroupBusiSV.updateGroupState(groupStatus.getTenantId(), groupStatus.getSupplierId(),
-				groupStatus.getGroupId(),groupStatus.getState(),groupStatus.getOperId());
-		BaseResponse baseResponse = new BaseResponse();
-		CommonUtils.addSuccessResHeader(baseResponse,"");
-		return baseResponse;
+		String tenantId = groupStatus.getTenantId(),
+				groupId = groupStatus.getGroupId();
+		storageGroupBusiSV.updateGroupState(tenantId, groupStatus.getSupplierId(),
+				groupId,groupStatus.getState(),groupStatus.getOperId());
+		//如果为启用,则刷新缓存
+		if (StorageConstants.StorageGroup.State.ACTIVE.equals(groupStatus.getState()))
+			storageGroupBusiSV.flushStorageCache(tenantId,groupId);
+		//如为废弃,则删除缓存
+		else if(StorageConstants.StorageGroup.State.DISCARD.equals(groupStatus.getState()))
+			storageGroupBusiSV.cleanGroupCache(tenantId,groupId);
+		return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
 	}
 
 	/**
@@ -150,19 +159,7 @@ public class IStorageSVImpl implements IStorageSV {
 	public BaseResponse saveStorage(STOStorage stoStorage) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(stoStorage.getTenantId());
 		String storageId = storageBusiSV.saveStorage(stoStorage);
-		return returnIdToMsg(storageId);
-	}
-
-	/**
-	 * 新增库存组合库存返回ID
-	 * @param storageId
-	 * @return
-	 */
-	private BaseResponse returnIdToMsg(String storageId) {
-		BaseResponse baseResponse = new BaseResponse();
-		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,storageId);
-		baseResponse.setResponseHeader(responseHeader);
-		return baseResponse;
+		return CommonUtils.addSuccessResHeader(new BaseResponse(),storageId);
 	}
 
 	/**

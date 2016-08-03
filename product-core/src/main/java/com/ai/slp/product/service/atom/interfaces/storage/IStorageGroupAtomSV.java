@@ -42,14 +42,22 @@ public interface IStorageGroupAtomSV {
     public int installGroup(StorageGroup group);
 
     /**
-     * 查询指定标识的库存组
+     * 查询指定标识和销售商的库存组
      *
      * @param tenantId
      * @param supplierId
      * @param groupId
      * @return
      */
-    public StorageGroup queryByGroupId(String tenantId,String supplierId,String groupId);
+    public StorageGroup queryByGroupIdAndSupplierId(String tenantId, String supplierId, String groupId);
+
+    /**
+     * 查询指定租户下指定标识的库存组
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    public StorageGroup queryByGroupId(String tenantId, String groupId);
 
     /**
      * 更新指定库存组标识的库存组信息
