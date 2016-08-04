@@ -32,8 +32,11 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	 */
 	static List<String> DISCARD_LIST = new ArrayList<>();
 	static List<String> STOP_LIST = new ArrayList<>();
+	static List<String> ACTIVE_LIST = new ArrayList<>();
 
 	static {
+		ACTIVE_LIST.add(StorageConstants.Storage.State.ACTIVE);
+		ACTIVE_LIST.add(StorageConstants.Storage.State.AUTO_ACTIVE);
 		DISCARD_LIST.add(StorageConstants.Storage.State.DISCARD);
 		DISCARD_LIST.add(StorageConstants.Storage.State.AUTO_DISCARD);
 		STOP_LIST.add(StorageConstants.Storage.State.STOP);
@@ -104,14 +107,14 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	}
 
 	/**
-	 * 查询指定标识的库存
+	 * 查询指定标识的非废弃的库存
 	 */
 	@Override
-	public Storage queryById(String storageId) {
+	public Storage queryNoDiscardById(String storageId) {
 		Storage storage = storageMapper.selectByPrimaryKey(storageId);
 		if (StorageConstants.Storage.State.DISCARD.equals(storage.getState())
 				|| StorageConstants.Storage.State.AUTO_DISCARD.equals(storage.getState()))
-			return null;
+			storage = null;
 		return storage;
 	}
 
@@ -288,6 +291,22 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 		//不包含废弃的
 		if (!hasDiscard)
 			criteria.andStateNotIn(DISCARD_LIST);
+		return storageMapper.countByExample(example);
+	}
+
+	/**
+	 * 统计除当前优先级外,状态为启用的库存数量
+	 *
+	 * @param groupId
+	 * @param priorityNum
+	 * @return
+	 */
+	@Override
+	public int countOfActiveNoPrioritySelf(String groupId, Short priorityNum) {
+		StorageCriteria example = new StorageCriteria();
+		example.createCriteria().andStorageGroupIdEqualTo(groupId).andStateIn(ACTIVE_LIST)
+				.andPriorityNumberNotEqualTo(priorityNum);
+
 		return storageMapper.countByExample(example);
 	}
 

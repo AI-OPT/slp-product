@@ -91,7 +91,7 @@ public class StorageNumDbBusiSVImpl {
             }
 
             //更新库存信息
-            Storage storage = storageAtomSV.queryById(skuStorage.getStorageId());
+            Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
             if (storage==null)
                 continue;
             logger.info("\r\nThe usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());

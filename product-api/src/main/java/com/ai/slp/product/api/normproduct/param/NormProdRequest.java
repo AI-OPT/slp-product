@@ -33,7 +33,7 @@ public class NormProdRequest extends BaseInfo {
      * 销售商(商户)标识,必填<br>
      * -1:自营平台;其余为销售商(商户)标识
      */
-    @NotBlank(message = "",
+    @NotBlank(message = "销售商(商户)标识不能为空",
             groups = {INormProductSV.QueryNormProduct.class,INormProductSV.QueryNormProductForSalePrice.class})
     private String supplierId;
 

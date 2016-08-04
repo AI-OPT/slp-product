@@ -47,7 +47,7 @@ public interface IStorageAtomSV {
      * @param storageId
      * @return
      */
-    public Storage queryById(String storageId);
+    public Storage queryNoDiscardById(String storageId);
     
     /**
      * 更新库存销售价
@@ -137,4 +137,10 @@ public interface IStorageAtomSV {
      * @return
      */
     public Integer countOfGroup(String groupId,boolean hasDiscard);
+
+    /**
+     * 统计除当前优先级外,状态为启用的库存数量
+     * @return
+     */
+    public int countOfActiveNoPrioritySelf(String groupId,Short priorityNum);
 }

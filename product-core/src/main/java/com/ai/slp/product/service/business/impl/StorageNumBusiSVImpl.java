@@ -197,7 +197,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
                 continue;
             }
             //1.2 查询SKU库存对应库存信息
-            Storage storage = storageAtomSV.queryById(skuStorage.getStorageId());
+            Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
             if (storage==null){
                 logger.warn("库存回退过程中,未找到对应库存,SKU库存标识:{},库存标识:{}"
                         ,skuStorageId,skuStorage.getStorageId());

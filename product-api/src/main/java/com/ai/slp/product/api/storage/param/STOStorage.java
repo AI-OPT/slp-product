@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.Map;
 
 /**
  * 虚拟库存信息<br>
@@ -19,11 +20,11 @@ import java.sql.Timestamp;
 public class STOStorage extends BaseInfo{
     private static final long serialVersionUID = 1L;
     /**
-     * 商品类目标识
+     * 销售商(商户)标识,必填
      */
-    @NotBlank(message = "类目标识不能为空",
-    		groups = { IStorageSV.SaveStorage.class })
-    private String productCatId;
+    @NotBlank(message = "销售商(商户)标识不能为空",
+            groups = { IStorageSV.SaveStorage.class })
+    private String supplierId;
 	/**
      * 库存标识<br>
      * 若包含标识则进行更新操作,否则进行添加操作
@@ -83,6 +84,12 @@ public class STOStorage extends BaseInfo{
     @NotNull(message = "操作人不能为空",
             groups = { IStorageSV.SaveStorage.class })
     private Long operId;
+
+    /**
+     * SKU对应的库存量<br>
+     * 没有销售属性时,为空
+     */
+    private Map<String,Long> skuStorageNum;
 
     public String getStorageId() {
         return storageId;
@@ -164,11 +171,19 @@ public class STOStorage extends BaseInfo{
         this.operId = operId;
     }
 
-	public String getProductCatId() {
-		return productCatId;
-	}
+    public String getSupplierId() {
+        return supplierId;
+    }
 
-	public void setProductCatId(String productCatId) {
-		this.productCatId = productCatId;
-	}
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public Map<String, Long> getSkuStorageNum() {
+        return skuStorageNum;
+    }
+
+    public void setSkuStorageNum(Map<String, Long> skuStorageNum) {
+        this.skuStorageNum = skuStorageNum;
+    }
 }

@@ -348,7 +348,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         List<SkuStorage> storageList = skuStorageAtomSV.queryOfSku(prodSku.getSkuId());
         //对SKU库存进行废弃,并减少对应库存的库存量
         for (SkuStorage skuStorage:storageList){
-            Storage storage = storageAtomSV.queryById(skuStorage.getStorageId());
+            Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
             if (storage==null){
                 continue;
             }
