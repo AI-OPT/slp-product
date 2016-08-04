@@ -24,10 +24,28 @@ public class CommonUtils {
      * 检查租户id是否为空
      */
     public static void checkTenantId(String tenantId,String errCode){
-        String nullErrorCode = StringUtils.isBlank(errCode)? ErrorCodeConstants.TENANT_ID_NULL:errCode;
-        if (StringUtils.isBlank(tenantId))
-            throw new BusinessException(nullErrorCode,"租户标识不能为空");
+    	String nullErrorCode = StringUtils.isBlank(errCode)? ErrorCodeConstants.TENANT_ID_NULL:errCode;
+    	if (StringUtils.isBlank(tenantId))
+    		throw new BusinessException(nullErrorCode,"租户标识不能为空");
     }
+    
+    /**
+     * 检查商户ID是否为空
+     * @param supplierId
+     */
+    public static void checkSupplierId(String supplierId){
+    	checkSupplierId(supplierId,ErrorCodeConstants.SUPPLIER_ID_NULL);
+    }
+    /**
+     * 检查商户ID是否为空
+     * @param supplierId
+     * @param errCode
+     */
+    public static void checkSupplierId(String supplierId,String errCode) {
+		String nullErrorCode = StringUtils.isBlank(errCode)? ErrorCodeConstants.SUPPLIER_ID_NULL:errCode;
+        if (StringUtils.isBlank(supplierId))
+            throw new BusinessException(nullErrorCode,"商户标识不能为空");
+	}
 
     /**
      * 添加操作成功的responseHeader
