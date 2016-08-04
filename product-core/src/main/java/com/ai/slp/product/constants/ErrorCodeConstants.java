@@ -44,4 +44,10 @@ public final class ErrorCodeConstants {
          */
         public static final String UNMATCHED = "1005";
     }
+    
+    /**
+     * 商户标识为空
+     */
+    public static final String SUPPLIER_ID_NULL = "1007";
+    
 }
