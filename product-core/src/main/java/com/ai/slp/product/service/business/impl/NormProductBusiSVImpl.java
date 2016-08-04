@@ -5,7 +5,7 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.normproduct.param.*;
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.*;
@@ -95,7 +95,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
             prodAttr.setAttrValueName(attrValReq.getAttrVal());
             prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
-            prodAttr.setState(CommonSatesConstants.STATE_ACTIVE);// 设置为有效
+            prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
             prodAttr.setOperTime(nowTime);
             // 添加成功,添加日志
             if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
@@ -338,7 +338,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
                 prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
                 prodAttr.setSerialNumber(queryValInfoSerialNum(tenantId, catId,
                         attrValReq.getAttrId(), attrValReq.getAttrValId()));
-                prodAttr.setState(CommonSatesConstants.STATE_ACTIVE);// 设置为有效
+                prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
                 upNum = standedProdAttrAtomSV.installObj(prodAttr);
             }
             oldAttrValMap.remove(attrKey);
@@ -382,7 +382,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         for (StandedProdAttr prodAttr : oldAttrValList) {
             prodAttr.setOperId(operId);
             prodAttr.setOperTime(DateUtils.currTimeStamp());
-            prodAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+            prodAttr.setState(CommonConstants.STATE_INACTIVE);
             if (standedProdAttrAtomSV.updateObj(prodAttr) > 0) {
                 StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
                 BeanUtils.copyProperties(prodAttrLog, prodAttr);
@@ -474,7 +474,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             normProdResponse.setCatName(catName);
             // 获取库存组数量
             normProdResponse.setStorageGroupNum(storageGroupAtomSV.countStorGroupByProdID(
-                    standedProduct.getTenantId(), standedProduct.getStandedProdId()));
+                    standedProduct.getTenantId(),productRequest.getSupplierId(), standedProduct.getStandedProdId()));
             NormProdResponseList.add(normProdResponse);
         }
         //新建返回对象

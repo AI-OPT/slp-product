@@ -173,7 +173,8 @@ public class INormProductSVImpl implements INormProductSV {
      * @author liutong5
      */
     @Override
-    public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest) throws BusinessException, SystemException {
+    public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest)
+            throws BusinessException, SystemException {
     	return  normProductBusiSV.queryNormProductForSalePrice(productRequest);
     }
 }

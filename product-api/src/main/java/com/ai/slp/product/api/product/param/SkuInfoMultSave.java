@@ -4,10 +4,9 @@ import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * 商城商品的SKU批量更新<br>
@@ -19,6 +18,13 @@ import javax.validation.constraints.NotNull;
  */
 public class SkuInfoMultSave extends BaseInfo{
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 销售商（商户）标识，必填<br>
+     */
+    @NotBlank(message = "销售商（商户）标识不能为空",
+            groups = { IProductSV.SaveMultSKUInfo.class})
+    private String supplierId;
 
 	/**
      * 商品标识,必填
@@ -38,6 +44,14 @@ public class SkuInfoMultSave extends BaseInfo{
     @NotNull(message = "操作人不能为空",
             groups = { IProductSV.SaveMultSKUInfo.class })
     private Long operId;
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
 
     public String getProdId() {
         return prodId;

@@ -5,7 +5,7 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.productcat.param.*;
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
@@ -308,7 +308,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catAttr.setAttrId(attId);
                 catAttr.setAttrType(attrType);
                 catAttr.setSerialNumber((short)0);
-                catAttr.setState(CommonSatesConstants.STATE_ACTIVE);
+                catAttr.setState(CommonConstants.STATE_ACTIVE);
                 catAttr.setOperId(addCatAttrParam.getOperId());
                 catAttr.setOperTime(operTime);
                 //设置是否必填,关键属性和销售属性为必填,其他为非必填
@@ -336,7 +336,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catAttrValue.setAttrvalueDefId(valId);
                 catAttrValue.setCatAttrId(catAttr.getCatAttrId());
                 catAttrValue.setSerialNumber((short)0);
-                catAttrValue.setState(CommonSatesConstants.STATE_ACTIVE);
+                catAttrValue.setState(CommonConstants.STATE_ACTIVE);
                 catAttrValue.setOperId(addCatAttrParam.getOperId());
                 catAttrValue.setOperTime(operTime);
                 prodCatAttrValAtomSV.installCatAttrVal(catAttrValue);

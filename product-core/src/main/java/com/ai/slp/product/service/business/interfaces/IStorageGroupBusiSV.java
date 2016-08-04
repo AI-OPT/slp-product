@@ -35,7 +35,7 @@ public interface IStorageGroupBusiSV {
      * @param productId
      * @return
      */
-    public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId, String productId);
+    public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId);
 
     /**
      * 查询单个库存组的信息
@@ -44,7 +44,7 @@ public interface IStorageGroupBusiSV {
      * @param groupId
      * @return
      */
-    public StorageGroupRes queryGroupInfoByGroupId(String tenantId, String groupId);
+    public StorageGroupRes queryGroupInfoByGroupId(String tenantId,String supplierId, String groupId);
     
     /**
      * 更新库存组价格信息
@@ -61,7 +61,7 @@ public interface IStorageGroupBusiSV {
      * @param state 要变更状态
      * @param operId 操作者ID
      */
-    public void updateGroupState(String tenantId,String groupId,String state,Long operId);
+    public void updateGroupState(String tenantId,String supplierId,String groupId,String state,Long operId);
     
     /**
      * 根据标准品标识分页查询库存组信息<br>
@@ -88,8 +88,22 @@ public interface IStorageGroupBusiSV {
     public void flushStorageCache(StorageGroup storageGroup);
 
     /**
+     * 刷新库存组缓存
+     * @param tenantId
+     * @param groupId 
+     */
+    public void flushStorageCache(String tenantId,String groupId);
+
+    /**
      * 分页查询指定条件的库存组
      * @return
      */
     public PageInfoResponse<StorageGroup4List> queryPageForGroupList(StorageGroupQueryPage groupQuery);
+
+    /**
+     * 清空库存组下的缓存信息
+     * @param tenantId
+     * @param groupId
+     */
+    public void cleanGroupCache(String tenantId,String groupId);
 }

@@ -1,11 +1,10 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import java.sql.Timestamp;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import org.hibernate.validator.constraints.NotBlank;
+
+import java.sql.Timestamp;
 
 /**
  * 标准品列表查询参数<br>
@@ -29,6 +28,15 @@ public class NormProdRequest extends BaseInfo {
      * 默认为20
      */
     private Integer pageSize = 20;
+
+    /**
+     * 销售商(商户)标识,必填<br>
+     * -1:自营平台;其余为销售商(商户)标识
+     */
+    @NotBlank(message = "",
+            groups = {INormProductSV.QueryNormProduct.class,INormProductSV.QueryNormProductForSalePrice.class})
+    private String supplierId;
+
     /**
      * 类目ID,查询废弃时,非必填,其他情况必填.
      */
@@ -78,13 +86,6 @@ public class NormProdRequest extends BaseInfo {
      * 操作/废弃时间范围的截止时间
      */
     private Timestamp operEndTime;
-    /**
-     * (新增字段)
-     * 商户ID--(-1:自运营)
-     */
-    @NotBlank(message = "商户ID不能为空",
-            groups = { INormProductSV.QueryNormProduct.class})
-    private String supplierId;
     
     
     public String getSupplierId() {

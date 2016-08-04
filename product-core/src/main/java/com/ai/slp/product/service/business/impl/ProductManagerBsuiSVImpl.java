@@ -9,7 +9,7 @@ import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.slp.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.product.param.*;
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
@@ -187,7 +187,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                 prodAudiences.setUserId(perAudi);
                 prodAudiences.setOperId(operId);
                 prodAudiences.setUserType(ProductConstants.ProdAudiences.userType.PERSON);
-                prodAudiences.setState(CommonSatesConstants.STATE_ACTIVE);
+                prodAudiences.setState(CommonConstants.STATE_ACTIVE);
                 prodAudiencesAtomSV.installAudiences(prodAudiences);
             }
         }//全部不可见
@@ -229,7 +229,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         }
         //如果为立即上架,则进行上架操作
         if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){
-            productBusiSV.changeToInSale(tenantId,productId,operId);
+            productBusiSV.changeToInSale(tenantId,productInfo.getSupplierId(),productId,operId);
         }
     }
 
@@ -335,7 +335,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             List<ProdAttr> prodAttrList = prodAttrAtomSV.queryOfProdAndAttr(tenantId, productId, attrId);
             for (ProdAttr prodAttr:prodAttrList){
                 //废弃原
-                prodAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+                prodAttr.setState(CommonConstants.STATE_INACTIVE);
                 prodAttr.setOperId(operId);
                 prodAttr.setOperTime(DateUtils.currTimeStamp());
                 //添加日志
@@ -355,7 +355,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                 prodAttr.setAttrvalueDefId(valInfo.getAttrValId());
                 prodAttr.setAttrValueName(valInfo.getAttrVal());
                 prodAttr.setAttrValueName2(valInfo.getAttrVal2());
-                prodAttr.setState(CommonSatesConstants.STATE_ACTIVE);
+                prodAttr.setState(CommonConstants.STATE_ACTIVE);
                 prodAttr.setOperId(operId);
                 //添加日志
                 if (prodAttrAtomSV.installProdAttr(prodAttr)>0){
@@ -384,7 +384,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             prodAudiences.setProdId(productId);
             prodAudiences.setUserType(userType);
             prodAudiences.setUserId(ProductConstants.ProdAudiences.userId.USER_TYPE);
-            prodAudiences.setState(CommonSatesConstants.STATE_ACTIVE);
+            prodAudiences.setState(CommonConstants.STATE_ACTIVE);
             prodAudiences.setOperId(operId);
             prodAudiencesAtomSV.installAudiences(prodAudiences);
         }//3.受众为部分可见
@@ -395,7 +395,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                 prodAudiences.setProdId(productId);
                 prodAudiences.setUserType(userType);
                 prodAudiences.setUserId(userId);
-                prodAudiences.setState(CommonSatesConstants.STATE_ACTIVE);
+                prodAudiences.setState(CommonConstants.STATE_ACTIVE);
                 prodAudiences.setOperId(operId);
                 prodAudiencesAtomSV.installAudiences(prodAudiences);
             }
@@ -418,7 +418,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             targetArea.setTenantId(tenantId);
             targetArea.setProdId(prodId);
             targetArea.setProvCode(provCode.intValue());
-            targetArea.setState(CommonSatesConstants.STATE_ACTIVE);
+            targetArea.setState(CommonConstants.STATE_ACTIVE);
             targetArea.setOperId(operId);
             prodTargetAreaAtomSV.installArea(targetArea);
         }
@@ -436,7 +436,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             ProdPictureLog pictureLog = new ProdPictureLog();
             BeanUtils.copyProperties(pictureLog,prodPicture);
             pictureLog.setOperId(operId);
-            pictureLog.setState(CommonSatesConstants.STATE_INACTIVE);
+            pictureLog.setState(CommonConstants.STATE_INACTIVE);
             prodPictureLogAtomSV.installLog(pictureLog);
         }
         //添加新图片
@@ -447,7 +447,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
             prodPicture.setPicUses("0".equals(attrValId)?
                     ProductConstants.ProdPicture.PicType.PRODUCT:ProductConstants.ProdPicture.PicType.ATTR);
             prodPicture.setOperId(operId);
-            prodPicture.setState(CommonSatesConstants.STATE_ACTIVE);
+            prodPicture.setState(CommonConstants.STATE_ACTIVE);
             if (prodPictureAtomSV.installPic(prodPicture)>0){
                 ProdPictureLog pictureLog = new ProdPictureLog();
                 BeanUtils.copyProperties(pictureLog,prodPicture);

@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.atom.impl;
 
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValueCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrValueMapper;
@@ -31,7 +31,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdEqualTo(catAttrId);
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
-        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setState(CommonConstants.STATE_INACTIVE);
         attrValue.setOperId(operId);
         attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.updateByExampleSelective(attrValue,example);
@@ -52,7 +52,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andCatAttrIdEqualTo(catAttrId).andAttrvalueDefIdGreaterThan(attrValId);
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
-        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setState(CommonConstants.STATE_INACTIVE);
         attrValue.setOperId(operId);
         attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.updateByExampleSelective(attrValue,example);
@@ -69,7 +69,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
     public List<ProdCatAttrValue> queryByCatAttrId(String tenantId, String catAttrId) {
         ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdEqualTo(catAttrId)
-        .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return attrValueMapper.selectByExample(example);
     }
 
@@ -87,7 +87,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andCatAttrIdEqualTo(catAttrId)
                 .andAttrvalueDefIdEqualTo(valId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<ProdCatAttrValue> valueList = attrValueMapper.selectByExample(example);
         return valueList==null||valueList.isEmpty()?null:valueList.get(0);
     }

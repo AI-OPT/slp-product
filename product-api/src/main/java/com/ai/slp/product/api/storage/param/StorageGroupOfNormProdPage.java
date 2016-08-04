@@ -1,9 +1,8 @@
 package com.ai.slp.product.api.storage.param;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 库存组信息查询条件,用于分页查询<br>
@@ -27,6 +26,11 @@ public class StorageGroupOfNormProdPage extends BaseInfo {
      */
     private Integer pageSize =20;
     /**
+     * 销售商（商户）标识，必填<br>
+     */
+    @NotBlank(message = "销售商（商户）标识不能为空")
+    private String supplierId;
+    /**
      * 标准品标识<br>
      * 在根据标准品标识查询时,不能为空.其他情况忽略
      */
@@ -34,6 +38,14 @@ public class StorageGroupOfNormProdPage extends BaseInfo {
             groups = { IStorageSV.QueryGroupInfoByProductId.class,
             		IStorageSV.QueryGroupByProdIdForSalePrice.class})
     private String standedProdId;
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
 
     public Integer getPageNo() {
         return pageNo;

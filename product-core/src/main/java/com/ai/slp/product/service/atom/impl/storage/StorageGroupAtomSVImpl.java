@@ -3,6 +3,7 @@ package com.ai.slp.product.service.atom.impl.storage;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.StorageGroupAttach4List;
 import com.ai.slp.product.dao.mapper.attach.StorageGroupAttachMapper;
@@ -34,14 +35,14 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	@Autowired
 	StorageGroupAttachMapper attachMapper;
 
-	private static List<String> discardList = new ArrayList<>();
+	private static List<String> DISCARD_LIST = new ArrayList<>();
 
 	static {
-		discardList.add(StorageConstants.StorageGroup.State.DISCARD);
-		discardList.add(StorageConstants.StorageGroup.State.AUTO_DISCARD);
+		DISCARD_LIST.add(StorageConstants.StorageGroup.State.DISCARD);
+		DISCARD_LIST.add(StorageConstants.StorageGroup.State.AUTO_DISCARD);
 	}
 	/**
-	 * 没有废弃的库存组数量
+	 * 查询标准品下没有废弃的库存组数量
 	 * 
 	 * @param tenantId
 	 * @param standedProdId
@@ -59,7 +60,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	}
 
 	/**
-	 * 启用状态的库存组数量
+	 * 查询标准品下状态为"启用"的库存组数量
 	 * 
 	 * @param tenantId
 	 * @param standedProdId
@@ -100,9 +101,28 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 * @return
 	 */
 	@Override
+	public StorageGroup queryByGroupIdAndSupplierId(String tenantId, String supplierId, String groupId) {
+		StorageGroup group = storageGroupMapper.selectByPrimaryKey(groupId);
+		if (group==null
+				|| !group.getTenantId().equals(tenantId)
+				|| !group.getSupplierId().equals(supplierId)){
+			group = null;
+		}
+		return group;
+	}
+
+	/**
+	 * 查询指定租户下指定标识的库存组
+	 *
+	 * @param tenantId
+	 * @param groupId
+	 * @return
+	 */
+	@Override
 	public StorageGroup queryByGroupId(String tenantId, String groupId) {
 		StorageGroup group = storageGroupMapper.selectByPrimaryKey(groupId);
-		if (group!=null && !group.getTenantId().equals(tenantId)){
+		if (group==null
+				|| !group.getTenantId().equals(tenantId)){
 			group = null;
 		}
 		return group;
@@ -128,10 +148,13 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 * @return
 	 */
 	@Override
-	public List<StorageGroup> queryOfStandedProd(String tenantId, String standedProdId) {
+	public List<StorageGroup> queryOfStandedProd(String tenantId,String supplierId, String standedProdId) {
 		StorageGroupCriteria example = new StorageGroupCriteria();
 		example.setOrderByClause(" CREATE_TIME desc");
-		example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
+		StorageGroupCriteria.Criteria criteria = example.createCriteria()
+				.andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
+		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId))
+			criteria.andSupplierIdEqualTo(supplierId);
 		return storageGroupMapper.selectByExample(example);
 	}
 
@@ -144,11 +167,21 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		return storageGroupMapper.updateByPrimaryKeySelective(storageGroup);
 	}
 
+	/**
+	 * 通过标准品ID查询标准品下的非废弃库存组数量
+	 * @param tenantId
+	 * @param supplierId
+	 * @param standedProdId
+     * @return
+     */
 	@Override
-	public int countStorGroupByProdID(String tenantId, String standedProdId) {
+	public int countStorGroupByProdID(String tenantId,String supplierId, String standedProdId) {
 		StorageGroupCriteria example = new StorageGroupCriteria();
-		example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(tenantId).andStateNotEqualTo("3")
-				.andStateNotEqualTo("31");
+		StorageGroupCriteria.Criteria criteria = example.createCriteria().andTenantIdEqualTo(tenantId)
+				.andStandedProdIdEqualTo(standedProdId).andStateNotIn(DISCARD_LIST);
+		//若不是查询全部,则指定查询的销售商(商户)标识
+		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId))
+			criteria.andSupplierIdEqualTo(supplierId);
 		return storageGroupMapper.countByExample(example);
 	}
 
@@ -156,67 +189,75 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 * 分页查询某个标准品下的库存组列表
 	 */
 	@Override
-	public PageInfoResponse<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId, Integer pageNo,
-			Integer pageSize)
+	public PageInfoResponse<StorageGroup> queryPageOfStandedProd(
+			String tenantId, String supplierId,String standedProdId, Integer pageNo,Integer pageSize)
 	{
 		StorageGroupCriteria example = new StorageGroupCriteria();
 		example.setLimitStart((pageNo - 1) * pageSize);
 		example.setLimitEnd(pageSize);
-		List<String> stateList = new ArrayList<String>();
-		stateList.add("3");
-		stateList.add("31");
-		example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId)
-				.andStateNotIn(stateList);
+		StorageGroupCriteria.Criteria criteria = example.createCriteria()
+				.andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId).andStateNotIn(DISCARD_LIST);
+		//若不是查询全部,则指定查询的销售商(商户)标识
+		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId))
+			criteria.andSupplierIdEqualTo(supplierId);
 		PageInfoResponse<StorageGroup> storageGroupPage = new PageInfoResponse<>();
 		storageGroupPage.setResult(storageGroupMapper.selectByExample(example));
 		storageGroupPage.setPageNo(pageNo);
 		storageGroupPage.setPageSize(pageSize);
 		return storageGroupPage;
 	}
-
+	/**
+	 * 根据搜索条件分页查询库存组列表
+	 *
+	 * @param queryVo
+	 * @return
+	 * @author lipeng16
+	 */
 	@Override
-	public PageInfoResponse<StorageGroup> queryPageOfSearch(StorageGroupPageQueryVo storageGroupPageQueryVo) {
+	public PageInfo<StorageGroup> queryPageOfSearch(StorageGroupPageQueryVo queryVo) {
 		StorageGroupCriteria example = new StorageGroupCriteria();
 		StorageGroupCriteria.Criteria request = example.createCriteria();
 		// 设置状态为除废弃外的所有状态
-		List<String> stateList = new ArrayList<String>();
-		stateList.add(StorageConstants.StorageGroup.State.DISCARD);
-		stateList.add(StorageConstants.StorageGroup.State.AUTO_DISCARD);
-		// 设置条件参数
-		request.andTenantIdEqualTo(storageGroupPageQueryVo.getTenantId()).andStateNotIn(stateList);
-		if (storageGroupPageQueryVo.getStorageGroupName() != null)
-			request.andStorageGroupNameLike("%" + storageGroupPageQueryVo.getStorageGroupName() + "%");
-		if (storageGroupPageQueryVo.getStorageGroupId() != null)
-			request.andStorageGroupIdEqualTo(storageGroupPageQueryVo.getStorageGroupId());
-		if (storageGroupPageQueryVo.getStandedProdId() != null)
-			request.andStandedProdIdEqualTo(storageGroupPageQueryVo.getStandedProdId());
+		request.andTenantIdEqualTo(queryVo.getTenantId()).andStateNotIn(DISCARD_LIST);
+		if (queryVo.getStorageGroupName() != null)
+			request.andStorageGroupNameLike("%" + queryVo.getStorageGroupName() + "%");
+		if (queryVo.getStorageGroupId() != null)
+			request.andStorageGroupIdEqualTo(queryVo.getStorageGroupId());
+		if (queryVo.getStandedProdId() != null)
+			request.andStandedProdIdEqualTo(queryVo.getStandedProdId());
+		//若不是查询全部,则指定查询的销售商(商户)标识
+		if (!CommonConstants.ALL_SUPPLIER.equals(queryVo.getSupplierId()))
+			request.andSupplierIdEqualTo(queryVo.getSupplierId());
+		if(queryVo.getCreateTimeStart() != null && queryVo.getCreateTimeEnd() != null)
+			request.andCreateTimeBetween(queryVo.getCreateTimeStart(), queryVo.getCreateTimeEnd());
+		//设置页码相关参数
+		example.setLimitStart((queryVo.getPageNo() - 1) * queryVo.getPageSize());
+		example.setLimitEnd(queryVo.getPageSize());
+		int count = 0;
+		List<StorageGroup> result = new ArrayList<>();
 		// 标准品名称
-		if (storageGroupPageQueryVo.getStandedProductName() != null) {
+		if (StringUtils.isNotBlank(queryVo.getStandedProductName())) {
 			List<String> standedProductIdList = standedProductAtomSV
-					.queryIdByName("%" + storageGroupPageQueryVo.getStandedProductName() + "%");
+					.queryIdByName("%" + queryVo.getStandedProductName() + "%");
+			//若为空,则直接返回空
 			if(!CollectionUtil.isEmpty(standedProductIdList)){
-				request.andStandedProdIdIn(standedProductIdList);
+				//获取结果总数
+				count = storageGroupMapper.countByExample(example);
+				result = storageGroupMapper.selectByExample(example);
 			}
 		}
-		if(storageGroupPageQueryVo.getCreateTimeStart() != null && storageGroupPageQueryVo.getCreateTimeEnd() != null)
-			request.andCreateTimeBetween(storageGroupPageQueryVo.getCreateTimeStart(), storageGroupPageQueryVo.getCreateTimeEnd());
-		//获取结果总数
-		int count = storageGroupMapper.countByExample(example);
-		//设置页码相关参数
-		example.setLimitStart((storageGroupPageQueryVo.getPageNo() - 1) * storageGroupPageQueryVo.getPageSize());
-		example.setLimitEnd(storageGroupPageQueryVo.getPageSize());
+
 		//新建返回对象
-		PageInfoResponse<StorageGroup> StorageGroupPage = new PageInfoResponse<>();
+		PageInfo<StorageGroup> StorageGroupPage = new PageInfo<>();
 		StorageGroupPage.setCount(count);
-		StorageGroupPage.setPageNo(storageGroupPageQueryVo.getPageNo());
-		StorageGroupPage.setPageSize(storageGroupPageQueryVo.getPageSize());
-		StorageGroupPage.setResult(storageGroupMapper.selectByExample(example));
+		StorageGroupPage.setPageNo(queryVo.getPageNo());
+		StorageGroupPage.setPageSize(queryVo.getPageSize());
+		StorageGroupPage.setResult(result);
 		//设置总页数
-		boolean isDivisible = count%storageGroupPageQueryVo.getPageSize() == 0;
-		if(isDivisible)
-			StorageGroupPage.setPageCount(count%storageGroupPageQueryVo.getPageSize());
-		if(!isDivisible)
-			StorageGroupPage.setPageCount(count%storageGroupPageQueryVo.getPageSize() + 1);
+		int pageCount = count/queryVo.getPageSize();
+		if (count % queryVo.getPageSize() == 0)
+			pageCount++;
+		StorageGroupPage.setPageCount(pageCount);
 			
 		return StorageGroupPage;
 	}
@@ -229,7 +270,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	@Override
 	public int countOfNoDiscard() {
 		StorageGroupCriteria example = new StorageGroupCriteria();
-		example.createCriteria().andStateNotIn(discardList);
+		example.createCriteria().andStateNotIn(DISCARD_LIST);
 		return storageGroupMapper.countByExample(example);
 	}
 
@@ -248,7 +289,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		example.setLimitStart((pageNum - 1) * pageSize);
 		example.setLimitEnd(pageSize);
 		if (!hasDiscard){
-			example.createCriteria().andStateNotIn(discardList);
+			example.createCriteria().andStateNotIn(DISCARD_LIST);
 		}
 		return storageGroupMapper.selectByExample(example);
 	}

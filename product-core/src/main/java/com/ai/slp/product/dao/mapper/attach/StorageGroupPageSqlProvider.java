@@ -1,5 +1,6 @@
 package com.ai.slp.product.dao.mapper.attach;
 
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.vo.StoGroupPageQueryVo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -51,6 +52,9 @@ public class StorageGroupPageSqlProvider {
     private StringBuffer genQueryStr(StringBuffer seqBuffer,StoGroupPageQueryVo queryVo){
         seqBuffer.append("from standed_product as sp,storage_group as sg ");
         seqBuffer.append("where sp.STANDED_PROD_ID = sg.STANDED_PROD_ID and sg.TENANT_ID= #{vo.tenantId} ");
+        //销售商(租户)标识
+        if (!CommonConstants.ALL_SUPPLIER.equals(queryVo.getSupplierId()))
+            seqBuffer.append(" and sg.SUPPLIER_ID = #{vo.supplierId}% ");
         //库存组名称
         if (StringUtils.isNotBlank(queryVo.getStorageGroupName()))
             seqBuffer.append(" and sg.STORAGE_GROUP_NAME like #{vo.storageGroupName}% ");

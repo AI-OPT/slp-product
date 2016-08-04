@@ -4,7 +4,6 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
@@ -86,11 +85,10 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public BaseResponse saveMultSKUInfo(SkuInfoMultSave saveInfo) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(saveInfo.getTenantId(),"");
+        CommonUtils.checkTenantId(saveInfo.getTenantId());
         prodSkuBusiSV.updateSkuOfProduct(saveInfo);
         BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setIsSuccess(true);
+        CommonUtils.addSuccessResHeader(baseResponse,"");
         return baseResponse;
     }
 

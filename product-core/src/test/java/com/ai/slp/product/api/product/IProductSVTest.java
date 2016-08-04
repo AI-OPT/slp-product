@@ -3,7 +3,7 @@ package com.ai.slp.product.api.product;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.ProductInfo;
 import com.ai.slp.product.api.product.param.ProductInfoQuery;
-import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.CommonTestConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class IProductSVTest {
     @Test
     public void queryProductByIdTest(){
         ProductInfoQuery infoQuery = new ProductInfoQuery();
-        infoQuery.setTenantId(CommonConstants.COMMON_TENANT_ID);
+        infoQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
         infoQuery.setProductId("1000000000000001");
         ProductInfo productInfo = productSV.queryProductById(infoQuery);
         System.out.println(productInfo.getState());

@@ -18,6 +18,15 @@ public interface IProdSkuAtomSV {
      * @return
      */
     public List<ProdSku> querySkuOfProd(String tenantId,String prodId);
+    /**
+     * 查询商品的SKU信息
+     *
+     * @param tenantId
+     * @param prodId
+     * @param hasDiscard true:包含废弃状态;false:不包含废弃状态
+     * @return
+     */
+    public List<ProdSku> querySkuOfProd(String tenantId,String prodId,boolean hasDiscard);
 
     /**
      * 废弃指定SKU单品

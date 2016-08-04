@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.atom;
 
-import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAttrAtomSV;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ public class IProdSkuAttrAtomSVTest {
     @Test
     public void queryAttrValIdByProdIdAndAttrIdTest(){
         List<String> attrValIds = skuAttrAtomSV.queryAttrValIdByProdIdAndAttrId(
-                CommonConstants.COMMON_TENANT_ID,"1",100010l);
+                CommonTestConstants.COMMON_TENANT_ID,"1",100010l);
         System.out.println("\r");
         for (String attrValId:attrValIds){
             System.out.print(attrValId+",");

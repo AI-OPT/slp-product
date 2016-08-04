@@ -67,7 +67,8 @@ public class IProductServerSVImpl implements IProductServerSV {
      */
     @Override
     public ProductRoute queryRouteGroupOfProd(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(productInfoQuery.getTenantId(),"");
-        return productBusiSV.queryRouteGroupOfProd(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
+        CommonUtils.checkTenantId(productInfoQuery.getTenantId());
+        return productBusiSV.queryRouteGroupOfProd(
+                productInfoQuery.getTenantId(),productInfoQuery.getSupplierId(),productInfoQuery.getProductId());
     }
 }

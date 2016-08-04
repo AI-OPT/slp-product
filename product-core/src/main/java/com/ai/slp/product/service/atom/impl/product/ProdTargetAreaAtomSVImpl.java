@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.atom.impl.product;
 
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetAreaCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdTargetAreaMapper;
@@ -44,7 +44,7 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
             criteria.andProvCodeEqualTo(provCode);
         //若不包括废弃状态
         if (!hasDiscard){
-            criteria.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+            criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         }
         return areaMapper.selectByExample(example);
     }
@@ -54,9 +54,9 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
         ProdTargetAreaCriteria example = new ProdTargetAreaCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andProdIdEqualTo(prodId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         ProdTargetArea targetArea = new ProdTargetArea();
-        targetArea.setState(CommonSatesConstants.STATE_INACTIVE);
+        targetArea.setState(CommonConstants.STATE_INACTIVE);
         targetArea.setOperId(operId);
         targetArea.setOperTime(DateUtils.currTimeStamp());
         return areaMapper.updateByExampleSelective(targetArea,example);

@@ -1,15 +1,11 @@
 package com.ai.slp.product.api.storage.param;
 
-import java.util.List;
-import java.util.Map;
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 
 /**
  * 变更库存组下库存的优先级<br>
@@ -21,6 +17,12 @@ import com.ai.slp.product.api.storage.interfaces.IStorageSV;
  */
 public class StoragePriorityCharge extends BaseInfo {
     private static final long serialVersionUID = 1L;
+    /**
+     * 销售商（商户）标识，必填<br>
+     */
+    @NotBlank(message = "销售商（商户）标识不能为空",
+            groups = { IStorageSV.ChargeStoragePriority.class})
+    private String supplierId;
 	/**
      * 库存组标识,必填
      */
@@ -48,6 +50,14 @@ public class StoragePriorityCharge extends BaseInfo {
     @NotNull(message = "操作人ID不能为空",
             groups = {IStorageSV.ChargeStoragePriority.class})
     private Long operId;
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
 
     public String getStorageGroupId() {
         return storageGroupId;

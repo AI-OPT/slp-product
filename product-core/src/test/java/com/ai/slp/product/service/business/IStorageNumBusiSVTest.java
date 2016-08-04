@@ -1,7 +1,7 @@
 package com.ai.slp.product.service.business;
 
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
-import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.vo.SkuStorageVo;
 import org.junit.Test;
@@ -21,13 +21,13 @@ public class IStorageNumBusiSVTest {
 
     @Test
     public void queryStorageOfSku(){
-        SkuStorageVo storageVo = storageNumBusiSV.queryStorageOfSku(CommonConstants.COMMON_TENANT_ID,"1000000000002534");
+        SkuStorageVo storageVo = storageNumBusiSV.queryStorageOfSku(CommonTestConstants.COMMON_TENANT_ID,"1000000000002534");
         System.out.println(storageVo.toString());
     }
 
     @Test
     public void userStorageNum(){
-        StorageNumRes numRes = storageNumBusiSV.userStorageNum(CommonConstants.COMMON_TENANT_ID,"1000000000002409",1);
+        StorageNumRes numRes = storageNumBusiSV.userStorageNum(CommonTestConstants.COMMON_TENANT_ID,"1000000000002409",1);
         System.out.println(numRes.toString());
     }
 }

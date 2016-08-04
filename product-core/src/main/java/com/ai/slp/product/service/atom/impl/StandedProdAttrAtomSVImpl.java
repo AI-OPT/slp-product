@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.atom.impl;
 
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.StandedProdAttrMapper;
@@ -62,7 +62,7 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
         StandedProdAttrCriteria example = new StandedProdAttrCriteria();
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId)
-                .andStandedProdIdEqualTo(standedId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStandedProdIdEqualTo(standedId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return standedProdAttrMapper.selectByExample(example);
     }
 
@@ -79,14 +79,14 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
     @Override
     public int updateInactiveByNormProduct(String tenantId, String standedId,Long operId) {
         StandedProdAttr prodAttr = new StandedProdAttr();
-        prodAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+        prodAttr.setState(CommonConstants.STATE_INACTIVE);
         prodAttr.setOperId(operId);
         prodAttr.setOperTime(DateUtils.currTimeStamp());
         StandedProdAttrCriteria example = new StandedProdAttrCriteria();
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId)
                 .andStandedProdIdEqualTo(standedId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
 
         return standedProdAttrMapper.updateByExampleSelective(prodAttr,example);
     }
@@ -104,7 +104,7 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId)
                 .andAttrIdEqualTo(attrId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return standedProdAttrMapper.countByExample(example);
     }
 
@@ -124,7 +124,7 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
                 .andTenantIdEqualTo(tenantId)
                 .andStandedProdIdEqualTo(standedId)
                 .andAttrIdEqualTo(attrId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return standedProdAttrMapper.selectByExample(example);
     }
 

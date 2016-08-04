@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface IStorageGroupAtomSV {
     /**
-     * 查询标准品下已经不是废弃状态的库存组
+     * 查询标准品下没有废弃的库存组数量
      *
      * @param tenantId
      * @param standedProdId
@@ -42,13 +42,22 @@ public interface IStorageGroupAtomSV {
     public int installGroup(StorageGroup group);
 
     /**
-     * 查询指定标识的库存组
+     * 查询指定标识和销售商的库存组
      *
+     * @param tenantId
+     * @param supplierId
+     * @param groupId
+     * @return
+     */
+    public StorageGroup queryByGroupIdAndSupplierId(String tenantId, String supplierId, String groupId);
+
+    /**
+     * 查询指定租户下指定标识的库存组
      * @param tenantId
      * @param groupId
      * @return
      */
-    public StorageGroup queryByGroupId(String tenantId,String groupId);
+    public StorageGroup queryByGroupId(String tenantId, String groupId);
 
     /**
      * 更新指定库存组标识的库存组信息
@@ -65,7 +74,7 @@ public interface IStorageGroupAtomSV {
      * @param standedProdId
      * @return
      */
-    public List<StorageGroup> queryOfStandedProd(String tenantId,String standedProdId);
+    public List<StorageGroup> queryOfStandedProd(String tenantId,String supplierId,String standedProdId);
     
     /**
      * 更新库存组的最低最高销售价
@@ -84,7 +93,7 @@ public interface IStorageGroupAtomSV {
      * @return 标准品下库存组数量
      * @author lipeng16
      */
-    public int countStorGroupByProdID(String tenantId,String standedProdId);
+    public int countStorGroupByProdID(String tenantId,String supplierId,String standedProdId);
     
     /**
      * 分页查询某个标准品下的库存组列表
@@ -96,7 +105,7 @@ public interface IStorageGroupAtomSV {
      * @return
      * @author lipeng16
      */
-    public PageInfoResponse<StorageGroup> queryPageOfStandedProd(String tenantId, String standedProdId, Integer pageNo, Integer pageSize);
+    public PageInfoResponse<StorageGroup> queryPageOfStandedProd(String tenantId, String supplierId,String standedProdId, Integer pageNo, Integer pageSize);
     
     /**
      * 根据搜索条件分页查询库存组列表
@@ -105,7 +114,7 @@ public interface IStorageGroupAtomSV {
      * @return
      * @author lipeng16
      */
-    public PageInfoResponse<StorageGroup> queryPageOfSearch(StorageGroupPageQueryVo storageGroupPageQueryVo);
+    public PageInfo<StorageGroup> queryPageOfSearch(StorageGroupPageQueryVo storageGroupPageQueryVo);
 
     /**
      * 统计所有非废弃库存组

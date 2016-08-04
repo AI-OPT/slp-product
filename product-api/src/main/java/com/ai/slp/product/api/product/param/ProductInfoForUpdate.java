@@ -18,6 +18,11 @@ import java.util.Map;
  * @author liutong5
  */
 public class ProductInfoForUpdate extends BaseInfo {
+    /**
+     * 销售商（商户）标识，必填<br>
+     */
+    @NotBlank(message = "销售商（商户）标识不能为空",groups = {IProductManagerSV.SaveProduct.class})
+    private String supplierId;
 	/**
 	 * 商品标识，必填
 	 */
@@ -142,6 +147,14 @@ public class ProductInfoForUpdate extends BaseInfo {
      * 销售商品非关键属性
      */
     private Map<Long,List<ProdAttrValInfo>> noKeyAttrValMap;
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
 
     public String getProdId() {
         return prodId;

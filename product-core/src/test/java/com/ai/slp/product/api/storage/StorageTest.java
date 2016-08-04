@@ -5,7 +5,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.StorageGroup4List;
 import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
-import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.CommonTestConstants;
 import org.elasticsearch.common.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ public class StorageTest {
     @Test
     public void queryGroup() {
         StorageGroupQueryPage groupQuery = new StorageGroupQueryPage();
-        groupQuery.setTenantId(CommonConstants.COMMON_TENANT_ID);
+        groupQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
         groupQuery.setPageSize(10);
         DateTime dateTime = new DateTime(2016,5,20,0,0);//2016年5月20日0点0分
         groupQuery.setOperTimeStart(new Timestamp(dateTime.getMillis()));

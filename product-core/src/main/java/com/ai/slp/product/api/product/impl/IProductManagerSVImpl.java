@@ -155,15 +155,10 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(query.getTenantId(),"");
-        productBusiSV.changeToInSale(query.getTenantId(),query.getProductId(),query.getOperId());
+        productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
         //将商品添加至搜索引擎
         skuIndexManage.updateSKUIndex(query.getProductId());
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
     }
 
     /**
@@ -189,16 +184,13 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public BaseResponse updateProduct(ProductInfoForUpdate product) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(product.getTenantId(),"");
+        CommonUtils.checkTenantId(product.getTenantId());
         productManagerBsuiSV.updateProdEdit(product);
         //若为立即上架处理,则将数据添加至搜索引擎
         if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){
             skuIndexManage.updateSKUIndex(product.getProdId());
         }
-        BaseResponse response = new BaseResponse();
-        ResponseHeader header = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
-        response.setResponseHeader(header);
-        return response;
+        return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
     }
 
     /**

@@ -1,17 +1,16 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
-import java.util.List;
-
-import com.ai.slp.product.util.SequenceUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaff;
 import com.ai.slp.product.dao.mapper.bo.storage.WarnReceiveStaffCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.WarnReceiveStaffMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.IWarnReceiveStaffAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
@@ -23,7 +22,7 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
     public WarnReceiveStaff selectWarnReceiveStaff(String tenantId, String warnReceiveStaffId) {
         WarnReceiveStaffCriteria example = new WarnReceiveStaffCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).
-        andWarnReceiveStaffIdEqualTo(warnReceiveStaffId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        andWarnReceiveStaffIdEqualTo(warnReceiveStaffId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<WarnReceiveStaff> warnReceiveStaffList = warnReceiveStaffMapper.selectByExample(example);
         if(warnReceiveStaffList == null || warnReceiveStaffList.isEmpty())
             return null;
@@ -34,7 +33,7 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
     public List<WarnReceiveStaff> selectWarnRecList(String tenantId, String objectId) {
         WarnReceiveStaffCriteria example = new WarnReceiveStaffCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId)
-        .andObjectIdEqualTo(objectId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        .andObjectIdEqualTo(objectId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return warnReceiveStaffMapper.selectByExample(example);
     }
 
@@ -66,7 +65,7 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
     @Override
     public int deleteWarnReceiveStaff(String tenantId, String warnReceiveStaffId, Long operId) {
         WarnReceiveStaff warnReceiveStaff = new WarnReceiveStaff();
-        warnReceiveStaff.setState(CommonSatesConstants.STATE_INACTIVE);
+        warnReceiveStaff.setState(CommonConstants.STATE_INACTIVE);
         warnReceiveStaff.setOperId(operId);
         warnReceiveStaff.setOperTime(DateUtils.currTimeStamp());
         WarnReceiveStaffCriteria example = new WarnReceiveStaffCriteria();

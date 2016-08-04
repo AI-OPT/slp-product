@@ -3,7 +3,7 @@ package com.ai.slp.product.constants;
 /**
  * Created by jackieliu on 16/6/2.
  */
-public final class CommonConstants {
+public final class CommonTestConstants {
     /**
      * 通用测试租户ID
      */
