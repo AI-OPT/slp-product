@@ -399,6 +399,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         if (standedProduct == null)
             throw new BusinessException("", "找不到指定的租户=" + marketPrice.getTenantId() + "下的标准品="
                     + marketPrice.getProductId() + "信息");
+        //判断商户ID是否为传入的商户ID
+        if (!marketPrice.getSupplierId().equals(standedProduct.getSupplierId())) 
+        	throw new BusinessException("", "标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + marketPrice.getSupplierId() + "不一致!");
+        
         // 更新市场价格信息
         int count = standedProductAtomSV.updateMarketPrice(marketPrice.getTenantId(),
                 marketPrice.getProductId(), marketPrice.getMarketPrice(), marketPrice.getOperId());
