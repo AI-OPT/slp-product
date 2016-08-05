@@ -7,7 +7,9 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.apache.commons.lang.StringUtils;
@@ -24,6 +26,8 @@ public class INormProductSVImpl implements INormProductSV {
     //标准品处理对象
     @Autowired
     INormProductBusiSV normProductBusiSV;
+    @Autowired
+    IStorageGroupBusiSV storageGroupBusiSV;
     /**
      * 标准品列表查询. <br>
      *
@@ -57,7 +61,7 @@ public class INormProductSVImpl implements INormProductSV {
     /**
      * 添加标准品信息. <br>
      *
-     * @param productInfoRequest 标准品信息
+     * @param request 标准品信息
      * @return 标准品保存结果
      * @throws BusinessException
      * @throws SystemException
@@ -65,14 +69,18 @@ public class INormProductSVImpl implements INormProductSV {
      * @ApiDocMethod
      */
     @Override
-    public BaseResponse createProductInfo(NormProdSaveRequest productInfoRequest) throws BusinessException, SystemException {
-        normProductBusiSV.installNormProd(productInfoRequest);
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultCode("");
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+    public BaseResponse createProductInfo(NormProdSaveRequest request) throws BusinessException, SystemException {
+        CommonUtils.checkTenantId(request.getTenantId());
+        String normProdId = normProductBusiSV.installNormProd(request);
+        //自动添加一个库存组
+        STOStorageGroup storageGroup = new STOStorageGroup();
+        storageGroup.setTenantId(request.getTenantId());
+        storageGroup.setCreateId(request.getOperId());
+        storageGroup.setStandedProdId(normProdId);
+        storageGroup.setSupplierId(request.getSupplierId());
+        storageGroup.setStorageGroupName(request.getProductName());
+        storageGroupBusiSV.addGroup(storageGroup);
+        return CommonUtils.genSuccessResponse(normProdId);
     }
 
     /**

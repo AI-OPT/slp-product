@@ -53,4 +53,15 @@ public class CommonUtils {
         baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS,resultMsg));
         return baseResponse;
     }
+
+    /**
+     * 返回包含成功标识的response
+     * @param resultMsg
+     * @return
+     */
+    public static BaseResponse genSuccessResponse(String resultMsg){
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS,resultMsg));
+        return baseResponse;
+    }
 }
