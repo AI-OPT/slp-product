@@ -163,18 +163,12 @@ public class StorageNumDbBusiSVImpl {
     public void flushPriorityStorage(String tenantId,String groupId,Short priority,boolean autoActive){
         logger.info("===刷新优先级的库存信息(开始),库存组ID:{},优先级:{},是否自动切换:{}",groupId,priority,autoActive);
         //查询已"启用"状态库存.
-        List<Storage> storageList = storageAtomSV.queryActive(tenantId,groupId,false);
-        //若"启用"状态库存为空,或启用库存所属优先级与当前不一致
-        if (CollectionUtil.isEmpty(storageList)
-                || !priority.equals(storageList.get(0).getPriorityNumber())){
-            //查询优先级内所有非废弃的库存
-            storageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,priority,false);
-        }
-        //若当前优先级不存在非废弃的库存,则直接返回.
+        List<Storage> storageList = storageAtomSV.queryActiveByGroupIdAndPriorityNum(groupId,priority);
+        //若当前优先级不存在启用的库存,则直接返回.
         if (CollectionUtil.isEmpty(storageList))
             return;
-        ICacheClient cacheClient = IPaasStorageUtils.getClient();
 
+        ICacheClient cacheClient = IPaasStorageUtils.getClient();
         List<String> stopList = new ArrayList<>();
         stopList.add(StorageConstants.Storage.State.STOP);
         stopList.add(StorageConstants.Storage.State.AUTO_STOP);
@@ -189,16 +183,6 @@ public class StorageNumDbBusiSVImpl {
         for (Storage storage:storageList){
             logger.info("当前库存信息,库存ID:{},库存总量:{},库存可用量:{}",
                     storage.getStorageId(),storage.getTotalNum(),storage.getUsableNum());
-            //将可用量大于零,且停用的库存,设置为"自动启用"
-            if (autoActive && storage.getUsableNum() > 0
-                    && stopList.contains(storage.getState())){
-                storage.setState(StorageConstants.Storage.State.AUTO_ACTIVE);
-                if (storageAtomSV.updateById(storage)>0){
-                    StorageLog storageLog = new StorageLog();
-                    BeanUtils.copyProperties(storageLog,storage);
-                    storageLogAtomSV.installLog(storageLog);
-                }
-            }
             //查询库存下SKU库存
             List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storage.getStorageId());
             for (SkuStorage skuStorage:skuStorageList){

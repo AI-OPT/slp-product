@@ -387,6 +387,11 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @param operId
 	 */
 	private void stopGroup(StorageGroup storageGroup, Long operId) {
+		// 商品进行停用下架
+		Product product = productAtomSV.selectByGroupId(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
+		if (product != null && ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
+			productBusiSV.offSale(product.getTenantId(),storageGroup.getSupplierId(), product.getProdId(), operId);
+		}
 		// 库存组变更为停用
 		storageGroup.setState(StorageConstants.StorageGroup.State.STOP);
 		storageGroup.setOperId(operId);
@@ -395,11 +400,6 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			StorageGroupLog groupLog = new StorageGroupLog();
 			BeanUtils.copyProperties(groupLog, storageGroup);
 			storageGroupLogAtomSV.install(groupLog);
-		}
-		// 商品进行停用下架
-		Product product = productAtomSV.selectByGroupId(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
-		if (product != null && ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
-			productBusiSV.offSale(product.getTenantId(),storageGroup.getSupplierId(), product.getProdId(), operId);
 		}
 		//将缓存中库存组状态改为停用
 		ICacheClient cacheClient = IPaasStorageUtils.getClient();
@@ -500,9 +500,6 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		ICacheClient cacheClient = IPaasStorageUtils.getClient();
 		//获取库存组的cacheKey
 		String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
-		//设置库存组状态
-		cacheClient.hset(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE,storageGroup.getState());
-		logger.info("库存组当前状态:{}",storageGroup.getState());
 		//查询所有截止时间在当前时间之后的促销的库存,不包括废弃库存
 		List<Storage> storageList = storageAtomSV.queryTimeStorageOfGroup(storageGroup.getStorageGroupId(),false);
 		List<Short> priorityNumList = new ArrayList<>();
@@ -537,6 +534,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			cleanStorageCache(tenantId,groupId,priority);
 		}
 		logger.info("====刷新[非]促销优先级缓存(结束)====");
+		//设置库存组状态
+		cacheClient.hset(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE,storageGroup.getState());
+		logger.info("===库存组当前状态:{}",storageGroup.getState());
 	}
 
 	/**
