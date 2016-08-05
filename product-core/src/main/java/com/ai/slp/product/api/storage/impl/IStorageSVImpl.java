@@ -234,27 +234,6 @@ public class IStorageSVImpl implements IStorageSV {
 	}
 
 	/**
-	 * 变更库存组中库存优先级
-	 *
-	 * @param priorityCharge
-	 *            优先级变更信息
-	 * @return 操作结果
-	 * @throws BusinessException
-	 * @throws SystemException
-	 * @author liutong5
-	 * @ApiDocMethod
-	 */
-	@Override
-	public BaseResponse chargeStoragePriority(StoragePriorityCharge priorityCharge)
-			throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(priorityCharge.getTenantId());
-		storageBusiSV.updateStoragePriority(priorityCharge);
-		BaseResponse baseResponse = new BaseResponse();
-		CommonUtils.addSuccessResHeader(baseResponse,"");
-		return baseResponse;
-	}
-
-	/**
 	 * 更新库存组信息
 	 *
 	 * @param storageGroup
