@@ -361,27 +361,44 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	@Override
 	public int updateStorageNameWarn(STOStorage stoStorage) {
-		Long operId = stoStorage.getOperId();
-		// 获取库存ID
-		String storageId = stoStorage.getStorageId();
-		// 判断库存标识是否存在库存信息
-		if (storageAtomSV.findStorage(storageId) <= 0) {
-			throw new BusinessException("", "找不到指定的标识的库存,库存标识=" + storageId);
+		String tenantId = stoStorage.getTenantId(),
+				supplierId = stoStorage.getSupplierId(),
+				storageId = stoStorage.getStorageId();
+		if (StringUtils.isBlank(stoStorage.getStorageName()) && stoStorage.getWarnNum()==null)
+			return 0;
+		Storage storage0 = storageAtomSV.queryAllStateStorage(stoStorage.getStorageId());
+		if (storage0 == null
+				|| StorageConstants.Storage.State.DISCARD.equals(storage0.getState())
+				|| StorageConstants.Storage.State.AUTO_DISCARD.equals(storage0.getState())) {
+			logger.warn("tenantId:{},supplierId:{},storageId:{}",tenantId,supplierId,storageId);
+			throw new BusinessException("", "库存不存在或已废弃" + storageId);
 		}
+		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(
+				tenantId,supplierId,storage0.getStorageGroupId());
+		if (group==null){
+			logger.warn("tenantId:{},supplierId:{},storageId:{}",tenantId,supplierId,storageId);
+			throw new BusinessException("", "未找到对应库存信息,库存ID:" + storageId);
+		}
+		Long operId = stoStorage.getOperId();
 		// 如果存在则修改库存信息,只能修改名称和最低预警库存量
 		Storage storage = new Storage();
 		storage.setStorageId(storageId);
-		storage.setStorageName(stoStorage.getStorageName());
-		storage.setWarnNum(storage.getWarnNum());
+		if (StringUtils.isNotBlank(stoStorage.getStorageName())) {
+			storage.setStorageName(stoStorage.getStorageName());
+			storage0.setStorageName(stoStorage.getStorageName());
+		}
+		if (stoStorage.getWarnNum() == null) {
+			storage.setWarnNum(storage.getWarnNum());
+			storage0.setWarnNum(storage.getWarnNum());
+		}
 		storage.setOperId(operId);
 		int updateNum = storageAtomSV.updateById(storage);
-		if (updateNum <= 0) {
-			throw new BusinessException("", "修改库存信息失败,库存ID=" + storageId);
+		if (updateNum > 0) {
+			// 更新库存日志信息
+			StorageLog storageLog = new StorageLog();
+			BeanUtils.copyProperties(storageLog, storage0);
+			storageLogAtomSV.installLog(storageLog);
 		}
-		// 更新库存日志信息
-		StorageLog storageLog = new StorageLog();
-		BeanUtils.copyProperties(storageLog, storage);
-		storageLogAtomSV.installLog(storageLog);
 		return updateNum;
 	}
 

@@ -206,7 +206,7 @@ public interface IStorageSV {
      */
     @POST
     @Path("/updateGroupName")
-    public BaseResponse updateStorageGroupName(StorageGroupUpName storageGroup)
+    public BaseResponse updateStorageGroupName(NameUpReq storageGroup)
         throws BusinessException,SystemException;
     @interface UpdateStorageGroupName{}
 
@@ -315,4 +315,20 @@ public interface IStorageSV {
     @Path("/addSkuStorages")
     public BaseResponse addSkuStorage(List<SkuStorageAdd> skuStorageAddList) throws BusinessException,SystemException;
     @interface AddSkuStorage {}
+
+    /**
+     * 更新库存名称信息
+     *
+     * @param req
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode STORAGE_0116
+     * @RestRelativeURL storage/updateStorageName
+     */
+    @POST
+    @Path("/updateStorageName")
+    public BaseResponse updateStorageName(NameUpReq req)
+        throws BusinessException,SystemException;
 }

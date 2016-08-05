@@ -257,7 +257,7 @@ public class IStorageSVImpl implements IStorageSV {
 	}
 
 	/**
-	 * 更新库存组信息
+	 * 更新库存组名称
 	 *
 	 * @param storageGroup
 	 *            库存组信息
@@ -268,7 +268,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @ApiDocMethod
 	 */
 	@Override
-	public BaseResponse updateStorageGroupName(StorageGroupUpName storageGroup)
+	public BaseResponse updateStorageGroupName(NameUpReq storageGroup)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(storageGroup.getTenantId());
 		int updateNum = storageGroupBusiSV.updateGroupName(storageGroup);
@@ -398,5 +398,30 @@ public class IStorageSVImpl implements IStorageSV {
 		BaseResponse baseResponse = new BaseResponse();
 		CommonUtils.addSuccessResHeader(baseResponse,"增加SKU库存信息成功");
 		return baseResponse;
+	}
+
+	/**
+	 * 更新库存名称信息
+	 *
+	 * @param req
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiCode STORAGE_0116
+	 * @RestRelativeURL storage/updateStorageName
+	 */
+	@Override
+	public BaseResponse updateStorageName(NameUpReq req) throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(req.getTenantId());
+		//更新库存名称
+		STOStorage stoStorage = new STOStorage();
+		stoStorage.setTenantId(req.getTenantId());
+		stoStorage.setSupplierId(req.getSupplierId());
+		stoStorage.setStorageId(req.getId());
+		stoStorage.setStorageName(req.getName());
+		stoStorage.setOperId(req.getOperId());
+		storageBusiSV.updateStorageNameWarn(stoStorage);
+		return CommonUtils.genSuccessResponse("");
 	}
 }

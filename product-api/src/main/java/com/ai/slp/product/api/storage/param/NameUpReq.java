@@ -7,13 +7,13 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * 虚拟库存组更新信息<br>
+ * 更新名称请求信息<br>
  *
  * Date: 2016年5月10日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class StorageGroupUpName extends BaseInfo {
+public class NameUpReq extends BaseInfo {
     private static final long serialVersionUID = 1L;
     /**
      * 销售商（商户）标识，必填<br>
@@ -24,16 +24,16 @@ public class StorageGroupUpName extends BaseInfo {
 	/**
      * 库存组标识
      */
-    @NotBlank(message = "库存组标识不能为空",
+    @NotBlank(message = "标识不能为空",
             groups = { IStorageSV.UpdateStorageGroupName.class})
-    private String storageGroupId;
+    private String id;
     /**
      * 库存组名称,必填
      * 设置为null,则不进行更新操作
      */
-    @NotBlank(message = "库存组名称不能为空",
+    @NotBlank(message = "名称不能为空",
             groups = { IStorageSV.UpdateStorageGroupName.class})
-    private String storageGroupName;
+    private String name;
 
     /**
      * 操作者ID<br>
@@ -51,20 +51,20 @@ public class StorageGroupUpName extends BaseInfo {
         this.supplierId = supplierId;
     }
 
-    public String getStorageGroupId() {
-        return storageGroupId;
+    public String getId() {
+        return id;
     }
 
-    public void setStorageGroupId(String storageGroupId) {
-        this.storageGroupId = storageGroupId;
+    public void setId(String storageGroupId) {
+        this.id = storageGroupId;
     }
 
-    public String getStorageGroupName() {
-        return storageGroupName;
+    public String getName() {
+        return name;
     }
 
-    public void setStorageGroupName(String storageGroupName) {
-        this.storageGroupName = storageGroupName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getOperId() {

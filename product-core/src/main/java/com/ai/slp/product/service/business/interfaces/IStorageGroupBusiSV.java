@@ -26,7 +26,7 @@ public interface IStorageGroupBusiSV {
      * @param storageGroup
      * @return
      */
-    public int updateGroupName(StorageGroupUpName storageGroup);
+    public int updateGroupName(NameUpReq storageGroup);
 
     /**
      * 查询指定标准品下的库存组信息,包括库存信息

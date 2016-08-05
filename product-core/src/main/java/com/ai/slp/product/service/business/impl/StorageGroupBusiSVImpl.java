@@ -126,13 +126,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @return
 	 */
 	@Override
-	public int updateGroupName(StorageGroupUpName storageGroup) {
+	public int updateGroupName(NameUpReq storageGroup) {
 		// 查询库存组是否存在
 		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(
-				storageGroup.getTenantId(),storageGroup.getSupplierId(),storageGroup.getStorageGroupId());
+				storageGroup.getTenantId(),storageGroup.getSupplierId(),storageGroup.getId());
 		if (group == null)
 			throw new BusinessException("",
-					"要更新库存组信息不存在,租户ID:" + storageGroup.getTenantId() + ",库存组标识:" + storageGroup.getStorageGroupId());
+					"要更新库存组信息不存在,租户ID:" + storageGroup.getTenantId() + ",库存组标识:" + storageGroup.getId());
 		// 已废弃,不允许变更
 		if (StorageConstants.StorageGroup.State.DISCARD.equals(group.getState())
 				|| StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(group.getState()))
@@ -140,7 +140,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			throw new BusinessException("", "库存组已经废弃,不允许更新信息");
 		}
 		// 设置可更新信息
-		group.setStorageGroupName(storageGroup.getStorageGroupName());
+		group.setStorageGroupName(storageGroup.getName());
 		// group.setSerialNumber(storageGroup.getSerialNumber());
 		group.setOperId(storageGroup.getOperId());
 		int updateNum = storageGroupAtomSV.updateById(group);
