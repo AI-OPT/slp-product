@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
+import com.ai.slp.product.api.product.interfaces.IProductManagerSV.QueryProductRefuse;
 
 /**
  * 商品管理待编辑查询参数
@@ -67,8 +68,7 @@ public class ProductEditQueryReq extends BaseInfo{
      */
     @NotBlank(message = "商户标识不能为空",
             groups = {IProductManagerSV.QueryProductEdit.class,
-            		  IProductManagerSV.QueryProductRefuse.class,
-            		  IProductManagerSV.QueryProductCheck.class})
+            		  IProductManagerSV.QueryProductRefuse.class})
     private String supplierId;
 
     
