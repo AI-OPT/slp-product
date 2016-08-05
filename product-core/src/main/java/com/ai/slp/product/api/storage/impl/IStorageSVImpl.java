@@ -183,8 +183,7 @@ public class IStorageSVImpl implements IStorageSV {
 	/**
 	 * 查询标准品库存信息<br>
 	 *
-	 * @param storageId
-	 *            库存标识
+	 * @param query 库存唯一标识查询条件
 	 * @return 标准品库存信息
 	 * @throws BusinessException
 	 * @throws SystemException
@@ -192,11 +191,13 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @ApiDocMethod
 	 */
 	@Override
-	public StorageRes queryStorageById(String storageId) throws BusinessException, SystemException {
-		if(StringUtils.isEmpty(storageId)){
-			throw new BusinessException("", "库存ID不能为空");
-		}
-		return storageBusiSV.queryStorageById(storageId);
+	public StorageRes queryStorageById(StorageUniQuery query)
+			throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(query.getTenantId());
+		StorageRes res = storageBusiSV.queryStorageById(
+				query.getTenantId(),query.getSupplierId(),query.getStorageId());
+		CommonUtils.addSuccessResHeader(res,"");
+		return res;
 	}
 
 	/**
@@ -212,7 +213,8 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @ApiDocMethod
 	 */
 	@Override
-	public BaseResponse chargeStorageStatus(StorageStatus storageStatus) throws BusinessException, SystemException {
+	public BaseResponse chargeStorageStatus(StorageStatus storageStatus)
+			throws BusinessException, SystemException {
 		String tenantId = storageStatus.getTenantId();
 		Long operId = storageStatus.getOperId();
 		CommonUtils.checkTenantId(storageStatus.getTenantId());

@@ -74,11 +74,13 @@ public interface IStorageBusiSV {
     /**
      * 查看库存信息
      *
+     * @param tenantId
+     * @param supplierId
      * @param storageId
      * @return
      * @author lipeng16
      */
-    public StorageRes queryStorageById(String storageId);
+    public StorageRes queryStorageById(String tenantId,String supplierId,String storageId);
     
     /**
      * 查询SKU库存信息

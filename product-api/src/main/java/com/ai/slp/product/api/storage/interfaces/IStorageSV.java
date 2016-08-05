@@ -138,7 +138,7 @@ public interface IStorageSV {
     /**
      * 查询库存信息<br>
      *
-     * @param storageId 库存标识
+     * @param query 库存标识
      * @return 标准品库存信息
      * @throws BusinessException
      * @throws SystemException
@@ -149,7 +149,7 @@ public interface IStorageSV {
      */
     @POST
     @Path("/queryStorageById")
-    public StorageRes queryStorageById(String storageId)
+    public StorageRes queryStorageById(StorageUniQuery query)
             throws BusinessException,SystemException;
     @interface QueryStorageById{}
 

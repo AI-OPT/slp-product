@@ -389,10 +389,17 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * 查看库存信息
 	 */
 	@Override
-	public StorageRes queryStorageById(String storageId) {
+	public StorageRes queryStorageById(String tenantId,String supplierId,String storageId) {
 		Storage storage = storageAtomSV.queryAllStateStorage(storageId);
 		if (storage == null) {
+			logger.warn("tenantId:{},supplierId:{},storageId:{}",tenantId,supplierId,storageId);
 			throw new BusinessException("", "找不到指定标识的库存,库存ID" + storageId);
+		}
+		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(
+				tenantId,supplierId,storage.getStorageGroupId());
+		if (group==null){
+			logger.warn("tenantId:{},supplierId:{},storageId:{}",tenantId,supplierId,storageId);
+			throw new BusinessException("", "未找到对应库存信息,库存ID:" + storageId);
 		}
 		StorageRes storageRes = new StorageRes();
 		BeanUtils.copyProperties(storageRes, storage);
