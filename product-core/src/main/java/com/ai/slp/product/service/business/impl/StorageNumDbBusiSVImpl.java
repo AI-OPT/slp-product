@@ -148,7 +148,10 @@ public class StorageNumDbBusiSVImpl {
         }
         //若为减少,且需要切换优先级检查,则进行优先级切换
         else if (isUser && product!=null && priorityChange){
-            changeGroupPriority(tenantId,product.getSupplierId(),product.getStorageGroupId(),product.getProdId());
+            //取消自动切换优先级,对商品进行售罄下架处理.
+//            changeGroupPriority(tenantId,product.getSupplierId(),product.getStorageGroupId(),product.getProdId());
+            //进行售罄操作
+            productBusiSV.offSale(tenantId,product.getSupplierId(),product.getProdId(),null);
         }
 
     }
