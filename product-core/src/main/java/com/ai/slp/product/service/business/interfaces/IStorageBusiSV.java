@@ -14,10 +14,10 @@ import java.util.List;
 public interface IStorageBusiSV {
 
     /**
-     * 废弃库存组
+     * 废弃库存
      * @param storage
      */
-    public void discardStorage(Storage storage, Long operId);
+    public void discardStorage(String tenantId,Storage storage, Long operId,boolean isAuto);
 
     /**
      * 自动停用库存

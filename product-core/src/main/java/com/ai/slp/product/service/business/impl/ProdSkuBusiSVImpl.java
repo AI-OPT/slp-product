@@ -135,7 +135,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
             //查询库存组下库存
             List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId,group.getStorageGroupId());
             for (Storage storage : storageList) {
-                storageBusiSV.discardStorage(storage, saveInfo.getOperId());
+                storageBusiSV.discardStorage(tenantId,storage, saveInfo.getOperId(),true);
             }
         }
     }

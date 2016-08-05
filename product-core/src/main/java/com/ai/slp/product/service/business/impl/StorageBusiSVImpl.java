@@ -81,6 +81,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
     IProductStateLogAtomSV productStateLogAtomSV;
 	@Autowired
 	ISKUIndexManage iskuIndexManage;
+	@Autowired
+	StorageNumDbBusiSVImpl storageNumDbBusiSV;
 
 	/**
 	 * 废弃库存
@@ -88,9 +90,20 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * @param storage 要废弃的库存信息
 	 */
 	@Override
-	public void discardStorage(Storage storage, Long operId) {
-		// 废弃库存
-		storage.setState(StorageConstants.Storage.State.AUTO_DISCARD);
+	public void discardStorage(String tenantId,Storage storage, Long operId,boolean isAuto) {
+		Product product = productAtomSV.queryProductByGroupId(tenantId,storage.getStorageGroupId());
+		//库存为启用,且商品为在售,则不允许进行废弃
+		if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())
+				&& product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState()))
+			throw new BusinessException("","对应商品在销售中,不允许停用");
+		//如果库存为启用,需要从缓存中删除库存对应缓存信息
+		if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState()))
+			storageNumDbBusiSV.subStorageCache(tenantId,storage);
+		//判断是否为自动废弃
+		if (isAuto)
+			storage.setState(StorageConstants.Storage.State.AUTO_DISCARD);
+		else
+			storage.setState(StorageConstants.Storage.State.DISCARD);
 		storage.setOperId(operId);
 		if (storageAtomSV.updateById(storage) > 0) {
 			StorageLog storageLog = new StorageLog();
@@ -142,7 +155,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			stopStorage(tenantId,storage,operId);
 			break;
 		case StorageConstants.Storage.State.DISCARD:// 转废弃
-			discardStorage(storage,operId);
+			discardStorage(tenantId,storage,operId,false);
 			break;
 		default:
 			throw new BusinessException("", "无法识别的状态:" + state);

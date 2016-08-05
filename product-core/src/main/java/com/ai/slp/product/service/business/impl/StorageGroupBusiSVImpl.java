@@ -425,7 +425,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 废弃库存组下所有库存和SKU库存
 		List<Storage> storageList = storageAtomSV.queryOfGroup(storageGroup.getTenantId(),storageGroup.getStorageGroupId());
 		for (Storage storage : storageList) {
-			storageBusiSV.discardStorage(storage, operId);
+			storageBusiSV.discardStorage(storageGroup.getTenantId(),storage, operId,true);
 		}
 		// 库存组废弃
 		storageGroup.setState(StorageConstants.StorageGroup.State.DISCARD);
