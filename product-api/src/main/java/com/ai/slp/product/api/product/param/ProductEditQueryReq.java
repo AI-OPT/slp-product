@@ -5,6 +5,8 @@ import java.util.List;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 
 /**
  * 商品管理待编辑查询参数
@@ -57,8 +59,28 @@ public class ProductEditQueryReq extends BaseInfo{
      */
 
     private List<String> stateList;
+    
+    /**
+     * 商户标识,必填
+     * -1:自营
+     *  0:全部
+     */
+    @NotBlank(message = "商户标识不能为空",
+            groups = {IProductManagerSV.QueryProductEdit.class,
+            		  IProductManagerSV.QueryProductRefuse.class,
+            		  IProductManagerSV.QueryProductCheck.class})
+    private String supplierId;
 
-    public String getProdName() {
+    
+    public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	public String getProdName() {
         return prodName;
     }
 
