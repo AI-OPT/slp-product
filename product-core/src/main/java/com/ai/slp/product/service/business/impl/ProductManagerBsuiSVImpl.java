@@ -115,6 +115,46 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     }
 
     /**
+     *商品管理中分页查询被拒绝商品信息
+     * @param queryReq
+     * @return
+     */
+    @Override
+    public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam) {
+    	//获取住户ID
+    	String tenantId = productRefuseParam.getTenantId();
+    	//查询符合条件的商品
+    	PageInfo<Product> pageInfo = productAtomSV.selectPageForEdit(productRefuseParam);
+    	ArrayList<ProductEditUp> editUpList = new ArrayList<>();
+    	for (Product product : pageInfo.getResult()) {
+			ProductEditUp productEditUp = new ProductEditUp();
+			BeanUtils.copyProperties(productEditUp,product);
+			//设置类目名称
+			ProductCat cat = catDefAtomSV.selectById(tenantId, product.getProductCatId());
+			if (cat!=null) 
+				productEditUp.setProductCatName(cat.getProductCatName());
+			//查询预览主图
+			ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
+			if (prodPicture!=null) {
+				productEditUp.setProPictureId(prodPicture.getProPictureId());
+				productEditUp.setVfsId(prodPicture.getVfsId());
+				productEditUp.setPicType(prodPicture.getPicType());
+			}
+			//获取    拒绝原因   拒绝描述
+			ProductStateLog productStateLog = productStateLogAtomSV.selectRefuseById(productRefuseParam.getProdId());
+			if (productStateLog.getRefuseReason()!=null || productStateLog.getRefuseDes()!=null) {
+				productEditUp.setRefuseReason(productStateLog.getRefuseReason());
+				productEditUp.setRefuseDes(productStateLog.getRefuseDes());
+			}
+			editUpList.add(productEditUp);
+		}
+    	PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();
+    	BeanUtils.copyProperties(response, pageInfo);
+    	response.setResult(editUpList);
+    	return response;
+    }
+    
+    /**
      * 查询商品的受众信息
      *
      * @param tenantId

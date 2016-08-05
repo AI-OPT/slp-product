@@ -64,7 +64,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam) throws BusinessException, SystemException {
     	CommonUtils.checkTenantId(productRefuseParam.getTenantId(),"");
         CommonUtils.checkSupplierId(productRefuseParam.getSupplierId(),"");
-        return productManagerBsuiSV.queryPageForEdit(productRefuseParam);
+    	return productManagerBsuiSV.queryProductRefuse(productRefuseParam);
     }
 
     /**

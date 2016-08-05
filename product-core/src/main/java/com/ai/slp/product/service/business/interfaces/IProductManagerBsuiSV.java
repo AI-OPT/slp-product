@@ -41,4 +41,11 @@ public interface IProductManagerBsuiSV {
      */
     public PageInfoResponse<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) ;
     
+    /**
+     * 商品管理中分页查询被拒绝商品信息
+     * @param productRefuseParam
+     * @return
+     */
+	public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam);
+    
 }
