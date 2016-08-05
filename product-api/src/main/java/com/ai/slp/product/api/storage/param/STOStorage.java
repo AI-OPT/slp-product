@@ -88,6 +88,7 @@ public class STOStorage extends BaseInfo{
     /**
      * SKU对应的库存量<br>
      * 没有销售属性时,为空
+     * K:skuId,V:sku库存的数量
      */
     private Map<String,Long> skuStorageNum;
 

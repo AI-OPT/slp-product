@@ -12,8 +12,6 @@ import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
-import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -31,6 +29,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
+import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -335,43 +334,27 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		storage.setUsableNum(stoStorage.getTotalNum());
 		int saveNum = storageAtomSV.insertStorage(storage);
 		if (saveNum <= 0) {
-			// 没有插入成功返回0
-			return "";
+			logger.error("Install storage num is 0.\r\n{}", new Gson().toJson(storage));
+			throw new BusinessException("","添加库存失败");
 		}
 		// 添加库存日志
 		StorageLog storageLog = new StorageLog();
 		BeanUtils.copyProperties(storageLog, storage);
 		storageLogAtomSV.installLog(storageLog);
-		// 通过是否有销售属性判断下一步操作
+		// 如果有销售属性,则添加SKU对应的库存信息
 		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)) {
-			// 如果有销售属性则返回
-			return "";
+			for (Map.Entry<String,Long> entry:stoStorage.getSkuStorageNum().entrySet()){
+				installSkuStorage(entry.getKey(),storage.getStorageId(),entry.getValue(),operId);
+			}
 		} else if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.NO)) {
 			//通过商品id查出商品SKU信息,更新SKU库存信息
 			String skuId = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId()).get(0).getSkuId();
 			installSkuStorage(skuId,storage.getStorageId(),storage.getTotalNum(),operId);
-			return storage.getStorageId();
 		} else {
 			throw new BusinessException("", "不是有效的是否有销售属性状态" + isSaleAttr);
 		}
+		return storage.getStorageId();
 	}
-
-	/**
-	 * 更新商品和商品状态日志表
-	 * 
-	 * @param product
-	 */
-	private void insertProdAndStateLog(Product product) {
-		//商品日志表
-		ProductLog productLog = new ProductLog();
-		BeanUtils.copyProperties(productLog, product);
-		productLogAtomSV.install(productLog);
-		//商品状态日志表
-		ProductStateLog productStateLog = new ProductStateLog();
-		BeanUtils.copyProperties(productStateLog, product);
-		productStateLogAtomSV.insert(productStateLog);
-	}
-
 
 	/**
 	 * 修改库存信息,只能修改名称和最低预警库存量-适用有和无销售属性两种状态
