@@ -172,23 +172,6 @@ public interface IStorageSV {
             throws BusinessException,SystemException;
     @interface ChargeStorageStatus{}
 
-    /**
-     * 变更库存组中库存优先级
-     *
-     * @param priorityCharge 优先级变更信息
-     * @return 操作结果
-     * @throws BusinessException
-     * @throws SystemException
-     * @author liutong5
-     * @ApiDocMethod
-     * @ApiCode STORAGE_0108
-     * @RestRelativeURL storage/chargeStoragePriority
-     */
-    @POST
-    @Path("/chargeStoragePriority")
-    public BaseResponse chargeStoragePriority(StoragePriorityCharge priorityCharge)
-            throws BusinessException,SystemException;
-    @interface ChargeStoragePriority{}
 
     /**
      * 更新库存组名称

@@ -63,7 +63,7 @@ public interface INormProductSV {
     /**
      * 添加标准品信息. <br>
      *
-     * @param productInfoRequest 标准品信息
+     * @param request 标准品信息
      * @return 标准品保存结果
      * @throws BusinessException
      * @throws SystemException
@@ -74,7 +74,7 @@ public interface INormProductSV {
      */
     @POST
     @Path("/add")
-    public BaseResponse createProductInfo(NormProdSaveRequest productInfoRequest)
+    public BaseResponse createProductInfo(NormProdSaveRequest request)
             throws BusinessException,SystemException;
     @interface SaveProductInfo {}
 

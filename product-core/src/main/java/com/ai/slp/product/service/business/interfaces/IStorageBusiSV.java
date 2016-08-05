@@ -14,10 +14,10 @@ import java.util.List;
 public interface IStorageBusiSV {
 
     /**
-     * 废弃库存组
+     * 废弃库存
      * @param storage
      */
-    public void discardStorage(Storage storage, Long operId);
+    public void discardStorage(String tenantId,Storage storage, Long operId,boolean isAuto);
 
     /**
      * 自动停用库存
@@ -31,8 +31,9 @@ public interface IStorageBusiSV {
      * @param storageId
      * @param state
      * @param operId
+     * @return 返回更改成功的库存信息
      */
-    public void changeStorageStats(String tenantId,String supplierId,String storageId,String state,Long operId);
+    public Storage changeStorageStats(String tenantId,String supplierId,String storageId,String state,Long operId);
 	 /**
 	  * 批量更新库存销售价
 	  *

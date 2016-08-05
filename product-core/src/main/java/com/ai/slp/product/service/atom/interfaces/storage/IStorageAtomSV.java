@@ -143,4 +143,13 @@ public interface IStorageAtomSV {
      * @return
      */
     public int countOfActiveNoPrioritySelf(String groupId,Short priorityNum);
+
+    /**
+     * 查询库存组中指定优先级下启用库存
+     *
+     * @param groupId
+     * @param priorityNum
+     * @return
+     */
+    public List<Storage> queryActiveByGroupIdAndPriorityNum(String groupId,Short priorityNum);
 }

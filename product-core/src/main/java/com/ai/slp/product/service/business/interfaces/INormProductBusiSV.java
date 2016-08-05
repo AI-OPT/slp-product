@@ -13,6 +13,7 @@ public interface INormProductBusiSV {
      * 添加标准品,包括属性值
      *
      * @param normProdct
+     * @return 标准品标识
      */
     public String installNormProd(NormProdSaveRequest normProdct);
 

@@ -310,4 +310,19 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 		return storageMapper.countByExample(example);
 	}
 
+	/**
+	 * 查询库存组中指定优先级下启用库存
+	 *
+	 * @param groupId
+	 * @param priorityNum
+	 * @return
+	 */
+	@Override
+	public List<Storage> queryActiveByGroupIdAndPriorityNum(String groupId, Short priorityNum) {
+		StorageCriteria example = new StorageCriteria();
+		example.createCriteria().andStorageGroupIdEqualTo(groupId).andStateIn(ACTIVE_LIST)
+				.andPriorityNumberNotEqualTo(priorityNum);
+		return storageMapper.selectByExample(example);
+	}
+
 }

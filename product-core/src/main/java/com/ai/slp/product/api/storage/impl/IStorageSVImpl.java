@@ -13,7 +13,9 @@ import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.business.impl.StorageNumDbBusiSVImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
@@ -39,6 +41,8 @@ public class IStorageSVImpl implements IStorageSV {
 	IProductAtomSV productAtomSV;
 	@Autowired
 	IProductBusiSV productBusiSV;
+	@Autowired
+	StorageNumDbBusiSVImpl storageNumDbBusiSV;
 
 	/**
 	 * 添加标准品库存组<br>
@@ -209,30 +213,21 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public BaseResponse chargeStorageStatus(StorageStatus storageStatus) throws BusinessException, SystemException {
+		String tenantId = storageStatus.getTenantId();
+		Long operId = storageStatus.getOperId();
 		CommonUtils.checkTenantId(storageStatus.getTenantId());
-		storageBusiSV.changeStorageStats(storageStatus.getTenantId(), storageStatus.getSupplierId(),
-				storageStatus.getStorageId(),storageStatus.getState(), storageStatus.getOperId());
-		BaseResponse baseResponse = new BaseResponse();
-		CommonUtils.addSuccessResHeader(baseResponse,"");
-		return baseResponse;
-	}
-
-	/**
-	 * 变更库存组中库存优先级
-	 *
-	 * @param priorityCharge
-	 *            优先级变更信息
-	 * @return 操作结果
-	 * @throws BusinessException
-	 * @throws SystemException
-	 * @author liutong5
-	 * @ApiDocMethod
-	 */
-	@Override
-	public BaseResponse chargeStoragePriority(StoragePriorityCharge priorityCharge)
-			throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(priorityCharge.getTenantId());
-		storageBusiSV.updateStoragePriority(priorityCharge);
+		Storage storage = storageBusiSV.changeStorageStats(tenantId, storageStatus.getSupplierId(),
+				storageStatus.getStorageId(),storageStatus.getState(), operId);
+		//若启用库存,则刷新缓存
+		if (StorageConstants.Storage.State.ACTIVE.equals(storageStatus.getState())){
+			storageNumDbBusiSV.flushStorageCache(tenantId,storage);
+			//若商品为售罄下架,则进行上架处理
+			Product product = productAtomSV.queryProductByGroupId(tenantId,storage.getStorageGroupId());
+			if (product!=null && ProductConstants.Product.State.SALE_OUT.equals(product.getState()))
+				productBusiSV.changeToInSale(tenantId,storageStatus.getSupplierId(),product.getProdId(),operId);
+		}else if(StorageConstants.Storage.State.STOP.equals(storageStatus.getState())){
+			storageNumDbBusiSV.subStorageCache(tenantId,storage);
+		}
 		BaseResponse baseResponse = new BaseResponse();
 		CommonUtils.addSuccessResHeader(baseResponse,"");
 		return baseResponse;

@@ -139,4 +139,11 @@ public interface IStorageGroupAtomSV {
      * @return
      */
     public PageInfo<StorageGroupAttach4List> queryForGroupList(StoGroupPageQueryVo queryVo);
+
+    /**
+     * 判断库存组是否为废弃状态
+     * @param group
+     * @return
+     */
+    public boolean isDiscard(StorageGroup group);
 }

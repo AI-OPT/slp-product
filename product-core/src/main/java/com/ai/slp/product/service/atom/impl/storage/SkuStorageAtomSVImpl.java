@@ -116,6 +116,20 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	}
 
 	/**
+	 * 查询指定库存中没有销售价格的SKU库存数量
+	 *
+	 * @param storageId
+	 * @return
+	 */
+	@Override
+	public int queryNoPriceOfStorageById(String storageId) {
+		SkuStorageCriteria example = new SkuStorageCriteria();
+		example.createCriteria().andStorageIdEqualTo(storageId)
+				.andSalePriceIsNull();
+		return skuStorageMapper.countByExample(example);
+	}
+
+	/**
 	 * 查询指定标识的SKU库存
 	 *
 	 * @param skuStorageId

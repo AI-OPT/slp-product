@@ -321,6 +321,17 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	}
 
 	/**
+	 * 判断库存组是否为废弃状态
+	 *
+	 * @param group
+	 * @return
+	 */
+	@Override
+	public boolean isDiscard(StorageGroup group) {
+		return group!=null&&DISCARD_LIST.contains(group.getState());
+	}
+
+	/**
 	 * 完善like检查信息
 	 */
 	private void genLikeStr(StoGroupPageQueryVo queryVo){
