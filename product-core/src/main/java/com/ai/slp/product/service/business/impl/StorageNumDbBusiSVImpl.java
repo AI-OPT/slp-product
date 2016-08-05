@@ -187,9 +187,44 @@ public class StorageNumDbBusiSVImpl {
         initCacheKey(tenantId,priority,storageList.get(0));
     }
 
+    /**
+     * 向缓存中添加单个库存的数据
+     * @param tenantId
+     * @param storage
+     */
     public void flushStorageCache(String tenantId,Storage storage){
         ICacheClient cacheClient = IPaasStorageUtils.getClient();
         flushStorageCache(cacheClient,tenantId,storage,null);
+    }
+
+    /**
+     * 从缓存中减少单个缓存的数据
+     */
+    public void subStorageCache(String tenantId,Storage storage){
+        logger.info("====Start sub storage cache,tenantId:{},storageId:{}",tenantId,storage.getStorageId());
+        Short priority = storage.getPriorityNumber();
+        String groupId = storage.getStorageGroupId();
+        ICacheClient cacheClient = IPaasStorageUtils.getClient();
+        //优先级总可用量(F)
+        String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
+        String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
+        logger.info("当前库存信息,库存ID:{},库存总量:{},库存可用量:{}",
+                storage.getStorageId(),storage.getTotalNum(),storage.getUsableNum());
+        //查询库存下SKU库存
+        List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storage.getStorageId());
+        for (SkuStorage skuStorage:skuStorageList){
+            logger.info("当前SKU库存信息,库存ID:{},SKU库存ID:{},库存总量:{},库存可用量:{}",
+                    storage.getStorageId(),skuStorage.getSkuStorageId(),skuStorage.getTotalNum(),skuStorage.getUsableNum());
+            //F
+            cacheClient.decrBy(priorityUsableKey,skuStorage.getUsableNum());
+            //C,增加负数
+            cacheClient.hincrBy(skuUsableKey,skuStorage.getSkuId(),0-skuStorage.getUsableNum());
+            //E
+            String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(
+                    tenantId,groupId,priority.toString(),skuStorage.getSkuId());
+            cacheClient.zrem(skuStorageKey,skuStorage.getSkuStorageId());
+        }
+        logger.info("====End sub storage cache,tenantId:{},storageId:{}",tenantId,storage.getStorageId());
     }
 
     private void flushStorageCache(ICacheClient cacheClient,String tenantId,Storage storage,Set<String> skuIds){

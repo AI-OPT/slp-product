@@ -225,6 +225,8 @@ public class IStorageSVImpl implements IStorageSV {
 			Product product = productAtomSV.queryProductByGroupId(tenantId,storage.getStorageGroupId());
 			if (product!=null && ProductConstants.Product.State.SALE_OUT.equals(product.getState()))
 				productBusiSV.changeToInSale(tenantId,storageStatus.getSupplierId(),product.getProdId(),operId);
+		}else if(StorageConstants.Storage.State.STOP.equals(storageStatus.getState())){
+			storageNumDbBusiSV.subStorageCache(tenantId,storage);
 		}
 		BaseResponse baseResponse = new BaseResponse();
 		CommonUtils.addSuccessResHeader(baseResponse,"");

@@ -162,19 +162,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		Product product = productAtomSV.queryProductByGroupId(tenantId,storage.getStorageGroupId());
 		if (product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState()))
 			throw new BusinessException("","对应商品在销售中,不允许停用");
-		//库存对应的库存组下是否存在启用或自动启用的库存,若存在则直接停用
-		List<Storage> storageList = storageAtomSV.queryActive(tenantId,storage.getStorageGroupId(),false);
-		if(!CollectionUtil.isEmpty(storageList)){
-			//库存状态变为停用并更新日志
-			storage.setState(StorageConstants.Storage.State.STOP);
-			storage.setOperId(operId);
-			if(storageAtomSV.updateById(storage)>0){
-				StorageLog storageLog = new StorageLog();
-				BeanUtils.copyProperties(storageLog, storage);
-				storageLogAtomSV.installLog(storageLog);
-			}
-			//TODO 调用自动切换库存方法
-			return;
+		//更新库存状态
+		storage.setOperId(operId);
+		storage.setState(StorageConstants.Storage.State.STOP);
+		if (storageAtomSV.updateById(storage)>0){
+			StorageLog storageLog = new StorageLog();
+			BeanUtils.copyProperties(storageLog, storage);
+			storageLogAtomSV.installLog(storageLog);
 		}
 	}
 
