@@ -181,29 +181,43 @@ public class StorageNumDbBusiSVImpl {
         //该优先级下,sku可用量已经做过初始化的SKU标识
         Set<String> skuIds = new HashSet<>();
         for (Storage storage:storageList){
-            logger.info("当前库存信息,库存ID:{},库存总量:{},库存可用量:{}",
-                    storage.getStorageId(),storage.getTotalNum(),storage.getUsableNum());
-            //查询库存下SKU库存
-            List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storage.getStorageId());
-            for (SkuStorage skuStorage:skuStorageList){
-                logger.info("当前SKU库存信息,库存ID:{},SKU库存ID:{},库存总量:{},库存可用量:{}",
-                        storage.getStorageId(),skuStorage.getSkuStorageId(),skuStorage.getTotalNum(),skuStorage.getUsableNum());
-                //若没有将sku可用量进行初始操作,则需要将sku可用量设置为零
-                if (!skuIds.contains(skuStorage.getSkuId())){
-                    cacheClient.hset(skuUsableKey,skuStorage.getSkuId(),new Long(0).toString());
-                }
-                //设置SKU库存
-                String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(
-                        tenantId,groupId,priority.toString(),skuStorage.getSkuId());
-                cacheClient.zadd(skuStorageKey,skuStorage.getUsableNum(),skuStorage.getSkuStorageId());
-                //设置SKU库存可用量
-                cacheClient.hincrBy(skuUsableKey,skuStorage.getSkuId(),skuStorage.getUsableNum());
-                //设置优先级可用量
-                cacheClient.incrBy(priorityUsableKey,skuStorage.getUsableNum());
-            }
+            flushStorageCache(cacheClient,tenantId,storage,skuIds);
         }
         logger.info("===刷新指定优先级库存(结束)");
         initCacheKey(tenantId,priority,storageList.get(0));
+    }
+
+    public void flushStorageCache(String tenantId,Storage storage){
+        ICacheClient cacheClient = IPaasStorageUtils.getClient();
+        flushStorageCache(cacheClient,tenantId,storage,null);
+    }
+
+    private void flushStorageCache(ICacheClient cacheClient,String tenantId,Storage storage,Set<String> skuIds){
+        Short priority = storage.getPriorityNumber();
+        String groupId = storage.getStorageGroupId();
+        //优先级总可用量(F)
+        String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
+        String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
+        logger.info("当前库存信息,库存ID:{},库存总量:{},库存可用量:{}",
+                storage.getStorageId(),storage.getTotalNum(),storage.getUsableNum());
+        //查询库存下SKU库存
+        List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storage.getStorageId());
+        for (SkuStorage skuStorage:skuStorageList){
+            logger.info("当前SKU库存信息,库存ID:{},SKU库存ID:{},库存总量:{},库存可用量:{}",
+                    storage.getStorageId(),skuStorage.getSkuStorageId(),skuStorage.getTotalNum(),skuStorage.getUsableNum());
+            //若没有将sku可用量进行初始操作,则需要将sku可用量设置为零
+            if (skuIds!=null && !skuIds.contains(skuStorage.getSkuId())){
+                cacheClient.hset(skuUsableKey,skuStorage.getSkuId(),new Long(0).toString());
+            }
+            //设置SKU库存
+            String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(
+                    tenantId,groupId,storage.getPriorityNumber().toString(),skuStorage.getSkuId());
+            cacheClient.zadd(skuStorageKey,skuStorage.getUsableNum(),skuStorage.getSkuStorageId());
+            //设置SKU库存可用量
+            cacheClient.hincrBy(skuUsableKey,skuStorage.getSkuId(),skuStorage.getUsableNum());
+            //设置优先级可用量
+            cacheClient.incrBy(priorityUsableKey,skuStorage.getUsableNum());
+        }
     }
 
     /**
