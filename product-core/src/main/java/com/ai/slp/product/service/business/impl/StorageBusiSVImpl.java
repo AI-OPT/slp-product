@@ -121,7 +121,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * @param operId
 	 */
 	@Override
-	public void changeStorageStats(String tenantId,String supplierId, String storageId, String state, Long operId) {
+	public Storage changeStorageStats(String tenantId,String supplierId, String storageId, String state, Long operId) {
 		// 查询库存是否存在
 		Storage storage = storageAtomSV.queryNoDiscardById(storageId);
 		if (storage == null) {
@@ -147,15 +147,21 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		default:
 			throw new BusinessException("", "无法识别的状态:" + state);
 		}
+		return storage;
 	}
 
 	/**
 	 * 停用库存
+	 * 商品必须为为非在售状态
 	 *
 	 * @param storage
 	 * @author lipeng16
 	 */
 	private void stopStorage(String tenantId,Storage storage, Long operId) {
+		//判断商品是否在售
+		Product product = productAtomSV.queryProductByGroupId(tenantId,storage.getStorageGroupId());
+		if (product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState()))
+			throw new BusinessException("","对应商品在销售中,不允许停用");
 		//库存对应的库存组下是否存在启用或自动启用的库存,若存在则直接停用
 		List<Storage> storageList = storageAtomSV.queryActive(tenantId,storage.getStorageGroupId(),false);
 		if(!CollectionUtil.isEmpty(storageList)){
@@ -169,16 +175,6 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			}
 			//TODO 调用自动切换库存方法
 			return;
-		}
-		//若不存在,则该库存组对应商品状态若为在售则变为停用下架
-		Product product = productAtomSV.queryProductByGroupId(tenantId, storage.getStorageGroupId());
-		if(!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
-			return;
-		}
-		product.setState(ProductConstants.Product.State.STOP);
-		product.setOperId(operId);
-		if(productAtomSV.updateById(product)>0){
-			insertProdAndStateLog(product);
 		}
 	}
 
@@ -257,11 +253,10 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		if (count > 0) {
 			throw new BusinessException("", "其他优先级存在启用库存,无法启用当前库存");
 		}
-		// 若没有则设置为自动停用.
-		if (storage.getUsableNum() <= 0) {
-			throw new BusinessException("", "当前库存可用量为零,无法启用");
+		//判断库存下SKU库存是否已设置价格
+		if (skuStorageAtomSV.queryNoPriceOfStorageById(storage.getStorageId())>0){
+			throw new BusinessException("", "该库存价格设置不完整,无法启用");
 		}
-		//若商品为在售,且不为当前优先级,则不能启用
 		//更新库存状态
 		storage.setOperId(operId);
 		storage.setState(StorageConstants.Storage.State.ACTIVE);
@@ -270,10 +265,6 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			BeanUtils.copyProperties(storageLog, storage);
 			storageLogAtomSV.installLog(storageLog);
 		}
-		//刷新缓存信息
-
-		//若商品为售罄下架,则进行上架处理.
-
 	}
 
 	/**

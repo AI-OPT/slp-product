@@ -264,7 +264,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 判断库存是否废弃
 		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(
 				salePrice.getTenantId(),salePrice.getSupplierId(),salePrice.getStorageGroupId());
-		if (group == null || group.getState().equals("3"))
+		if (group == null || storageGroupAtomSV.isDiscard(group))
 			throw new BusinessException("", "库存组不存在或已废弃");
 		// 填充价格等基本信息
 		StorageGroup storageGroup = new StorageGroup();

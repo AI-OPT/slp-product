@@ -57,6 +57,13 @@ public interface ISkuStorageAtomSV {
     public int queryNoPriceOfStorageByIdList(List<String> storageIdList);
 
     /**
+     * 查询指定库存中没有销售价格的SKU库存数量
+     * @param storageId
+     * @return
+     */
+    public int queryNoPriceOfStorageById(String storageId);
+
+    /**
      * 查询指定标识的SKU库存
      * @param skuStorageId
      * @param hasDiscard 是否查询废弃库存, true:包含;false:不包含
