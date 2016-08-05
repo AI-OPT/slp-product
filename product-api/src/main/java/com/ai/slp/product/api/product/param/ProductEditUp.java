@@ -92,19 +92,6 @@ public class ProductEditUp implements Serializable{
      *  0:全部
      */
     private String supplierId;
-    /**
-     *拒绝原因 
-     */
-    private String Refuse;
-    
-    
-    public String getRefuse() {
-		return Refuse;
-	}
-
-	public void setRefuse(String refuse) {
-		Refuse = refuse;
-	}
 
 	public String getSupplierId() {
 		return supplierId;
