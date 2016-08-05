@@ -128,8 +128,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	@Override
 	public int updateGroupName(StorageGroupUpName storageGroup) {
 		// 查询库存组是否存在
-		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(storageGroup.getTenantId(),storageGroup.getSupplierId(),
-				storageGroup.getStorageGroupId());
+		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(
+				storageGroup.getTenantId(),storageGroup.getSupplierId(),storageGroup.getStorageGroupId());
 		if (group == null)
 			throw new BusinessException("",
 					"要更新库存组信息不存在,租户ID:" + storageGroup.getTenantId() + ",库存组标识:" + storageGroup.getStorageGroupId());
@@ -163,11 +163,14 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	@Override
 	public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId) {
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
-		if (standedProduct == null)
+		if (standedProduct == null) {
 			throw new BusinessException("", "未找到对应的标准品信息,租户ID:" + tenantId + ",标准品标识:" + productId);
+		}
 		// 查询出标准品下的所有库存组,创建时间倒序
 		List<StorageGroupRes> groupInfoList = new ArrayList<>();
 		List<StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId,supplierId, productId);
+		if (CollectionUtil.isEmpty(groupList))
+			logger.warn("查询库存组列表为空,租户ID:{},销售商ID:{},标准品ID:{}",tenantId,supplierId,productId);
 //		for (StorageGroup storageGroup : groupList) {
 //			groupInfoList.add(genStorageGroupInfo(storageGroup));
 //		}
@@ -342,19 +345,12 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		if (StringUtils.isBlank(storageGroup.getRouteGroupId())) {
 			throw new BusinessException("", "库存组没有配置路由信息,不能启用");
 		}
-		// 检查路由组是否已为启用状态
-		IRouteQuerySV iRouteQuerySV = DubboConsumerFactory.getService("iRouteQuerySV");
-		RouteGroupQueryResult queryResult = iRouteQuerySV.routeGroupDetailQuery(storageGroup.getRouteGroupId());
-		if (queryResult==null || !RouteConstants.RouteGroup.State.RIGHT.equals(queryResult.getState())){
-			throw new BusinessException("","对应路由组状态不正常,无法启用库存组");
-		}
 		// 判断标准品的状态是否可用
 		String staProdState = standedProductAtomSV.selectById(storageGroup.getTenantId(), storageGroup.getStandedProdId()).getState();
 		if(!StandedProductConstants.STATUS_ACTIVE.equals(staProdState)){
 			throw new BusinessException("", "该库存组对应的标准品的状态不可用,不能启用");
 		}
-		// 判断库存组下SKU库存有没有价格1.通过库存组查询所有库存,2.通过库存ID查找所有SKU库存的销售价是否存在
-		// 3.若存在则继续下一步,若不存在则提示添加价格后才可以启用.
+		// 判断库存组下SKU库存是否已经设置价格
 		List<Storage> storageList = storageAtomSV.queryOfGroup(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
 		// 如果该库存组下有库存则判断库存下的SKU库存是否有销售价
 		if(!CollectionUtil.isEmpty(storageList)){
@@ -366,6 +362,12 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 				throw new BusinessException("","该库存组下存在未指定销售价的单品,库存组无法启用");
 			}
 		}
+		// 检查路由组是否已为启用状态
+		IRouteQuerySV iRouteQuerySV = DubboConsumerFactory.getService("iRouteQuerySV");
+		RouteGroupQueryResult queryResult = iRouteQuerySV.routeGroupDetailQuery(storageGroup.getRouteGroupId());
+		if (queryResult==null || !RouteConstants.RouteGroup.State.RIGHT.equals(queryResult.getState())){
+			throw new BusinessException("","对应路由组状态不正常,无法启用库存组");
+		}
 		// 库存组设置为启用状态
 		storageGroup.setState(StorageConstants.StorageGroup.State.ACTIVE);
 		storageGroup.setOperId(operId);
@@ -375,11 +377,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			BeanUtils.copyProperties(groupLog, storageGroup);
 			storageGroupLogAtomSV.install(groupLog);
 		}
-		// 若对应商品为"62停用下架",则进行自动上架.
-		Product product = productAtomSV.selectByGroupId(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
-		if (product != null && ProductConstants.Product.State.STOP.equals(product.getState())) {
-			productBusiSV.changeToSaleForStop(product.getTenantId(), product.getProdId(), operId);
-		}
+
 	}
 
 	/**

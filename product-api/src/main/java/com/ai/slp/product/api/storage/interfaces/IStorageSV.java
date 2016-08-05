@@ -191,7 +191,7 @@ public interface IStorageSV {
     @interface ChargeStoragePriority{}
 
     /**
-     * 更新库存组信息
+     * 更新库存组名称
      *
      * @param storageGroup 库存组信息
      * @return 操作结果

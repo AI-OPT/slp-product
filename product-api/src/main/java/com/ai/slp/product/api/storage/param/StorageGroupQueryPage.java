@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.sql.Timestamp;
 
@@ -27,6 +28,7 @@ public class StorageGroupQueryPage extends BaseInfo {
 	/**
 	 * 销售商(商户)标识
 	 */
+	@NotBlank(message = "销售商(商户)标识不能为空")
 	private String supplierId;
     /**
      * 库存组标识

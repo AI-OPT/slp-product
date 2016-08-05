@@ -83,7 +83,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         List<ProdAudiences> audiList = prodAudiencesAtomSV.queryByUserType(
                 tenantId,product.getProdId(),useReq.getUserType(),useReq.getUserId(),false);
         if (CollectionUtil.isEmpty(audiList)){
-            logger.warn("此商品部适用于该用户,租户ID:{},skuId:{},用户类型:{},用户标识:{}",
+            logger.warn("此商品不适用于该用户,租户ID:{},skuId:{},用户类型:{},用户标识:{}",
                     tenantId,skuId,useReq.getUserType(),useReq.getUserId());
             throw new BusinessException(ErrorCodeConstants.ProdAudiences.UNMATCHED,"此商品不适用于该用户");
         }
@@ -197,7 +197,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
                 continue;
             }
             //1.2 查询SKU库存对应库存信息
-            Storage storage = storageAtomSV.queryById(skuStorage.getStorageId());
+            Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
             if (storage==null){
                 logger.warn("库存回退过程中,未找到对应库存,SKU库存标识:{},库存标识:{}"
                         ,skuStorageId,skuStorage.getStorageId());

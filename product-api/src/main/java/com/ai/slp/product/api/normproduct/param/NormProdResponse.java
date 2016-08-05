@@ -31,7 +31,7 @@ public class NormProdResponse implements Serializable {
 
     /**
      * 标准品状态<br>
-     * 1可上架;2不可上架;3待处理;4废弃
+     * 0废弃;1可使用;2不可使用
      */
     private String state;
 

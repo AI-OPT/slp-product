@@ -21,7 +21,7 @@ public interface IStorageNumBusiSV {
     public StorageNumRes userStorageNum(String tenantId,String skuId,int skuNum);
 
     /**
-     * 使用库存量
+     * 使用库存量,包含商品受众检查
      * @param useReq 使用信息
      * @return
      */

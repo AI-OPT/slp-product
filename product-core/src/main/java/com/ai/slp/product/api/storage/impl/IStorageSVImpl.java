@@ -10,7 +10,11 @@ import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonUtils;
@@ -31,6 +35,10 @@ public class IStorageSVImpl implements IStorageSV {
 	IStorageGroupBusiSV storageGroupBusiSV;
 	@Autowired
 	IStorageBusiSV storageBusiSV;
+	@Autowired
+	IProductAtomSV productAtomSV;
+	@Autowired
+	IProductBusiSV productBusiSV;
 
 	/**
 	 * 添加标准品库存组<br>
@@ -115,8 +123,14 @@ public class IStorageSVImpl implements IStorageSV {
 		storageGroupBusiSV.updateGroupState(tenantId, groupStatus.getSupplierId(),
 				groupId,groupStatus.getState(),groupStatus.getOperId());
 		//如果为启用,则刷新缓存
-		if (StorageConstants.StorageGroup.State.ACTIVE.equals(groupStatus.getState()))
-			storageGroupBusiSV.flushStorageCache(tenantId,groupId);
+		if (StorageConstants.StorageGroup.State.ACTIVE.equals(groupStatus.getState())){
+			storageGroupBusiSV.flushStorageCache(tenantId, groupId);
+			// 若对应商品为"62停用下架",则进行自动上架.
+			Product product = productAtomSV.selectByGroupId(tenantId, groupId);
+			if (product != null && ProductConstants.Product.State.STOP.equals(product.getState())) {
+				productBusiSV.changeToSaleForStop(product.getTenantId(), product.getProdId(), groupStatus.getOperId());
+			}
+		}
 		//如为废弃,则删除缓存
 		else if(StorageConstants.StorageGroup.State.DISCARD.equals(groupStatus.getState()))
 			storageGroupBusiSV.cleanGroupCache(tenantId,groupId);
@@ -176,7 +190,7 @@ public class IStorageSVImpl implements IStorageSV {
 	@Override
 	public StorageRes queryStorageById(String storageId) throws BusinessException, SystemException {
 		if(StringUtils.isEmpty(storageId)){
-			throw new BusinessException("", "库存ID不存在,库存ID"+storageId);
+			throw new BusinessException("", "库存ID不能为空");
 		}
 		return storageBusiSV.queryStorageById(storageId);
 	}
