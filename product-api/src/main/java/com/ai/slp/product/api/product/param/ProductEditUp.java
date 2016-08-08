@@ -92,6 +92,20 @@ public class ProductEditUp implements Serializable{
      *  0:全部
      */
     private String supplierId;
+    /**
+     *商品受众userType
+     * 
+     */
+    private List<String> userTypes;
+    
+
+	public List<String> getUserTypes() {
+		return userTypes;
+	}
+
+	public void setUserTypes(List<String> userTypes) {
+		this.userTypes = userTypes;
+	}
 
 	public String getSupplierId() {
 		return supplierId;
