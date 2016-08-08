@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -427,11 +428,11 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * 查看SKU库存
 	 */
 	@Override
-	public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) {
+	public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String supplierId,String storageId) {
 		// 通过库存标识查询SKU库存集合
 		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storageId);
 		if (CollectionUtil.isEmpty(skuStorageList)) {
-			throw new BusinessException("", "找不到指定库存标识的SKU库存,库存标识=" + storageId);
+			return Collections.emptyList();
 		}
 		List<SkuStorageAndProd> skuStorageAndProdList = new ArrayList<>();
 		SkuStorageAndProd skuStorageAndProd = null;

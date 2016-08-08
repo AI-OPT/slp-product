@@ -286,8 +286,7 @@ public interface IStorageSV {
     /**
      * 查看SKU库存信息和SKU单品
      *
-     * @param tenantId 租户id
-     * @param storageId 库存标识
+     * @param query 库存标识
      * @return 
      * @throws BusinessException
      * @throws SystemException
@@ -297,7 +296,7 @@ public interface IStorageSV {
      */
     @POST
     @Path("/querySkuStorageById")
-    public BaseListResponse<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) throws BusinessException,SystemException;
+    public BaseListResponse<SkuStorageAndProd> querySkuStorageById(StorageUniQuery query) throws BusinessException,SystemException;
     @interface QuerySkuStorageById{}
     
     /**

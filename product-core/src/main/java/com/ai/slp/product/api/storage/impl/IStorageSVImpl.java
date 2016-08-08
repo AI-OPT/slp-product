@@ -21,7 +21,6 @@ import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -368,12 +367,10 @@ public class IStorageSVImpl implements IStorageSV {
      * @author lipeng16
      */
 	@Override
-	public BaseListResponse<SkuStorageAndProd> querySkuStorageById(String tenantId,String storageId) throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(tenantId);
-		if(StringUtils.isEmpty(storageId)){
-			throw new BusinessException("", "库存标识不能为空");
-		}
-		List<SkuStorageAndProd> prodList = storageBusiSV.querySkuStorageById(tenantId,storageId);
+	public BaseListResponse<SkuStorageAndProd> querySkuStorageById(StorageUniQuery query) throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(query.getTenantId());
+		List<SkuStorageAndProd> prodList = storageBusiSV.querySkuStorageById(
+				query.getTenantId(),query.getSupplierId(),query.getStorageId());
 		BaseListResponse<SkuStorageAndProd> prodRes = new BaseListResponse<>();
 		prodRes.setResult(prodList);
 		prodRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));

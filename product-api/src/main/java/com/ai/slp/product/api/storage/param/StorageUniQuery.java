@@ -1,7 +1,6 @@
 package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -16,14 +15,12 @@ public class StorageUniQuery extends BaseInfo{
     /**
      * 销售商（商户）标识，必填<br>
      */
-    @NotBlank(message = "销售商（商户）标识不能为空",
-            groups = { IStorageSV.QueryStorageById.class})
+    @NotBlank(message = "销售商（商户）标识不能为空")
     private String supplierId;
     /**
      * 库存标识,必填
      */
-    @NotBlank(message = "库存标识不能为空",
-            groups = { IStorageSV.QueryStorageById.class })
+    @NotBlank(message = "库存标识不能为空")
     private String storageId;
 
     public String getSupplierId() {
