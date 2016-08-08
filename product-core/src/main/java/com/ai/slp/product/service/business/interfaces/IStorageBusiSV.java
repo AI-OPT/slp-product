@@ -34,14 +34,24 @@ public interface IStorageBusiSV {
      * @return 返回更改成功的库存信息
      */
     public Storage changeStorageStats(String tenantId,String supplierId,String storageId,String state,Long operId);
-	 /**
+
+    /**
 	  * 批量更新库存销售价
 	  *
 	 * @param salePrice
 	 * @return
 	 * @author lipeng16
 	 */
-	public int updateMultiStorageSalePrice(StorageSalePrice salePrice);
+	public int updateNoSkuStoSalePrice(StoNoSkuSalePrice salePrice);
+
+    /**
+     * 批量更新有销售属性库存销售价
+     *
+     * @param salePrice
+     * @return
+     * @author lipeng16
+     */
+    public int updateSkuStoSalePrice(StoSkuSalePrice salePrice);
 	
 	/**
 	 * 查询标准品列表,包含标准品的库存组,适用于库存组定最低最高销售价<br>

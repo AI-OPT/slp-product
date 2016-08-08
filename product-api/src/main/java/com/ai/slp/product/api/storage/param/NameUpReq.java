@@ -1,7 +1,6 @@
 package com.ai.slp.product.api.storage.param;
 
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -18,29 +17,24 @@ public class NameUpReq extends BaseInfo {
     /**
      * 销售商（商户）标识，必填<br>
      */
-    @NotBlank(message = "销售商（商户）标识不能为空",
-            groups = { IStorageSV.UpdateStorageGroupName.class})
+    @NotBlank(message = "销售商（商户）标识不能为空")
     private String supplierId;
 	/**
-     * 库存组标识
+     * 库存组/库存标识
      */
-    @NotBlank(message = "标识不能为空",
-            groups = { IStorageSV.UpdateStorageGroupName.class})
+    @NotBlank(message = "标识不能为空")
     private String id;
     /**
      * 库存组名称,必填
      * 设置为null,则不进行更新操作
      */
-    @NotBlank(message = "名称不能为空",
-            groups = { IStorageSV.UpdateStorageGroupName.class})
+    @NotBlank(message = "名称不能为空")
     private String name;
-
     /**
      * 操作者ID<br>
      * 不能为空
      */
-    @NotNull(message = "操作者不能为空",
-            groups = {IStorageSV.UpdateStorageGroupName.class})
+    @NotNull(message = "操作者不能为空")
     private Long operId;
 
     public String getSupplierId() {

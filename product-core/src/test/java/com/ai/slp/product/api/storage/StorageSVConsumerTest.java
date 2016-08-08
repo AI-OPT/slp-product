@@ -5,7 +5,6 @@ import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.STOStorage;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
-import com.ai.slp.product.api.storage.param.StorageRes;
 import org.junit.Test;
 
 /**
@@ -16,8 +15,8 @@ public class StorageSVConsumerTest {
     @Test
     public void queryStorageById(){
         IStorageSV storageSV = DubboConsumerFactory.getService(IStorageSV.class);
-        StorageRes storageRes = storageSV.queryStorageById("100100000001");
-        System.out.println(storageRes.getStorageGroupId());
+//        StorageRes storageRes = storageSV.queryStorageById("100100000001");
+//        System.out.println(storageRes.getStorageGroupId());
     }
 
     @Test
@@ -27,7 +26,6 @@ public class StorageSVConsumerTest {
         stoStorage.setOperId(1l);
         stoStorage.setPriorityNumber((short) 1);
         stoStorage.setTenantId("SLP");
-        stoStorage.setProductCatId("10000010010000");
         stoStorage.setStorageGroupId("0000000000058");
         stoStorage.setStorageName("1234567890");
         stoStorage.setTotalNum(100l);

@@ -1,11 +1,9 @@
 package com.ai.slp.product.api.product.param;
 
-import java.util.Date;
-
-import javax.validation.constraints.NotNull;
-
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * SKU销售价对称<br>
@@ -33,11 +31,6 @@ public class ProdSkuSalPrice extends BaseInfo {
     @NotNull(message = "操作人不能为空",
             groups = { IProductSV.UpdateMultSKUSalePrice.class })
     private Long operId;
-    /**
-     * 操作时间<br>
-     * 若不填写,则设置接收时间
-     */
-    private Date operTime;
 
     public String getSkuId() {
         return skuId;
@@ -61,13 +54,5 @@ public class ProdSkuSalPrice extends BaseInfo {
 
     public void setOperId(Long operId) {
         this.operId = operId;
-    }
-
-    public Date getOperTime() {
-        return operTime;
-    }
-
-    public void setOperTime(Date operTime) {
-        this.operTime = operTime;
     }
 }

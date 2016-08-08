@@ -5,7 +5,9 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.constants.ProdPriceLogConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SkuStorageConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -91,7 +93,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	@Override
 	public void discardStorage(String tenantId,Storage storage, Long operId,boolean isAuto) {
-		Product product = productAtomSV.queryProductByGroupId(tenantId,storage.getStorageGroupId());
+		Product product = productAtomSV.selectByGroupId(tenantId,storage.getStorageGroupId());
 		//库存为启用,且商品为在售,则不允许进行废弃
 		if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())
 				&& product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState()))
@@ -172,7 +174,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	private void stopStorage(String tenantId,Storage storage, Long operId) {
 		//判断商品是否在售
-		Product product = productAtomSV.queryProductByGroupId(tenantId,storage.getStorageGroupId());
+		Product product = productAtomSV.selectByGroupId(tenantId,storage.getStorageGroupId());
 		if (product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState()))
 			throw new BusinessException("","对应商品在销售中,不允许停用");
 		//更新库存状态
@@ -188,66 +190,75 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	/**
 	 * 批量更新库存销售价
 	 *
-	 * @param storageSalePrice
+	 * @param salePrice
 	 * @return
 	 * @author lipeng16
 	 */
 	@Override
-	public int updateMultiStorageSalePrice(StorageSalePrice storageSalePrice) {
-		Map<String, Long> priceMap = storageSalePrice.getStorageSalePrice();
+	public int updateNoSkuStoSalePrice(StoNoSkuSalePrice salePrice) {
+		//K:优先级;V:价格
+		Map<Short, Long> priceMap = salePrice.getStorageSalePrice();
 		if (priceMap == null || priceMap.isEmpty())
 			return 0;
-		String tenantId = storageSalePrice.getTenantId();
-		Long operId = storageSalePrice.getOperId();
+		String groupId = salePrice.getGroupId();
+		Long operId = salePrice.getOperId();
 		int count = 0;
-		for (String storageId : priceMap.keySet()) {
+		for (Short priorityNum : priceMap.keySet()) {
 			// 库存标识为空,库存对应价格为空,库存销售价小于等于0,均不处理
-			if (StringUtils.isBlank(storageId) || priceMap.get(storageId) == null || priceMap.get(storageId) <= 0) {
-				logger.warn("库存标识为空或销售价不大于零,库存标识[{}],销售价[{}]", storageId, priceMap.get(storageId));
+			if (priorityNum==null || priceMap.get(priorityNum) == null || priceMap.get(priorityNum) <= 0) {
+				logger.warn("库存标识为空或销售价不大于零,库存标识[{}],销售价[{}]", priorityNum, priceMap.get(priorityNum));
 				continue;
 			}
-
-			// 查看对应的标识下是否存在库存信息
-			Storage storage0 = storageMapper.selectByPrimaryKey(storageId);
-			if (storage0 == null) {
-				logger.warn("未查询到指定库存,库存标识[{}]", storageId);
-				continue;
-			}
-			// 获取当前库存对应库存组
-			StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(
-					tenantId, storageSalePrice.getSupplierId(),storage0.getStorageGroupId());
-			if (storageGroup == null || storageGroup.getHighSalePrice() == null
-					|| storageGroup.getLowSalePrice() == null)
-			{
-				logger.warn("未找到对应库存组或库存组为设置最低最高销售价,租户ID:{},库存组标识:{}", tenantId, storage0.getStorageGroupId());
-				throw new BusinessException("",
-						"未找到对应库存组或库存组未设置最低最高销售价,租户ID:" + tenantId + ",库存组标识:" + storage0.getStorageGroupId());
-			}
-			// 判断销售价是否在库存组价格区间
-			Long salePrice = priceMap.get(storageId);
-			if (salePrice > storageGroup.getHighSalePrice() || salePrice < storageGroup.getLowSalePrice()) {
-				throw new BusinessException("", "库存[" + storage0.getStorageName() + "]的价格必须在库存组的最低最高销售价范围内");
-			}
-
-			// 更新库存价格信息
-			Storage storage = new Storage();
-			storage.setStorageId(tenantId);
-			storage.setSalePrice(salePrice);
-			storage.setOperId(operId);
-			int installNum = storageAtomSV.updateSaleById(storage);
-			if (installNum > 0) {
-				ProdPriceLog prodPriceLog = new ProdPriceLog();
-				prodPriceLog.setObjId(storageId);
-				prodPriceLog.setObjType("SO");
-				prodPriceLog.setOperId(operId);
-				prodPriceLog.setUpdatePrice(salePrice);
-				prodPriceLogAtomSV.insert(prodPriceLog);
-			}
-			count++;
+			count += updateSkuPrice(groupId,null,priorityNum,priceMap.get(priorityNum),operId);
 		}
 		return count;
 	}
 
+	/**
+	 * 批量更新有销售属性库存销售价
+	 *
+	 * @param salePrice
+	 * @return
+	 * @author lipeng16
+	 */
+	@Override
+	public int updateSkuStoSalePrice(StoSkuSalePrice salePrice) {
+		String groupId = salePrice.getGroupId();
+		Product product = productAtomSV.selectByGroupId(salePrice.getTenantId(),groupId);
+		if (product == null)
+			throw new BusinessException("","未找到对应商品信息");
+		Map<String,Long> priceMap = salePrice.getStorageSalePrice();
+		//查询商品对应得SKU集合
+		List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(salePrice.getTenantId(),product.getProdId());
+		int count = 0;
+		for (String skuId:priceMap.keySet()){
+			count += updateSkuPrice(
+					groupId,skuId,salePrice.getPriorityNum(),priceMap.get(skuId),salePrice.getOperId());
+		}
+		return count;
+	}
+
+	private int updateSkuPrice(String groupId,String skuId,Short priorityNum,Long price,Long operId){
+		int count = 0;
+		//查看对应优先级是否已经有库存信息
+		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryStorageByIdList(groupId,skuId,priorityNum);
+		for (SkuStorage skuStorage:skuStorageList){
+			skuStorage.setSalePrice(price);
+			skuStorage.setOperId(operId);
+			skuStorage.setOperTime(DateUtil.getSysDate());
+			if(skuStorageAtomSV.updateById(skuStorage)>0){
+				ProdPriceLog priceLog = new ProdPriceLog();
+				priceLog.setObjId(skuStorage.getSkuStorageId());
+				priceLog.setObjType(ProdPriceLogConstants.ProdPriceLog.ObjType.SKU_STORAGE);
+				priceLog.setUpdatePrice(skuStorage.getSalePrice());
+				priceLog.setOperId(operId);
+				priceLog.setOperTime(skuStorage.getOperTime());
+				prodPriceLogAtomSV.insert(priceLog);
+				count++;
+			}
+		}
+		return count;
+	}
 	/**
 	 * 启用库存
 	 * 

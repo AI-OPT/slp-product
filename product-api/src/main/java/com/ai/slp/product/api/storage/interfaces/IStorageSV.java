@@ -266,7 +266,7 @@ public interface IStorageSV {
     @interface QueryGroupByProdIdForSalePrice{}
 
     /**
-     * 批量更新库存销售价<br>
+     * 批量更新没有销售属性的库存销售价<br>
      *
      * @param salePrice 库存批量销售价信息
      * @return 操作结果
@@ -279,7 +279,7 @@ public interface IStorageSV {
      */
     @POST
     @Path("/updateStorageSalePrice")
-    public BaseResponse updateMultiStorageSalePrice(StorageSalePrice salePrice)
+    public BaseResponse updateMultiStorageSalePrice(StoNoSkuSalePrice salePrice)
             throws BusinessException,SystemException;
     @interface UpdateMultiStorageSalePrice{}
     
@@ -330,4 +330,23 @@ public interface IStorageSV {
     @Path("/updateStorageName")
     public BaseResponse updateStorageName(NameUpReq req)
         throws BusinessException,SystemException;
+    @interface  UpdateStorageName {}
+
+    /**
+     * 批量更新有销售属性的库存销售价<br>
+     *
+     * @param salePrice 库存批量销售价信息
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_0117
+     * @RestRelativeURL storage/updateSkuStoSalePrice
+     */
+    @POST
+    @Path("/updateSkuStoSalePrice")
+    public BaseResponse updateSkuStorageSalePrice(StoSkuSalePrice salePrice)
+            throws BusinessException,SystemException;
+    @interface updateSkuStorageSalePrice{}
 }

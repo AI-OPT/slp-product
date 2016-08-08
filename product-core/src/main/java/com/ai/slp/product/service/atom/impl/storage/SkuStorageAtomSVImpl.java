@@ -1,8 +1,10 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.constants.SkuStorageConstants;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.attach.SkuStorageAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorageCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.SkuStorageMapper;
@@ -14,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * SKU库存原子操作 Created by jackieliu on 16/5/12.
@@ -23,6 +27,8 @@ import java.util.List;
 public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	@Autowired
 	SkuStorageMapper skuStorageMapper;
+	@Autowired
+	SkuStorageAttachMapper skuStorageAttachMapper;
 
 	/**
 	 * 废弃指定库存的SKU库存
@@ -154,5 +160,40 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	public int updateById(SkuStorage skuStorage) {
 		skuStorage.setOperTime(DateUtils.currTimeStamp());
 		return skuStorageMapper.updateByPrimaryKey(skuStorage);
+	}
+
+	/**
+	 * 查询指定库存集合下的SKU库存
+	 *
+	 * @param priorityNum
+	 * @return
+	 */
+	@Override
+	public List<SkuStorage> queryStorageByIdList(String groupId,String skuId,Short priorityNum) {
+		Map<String,Object> params = new HashMap<>();
+		params.put("groupId",groupId);
+		params.put("priorityNum",priorityNum);
+		params.put("skuId",skuId);
+		return skuStorageAttachMapper.queryOfPriority(params);
+	}
+
+	/**
+	 * 更新指定库存下指定SKU的价格
+	 *
+	 * @param storageId
+	 * @param skuId
+	 * @param price
+	 * @return
+	 */
+	@Override
+	public int updatePrice(String storageId, String skuId, Long price,Long operId) {
+		SkuStorageCriteria example = new SkuStorageCriteria();
+		SkuStorageCriteria.Criteria criteria = example.createCriteria();
+		criteria.andStorageIdEqualTo(storageId).andSkuIdEqualTo(skuId);
+		SkuStorage skuStorage = new SkuStorage();
+		skuStorage.setSalePrice(price);
+		skuStorage.setOperId(operId);
+		skuStorage.setOperTime(DateUtil.getSysDate());
+		return skuStorageMapper.updateByExampleSelective(skuStorage,example);
 	}
 }

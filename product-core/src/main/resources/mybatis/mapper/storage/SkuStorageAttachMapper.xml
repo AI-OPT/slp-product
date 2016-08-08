@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.attach.SkuStorageAttachMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
+    <id column="SKU_STORAGE_ID" property="skuStorageId" jdbcType="VARCHAR" />
+    <result column="SKU_ID" property="skuId" jdbcType="VARCHAR" />
+    <result column="STORAGE_ID" property="storageId" jdbcType="VARCHAR" />
+    <result column="SALE_PRICE" property="salePrice" jdbcType="DECIMAL" />
+    <result column="TOTAL_NUM" property="totalNum" jdbcType="DECIMAL" />
+    <result column="USABLE_NUM" property="usableNum" jdbcType="DECIMAL" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    SKU_STORAGE_ID, SKU_ID, STORAGE_ID, SALE_PRICE, TOTAL_NUM, USABLE_NUM, STATE, OPER_ID, 
+    OPER_TIME
+  </sql>
+  <!-- 查询指定优先级下非废弃的SKU库存 -->
+  <select id="queryOfPriority" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select
+    ss.SKU_STORAGE_ID, ss.SKU_ID, ss.STORAGE_ID, ss.SALE_PRICE, ss.TOTAL_NUM, ss.USABLE_NUM, ss.STATE, ss.OPER_ID,
+    ss.OPER_TIME
+    from sku_storage as ss,storage as s
+    WHERE ss.STORAGE_ID = s.STORAGE_ID
+    and s.STATE IN ('1','11','2','21') and ss.STATE = '1'
+    <if test="skuId != null" >
+      AND ss.SKU_ID = #{skuId}
+    </if>
+    and s.PRIORITY_NUMBER = #{priorityNum} and s.STORAGE_GROUP_ID = #{groupId}
+  </select>
+
+</mapper>

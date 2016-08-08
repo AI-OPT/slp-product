@@ -605,7 +605,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		cachekey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
 		cacheClient.expire(cachekey,0);
 		//查询库存组对应商品下的SKU
-		Product product = productAtomSV.queryProductByGroupId(tenantId,groupId);
+		Product product = productAtomSV.selectByGroupId(tenantId,groupId);
 		if (product==null)
 			return;
 		List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(tenantId,product.getProdId());

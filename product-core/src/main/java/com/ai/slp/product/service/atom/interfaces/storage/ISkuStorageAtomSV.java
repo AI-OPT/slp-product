@@ -77,4 +77,21 @@ public interface ISkuStorageAtomSV {
      * @return
      */
     public int updateById(SkuStorage skuStorage);
+
+    /**
+     * 查询指定库存集合下的SKU库存
+     *
+     * @param priorityNum
+     * @return
+     */
+    public List<SkuStorage> queryStorageByIdList(String groupId,String skuId,Short priorityNum);
+
+    /**
+     * 更新指定库存下指定SKU的价格
+     *
+     * @param storageId
+     * @param price
+     * @return
+     */
+    public int updatePrice(String storageId,String skuId,Long price,Long operId);
 }

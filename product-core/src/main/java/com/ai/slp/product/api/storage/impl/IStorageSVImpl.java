@@ -223,7 +223,7 @@ public class IStorageSVImpl implements IStorageSV {
 		if (StorageConstants.Storage.State.ACTIVE.equals(storageStatus.getState())){
 			storageNumDbBusiSV.flushStorageCache(tenantId,storage);
 			//若商品为售罄下架,则进行上架处理
-			Product product = productAtomSV.queryProductByGroupId(tenantId,storage.getStorageGroupId());
+			Product product = productAtomSV.selectByGroupId(tenantId,storage.getStorageGroupId());
 			if (product!=null && ProductConstants.Product.State.SALE_OUT.equals(product.getState()))
 				productBusiSV.changeToInSale(tenantId,storageStatus.getSupplierId(),product.getProdId(),operId);
 		}else if(StorageConstants.Storage.State.STOP.equals(storageStatus.getState())){
@@ -337,7 +337,7 @@ public class IStorageSVImpl implements IStorageSV {
 
 	/**
 	 * 批量更新库存销售价<br>
-	 *
+	 * 无销售属性
 	 * @param salePrice
 	 *            库存批量销售价信息
 	 * @return 操作结果
@@ -347,11 +347,11 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @ApiDocMethod
 	 */
 	@Override
-	public BaseResponse updateMultiStorageSalePrice(StorageSalePrice salePrice)
+	public BaseResponse updateMultiStorageSalePrice(StoNoSkuSalePrice salePrice)
 			throws BusinessException, SystemException {
 		// 判断集合元素
 		CommonUtils.checkTenantId(salePrice.getTenantId());
-		storageBusiSV.updateMultiStorageSalePrice(salePrice);
+		storageBusiSV.updateNoSkuStoSalePrice(salePrice);
 		BaseResponse baseResponse = new BaseResponse();
 		CommonUtils.addSuccessResHeader(baseResponse,"修改库存销售价成功");
 		return baseResponse;
@@ -367,7 +367,8 @@ public class IStorageSVImpl implements IStorageSV {
      * @author lipeng16
      */
 	@Override
-	public BaseListResponse<SkuStorageAndProd> querySkuStorageById(StorageUniQuery query) throws BusinessException, SystemException {
+	public BaseListResponse<SkuStorageAndProd> querySkuStorageById(StorageUniQuery query)
+			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(query.getTenantId());
 		List<SkuStorageAndProd> prodList = storageBusiSV.querySkuStorageById(
 				query.getTenantId(),query.getSupplierId(),query.getStorageId());
@@ -387,7 +388,8 @@ public class IStorageSVImpl implements IStorageSV {
      * @author lipeng16
      */
 	@Override
-	public BaseResponse addSkuStorage(List<SkuStorageAdd> skuStorageAddList) throws BusinessException, SystemException {
+	public BaseResponse addSkuStorage(List<SkuStorageAdd> skuStorageAddList)
+			throws BusinessException, SystemException {
 		if(CollectionUtil.isEmpty(skuStorageAddList)){
 			throw new BusinessException("", "新增信息集合为空");
 		}
@@ -409,7 +411,8 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @RestRelativeURL storage/updateStorageName
 	 */
 	@Override
-	public BaseResponse updateStorageName(NameUpReq req) throws BusinessException, SystemException {
+	public BaseResponse updateStorageName(NameUpReq req)
+			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(req.getTenantId());
 		//更新库存名称
 		STOStorage stoStorage = new STOStorage();
@@ -420,5 +423,26 @@ public class IStorageSVImpl implements IStorageSV {
 		stoStorage.setOperId(req.getOperId());
 		storageBusiSV.updateStorageNameWarn(stoStorage);
 		return CommonUtils.genSuccessResponse("");
+	}
+
+	/**
+	 * 批量更新有销售属性的库存销售价<br>
+	 *
+	 * @param salePrice 库存批量销售价信息
+	 * @return 操作结果
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiDocMethod
+	 * @ApiCode STORAGE_0117
+	 * @RestRelativeURL storage/updateSkuStoSalePrice
+	 */
+	@Override
+	public BaseResponse updateSkuStorageSalePrice(StoSkuSalePrice salePrice)
+			throws BusinessException, SystemException {
+		// 判断集合元素
+		CommonUtils.checkTenantId(salePrice.getTenantId());
+		int num = storageBusiSV.updateSkuStoSalePrice(salePrice);
+		return CommonUtils.genSuccessResponse(num+"");
 	}
 }
