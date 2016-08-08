@@ -5,7 +5,10 @@ import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.StandedProductCriteria;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.StandedProductMapper;
+import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
@@ -24,7 +27,7 @@ import java.util.List;
 public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 	@Autowired
 	StandedProductMapper standedProductMapper;
-
+	ProductMapper productMapper;
 	@Override
 	public int installObj(StandedProduct standedProduct) {
 		if (standedProduct == null)

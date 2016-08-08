@@ -3,6 +3,7 @@ package com.ai.slp.product.api.normproduct.param;
 import com.ai.opt.base.vo.BaseResponse;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -90,7 +91,6 @@ public class NormProdInfoResponse extends BaseResponse {
      * 商户ID--(-1:自运营)
      */
     private String supplierId;
-    
 
     public String getSupplierId() {
 		return supplierId;

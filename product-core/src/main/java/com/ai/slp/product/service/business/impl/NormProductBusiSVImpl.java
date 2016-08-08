@@ -10,6 +10,7 @@ import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.*;
 import com.ai.slp.product.service.atom.interfaces.*;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.util.DateUtils;
@@ -66,6 +67,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
     @Autowired
     IProdPriceLogAtomSV prodPriceLogAtomSV;
+    
+    @Autowired
+    IProductAtomSV productAtomSV;
 
     /**
      * 添加标准品

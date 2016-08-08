@@ -89,7 +89,6 @@ public class NormProdResponse implements Serializable {
      */
     private String supplierId;
     
-
     public String getSupplierId() {
 		return supplierId;
 	}
