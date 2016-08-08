@@ -105,6 +105,11 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
 		if (StringUtils.isNotBlank(queryReq.getProdName()))
 			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+		//对商户标识的查询
+		if (StringUtils.isNotBlank(queryReq.getSupplierId())) {
+			criteria.andSupplierIdLike("%"+queryReq.getSupplierId()+"%");
+		}
+		
 		//获取页数和每页条数
 		int pageNo = queryReq.getPageNo();
 		int pageSize = queryReq.getPageSize();

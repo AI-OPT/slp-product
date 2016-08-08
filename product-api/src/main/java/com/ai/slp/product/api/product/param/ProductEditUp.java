@@ -2,6 +2,11 @@ package com.ai.slp.product.api.product.param;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 /**
  * 商品编辑上架返回类
  * 
@@ -81,8 +86,22 @@ public class ProductEditUp implements Serializable{
      * 状态名称，页面展示状态名称
      */
     private String stateName;
-    
-    public String getProductTypeName() {
+    /**
+     * 商户标识,必填
+     * -1:自营
+     *  0:全部
+     */
+    private String supplierId;
+
+	public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	public String getProductTypeName() {
 		return productTypeName;
 	}
 

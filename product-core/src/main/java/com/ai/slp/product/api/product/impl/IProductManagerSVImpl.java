@@ -14,6 +14,9 @@ import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
+
+import scala.remote;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,6 +46,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Override
     public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq productEditParam) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(productEditParam.getTenantId(),"");
+        CommonUtils.checkSupplierId(productEditParam.getSupplierId(),"");
         return productManagerBsuiSV.queryPageForEdit(productEditParam);
     }
 
@@ -58,7 +62,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam) throws BusinessException, SystemException {
-        return null;
+    	CommonUtils.checkTenantId(productRefuseParam.getTenantId(),"");
+        CommonUtils.checkSupplierId(productRefuseParam.getSupplierId(),"");
+    	return productManagerBsuiSV.queryProductRefuse(productRefuseParam);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
+import java.util.List;
+
 import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 
 /**
@@ -14,4 +16,9 @@ public interface IProductStateLogAtomSV {
 	 * @return
 	 */
 	public int insert(ProductStateLog productStateLog);
+	
+	/**
+	 * 查询商品   拒绝原因   拒绝描述
+	 */
+	public ProductStateLog selectRefuseById(String prodId);
 }
