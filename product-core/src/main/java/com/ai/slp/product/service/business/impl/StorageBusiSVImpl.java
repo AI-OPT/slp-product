@@ -241,7 +241,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	private int updateSkuPrice(String groupId,String skuId,Short priorityNum,Long price,Long operId){
 		int count = 0;
 		//查看对应优先级是否已经有库存信息
-		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryStorageByIdList(groupId,skuId,priorityNum);
+		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryPriorityOfGroup(groupId,skuId,priorityNum);
 		for (SkuStorage skuStorage:skuStorageList){
 			skuStorage.setSalePrice(price);
 			skuStorage.setOperId(operId);
@@ -325,13 +325,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	public String saveStorage(STOStorage stoStorage) {
 		String tenantId = stoStorage.getTenantId();
 		Long operId = stoStorage.getOperId();
-		String storageGroupId = stoStorage.getStorageGroupId();
+		String groupId = stoStorage.getStorageGroupId();
 //		查询指定库存组下的销售商品
-		Product product = productAtomSV.selectByGroupId(tenantId, storageGroupId);
+		Product product = productAtomSV.selectByGroupId(tenantId, groupId);
 		if(product == null){
 			logger.warn("未找到对应的商品信息,租户ID:{},销售商ID:{},库存组ID:{},库存ID:{}",
 					stoStorage.getTenantId());
-			throw new BusinessException("", "找不到指定标示的商品:" + storageGroupId);
+			throw new BusinessException("", "找不到指定标示的商品:" + groupId);
 		}
 		String isSaleAttr = product.getIsSaleAttr();
 		// 新增库存信息
@@ -356,12 +356,14 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		// 如果有销售属性,则添加SKU对应的库存信息
 		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)) {
 			for (Map.Entry<String,Long> entry:stoStorage.getSkuStorageNum().entrySet()){
-				installSkuStorage(entry.getKey(),storage.getStorageId(),entry.getValue(),operId);
+				Long price = getPriceOfSku(groupId,entry.getKey(),storage.getPriorityNumber());
+				installSkuStorage(entry.getKey(),storage.getStorageId(),entry.getValue(),price,operId);
 			}
 		} else if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.NO)) {
 			//通过商品id查出商品SKU信息,更新SKU库存信息
 			String skuId = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId()).get(0).getSkuId();
-			installSkuStorage(skuId,storage.getStorageId(),storage.getTotalNum(),operId);
+			Long price = getPriceOfSku(groupId,skuId,storage.getPriorityNumber());
+			installSkuStorage(skuId,storage.getStorageId(),storage.getTotalNum(),price,operId);
 		} else {
 			throw new BusinessException("", "不是有效的是否有销售属性状态" + isSaleAttr);
 		}
@@ -522,16 +524,25 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		}
 	}
 
+	private Long getPriceOfSku(String groupId,String skuId,Short priorityNum){
+		List<SkuStorage> storageList = skuStorageAtomSV.queryPriorityOfGroup(groupId,skuId,priorityNum);
+		if (CollectionUtil.isEmpty(storageList))
+			return null;
+		SkuStorage storage = storageList.get(0);
+		return storage.getSalePrice();
+	}
+
 	/**
 	 * 添加SKU库存
 	 * @return sku库存标识
 	 */
-	private String installSkuStorage(String skuId,String storageId,Long totalNum,Long operId){
+	private String installSkuStorage(String skuId,String storageId,Long totalNum,Long price,Long operId){
 		// 新增SKU虚拟库存,数据来自虚拟库存和单品SKU
 		SkuStorage skuStorage = new SkuStorage();
 		skuStorage.setSkuId(skuId);
 		skuStorage.setStorageId(storageId);
 		skuStorage.setTotalNum(totalNum);
+		skuStorage.setSalePrice(price);
 		skuStorage.setState(SkuStorageConstants.SkuStorage.State.ACTIVE);
 		skuStorage.setOperId(operId);
 		skuStorage.setUsableNum(totalNum);

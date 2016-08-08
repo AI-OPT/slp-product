@@ -28,7 +28,7 @@ public class ISkuStorageAtomSVTest {
 
     @Test
     public void queryByPriorityNum(){
-        List<SkuStorage> skuStoList = skuStorageAtomSV.queryStorageByIdList("1",null,new Short("1"));
+        List<SkuStorage> skuStoList = skuStorageAtomSV.queryPriorityOfGroup("1",null,new Short("1"));
         Gson gson = new Gson();
         System.out.println("\r");
         for (SkuStorage storage:skuStoList){

@@ -84,7 +84,7 @@ public interface ISkuStorageAtomSV {
      * @param priorityNum
      * @return
      */
-    public List<SkuStorage> queryStorageByIdList(String groupId,String skuId,Short priorityNum);
+    public List<SkuStorage> queryPriorityOfGroup(String groupId, String skuId, Short priorityNum);
 
     /**
      * 更新指定库存下指定SKU的价格

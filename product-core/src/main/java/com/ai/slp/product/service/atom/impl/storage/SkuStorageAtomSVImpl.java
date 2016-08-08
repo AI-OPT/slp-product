@@ -169,7 +169,7 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	 * @return
 	 */
 	@Override
-	public List<SkuStorage> queryStorageByIdList(String groupId,String skuId,Short priorityNum) {
+	public List<SkuStorage> queryPriorityOfGroup(String groupId, String skuId, Short priorityNum) {
 		Map<String,Object> params = new HashMap<>();
 		params.put("groupId",groupId);
 		params.put("priorityNum",priorityNum);
