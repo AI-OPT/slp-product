@@ -89,6 +89,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     @Override
     public PageInfoResponse<ProductEditUp> queryPageForEdit(ProductEditQueryReq queryReq) {
         String tenantId = queryReq.getTenantId();
+        String prodId = queryReq.getProdId();
         //查询所有符合条件商品
         PageInfo<Product> productPage = productAtomSV.selectPageForEdit(queryReq);
         List<ProductEditUp> editUpList = new ArrayList<>();
@@ -106,8 +107,13 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                 productEditUp.setVfsId(prodPicture.getVfsId());
                 productEditUp.setPicType(prodPicture.getPicType());
             }
+            //查询商品受众
+            List<String> userTypes = productAtomSV.selectUserTypeByProductId(tenantId, prodId);
+            if (userTypes!=null)
+            	productEditUp.setUserTypes(userTypes);
             editUpList.add(productEditUp);
         }
+        
         PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();
         BeanUtils.copyProperties(response,productPage);
         response.setResult(editUpList);

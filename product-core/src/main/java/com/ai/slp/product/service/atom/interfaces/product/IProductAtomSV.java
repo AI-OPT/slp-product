@@ -1,8 +1,11 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 
 /**
@@ -71,4 +74,12 @@ public interface IProductAtomSV {
      * @return
      */
     public PageInfo<Product> selectStorProdByState(ProductStorageSaleParam productStorageSaleParam);
+    /**
+     * 查询指定商品的受众
+     *
+     * @param tenantId
+     * @param prodId
+     * @return
+     */
+    public List<String> selectUserTypeByProductId(String tenantId,String prodId);
 }

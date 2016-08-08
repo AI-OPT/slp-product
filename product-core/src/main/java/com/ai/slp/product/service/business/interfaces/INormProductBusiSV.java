@@ -74,4 +74,5 @@ public interface INormProductBusiSV {
      * @author lipeng
      */
     public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest);
+
 }

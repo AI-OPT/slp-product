@@ -37,7 +37,7 @@ public class NormProdUniqueReq extends BaseInfo {
     @NotBlank(message = "商户ID不能为空",
             groups = { INormProductSV.DiscardProduct.class })
     private String supplierId;
-    
+   
     
     public String getSupplierId() {
 		return supplierId;

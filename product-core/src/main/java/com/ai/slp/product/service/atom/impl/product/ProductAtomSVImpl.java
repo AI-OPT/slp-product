@@ -4,8 +4,11 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAudiencesCriteria;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
+import com.ai.slp.product.dao.mapper.interfaces.product.ProdAudiencesMapper;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
@@ -14,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +27,7 @@ import java.util.List;
 public class ProductAtomSVImpl implements IProductAtomSV {
 	@Autowired
 	ProductMapper productMapper;
-
+	ProdAudiencesMapper prodAudiencesMapper;
 
 	/**
 	 * 添加销售商品信息
@@ -163,5 +167,32 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		int pageSize = queryReq.getPageSize();
 
 		return pageQuery(example, pageNo, pageSize);
+	}
+	/**
+	 * 查询指定商品的受众
+	 *
+	 * @param tenantId
+	 * @param prodId
+	 * @return
+	 */
+	@Override
+	public List<String> selectUserTypeByProductId(String tenantId, String prodId) {
+		ProdAudiencesCriteria example = new ProdAudiencesCriteria();
+		example.createCriteria().andTenantIdEqualTo(tenantId).andProdIdEqualTo(prodId);
+		List<ProdAudiences> prodAudiences = prodAudiencesMapper.selectByExample(example);
+		ArrayList<String> userTypeList = new ArrayList<>();
+		if (prodAudiences!=null)
+			prodAudiences = null;
+		
+		for (int i = 0; i < prodAudiences.size(); i++) {
+			if (prodAudiences.get(i).getTenantId().equals(tenantId)) {
+				//获取受众
+				String userType = prodAudiences.get(i).getUserType();
+				userTypeList.add(userType);
+			}else {
+				prodAudiences = null;
+			}
+		}
+		return userTypeList;
 	}
 }
