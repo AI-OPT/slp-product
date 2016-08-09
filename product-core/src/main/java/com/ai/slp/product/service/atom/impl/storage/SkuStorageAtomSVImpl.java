@@ -196,4 +196,16 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 		skuStorage.setOperTime(DateUtil.getSysDate());
 		return skuStorageMapper.updateByExampleSelective(skuStorage,example);
 	}
+
+	/**
+	 * 查询库存组下已启用库存下未设置价格的SKU库存数量
+	 *
+	 * @param tenantId
+	 * @param groupId
+	 * @return
+	 */
+	@Override
+	public int countOfNoPrice(String tenantId, String groupId) {
+		return skuStorageAttachMapper.countOfNoPrice(groupId);
+	}
 }

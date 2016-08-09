@@ -28,6 +28,7 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
@@ -89,6 +90,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     IProdTargetAreaAtomSV targetAreaAtomSV;
     @Autowired
     IStorageNumBusiSV storageNumBusiSV;
+    @Autowired
+    ISkuStorageAtomSV skuStorageAtomSV;
     @Autowired
     ISKUIndexManage skuIndexManage;
     @Autowired
@@ -369,7 +372,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                     tenantId,prodId,product.getState());
             throw new BusinessException("","商品当前状态不允许上架");
         }
-        //将仓库中商品进行上架,不判断价格,应由库存启用时检查
+
         //1.库存组不存在,或已废弃
         StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,supplierId,product.getStorageGroupId());
         if (storageGroup==null
@@ -378,6 +381,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new BusinessException("","对应库存组不存在或已废弃,无法上架,租户ID:"+tenantId
                     +"库存组ID:"+product.getStorageGroupId());
         }
+        //判断已启用库存下的SKU库存是否均设置价格
+        if (skuStorageAtomSV.countOfNoPrice(tenantId,storageGroup.getStorageGroupId())>0)
+            throw new BusinessException("","启用库存下存在未设置价格的库存,无法上架");
         //查询当前库存组可用量
         Long usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,storageGroup.getStorageGroupId());
         //库存组停用或当前库存可用为零,

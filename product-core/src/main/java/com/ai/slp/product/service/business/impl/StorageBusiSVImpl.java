@@ -18,7 +18,6 @@ import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
-import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
@@ -61,8 +60,6 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	IStorageLogAtomSV storageLogAtomSV;
 	@Autowired
 	ISkuStorageAtomSV skuStorageAtomSV;
-	@Autowired
-	private transient StorageMapper storageMapper;
 	@Autowired
 	IProdPriceLogAtomSV prodPriceLogAtomSV;
 	@Autowired

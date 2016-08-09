@@ -88,4 +88,13 @@
     and s.PRIORITY_NUMBER = #{priorityNum} and s.STORAGE_GROUP_ID = #{groupId}
   </select>
 
+  <!-- 查询启用的库存下没有销售价格的SKU库存数量 -->
+  <select id="countOfNoPrice" resultType="java.lang.Integer" parameterType="java.lang.String">
+    select count(*)
+    from sku_storage as ss,storage as s
+    WHERE ss.STORAGE_ID = s.STORAGE_ID
+    and s.STATE IN ('1','11') and ss.STATE = '1' and ss.SALE_PRICE IS NULL
+    and s.STORAGE_GROUP_ID = #{groupId}
+  </select>
+
 </mapper>
