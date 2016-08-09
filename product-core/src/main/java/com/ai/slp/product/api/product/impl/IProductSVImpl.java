@@ -126,7 +126,8 @@ public class IProductSVImpl implements IProductSV {
     @Override
     public ProdAttrMap queryNoKeyAttrInfo(ProductInfoQuery queryInfo)
             throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(queryInfo.getTenantId(),"");
-        return productBusiSV.queryNoKeyAttrOfProduct(queryInfo.getTenantId(),queryInfo.getProductId());
+        CommonUtils.checkTenantId(queryInfo.getTenantId());
+        return productBusiSV.queryNoKeyAttrOfProduct(
+                queryInfo.getTenantId(),queryInfo.getSupplierId(),queryInfo.getProductId());
     }
 }

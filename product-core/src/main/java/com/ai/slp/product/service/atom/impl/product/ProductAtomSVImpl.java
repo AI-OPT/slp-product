@@ -70,7 +70,24 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public Product selectByProductId(String tenantId, String prodId) {
 		Product product = productMapper.selectByPrimaryKey(prodId);
-		if (product!=null && !product.getTenantId().equals(tenantId))
+		if (product==null || !product.getTenantId().equals(tenantId))
+			product = null;
+		return product;
+	}
+
+	/**
+	 * 查询指定商品
+	 *
+	 * @param tenantId
+	 * @param supplierId
+	 * @param prodId
+	 * @return
+	 */
+	@Override
+	public Product selectByProductId(String tenantId, String supplierId, String prodId) {
+		Product product = productMapper.selectByPrimaryKey(prodId);
+		if (product==null || !product.getTenantId().equals(tenantId)
+				|| !product.getSupplierId().equals(supplierId))
 			product = null;
 		return product;
 	}

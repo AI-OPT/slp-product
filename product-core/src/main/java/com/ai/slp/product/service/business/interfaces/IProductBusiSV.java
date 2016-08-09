@@ -73,7 +73,7 @@ public interface IProductBusiSV {
      * 查询商品的非关键属性
      * @return
      */
-    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String productId);
+    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId,String supplierId, String productId);
 
     /**
      * 查询相关的快充产品

@@ -274,11 +274,12 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * 查询商品的非关键属性
      *
      * @param tenantId
+     * @param supplierId
      * @param productId
      * @return
      */
     @Override
-    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String productId) {
+    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String supplierId,String productId) {
         //查询商品信息
         Product product = productAtomSV.selectByProductId(tenantId,productId);
         if (product==null){
@@ -356,7 +357,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToInSale(String tenantId,String supplierId, String prodId, Long operId) {
-        Product product = productAtomSV.selectByProductId(tenantId,prodId);
+        Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
         if (prodId == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
