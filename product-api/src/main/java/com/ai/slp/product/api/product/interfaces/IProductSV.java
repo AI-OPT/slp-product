@@ -11,7 +11,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 /**
  * 商城商品操作<br>
@@ -59,24 +58,6 @@ public interface IProductSV {
     public ProductInfo queryProductById(ProductInfoQuery productInfoQuery)
         throws BusinessException,SystemException;
     @interface QueryProductById{}
-
-    /**
-     * 批量更新SKU销售价<br>
-     *
-     * @param skuSalPrices sku销售价结婚
-     * @return 操作结果
-     * @throws BusinessException
-     * @throws SystemException
-     * @author liutong5
-     * @ApiDocMethod
-     * @RestRelativeURL productManager/updateSKUPrice
-     * @ApiCode PRODUCT_0102
-     */
-    @POST
-	@Path("/updateSKUPrice")
-    public BaseResponse updateMultSKUSalePrice(List<ProdSkuSalPrice> skuSalPrices)
-            throws BusinessException,SystemException;
-    @interface UpdateMultSKUSalePrice{}
 
     /**
      * 更新商品SKU信息<br>

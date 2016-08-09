@@ -148,9 +148,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
      * @return
      */
     @Override
-    public SkuSetForProduct querySkuByProdId(String tenantId, String productId) {
+    public SkuSetForProduct querySkuByProdId(String tenantId,String supplierId, String productId) {
         //查询商品信息
-        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        Product product = productAtomSV.selectByProductId(tenantId,supplierId,productId);
         if (product==null){
         	logger.warn("未找到指定商品,租户ID{},商品标识{}:"+tenantId+","+productId);
             throw new BusinessException("","查询商品信息不存在,租户ID:"+tenantId+",商品标识:"+productId);
@@ -275,7 +275,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
                 tenantId,product.getStandedProdId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
         configResponse.getProductAttrList().addAll(getKeyAttr(keyAttrMap));
         //查询非关键属性
-        ProdAttrMap noKeyAttrMap = productBusiSV.queryNoKeyAttrOfProduct(tenantId,product.getProdId());
+        ProdAttrMap noKeyAttrMap = productBusiSV.queryNoKeyAttrOfProduct(product);
         configResponse.getProductAttrList().addAll(getNoKeyAttr(noKeyAttrMap));
         //查询SKU对应销售属性
         configResponse.getProductAttrList().addAll(getSkuAttr(product,skuId));

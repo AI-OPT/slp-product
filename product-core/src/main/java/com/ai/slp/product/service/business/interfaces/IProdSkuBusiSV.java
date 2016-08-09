@@ -25,7 +25,7 @@ public interface IProdSkuBusiSV {
      * @param prodId
      * @return
      */
-    public SkuSetForProduct querySkuByProdId(String tenantId, String prodId);
+    public SkuSetForProduct querySkuByProdId(String tenantId,String supplierId, String prodId);
 
     /**
      * 添加单个sku

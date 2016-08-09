@@ -286,6 +286,18 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             logger.warn("未找到对应销售商品信息,租户ID:{},销售商品ID:{}",tenantId,productId);
             throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
         }
+        return queryNoKeyAttrOfProduct(product);
+    }
+
+    /**
+     * 查询商品的非关键属性
+     *
+     * @param product
+     * @return
+     */
+    @Override
+    public ProdAttrMap queryNoKeyAttrOfProduct(Product product) {
+        String tenantId = product.getTenantId();
         ProdAttrMap attrMapOfNormProd = new ProdAttrMap();
         Map<Long, List<Long>> attrAndValMap = new HashMap<>();
         Map<Long, CatAttrInfoForProd> attrDefMap = new HashMap<>();
@@ -301,7 +313,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             attrAndValMap.put(catAttrDef.getAttrId(), attrValDefList);
             attrDefMap.put(catAttrDef.getAttrId(), catAttrDef);
             // 查询销售商品非关键属性值
-            List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(tenantId,productId,catAttrAttch.getAttrId());
+            List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(
+                    tenantId,product.getProdId(),catAttrAttch.getAttrId());
             for (ProdAttr prodAttr : prodAttrs) {
                 ProdAttrValInfo valDef = new ProdAttrValInfo();
                 BeanUtils.copyProperties(valDef, prodAttr);
@@ -464,8 +477,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @return
      */
     @Override
-    public ProductInfo queryByProdId(String tenantId, String productId) {
-        Product product = productAtomSV.selectByProductId(tenantId,productId);
+    public ProductInfo queryByProdId(String tenantId,String supplierId, String productId) {
+        Product product = productAtomSV.selectByProductId(tenantId,supplierId,productId);
         if (product==null){
             throw new BusinessException("","未查询到指定的商品信息,租户ID:"+tenantId+",商品标识:"+productId);
         }
