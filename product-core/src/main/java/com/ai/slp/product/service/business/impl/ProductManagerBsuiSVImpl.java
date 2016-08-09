@@ -261,14 +261,10 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         updateTargetArea(tenantId,productId,productInfo.getIsSaleNationwide(),productInfo.getProvCodes(),operId);
         //更新商品主信息
         BeanUtils.copyProperties(product,productInfo);
-        //目前设置为仓库中
-        product.setState(ProductConstants.Product.State.IN_STORE);
+        //设置为待审核
+        product.setState(ProductConstants.Product.State.VERIFYING);
         //添加日志
         productBusiSV.updateProdAndStatusLog(product);
-        //如果为立即上架,则进行上架操作
-        if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){
-            productBusiSV.changeToInSale(tenantId,productInfo.getSupplierId(),productId,operId);
-        }
     }
 
     private Map<String,ProdAudiencesInfo> getAudiencesInfo(String tenantId,String prodId,String userType){

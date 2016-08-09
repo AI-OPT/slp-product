@@ -6,7 +6,6 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
-import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
@@ -188,10 +187,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     public BaseResponse updateProduct(ProductInfoForUpdate product) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(product.getTenantId());
         productManagerBsuiSV.updateProdEdit(product);
-        //若为立即上架处理,则将数据添加至搜索引擎
-        if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){
-            skuIndexManage.updateSKUIndex(product.getProdId());
-        }
         return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
     }
 
