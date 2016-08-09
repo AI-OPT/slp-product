@@ -37,7 +37,8 @@ public class IProductSVImpl implements IProductSV {
      * @ApiDocMethod
      */
     @Override
-    public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery) throws BusinessException, SystemException {
+    public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery)
+            throws BusinessException, SystemException {
     	CommonUtils.checkTenantId(productQuery.getTenantId(),"");
         return productBusiSV.queryProductPage(productQuery);
     }
@@ -53,7 +54,8 @@ public class IProductSVImpl implements IProductSV {
      * @ApiDocMethod
      */
     @Override
-    public ProductInfo queryProductById(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
+    public ProductInfo queryProductById(ProductInfoQuery productInfoQuery)
+            throws BusinessException, SystemException {
         CommonUtils.checkTenantId(productInfoQuery.getTenantId(),"");
         return productBusiSV.queryByProdId(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
     }
@@ -69,7 +71,8 @@ public class IProductSVImpl implements IProductSV {
      * @ApiDocMethod
      */
     @Override
-    public BaseResponse updateMultSKUSalePrice(List<ProdSkuSalPrice> skuSalPrices) throws BusinessException, SystemException {
+    public BaseResponse updateMultSKUSalePrice(List<ProdSkuSalPrice> skuSalPrices)
+            throws BusinessException, SystemException {
         return null;
     }
 
@@ -84,7 +87,8 @@ public class IProductSVImpl implements IProductSV {
      * @ApiDocMethod
      */
     @Override
-    public BaseResponse saveMultSKUInfo(SkuInfoMultSave saveInfo) throws BusinessException, SystemException {
+    public BaseResponse saveMultSKUInfo(SkuInfoMultSave saveInfo)
+            throws BusinessException, SystemException {
         CommonUtils.checkTenantId(saveInfo.getTenantId());
         prodSkuBusiSV.updateSkuOfProduct(saveInfo);
         BaseResponse baseResponse = new BaseResponse();
@@ -103,7 +107,8 @@ public class IProductSVImpl implements IProductSV {
      * @ApiDocMethod
      */
     @Override
-    public SkuSetForProduct querySkuSetForProduct(ProductInfoQuery query) throws BusinessException, SystemException {
+    public SkuSetForProduct querySkuSetForProduct(ProductInfoQuery query)
+            throws BusinessException, SystemException {
         CommonUtils.checkTenantId(query.getTenantId(),"");
         return prodSkuBusiSV.querySkuByProdId(query.getTenantId(),query.getProductId());
     }
@@ -119,7 +124,8 @@ public class IProductSVImpl implements IProductSV {
      * @ApiDocMethod
      */
     @Override
-    public ProdAttrMap queryNoKeyAttrInfo(ProductInfoQuery queryInfo) throws BusinessException, SystemException {
+    public ProdAttrMap queryNoKeyAttrInfo(ProductInfoQuery queryInfo)
+            throws BusinessException, SystemException {
         CommonUtils.checkTenantId(queryInfo.getTenantId(),"");
         return productBusiSV.queryNoKeyAttrOfProduct(queryInfo.getTenantId(),queryInfo.getProductId());
     }

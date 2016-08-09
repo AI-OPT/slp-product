@@ -5,6 +5,7 @@ import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 库存业务操作
@@ -101,7 +102,7 @@ public interface IStorageBusiSV {
      * @return
      * @author lipeng16
      */
-    public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String supplierId,String storageId);
+    public Map<String,SkuStorageInfo> querySkuStorageById(String tenantId, String supplierId, String storageId);
     
     /**
      * 新增SKU库存(有销售属性)

@@ -38,10 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 库存业务操作
@@ -438,14 +435,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * 查看SKU库存
 	 */
 	@Override
-	public List<SkuStorageAndProd> querySkuStorageById(String tenantId,String supplierId,String storageId) {
+	public Map<String,SkuStorageInfo> querySkuStorageById(String tenantId, String supplierId, String storageId) {
 		// 通过库存标识查询SKU库存集合
 		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storageId);
 		if (CollectionUtil.isEmpty(skuStorageList)) {
-			return Collections.emptyList();
+			return Collections.emptyMap();
 		}
-		List<SkuStorageAndProd> skuStorageAndProdList = new ArrayList<>();
-		SkuStorageAndProd skuStorageAndProd = null;
+		Map<String,SkuStorageInfo> skuStoMap = new HashMap<>();
 		// 通过SKU库存的SKU标识查对应的商品SKU
 		for (SkuStorage skuStorage : skuStorageList) {
 			String skuId = skuStorage.getSkuId();
@@ -453,15 +449,15 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			if (prodSku == null) {
 				continue;
 			}
-			skuStorageAndProd = new SkuStorageAndProd();
+			SkuStorageInfo skuStorageAndProd = new SkuStorageInfo();
 			skuStorageAndProd.setSkuId(skuId);
 			skuStorageAndProd.setSkuStorageId(storageId);
 			skuStorageAndProd.setTotalNum(skuStorage.getTotalNum());
 			skuStorageAndProd.setSaleAttrs(prodSku.getSaleAttrs());
 			// 填充返回值
-			skuStorageAndProdList.add(skuStorageAndProd);
+			skuStoMap.put(skuId,skuStorageAndProd);
 		}
-		return CollectionUtil.isEmpty(skuStorageAndProdList) ? null : skuStorageAndProdList;
+		return skuStoMap;
 	}
 
 	/**

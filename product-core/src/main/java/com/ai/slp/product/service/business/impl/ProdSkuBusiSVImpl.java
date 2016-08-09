@@ -175,8 +175,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
                 tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
         Map<Long,Set<String>> attrAndValIdMap = new LinkedHashMap<>();
-        Map<SkuAttrInfo,List<SkuAttrValInfo>> attrAndValInfoMap
-                = new LinkedHashMap<>();
+        Map<SkuAttrInfo,List<SkuAttrValInfo>> attrAndValInfoMap = new LinkedHashMap<>();
         skuSetForProduct.setAttrAndValIdMap(attrAndValIdMap);
         skuSetForProduct.setAttrAndValInfoMap(attrAndValInfoMap);
         //查询已设置SKU的属性和属性值信息

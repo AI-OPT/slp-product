@@ -3,6 +3,7 @@ package com.ai.slp.product.api.storage.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseListResponse;
+import com.ai.opt.base.vo.BaseMapResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.param.*;
@@ -284,10 +285,10 @@ public interface IStorageSV {
     @interface UpdateMultiStorageSalePrice{}
     
     /**
-     * 查看SKU库存信息和SKU单品
+     * 查看SKU库存信息
      *
      * @param query 库存标识
-     * @return 
+     * @return map K:skuId, V:sku库存信息
      * @throws BusinessException
      * @throws SystemException
      * @author lipeng16
@@ -296,7 +297,7 @@ public interface IStorageSV {
      */
     @POST
     @Path("/querySkuStorageById")
-    public BaseListResponse<SkuStorageAndProd> querySkuStorageById(StorageUniQuery query) throws BusinessException,SystemException;
+    public BaseMapResponse<String, SkuStorageInfo> querySkuStorageById(StorageUniQuery query) throws BusinessException,SystemException;
     @interface QuerySkuStorageById{}
     
     /**

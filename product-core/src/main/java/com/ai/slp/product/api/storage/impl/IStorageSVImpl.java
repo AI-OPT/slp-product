@@ -2,10 +2,7 @@ package com.ai.slp.product.api.storage.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.BaseListResponse;
-import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.base.vo.*;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
@@ -25,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jackieliu on 16/5/4.
@@ -359,7 +357,7 @@ public class IStorageSVImpl implements IStorageSV {
 
 	 
     /**
-     * 查看SKU库存信息和SKU单品
+     * 查看SKU库存信息
      *
      * @return 
      * @throws BusinessException
@@ -367,13 +365,13 @@ public class IStorageSVImpl implements IStorageSV {
      * @author lipeng16
      */
 	@Override
-	public BaseListResponse<SkuStorageAndProd> querySkuStorageById(StorageUniQuery query)
+	public BaseMapResponse<String, SkuStorageInfo> querySkuStorageById(StorageUniQuery query)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(query.getTenantId());
-		List<SkuStorageAndProd> prodList = storageBusiSV.querySkuStorageById(
+		Map<String,SkuStorageInfo> prodMap = storageBusiSV.querySkuStorageById(
 				query.getTenantId(),query.getSupplierId(),query.getStorageId());
-		BaseListResponse<SkuStorageAndProd> prodRes = new BaseListResponse<>();
-		prodRes.setResult(prodList);
+		BaseMapResponse<String,SkuStorageInfo> prodRes = new BaseMapResponse<>();
+		prodRes.setResult(prodMap);
 		prodRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
 		return prodRes;
 	}
