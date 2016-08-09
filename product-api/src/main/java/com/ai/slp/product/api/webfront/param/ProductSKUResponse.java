@@ -8,7 +8,10 @@ import java.util.List;
 public class ProductSKUResponse extends BaseResponse{
 
 	private static final long serialVersionUID = 1L;
-	
+	/**
+	 * 销售商(租户)标识
+	 */
+	private String supplierId;
 	/**
      * sku单品标识
      */
@@ -140,15 +143,12 @@ public class ProductSKUResponse extends BaseResponse{
 	public void setUsableNum(Long usableNum) {
 		this.usableNum = usableNum;
 	}
-
 	public Long getSalePrice() {
 		return salePrice;
 	}
-
 	public void setSalePrice(Long salePrice) {
 		this.salePrice = salePrice;
 	}
-
 	public Long getSaleNum() {
 		return saleNum;
 	}
@@ -173,22 +173,18 @@ public class ProductSKUResponse extends BaseResponse{
 	public void setActiveType(String activeType) {
 		this.activeType = activeType;
 	}
-
 	public Short getActiveCycle() {
 		return activeCycle;
 	}
-
 	public void setActiveCycle(Short activeCycle) {
 		this.activeCycle = activeCycle;
 	}
-
 	public String getUnit() {
 		return unit;
 	}
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-
 	public String getProdId() {
 		return prodId;
 	}
@@ -227,6 +223,14 @@ public class ProductSKUResponse extends BaseResponse{
 
 	public void setProDetailContent(String proDetailContent) {
 		this.proDetailContent = proDetailContent;
+	}
+
+	public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
 	}
 
 	@Override

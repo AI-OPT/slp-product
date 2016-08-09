@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class StorageGroupStatus extends BaseInfo {
+public class StoGroupStatus extends BaseInfo {
     private static final long serialVersionUID = 1L;
     /**
      * 销售商（商户）标识，必填<br>
@@ -24,8 +24,7 @@ public class StorageGroupStatus extends BaseInfo {
 	/**
      * 库存组标识
      */
-    @NotBlank(message = "库存组标识不能为空",
-            groups = { IStorageSV.ChargeStorageGroupStatus.class})
+    @NotBlank(message = "库存组标识不能为空")
     private String groupId;
     /**
      * 状态 1:启用;2:停用;3:废弃<br>

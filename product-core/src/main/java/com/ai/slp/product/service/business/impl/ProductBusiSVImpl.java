@@ -28,6 +28,7 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
@@ -89,6 +90,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     IProdTargetAreaAtomSV targetAreaAtomSV;
     @Autowired
     IStorageNumBusiSV storageNumBusiSV;
+    @Autowired
+    ISkuStorageAtomSV skuStorageAtomSV;
     @Autowired
     ISKUIndexManage skuIndexManage;
     @Autowired
@@ -271,17 +274,30 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * 查询商品的非关键属性
      *
      * @param tenantId
+     * @param supplierId
      * @param productId
      * @return
      */
     @Override
-    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String productId) {
+    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String supplierId,String productId) {
         //查询商品信息
         Product product = productAtomSV.selectByProductId(tenantId,productId);
         if (product==null){
             logger.warn("未找到对应销售商品信息,租户ID:{},销售商品ID:{}",tenantId,productId);
             throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
         }
+        return queryNoKeyAttrOfProduct(product);
+    }
+
+    /**
+     * 查询商品的非关键属性
+     *
+     * @param product
+     * @return
+     */
+    @Override
+    public ProdAttrMap queryNoKeyAttrOfProduct(Product product) {
+        String tenantId = product.getTenantId();
         ProdAttrMap attrMapOfNormProd = new ProdAttrMap();
         Map<Long, List<Long>> attrAndValMap = new HashMap<>();
         Map<Long, CatAttrInfoForProd> attrDefMap = new HashMap<>();
@@ -297,7 +313,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             attrAndValMap.put(catAttrDef.getAttrId(), attrValDefList);
             attrDefMap.put(catAttrDef.getAttrId(), catAttrDef);
             // 查询销售商品非关键属性值
-            List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(tenantId,productId,catAttrAttch.getAttrId());
+            List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(
+                    tenantId,product.getProdId(),catAttrAttch.getAttrId());
             for (ProdAttr prodAttr : prodAttrs) {
                 ProdAttrValInfo valDef = new ProdAttrValInfo();
                 BeanUtils.copyProperties(valDef, prodAttr);
@@ -353,7 +370,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToInSale(String tenantId,String supplierId, String prodId, Long operId) {
-        Product product = productAtomSV.selectByProductId(tenantId,prodId);
+        Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
         if (prodId == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
@@ -369,7 +386,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                     tenantId,prodId,product.getState());
             throw new BusinessException("","商品当前状态不允许上架");
         }
-        //将仓库中商品进行上架,不判断价格,应由库存启用时检查
+
         //1.库存组不存在,或已废弃
         StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,supplierId,product.getStorageGroupId());
         if (storageGroup==null
@@ -378,6 +395,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new BusinessException("","对应库存组不存在或已废弃,无法上架,租户ID:"+tenantId
                     +"库存组ID:"+product.getStorageGroupId());
         }
+        //判断已启用库存下的SKU库存是否均设置价格
+        if (skuStorageAtomSV.countOfNoPrice(tenantId,storageGroup.getStorageGroupId())>0)
+            throw new BusinessException("","启用库存下存在未设置价格的库存,无法上架");
         //查询当前库存组可用量
         Long usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,storageGroup.getStorageGroupId());
         //库存组停用或当前库存可用为零,
@@ -457,8 +477,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @return
      */
     @Override
-    public ProductInfo queryByProdId(String tenantId, String productId) {
-        Product product = productAtomSV.selectByProductId(tenantId,productId);
+    public ProductInfo queryByProdId(String tenantId,String supplierId, String productId) {
+        Product product = productAtomSV.selectByProductId(tenantId,supplierId,productId);
         if (product==null){
             throw new BusinessException("","未查询到指定的商品信息,租户ID:"+tenantId+",商品标识:"+productId);
         }
@@ -486,7 +506,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         return prodInfoMap;
     }
 
-    private void changeToSaleForStop(Product product,Long operId){
+    @Override
+    public void changeToSaleForStop(Product product,Long operId){
         String tenantId = product.getTenantId();
         //若商品状态不是"停用下架",也不是"售罄下架",则不进行处理
         if(!ProductConstants.Product.State.STOP.equals(product.getState())
@@ -588,8 +609,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
 	@Override
-	public void changeToInStore(String tenantId, String prodId, Long operId) {
-		Product product = productAtomSV.selectByProductId(tenantId,prodId);
+	public void changeToInStore(String tenantId,String supplierId, String prodId, Long operId) {
+		Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
         if (prodId != null){
 	        //若商品状态是"销售中"
 	        if (ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
@@ -610,7 +631,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         	throw new SystemException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
 		}
 	}
-    private void updateProdAndStatusLog(Product product){
+
+    public void updateProdAndStatusLog(Product product){
         if (productAtomSV.updateById(product)>0){
             ProductLog log = new ProductLog();
             BeanUtils.copyProperties(log,product);

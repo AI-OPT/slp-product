@@ -4,8 +4,6 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.ProductConstants;
@@ -14,9 +12,6 @@ import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-
-import scala.remote;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -116,7 +111,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     }
 
     /**
-     * 查询单个商品的受众信息<br>
+     * 查询单个商品的其他设置信息<br>
      *
      * @param productInfoQuery 单个商品的标识信息
      * @return 单个商品的受众信息
@@ -126,8 +121,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public OtherSetOfProduct queryOtherSetOfProduct(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(productInfoQuery.getTenantId(),"");
-        return productManagerBsuiSV.queryOtherSetOfProd(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
+        CommonUtils.checkTenantId(productInfoQuery.getTenantId());
+        return productManagerBsuiSV.queryOtherSetOfProd(
+                productInfoQuery.getTenantId(),productInfoQuery.getSupplierId(),productInfoQuery.getProductId());
     }
 
     /**
@@ -209,13 +205,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
 	@Override
 	public BaseResponse changeToInStore(ProductInfoQuery query) throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(query.getTenantId(),"");
-        productBusiSV.changeToInStore(query.getTenantId(),query.getProductId(),query.getOperId());
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+		CommonUtils.checkTenantId(query.getTenantId());
+        productBusiSV.changeToInStore(
+                query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
+        return CommonUtils.genSuccessResponse("");
 	}
 }

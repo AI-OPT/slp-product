@@ -94,4 +94,12 @@ public interface ISkuStorageAtomSV {
      * @return
      */
     public int updatePrice(String storageId,String skuId,Long price,Long operId);
+
+    /**
+     * 查询库存组下已启用库存下未设置价格的SKU库存数量
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    public int countOfNoPrice(String tenantId,String groupId);
 }

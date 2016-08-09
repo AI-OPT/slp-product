@@ -2,10 +2,7 @@ package com.ai.slp.product.api.storage.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.BaseListResponse;
-import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.base.vo.*;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
@@ -25,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jackieliu on 16/5/4.
@@ -118,7 +116,7 @@ public class IStorageSVImpl implements IStorageSV {
 	 * @ApiDocMethod
 	 */
 	@Override
-	public BaseResponse chargeStorageGroupStatus(StorageGroupStatus groupStatus)
+	public BaseResponse chargeStorageGroupStatus(StoGroupStatus groupStatus)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(groupStatus.getTenantId());
 		String tenantId = groupStatus.getTenantId(),
@@ -359,7 +357,7 @@ public class IStorageSVImpl implements IStorageSV {
 
 	 
     /**
-     * 查看SKU库存信息和SKU单品
+     * 查看SKU库存信息
      *
      * @return 
      * @throws BusinessException
@@ -367,13 +365,13 @@ public class IStorageSVImpl implements IStorageSV {
      * @author lipeng16
      */
 	@Override
-	public BaseListResponse<SkuStorageAndProd> querySkuStorageById(StorageUniQuery query)
+	public BaseMapResponse<String, SkuStorageInfo> querySkuStorageById(StorageUniQuery query)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(query.getTenantId());
-		List<SkuStorageAndProd> prodList = storageBusiSV.querySkuStorageById(
+		Map<String,SkuStorageInfo> prodMap = storageBusiSV.querySkuStorageById(
 				query.getTenantId(),query.getSupplierId(),query.getStorageId());
-		BaseListResponse<SkuStorageAndProd> prodRes = new BaseListResponse<>();
-		prodRes.setResult(prodList);
+		BaseMapResponse<String,SkuStorageInfo> prodRes = new BaseMapResponse<>();
+		prodRes.setResult(prodMap);
 		prodRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
 		return prodRes;
 	}
@@ -445,4 +443,43 @@ public class IStorageSVImpl implements IStorageSV {
 		int num = storageBusiSV.updateSkuStoSalePrice(salePrice);
 		return CommonUtils.genSuccessResponse(num+"");
 	}
+
+	/**
+	 * 更改标准品库存组自动状态<br>
+	 * 包括自动启动,自动停用
+	 *
+	 * @param aStatus 要设置的库存组状态对象
+	 * @return 添加结果
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiDocMethod
+	 * @ApiCode STORAGE_0118
+	 * @RestRelativeURL storage/chargeGroupStatus
+	 */
+	@Override
+	public BaseResponse chargeGroupStatusAuto(StoGroupAStatus aStatus) throws BusinessException, SystemException {
+		String tenantId = aStatus.getTenantId(),groupId = aStatus.getGroupId();
+		CommonUtils.checkTenantId(aStatus.getTenantId());
+		switch (aStatus.getState()) {
+			//如果为启用,则刷新缓存
+			case StorageConstants.StorageGroup.State.AUTO_ACTIVE:
+				if(storageGroupBusiSV.changeGroupAutoStart(tenantId, aStatus.getGroupId())){
+					storageGroupBusiSV.flushStorageCache(tenantId, groupId);
+					// 若对应商品为"62停用下架",则进行自动上架.
+					Product product = productAtomSV.selectByGroupId(tenantId, groupId);
+					if (product != null && ProductConstants.Product.State.STOP.equals(product.getState())) {
+						productBusiSV.changeToSaleForStop(product, null);
+					}
+				}
+				break;
+			case StorageConstants.StorageGroup.State.AUTO_STOP:
+				storageGroupBusiSV.changeGroupAutoStop(tenantId,aStatus.getGroupId());
+				break;
+			default:
+				throw new BusinessException("","不支持状态["+aStatus.getState()+"]");
+		}
+		return CommonUtils.genSuccessResponse("");
+	}
+
 }

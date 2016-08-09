@@ -20,6 +20,7 @@ public class ISkuStorageAtomSVTest {
     @Autowired
     ISkuStorageAtomSV skuStorageAtomSV;
 
+
     @Test
     public void queryByIdTest(){
         SkuStorage skuStorage = skuStorageAtomSV.queryById("100000100008",true);
@@ -34,5 +35,10 @@ public class ISkuStorageAtomSVTest {
         for (SkuStorage storage:skuStoList){
             System.out.println(gson.toJson(storage));
         }
+    }
+
+    @Test
+    public void countOfNoPrice(){
+        System.out.println("\r===="+skuStorageAtomSV.countOfNoPrice("SLP","1"));
     }
 }

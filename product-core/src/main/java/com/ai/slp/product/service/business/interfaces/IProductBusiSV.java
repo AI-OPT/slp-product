@@ -4,6 +4,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 
@@ -28,6 +29,14 @@ public interface IProductBusiSV {
      * @param prodId
      */
     public void changeToSaleForStop(String tenantId,String prodId,Long operId);
+
+    /**
+     * 对停用下架的商品进行上架处理
+     *
+     * @param product
+     * @param operId
+     */
+    public void changeToSaleForStop(Product product, Long operId);
 
     /**
      * 进行停用下架
@@ -64,7 +73,13 @@ public interface IProductBusiSV {
      * 查询商品的非关键属性
      * @return
      */
-    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String productId);
+    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId,String supplierId, String productId);
+
+    /**
+     * 查询商品的非关键属性
+     * @return
+     */
+    public ProdAttrMap queryNoKeyAttrOfProduct(Product product);
 
     /**
      * 查询相关的快充产品
@@ -86,7 +101,7 @@ public interface IProductBusiSV {
      * @param tenantId
      * @param prodId
      */
-    public void changeToInStore(String tenantId, String prodId, Long operId);
+    public void changeToInStore(String tenantId, String supplierId,String prodId, Long operId);
     
     /**
      * 查询管理界面中的非关键属性
@@ -102,5 +117,11 @@ public interface IProductBusiSV {
      * @param productId
      * @return
      */
-    public ProductInfo queryByProdId(String tenantId, String productId);
+    public ProductInfo queryByProdId(String tenantId,String supplierId, String productId);
+
+    /**
+     * 更新商品日志和状态日志
+     * @param product
+     */
+    public void updateProdAndStatusLog(Product product);
 }

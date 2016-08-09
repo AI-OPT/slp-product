@@ -8,7 +8,11 @@ import com.ai.opt.base.vo.BaseResponse;
  */
 public class ProductSkuInfo extends BaseResponse {
     private static final long serialVersionUID = 1L;
-	/**
+    /**
+     * 销售商(租户)标识
+     */
+    private String supplierId;
+    /**
      * sku单品标识
      */
     private String skuId;
@@ -48,6 +52,14 @@ public class ProductSkuInfo extends BaseResponse {
      * 销售价
      */
     private Long salePrice;
+
+    public String getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
 
     public String getSkuId() {
         return skuId;

@@ -162,8 +162,8 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
      * @return
      */
     @Override
-    public OtherSetOfProduct queryOtherSetOfProd(String tenantId, String prodId) {
-        Product product = productAtomSV.selectByProductId(tenantId,prodId);
+    public OtherSetOfProduct queryOtherSetOfProd(String tenantId,String supplierId, String prodId) {
+        Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
         if (product==null){
             throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
                     "未查询到指定商品,租户ID:"+tenantId+",销售商品标示:"+prodId);
@@ -258,15 +258,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         //目前设置为仓库中
         product.setState(ProductConstants.Product.State.IN_STORE);
         //添加日志
-        if (productAtomSV.updateById(product)>0){
-            ProductLog log = new ProductLog();
-            BeanUtils.copyProperties(log,product);
-            productLogAtomSV.install(log);
-            //商品状态日志表
-            ProductStateLog productStateLog = new ProductStateLog();
-            BeanUtils.copyProperties(productStateLog, product);
-            productStateLogAtomSV.insert(productStateLog);
-        }
+        productBusiSV.updateProdAndStatusLog(product);
         //如果为立即上架,则进行上架操作
         if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){
             productBusiSV.changeToInSale(tenantId,productInfo.getSupplierId(),productId,operId);
