@@ -208,23 +208,6 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     }
 
     /**
-     * 添加单个sku
-     *
-     * @param prodSku
-     * @return
-     */
-    @Override
-    public int addSku(ProdSku prodSku) {
-        int addNum = prodSkuAtomSV.createObj(prodSku);
-        if (addNum>0){
-            ProdSkuLog prodSkuLog = new ProdSkuLog();
-            BeanUtils.copyProperties(prodSkuLog,prodSku);
-            prodSkuLogAtomSV.install(prodSkuLog);
-        }
-        return addNum;
-    }
-
-    /**
      * 根据SKU标识或SKU属性串查询SKU的信息
      *
      * @param tenantId

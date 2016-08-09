@@ -122,7 +122,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
 
     /**
      *商品管理中分页查询被拒绝商品信息
-     * @param queryReq
+     * @param productRefuseParam
      * @return
      */
     @Override

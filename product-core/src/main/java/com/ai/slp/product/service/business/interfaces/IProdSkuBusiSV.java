@@ -4,7 +4,6 @@ import com.ai.slp.product.api.product.param.SkuInfoMultSave;
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
 import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 
 /**
  * 商品SKU业务操作
@@ -26,13 +25,6 @@ public interface IProdSkuBusiSV {
      * @return
      */
     public SkuSetForProduct querySkuByProdId(String tenantId,String supplierId, String prodId);
-
-    /**
-     * 添加单个sku
-     * @param prodSku
-     * @return
-     */
-    public int addSku(ProdSku prodSku);
 
     /**
      * 根据SKU标识或SKU属性串查询SKU的信息

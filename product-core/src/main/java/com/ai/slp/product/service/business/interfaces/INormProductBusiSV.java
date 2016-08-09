@@ -12,17 +12,17 @@ public interface INormProductBusiSV {
     /**
      * 添加标准品,包括属性值
      *
-     * @param normProdct
+     * @param normProduct
      * @return 标准品标识
      */
-    public String installNormProd(NormProdSaveRequest normProdct);
+    public String installNormProd(NormProdSaveRequest normProduct);
 
     /**
      * 更新标准品,包括属性值
      *
-     * @param normProdct
+     * @param normProduct
      */
-    public void updateNormProd(NormProdSaveRequest normProdct);
+    public void updateNormProd(NormProdSaveRequest normProduct);
 
     /**
      * 查询指定的标准品嘻嘻
