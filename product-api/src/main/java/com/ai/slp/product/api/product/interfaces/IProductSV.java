@@ -131,4 +131,21 @@ public interface IProductSV {
     public ProdAttrMap queryNoKeyAttrInfo(ProductInfoQuery productInfoQuery)
             throws BusinessException,SystemException;
     @interface QueryNoKeyAttrInfo{}
+    
+    /**
+     * 根据商品ID查询商品目标地域
+     * @param productInfoQuery 商品标识信息
+     * @return 商品目标地域对象
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+     * @ApiDocMethod
+     * @RestRelativeURL 
+     * @ApiCode PRODUCT_0106
+     */
+    @POST
+    @Path("/searchProdTargetArea")
+    public List<TargetArea> searchProdTargetArea(ProductInfoQuery productInfoQuery)
+            throws BusinessException,SystemException;
+        @interface SearchProdTargetArea{}
 }

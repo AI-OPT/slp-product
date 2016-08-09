@@ -1,12 +1,17 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.OtherSetOfProduct;
+import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
 import com.ai.slp.product.api.product.param.ProductStorageSale;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.api.product.param.TargetArea;
+import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 
 /**
  * 销售商品管理
@@ -47,5 +52,10 @@ public interface IProductManagerBsuiSV {
      * @return
      */
 	public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam);
-    
+	
+	/**
+     * 查收商品的目标地域
+     * @return
+     */
+	public List<TargetArea> searchProdTargetArea(String tenantId,String prodId);
 }

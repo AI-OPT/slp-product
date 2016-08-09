@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
+import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 
 import java.util.List;
@@ -36,4 +37,14 @@ public interface IProdTargetAreaAtomSV {
      * @return
      */
     public int installArea(ProdTargetArea targetArea);
+
+    /**
+     * 查询目标地域
+     * @param tenantId
+     * @param prodId
+     * @param provCode
+     * @param hasDiscard
+     * @return
+     */
+	public List<ProdTargetArea> searchProdTargetArea(String tenantId,String prodId);
 }
