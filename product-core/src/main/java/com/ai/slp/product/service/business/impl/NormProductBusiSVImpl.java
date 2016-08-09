@@ -100,6 +100,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             prodAttr.setAttrValueName(attrValReq.getAttrVal());
             prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
             prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
+            prodAttr.setOperId(normProdct.getOperId());
             prodAttr.setOperTime(nowTime);
             // 添加成功,添加日志
             if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
@@ -108,6 +109,15 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
                 standedProdAttrLogAtomSV.installObj(prodAttrLog);
             }
         }
+        //添加库存组
+        //自动添加一个库存组
+//        STOStorageGroup storageGroup = new STOStorageGroup();
+//        storageGroup.setTenantId(normProdct.getTenantId());
+//        storageGroup.setCreateId(normProdct.getOperId());
+//        storageGroup.setStandedProdId(normProdId);
+//        storageGroup.setSupplierId(request.getSupplierId());
+//        storageGroup.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
+//        storageGroupBusiSV.addGroup(storageGroup);
         return standedProduct.getStandedProdId();
     }
 

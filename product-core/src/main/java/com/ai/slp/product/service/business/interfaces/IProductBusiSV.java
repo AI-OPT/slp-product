@@ -4,6 +4,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 
@@ -28,6 +29,14 @@ public interface IProductBusiSV {
      * @param prodId
      */
     public void changeToSaleForStop(String tenantId,String prodId,Long operId);
+
+    /**
+     * 对停用下架的商品进行上架处理
+     *
+     * @param product
+     * @param operId
+     */
+    public void changeToSaleForStop(Product product, Long operId);
 
     /**
      * 进行停用下架

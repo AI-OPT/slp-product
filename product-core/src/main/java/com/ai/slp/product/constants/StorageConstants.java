@@ -1,8 +1,5 @@
 package com.ai.slp.product.constants;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 库存和库存组的常量
  *
@@ -58,6 +55,8 @@ public final class StorageConstants {
     }
 
     public final class StorageGroup{
+
+        public static final String DEFAULT_NAME = "默认库存组";
         public final class State{
             /**
              * 启用

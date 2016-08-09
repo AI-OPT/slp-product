@@ -106,4 +106,18 @@ public interface IStorageGroupBusiSV {
      * @param groupId
      */
     public void cleanGroupCache(String tenantId,String groupId);
+
+    /**
+     * 库存组自动启用
+     * @param tenantId
+     * @param groupId
+     */
+    public boolean changeGroupAutoStart(String tenantId, String groupId);
+
+    /**
+     * 库存组自动停用
+     * @param tenantId
+     * @param groupId
+     */
+    public boolean changeGroupAutoStop(String tenantId, String groupId);
 }

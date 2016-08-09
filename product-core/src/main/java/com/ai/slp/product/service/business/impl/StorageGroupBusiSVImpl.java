@@ -311,8 +311,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		}
 		// 查看是否为废弃状态
 		if (StorageConstants.StorageGroup.State.DISCARD.equals(oldState)
-				|| StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(oldState))
-		{
+				|| StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(oldState)){
 			throw new BusinessException("", groupId + "库存组已废弃,不允许变更状态");
 		}
 		switch (state){
@@ -613,6 +612,77 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			cachekey = IPaasStorageUtils.genMcsSkuStorageUsableKey(tenantId,groupId,priority,prodSku.getSkuId());
 			cacheClient.expire(cachekey,0);
 		}
+	}
+
+	/**
+	 * 库存组自动启用
+	 *
+	 * @param tenantId
+	 * @param groupId
+	 */
+	@Override
+	public boolean changeGroupAutoStart(String tenantId, String groupId) {
+		//查询库存组是否存在
+		StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
+		//查询库存组是否废弃
+		if (group == null ){
+			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,group,group==null?null:group.getState());
+			throw new BusinessException("","库存组不存在");
+		}
+		//库存组状态若不是自动停用,则不进行处理
+		if (!StorageConstants.StorageGroup.State.AUTO_STOP.equals(group.getState())){
+			return false;
+		}
+		//自启用状态
+		group.setState(StorageConstants.StorageGroup.State.AUTO_ACTIVE);
+		// 添加日志
+		if (storageGroupAtomSV.updateById(group) > 0) {
+			StorageGroupLog groupLog = new StorageGroupLog();
+			BeanUtils.copyProperties(groupLog, group);
+			storageGroupLogAtomSV.install(groupLog);
+		}
+		return true;
+	}
+
+	/**
+	 * 库存组自动停用
+	 *
+	 * @param tenantId
+	 * @param groupId
+	 */
+	@Override
+	public boolean changeGroupAutoStop(String tenantId, String groupId) {
+		//查询库存组是否存在
+		StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
+		//查询库存组是否废弃
+		if (group == null ){
+			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,group,group==null?null:group.getState());
+			throw new BusinessException("","库存组不存在");
+		}
+		//库存组状态若不是启动状态,则不进行处理
+		if (!StorageConstants.StorageGroup.State.ACTIVE.equals(group.getState())
+				&& StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(group.getState())){
+			return false;
+		}
+		Product product = productAtomSV.queryProductByGroupId(tenantId,groupId);
+		//若对应商品为在售,则进行下架处理
+		if (product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState()))
+			productBusiSV.offSale(tenantId,product.getSupplierId(),product.getProdId(),null);
+		//自启用状态
+		group.setState(StorageConstants.StorageGroup.State.AUTO_STOP);
+		// 添加日志
+		if (storageGroupAtomSV.updateById(group) > 0) {
+			StorageGroupLog groupLog = new StorageGroupLog();
+			BeanUtils.copyProperties(groupLog, group);
+			storageGroupLogAtomSV.install(groupLog);
+		}
+		//将缓存中库存组状态改为停用
+		ICacheClient cacheClient = IPaasStorageUtils.getClient();
+		//获取库存组的cacheKey
+		String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
+		//设置库存组状态
+		cacheClient.hset(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE,group.getState());
+		return true;
 	}
 
 	/**

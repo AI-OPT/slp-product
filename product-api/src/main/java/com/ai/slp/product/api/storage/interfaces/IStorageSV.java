@@ -95,7 +95,7 @@ public interface IStorageSV {
      */
     @POST
     @Path("/chargeGroupStatus")
-    public BaseResponse chargeStorageGroupStatus(StorageGroupStatus groupStatus)
+    public BaseResponse chargeStorageGroupStatus(StoGroupStatus groupStatus)
             throws BusinessException,SystemException;
     @interface ChargeStorageGroupStatus{}
 
@@ -348,5 +348,24 @@ public interface IStorageSV {
     @Path("/updateSkuStoSalePrice")
     public BaseResponse updateSkuStorageSalePrice(StoSkuSalePrice salePrice)
             throws BusinessException,SystemException;
-    @interface updateSkuStorageSalePrice{}
+    @interface UpdateSkuStorageSalePrice{}
+
+    /**
+     * 更改标准品库存组自动状态<br>
+     * 包括自动启动,自动停用
+     *
+     * @param aStatus 要设置的库存组状态对象
+     * @return 添加结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_0118
+     * @RestRelativeURL storage/chargeGroupAutoStatus
+     */
+    @POST
+    @Path("/chargeGroupAutoStatus")
+    public BaseResponse chargeGroupStatusAuto(StoGroupAStatus aStatus)
+            throws BusinessException,SystemException;
+    @interface ChargeGroupStatusAuto{}
 }

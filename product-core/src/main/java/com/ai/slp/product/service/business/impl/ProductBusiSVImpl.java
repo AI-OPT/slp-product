@@ -486,7 +486,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         return prodInfoMap;
     }
 
-    private void changeToSaleForStop(Product product,Long operId){
+    @Override
+    public void changeToSaleForStop(Product product,Long operId){
         String tenantId = product.getTenantId();
         //若商品状态不是"停用下架",也不是"售罄下架",则不进行处理
         if(!ProductConstants.Product.State.STOP.equals(product.getState())

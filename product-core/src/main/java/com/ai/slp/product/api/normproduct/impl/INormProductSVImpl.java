@@ -8,6 +8,7 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
+import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonUtils;
@@ -78,7 +79,7 @@ public class INormProductSVImpl implements INormProductSV {
         storageGroup.setCreateId(request.getOperId());
         storageGroup.setStandedProdId(normProdId);
         storageGroup.setSupplierId(request.getSupplierId());
-        storageGroup.setStorageGroupName(request.getProductName());
+        storageGroup.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
         storageGroupBusiSV.addGroup(storageGroup);
         return CommonUtils.genSuccessResponse(normProdId);
     }
