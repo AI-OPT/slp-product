@@ -1,12 +1,7 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.product.param.OtherSetOfProduct;
-import com.ai.slp.product.api.product.param.ProductEditQueryReq;
-import com.ai.slp.product.api.product.param.ProductEditUp;
-import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
-import com.ai.slp.product.api.product.param.ProductStorageSale;
-import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.api.product.param.*;
 
 /**
  * 销售商品管理
@@ -23,10 +18,11 @@ public interface IProductManagerBsuiSV {
     /**
      * 查询商品的其他设置内容
      * @param tenantId
+     * @param supplierId
      * @param prodId
      * @return
      */
-    public OtherSetOfProduct queryOtherSetOfProd(String tenantId, String prodId);
+    public OtherSetOfProduct queryOtherSetOfProd(String tenantId,String supplierId, String prodId);
 
     /**
      * 更新产品编辑信息

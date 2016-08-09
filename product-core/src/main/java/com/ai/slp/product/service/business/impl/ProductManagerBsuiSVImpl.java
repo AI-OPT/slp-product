@@ -168,8 +168,8 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
      * @return
      */
     @Override
-    public OtherSetOfProduct queryOtherSetOfProd(String tenantId, String prodId) {
-        Product product = productAtomSV.selectByProductId(tenantId,prodId);
+    public OtherSetOfProduct queryOtherSetOfProd(String tenantId,String supplierId, String prodId) {
+        Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
         if (product==null){
             throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
                     "未查询到指定商品,租户ID:"+tenantId+",销售商品标示:"+prodId);

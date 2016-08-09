@@ -14,9 +14,6 @@ import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-
-import scala.remote;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -116,7 +113,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     }
 
     /**
-     * 查询单个商品的受众信息<br>
+     * 查询单个商品的其他设置信息<br>
      *
      * @param productInfoQuery 单个商品的标识信息
      * @return 单个商品的受众信息
@@ -126,8 +123,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public OtherSetOfProduct queryOtherSetOfProduct(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(productInfoQuery.getTenantId(),"");
-        return productManagerBsuiSV.queryOtherSetOfProd(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
+        CommonUtils.checkTenantId(productInfoQuery.getTenantId());
+        return productManagerBsuiSV.queryOtherSetOfProd(
+                productInfoQuery.getTenantId(),productInfoQuery.getSupplierId(),productInfoQuery.getProductId());
     }
 
     /**
