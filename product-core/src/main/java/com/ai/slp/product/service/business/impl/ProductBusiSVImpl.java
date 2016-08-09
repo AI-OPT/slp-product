@@ -609,8 +609,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
 	@Override
-	public void changeToInStore(String tenantId, String prodId, Long operId) {
-		Product product = productAtomSV.selectByProductId(tenantId,prodId);
+	public void changeToInStore(String tenantId,String supplierId, String prodId, Long operId) {
+		Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
         if (prodId != null){
 	        //若商品状态是"销售中"
 	        if (ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
@@ -631,7 +631,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         	throw new SystemException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
 		}
 	}
-    private void updateProdAndStatusLog(Product product){
+
+    public void updateProdAndStatusLog(Product product){
         if (productAtomSV.updateById(product)>0){
             ProductLog log = new ProductLog();
             BeanUtils.copyProperties(log,product);

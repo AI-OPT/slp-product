@@ -93,7 +93,7 @@ public class IProductSVImpl implements IProductSV {
     @Override
     public SkuSetForProduct querySkuSetForProduct(ProductInfoQuery query)
             throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(query.getTenantId(),"");
+        CommonUtils.checkTenantId(query.getTenantId());
         return prodSkuBusiSV.querySkuByProdId(query.getTenantId(),query.getSupplierId(),query.getProductId());
     }
 

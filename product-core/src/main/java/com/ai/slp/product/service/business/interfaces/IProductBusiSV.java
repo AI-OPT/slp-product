@@ -101,7 +101,7 @@ public interface IProductBusiSV {
      * @param tenantId
      * @param prodId
      */
-    public void changeToInStore(String tenantId, String prodId, Long operId);
+    public void changeToInStore(String tenantId, String supplierId,String prodId, Long operId);
     
     /**
      * 查询管理界面中的非关键属性
@@ -118,4 +118,10 @@ public interface IProductBusiSV {
      * @return
      */
     public ProductInfo queryByProdId(String tenantId,String supplierId, String productId);
+
+    /**
+     * 更新商品日志和状态日志
+     * @param product
+     */
+    public void updateProdAndStatusLog(Product product);
 }
