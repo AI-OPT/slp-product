@@ -75,9 +75,7 @@ public class IProductSVImpl implements IProductSV {
             throws BusinessException, SystemException {
         CommonUtils.checkTenantId(saveInfo.getTenantId());
         prodSkuBusiSV.updateSkuOfProduct(saveInfo);
-        BaseResponse baseResponse = new BaseResponse();
-        CommonUtils.addSuccessResHeader(baseResponse,"");
-        return baseResponse;
+        return CommonUtils.genSuccessResponse("");
     }
 
     /**
