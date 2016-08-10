@@ -3,37 +3,43 @@ package com.ai.slp.product.api.product.param;
 import java.io.Serializable;
 
 /**
- * 查询地域的出参
- * 商品目标地域<br>
+ * 地域信息
+ * @author jiawen 
  *
- * @author jiawen
  */
-public class TargetArea implements Serializable {
-    private static final long serialVersionUID = 1L;
-    /**
-     * 租户标识
-     */
+
+public class TargetArea implements Serializable{
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 商品目标地域ID
+	 */
+	private Long targetAreaId;
+	/**
+	 * 租户ID
+	 */
     private String tenantId;
     /**
      * 商品标识
      */
     private String prodId;
     /**
-     * 商品目标地域标识
+     * 目标省
      */
-    private Long targetAreaId;
+    private Integer provCode;
     /**
-     * 省份编码
-     */
-    private String provinceCode;
-    /**
-     *市编码 
+     * 目标市
      */
     private Integer cityCode;
     /**
-     * 县编码
+     * 目标县
      */
     private Integer countyCode;
+	public Long getTargetAreaId() {
+		return targetAreaId;
+	}
+	public void setTargetAreaId(Long targetAreaId) {
+		this.targetAreaId = targetAreaId;
+	}
 	public String getTenantId() {
 		return tenantId;
 	}
@@ -46,17 +52,11 @@ public class TargetArea implements Serializable {
 	public void setProdId(String prodId) {
 		this.prodId = prodId;
 	}
-	public Long getTargetAreaId() {
-		return targetAreaId;
+	public Integer getProvCode() {
+		return provCode;
 	}
-	public void setTargetAreaId(Long targetAreaId) {
-		this.targetAreaId = targetAreaId;
-	}
-	public String getProvinceCode() {
-		return provinceCode;
-	}
-	public void setProvinceCode(String provinceCode) {
-		this.provinceCode = provinceCode;
+	public void setProvCode(Integer provCode) {
+		this.provCode = provCode;
 	}
 	public Integer getCityCode() {
 		return cityCode;
@@ -70,4 +70,5 @@ public class TargetArea implements Serializable {
 	public void setCountyCode(Integer countyCode) {
 		this.countyCode = countyCode;
 	}
+	
 }
