@@ -89,7 +89,6 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     @Override
     public PageInfoResponse<ProductEditUp> queryPageForEdit(ProductEditQueryReq queryReq) {
         String tenantId = queryReq.getTenantId();
-        String prodId = queryReq.getProdId();
         //查询所有符合条件商品
         PageInfo<Product> productPage = productAtomSV.selectPageForEdit(queryReq);
         List<ProductEditUp> editUpList = new ArrayList<>();
@@ -107,11 +106,6 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                 productEditUp.setVfsId(prodPicture.getVfsId());
                 productEditUp.setPicType(prodPicture.getPicType());
             }
-            //查询商品受众
-            List<String> userTypes = productAtomSV.selectUserTypeByProductId(tenantId, prodId);
-            if (userTypes!=null)
-            	productEditUp.setUserTypes(userTypes);
-            editUpList.add(productEditUp);
         }
         
         PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();
@@ -294,6 +288,8 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
      */
     private List<ProdTargetAreaInfo> getTargetOfProd(String tenantId,String prodId){
         List<ProdTargetAreaInfo> areaInfoList = new ArrayList<>();
+        
+        
         //查询所有省份信息
         IGnAreaQuerySV gnAreaQuerySV = DubboConsumerFactory.getService("iGnAreaQuerySV");
         List<GnAreaVo> provAreaList = gnAreaQuerySV.getProvinceList();
@@ -518,4 +514,20 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         response.setResult(prodStorList);
         return response;
 	}
+	
+	/**
+	 *查询商品目标地域 
+	 */
+	public List<TargetArea> searchProdTargetArea(String tenantId,String prodId){
+		//查询目标地域
+		List<ProdTargetArea> targetAreaList = prodTargetAreaAtomSV.searchProdTargetArea(tenantId, prodId);
+		ArrayList<TargetArea> areaList = new ArrayList<>();
+		for (ProdTargetArea prodTargetArea : targetAreaList) {
+			TargetArea targetArea = new TargetArea();
+			BeanUtils.copyProperties(targetArea, prodTargetArea);
+			areaList.add(targetArea);
+		}
+		return areaList;
+    }
+	
 }

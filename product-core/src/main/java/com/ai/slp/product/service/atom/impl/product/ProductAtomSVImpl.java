@@ -185,31 +185,4 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 
 		return pageQuery(example, pageNo, pageSize);
 	}
-	/**
-	 * 查询指定商品的受众
-	 *
-	 * @param tenantId
-	 * @param prodId
-	 * @return
-	 */
-	@Override
-	public List<String> selectUserTypeByProductId(String tenantId, String prodId) {
-		ProdAudiencesCriteria example = new ProdAudiencesCriteria();
-		example.createCriteria().andTenantIdEqualTo(tenantId).andProdIdEqualTo(prodId);
-		List<ProdAudiences> prodAudiences = prodAudiencesMapper.selectByExample(example);
-		ArrayList<String> userTypeList = new ArrayList<>();
-		if (prodAudiences!=null)
-			prodAudiences = null;
-		
-		for (int i = 0; i < prodAudiences.size(); i++) {
-			if (prodAudiences.get(i).getTenantId().equals(tenantId)) {
-				//获取受众
-				String userType = prodAudiences.get(i).getUserType();
-				userTypeList.add(userType);
-			}else {
-				prodAudiences = null;
-			}
-		}
-		return userTypeList;
-	}
 }

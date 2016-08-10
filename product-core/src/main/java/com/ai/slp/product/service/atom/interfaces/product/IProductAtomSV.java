@@ -83,12 +83,4 @@ public interface IProductAtomSV {
      * @return
      */
     public PageInfo<Product> selectStorProdByState(ProductStorageSaleParam productStorageSaleParam);
-    /**
-     * 查询指定商品的受众
-     *
-     * @param tenantId
-     * @param prodId
-     * @return
-     */
-    public List<String> selectUserTypeByProductId(String tenantId,String prodId);
 }

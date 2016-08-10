@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetAreaCriteria;
@@ -67,5 +68,25 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
         targetArea.setTargetAreaId(SequenceUtil.genProdTargetAreaId());
         targetArea.setOperTime(DateUtils.currTimeStamp());
         return areaMapper.insert(targetArea);
+    }
+    
+    /**
+     * 根据商品ID
+     *查询商品目标地域
+     * 
+     */
+    @Override
+    public List<ProdTargetArea> searchProdTargetArea(String tenantId, String prodId) {
+    	//根据商品ID查询目标的地域编码
+    	ProdTargetAreaCriteria example = new ProdTargetAreaCriteria();
+    	example.createCriteria().andTenantIdEqualTo(tenantId)
+        .andProdIdEqualTo(prodId)
+        .andStateEqualTo(CommonConstants.STATE_ACTIVE);
+    	List<ProdTargetArea> prodTargetAreaList = areaMapper.selectByExample(example);
+        //若省份,城市,区县编码均为空,则直接返回空
+        if (prodTargetAreaList==null && StringUtils.isBlank(prodId)){
+            return Collections.emptyList();
+        }
+        return prodTargetAreaList;
     }
 }
