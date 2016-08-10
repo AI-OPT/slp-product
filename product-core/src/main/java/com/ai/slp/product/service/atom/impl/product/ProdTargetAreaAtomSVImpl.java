@@ -1,10 +1,15 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetAreaCriteria;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdTargetAreaMapper;
+import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProdTargetAreaAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
@@ -22,6 +27,7 @@ import java.util.List;
 public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
     @Autowired
     ProdTargetAreaMapper areaMapper;
+    ProductMapper productMapper;
     /**
      * 根据地域编码查询目标地域信息
      *
@@ -85,8 +91,44 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
     	List<ProdTargetArea> prodTargetAreaList = areaMapper.selectByExample(example);
         //若省份,城市,区县编码均为空,则直接返回空
         if (prodTargetAreaList==null && StringUtils.isBlank(prodId)){
-            return Collections.emptyList();
+        	return Collections.emptyList();
         }
         return prodTargetAreaList;
     }
+    
+    /**
+     * 根据商品ID查询符合条件的商品的集合(配合查询目标地域使用)
+     */
+    @Override
+	public PageInfo<Product> searchProd(ProductEditQueryReq productEditParam) {
+    	//根据商品ID查询符合条件的商品
+    	ProductCriteria prodExample = new ProductCriteria();
+    	prodExample.setOrderByClause("OPER_TIME desc");//操作时间倒序
+		ProductCriteria.Criteria criteria = prodExample.createCriteria();
+		if (StringUtils.isNotBlank(productEditParam.getProdId()))
+			criteria.andProdIdLike("%"+productEditParam.getProdId()+"%");
+		int pageNo = productEditParam.getPageNo();
+        int pageSize = productEditParam.getPageSize();
+        //符合条件的商品集合
+		return pageQuery(prodExample, pageNo, pageSize);
+	}
+    
+    private PageInfo<Product> pageQuery(ProductCriteria example, int pageNo, int pageSize) {
+		PageInfo<Product> pageInfo = new PageInfo<>();
+		// 设置总数
+		int count = productMapper.countByExample(example);
+		pageInfo.setCount(count);
+		//设置分页查询条件
+		example.setLimitStart((pageNo-1)*pageSize);
+		example.setLimitEnd(pageSize);
+		//设置页数和每页条数
+		pageInfo.setPageNo(pageNo);
+		pageInfo.setPageSize(pageSize);
+		//设置结果集
+		pageInfo.setResult(productMapper.selectByExample(example));
+		//设置总页数
+		int pageCount = count/pageSize+(count%pageSize>0 ? 1 : 0);
+		pageInfo.setPageCount(pageCount);
+		return pageInfo;
+	}
 }

@@ -116,7 +116,7 @@ public interface IProductSV {
     @interface QueryNoKeyAttrInfo{}
     
     /**
-     * 根据商品ID查询商品目标地域
+     * 根据商品ID查询满足条件的商品目标地域集合
      * @param productInfoQuery 商品标识信息
      * @return 商品目标地域对象
      * @throws BusinessException
@@ -128,7 +128,7 @@ public interface IProductSV {
      */
     @POST
     @Path("/searchProdTargetArea")
-    public List<TargetArea> searchProdTargetArea(ProductInfoQuery productInfoQuery)
+    public PageInfoResponse<TargetAreaForProd> searchProdTargetArea(ProductEditQueryReq productEditParam)
             throws BusinessException,SystemException;
         @interface SearchProdTargetArea{}
 }
