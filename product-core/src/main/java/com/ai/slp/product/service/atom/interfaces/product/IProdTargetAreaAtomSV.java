@@ -1,7 +1,11 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.TargetAreaForProd;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 
 import java.util.List;
 
@@ -46,5 +50,13 @@ public interface IProdTargetAreaAtomSV {
      * @param hasDiscard
      * @return
      */
-	public List<ProdTargetArea> searchProdTargetArea(String tenantId,String prodId);
+	public List<ProdTargetArea> searchProdTargetArea(String tenantId, String prodId);
+	
+	/**
+	 * 根据商品ID查询符合条件的商品的集合(配合查询目标地域使用)
+	 * 
+	 */
+	public PageInfo<Product> searchProd(ProductEditQueryReq productEditParam);
+
+	
 }

@@ -518,16 +518,45 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
 	/**
 	 *查询商品目标地域 
 	 */
-	public List<TargetArea> searchProdTargetArea(String tenantId,String prodId){
-		//查询目标地域
-		List<ProdTargetArea> targetAreaList = prodTargetAreaAtomSV.searchProdTargetArea(tenantId, prodId);
-		ArrayList<TargetArea> areaList = new ArrayList<>();
-		for (ProdTargetArea prodTargetArea : targetAreaList) {
-			TargetArea targetArea = new TargetArea();
-			BeanUtils.copyProperties(targetArea, prodTargetArea);
-			areaList.add(targetArea);
-		}
-		return areaList;
+	public PageInfoResponse<TargetAreaForProd> searchProdTargetArea(ProductEditQueryReq productEditParam){
+		String tenantId = productEditParam.getTenantId();
+		//查询所有符合条件商品
+        PageInfo<Product> productPage = productAtomSV.selectPageForEdit(productEditParam);
+        List<TargetAreaForProd> targetAreaList = new ArrayList<>();
+        for (Product product:productPage.getResult()){
+            TargetAreaForProd targetAreaForProd = new TargetAreaForProd();
+            BeanUtils.copyProperties(targetAreaForProd,product);
+            //设置类目名称
+            ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
+            if (cat!=null)
+            	targetAreaForProd.setProductCatName(cat.getProductCatName());
+            //查询主预览图
+            ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
+            if (prodPicture!=null){
+            	targetAreaForProd.setProPictureId(prodPicture.getProPictureId());
+            	targetAreaForProd.setVfsId(prodPicture.getVfsId());
+            	targetAreaForProd.setPicType(prodPicture.getPicType());
+            }
+            
+            //查询目标地域
+            String productId = product.getProdId();
+            String tenant = product.getTenantId();
+            //查询目标地域
+    		List<ProdTargetArea> prodTargetAreaList = prodTargetAreaAtomSV.searchProdTargetArea(tenant, productId);
+    		if (prodTargetAreaList!=null) {
+    			ArrayList<TargetArea> areaList = new ArrayList<>();
+    			for (ProdTargetArea prodTargetArea : prodTargetAreaList) {
+    				TargetArea targetArea = new TargetArea();
+    				BeanUtils.copyProperties(targetArea, prodTargetArea);
+    				areaList.add(targetArea);
+				}
+    			targetAreaForProd.setTargetArea(areaList);
+			}
+        }
+        PageInfoResponse<TargetAreaForProd> response = new PageInfoResponse<>();
+        BeanUtils.copyProperties(response,productPage);
+        response.setResult(targetAreaList);
+        return response;
     }
 	
 }

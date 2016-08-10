@@ -131,10 +131,13 @@ public class IProductSVImpl implements IProductSV {
      * @RestRelativeURL 
      */
 	@Override
-	public List<TargetArea> searchProdTargetArea(ProductInfoQuery productInfoQuery)
+	public PageInfoResponse<TargetAreaForProd> searchProdTargetArea(ProductEditQueryReq productEditParam)
 			throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(productInfoQuery.getTenantId(),"");
-		List<TargetArea> prodTargetAreaLit = productManagerBsuiSV.searchProdTargetArea(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
-		return prodTargetAreaLit;
+		CommonUtils.checkTenantId(productEditParam.getTenantId(),"");
+		CommonUtils.checkSupplierId(productEditParam.getSupplierId(),"");
+		productManagerBsuiSV.searchProdTargetArea(productEditParam);
+		
+		
+		return null;
 	}
 }

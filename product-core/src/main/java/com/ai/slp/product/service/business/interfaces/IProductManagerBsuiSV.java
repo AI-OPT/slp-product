@@ -10,7 +10,7 @@ import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
 import com.ai.slp.product.api.product.param.ProductStorageSale;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
-import com.ai.slp.product.api.product.param.TargetArea;
+import com.ai.slp.product.api.product.param.TargetAreaForProd;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.api.product.param.*;
 
@@ -59,5 +59,5 @@ public interface IProductManagerBsuiSV {
      * 查收商品的目标地域
      * @return
      */
-	public List<TargetArea> searchProdTargetArea(String tenantId,String prodId);
+	public PageInfoResponse<TargetAreaForProd> searchProdTargetArea(ProductEditQueryReq productEditParam);
 }
