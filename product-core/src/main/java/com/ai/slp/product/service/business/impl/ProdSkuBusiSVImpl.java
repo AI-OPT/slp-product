@@ -85,6 +85,37 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     INormProductBusiSV normProductBusiSV;
     @Autowired
     IProdAttrValDefAtomSV attrValDefAtomSV;
+
+    /**
+     * 产生库存组对应商品的SKU
+     * 完全使用配置到标准品的销售属性
+     *
+     * @param group
+     */
+    @Override
+    public void createSkuOfProduct(StorageGroup group) {
+        if (group==null){
+            logger.warn("库存组不能为空");
+            throw new BusinessException("","库存组不能为空");
+        }
+        String tenantId = group.getTenantId();
+        //只有在库存组停用时,才允许变更SKU.
+        if (!StorageConstants.StorageGroup.State.STOP.equals(group.getState())){
+            logger.warn("库存组不是停用状态,不允许更新SKU信息,租户ID:{},库存组标识:{}.",tenantId, group.getStorageGroupId());
+            throw new BusinessException("","库存组不是停用状态,不允许更新SKU信息");
+        }
+        //查询商品信息
+        Product product = productAtomSV.queryProductByGroupId(tenantId,group.getStorageGroupId());
+        //查询类目下指定类型的属性信息
+        List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
+                tenantId,product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+        //参数属性值的所有SKU组合
+        Set<String> skuSaleAttrs = new HashSet<>();//新SKU属性串集合
+        //获取标准品下的销售属性
+
+//        genSkuSalAttr(attrAndValMap,"",0,skuSaleAttrs,catAttrList);
+    }
+
     /**
      * 更新商品SKU信息
      *
@@ -111,6 +142,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         }
         //查询商品的销售属性集合,序号正序
         Map<Long, List<String>> attrAndValMap = saveInfo.getAttrAndValIdMap();
+        //查询类目下指定类型的属性信息
         List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
                 tenantId,product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
         if (attrAndValMap.size()!=catAttrList.size())
@@ -293,7 +325,6 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
      */
     private void genSkuSalAttr(Map<Long, List<String>> attrAndValMap,
                                String skuInfo,int attrIndex,Set<String> skuSalInfo,List<ProdCatAttr> catAttrList){
-
         if (attrIndex == catAttrList.size()){
             skuSalInfo.add(skuInfo);
             return;
@@ -308,6 +339,10 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
             String skuAttrVal = newSkuAttr+val;
             genSkuSalAttr(attrAndValMap,skuAttrVal,attrIndex+1,skuSalInfo,catAttrList);
         }
+    }
+
+    private void genSkuSal(){
+
     }
 
     /**
@@ -517,7 +552,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
     }
 
     /**
-     * 获取关键属性的属性信息
+     * 获取非关键属性的属性信息
      * @param attrMap
      * @return
      */

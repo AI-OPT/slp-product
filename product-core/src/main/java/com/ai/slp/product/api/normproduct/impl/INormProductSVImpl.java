@@ -80,7 +80,9 @@ public class INormProductSVImpl implements INormProductSV {
         storageGroup.setStandedProdId(normProdId);
         storageGroup.setSupplierId(request.getSupplierId());
         storageGroup.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
-        storageGroupBusiSV.addGroup(storageGroup);
+        String groupId = storageGroupBusiSV.addGroup(storageGroup);
+        //添加SKU
+
         return CommonUtils.genSuccessResponse(normProdId);
     }
 

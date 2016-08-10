@@ -4,12 +4,21 @@ import com.ai.slp.product.api.product.param.SkuInfoMultSave;
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
 import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 /**
  * 商品SKU业务操作
  * Created by jackieliu on 16/5/12.
  */
 public interface IProdSkuBusiSV {
+
+    /**
+     * 产生库存组对应商品的SKU
+     * 完全使用配置到标准品的销售属性
+     *
+     * @param group
+     */
+    public void createSkuOfProduct(StorageGroup group);
 
     /**
      * 更新商品SKU信息

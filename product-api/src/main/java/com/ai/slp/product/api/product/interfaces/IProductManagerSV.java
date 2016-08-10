@@ -36,7 +36,7 @@ public interface IProductManagerSV {
      * @throws SystemException
      * @author lipeng16
      * @RestRelativeURL productManager/stateSearch
-    *  @ApiCode PROMAN_0100
+     * @ApiCode PROMAN_0100
      */
 	@POST
 	@Path("/stateSearch")

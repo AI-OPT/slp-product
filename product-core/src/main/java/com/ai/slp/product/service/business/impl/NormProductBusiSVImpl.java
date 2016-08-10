@@ -13,6 +13,8 @@ import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.StandedProdPageQueryVo;
 import org.apache.commons.lang.StringUtils;
@@ -37,52 +39,45 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
     @Autowired
     IStandedProductAtomSV standedProductAtomSV;
-
     @Autowired
     IStandedProductLogAtomSV standedProductLogAtomSV;
-
     @Autowired
     IStandedProdAttrAtomSV standedProdAttrAtomSV;
-
     @Autowired
     IStandedProdAttrLogAtomSV standedProdAttrLogAtomSV;
-
     @Autowired
     IStorageGroupAtomSV storageGroupAtomSV;
-
     @Autowired
     IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
-
     @Autowired
     IProdCatAttrAtomSV prodCatAttrAtomSV;
-
     @Autowired
     IProdCatAttrValAtomSV prodCatAttrValAtomSV;
-
     @Autowired
     IProdAttrValDefAtomSV attrValDefAtomSV;
-
     @Autowired
     IProdCatDefAtomSV catDefAtomSV;
-
     @Autowired
     IProdPriceLogAtomSV prodPriceLogAtomSV;
-    
     @Autowired
     IProductAtomSV productAtomSV;
+    @Autowired
+    IStorageGroupBusiSV groupBusiSV;
+    @Autowired
+    IProdSkuBusiSV prodSkuBusiSV;
 
     /**
      * 添加标准品
      *
-     * @param normProdct
+     * @param normProduct
      * @return 添加成功后的标准品的标识
      */
     @Override
-    public String installNormProd(NormProdSaveRequest normProdct) {
+    public String installNormProd(NormProdSaveRequest normProduct) {
         // 添加标准品
         StandedProduct standedProduct = new StandedProduct();
-        BeanUtils.copyProperties(standedProduct, normProdct);
-        standedProduct.setStandedProductName(normProdct.getProductName());
+        BeanUtils.copyProperties(standedProduct, normProduct);
+        standedProduct.setStandedProductName(normProduct.getProductName());
         // 添加成功,添加标准品日志
         if (standedProductAtomSV.installObj(standedProduct) > 0) {
             StandedProductLog productLog = new StandedProductLog();
@@ -90,17 +85,17 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             standedProductLogAtomSV.insert(productLog);
         }
         // 添加标准品属性值
-        List<AttrValRequest> attrValList = normProdct.getAttrValList();
+        List<AttrValRequest> attrValList = normProduct.getAttrValList();
         Timestamp nowTime = DateUtils.currTimeStamp();
         for (AttrValRequest attrValReq : attrValList) {
             StandedProdAttr prodAttr = new StandedProdAttr();
             BeanUtils.copyProperties(prodAttr, attrValReq);
-            prodAttr.setTenantId(normProdct.getTenantId());
+            prodAttr.setTenantId(normProduct.getTenantId());
             prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
             prodAttr.setAttrValueName(attrValReq.getAttrVal());
             prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
             prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
-            prodAttr.setOperId(normProdct.getOperId());
+            prodAttr.setOperId(normProduct.getOperId());
             prodAttr.setOperTime(nowTime);
             // 添加成功,添加日志
             if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
@@ -109,15 +104,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
                 standedProdAttrLogAtomSV.installObj(prodAttrLog);
             }
         }
-        //添加库存组
-        //自动添加一个库存组
-//        STOStorageGroup storageGroup = new STOStorageGroup();
-//        storageGroup.setTenantId(normProdct.getTenantId());
-//        storageGroup.setCreateId(normProdct.getOperId());
-//        storageGroup.setStandedProdId(normProdId);
-//        storageGroup.setSupplierId(request.getSupplierId());
-//        storageGroup.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
-//        storageGroupBusiSV.addGroup(storageGroup);
         return standedProduct.getStandedProdId();
     }
 
