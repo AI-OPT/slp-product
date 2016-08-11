@@ -552,6 +552,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
 				}
     			targetAreaForProd.setTargetArea(areaList);
 			}
+    		targetAreaList.add(targetAreaForProd);
         }
         PageInfoResponse<TargetAreaForProd> response = new PageInfoResponse<>();
         BeanUtils.copyProperties(response,productPage);

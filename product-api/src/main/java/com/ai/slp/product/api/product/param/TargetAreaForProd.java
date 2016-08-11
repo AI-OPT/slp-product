@@ -11,7 +11,7 @@ import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 /**
  * 查询地域信息的商品的出参
  * 商品目标地域<br>
- *
+ * Date: 2016年8月9日 <br>
  * @author jiawen
  */
 public class TargetAreaForProd implements Serializable {

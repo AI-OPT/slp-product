@@ -135,9 +135,7 @@ public class IProductSVImpl implements IProductSV {
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(productEditParam.getTenantId(),"");
 		CommonUtils.checkSupplierId(productEditParam.getSupplierId(),"");
-		productManagerBsuiSV.searchProdTargetArea(productEditParam);
 		
-		
-		return null;
+		return productManagerBsuiSV.searchProdTargetArea(productEditParam);
 	}
 }
