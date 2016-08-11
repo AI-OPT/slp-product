@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 地域信息
+ * Date: 2016年8月9日 <br>
  * @author jiawen 
  *
  */
