@@ -1,9 +1,14 @@
 package com.ai.slp.product.api.product;
 
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductInfo;
 import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.TargetAreaForProd;
 import com.ai.slp.product.constants.CommonTestConstants;
+import com.google.gson.Gson;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,4 +32,20 @@ public class IProductSVTest {
         ProductInfo productInfo = productSV.queryProductById(infoQuery);
         System.out.println(productInfo.getState());
     }
+    
+    /**
+     * 查询含有地域信息的商品集合
+     * 
+     */
+    @Test
+    public void searchProdTargetAreaTest(){
+    	ProductEditQueryReq queryReq = new ProductEditQueryReq();
+    	queryReq.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+    	queryReq.setSupplierId("-1");//设置商户ID
+    	queryReq.setProdId("1000000000000022");//不完整ID
+    	PageInfoResponse<TargetAreaForProd> searchProdTargetArea = productSV.searchProdTargetArea(queryReq);
+    	Gson gson = new Gson();
+    	System.out.println(gson.toJson(searchProdTargetArea.getResult().get(0)));
+    }
+    
 }
