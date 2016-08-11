@@ -41,7 +41,7 @@ public class IProductManagerBusiSVTest {
     @Test
     public void queryOtherSetOfProdTest(){
         OtherSetOfProduct otherSet = productManagerBsuiSV.queryOtherSetOfProd(
-                CommonTestConstants.COMMON_TENANT_ID,"3");
+                CommonTestConstants.COMMON_TENANT_ID,"-1","3");
         if (otherSet!=null && otherSet.getPersonAudiences()!=null){
             System.out.println(otherSet.getPersonAudiences().getUserId());
         }

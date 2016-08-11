@@ -40,12 +40,9 @@ public class IProductCatSVImpl implements IProductCatSV {
      */
     @Override
     public PageInfoResponse<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(pageQuery.getTenantId(),"");
+        CommonUtils.checkTenantId(pageQuery.getTenantId());
         PageInfoResponse<ProductCatInfo> catInfoPageInfoWrapper = productCatBusiSV.queryProductCat(pageQuery);
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        catInfoPageInfoWrapper.setResponseHeader(responseHeader);
+        CommonUtils.addSuccessResHeader(catInfoPageInfoWrapper,"");
         return catInfoPageInfoWrapper;
     }
 
