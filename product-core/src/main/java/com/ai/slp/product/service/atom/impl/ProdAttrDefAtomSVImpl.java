@@ -1,5 +1,11 @@
 package com.ai.slp.product.service.atom.impl;
 
+import java.util.List;
+
+import com.ai.slp.product.util.SequenceUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
@@ -64,9 +70,11 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         request.andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId());
         if(attrAndValPageQueryVo.getAttrId() != null)
             request.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId());
-        if(attrAndValPageQueryVo.getAttrName() != null)
+
+        if(StringUtils.isNoneBlank(attrAndValPageQueryVo.getAttrName()))
             request.andAttrNameEqualTo(attrAndValPageQueryVo.getAttrName());
-        if(attrAndValPageQueryVo.getValueWay() != null)
+
+        if(StringUtils.isNotBlank(attrAndValPageQueryVo.getValueWay()))
             request.andValueWayEqualTo(attrAndValPageQueryVo.getValueWay());
         //设置数据的查询状态为有效状态
         request.andStateEqualTo(CommonConstants.STATE_ACTIVE);
