@@ -4,6 +4,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
@@ -71,11 +72,22 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
 
     @Override
     public void addCatList(List<ProductCatParam> pcpList) {
-        if (pcpList==null || pcpList.isEmpty())
+        if (CollectionUtil.isEmpty(pcpList))
             return;
         for(ProductCatParam catParam:pcpList){
             ProductCat productCat = new ProductCat();
             BeanUtils.copyProperties(productCat,catParam);
+            Short catLeve = new Short("1");
+            //上级类目不为空,且不为0
+            if (StringUtils.isNotBlank(catParam.getParentProductCatId())
+                    && !ProductCatConstants.ProductCat.ParentProductCatId.ROOT_CAT.equals(
+                    catParam.getParentProductCatId())){
+                ProductCat parentCat = prodCatDefAtomSV.selectById(
+                        catParam.getTenantId(),catParam.getParentProductCatId());
+                if (parentCat!=null)
+                    catLeve = (short) (parentCat.getCatLevel()+1);
+            }
+            productCat.setCatLevel(catLeve);
             prodCatDefAtomSV.insertProductCat(productCat);
         }
     }
