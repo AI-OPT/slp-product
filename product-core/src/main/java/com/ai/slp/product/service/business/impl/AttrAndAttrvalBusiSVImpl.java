@@ -5,6 +5,7 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.productcat.param.*;
+import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
@@ -97,6 +98,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         for (AttrParam attrParam : attrParamList) {
             ProdAttrDef prodAttrDef = new ProdAttrDef();
             BeanUtils.copyProperties(prodAttrDef, attrParam);
+            prodAttrDef.setState(ProductConstants.ProdAttr.State.ACTIVE);
             if (attrParam.getFirstLetter() != null)
                 prodAttrDef.setFirstLetter(attrParam.getFirstLetter());
             int ok = prodAttrDefAtomSV.installObj(prodAttrDef);
