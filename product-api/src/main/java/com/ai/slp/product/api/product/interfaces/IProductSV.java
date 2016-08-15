@@ -6,8 +6,6 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -117,7 +115,7 @@ public interface IProductSV {
     
     /**
      * 根据商品ID查询满足条件的商品目标地域集合
-     * @param productInfoQuery 商品标识信息
+     * @param productEditParam 商品标识信息
      * @return 商品目标地域对象
      * @throws BusinessException
      * @throws SystemException
