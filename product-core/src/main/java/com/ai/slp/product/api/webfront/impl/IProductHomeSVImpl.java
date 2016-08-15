@@ -16,7 +16,7 @@ import com.ai.slp.product.search.dto.UserSearchAuthority;
 import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
-import com.ai.slp.product.util.CommonCheckUtils;
+import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.util.ConvertImageUtil;
 import com.ai.slp.product.util.ValidateUtil;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -129,7 +129,7 @@ public class IProductHomeSVImpl implements IProductHomeSV {
      */
     @Override
     public FastProductInfoRes queryFastProduct(FastProductReq request) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(request.getTenantId(),"");
+        CommonUtils.checkTenantId(request.getTenantId(),"");
         return productBusiSV.queryFastInfoList(request);
     }
 }

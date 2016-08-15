@@ -9,7 +9,7 @@ import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.util.CommonCheckUtils;
+import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,7 +39,7 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery) throws BusinessException, SystemException {
-    	CommonCheckUtils.checkTenantId(productQuery.getTenantId(),"");
+    	CommonUtils.checkTenantId(productQuery.getTenantId(),"");
         return productBusiSV.queryProductPage(productQuery);
     }
 
@@ -55,7 +55,7 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public ProductInfo queryProductById(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(productInfoQuery.getTenantId(),"");
+        CommonUtils.checkTenantId(productInfoQuery.getTenantId(),"");
         return productBusiSV.queryByProdId(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
     }
 
@@ -86,7 +86,7 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public BaseResponse saveMultSKUInfo(SkuInfoMultSave saveInfo) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(saveInfo.getTenantId(),"");
+        CommonUtils.checkTenantId(saveInfo.getTenantId(),"");
         prodSkuBusiSV.updateSkuOfProduct(saveInfo);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
@@ -106,7 +106,7 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public SkuSetForProduct querySkuSetForProduct(ProductInfoQuery query) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(query.getTenantId(),"");
+        CommonUtils.checkTenantId(query.getTenantId(),"");
         return prodSkuBusiSV.querySkuByProdId(query.getTenantId(),query.getProductId());
     }
 
@@ -122,7 +122,7 @@ public class IProductSVImpl implements IProductSV {
      */
     @Override
     public ProdAttrMap queryNoKeyAttrInfo(ProductInfoQuery queryInfo) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(queryInfo.getTenantId(),"");
+        CommonUtils.checkTenantId(queryInfo.getTenantId(),"");
         return productBusiSV.queryNoKeyAttrOfProduct(queryInfo.getTenantId(),queryInfo.getProductId());
     }
 }

@@ -7,9 +7,8 @@ import com.ai.slp.product.api.webfront.interfaces.IProductDetailSV;
 import com.ai.slp.product.api.webfront.param.*;
 import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
-import com.ai.slp.product.util.CommonCheckUtils;
+import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +29,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 	@Override
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest skuReq) throws BusinessException, SystemException {
 		logger.info("---= queryProducSKUById start time:"+System.currentTimeMillis());
-		CommonCheckUtils.checkTenantId(skuReq.getTenantId(),"");
+		CommonUtils.checkTenantId(skuReq.getTenantId(),"");
 		if (StringUtils.isBlank(skuReq.getSkuId())
 				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
@@ -51,7 +50,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 	@Override
 	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest skuReq)
 			throws BusinessException, SystemException {
-		CommonCheckUtils.checkTenantId(skuReq.getTenantId(),"");
+		CommonUtils.checkTenantId(skuReq.getTenantId(),"");
 		if (StringUtils.isBlank(skuReq.getSkuId())
 				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");

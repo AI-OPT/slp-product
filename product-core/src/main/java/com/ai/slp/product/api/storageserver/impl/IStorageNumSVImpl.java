@@ -12,7 +12,7 @@ import com.ai.slp.product.api.storageserver.param.StorageNumUseReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumUserReq;
 import com.ai.slp.product.service.business.interfaces.IProdSaleAllBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
-import com.ai.slp.product.util.CommonCheckUtils;
+import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,7 +40,7 @@ public class IStorageNumSVImpl implements IStorageNumSV {
     @Override
     @Deprecated
     public StorageNumRes useStorageNum(StorageNumUserReq numReq) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
+        CommonUtils.checkTenantId(numReq.getTenantId(),"");
         StorageNumRes numRes = storageNumBusiSV.userStorageNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum());
         numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
         return numRes;
@@ -58,7 +58,7 @@ public class IStorageNumSVImpl implements IStorageNumSV {
      */
     @Override
     public BaseResponse backStorageNum(StorageNumBackReq backReq) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(backReq.getTenantId(),"");
+        CommonUtils.checkTenantId(backReq.getTenantId(),"");
         storageNumBusiSV.backStorageNum(backReq.getTenantId(),backReq.getSkuId(),backReq.getStorageNum());
         BaseResponse response = new BaseResponse();
         response.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
@@ -77,7 +77,7 @@ public class IStorageNumSVImpl implements IStorageNumSV {
      */
     @Override
     public BaseResponse addSaleNumOfProduct(StorageNumUserReq numReq) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
+        CommonUtils.checkTenantId(numReq.getTenantId(),"");
         //添加使用正数
         prodSaleAllBusiSV.updateSaleNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum());
         BaseResponse response = new BaseResponse();
@@ -87,7 +87,7 @@ public class IStorageNumSVImpl implements IStorageNumSV {
 
     @Override
     public BaseResponse backSaleNumOfProduct(StorageNumUserReq numReq) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
+        CommonUtils.checkTenantId(numReq.getTenantId(),"");
         //减少使用负数
         prodSaleAllBusiSV.updateSaleNum(numReq.getTenantId(),numReq.getSkuId(),-numReq.getSkuNum());
         BaseResponse response = new BaseResponse();
@@ -98,7 +98,7 @@ public class IStorageNumSVImpl implements IStorageNumSV {
 
     @Override
     public StorageNumRes useStorageNum(StorageNumUseReq numReq) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(numReq.getTenantId(),"");
+        CommonUtils.checkTenantId(numReq.getTenantId(),"");
         StorageNumRes numRes = storageNumBusiSV.userNumWithAudiAndPrice(numReq);
         numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
         return numRes;
