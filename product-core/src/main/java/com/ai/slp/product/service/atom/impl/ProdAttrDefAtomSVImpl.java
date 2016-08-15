@@ -78,20 +78,15 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         request.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         //获取查询到的条目数
         int count = prodAttrDefMapper.countByExample(example);
-        int pageSize = attrAndValPageQueryVo.getPageSize();
         if(attrAndValPageQueryVo.getPageNo() != null && attrAndValPageQueryVo.getPageSize() != null){
             example.setLimitStart((attrAndValPageQueryVo.getPageNo()-1) * attrAndValPageQueryVo.getPageSize());
             example.setLimitEnd(attrAndValPageQueryVo.getPageSize());
         }
-        int pageCount = count/pageSize;
-        if(count%pageSize>0)
-        	pageCount += 1;
         //分页返回对象设置
         PageInfo<ProdAttrDef> pageInfo = new PageInfo<ProdAttrDef>();
         pageInfo.setPageNo(attrAndValPageQueryVo.getPageNo());
         pageInfo.setPageSize(attrAndValPageQueryVo.getPageSize());
         pageInfo.setResult(prodAttrDefMapper.selectByExample(example));
-        pageInfo.setPageCount(pageCount);
         pageInfo.setCount(count);
             
         return pageInfo;
