@@ -78,10 +78,6 @@ public class AttrParam extends BaseInfo{
         return attrId;
     }
 
-    public void setAttrId(long attrId) {
-        this.attrId = attrId;
-    }
-
     public Long getOperId() {
         return operId;
     }
