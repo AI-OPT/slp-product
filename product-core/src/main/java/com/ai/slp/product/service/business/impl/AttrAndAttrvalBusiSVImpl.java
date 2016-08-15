@@ -60,12 +60,12 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
             attrDefInfoList.add(attrDefInfo);
         }
-        PageInfoResponse<AttrDefInfo> AttrDefInfoPage = new PageInfoResponse<>();
-        AttrDefInfoPage.setResult(attrDefInfoList);
-        AttrDefInfoPage.setPageNo(pageInfo.getPageNo());
-        AttrDefInfoPage.setPageSize(pageInfo.getPageSize());
-
-        return AttrDefInfoPage;
+        PageInfoResponse<AttrDefInfo> attrDefInfoPage = new PageInfoResponse<>();
+        attrDefInfoPage.setResult(attrDefInfoList);
+        attrDefInfoPage.setPageNo(pageInfo.getPageNo());
+        attrDefInfoPage.setPageSize(pageInfo.getPageSize());
+        attrDefInfoPage.setPageCount(pageInfo.getCount());
+        return attrDefInfoPage;
     }
 
     @Override
