@@ -1,11 +1,10 @@
 package com.ai.slp.product.api.productcat.param;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 增加修改属性参数 
@@ -74,12 +73,8 @@ public class AttrParam extends BaseInfo{
 		this.attrId = attrId;
 	}
 
-	public long getAttrId() {
+	public Long getAttrId() {
         return attrId;
-    }
-
-    public void setAttrId(long attrId) {
-        this.attrId = attrId;
     }
 
     public Long getOperId() {
