@@ -12,7 +12,7 @@ import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
-import com.ai.slp.product.util.CommonCheckUtils;
+import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,7 +42,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq productEditParam) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(productEditParam.getTenantId(),"");
+        CommonUtils.checkTenantId(productEditParam.getTenantId(),"");
         return productManagerBsuiSV.queryPageForEdit(productEditParam);
     }
 
@@ -120,7 +120,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public OtherSetOfProduct queryOtherSetOfProduct(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(productInfoQuery.getTenantId(),"");
+        CommonUtils.checkTenantId(productInfoQuery.getTenantId(),"");
         return productManagerBsuiSV.queryOtherSetOfProd(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
     }
 
@@ -139,7 +139,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public PageInfoResponse<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) throws BusinessException, SystemException {
-    	CommonCheckUtils.checkTenantId(productStorageSaleParam.getTenantId(),"");
+    	CommonUtils.checkTenantId(productStorageSaleParam.getTenantId(),"");
         return productManagerBsuiSV.queryStorageProdByState(productStorageSaleParam);
     }
 
@@ -154,7 +154,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(query.getTenantId(),"");
+        CommonUtils.checkTenantId(query.getTenantId(),"");
         productBusiSV.changeToInSale(query.getTenantId(),query.getProductId(),query.getOperId());
         //将商品添加至搜索引擎
         skuIndexManage.updateSKUIndex(query.getProductId());
@@ -176,7 +176,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public ProdNoKeyAttr queryNoKeyAttrOfProd(ProductInfoQuery query) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(query.getTenantId(),"");
+        CommonUtils.checkTenantId(query.getTenantId(),"");
         return productBusiSV.queryNoKeyAttrForEdit(query.getTenantId(),query.getProductId());
     }
 
@@ -189,7 +189,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public BaseResponse updateProduct(ProductInfoForUpdate product) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(product.getTenantId(),"");
+        CommonUtils.checkTenantId(product.getTenantId(),"");
         productManagerBsuiSV.updateProdEdit(product);
         //若为立即上架处理,则将数据添加至搜索引擎
         if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())){
@@ -211,7 +211,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
 	@Override
 	public BaseResponse changeToInStore(ProductInfoQuery query) throws BusinessException, SystemException {
-		CommonCheckUtils.checkTenantId(query.getTenantId(),"");
+		CommonUtils.checkTenantId(query.getTenantId(),"");
         productBusiSV.changeToInStore(query.getTenantId(),query.getProductId(),query.getOperId());
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();

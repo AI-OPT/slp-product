@@ -7,10 +7,11 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
-import com.ai.slp.product.util.CommonCheckUtils;
+import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +41,9 @@ public class IProductCatSVImpl implements IProductCatSV {
      */
     @Override
     public PageInfoResponse<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(pageQuery.getTenantId(),"");
+        CommonUtils.checkTenantId(pageQuery.getTenantId(),"");
         PageInfoResponse<ProductCatInfo> catInfoPageInfoWrapper = productCatBusiSV.queryProductCat(pageQuery);
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        catInfoPageInfoWrapper.setResponseHeader(responseHeader);
+        CommonUtils.addSuccessResHeader(catInfoPageInfoWrapper,"");
         return catInfoPageInfoWrapper;
     }
 
@@ -61,15 +59,10 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse createProductCat(List<ProductCatParam> pcpList)
             throws BusinessException, SystemException {
-        if (pcpList!=null && pcpList.size()>0){
+        if (!CollectionUtil.isEmpty(pcpList)){
             productCatBusiSV.addCatList(pcpList);
         }
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        return CommonUtils.genSuccessResponse("");
     }
 
 	/**
@@ -84,7 +77,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse updateProductCat(ProductCatParam productCatParam)
             throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(productCatParam.getTenantId(),"");
+        CommonUtils.checkTenantId(productCatParam.getTenantId(),"");
         productCatBusiSV.updateByCatId(productCatParam);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
@@ -107,7 +100,7 @@ public class IProductCatSVImpl implements IProductCatSV {
 	 */
     @Override
     public BaseResponse deleteProductCat(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),"");
+        CommonUtils.checkTenantId(catUniqueReq.getTenantId(),"");
         productCatBusiSV.deleteByCatId(catUniqueReq.getTenantId(),catUniqueReq.getProductCatId(),
                 catUniqueReq.getOperId());
         BaseResponse baseResponse = new BaseResponse();
@@ -130,7 +123,7 @@ public class IProductCatSVImpl implements IProductCatSV {
      */
     @Override
     public BaseMapResponse<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
+        CommonUtils.checkTenantId(attrQuery.getTenantId(),"");
         Map<Long, Set<String>> map= productCatBusiSV.queryAttrAndValIdByCatIdAndType(
                 attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
         BaseMapResponse<Long, Set<String>> attrMapRes = new BaseMapResponse();
@@ -153,7 +146,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse addAttrForCatAndType(ProdCatAttrAddParam addCatAttrParam)
             throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(addCatAttrParam.getTenantId(),"");
+        CommonUtils.checkTenantId(addCatAttrParam.getTenantId(),"");
         //检查要添加内容是否为空
         if (addCatAttrParam.getAttrAndVal().isEmpty()){
             throw new BusinessException("","添加属性相关信息为空,不执行添加操作");
@@ -178,7 +171,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse deleteProductCatAttrOrVal(ProdCatAttrVal productAttrValParam)
             throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(productAttrValParam.getTenantId(),"");
+        CommonUtils.checkTenantId(productAttrValParam.getTenantId(),"");
         productCatBusiSV.deleteAttrOrVa(productAttrValParam);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
@@ -201,7 +194,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     public ProductCatInfo queryByCatId(ProductCatUniqueReq catUniqueReq)
             throws BusinessException, SystemException {
         String tenantId = catUniqueReq.getTenantId(),catId = catUniqueReq.getProductCatId();
-        CommonCheckUtils.checkTenantId(tenantId,"");
+        CommonUtils.checkTenantId(tenantId,"");
         if (StringUtils.isBlank(catId))
             throw new BusinessException("","类目标识不能为空");
         return productCatBusiSV.queryByCatId(tenantId,catId);
@@ -218,7 +211,7 @@ public class IProductCatSVImpl implements IProductCatSV {
      */
     @Override
     public List<ProductCatInfo> queryLinkOfCatById(ProductCatUniqueReq catUniqueReq) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(catUniqueReq.getTenantId(),"");
+        CommonUtils.checkTenantId(catUniqueReq.getTenantId(),"");
         List<ProductCatInfo> list = productCatBusiSV.queryLinkOfCatById(catUniqueReq.getTenantId(),catUniqueReq.getProductCatId());
         return list;
     }
@@ -236,7 +229,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
             throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(attrQuery.getTenantId(),"");
+        CommonUtils.checkTenantId(attrQuery.getTenantId(),"");
         return productCatBusiSV.queryAttrOfCatByIdAndType(attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
     }
 
@@ -251,7 +244,7 @@ public class IProductCatSVImpl implements IProductCatSV {
      */
     @Override
     public List<ProdCatInfo> queryCatByNameOrFirst(ProductCatQuery catQuery) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(catQuery.getTenantId(),"");
+        CommonUtils.checkTenantId(catQuery.getTenantId(),"");
 //        ListForRes<ProdCatInfo> catInfoList = new ListForRes<ProdCatInfo>(productCatBusiSV.queryByNameOrFirst(catQuery));
         return productCatBusiSV.queryByNameOrFirst(catQuery);
     }

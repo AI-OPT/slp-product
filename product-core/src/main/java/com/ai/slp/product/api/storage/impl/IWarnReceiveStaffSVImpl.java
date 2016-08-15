@@ -12,7 +12,7 @@ import com.ai.slp.product.api.storage.param.WarnReceStaff;
 import com.ai.slp.product.api.storage.param.WarnReceiveStaffOper;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.service.business.interfaces.IWarnReceiveStaffBusiSV;
-import com.ai.slp.product.util.CommonCheckUtils;
+import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,7 +38,7 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
     @Override
     public BaseListResponse<WarnReceStaff> queryByObjectIdOfStorage(
             WarnReceStafForQuery warnReceStafForQuery) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(warnReceStafForQuery.getTenantId(), ErrorCodeConstants.TENANT_ID_NULL);
+        CommonUtils.checkTenantId(warnReceStafForQuery.getTenantId(), ErrorCodeConstants.TENANT_ID_NULL);
         List<WarnReceStaff> resList = warnReceiveStaffBusiSV.queryByObjectId(warnReceStafForQuery);
         BaseListResponse<WarnReceStaff> prodRes = new BaseListResponse<>();
         prodRes.setResult(resList);
@@ -59,7 +59,7 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
     public BaseResponse installWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
             throws BusinessException, SystemException {
         for(WarnReceiveStaffOper warnReceiveStaffOper : operList){
-            CommonCheckUtils.checkTenantId(warnReceiveStaffOper.getTenantId(), ErrorCodeConstants.TENANT_ID_NULL);
+            CommonUtils.checkTenantId(warnReceiveStaffOper.getTenantId(), ErrorCodeConstants.TENANT_ID_NULL);
         }
         warnReceiveStaffBusiSV.addWarnReceStafList(operList);
         
@@ -81,7 +81,7 @@ public class IWarnReceiveStaffSVImpl implements IWarnReceiveStaffSV {
     public BaseResponse deleteWarnReceiveStaff(List<WarnReceiveStaffOper> operList)
             throws BusinessException, SystemException {
         for(WarnReceiveStaffOper warnReceiveStaffOper : operList){
-            CommonCheckUtils.checkTenantId(warnReceiveStaffOper.getTenantId(), "");
+            CommonUtils.checkTenantId(warnReceiveStaffOper.getTenantId(), "");
         }
         warnReceiveStaffBusiSV.deleteWarnReceStaff(operList);
         

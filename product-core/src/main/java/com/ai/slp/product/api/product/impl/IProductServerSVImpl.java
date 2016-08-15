@@ -13,7 +13,7 @@ import com.ai.slp.product.api.webfront.param.ProductImage;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.util.CommonCheckUtils;
+import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -67,7 +67,7 @@ public class IProductServerSVImpl implements IProductServerSV {
      */
     @Override
     public ProductRoute queryRouteGroupOfProd(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
-        CommonCheckUtils.checkTenantId(productInfoQuery.getTenantId(),"");
+        CommonUtils.checkTenantId(productInfoQuery.getTenantId(),"");
         return productBusiSV.queryRouteGroupOfProd(productInfoQuery.getTenantId(),productInfoQuery.getProductId());
     }
 }
