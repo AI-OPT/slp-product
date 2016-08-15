@@ -74,7 +74,7 @@ public class AttrParam extends BaseInfo{
 		this.attrId = attrId;
 	}
 
-	public long getAttrId() {
+	public Long getAttrId() {
         return attrId;
     }
 
