@@ -41,6 +41,10 @@ public class AttrValInfo {
      * 操作时间
      */
     private Timestamp operTime;
+    /**
+     * 顺序号
+     */
+    private Short serialNumber;
 
     public String getOperName() {
 		return operName;
