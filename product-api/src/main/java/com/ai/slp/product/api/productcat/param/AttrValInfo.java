@@ -102,5 +102,11 @@ public class AttrValInfo {
         this.operTime = operTime;
     }
 
+    public Short getSerialNumber() {
+        return serialNumber;
+    }
 
+    public void setSerialNumber(Short serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 }
