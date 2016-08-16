@@ -4,7 +4,6 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 属性与属性值的相关操作
@@ -114,5 +113,5 @@ public interface IAttrAndAttrvalBusiSV {
      * @return 由属性对象对应的属性值List的Map
      * @author lipeng16
      */
-    public Map<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId);
+    public List<AttrDef> queryAllAttrAndVals(String tenantId);
 }

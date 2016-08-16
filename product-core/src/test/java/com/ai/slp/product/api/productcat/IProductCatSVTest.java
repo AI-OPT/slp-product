@@ -1,12 +1,13 @@
 package com.ai.slp.product.api.productcat;
 
+import com.ai.opt.base.vo.BaseListResponse;
+import com.ai.opt.base.vo.BaseMapResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
-import com.ai.slp.product.api.productcat.param.ProductCatInfo;
-import com.ai.slp.product.api.productcat.param.ProductCatPageQuery;
-import com.ai.slp.product.api.productcat.param.ProductCatParam;
+import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.ProductCatConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by jackieliu on 16/8/11.
@@ -51,5 +53,25 @@ public class IProductCatSVTest {
         catParam.setSerialNumber((short)2);
         pcpList.add(catParam);
         BaseResponse response = productCatSV.createProductCat(pcpList);
+    }
+
+    @Test
+    public void queryAttrByCatAndType(){
+        AttrQueryForCat attrQuery = new AttrQueryForCat();
+        attrQuery.setTenantId("SLP");
+        attrQuery.setProductCatId("1");
+        attrQuery.setAttrType(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+        BaseListResponse<ProdCatAttrDef> response = productCatSV.queryAttrByCatAndType(attrQuery);
+        System.out.println(response.getResult().size());
+    }
+
+    @Test
+    public void queryAttrAndValIdByCatAndType(){
+        AttrQueryForCat attrQuery = new AttrQueryForCat();
+        attrQuery.setTenantId("SLP");
+        attrQuery.setAttrType(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+        attrQuery.setProductCatId("1");
+        BaseMapResponse<Long,Set<String>> response =  productCatSV.queryAttrAndValIdByCatAndType(attrQuery);
+        System.out.println(response.getResult().size());
     }
 }

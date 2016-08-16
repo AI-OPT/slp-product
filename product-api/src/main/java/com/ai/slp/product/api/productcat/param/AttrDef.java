@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.productcat.param;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 查询属性和属性值的MAP集合的返回属性类型
@@ -34,6 +35,11 @@ public class AttrDef implements Serializable {
      */
     private String valueWay;
 
+    /**
+     * 属性值
+     */
+    private List<AttrValDef> valDefList;
+
     public Long getAttrId() {
         return attrId;
     }
@@ -65,6 +71,12 @@ public class AttrDef implements Serializable {
     public void setValueWay(String valueWay) {
         this.valueWay = valueWay;
     }
-    
-    
+
+    public List<AttrValDef> getValDefList() {
+        return valDefList;
+    }
+
+    public void setValDefList(List<AttrValDef> valDefList) {
+        this.valDefList = valDefList;
+    }
 }

@@ -1,11 +1,5 @@
 package com.ai.slp.product.service.atom.impl;
 
-import java.util.List;
-
-import com.ai.slp.product.util.SequenceUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
@@ -13,7 +7,12 @@ import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Date: 2016年4月28日 <br>
@@ -93,7 +92,7 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
     @Override
     public List<ProdAttrvalueDef> selectAttrValForAttr(String tenantId, Long attrId) {
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
-        example.setOrderByClause("firstLetter");
+        example.setOrderByClause("first_letter");
         example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         List<ProdAttrvalueDef> prodAttrValList = prodAttrvalueDefMapper.selectByExample(example);
         return prodAttrValList;
