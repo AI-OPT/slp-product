@@ -2,6 +2,7 @@ package com.ai.slp.product.api.productcat.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseMapResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
@@ -13,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -196,7 +196,7 @@ public interface IProductCatSV {
 	 */
 	@POST
 	@Path("/catAttrByType")
-	public Map<ProdCatAttrDef,List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
+	public BaseListResponse<ProdCatAttrDef> queryAttrByCatAndType(AttrQueryForCat attrQuery)
 			throws BusinessException,SystemException;
 	@interface QueryAttrByCatAndType{}
 

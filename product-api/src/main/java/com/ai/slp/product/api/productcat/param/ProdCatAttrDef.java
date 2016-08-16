@@ -2,6 +2,8 @@ package com.ai.slp.product.api.productcat.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 
+import java.util.List;
+
 /**
  * 类目属性对象<br>
  * 用于类目,标准品,商品的属性
@@ -66,6 +68,11 @@ public class ProdCatAttrDef extends BaseInfo {
      * 序列号
      */
     private Short serialNumber;
+
+    /**
+     * 对应属性值
+     */
+    private List<AttrValInfo> attrValList;
 
     public String getCatAttrId() {
         return catAttrId;
@@ -153,5 +160,13 @@ public class ProdCatAttrDef extends BaseInfo {
 
     public void setHasProduct(Boolean hasProduct) {
         this.hasProduct = hasProduct;
+    }
+
+    public List<AttrValInfo> getAttrValList() {
+        return attrValList;
+    }
+
+    public void setAttrValList(List<AttrValInfo> attrValList) {
+        this.attrValList = attrValList;
     }
 }

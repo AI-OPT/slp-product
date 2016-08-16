@@ -29,6 +29,7 @@
 	<dubbo:reference id="iUcKeyInfoSV" interface="com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV"/>
 
 	<!-- test consumer -->
+	<dubbo:reference id="iProductCatSV" interface="com.ai.slp.product.api.productcat.interfaces.IProductCatSV"/>
 	<dubbo:reference id="iProductSV" interface="com.ai.slp.product.api.product.interfaces.IProductSV" />
 	<dubbo:reference id="iStorageSV" interface="com.ai.slp.product.api.storage.interfaces.IStorageSV"/>
 	<dubbo:reference id="iStorageNumSV" interface="com.ai.slp.product.api.storageserver.interfaces.IStorageNumSV"/>
