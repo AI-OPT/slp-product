@@ -1,7 +1,9 @@
 package com.ai.slp.product.service.atom.impl;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.dao.mapper.attach.ProdCatAttrXmlAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrMapper;
@@ -20,6 +22,8 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
 
     @Autowired
     ProdCatAttrMapper prodCatAttrMapper;
+    @Autowired
+    ProdCatAttrXmlAttachMapper attrXmlAttachMapper;
     
     @Override
     public ProdCatAttr selectById(String tenantId, String productCatId) {
@@ -48,6 +52,26 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     }
 
     /**
+     * 查询所有非指定的属性的关系标识
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrType
+     * @param attrIdList 指定的属性标识
+     * @return
+     */
+    @Override
+    public List<String> queryIdsOfNoAttrId(String tenantId, String catId, String attrType, List<Long> attrIdList) {
+        ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+        ProdCatAttrCriteria.Criteria criteria = example.createCriteria()
+                .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE).andAttrTypeEqualTo(attrType);
+        if (!CollectionUtil.isEmpty(attrIdList))
+            criteria.andAttrIdNotIn(attrIdList);
+        return attrXmlAttachMapper.selectCatAttrIdS(example);
+    }
+
+    /**
      * 删除类目的指定属性
      *
      * @param tenantId
@@ -67,9 +91,33 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         return prodCatAttrMapper.updateByExampleSelective(prodCatAttr,example);
     }
 
+    /**
+     * 删除非指定属性对应关系
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrType
+     * @param attrIdList 指定的属性标识
+     * @param operId     @return
+     */
+    @Override
+    public int deleteNoAttrId(String tenantId, String catId, String attrType, List<Long> attrIdList, Long operId) {
+        ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+        ProdCatAttrCriteria.Criteria criteria = example.createCriteria()
+                .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
+                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE).andAttrTypeEqualTo(attrType);
+        if (!CollectionUtil.isEmpty(attrIdList))
+            criteria.andAttrIdNotIn(attrIdList);
+        ProdCatAttr catAttr = new ProdCatAttr();
+        catAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+        catAttr.setOperId(operId);
+        catAttr.setOperTime(DateUtils.currTimeStamp());
+        return prodCatAttrMapper.updateByExampleSelective(catAttr,example);
+    }
+
 
     @Override
-    public int deleteByCatId(String tenantId,String catAttrId,Long operId) {
+    public int deleteByCatAttrId(String tenantId, String catAttrId, Long operId) {
         ProdCatAttr prodCatAttr = new ProdCatAttr();
         prodCatAttr.setState(CommonSatesConstants.STATE_INACTIVE);
         prodCatAttr.setOperId(operId);

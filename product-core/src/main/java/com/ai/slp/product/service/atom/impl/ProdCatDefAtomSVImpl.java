@@ -115,10 +115,14 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     }
 
     @Override
-    public int deleteProductCat(String tenantId, String productCatId) {
+    public int deleteProductCat(String tenantId, String productCatId,Long operId) {
         ProductCatCriteria example = new ProductCatCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId);
-        return productCatMapper.deleteByExample(example);
+        ProductCat productCat = new ProductCat();
+        productCat.setState(CommonSatesConstants.STATE_INACTIVE);
+        productCat.setOperId(operId);
+        productCat.setOperTime(DateUtils.currTimeStamp());
+        return productCatMapper.updateByExampleSelective(productCat,example);
     }
 
     @Override

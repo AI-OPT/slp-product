@@ -67,7 +67,7 @@ public interface IProdCatDefAtomSV {
      * @return
      * @author lipeng
      */
-    public int deleteProductCat(String tenantId,String productCatId);
+    public int deleteProductCat(String tenantId,String productCatId,Long operId);
 
     /**
      * 查询指定类目下存在子类目的数量
