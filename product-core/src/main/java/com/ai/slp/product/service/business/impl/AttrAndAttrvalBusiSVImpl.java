@@ -47,14 +47,14 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Override
     public PageInfoResponse<AttrDefInfo> queryAttrs(AttrDefParam attrDefParam) {
-    	String tenantId = attrDefParam.getTenantId();
-    	Long attrId = attrDefParam.getAttrId();
         AttrAndValPageQueryVo attrAndValPageQueryVo = new AttrAndValPageQueryVo();
         BeanUtils.copyProperties(attrAndValPageQueryVo, attrDefParam);
         PageInfo<ProdAttrDef> pageInfo = prodAttrDefAtomSV.selectPageAttrs(attrAndValPageQueryVo);
         List<ProdAttrDef> prodAttrDefList = pageInfo.getResult();
         List<AttrDefInfo> attrDefInfoList = new ArrayList<AttrDefInfo>();
         for (ProdAttrDef prodAttrDef : prodAttrDefList) {
+        	Long attrId = prodAttrDef.getAttrId();
+        	String tenantId = prodAttrDef.getTenantId();
             AttrDefInfo attrDefInfo = new AttrDefInfo();
             BeanUtils.copyProperties(attrDefInfo, prodAttrDef);
             //根据当前的属性ID 查询当前ID下的属性值的数量
