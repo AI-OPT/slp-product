@@ -129,7 +129,8 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         attrValInfo.setResult(attrValInfoList);
         attrValInfo.setPageNo(attrValPage.getPageNo());
         attrValInfo.setPageSize(attrValPage.getPageSize());
-
+        //设置数据总条数
+        attrValInfo.setCount(attrValPage.getCount());
         return attrValInfo;
     }
 
