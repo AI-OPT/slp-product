@@ -67,4 +67,10 @@ public interface IProdAttrValDefAtomSV {
      * @author lipeng16
      */
     public List<ProdAttrvalueDef> selectAttrValForAttr(String tenantId, Long attrId);
+    
+    /**
+     * 查询属性对应的实行值的数量
+     * 
+     */
+    public int selectAttrValNum(String tenantId, Long attrId);
 }

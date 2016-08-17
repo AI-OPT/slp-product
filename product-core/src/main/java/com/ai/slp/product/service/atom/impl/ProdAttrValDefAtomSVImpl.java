@@ -99,5 +99,15 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
     }
 
 
+	@Override
+	public int selectAttrValNum(String tenantId, Long attrId) {
+		 ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
+		 example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+		 int num = prodAttrvalueDefMapper.countByExample(example);
+		 
+		return num;
+	}
+
+
     
 }
