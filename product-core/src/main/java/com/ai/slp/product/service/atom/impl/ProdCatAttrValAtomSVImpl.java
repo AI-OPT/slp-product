@@ -100,7 +100,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
      */
     @Override
     public int installCatAttrVal(ProdCatAttrValue attrValue) {
-        attrValue.setCatAttrId(SequenceUtil.genProdCatAttrValId());
+        attrValue.setCatAttrValueId(SequenceUtil.genProdCatAttrValId());
         if (attrValue.getOperTime()==null)
             attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.insert(attrValue);
