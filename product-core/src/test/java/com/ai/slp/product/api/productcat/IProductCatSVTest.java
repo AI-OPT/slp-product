@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by jackieliu on 16/8/11.
@@ -73,5 +71,23 @@ public class IProductCatSVTest {
         attrQuery.setProductCatId("1");
         BaseMapResponse<Long,Set<String>> response =  productCatSV.queryAttrAndValIdByCatAndType(attrQuery);
         System.out.println(response.getResult().size());
+    }
+
+    @Test
+    public void addAttrForCatAndType(){
+        ProdCatAttrAddParam addParam = new ProdCatAttrAddParam();
+        Map<Long,Set<String>> attrValMap = new HashMap<>();
+        attrValMap.put(17l,new HashSet<String>());
+        Set<String> valSet = new HashSet<>();
+        valSet.add("100001");
+        valSet.add("100002");
+        attrValMap.put(100001l,valSet);
+        addParam.setTenantId("SLP");
+        addParam.setOperId(1l);
+        addParam.setProductCatId("00000000000007");
+        addParam.setAttrType("1");
+        addParam.setAttrAndVal(attrValMap);
+        BaseResponse response = productCatSV.addAttrForCatAndType(addParam);
+        System.out.println(response.getResponseHeader().getIsSuccess());
     }
 }

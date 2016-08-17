@@ -149,12 +149,7 @@ public class IProductCatSVImpl implements IProductCatSV {
             throw new BusinessException("","添加属性相关信息为空,不执行添加操作");
         }
         productCatBusiSV.addAttrAndValOfAttrType(addCatAttrParam);
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        return CommonUtils.genSuccessResponse("");
     }
 
     /**

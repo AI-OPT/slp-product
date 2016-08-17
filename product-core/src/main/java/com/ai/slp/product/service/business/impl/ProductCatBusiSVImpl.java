@@ -336,13 +336,10 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             Set<String> attrValSet = attrAndVal.get(attId);
             for (String valId:attrValSet){
                 //检查关联关系是否已经存在
-                ProdCatAttrValue catAttrValue = null;
-                if (catAttr!=null){
-                    catAttrValue = prodCatAttrValAtomSV.queryByCatAndCatAttrId(
+                ProdCatAttrValue catAttrValue = prodCatAttrValAtomSV.queryByCatAndCatAttrId(
                             tenantId,catAttr.getCatAttrId(),valId);
-                    if (catAttrValue!=null)
-                        continue;
-                }
+                if (catAttrValue!=null)
+                    continue;
                 //添加属性值
                 catAttrValue = new ProdCatAttrValue();
                 catAttrValue.setTenantId(tenantId);
