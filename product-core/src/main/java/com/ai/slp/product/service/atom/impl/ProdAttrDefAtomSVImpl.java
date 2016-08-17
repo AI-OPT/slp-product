@@ -1,13 +1,5 @@
 package com.ai.slp.product.service.atom.impl;
 
-import java.util.List;
-
-import com.ai.slp.product.util.SequenceUtil;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
@@ -17,7 +9,13 @@ import com.ai.slp.product.dao.mapper.interfaces.ProdAttrDefMapper;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * 属性定义原子操作
@@ -106,9 +104,9 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     }
 
     @Override
-    public List<ProdAttrDef> selectAllAttrs(String tenantId) {
+    public List<ProdAttrDef> selectAllAttrsOfFirstLetter(String tenantId) {
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
-        example.setOrderByClause("firstLetter");
+        example.setOrderByClause("first_letter");
         example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return prodAttrDefMapper.selectByExample(example);
     }

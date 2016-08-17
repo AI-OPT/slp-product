@@ -65,7 +65,7 @@ public interface IProductCatBusiSV {
      * @param attrType
      * @return
      */
-    public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrOfCatByIdAndType(
+    public List<ProdCatAttrDef> queryAttrOfCatByIdAndType(
             String tenantId,String productCatId,String attrType);
 
     /**

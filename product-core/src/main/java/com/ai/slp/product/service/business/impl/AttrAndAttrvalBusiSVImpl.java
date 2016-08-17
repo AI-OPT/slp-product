@@ -19,9 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Transactional
@@ -179,10 +177,10 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public Map<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId) {
-        Map<AttrDef, List<AttrValDef>> attrAndValues = new HashMap<>();
+    public List<AttrDef> queryAllAttrAndVals(String tenantId) {
+        List<AttrDef> attrAndValues = new ArrayList<>();
         //属性集合
-        List<ProdAttrDef> prodAttrList = prodAttrDefAtomSV.selectAllAttrs(tenantId);
+        List<ProdAttrDef> prodAttrList = prodAttrDefAtomSV.selectAllAttrsOfFirstLetter(tenantId);
         for (ProdAttrDef prodAttr : prodAttrList) {
             AttrDef attrDef = new AttrDef();
             BeanUtils.copyProperties(attrDef, prodAttr);
@@ -195,7 +193,8 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
                 BeanUtils.copyProperties(attrVal, prodAttrVal);
                 attrValList.add(attrVal);
             }
-            attrAndValues.put(attrDef, attrValList);
+            attrDef.setValDefList(attrValList);
+            attrAndValues.add(attrDef);
         }
         return attrAndValues;
     }

@@ -181,9 +181,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
      * @return
      */
     @Override
-    public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrOfCatByIdAndType(
+    public List<ProdCatAttrDef> queryAttrOfCatByIdAndType(
             String tenantId, String productCatId, String attrType) {
-        Map<ProdCatAttrDef, List<AttrValInfo>> catAttrDefListMap = new HashMap<>();
+        List<ProdCatAttrDef> catAttrDefList = new ArrayList<>();
         //查询类目属性集合
         List<ProdCatAttrAttch> attrAttchList = catAttrAttachAtomSV.queryAttrOfByIdAndType(
                 tenantId,productCatId,attrType);
@@ -198,14 +198,15 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             List<ProdAttrvalueDef> catAttrValList =
                     catAttrAttachAtomSV.queryValListByCatAttr(tenantId,attrAttch.getCatAttrId());
             List<AttrValInfo> valInfoList = new ArrayList<>();
-            catAttrDefListMap.put(catAttrDef,valInfoList);
             for (ProdAttrvalueDef attrvalueDef:catAttrValList){
                 AttrValInfo attrValInfo = new AttrValInfo();
                 BeanUtils.copyProperties(attrValInfo,attrvalueDef);
                 valInfoList.add(attrValInfo);
             }
+            catAttrDef.setAttrValList(valInfoList);
+            catAttrDefList.add(catAttrDef);
         }
-        return catAttrDefListMap;
+        return catAttrDefList;
     }
 
     /**

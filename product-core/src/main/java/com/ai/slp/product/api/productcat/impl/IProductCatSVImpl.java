@@ -2,10 +2,7 @@ package com.ai.slp.product.api.productcat.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.BaseMapResponse;
-import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.base.vo.*;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
@@ -227,10 +224,15 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @author liutong5
      */
     @Override
-    public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
+    public BaseListResponse<ProdCatAttrDef> queryAttrByCatAndType(AttrQueryForCat attrQuery)
             throws BusinessException, SystemException {
         CommonUtils.checkTenantId(attrQuery.getTenantId(),"");
-        return productCatBusiSV.queryAttrOfCatByIdAndType(attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
+        List<ProdCatAttrDef> attrList = productCatBusiSV.queryAttrOfCatByIdAndType(
+                attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
+        BaseListResponse<ProdCatAttrDef> listResponse = new BaseListResponse<>();
+        listResponse.setResult(attrList);
+        CommonUtils.addSuccessResHeader(listResponse,"");
+        return listResponse;
     }
 
     /**
