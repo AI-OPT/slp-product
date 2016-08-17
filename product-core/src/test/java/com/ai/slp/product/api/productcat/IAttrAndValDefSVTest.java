@@ -28,8 +28,8 @@ public class IAttrAndValDefSVTest {
 	public void queryPageAttrsTest(){
 		AttrDefParam attrDefParam = new AttrDefParam();
 		attrDefParam.setTenantId("SLP");
-		//attrDefParam.setAttrId();
-		attrDefParam.setAttrName("");
+		//Long longValue = Long.valueOf("18").longValue();
+		//attrDefParam.setAttrId(longValue);
 		
 		attrDefParam.setValueWay("1");
 		PageInfoResponse<AttrDefInfo> queryPageAttrs = attrAndValDefSV.queryPageAttrs(attrDefParam);
