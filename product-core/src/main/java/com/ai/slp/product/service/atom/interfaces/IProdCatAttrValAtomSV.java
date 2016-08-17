@@ -36,6 +36,25 @@ public interface IProdCatAttrValAtomSV {
     public int deleteValByAttr(String tenantId,String catAttrId,String attrValId,Long operId);
 
     /**
+     * 删除管理属性对应的属性值
+     *
+     * @param tenantId
+     * @param catAttrIdList
+     * @return
+     */
+    public int deleteByCatAttrId(String tenantId,List<String> catAttrIdList,Long operId);
+
+    /**
+     * 删除指定属性下不包含在当前属性值集合的属性值
+     * @param tenantId
+     * @param catAttrId
+     * @param valIdList
+     * @param operId
+     * @return
+     */
+    public int deleteNoValIds(String tenantId,String catAttrId,List<String> valIdList,Long operId);
+
+    /**
      * 查询类目属性关系对应的属性值
      *
      * @param tenantId

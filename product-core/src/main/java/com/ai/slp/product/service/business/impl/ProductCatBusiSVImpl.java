@@ -140,7 +140,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         if (productCat==null)
             throw new BusinessException("","未找到要删除类目,租户id:"+tenantId+",类目标识:"+productCatId);
         //判断是否关联了标准品
-        if (productAtomSV.queryByCatId(productCatId)>0)
+        if (productAtomSV.queryByCatId(tenantId,productCatId,false)>0)
             throw new BusinessException("","已关联了标准品，不可删除");
         //判断是否有子类目
         if (prodCatDefAtomSV.queryOfParent(productCatId)>0)
@@ -153,11 +153,11 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 //删除类目下属性与属性值的对应关系
                 prodCatAttrValAtomSV.deleteByCat(tenantId,catAttr.getCatAttrId(),operId);
                 //删除类目与属性对应关系
-                prodCatAttrAtomSV.deleteByCatId(tenantId,catAttr.getCatAttrId(),operId);
+                prodCatAttrAtomSV.deleteByCatAttrId(tenantId,catAttr.getCatAttrId(),operId);
             }
         }
         //删除类目
-        prodCatDefAtomSV.deleteProductCat(tenantId,productCatId);
+        prodCatDefAtomSV.deleteProductCat(tenantId,productCatId,operId);
     }
 
     /**
@@ -309,11 +309,27 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             throw new BusinessException("","未找到指定类目信息,租户ID:"+tenantId+",类目标识:"+catId);
         }
         String attrType = addCatAttrParam.getAttrType();
-        Timestamp operTime = DateUtils.currTimeStamp();
+        //查询当前类目是否已有非废弃的标准品
+        int count = productAtomSV.queryByCatId(tenantId,catId,false);
+        if(count>0&& ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(attrType)){
+            throw new BusinessException("","此类目下存在标准品,不允许更改关键属性");
+        }else if(count>0 && ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(attrType))
+            throw new BusinessException("","此类目下存在标准品,不允许更改销售属性");
         Map<Long,Set<String>> attrAndVal = addCatAttrParam.getAttrAndVal();
+        List<Long> attrIdList = new ArrayList<>(attrAndVal.keySet());
+        //查询待删除属性关联关系ID
+        List<String> catAttrIds = prodCatAttrAtomSV.queryIdsOfNoAttrId(tenantId,catId,attrType,attrIdList);
+        //删除属性关联
+        prodCatAttrAtomSV.deleteNoAttrId(tenantId,catId,attrType,attrIdList,addCatAttrParam.getOperId());
+        //删除取消管理的属性值
+        prodCatAttrValAtomSV.deleteByCatAttrId(tenantId,catAttrIds,addCatAttrParam.getOperId());
+        //查询当前类目指定类型的属性信息
+        List<ProdCatAttr> oldAttr = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId,catId,attrType);
+        Timestamp operTime = DateUtils.currTimeStamp();
         for (Long attId:attrAndVal.keySet()){
             //检查是否已经关联
             ProdCatAttr catAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(tenantId,catId,attId,attrType);
+            Set<String> attrValSet = attrAndVal.get(attId);
             if (catAttr==null){
                 catAttr = new ProdCatAttr();
                 catAttr.setTenantId(tenantId);
@@ -331,9 +347,12 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 else
                     catAttr.setIsNecessary("N");
                 prodCatAttrAtomSV.insertProdCatAttr(catAttr);
+            }else {
+                //删除已取消关联的属性值
+                prodCatAttrValAtomSV.deleteNoValIds(tenantId,catAttr.getCatAttrId()
+                        ,new ArrayList<String>(attrValSet),addCatAttrParam.getOperId());
             }
-            //添加属性值
-            Set<String> attrValSet = attrAndVal.get(attId);
+
             for (String valId:attrValSet){
                 //检查关联关系是否已经存在
                 ProdCatAttrValue catAttrValue = prodCatAttrValAtomSV.queryByCatAndCatAttrId(

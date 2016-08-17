@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValueCriteria;
@@ -51,6 +52,49 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andCatAttrIdEqualTo(catAttrId).andAttrvalueDefIdGreaterThan(attrValId);
+        ProdCatAttrValue attrValue = new ProdCatAttrValue();
+        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setOperId(operId);
+        attrValue.setOperTime(DateUtils.currTimeStamp());
+        return attrValueMapper.updateByExampleSelective(attrValue,example);
+    }
+
+    /**
+     * 删除管理属性对应的属性值
+     *
+     * @param tenantId
+     * @param catAttrIdList
+     * @return
+     */
+    @Override
+    public int deleteByCatAttrId(String tenantId, List<String> catAttrIdList,Long operId) {
+        if (CollectionUtil.isEmpty(catAttrIdList))
+            return 0;
+        ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+        ProdCatAttrValue attrValue = new ProdCatAttrValue();
+        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setOperId(operId);
+        attrValue.setOperTime(DateUtils.currTimeStamp());
+        example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdIn(catAttrIdList);
+        return attrValueMapper.updateByExampleSelective(attrValue,example);
+    }
+
+    /**
+     * 删除指定属性下不包含在当前属性值集合的属性值
+     *
+     * @param tenantId
+     * @param catAttrId
+     * @param valIdList
+     * @param operId
+     * @return
+     */
+    @Override
+    public int deleteNoValIds(String tenantId, String catAttrId, List<String> valIdList, Long operId) {
+        ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+        ProdCatAttrValueCriteria.Criteria criteria = example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andCatAttrIdEqualTo(catAttrId);
+        if (!CollectionUtil.isEmpty(valIdList))
+            criteria.andAttrvalueDefIdNotIn(valIdList);
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
         attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
         attrValue.setOperId(operId);
