@@ -53,9 +53,13 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         List<ProdAttrDef> prodAttrDefList = pageInfo.getResult();
         List<AttrDefInfo> attrDefInfoList = new ArrayList<AttrDefInfo>();
         for (ProdAttrDef prodAttrDef : prodAttrDefList) {
+        	Long attrId = prodAttrDef.getAttrId();
+        	String tenantId = prodAttrDef.getTenantId();
             AttrDefInfo attrDefInfo = new AttrDefInfo();
             BeanUtils.copyProperties(attrDefInfo, prodAttrDef);
-
+            //根据当前的属性ID 查询当前ID下的属性值的数量
+            int attrValNum = prodAttrValDefAtomSV.selectAttrValNum(tenantId, attrId);
+            attrDefInfo.setAttrValNum(attrValNum);
             attrDefInfoList.add(attrDefInfo);
         }
         PageInfoResponse<AttrDefInfo> attrDefInfoPage = new PageInfoResponse<>();
