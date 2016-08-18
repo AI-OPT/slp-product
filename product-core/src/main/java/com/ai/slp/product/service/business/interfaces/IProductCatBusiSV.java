@@ -109,10 +109,10 @@ public interface IProductCatBusiSV {
     /**
      * 更新类目属性和属性值
      *
-     * @param updateParams
+     * @param updateReq
      * @return 更新成功条目数
      */
-    public int updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams);
+    public int updateCatAttrAndVal(ProdCatAttrUpdateReq updateReq);
 
     /**
      * 查询类目下指定类型和指定属性的属性值

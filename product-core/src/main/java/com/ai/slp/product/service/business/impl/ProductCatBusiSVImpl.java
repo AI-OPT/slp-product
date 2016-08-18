@@ -398,21 +398,15 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     /**
      * 更新类目属性和属性值
      *
-     * @param updateParams
+     * @param updateReq
      * @return 更新成功条目数
      */
     @Override
-    public int updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams) {
+    public int updateCatAttrAndVal(ProdCatAttrUpdateReq updateReq) {
         //成功数量
         int successNum = 0;
-
-        for (ProdCatAttrUpdateParam updateParam:updateParams){
-            String tenantId = updateParam.getTenantId();
-            if (StringUtils.isBlank(tenantId)){
-                logger.warn("租户id不能为空\r\n"+updateParam.toString());
-                continue;
-            }
-
+        String tenantId = updateReq.getTenantId();
+        for (ProdCatAttrUpdateParam updateParam:updateReq.getUpdateParamList()){
             switch (updateParam.getObjType()){
                 //更新属性
                 case "1":
@@ -424,7 +418,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                     }
                     prodCatAttr.setSerialNumber(updateParam.getSerialNumber());
                     prodCatAttr.setIsPicture(updateParam.getIsPicture());
-                    prodCatAttr.setOperId(updateParam.getOperId());
+                    prodCatAttr.setOperId(updateReq.getOperId());
                     prodCatAttrAtomSV.update(prodCatAttr);
                     successNum++;
                     break;
@@ -437,7 +431,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                         continue;
                     }
                     attrVal.setSerialNumber(updateParam.getSerialNumber());
-                    attrVal.setOperId(updateParam.getOperId());
+                    attrVal.setOperId(updateReq.getOperId());
                     prodCatAttrValAtomSV.update(attrVal);
                     successNum++;
                     break;
