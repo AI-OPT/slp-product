@@ -13,6 +13,11 @@ import java.sql.Timestamp;
 public class AttrValInfo {
 
     /**
+     * 类目与属性值关联标识,
+     * 只在查询类目的关联属性值时需要
+     */
+    private String catAttrValId;
+    /**
      * 属性值ID
      */
     private String attrvalueDefId;
@@ -45,6 +50,14 @@ public class AttrValInfo {
      * 顺序号
      */
     private Short serialNumber;
+
+    public String getCatAttrValId() {
+        return catAttrValId;
+    }
+
+    public void setCatAttrValId(String catAttrValId) {
+        this.catAttrValId = catAttrValId;
+    }
 
     public String getOperName() {
 		return operName;

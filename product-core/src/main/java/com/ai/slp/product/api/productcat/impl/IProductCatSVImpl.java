@@ -258,13 +258,7 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams) throws BusinessException, SystemException {
         int successNum = productCatBusiSV.updateCatAttrAndVal(updateParams);
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultMessage("总共["+updateParams.size()+"]条,更新成功["+successNum+"]条");
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        return CommonUtils.genSuccessResponse("总共["+updateParams.size()+"]条,更新成功["+successNum+"]条");
     }
 
   

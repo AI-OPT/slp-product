@@ -2,7 +2,7 @@ package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
-import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
+import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
 
 import java.util.List;
 import java.util.Map;
@@ -116,5 +116,5 @@ public interface IProductCatBusiSV {
      * @param attrType
      * @return
      */
-    public List<ProdAttrvalueDef> queryAttrValOfAttrAndType(String tenantId, String catId, long attrId, String attrType);
+    public List<CatAttrValAttach> queryAttrValOfAttrAndType(String tenantId, String catId, long attrId, String attrType);
 }

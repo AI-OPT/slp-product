@@ -1,14 +1,13 @@
 package com.ai.slp.product.service.atom.impl;
 
-import java.util.List;
-
+import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
+import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttachMapper;
+import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
+import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttachMapper;
-import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
-import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
+import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/2.
@@ -41,7 +40,7 @@ public class ProdCatAttrAttachAtomSVImpl implements IProdCatAttrAttachAtomSV {
 	 * @return
 	 */
 	@Override
-	public List<ProdAttrvalueDef> queryValListByCatAttr(String tenantId, String catAttrId) {
+	public List<CatAttrValAttach> queryValListByCatAttr(String tenantId, String catAttrId) {
 		return catAttrAttachMapper.selectCatAttrVal(tenantId, catAttrId);
 	}
 

@@ -122,7 +122,6 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         for (ProdAttrvalueDef attrVal : attrValList) {
             AttrValInfo attrValInfo = new AttrValInfo();
             BeanUtils.copyProperties(attrValInfo, attrVal);
-
             attrValInfoList.add(attrValInfo);
         }
         PageInfoResponse<AttrValInfo> attrValInfo = new PageInfoResponse<AttrValInfo>();

@@ -8,8 +8,8 @@ import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
-import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
@@ -195,12 +195,13 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             int prodNum = prodAttrAtomSV.queryProdNumOfAttr(tenantId,attrAttch.getAttrId());
             catAttrDef.setHasProduct(prodNum>0?true:false);
             //查询属性对应的属性值
-            List<ProdAttrvalueDef> catAttrValList =
+            List<CatAttrValAttach> catAttrValList =
                     catAttrAttachAtomSV.queryValListByCatAttr(tenantId,attrAttch.getCatAttrId());
             List<AttrValInfo> valInfoList = new ArrayList<>();
-            for (ProdAttrvalueDef attrvalueDef:catAttrValList){
+            for (CatAttrValAttach attrvalueDef:catAttrValList){
                 AttrValInfo attrValInfo = new AttrValInfo();
                 BeanUtils.copyProperties(attrValInfo,attrvalueDef);
+                attrValInfo.setCatAttrValId(attrvalueDef.getCatAttrValueId());
                 valInfoList.add(attrValInfo);
             }
             catAttrDef.setAttrValList(valInfoList);
@@ -438,7 +439,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
      * @return
      */
     @Override
-    public List<ProdAttrvalueDef> queryAttrValOfAttrAndType(String tenantId, String catId, long attrId, String attrType) {
+    public List<CatAttrValAttach> queryAttrValOfAttrAndType(String tenantId, String catId, long attrId, String attrType) {
         //查询对应关系
         ProdCatAttr catAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(tenantId,catId,attrId,attrType);
         if (catAttr==null){
