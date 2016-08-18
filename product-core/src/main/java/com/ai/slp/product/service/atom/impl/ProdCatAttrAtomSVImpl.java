@@ -28,7 +28,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     @Override
     public ProdCatAttr selectById(String tenantId, String catAttrId) {
         ProdCatAttr prodCatAttr = prodCatAttrMapper.selectByPrimaryKey(catAttrId);
-        if (prodCatAttr!=null && !tenantId.equals(prodCatAttr))
+        if (prodCatAttr!=null && !tenantId.equals(prodCatAttr.getTenantId()))
             prodCatAttr = null;
         return prodCatAttr;
     }

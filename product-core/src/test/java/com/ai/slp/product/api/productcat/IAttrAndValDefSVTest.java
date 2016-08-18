@@ -4,11 +4,7 @@ import com.ai.opt.base.vo.BaseInfo;
 import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
-import com.ai.slp.product.api.productcat.param.AttrDef;
-import com.ai.slp.product.api.productcat.param.AttrDefInfo;
-import com.ai.slp.product.api.productcat.param.AttrDefParam;
-import com.ai.slp.product.api.productcat.param.AttrValInfo;
-import com.ai.slp.product.api.productcat.param.AttrValPageQuery;
+import com.ai.slp.product.api.productcat.param.*;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,8 +48,9 @@ public class IAttrAndValDefSVTest {
 	public void queryPageAttrValuesTest(){
 		AttrValPageQuery attrVal = new AttrValPageQuery();
 		attrVal.setTenantId("SLP");
-		Long longValue = Long.valueOf("18").longValue();
-		attrVal.setAttrId(longValue);
+		attrVal.setAttrId(9l);
+		attrVal.setPageSize(10);
+		attrVal.setPageNo(1);
 		PageInfoResponse<AttrValInfo> queryPageAttrs = attrAndValDefSV.queryPageAttrvalue(attrVal);
 		Gson gson = new Gson();
 		System.out.println(gson.toJson(queryPageAttrs.getResult().get(0)));
