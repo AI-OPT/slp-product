@@ -9,6 +9,8 @@ import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -69,10 +71,19 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
     public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrAndValPageQueryVo attrAndValPageQueryVo) {
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
         ProdAttrvalueDefCriteria.Criteria param = example.createCriteria();
-        param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
-        if(attrAndValPageQueryVo.getAttrValueName() != null)
+        
+        
+        
+        if(attrAndValPageQueryVo.getAttrId()!=null)
+        	param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        
+       // param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        
+        //if(attrAndValPageQueryVo.getAttrValueName() != null)
+        if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrName()))
             param.andAttrValueNameEqualTo(attrAndValPageQueryVo.getAttrValueName());
-        if(attrAndValPageQueryVo.getAttrvalueDefId() != null)
+       // if(attrAndValPageQueryVo.getAttrvalueDefId() != null)
+        if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrvalueDefId()))
             param.andAttrvalueDefIdEqualTo(attrAndValPageQueryVo.getAttrvalueDefId());
         //统计查询条目数
         int count = prodAttrvalueDefMapper.countByExample(example);
@@ -85,6 +96,7 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         attrValPage.setPageNo(attrAndValPageQueryVo.getPageNo());
         attrValPage.setResult(prodAttrvalueDefMapper.selectByExample(example));
         attrValPage.setCount(count);
+        System.out.println("count"+count);
         
         return attrValPage;
     }
