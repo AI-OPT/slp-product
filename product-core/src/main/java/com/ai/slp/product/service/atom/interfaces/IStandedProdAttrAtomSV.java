@@ -59,6 +59,14 @@ public interface IStandedProdAttrAtomSV {
      * @return
      */
     public int queryProdNumOfAttr(String tenantId,Long attrId);
+    /**
+     * 查询某个属性关联标准品的数量
+     *
+     * @param tenantId
+     * @param attrvalueDefId
+     * @return
+     */
+    public int queryProdNumOfAttrValue(String tenantId,String attrvalueDefId);
 
     /**
      * 查询指定标准品下某个属性的属性值

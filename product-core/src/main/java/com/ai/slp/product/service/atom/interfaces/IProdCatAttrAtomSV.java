@@ -121,6 +121,15 @@ public interface IProdCatAttrAtomSV {
      * @author lipeng16
      */
     public int selectCatNumByAttrId(String tenantId, Long attrId );
+    /**
+     * 通过属性ID查询关联类目数量
+     * 
+     * @param tenantId
+     * @param attrId
+     * @return
+     * @author jiawen
+     */
+    public int selectCatNumByAttrValueId(String tenantId, String attrvalueDefId);
     
     /**
      * 通过属性标识查看商品类目属性信息

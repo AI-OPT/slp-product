@@ -6,7 +6,9 @@ import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrXmlAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrCriteria;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValueCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrMapper;
+import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrValueMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
@@ -24,6 +26,8 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     ProdCatAttrMapper prodCatAttrMapper;
     @Autowired
     ProdCatAttrXmlAttachMapper attrXmlAttachMapper;
+    @Autowired
+    ProdCatAttrValueMapper prodCatAttrValueMapper;
     
     @Override
     public ProdCatAttr selectById(String tenantId, String catAttrId) {
@@ -176,7 +180,9 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         prodCatAttr.setOperTime(DateUtils.currTimeStamp());
         return prodCatAttrMapper.updateByPrimaryKey(prodCatAttr);
     }
-
+    /**
+     * 根据租户ID属性ID查询商品类目属性关系的数量
+     */
     @Override
     public int selectCatNumByAttrId(String tenantId, Long attrId) {
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
@@ -184,7 +190,17 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return prodCatAttrMapper.countByExample(example);
     }
-
+    
+    /**
+     * 根据租户ID  属性值ID查询商品类目属性值关系的数量
+     */
+    public int selectCatNumByAttrValueId(String tenantId, String attrvalueDefId) {
+    	ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+    	example.createCriteria().andTenantIdEqualTo(tenantId).
+        andAttrvalueDefIdEqualTo(attrvalueDefId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+    	return prodCatAttrValueMapper.countByExample(example);
+    }
+    
 	@Override
 	public List<ProdCatAttr> queryCatAttrByAttrId(String tenantId, Long attrId) {
 		if (StringUtils.isBlank(tenantId) || attrId == null) {
