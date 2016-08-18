@@ -88,9 +88,6 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         if(prodCatAttrAtomSV.selectCatNumByAttrId(attrPam.getTenantId(), attrPam.getAttrId()) > 0
                 || standedProdAttrAtomSV.queryProdNumOfAttr(attrPam.getTenantId(), attrPam.getAttrId()) > 0)
             throw new BusinessException("", "该属性已被使用，不能删除");
-        
-        if (attrPam.getTenantId() == null)
-            throw new BusinessException("", "未找到指定的属性信息，租户ID=" + attrPam.getTenantId());
         return prodAttrDefAtomSV.deleteById(attrPam.getTenantId(), attrPam.getAttrId(),attrPam.getOperId());
     }
 
@@ -147,9 +144,9 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Override
     public int deleteAttrVal(AttrValUniqueReq attrValUniqueReq) {
-        if(prodCatAttrAtomSV.selectCatNumByAttrId(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrId()) > 0
-                || standedProdAttrAtomSV.queryProdNumOfAttr(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrId()) > 0)
-            throw new BusinessException("", "该属性已被使用，不能删除");
+        if(prodCatAttrAtomSV.selectCatNumByAttrValueId(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrvalueDefId()) > 0
+                || standedProdAttrAtomSV.queryProdNumOfAttrValue(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrvalueDefId()) > 0)
+            throw new BusinessException("", "该属性值已被使用，不能删除");
         
         return prodAttrValDefAtomSV.deleteProdAttrVal(attrValUniqueReq.getTenantId(),
                 attrValUniqueReq.getAttrvalueDefId(), attrValUniqueReq.getOperId());

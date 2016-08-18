@@ -110,6 +110,23 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return standedProdAttrMapper.countByExample(example);
     }
+    /**
+     * 查询某个属性关联标准品的数量
+     *
+     * @param tenantId
+     * @param attrvalueDefId
+     * @return
+     */
+    @Override
+    public int queryProdNumOfAttrValue(String tenantId, String attrvalueDefId) {
+    	
+    	StandedProdAttrCriteria example = new StandedProdAttrCriteria();
+    	example.createCriteria()
+    	.andTenantIdEqualTo(tenantId)
+    	.andAttrvalueDefIdEqualTo(attrvalueDefId)
+    	.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+    	return standedProdAttrMapper.countByExample(example);
+    }
 
     /**
      * 查询指定标准品下某个属性的属性值
