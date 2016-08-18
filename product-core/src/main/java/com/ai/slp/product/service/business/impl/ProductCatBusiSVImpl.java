@@ -14,6 +14,7 @@ import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.atom.interfaces.*;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
@@ -38,13 +39,15 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     @Autowired
     IProdCatAttrAtomSV prodCatAttrAtomSV;
     @Autowired
-    IStandedProductAtomSV productAtomSV;
+    IStandedProductAtomSV standedProductAtomSV;
+    @Autowired
+    IProdAttrAtomSV prodAttrAtomSV;
     @Autowired
     IProdCatAttrValAtomSV prodCatAttrValAtomSV;
     @Autowired
     IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
     @Autowired
-    IStandedProdAttrAtomSV prodAttrAtomSV;
+    IStandedProdAttrAtomSV standedProdAttrAtomSV;
 
     @Override
     public PageInfoResponse<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
@@ -140,7 +143,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         if (productCat==null)
             throw new BusinessException("","未找到要删除类目,租户id:"+tenantId+",类目标识:"+productCatId);
         //判断是否关联了标准品
-        if (productAtomSV.queryByCatId(tenantId,productCatId,false)>0)
+        if (standedProductAtomSV.queryByCatId(tenantId,productCatId,false)>0)
             throw new BusinessException("","已关联了标准品，不可删除");
         //判断是否有子类目
         if (prodCatDefAtomSV.queryOfParent(productCatId)>0)
@@ -192,7 +195,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             ProdCatAttrDef catAttrDef = new ProdCatAttrDef();
             BeanUtils.copyProperties(catAttrDef,attrAttch);
             //查询此属性是否关联标准品
-            int prodNum = prodAttrAtomSV.queryProdNumOfAttr(tenantId,attrAttch.getAttrId());
+            int prodNum = standedProdAttrAtomSV.queryProdNumOfAttr(tenantId,attrAttch.getAttrId());
             catAttrDef.setHasProduct(prodNum>0?true:false);
             //查询属性对应的属性值
             List<CatAttrValAttach> catAttrValList =
@@ -239,32 +242,50 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     }
 
     /**
-     * 删除类目的属性或属性值关联
+     * 删除类目的属性关联
      *
      * @param catAttrVal
      */
     @Override
-    public void deleteAttrOrVa(ProdCatAttrVal catAttrVal) {
-        //若删除未关键属性或销售属性,需要检查是否关联标准品
-        if (ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(catAttrVal.getAttrType())
-                || ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(catAttrVal.getAttrType())) {
-            int prodNum = prodAttrAtomSV.queryProdNumOfAttr(catAttrVal.getTenantId(), catAttrVal.getAttrId());
-            if (prodNum > 0)
-                throw new BusinessException("", "此属性已关联标准品,不允许删除");
+    public void deleteAttr(ProdCatAttrVal catAttrVal) {
+        String tenantId = catAttrVal.getTenantId(),
+                catId = catAttrVal.getProductCatId();
+        //查询属性值
+        ProdCatAttr catAttr = prodCatAttrAtomSV.selectById(tenantId,catAttrVal.getId());
+        if (catAttr==null || CommonSatesConstants.STATE_INACTIVE.equals(catAttr.getState()))
+            return;
+        int count = standedProductAtomSV.queryByCatId(tenantId,catId,false);
+        //若删除关键属性或销售属性,需要检查是否关联标准品
+        if (count>0 && (ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(catAttr.getAttrType())
+                || ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(catAttr.getAttrType()))) {
+            throw new BusinessException("", "此类目已关联标准品,不允许删除当前属性");
         }
-        //属性值不为空,表示只删除单个属性值
-        if (StringUtils.isNotBlank(catAttrVal.getAttrvalueDefId())){
-            //删除属性值
-            prodCatAttrValAtomSV.deleteValByAttr(catAttrVal.getTenantId(),catAttrVal.getCatAttrId(),
-                    catAttrVal.getAttrvalueDefId(),catAttrVal.getOperId());
-        }else{//删除整个属性值
-            //删除关联属性值
-            prodCatAttrValAtomSV.deleteByCat(catAttrVal.getTenantId(),catAttrVal.getCatAttrId(),
-                    catAttrVal.getOperId());
-            //删除关联属性
-            prodCatAttrAtomSV.deleteByCatAttrId(catAttrVal.getTenantId(),catAttrVal.getProductCatId(),
-                    catAttrVal.getAttrId(),catAttrVal.getOperId());
+        //删除关联属性
+        prodCatAttrAtomSV.deleteByCatAttrId(tenantId,catAttrVal.getId(),catAttrVal.getOperId());
+        //删除关联属性值
+        prodCatAttrValAtomSV.deleteByCatAttrId(tenantId,catAttrVal.getId(),catAttrVal.getOperId());
+    }
+
+    /**
+     * 删除类目的属性值关联
+     *
+     * @param catAttrVal
+     */
+    @Override
+    public void deleteAttrVal(ProdCatAttrVal catAttrVal) {
+        String tenantId = catAttrVal.getTenantId(),
+                catId = catAttrVal.getProductCatId();
+        //查询关联属性值是否存在
+        ProdCatAttrValue catAttrValue = prodCatAttrValAtomSV.selectById(tenantId,catAttrVal.getId());
+        if (catAttrValue==null || CommonSatesConstants.STATE_INACTIVE.equals(catAttrValue.getState()))
+            return;
+        //查询属性值是否被标准品/销售商品使用
+        if (standedProdAttrAtomSV.countOfAttrValOfCat(tenantId,catId,catAttrValue.getAttrvalueDefId())>0
+                ||prodAttrAtomSV.countOfAttrValOfCat(tenantId,catId,catAttrValue.getAttrvalueDefId())>0){
+            throw new BusinessException("","该属性值已被关联,不允许删除");
         }
+        //进行删除
+        prodCatAttrValAtomSV.deleteById(tenantId,catAttrVal.getId(),catAttrVal.getOperId());
     }
 
     /**
@@ -311,7 +332,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         }
         String attrType = addCatAttrParam.getAttrType();
         //查询当前类目是否已有非废弃的标准品
-        int count = productAtomSV.queryByCatId(tenantId,catId,false);
+        int count = standedProductAtomSV.queryByCatId(tenantId,catId,false);
         if(count>0&& ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(attrType)){
             throw new BusinessException("","此类目下存在标准品,不允许更改关键属性");
         }else if(count>0 && ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(attrType))

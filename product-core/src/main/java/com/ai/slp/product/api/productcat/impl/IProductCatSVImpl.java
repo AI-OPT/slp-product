@@ -163,14 +163,14 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse deleteProductCatAttrOrVal(ProdCatAttrVal productAttrValParam)
             throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(productAttrValParam.getTenantId(),"");
-        productCatBusiSV.deleteAttrOrVa(productAttrValParam);
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        CommonUtils.checkTenantId(productAttrValParam.getTenantId());
+        //删除属性
+        if ("1".equals(productAttrValParam.getObjType()))
+            productCatBusiSV.deleteAttr(productAttrValParam);
+        //删除属性值
+        else if("2".equals(productAttrValParam.getObjType()))
+            productCatBusiSV.deleteAttrVal(productAttrValParam);
+        return CommonUtils.genSuccessResponse("OK");
     }
 
 	/**

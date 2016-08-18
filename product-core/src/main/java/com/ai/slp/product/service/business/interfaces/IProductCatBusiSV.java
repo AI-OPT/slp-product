@@ -80,10 +80,16 @@ public interface IProductCatBusiSV {
             String tenantId,String productCatId,String attrType);
 
     /**
-     * 删除类目的属性或属性值关联
+     * 删除类目的属性关联
      * @param catAttrVal
      */
-    public void deleteAttrOrVa(ProdCatAttrVal catAttrVal);
+    public void deleteAttr(ProdCatAttrVal catAttrVal);
+
+    /**
+     * 删除类目的属性值关联
+     * @param catAttrVal
+     */
+    public void deleteAttrVal(ProdCatAttrVal catAttrVal);
 
     /**
      * 根据名称或首字母查询类目信息

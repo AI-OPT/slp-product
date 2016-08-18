@@ -18,11 +18,11 @@ public interface IProdCatAttrAtomSV {
      * 根据ID查询类目属性
      * 
      * @param tenantId
-     * @param productCatId
+     * @param catAttrId
      * @return
      * @author lipeng16
      */
-    public ProdCatAttr selectById(String tenantId,String productCatId);
+    public ProdCatAttr selectById(String tenantId,String catAttrId);
     
     /**
      * 添加类目属性

@@ -2,6 +2,7 @@ package com.ai.slp.product.service.atom.impl.product;
 
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.dao.mapper.attach.ProdAttrAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdAttrMapper;
@@ -20,6 +21,8 @@ import java.util.List;
 public class ProdAttrAtomSVImpl implements IProdAttrAtomSV {
     @Autowired
     ProdAttrMapper prodAttrMapper;
+    @Autowired
+    ProdAttrAttachMapper prodAttrAttachMapper;
     /**
      * 查询指定商品下某个属性的属性值
      *
@@ -64,5 +67,18 @@ public class ProdAttrAtomSVImpl implements IProdAttrAtomSV {
         prodAttr.setProdAttrId(SequenceUtil.genProdAttrId());
         prodAttr.setOperTime(DateUtils.currTimeStamp());
         return prodAttrMapper.insert(prodAttr);
+    }
+
+    /**
+     * 查询某类目下某个属性值被关联的数量
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrValDefId
+     * @return
+     */
+    @Override
+    public int countOfAttrValOfCat(String tenantId, String catId, String attrValDefId) {
+        return prodAttrAttachMapper.countOfAttrValOfCat(tenantId,catId,attrValDefId);
     }
 }
