@@ -22,6 +22,10 @@ public class ProdCatAttrUpdateReq extends BaseInfo {
     @NotNull(message = "操作人标识不能为空",groups = {IProductCatSV.UpdateCatAttrAndVal.class})
     private Long operId;
 
+    /**
+     * 属性或属性值关联关系集合
+     */
+    @NotNull(message = "关联关系集合不能为空")
     private List<ProdCatAttrUpdateParam> updateParamList;
 
     public Long getOperId() {
