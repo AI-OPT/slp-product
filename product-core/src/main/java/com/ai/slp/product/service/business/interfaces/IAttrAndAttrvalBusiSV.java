@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
 
@@ -114,4 +116,16 @@ public interface IAttrAndAttrvalBusiSV {
      * @author lipeng16
      */
     public List<AttrDef> queryAllAttrAndVals(String tenantId);
+    
+    /**
+	 * 根据属性ID查询有效的商品类目属性关系
+	 * @param attrDefParam
+     * @return 符合条件的数量
+     * @author jiawen
+	 */
+	public int queryNum(String tenantId, Long attrId);
+    
+    
+    
+    
 }
