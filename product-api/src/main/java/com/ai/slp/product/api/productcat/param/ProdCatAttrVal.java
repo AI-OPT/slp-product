@@ -1,11 +1,10 @@
 package com.ai.slp.product.api.productcat.param;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 类目属性值对象<br>
@@ -19,43 +18,35 @@ import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 public class ProdCatAttrVal extends BaseInfo{
     private static final long serialVersionUID = 1L;
 	/**
-     * 类目与属性关系标识
+     * 类目与属性关联标识/类目与属性值的关联标识
      */
-    @NotBlank(message = "关系标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
-    private String catAttrId;
+    @NotBlank(message = "标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
+    private String id;
     /**
      * 商品类目标识
      */
     @NotBlank(message = "类目标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
     private String productCatId;
-    /**
-     * 属性ID
-     */
-    @NotNull(message = "属性标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
-    private Long attrId;
-    /**
-     * 属性值ID<br>
-     * 为空时,表示删除整个属性
-     */
-    private String attrvalueDefId;
 
     /**
-     * 属性类型,包括 1:关键属性 2:销售属性 3:非关键属性
+     * 数据类型,必填<br>
+     * 1:属性;2:属性值
      */
-    @NotBlank(message = "属性类型不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
-    private String attrType;
+    @NotBlank(message = "数据的类型不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
+    private String objType;
+
     /**
      * 操作人
      */
     @NotNull(message = "操作人标识不能为空",groups = {IProductCatSV.DeleteProductCatAttrOrVal.class})
     private Long operId;
 
-    public String getCatAttrId() {
-        return catAttrId;
+    public String getId() {
+        return id;
     }
 
-    public void setCatAttrId(String catAttrId) {
-        this.catAttrId = catAttrId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getProductCatId() {
@@ -66,35 +57,19 @@ public class ProdCatAttrVal extends BaseInfo{
         this.productCatId = productCatId;
     }
 
-    public long getAttrId() {
-        return attrId;
+    public String getObjType() {
+        return objType;
     }
 
-    public void setAttrId(long attrId) {
-        this.attrId = attrId;
+    public void setObjType(String objType) {
+        this.objType = objType;
     }
 
-    public String getAttrvalueDefId() {
-        return attrvalueDefId;
-    }
-
-    public void setAttrvalueDefId(String attrvalueDefId) {
-        this.attrvalueDefId = attrvalueDefId;
-    }
-
-    public String getAttrType() {
-        return attrType;
-    }
-
-    public void setAttrType(String attrType) {
-        this.attrType = attrType;
-    }
-
-    public long getOperId() {
-        return operId;
-    }
-
-    public void setOperId(long operId) {
+    public void setOperId(Long operId) {
         this.operId = operId;
+    }
+
+    public Long getOperId() {
+        return operId;
     }
 }

@@ -26,13 +26,11 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     ProdCatAttrXmlAttachMapper attrXmlAttachMapper;
     
     @Override
-    public ProdCatAttr selectById(String tenantId, String productCatId) {
-        ProdCatAttrCriteria example = new ProdCatAttrCriteria();
-        example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId);
-        List<ProdCatAttr> prodCatAttrList = prodCatAttrMapper.selectByExample(example);
-        if(prodCatAttrList == null || prodCatAttrList.isEmpty())
-            return null;
-        return prodCatAttrList.get(0);
+    public ProdCatAttr selectById(String tenantId, String catAttrId) {
+        ProdCatAttr prodCatAttr = prodCatAttrMapper.selectByPrimaryKey(catAttrId);
+        if (prodCatAttr!=null && !tenantId.equals(prodCatAttr))
+            prodCatAttr = null;
+        return prodCatAttr;
     }
 
     @Override

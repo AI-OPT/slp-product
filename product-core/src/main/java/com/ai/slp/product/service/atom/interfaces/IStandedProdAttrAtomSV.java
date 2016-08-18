@@ -70,4 +70,13 @@ public interface IStandedProdAttrAtomSV {
      */
     public List<StandedProdAttr> queryAttrVal(String tenantId,String standedId,Long attrId);
 
+    /**
+     * 查询指定类目下某个属性值被标准品关联的数量
+     * @param tenantId
+     * @param catId
+     * @param attrValDefId
+     * @return
+     */
+    public int countOfAttrValOfCat(String tenantId,  String catId, String attrValDefId);
+
 }

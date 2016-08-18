@@ -103,6 +103,26 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
     }
 
     /**
+     * 删除指定的属性值关联
+     *
+     * @param tenantId
+     * @param catAttrValId
+     * @param operId
+     * @return
+     */
+    @Override
+    public int deleteById(String tenantId, String catAttrValId, Long operId) {
+        ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andCatAttrValueIdEqualTo(catAttrValId);
+        ProdCatAttrValue attrValue = new ProdCatAttrValue();
+        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setOperId(operId);
+        attrValue.setOperTime(DateUtils.currTimeStamp());
+        return attrValueMapper.updateByExampleSelective(attrValue,example);
+    }
+
+    /**
      * 查询类目属性关系对应的属性值
      *
      * @param tenantId
@@ -179,11 +199,23 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         return attrValueMapper.updateByPrimaryKey(attrValue);
     }
 
-//	/**
-//	 * 根据属性值标识查询关联的类目数
-//	 */
-//	@Override
-//	public int queryNumByAttrvalId(String tenantId, String catAttrValId) {
-//		return 0;
-//	}
+    /**
+     * 删除关联属性所关联的属性值
+     *
+     * @param tenantId
+     * @param catAttrId
+     * @param operId
+     * @return
+     */
+    @Override
+    public int deleteByCatAttrId(String tenantId, String catAttrId, Long operId) {
+        ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdEqualTo(catAttrId);
+        ProdCatAttrValue attrValue = new ProdCatAttrValue();
+        attrValue.setOperId(operId);
+        attrValue.setOperTime(DateUtils.currTimeStamp());
+        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        return attrValueMapper.updateByExampleSelective(attrValue,example);
+    }
+
 }

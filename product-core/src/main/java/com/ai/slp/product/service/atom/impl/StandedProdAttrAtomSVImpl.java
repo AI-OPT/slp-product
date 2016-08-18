@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.atom.impl;
 
 import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.dao.mapper.attach.StandedProdAttrAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.StandedProdAttrMapper;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
     @Autowired
     StandedProdAttrMapper standedProdAttrMapper;
+    @Autowired
+    StandedProdAttrAttachMapper prodAttrAttachMapper;
     /**
      * 添加标准品属性值
      *
@@ -126,6 +129,19 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
                 .andAttrIdEqualTo(attrId)
                 .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return standedProdAttrMapper.selectByExample(example);
+    }
+
+    /**
+     * 查询指定类目下某个属性值被标准品关联的数量
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrValDefId
+     * @return
+     */
+    @Override
+    public int countOfAttrValOfCat(String tenantId, String catId, String attrValDefId) {
+        return prodAttrAttachMapper.countOfAttrValOfCat(tenantId,catId,attrValDefId);
     }
 
 }

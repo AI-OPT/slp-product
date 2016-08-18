@@ -1,6 +1,5 @@
 package com.ai.slp.product.dao.mapper.attach;
 
-import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -56,9 +55,10 @@ public interface ProdCatAttrAttachMapper {
             @Result(property ="firstLetter",column = "first_letter",javaType = String.class,jdbcType = JdbcType.VARCHAR),
             @Result(property ="state",column = "state",javaType = String.class,jdbcType = JdbcType.VARCHAR),
             @Result(property ="serialNumber",column = "serial_number",javaType = Short.class,jdbcType = JdbcType.NUMERIC),
+            @Result(property ="catAttrValueId",column = "cat_attr_value_id",javaType = String.class,jdbcType = JdbcType.VARCHAR)
     })
-    @Select("SELECT pcav.tenant_id,pcav.attrvalue_def_id,pad.attr_id,pad.attr_value_id,pad.attr_value_name,pad.first_letter,pcav.state,pcav.serial_number " +
+    @Select("SELECT pcav.tenant_id,pcav.attrvalue_def_id,pad.attr_id,pad.attr_value_id,pad.attr_value_name,pad.first_letter,pcav.state,pcav.serial_number,pcav.cat_attr_value_id " +
             "FROM prod_cat_attr_value pcav LEFT JOIN prod_attrvalue_def pad ON pcav.attrvalue_def_id = pad.attrvalue_def_id WHERE pcav.tenant_id=#{tenantId} " +
             "AND pcav.cat_attr_id = #{catAttrId} AND pcav.state = '1' order by pcav.serial_number")
-    List<ProdAttrvalueDef> selectCatAttrVal(@Param("tenantId")String tenantId,@Param("catAttrId")String catAttrId);
+    List<CatAttrValAttach> selectCatAttrVal(@Param("tenantId")String tenantId,@Param("catAttrId")String catAttrId);
 }
