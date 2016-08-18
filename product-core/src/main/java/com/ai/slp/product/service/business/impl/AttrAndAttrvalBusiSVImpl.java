@@ -203,4 +203,11 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         return attrAndValues;
     }
 
+	@Override
+	public int queryNum(String tenantId, Long attrId) {
+		//根据属性ID租户ID查询商品类目属性关系
+		
+		return prodAttrDefAtomSV.selectNumById(tenantId, attrId);
+	}
+
 }

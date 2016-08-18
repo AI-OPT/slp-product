@@ -243,5 +243,19 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
         CommonUtils.addSuccessResHeader(response,"OK");
         return response;
     }
+    /**
+	 * 根据属性ID查询有效的商品类目属性关系
+	 * @param attrDefParam
+     * @return 符合条件的数量
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+	 */
+	@Override
+	public int queryNum(AttrDefParam attrDefParam) throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(attrDefParam.getTenantId(),"");
+		
+        return attrAndAttrvalBusiSV.queryNum(attrDefParam.getTenantId(),attrDefParam.getAttrId());
+	}
 
 }

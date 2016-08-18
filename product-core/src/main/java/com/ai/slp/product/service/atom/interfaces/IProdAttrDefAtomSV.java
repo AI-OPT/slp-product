@@ -73,5 +73,12 @@ public interface IProdAttrDefAtomSV {
      */
     public List<ProdAttrDef> selectAllAttrsOfFirstLetter(String tenantId);
     
+    /**
+	 * 根据属性ID查询有效的商品类目属性关系
+	 * @param attrDefParam
+     * @return 符合条件的数量
+     * @author jiawen
+	 */
+    public int selectNumById(String tenantId, Long attrId);
 
 }

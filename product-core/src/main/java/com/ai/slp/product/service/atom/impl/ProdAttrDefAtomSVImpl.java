@@ -5,8 +5,10 @@ import com.ai.slp.product.constants.CommonSatesConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDefCriteria;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrDefMapper;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
+import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
@@ -27,6 +29,9 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     ProdAttrDefMapper prodAttrDefMapper;
     @Autowired
     ProdAttrvalueDefMapper prodAttrvalueDefMapper;
+    @Autowired
+    ProdCatAttrMapper prodCatAttrMapper;
+    
 
     @Override
     public int installObj(ProdAttrDef productAttr) {
@@ -110,6 +115,13 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return prodAttrDefMapper.selectByExample(example);
     }
+
+	@Override
+	public int selectNumById(String tenantId, Long attrId) {
+		ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+		 example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+		return prodCatAttrMapper.countByExample(example);
+	}
 
     
     
