@@ -220,7 +220,7 @@ public interface IProductCatSV {
 	/**
 	 * 更新类目属性信息
 	 *
-	 * @param updateParams 类目属性和属性值信息
+	 * @param updateReq 类目属性和属性值信息
 	 * @return
 	 * @throws BusinessException
 	 * @throws SystemException
@@ -230,7 +230,7 @@ public interface IProductCatSV {
 	 */
 	@POST
 	@Path("/saveCatAttr")
-	public BaseResponse updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams)
+	public BaseResponse updateCatAttrAndVal(ProdCatAttrUpdateReq updateReq)
 			throws BusinessException,SystemException;
 	@interface UpdateCatAttrAndVal{}
 

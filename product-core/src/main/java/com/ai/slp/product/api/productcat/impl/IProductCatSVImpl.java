@@ -249,16 +249,17 @@ public class IProductCatSVImpl implements IProductCatSV {
     /**
      * 更新类目属性信息
      *
-     * @param updateParams 类目属性和属性值信息
+     * @param updateReq 类目属性和属性值信息
      * @return
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
      */
     @Override
-    public BaseResponse updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams) throws BusinessException, SystemException {
-        int successNum = productCatBusiSV.updateCatAttrAndVal(updateParams);
-        return CommonUtils.genSuccessResponse("总共["+updateParams.size()+"]条,更新成功["+successNum+"]条");
+    public BaseResponse updateCatAttrAndVal(ProdCatAttrUpdateReq updateReq) throws BusinessException, SystemException {
+        CommonUtils.checkTenantId(updateReq.getTenantId());
+        int successNum = productCatBusiSV.updateCatAttrAndVal(updateReq);
+        return CommonUtils.genSuccessResponse("总共["+updateReq.getUpdateParamList().size()+"]条,更新成功["+successNum+"]条");
     }
 
   
