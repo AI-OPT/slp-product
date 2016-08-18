@@ -29,7 +29,7 @@ public class AttrValParam extends BaseInfo {
 	/**
 	 * 属性值ID,属性值修改时不能为空
 	 */
-	@NotBlank(message = "属性ID不能为空",
+	@NotBlank(message = "属性ID值不能为空",
             groups = {IAttrAndValDefSV.UpdateAttrvalue.class})
 	private String attrvalueDefId;
 	
