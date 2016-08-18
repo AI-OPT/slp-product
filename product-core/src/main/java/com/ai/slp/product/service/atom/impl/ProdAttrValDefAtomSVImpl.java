@@ -72,13 +72,9 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
         ProdAttrvalueDefCriteria.Criteria param = example.createCriteria();
         
-        
-        
         if(attrAndValPageQueryVo.getAttrId()!=null)
         	param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
-        
        // param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
-        
         //if(attrAndValPageQueryVo.getAttrValueName() != null)
         if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrName()))
             param.andAttrValueNameEqualTo(attrAndValPageQueryVo.getAttrValueName());
