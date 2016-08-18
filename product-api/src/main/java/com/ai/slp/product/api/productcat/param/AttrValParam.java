@@ -1,11 +1,10 @@
 package com.ai.slp.product.api.productcat.param;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 属性值添加修改请求参数<br>
@@ -29,7 +28,7 @@ public class AttrValParam extends BaseInfo {
 	/**
 	 * 属性值ID,属性值修改时不能为空
 	 */
-	@NotBlank(message = "属性ID值不能为空",
+	@NotBlank(message = "属性值ID不能为空",
             groups = {IAttrAndValDefSV.UpdateAttrvalue.class})
 	private String attrvalueDefId;
 	
