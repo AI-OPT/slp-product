@@ -252,7 +252,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catId = catAttrVal.getProductCatId();
         //查询属性值
         ProdCatAttr catAttr = prodCatAttrAtomSV.selectById(tenantId,catAttrVal.getId());
-        if (catAttr==null || CommonSatesConstants.STATE_INACTIVE.equals(catAttr.getState()))
+        if (catAttr==null || CommonConstants.STATE_INACTIVE.equals(catAttr.getState()))
             return;
         int count = standedProductAtomSV.queryByCatId(tenantId,catId,false);
         //若删除关键属性或销售属性,需要检查是否关联标准品
@@ -277,7 +277,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catId = catAttrVal.getProductCatId();
         //查询关联属性值是否存在
         ProdCatAttrValue catAttrValue = prodCatAttrValAtomSV.selectById(tenantId,catAttrVal.getId());
-        if (catAttrValue==null || CommonSatesConstants.STATE_INACTIVE.equals(catAttrValue.getState()))
+        if (catAttrValue==null || CommonConstants.STATE_INACTIVE.equals(catAttrValue.getState()))
             return;
         //查询属性值是否被标准品/销售商品使用
         if (standedProdAttrAtomSV.countOfAttrValOfCat(tenantId,catId,catAttrValue.getAttrvalueDefId())>0

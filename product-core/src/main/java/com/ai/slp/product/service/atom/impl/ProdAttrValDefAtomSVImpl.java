@@ -9,11 +9,6 @@ import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -77,14 +72,16 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         ProdAttrvalueDefCriteria.Criteria param = example.createCriteria();
 
         if(attrAndValPageQueryVo.getAttrId()!=null)
-        	param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
-       // param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
-        //if(attrAndValPageQueryVo.getAttrValueName() != null)
+        	param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId())
+                    .andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId())
+                    .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrName()))
-        param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonConstants.STATE_ACTIVE);
+            param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId())
+                    .andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId())
+                    .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         if(attrAndValPageQueryVo.getAttrValueName() != null)
             param.andAttrValueNameEqualTo(attrAndValPageQueryVo.getAttrValueName());
-       // if(attrAndValPageQueryVo.getAttrvalueDefId() != null)
+
         if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrvalueDefId()))
             param.andAttrvalueDefIdEqualTo(attrAndValPageQueryVo.getAttrvalueDefId());
         //统计查询条目数
@@ -107,7 +104,8 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
     public List<ProdAttrvalueDef> selectAttrValForAttr(String tenantId, Long attrId) {
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
         example.setOrderByClause("first_letter");
-        example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId)
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<ProdAttrvalueDef> prodAttrValList = prodAttrvalueDefMapper.selectByExample(example);
         return prodAttrValList;
     }
@@ -116,7 +114,7 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
 	@Override
 	public int selectAttrValNum(String tenantId, Long attrId) {
 		 ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
-		 example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+		 example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
 		 int num = prodAttrvalueDefMapper.countByExample(example);
 
 		return num;

@@ -111,14 +111,14 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     public List<ProdAttrDef> selectAllAttrsOfFirstLetter(String tenantId) {
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
         example.setOrderByClause("first_letter");
-        example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodAttrDefMapper.selectByExample(example);
     }
 
 	@Override
 	public int selectNumById(String tenantId, Long attrId) {
 		ProdCatAttrCriteria example = new ProdCatAttrCriteria();
-		 example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+		 example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
 		return prodCatAttrMapper.countByExample(example);
 	}
 

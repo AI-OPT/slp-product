@@ -119,7 +119,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         ProductCatCriteria example = new ProductCatCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId);
         ProductCat productCat = new ProductCat();
-        productCat.setState(CommonSatesConstants.STATE_INACTIVE);
+        productCat.setState(CommonConstants.STATE_INACTIVE);
         productCat.setOperId(operId);
         productCat.setOperTime(DateUtils.currTimeStamp());
         return productCatMapper.updateByExampleSelective(productCat,example);

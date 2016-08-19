@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrXmlAttachMapper;
@@ -66,7 +67,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
         ProdCatAttrCriteria.Criteria criteria = example.createCriteria()
                 .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE).andAttrTypeEqualTo(attrType);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE).andAttrTypeEqualTo(attrType);
         if (!CollectionUtil.isEmpty(attrIdList))
             criteria.andAttrIdNotIn(attrIdList);
         return attrXmlAttachMapper.selectCatAttrIdS(example);
@@ -106,11 +107,11 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
         ProdCatAttrCriteria.Criteria criteria = example.createCriteria()
                 .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
-                .andStateEqualTo(CommonSatesConstants.STATE_ACTIVE).andAttrTypeEqualTo(attrType);
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE).andAttrTypeEqualTo(attrType);
         if (!CollectionUtil.isEmpty(attrIdList))
             criteria.andAttrIdNotIn(attrIdList);
         ProdCatAttr catAttr = new ProdCatAttr();
-        catAttr.setState(CommonSatesConstants.STATE_INACTIVE);
+        catAttr.setState(CommonConstants.STATE_INACTIVE);
         catAttr.setOperId(operId);
         catAttr.setOperTime(DateUtils.currTimeStamp());
         return prodCatAttrMapper.updateByExampleSelective(catAttr,example);
@@ -196,7 +197,7 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     public int selectCatNumByAttrValueId(String tenantId, String attrvalueDefId) {
     	ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
     	example.createCriteria().andTenantIdEqualTo(tenantId).
-        andAttrvalueDefIdEqualTo(attrvalueDefId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        andAttrvalueDefIdEqualTo(attrvalueDefId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
     	return prodCatAttrValueMapper.countByExample(example);
     }
 

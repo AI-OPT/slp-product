@@ -1,8 +1,7 @@
 package com.ai.slp.product.service.atom.impl;
 
-import com.ai.slp.product.constants.CommonSatesConstants;
-import com.ai.slp.product.dao.mapper.attach.StandedProdAttrAttachMapper;
 import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.dao.mapper.attach.StandedProdAttrAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.StandedProdAttrMapper;
@@ -125,7 +124,7 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
     	example.createCriteria()
     	.andTenantIdEqualTo(tenantId)
     	.andAttrvalueDefIdEqualTo(attrvalueDefId)
-    	.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+    	.andStateEqualTo(CommonConstants.STATE_ACTIVE);
     	return standedProdAttrMapper.countByExample(example);
     }
 

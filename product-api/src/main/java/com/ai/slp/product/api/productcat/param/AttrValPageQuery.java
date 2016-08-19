@@ -1,11 +1,9 @@
 package com.ai.slp.product.api.productcat.param;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 属性值分页查询请求参数<br>

@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValueCriteria;
@@ -71,7 +72,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
             return 0;
         ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
-        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setState(CommonConstants.STATE_INACTIVE);
         attrValue.setOperId(operId);
         attrValue.setOperTime(DateUtils.currTimeStamp());
         example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdIn(catAttrIdList);
@@ -95,7 +96,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         if (!CollectionUtil.isEmpty(valIdList))
             criteria.andAttrvalueDefIdNotIn(valIdList);
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
-        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setState(CommonConstants.STATE_INACTIVE);
         attrValue.setOperId(operId);
         attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.updateByExampleSelective(attrValue,example);
@@ -115,7 +116,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andCatAttrValueIdEqualTo(catAttrValId);
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
-        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setState(CommonConstants.STATE_INACTIVE);
         attrValue.setOperId(operId);
         attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.updateByExampleSelective(attrValue,example);
@@ -213,7 +214,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
         attrValue.setOperId(operId);
         attrValue.setOperTime(DateUtils.currTimeStamp());
-        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setState(CommonConstants.STATE_INACTIVE);
         return attrValueMapper.updateByExampleSelective(attrValue,example);
     }
 

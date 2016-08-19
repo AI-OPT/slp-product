@@ -1,10 +1,10 @@
 package com.ai.slp.product.service.atom.interfaces;
 
-import java.util.List;
-
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
+
+import java.util.List;
 
 /**
  * 属性值操作
