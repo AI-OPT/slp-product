@@ -6,7 +6,7 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 import com.ai.slp.product.api.productcat.param.*;
-import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +28,7 @@ public class IProductCatSVTest {
     @Test
     public void queryPageProductCat(){
         ProductCatPageQuery pageQuery = new ProductCatPageQuery();
-        pageQuery.setTenantId(CommonConstants.COMMON_TENANT_ID);
+        pageQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
         pageQuery.setPageSize(10);
         pageQuery.setPageNo(1);
         pageQuery.setIsChild("");
@@ -43,7 +43,7 @@ public class IProductCatSVTest {
     public void createProductCatTest(){
         List<ProductCatParam> pcpList = new ArrayList<>();
         ProductCatParam catParam = new ProductCatParam();
-        catParam.setTenantId(CommonConstants.COMMON_TENANT_ID);
+        catParam.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
         catParam.setOperId(1l);
         catParam.setProductCatName("test12");
         catParam.setIsChild("Y");
