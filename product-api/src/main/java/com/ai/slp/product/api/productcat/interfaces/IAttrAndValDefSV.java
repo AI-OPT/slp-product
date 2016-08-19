@@ -3,7 +3,7 @@ package com.ai.slp.product.api.productcat.interfaces;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.opt.base.vo.BaseMapResponse;
+import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
@@ -210,7 +210,21 @@ public interface IAttrAndValDefSV {
      */
 	@POST
 	@Path("/attrsAndValues")
-    public BaseMapResponse<AttrDef,List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo)
+    public BaseListResponse<AttrDef> queryAllAttrAndVal(BaseInfo baseInfo)
             throws BusinessException, SystemException;
     @interface QueryAllAttrAndVal {}
+    
+    /**
+	 * 根据属性ID查询有效的商品类目属性关系
+	 * @param attrDefParam
+     * @return 符合条件的数量
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+	 */
+    @POST
+	@Path("/queryNum")
+    public int queryNum(AttrDefParam attrDefParam)
+    		throws BusinessException, SystemException;
+    @interface QueryNum {}
 }

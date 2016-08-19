@@ -30,7 +30,7 @@ public class IProductSVImpl implements IProductSV {
     IProdSkuBusiSV prodSkuBusiSV;
     @Autowired
     IProductManagerBsuiSV productManagerBsuiSV;
-    
+
     /**
      * 分页查询非废弃的销售商品列表<br>
      * 用于销售价设置
@@ -119,7 +119,7 @@ public class IProductSVImpl implements IProductSV {
         return productBusiSV.queryNoKeyAttrOfProduct(
                 queryInfo.getTenantId(),queryInfo.getSupplierId(),queryInfo.getProductId());
     }
-    
+
     /**
      * 根据商品ID查询商品目标地域
      * @param productInfoQuery 商品标识信息
@@ -128,14 +128,14 @@ public class IProductSVImpl implements IProductSV {
      * @throws SystemException
      * @author jiawen
      * @ApiDocMethod
-     * @RestRelativeURL 
+     * @RestRelativeURL
      */
 	@Override
 	public PageInfoResponse<TargetAreaForProd> searchProdTargetArea(ProductEditQueryReq productEditParam)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(productEditParam.getTenantId(),"");
 		CommonUtils.checkSupplierId(productEditParam.getSupplierId(),"");
-		
+
 		return productManagerBsuiSV.searchProdTargetArea(productEditParam);
 	}
 }

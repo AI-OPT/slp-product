@@ -3,6 +3,7 @@ package com.ai.slp.product.service.atom.impl;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
+import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.StandedProductCriteria;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
@@ -124,9 +125,14 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 	}
 
 	@Override
-	public int queryByCatId(String catId) {
+	public int queryByCatId(String tenantID,String catId,boolean hasDiscard) {
 		StandedProductCriteria example = new StandedProductCriteria();
-		example.createCriteria().andProductCatIdEqualTo(catId);
+		StandedProductCriteria.Criteria criteria = example.createCriteria()
+				.andTenantIdEqualTo(tenantID).andProductCatIdEqualTo(catId);
+		//如果不包括无效,则进行状态检查
+		if (!hasDiscard){
+			criteria.andStateNotEqualTo(StandedProductConstants.STATUS_DISCARD);
+		}
 		return standedProductMapper.countByExample(example);
 	}
 

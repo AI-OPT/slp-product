@@ -59,6 +59,14 @@ public interface IStandedProdAttrAtomSV {
      * @return
      */
     public int queryProdNumOfAttr(String tenantId,Long attrId);
+    /**
+     * 查询某个属性关联标准品的数量
+     *
+     * @param tenantId
+     * @param attrvalueDefId
+     * @return
+     */
+    public int queryProdNumOfAttrValue(String tenantId,String attrvalueDefId);
 
     /**
      * 查询指定标准品下某个属性的属性值
@@ -69,5 +77,14 @@ public interface IStandedProdAttrAtomSV {
      * @return
      */
     public List<StandedProdAttr> queryAttrVal(String tenantId,String standedId,Long attrId);
+
+    /**
+     * 查询指定类目下某个属性值被标准品关联的数量
+     * @param tenantId
+     * @param catId
+     * @param attrValDefId
+     * @return
+     */
+    public int countOfAttrValOfCat(String tenantId,  String catId, String attrValDefId);
 
 }

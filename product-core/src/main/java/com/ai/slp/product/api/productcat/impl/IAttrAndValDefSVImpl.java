@@ -3,7 +3,6 @@ package com.ai.slp.product.api.productcat.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.*;
-import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by jackieliu on 16/4/27.
@@ -236,14 +234,28 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
      * @author lipeng16
      */
     @Override
-    public BaseMapResponse<AttrDef, List<AttrValDef>> queryAllAttrAndVal(BaseInfo baseInfo)
+    public BaseListResponse<AttrDef> queryAllAttrAndVal(BaseInfo baseInfo)
             throws BusinessException, SystemException {
-    	CommonUtils.checkTenantId(baseInfo.getTenantId(),"");
-        Map<AttrDef, List<AttrValDef>> attrMap = attrAndAttrvalBusiSV.queryAllAttrAndVals(baseInfo.getTenantId());
-        BaseMapResponse<AttrDef, List<AttrValDef>> attrMapRes = new BaseMapResponse<AttrDef, List<AttrValDef>>();
-        attrMapRes.setResult(attrMap);
-        attrMapRes.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS,"OK"));
-        return attrMapRes;
+    	CommonUtils.checkTenantId(baseInfo.getTenantId());
+        List<AttrDef> attrDefList = attrAndAttrvalBusiSV.queryAllAttrAndVals(baseInfo.getTenantId());
+        BaseListResponse<AttrDef> response = new BaseListResponse<>();
+        response.setResult(attrDefList);
+        CommonUtils.addSuccessResHeader(response,"OK");
+        return response;
     }
+    /**
+	 * 根据属性ID查询有效的商品类目属性关系
+	 * @param attrDefParam
+     * @return 符合条件的数量
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+	 */
+	@Override
+	public int queryNum(AttrDefParam attrDefParam) throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(attrDefParam.getTenantId(),"");
+
+        return attrAndAttrvalBusiSV.queryNum(attrDefParam.getTenantId(),attrDefParam.getAttrId());
+	}
 
 }

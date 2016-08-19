@@ -18,11 +18,11 @@ public interface IProdCatAttrAtomSV {
      * 根据ID查询类目属性
      * 
      * @param tenantId
-     * @param productCatId
+     * @param catAttrId
      * @return
      * @author lipeng16
      */
-    public ProdCatAttr selectById(String tenantId,String productCatId);
+    public ProdCatAttr selectById(String tenantId,String catAttrId);
     
     /**
      * 添加类目属性
@@ -43,13 +43,23 @@ public interface IProdCatAttrAtomSV {
     public List<ProdCatAttr> queryAttrsByCatId(String tenantId, String catId);
 
     /**
-     * 删除指定类目属性关系
+     * 查询所有非指定的属性的关系标识
+     * @param tenantId
+     * @param catId
+     * @param attrType
+     * @param attrIdList 指定的属性标识
+     * @return
+     */
+    public List<String> queryIdsOfNoAttrId(String tenantId,String catId,String attrType,List<Long> attrIdList);
+
+    /**
+     * 删除指定类目属性关联关系
      * @param tenantId
      * @param catAttrId
      * @param operId
      * @return
      */
-    public int deleteByCatId(String tenantId,String catAttrId,Long operId);
+    public int deleteByCatAttrId(String tenantId, String catAttrId, Long operId);
 
     /**
      * 删除类目的指定属性
@@ -61,6 +71,17 @@ public interface IProdCatAttrAtomSV {
      * @return
      */
     public int deleteByCatAttrId(String tenantId, String catId,Long attrId, Long operId);
+
+    /**
+     * 删除非指定属性对应关系
+     * @param tenantId
+     * @param catId
+     * @param attrIdList 指定的属性标识
+     * @param operId
+     * @return
+     */
+    public int deleteNoAttrId(String tenantId,String catId,String attrType,List<Long> attrIdList,Long operId);
+
 
     /**
      * 查询类目下某个类型的属性
@@ -100,6 +121,15 @@ public interface IProdCatAttrAtomSV {
      * @author lipeng16
      */
     public int selectCatNumByAttrId(String tenantId, Long attrId );
+    /**
+     * 通过属性ID查询关联类目数量
+     * 
+     * @param tenantId
+     * @param attrId
+     * @return
+     * @author jiawen
+     */
+    public int selectCatNumByAttrValueId(String tenantId, String attrvalueDefId);
     
     /**
      * 通过属性标识查看商品类目属性信息

@@ -5,6 +5,7 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.productcat.param.*;
+import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
@@ -18,9 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Transactional
@@ -54,17 +53,21 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         List<ProdAttrDef> prodAttrDefList = pageInfo.getResult();
         List<AttrDefInfo> attrDefInfoList = new ArrayList<AttrDefInfo>();
         for (ProdAttrDef prodAttrDef : prodAttrDefList) {
+        	Long attrId = prodAttrDef.getAttrId();
+        	String tenantId = prodAttrDef.getTenantId();
             AttrDefInfo attrDefInfo = new AttrDefInfo();
             BeanUtils.copyProperties(attrDefInfo, prodAttrDef);
-
+            //根据当前的属性ID 查询当前ID下的属性值的数量
+            int attrValNum = prodAttrValDefAtomSV.selectAttrValNum(tenantId, attrId);
+            attrDefInfo.setAttrValNum(attrValNum);
             attrDefInfoList.add(attrDefInfo);
         }
-        PageInfoResponse<AttrDefInfo> AttrDefInfoPage = new PageInfoResponse<>();
-        AttrDefInfoPage.setResult(attrDefInfoList);
-        AttrDefInfoPage.setPageNo(pageInfo.getPageNo());
-        AttrDefInfoPage.setPageSize(pageInfo.getPageSize());
-
-        return AttrDefInfoPage;
+        PageInfoResponse<AttrDefInfo> attrDefInfoPage = new PageInfoResponse<>();
+        attrDefInfoPage.setResult(attrDefInfoList);
+        attrDefInfoPage.setPageNo(pageInfo.getPageNo());
+        attrDefInfoPage.setPageSize(pageInfo.getPageSize());
+        attrDefInfoPage.setCount(pageInfo.getCount());
+        return attrDefInfoPage;
     }
 
     @Override
@@ -85,9 +88,6 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         if(prodCatAttrAtomSV.selectCatNumByAttrId(attrPam.getTenantId(), attrPam.getAttrId()) > 0
                 || standedProdAttrAtomSV.queryProdNumOfAttr(attrPam.getTenantId(), attrPam.getAttrId()) > 0)
             throw new BusinessException("", "该属性已被使用，不能删除");
-        
-        if (attrPam.getTenantId() == null)
-            throw new BusinessException("", "未找到指定的属性信息，租户ID=" + attrPam.getTenantId());
         return prodAttrDefAtomSV.deleteById(attrPam.getTenantId(), attrPam.getAttrId(),attrPam.getOperId());
     }
 
@@ -97,6 +97,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         for (AttrParam attrParam : attrParamList) {
             ProdAttrDef prodAttrDef = new ProdAttrDef();
             BeanUtils.copyProperties(prodAttrDef, attrParam);
+            prodAttrDef.setState(ProductConstants.ProdAttr.State.ACTIVE);
             if (attrParam.getFirstLetter() != null)
                 prodAttrDef.setFirstLetter(attrParam.getFirstLetter());
             int ok = prodAttrDefAtomSV.installObj(prodAttrDef);
@@ -118,14 +119,15 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
         for (ProdAttrvalueDef attrVal : attrValList) {
             AttrValInfo attrValInfo = new AttrValInfo();
             BeanUtils.copyProperties(attrValInfo, attrVal);
-
+            attrValInfo.setCatAttrValId("");
             attrValInfoList.add(attrValInfo);
         }
         PageInfoResponse<AttrValInfo> attrValInfo = new PageInfoResponse<AttrValInfo>();
         attrValInfo.setResult(attrValInfoList);
         attrValInfo.setPageNo(attrValPage.getPageNo());
         attrValInfo.setPageSize(attrValPage.getPageSize());
-
+        //设置数据总条数
+        attrValInfo.setCount(attrValPage.getCount());
         return attrValInfo;
     }
 
@@ -142,9 +144,9 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
 
     @Override
     public int deleteAttrVal(AttrValUniqueReq attrValUniqueReq) {
-        if(prodCatAttrAtomSV.selectCatNumByAttrId(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrId()) > 0
-                || standedProdAttrAtomSV.queryProdNumOfAttr(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrId()) > 0)
-            throw new BusinessException("", "该属性已被使用，不能删除");
+        if(prodCatAttrAtomSV.selectCatNumByAttrValueId(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrvalueDefId()) > 0
+                || standedProdAttrAtomSV.queryProdNumOfAttrValue(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrvalueDefId()) > 0)
+            throw new BusinessException("", "该属性值已被使用，不能删除");
         
         return prodAttrValDefAtomSV.deleteProdAttrVal(attrValUniqueReq.getTenantId(),
                 attrValUniqueReq.getAttrvalueDefId(), attrValUniqueReq.getOperId());
@@ -177,10 +179,10 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     }
 
     @Override
-    public Map<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId) {
-        Map<AttrDef, List<AttrValDef>> attrAndValues = new HashMap<>();
+    public List<AttrDef> queryAllAttrAndVals(String tenantId) {
+        List<AttrDef> attrAndValues = new ArrayList<>();
         //属性集合
-        List<ProdAttrDef> prodAttrList = prodAttrDefAtomSV.selectAllAttrs(tenantId);
+        List<ProdAttrDef> prodAttrList = prodAttrDefAtomSV.selectAllAttrsOfFirstLetter(tenantId);
         for (ProdAttrDef prodAttr : prodAttrList) {
             AttrDef attrDef = new AttrDef();
             BeanUtils.copyProperties(attrDef, prodAttr);
@@ -193,9 +195,17 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
                 BeanUtils.copyProperties(attrVal, prodAttrVal);
                 attrValList.add(attrVal);
             }
-            attrAndValues.put(attrDef, attrValList);
+            attrDef.setValDefList(attrValList);
+            attrAndValues.add(attrDef);
         }
         return attrAndValues;
     }
+
+	@Override
+	public int queryNum(String tenantId, Long attrId) {
+		//根据属性ID租户ID查询商品类目属性关系
+		
+		return prodAttrDefAtomSV.selectNumById(tenantId, attrId);
+	}
 
 }

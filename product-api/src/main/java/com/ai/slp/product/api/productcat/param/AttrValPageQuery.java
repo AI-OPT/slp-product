@@ -1,5 +1,7 @@
 package com.ai.slp.product.api.productcat.param;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.ai.opt.base.vo.BaseInfo;
@@ -17,15 +19,15 @@ public class AttrValPageQuery extends BaseInfo{
     private static final long serialVersionUID = 1L;
 
 	/**
-     * 属性值ID,查询属性值时不能为空
+     * 属性值ID
      */
-    @NotBlank(message = "属性标识不能为空",
-    		groups = { IAttrAndValDefSV.QueryPageAttrvalue.class})
     private String attrvalueDefId;
     
     /**
-     *属性标识
+     *属性标识,必填
      */
+    @NotNull(message = "属性标识不能为空",
+    		groups = { IAttrAndValDefSV.QueryPageAttrvalue.class})
     private Long attrId;
     
     /**

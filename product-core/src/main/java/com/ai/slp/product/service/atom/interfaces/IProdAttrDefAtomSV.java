@@ -1,10 +1,10 @@
 package com.ai.slp.product.service.atom.interfaces;
 
-import java.util.List;
-
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
+
+import java.util.List;
 
 /**
  * 商品属性操作
@@ -66,12 +66,19 @@ public interface IProdAttrDefAtomSV {
     public int  updateAttr(ProdAttrDef prodAttrDef);
     
     /**
-     * 查询所有有效属性
+     * 查询所有有效属性,根据首字母进行正序
      * 
      * @return
      * @author lipeng16
      */
-    public List<ProdAttrDef> selectAllAttrs(String tenantId);
+    public List<ProdAttrDef> selectAllAttrsOfFirstLetter(String tenantId);
     
+    /**
+	 * 根据属性ID查询有效的商品类目属性关系
+	 * @param attrDefParam
+     * @return 符合条件的数量
+     * @author jiawen
+	 */
+    public int selectNumById(String tenantId, Long attrId);
 
 }

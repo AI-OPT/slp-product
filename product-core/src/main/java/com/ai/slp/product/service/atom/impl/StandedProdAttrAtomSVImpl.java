@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.atom.impl;
 
+import com.ai.slp.product.constants.CommonSatesConstants;
+import com.ai.slp.product.dao.mapper.attach.StandedProdAttrAttachMapper;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrCriteria;
@@ -24,6 +26,8 @@ import java.util.Map;
 public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
     @Autowired
     StandedProdAttrMapper standedProdAttrMapper;
+    @Autowired
+    StandedProdAttrAttachMapper prodAttrAttachMapper;
     /**
      * 添加标准品属性值
      *
@@ -107,6 +111,23 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
                 .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return standedProdAttrMapper.countByExample(example);
     }
+    /**
+     * 查询某个属性关联标准品的数量
+     *
+     * @param tenantId
+     * @param attrvalueDefId
+     * @return
+     */
+    @Override
+    public int queryProdNumOfAttrValue(String tenantId, String attrvalueDefId) {
+
+    	StandedProdAttrCriteria example = new StandedProdAttrCriteria();
+    	example.createCriteria()
+    	.andTenantIdEqualTo(tenantId)
+    	.andAttrvalueDefIdEqualTo(attrvalueDefId)
+    	.andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+    	return standedProdAttrMapper.countByExample(example);
+    }
 
     /**
      * 查询指定标准品下某个属性的属性值
@@ -126,6 +147,19 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
                 .andAttrIdEqualTo(attrId)
                 .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return standedProdAttrMapper.selectByExample(example);
+    }
+
+    /**
+     * 查询指定类目下某个属性值被标准品关联的数量
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrValDefId
+     * @return
+     */
+    @Override
+    public int countOfAttrValOfCat(String tenantId, String catId, String attrValDefId) {
+        return prodAttrAttachMapper.countOfAttrValOfCat(tenantId,catId,attrValDefId);
     }
 
 }

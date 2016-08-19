@@ -59,6 +59,69 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
     }
 
     /**
+     * 删除管理属性对应的属性值
+     *
+     * @param tenantId
+     * @param catAttrIdList
+     * @return
+     */
+    @Override
+    public int deleteByCatAttrId(String tenantId, List<String> catAttrIdList,Long operId) {
+        if (CollectionUtil.isEmpty(catAttrIdList))
+            return 0;
+        ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+        ProdCatAttrValue attrValue = new ProdCatAttrValue();
+        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setOperId(operId);
+        attrValue.setOperTime(DateUtils.currTimeStamp());
+        example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdIn(catAttrIdList);
+        return attrValueMapper.updateByExampleSelective(attrValue,example);
+    }
+
+    /**
+     * 删除指定属性下不包含在当前属性值集合的属性值
+     *
+     * @param tenantId
+     * @param catAttrId
+     * @param valIdList
+     * @param operId
+     * @return
+     */
+    @Override
+    public int deleteNoValIds(String tenantId, String catAttrId, List<String> valIdList, Long operId) {
+        ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+        ProdCatAttrValueCriteria.Criteria criteria = example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andCatAttrIdEqualTo(catAttrId);
+        if (!CollectionUtil.isEmpty(valIdList))
+            criteria.andAttrvalueDefIdNotIn(valIdList);
+        ProdCatAttrValue attrValue = new ProdCatAttrValue();
+        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setOperId(operId);
+        attrValue.setOperTime(DateUtils.currTimeStamp());
+        return attrValueMapper.updateByExampleSelective(attrValue,example);
+    }
+
+    /**
+     * 删除指定的属性值关联
+     *
+     * @param tenantId
+     * @param catAttrValId
+     * @param operId
+     * @return
+     */
+    @Override
+    public int deleteById(String tenantId, String catAttrValId, Long operId) {
+        ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andCatAttrValueIdEqualTo(catAttrValId);
+        ProdCatAttrValue attrValue = new ProdCatAttrValue();
+        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        attrValue.setOperId(operId);
+        attrValue.setOperTime(DateUtils.currTimeStamp());
+        return attrValueMapper.updateByExampleSelective(attrValue,example);
+    }
+
+    /**
      * 查询类目属性关系对应的属性值
      *
      * @param tenantId
@@ -100,7 +163,7 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
      */
     @Override
     public int installCatAttrVal(ProdCatAttrValue attrValue) {
-        attrValue.setCatAttrId(SequenceUtil.genProdCatAttrValId());
+        attrValue.setCatAttrValueId(SequenceUtil.genProdCatAttrValId());
         if (attrValue.getOperTime()==null)
             attrValue.setOperTime(DateUtils.currTimeStamp());
         return attrValueMapper.insert(attrValue);
@@ -135,11 +198,23 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         return attrValueMapper.updateByPrimaryKey(attrValue);
     }
 
-//	/**
-//	 * 根据属性值标识查询关联的类目数
-//	 */
-//	@Override
-//	public int queryNumByAttrvalId(String tenantId, String catAttrValId) {
-//		return 0;
-//	}
+    /**
+     * 删除关联属性所关联的属性值
+     *
+     * @param tenantId
+     * @param catAttrId
+     * @param operId
+     * @return
+     */
+    @Override
+    public int deleteByCatAttrId(String tenantId, String catAttrId, Long operId) {
+        ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andCatAttrIdEqualTo(catAttrId);
+        ProdCatAttrValue attrValue = new ProdCatAttrValue();
+        attrValue.setOperId(operId);
+        attrValue.setOperTime(DateUtils.currTimeStamp());
+        attrValue.setState(CommonSatesConstants.STATE_INACTIVE);
+        return attrValueMapper.updateByExampleSelective(attrValue,example);
+    }
+
 }

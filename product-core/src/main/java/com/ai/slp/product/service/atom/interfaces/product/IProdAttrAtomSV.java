@@ -35,4 +35,13 @@ public interface IProdAttrAtomSV {
      * @return
      */
     public int installProdAttr(ProdAttr prodAttr);
+
+    /**
+     * 查询某类目下某个属性值被关联的数量
+     * @param tenantId
+     * @param catId
+     * @param attrValDefId
+     * @return
+     */
+    public int countOfAttrValOfCat(String tenantId,  String catId, String attrValDefId);
 }

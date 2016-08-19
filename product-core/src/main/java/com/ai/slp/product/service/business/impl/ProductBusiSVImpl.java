@@ -15,6 +15,7 @@ import com.ai.slp.product.constants.ProdAttrAndValDefConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
 import com.ai.slp.product.dao.mapper.attach.ProductAttach;
@@ -579,9 +580,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         List<ProdAttrValInfo> valInfoList = new ArrayList<>();
         String tenantId = product.getTenantId(),prodId = product.getProdId();
         //查询属性对应的属性值集合
-        List<ProdAttrvalueDef> valDefList = productCatBusiSV.queryAttrValOfAttrAndType(tenantId
+        List<CatAttrValAttach> valDefList = productCatBusiSV.queryAttrValOfAttrAndType(tenantId
                 ,product.getProductCatId(),attrId,ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
-        for (ProdAttrvalueDef valDef:valDefList){
+        for (CatAttrValAttach valDef:valDefList){
             ProdAttrValInfo valInfo = new ProdAttrValInfo();
             valInfo.setTenantId(tenantId);
             valInfo.setProductId(prodId);

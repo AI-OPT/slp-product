@@ -4,15 +4,17 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
-import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.atom.interfaces.*;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
@@ -37,13 +39,15 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     @Autowired
     IProdCatAttrAtomSV prodCatAttrAtomSV;
     @Autowired
-    IStandedProductAtomSV productAtomSV;
+    IStandedProductAtomSV standedProductAtomSV;
+    @Autowired
+    IProdAttrAtomSV prodAttrAtomSV;
     @Autowired
     IProdCatAttrValAtomSV prodCatAttrValAtomSV;
     @Autowired
     IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
     @Autowired
-    IStandedProdAttrAtomSV prodAttrAtomSV;
+    IStandedProdAttrAtomSV standedProdAttrAtomSV;
 
     @Override
     public PageInfoResponse<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
@@ -71,11 +75,22 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
 
     @Override
     public void addCatList(List<ProductCatParam> pcpList) {
-        if (pcpList==null || pcpList.isEmpty())
+        if (CollectionUtil.isEmpty(pcpList))
             return;
         for(ProductCatParam catParam:pcpList){
             ProductCat productCat = new ProductCat();
             BeanUtils.copyProperties(productCat,catParam);
+            Short catLeve = new Short("1");
+            //上级类目不为空,且不为0
+            if (StringUtils.isNotBlank(catParam.getParentProductCatId())
+                    && !ProductCatConstants.ProductCat.ParentProductCatId.ROOT_CAT.equals(
+                    catParam.getParentProductCatId())){
+                ProductCat parentCat = prodCatDefAtomSV.selectById(
+                        catParam.getTenantId(),catParam.getParentProductCatId());
+                if (parentCat!=null)
+                    catLeve = (short) (parentCat.getCatLevel()+1);
+            }
+            productCat.setCatLevel(catLeve);
             prodCatDefAtomSV.insertProductCat(productCat);
         }
     }
@@ -128,7 +143,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         if (productCat==null)
             throw new BusinessException("","未找到要删除类目,租户id:"+tenantId+",类目标识:"+productCatId);
         //判断是否关联了标准品
-        if (productAtomSV.queryByCatId(productCatId)>0)
+        if (standedProductAtomSV.queryByCatId(tenantId,productCatId,false)>0)
             throw new BusinessException("","已关联了标准品，不可删除");
         //判断是否有子类目
         if (prodCatDefAtomSV.queryOfParent(productCatId)>0)
@@ -141,11 +156,11 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 //删除类目下属性与属性值的对应关系
                 prodCatAttrValAtomSV.deleteByCat(tenantId,catAttr.getCatAttrId(),operId);
                 //删除类目与属性对应关系
-                prodCatAttrAtomSV.deleteByCatId(tenantId,catAttr.getCatAttrId(),operId);
+                prodCatAttrAtomSV.deleteByCatAttrId(tenantId,catAttr.getCatAttrId(),operId);
             }
         }
         //删除类目
-        prodCatDefAtomSV.deleteProductCat(tenantId,productCatId);
+        prodCatDefAtomSV.deleteProductCat(tenantId,productCatId,operId);
     }
 
     /**
@@ -169,9 +184,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
      * @return
      */
     @Override
-    public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrOfCatByIdAndType(
+    public List<ProdCatAttrDef> queryAttrOfCatByIdAndType(
             String tenantId, String productCatId, String attrType) {
-        Map<ProdCatAttrDef, List<AttrValInfo>> catAttrDefListMap = new HashMap<>();
+        List<ProdCatAttrDef> catAttrDefList = new ArrayList<>();
         //查询类目属性集合
         List<ProdCatAttrAttch> attrAttchList = catAttrAttachAtomSV.queryAttrOfByIdAndType(
                 tenantId,productCatId,attrType);
@@ -180,20 +195,22 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             ProdCatAttrDef catAttrDef = new ProdCatAttrDef();
             BeanUtils.copyProperties(catAttrDef,attrAttch);
             //查询此属性是否关联标准品
-            int prodNum = prodAttrAtomSV.queryProdNumOfAttr(tenantId,attrAttch.getAttrId());
+            int prodNum = standedProdAttrAtomSV.queryProdNumOfAttr(tenantId,attrAttch.getAttrId());
             catAttrDef.setHasProduct(prodNum>0?true:false);
             //查询属性对应的属性值
-            List<ProdAttrvalueDef> catAttrValList =
+            List<CatAttrValAttach> catAttrValList =
                     catAttrAttachAtomSV.queryValListByCatAttr(tenantId,attrAttch.getCatAttrId());
             List<AttrValInfo> valInfoList = new ArrayList<>();
-            catAttrDefListMap.put(catAttrDef,valInfoList);
-            for (ProdAttrvalueDef attrvalueDef:catAttrValList){
+            for (CatAttrValAttach attrvalueDef:catAttrValList){
                 AttrValInfo attrValInfo = new AttrValInfo();
                 BeanUtils.copyProperties(attrValInfo,attrvalueDef);
+                attrValInfo.setCatAttrValId(attrvalueDef.getCatAttrValueId());
                 valInfoList.add(attrValInfo);
             }
+            catAttrDef.setAttrValList(valInfoList);
+            catAttrDefList.add(catAttrDef);
         }
-        return catAttrDefListMap;
+        return catAttrDefList;
     }
 
     /**
@@ -225,32 +242,50 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     }
 
     /**
-     * 删除类目的属性或属性值关联
+     * 删除类目的属性关联
      *
      * @param catAttrVal
      */
     @Override
-    public void deleteAttrOrVa(ProdCatAttrVal catAttrVal) {
-        //若删除未关键属性或销售属性,需要检查是否关联标准品
-        if (ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(catAttrVal.getAttrType())
-                || ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(catAttrVal.getAttrType())) {
-            int prodNum = prodAttrAtomSV.queryProdNumOfAttr(catAttrVal.getTenantId(), catAttrVal.getAttrId());
-            if (prodNum > 0)
-                throw new BusinessException("", "此属性已关联标准品,不允许删除");
+    public void deleteAttr(ProdCatAttrVal catAttrVal) {
+        String tenantId = catAttrVal.getTenantId(),
+                catId = catAttrVal.getProductCatId();
+        //查询属性值
+        ProdCatAttr catAttr = prodCatAttrAtomSV.selectById(tenantId,catAttrVal.getId());
+        if (catAttr==null || CommonSatesConstants.STATE_INACTIVE.equals(catAttr.getState()))
+            return;
+        int count = standedProductAtomSV.queryByCatId(tenantId,catId,false);
+        //若删除关键属性或销售属性,需要检查是否关联标准品
+        if (count>0 && (ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(catAttr.getAttrType())
+                || ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(catAttr.getAttrType()))) {
+            throw new BusinessException("", "此类目已关联标准品,不允许删除当前属性");
         }
-        //属性值不为空,表示只删除单个属性值
-        if (StringUtils.isNotBlank(catAttrVal.getAttrvalueDefId())){
-            //删除属性值
-            prodCatAttrValAtomSV.deleteValByAttr(catAttrVal.getTenantId(),catAttrVal.getCatAttrId(),
-                    catAttrVal.getAttrvalueDefId(),catAttrVal.getOperId());
-        }else{//删除整个属性值
-            //删除关联属性值
-            prodCatAttrValAtomSV.deleteByCat(catAttrVal.getTenantId(),catAttrVal.getCatAttrId(),
-                    catAttrVal.getOperId());
-            //删除关联属性
-            prodCatAttrAtomSV.deleteByCatAttrId(catAttrVal.getTenantId(),catAttrVal.getProductCatId(),
-                    catAttrVal.getAttrId(),catAttrVal.getOperId());
+        //删除关联属性
+        prodCatAttrAtomSV.deleteByCatAttrId(tenantId,catAttrVal.getId(),catAttrVal.getOperId());
+        //删除关联属性值
+        prodCatAttrValAtomSV.deleteByCatAttrId(tenantId,catAttrVal.getId(),catAttrVal.getOperId());
+    }
+
+    /**
+     * 删除类目的属性值关联
+     *
+     * @param catAttrVal
+     */
+    @Override
+    public void deleteAttrVal(ProdCatAttrVal catAttrVal) {
+        String tenantId = catAttrVal.getTenantId(),
+                catId = catAttrVal.getProductCatId();
+        //查询关联属性值是否存在
+        ProdCatAttrValue catAttrValue = prodCatAttrValAtomSV.selectById(tenantId,catAttrVal.getId());
+        if (catAttrValue==null || CommonSatesConstants.STATE_INACTIVE.equals(catAttrValue.getState()))
+            return;
+        //查询属性值是否被标准品/销售商品使用
+        if (standedProdAttrAtomSV.countOfAttrValOfCat(tenantId,catId,catAttrValue.getAttrvalueDefId())>0
+                ||prodAttrAtomSV.countOfAttrValOfCat(tenantId,catId,catAttrValue.getAttrvalueDefId())>0){
+            throw new BusinessException("","该属性值已被关联,不允许删除");
         }
+        //进行删除
+        prodCatAttrValAtomSV.deleteById(tenantId,catAttrVal.getId(),catAttrVal.getOperId());
     }
 
     /**
@@ -296,11 +331,27 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             throw new BusinessException("","未找到指定类目信息,租户ID:"+tenantId+",类目标识:"+catId);
         }
         String attrType = addCatAttrParam.getAttrType();
-        Timestamp operTime = DateUtils.currTimeStamp();
+        //查询当前类目是否已有非废弃的标准品
+        int count = standedProductAtomSV.queryByCatId(tenantId,catId,false);
+        if(count>0&& ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(attrType)){
+            throw new BusinessException("","此类目下存在标准品,不允许更改关键属性");
+        }else if(count>0 && ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(attrType))
+            throw new BusinessException("","此类目下存在标准品,不允许更改销售属性");
         Map<Long,Set<String>> attrAndVal = addCatAttrParam.getAttrAndVal();
+        List<Long> attrIdList = new ArrayList<>(attrAndVal.keySet());
+        //查询待删除属性关联关系ID
+        List<String> catAttrIds = prodCatAttrAtomSV.queryIdsOfNoAttrId(tenantId,catId,attrType,attrIdList);
+        //删除属性关联
+        prodCatAttrAtomSV.deleteNoAttrId(tenantId,catId,attrType,attrIdList,addCatAttrParam.getOperId());
+        //删除取消管理的属性值
+        prodCatAttrValAtomSV.deleteByCatAttrId(tenantId,catAttrIds,addCatAttrParam.getOperId());
+        //查询当前类目指定类型的属性信息
+        List<ProdCatAttr> oldAttr = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId,catId,attrType);
+        Timestamp operTime = DateUtils.currTimeStamp();
         for (Long attId:attrAndVal.keySet()){
             //检查是否已经关联
             ProdCatAttr catAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(tenantId,catId,attId,attrType);
+            Set<String> attrValSet = attrAndVal.get(attId);
             if (catAttr==null){
                 catAttr = new ProdCatAttr();
                 catAttr.setTenantId(tenantId);
@@ -318,18 +369,18 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 else
                     catAttr.setIsNecessary("N");
                 prodCatAttrAtomSV.insertProdCatAttr(catAttr);
+            }else {
+                //删除已取消关联的属性值
+                prodCatAttrValAtomSV.deleteNoValIds(tenantId,catAttr.getCatAttrId()
+                        ,new ArrayList<String>(attrValSet),addCatAttrParam.getOperId());
             }
-            //添加属性值
-            Set<String> attrValSet = attrAndVal.get(attId);
+
             for (String valId:attrValSet){
                 //检查关联关系是否已经存在
-                ProdCatAttrValue catAttrValue = null;
-                if (catAttr!=null){
-                    catAttrValue = prodCatAttrValAtomSV.queryByCatAndCatAttrId(
+                ProdCatAttrValue catAttrValue = prodCatAttrValAtomSV.queryByCatAndCatAttrId(
                             tenantId,catAttr.getCatAttrId(),valId);
-                    if (catAttrValue!=null)
-                        continue;
-                }
+                if (catAttrValue!=null)
+                    continue;
                 //添加属性值
                 catAttrValue = new ProdCatAttrValue();
                 catAttrValue.setTenantId(tenantId);
@@ -347,21 +398,15 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     /**
      * 更新类目属性和属性值
      *
-     * @param updateParams
+     * @param updateReq
      * @return 更新成功条目数
      */
     @Override
-    public int updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams) {
+    public int updateCatAttrAndVal(ProdCatAttrUpdateReq updateReq) {
         //成功数量
         int successNum = 0;
-
-        for (ProdCatAttrUpdateParam updateParam:updateParams){
-            String tenantId = updateParam.getTenantId();
-            if (StringUtils.isBlank(tenantId)){
-                logger.warn("租户id不能为空\r\n"+updateParam.toString());
-                continue;
-            }
-
+        String tenantId = updateReq.getTenantId();
+        for (ProdCatAttrUpdateParam updateParam:updateReq.getUpdateParamList()){
             switch (updateParam.getObjType()){
                 //更新属性
                 case "1":
@@ -373,7 +418,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                     }
                     prodCatAttr.setSerialNumber(updateParam.getSerialNumber());
                     prodCatAttr.setIsPicture(updateParam.getIsPicture());
-                    prodCatAttr.setOperId(updateParam.getOperId());
+                    prodCatAttr.setOperId(updateReq.getOperId());
                     prodCatAttrAtomSV.update(prodCatAttr);
                     successNum++;
                     break;
@@ -386,7 +431,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                         continue;
                     }
                     attrVal.setSerialNumber(updateParam.getSerialNumber());
-                    attrVal.setOperId(updateParam.getOperId());
+                    attrVal.setOperId(updateReq.getOperId());
                     prodCatAttrValAtomSV.update(attrVal);
                     successNum++;
                     break;
@@ -409,7 +454,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
      * @return
      */
     @Override
-    public List<ProdAttrvalueDef> queryAttrValOfAttrAndType(String tenantId, String catId, long attrId, String attrType) {
+    public List<CatAttrValAttach> queryAttrValOfAttrAndType(String tenantId, String catId, long attrId, String attrType) {
         //查询对应关系
         ProdCatAttr catAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(tenantId,catId,attrId,attrType);
         if (catAttr==null){

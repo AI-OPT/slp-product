@@ -1,10 +1,10 @@
 package com.ai.slp.product.service.atom.interfaces;
 
-import java.util.List;
-
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.vo.StandedProdPageQueryVo;
+
+import java.util.List;
 
 /**
  * 对标准品的原子操作
@@ -46,10 +46,12 @@ public interface IStandedProductAtomSV {
     /**
      * 查询类目下标准品数量
      *
+     * @param tenantID
      * @param catId
+     * @param hasDiscard  是否包括无效状态
      * @return
      */
-    public int queryByCatId(String catId);
+    public int queryByCatId(String tenantID,String catId,boolean hasDiscard);
     
     /**
      * 更新类目下标准品的市场价

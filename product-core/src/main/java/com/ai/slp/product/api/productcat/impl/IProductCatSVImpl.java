@@ -2,11 +2,9 @@ package com.ai.slp.product.api.productcat.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.BaseMapResponse;
-import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.base.vo.*;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
@@ -58,15 +56,10 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse createProductCat(List<ProductCatParam> pcpList)
             throws BusinessException, SystemException {
-        if (pcpList!=null && pcpList.size()>0){
+        if (!CollectionUtil.isEmpty(pcpList)){
             productCatBusiSV.addCatList(pcpList);
         }
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        return CommonUtils.genSuccessResponse("");
     }
 
 	/**
@@ -156,12 +149,7 @@ public class IProductCatSVImpl implements IProductCatSV {
             throw new BusinessException("","添加属性相关信息为空,不执行添加操作");
         }
         productCatBusiSV.addAttrAndValOfAttrType(addCatAttrParam);
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        return CommonUtils.genSuccessResponse("");
     }
 
     /**
@@ -175,14 +163,14 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseResponse deleteProductCatAttrOrVal(ProdCatAttrVal productAttrValParam)
             throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(productAttrValParam.getTenantId(),"");
-        productCatBusiSV.deleteAttrOrVa(productAttrValParam);
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        CommonUtils.checkTenantId(productAttrValParam.getTenantId());
+        //删除属性
+        if ("1".equals(productAttrValParam.getObjType()))
+            productCatBusiSV.deleteAttr(productAttrValParam);
+        //删除属性值
+        else if("2".equals(productAttrValParam.getObjType()))
+            productCatBusiSV.deleteAttrVal(productAttrValParam);
+        return CommonUtils.genSuccessResponse("OK");
     }
 
 	/**
@@ -231,10 +219,15 @@ public class IProductCatSVImpl implements IProductCatSV {
      * @author liutong5
      */
     @Override
-    public Map<ProdCatAttrDef, List<AttrValInfo>> queryAttrByCatAndType(AttrQueryForCat attrQuery)
+    public BaseListResponse<ProdCatAttrDef> queryAttrByCatAndType(AttrQueryForCat attrQuery)
             throws BusinessException, SystemException {
         CommonUtils.checkTenantId(attrQuery.getTenantId(),"");
-        return productCatBusiSV.queryAttrOfCatByIdAndType(attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
+        List<ProdCatAttrDef> attrList = productCatBusiSV.queryAttrOfCatByIdAndType(
+                attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
+        BaseListResponse<ProdCatAttrDef> listResponse = new BaseListResponse<>();
+        listResponse.setResult(attrList);
+        CommonUtils.addSuccessResHeader(listResponse,"");
+        return listResponse;
     }
 
     /**
@@ -256,22 +249,17 @@ public class IProductCatSVImpl implements IProductCatSV {
     /**
      * 更新类目属性信息
      *
-     * @param updateParams 类目属性和属性值信息
+     * @param updateReq 类目属性和属性值信息
      * @return
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
      */
     @Override
-    public BaseResponse updateCatAttrAndVal(List<ProdCatAttrUpdateParam> updateParams) throws BusinessException, SystemException {
-        int successNum = productCatBusiSV.updateCatAttrAndVal(updateParams);
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultMessage("总共["+updateParams.size()+"]条,更新成功["+successNum+"]条");
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+    public BaseResponse updateCatAttrAndVal(ProdCatAttrUpdateReq updateReq) throws BusinessException, SystemException {
+        CommonUtils.checkTenantId(updateReq.getTenantId());
+        int successNum = productCatBusiSV.updateCatAttrAndVal(updateReq);
+        return CommonUtils.genSuccessResponse("总共["+updateReq.getUpdateParamList().size()+"]条,更新成功["+successNum+"]条");
     }
 
   

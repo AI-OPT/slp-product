@@ -5,8 +5,10 @@ import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDefCriteria;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDefCriteria;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrDefMapper;
 import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
+import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
@@ -27,6 +29,9 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     ProdAttrDefMapper prodAttrDefMapper;
     @Autowired
     ProdAttrvalueDefMapper prodAttrvalueDefMapper;
+    @Autowired
+    ProdCatAttrMapper prodCatAttrMapper;
+
 
     @Override
     public int installObj(ProdAttrDef productAttr) {
@@ -75,7 +80,6 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         request.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         //获取查询到的条目数
         int count = prodAttrDefMapper.countByExample(example);
-        
         if(attrAndValPageQueryVo.getPageNo() != null && attrAndValPageQueryVo.getPageSize() != null){
             example.setLimitStart((attrAndValPageQueryVo.getPageNo()-1) * attrAndValPageQueryVo.getPageSize());
             example.setLimitEnd(attrAndValPageQueryVo.getPageSize());
@@ -104,13 +108,20 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     }
 
     @Override
-    public List<ProdAttrDef> selectAllAttrs(String tenantId) {
+    public List<ProdAttrDef> selectAllAttrsOfFirstLetter(String tenantId) {
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
-        example.setOrderByClause("firstLetter");
-        example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
+        example.setOrderByClause("first_letter");
+        example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         return prodAttrDefMapper.selectByExample(example);
     }
 
-    
+	@Override
+	public int selectNumById(String tenantId, Long attrId) {
+		ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+		 example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+		return prodCatAttrMapper.countByExample(example);
+	}
+
+
     
 }

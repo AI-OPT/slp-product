@@ -1,10 +1,11 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 属性与属性值的相关操作
@@ -114,5 +115,17 @@ public interface IAttrAndAttrvalBusiSV {
      * @return 由属性对象对应的属性值List的Map
      * @author lipeng16
      */
-    public Map<AttrDef, List<AttrValDef>> queryAllAttrAndVals(String tenantId);
+    public List<AttrDef> queryAllAttrAndVals(String tenantId);
+    
+    /**
+	 * 根据属性ID查询有效的商品类目属性关系
+	 * @param attrDefParam
+     * @return 符合条件的数量
+     * @author jiawen
+	 */
+	public int queryNum(String tenantId, Long attrId);
+    
+    
+    
+    
 }

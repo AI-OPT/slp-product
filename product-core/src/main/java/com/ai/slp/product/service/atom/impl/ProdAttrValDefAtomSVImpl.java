@@ -14,6 +14,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
 /**
  * Date: 2016年4月28日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
@@ -69,10 +75,17 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
     public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrAndValPageQueryVo attrAndValPageQueryVo) {
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
         ProdAttrvalueDefCriteria.Criteria param = example.createCriteria();
+
+        if(attrAndValPageQueryVo.getAttrId()!=null)
+        	param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+       // param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+        //if(attrAndValPageQueryVo.getAttrValueName() != null)
+        if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrName()))
         param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId()).andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId()).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         if(attrAndValPageQueryVo.getAttrValueName() != null)
             param.andAttrValueNameEqualTo(attrAndValPageQueryVo.getAttrValueName());
-        if(attrAndValPageQueryVo.getAttrvalueDefId() != null)
+       // if(attrAndValPageQueryVo.getAttrvalueDefId() != null)
+        if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrvalueDefId()))
             param.andAttrvalueDefIdEqualTo(attrAndValPageQueryVo.getAttrvalueDefId());
         //统计查询条目数
         int count = prodAttrvalueDefMapper.countByExample(example);
@@ -85,19 +98,30 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         attrValPage.setPageNo(attrAndValPageQueryVo.getPageNo());
         attrValPage.setResult(prodAttrvalueDefMapper.selectByExample(example));
         attrValPage.setCount(count);
-        
+        System.out.println("count"+count);
+
         return attrValPage;
     }
     
     @Override
     public List<ProdAttrvalueDef> selectAttrValForAttr(String tenantId, Long attrId) {
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
-        example.setOrderByClause("firstLetter");
-        example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
+        example.setOrderByClause("first_letter");
+        example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
         List<ProdAttrvalueDef> prodAttrValList = prodAttrvalueDefMapper.selectByExample(example);
         return prodAttrValList;
     }
 
 
-    
+	@Override
+	public int selectAttrValNum(String tenantId, Long attrId) {
+		 ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
+		 example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId).andStateEqualTo(CommonSatesConstants.STATE_ACTIVE);
+		 int num = prodAttrvalueDefMapper.countByExample(example);
+
+		return num;
+	}
+
+
+
 }
