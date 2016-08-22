@@ -8,6 +8,8 @@ import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
+import com.google.gson.Gson;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +62,10 @@ public class IProductCatSVTest {
         attrQuery.setProductCatId("1");
         attrQuery.setAttrType(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
         BaseListResponse<ProdCatAttrDef> response = productCatSV.queryAttrByCatAndType(attrQuery);
-        System.out.println(response.getResult().size());
+        //System.out.println(response.getResult().size());
+        ProdCatAttrDef def = response.getResult().get(0);
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(def));
     }
 
     @Test
