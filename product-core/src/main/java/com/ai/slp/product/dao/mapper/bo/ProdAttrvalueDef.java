@@ -22,6 +22,8 @@ public class ProdAttrvalueDef {
     private String state;
 
     private Long operId;
+    
+    private String operName;
 
     private Timestamp operTime;
 
@@ -112,4 +114,13 @@ public class ProdAttrvalueDef {
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
     }
+
+	public String getOperName() {
+		return operName;
+	}
+
+	public void setOperName(String operName) {
+		this.operName = operName;
+	}
+    
 }
