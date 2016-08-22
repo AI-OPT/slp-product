@@ -1,11 +1,10 @@
 package com.ai.slp.product.api.normproduct.param;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 标准品请求信息<br>
@@ -34,8 +33,7 @@ public class NormProdUniqueReq extends BaseInfo {
      * (新增字段)
      * 商户ID--(-1:自运营)
      */
-    @NotBlank(message = "商户ID不能为空",
-            groups = { INormProductSV.DiscardProduct.class })
+    @NotBlank(message = "商户ID不能为空")
     private String supplierId;
    
     
