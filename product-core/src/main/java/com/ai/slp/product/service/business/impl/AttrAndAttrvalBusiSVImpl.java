@@ -129,7 +129,7 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             BeanUtils.copyProperties(attrValInfo, attrVal);
             attrValInfo.setCatAttrValId("");
             //设置工号
-            queryReq.setNo(Long.toString(attrVal.getOperId()));
+            queryReq.setId(Long.toString(attrVal.getOperId()));
             //查询
             SysUserQueryResponse queryRes = userQuerySv.queryUserInfo(queryReq);
             if(queryRes!=null)
