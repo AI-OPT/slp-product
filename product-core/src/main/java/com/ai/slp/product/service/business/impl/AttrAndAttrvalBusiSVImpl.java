@@ -3,7 +3,11 @@ package com.ai.slp.product.service.business.impl;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.platform.common.api.sysuser.interfaces.ISysUserQuerySV;
+import com.ai.platform.common.api.sysuser.param.SysUserQueryRequest;
+import com.ai.platform.common.api.sysuser.param.SysUserQueryResponse;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
@@ -116,10 +120,21 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
                 .selectAttrValPage(attrAndValPageQueryVo);
         List<ProdAttrvalueDef> attrValList = attrValPage.getResult();
         List<AttrValInfo> attrValInfoList = new ArrayList<AttrValInfo>();
+        //获取服务
+        ISysUserQuerySV userQuerySv = DubboConsumerFactory.getService(ISysUserQuerySV.class);
+        SysUserQueryRequest queryReq = new SysUserQueryRequest();
+        queryReq.setTenantId(attrValPageQuery.getTenantId());
         for (ProdAttrvalueDef attrVal : attrValList) {
             AttrValInfo attrValInfo = new AttrValInfo();
             BeanUtils.copyProperties(attrValInfo, attrVal);
             attrValInfo.setCatAttrValId("");
+            //设置工号
+            queryReq.setNo(Long.toString(attrVal.getOperId()));
+            //查询
+            SysUserQueryResponse queryRes = userQuerySv.queryUserInfo(queryReq);
+            if(queryRes!=null)
+            	//设置操作人名字
+            	attrValInfo.setOperName(queryRes.getName());
             attrValInfoList.add(attrValInfo);
         }
         PageInfoResponse<AttrValInfo> attrValInfo = new PageInfoResponse<AttrValInfo>();
