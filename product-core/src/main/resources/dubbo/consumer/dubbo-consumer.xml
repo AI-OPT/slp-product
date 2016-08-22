@@ -28,4 +28,5 @@
 	<dubbo:reference id="iUcUserSV" interface="com.ai.slp.user.api.ucuser.intefaces.IUcUserSV"/>
 	<dubbo:reference id="iUcKeyInfoSV" interface="com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV"/>
 	<dubbo:reference id="iStorageSV" interface="com.ai.slp.product.api.storage.interfaces.IStorageSV"/>
+	<dubbo:reference id="iSysUserQuerySV" interface="com.ai.platform.common.api.sysuser.interfaces.ISysUserQuerySV"/>
 </beans>
