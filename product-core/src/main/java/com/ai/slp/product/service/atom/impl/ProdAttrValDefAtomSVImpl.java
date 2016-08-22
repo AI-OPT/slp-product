@@ -79,7 +79,7 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
             param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId())
                     .andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId())
                     .andStateEqualTo(CommonConstants.STATE_ACTIVE);
-        if(attrAndValPageQueryVo.getAttrValueName() != null)
+        if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrValueName()))
             param.andAttrValueNameEqualTo(attrAndValPageQueryVo.getAttrValueName());
 
         if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrvalueDefId()))
