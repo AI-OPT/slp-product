@@ -51,8 +51,11 @@ public class IAttrAndValDefSVTest {
 		attrVal.setAttrId(9l);
 		attrVal.setPageSize(10);
 		attrVal.setPageNo(1);
+		attrVal.setAttrValueName("");
+		
 		PageInfoResponse<AttrValInfo> queryPageAttrs = attrAndValDefSV.queryPageAttrvalue(attrVal);
 		Gson gson = new Gson();
+		System.out.println(queryPageAttrs.getResult().size());
 		System.out.println(gson.toJson(queryPageAttrs.getResult().get(0)));
 
 	}
