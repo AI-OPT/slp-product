@@ -212,6 +212,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         List<SkuInfo> skuInfoList = new ArrayList<>();
         //查询所有单品信息
         List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(tenantId,productId);
+        if (!CollectionUtil.isEmpty(catAttrAttches) && CollectionUtil.isEmpty(skuList))
+            throw new BusinessException("","该商品未设置SKU单品信息");
         //设置SKU单品信息集合
         for (ProdSku sku:skuList){
             //设置属性串和SKU标识
