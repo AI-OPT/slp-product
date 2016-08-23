@@ -1,5 +1,12 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
@@ -8,7 +15,18 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.platform.common.api.sysuser.interfaces.ISysUserQuerySV;
 import com.ai.platform.common.api.sysuser.param.SysUserQueryRequest;
 import com.ai.platform.common.api.sysuser.param.SysUserQueryResponse;
-import com.ai.slp.product.api.productcat.param.*;
+import com.ai.slp.product.api.productcat.param.AttrDef;
+import com.ai.slp.product.api.productcat.param.AttrDefInfo;
+import com.ai.slp.product.api.productcat.param.AttrDefParam;
+import com.ai.slp.product.api.productcat.param.AttrInfo;
+import com.ai.slp.product.api.productcat.param.AttrPam;
+import com.ai.slp.product.api.productcat.param.AttrParam;
+import com.ai.slp.product.api.productcat.param.AttrVal;
+import com.ai.slp.product.api.productcat.param.AttrValDef;
+import com.ai.slp.product.api.productcat.param.AttrValInfo;
+import com.ai.slp.product.api.productcat.param.AttrValPageQuery;
+import com.ai.slp.product.api.productcat.param.AttrValParam;
+import com.ai.slp.product.api.productcat.param.AttrValUniqueReq;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrDef;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
@@ -18,12 +36,6 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.business.interfaces.IAttrAndAttrvalBusiSV;
 import com.ai.slp.product.vo.AttrAndValPageQueryVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
@@ -37,6 +49,8 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     IProdCatAttrAtomSV prodCatAttrAtomSV;
     @Autowired
     IStandedProdAttrAtomSV standedProdAttrAtomSV;
+    @Autowired
+    ISysUserQuerySV sysUserQuerySV;
 
     @Override
     public AttrInfo queryAttrById(String tenantId, Long attrId) {
@@ -64,6 +78,16 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             //根据当前的属性ID 查询当前ID下的属性值的数量
             int attrValNum = prodAttrValDefAtomSV.selectAttrValNum(tenantId, attrId);
             attrDefInfo.setAttrValNum(attrValNum);
+            Long operId = prodAttrDef.getOperId();
+            if(operId != null){
+            	SysUserQueryRequest userQueryRequest=new SysUserQueryRequest();
+            	userQueryRequest.setId(Long.toString(operId));
+            	userQueryRequest.setTenantId(tenantId);
+            	SysUserQueryResponse userInfo = sysUserQuerySV.queryUserInfo(userQueryRequest);
+            	if(userInfo != null){
+            		attrDefInfo.setOperName(userInfo.getName());
+            	}
+            }
             attrDefInfoList.add(attrDefInfo);
         }
         PageInfoResponse<AttrDefInfo> attrDefInfoPage = new PageInfoResponse<>();

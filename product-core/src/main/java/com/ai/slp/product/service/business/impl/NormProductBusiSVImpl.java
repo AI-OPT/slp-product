@@ -4,6 +4,9 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.platform.common.api.sysuser.interfaces.ISysUserQuerySV;
+import com.ai.platform.common.api.sysuser.param.SysUserQueryRequest;
+import com.ai.platform.common.api.sysuser.param.SysUserQueryResponse;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
@@ -65,6 +68,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     IStorageGroupBusiSV groupBusiSV;
     @Autowired
     IProdSkuBusiSV prodSkuBusiSV;
+    @Autowired
+    ISysUserQuerySV sysUserQuerySV;
 
     /**
      * 添加标准品
@@ -177,8 +182,26 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         BeanUtils.copyProperties(response, product);
         response.setProductId(product.getStandedProdId());
         response.setProductName(product.getStandedProductName());
-        // response.setCreateName("");//TODO... 获取创建者名称
-        // response.setOperName("");//TODO... 获取操作者名称
+        SysUserQueryRequest userQuery = new SysUserQueryRequest();
+        userQuery.setTenantId(tenantId);
+        Long createId = product.getCreateId();
+        //设置创建者名称
+        if(createId != null){
+        	userQuery.setId(Long.toString(createId));
+        	SysUserQueryResponse serInfo = sysUserQuerySV.queryUserInfo(userQuery);
+        	if(serInfo != null){
+        		response.setCreateName(serInfo.getName());
+        	}
+        }
+        Long operId = product.getOperId();
+        //设置操作者名称
+        if(operId != null){
+        	userQuery.setId(Long.toString(operId));
+        	SysUserQueryResponse serInfo = sysUserQuerySV.queryUserInfo(userQuery);
+        	if(serInfo != null){
+        		response.setOperName(serInfo.getName());
+        	}
+        }
         Map<Long, Set<String>> attrAndValueIds = new HashMap<>();
         // 查询属性信息
         List<StandedProdAttr> attrList = standedProdAttrAtomSV.queryByNormProduct(tenantId,
@@ -214,8 +237,26 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         for (StandedProduct standedProduct : productList) {
             NormProdResponse normProduct = new NormProdResponse();
             BeanUtils.copyProperties(normProduct, standedProduct);
-            // normProduct.setCreateName(""); //TODO... 创建者账户名
-            // normProduct.setOperTime(""); //TODO... 操作者账号名
+            SysUserQueryRequest userQuery = new SysUserQueryRequest();
+            userQuery.setTenantId(standedProduct.getTenantId());
+            Long createId = standedProduct.getCreateId();
+            //设置创建者名称
+            if(createId != null){
+            	userQuery.setId(Long.toString(createId));
+            	SysUserQueryResponse serInfo = sysUserQuerySV.queryUserInfo(userQuery);
+            	if(serInfo != null){
+            		normProduct.setCreateName(serInfo.getName());
+            	}
+            }
+            Long operId = standedProduct.getOperId();
+            //设置操作者名称
+            if(operId != null){
+            	userQuery.setId(Long.toString(operId));
+            	SysUserQueryResponse serInfo = sysUserQuerySV.queryUserInfo(userQuery);
+            	if(serInfo != null){
+            		normProduct.setOperName(serInfo.getName());
+            	}
+            }
             ProductCat productCat = catDefAtomSV.selectAllStateById(standedProduct.getTenantId(),
                     standedProduct.getProductCatId());
             if (productCat != null)
