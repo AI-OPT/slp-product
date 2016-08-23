@@ -619,12 +619,12 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         return skuAttrList;
     }
 
-    private List<SkuInfo.AttrValForSku> genSkuAttrVal(SkuInfo skuInfo,
+    private List<SkuAttrVal> genSkuAttrVal(SkuInfo skuInfo,
             Product product,String skuId,Map<String,String> valInfoMap,Map<Long,Short> attrSn){
         String tenantId = product.getTenantId();
         //获取所有的属性信息
         List<ProdSkuAttr> skuAttrList = prodSkuAttrAtomSV.queryBySkuId(tenantId,skuId);
-        List<SkuInfo.AttrValForSku> valForSkus = new ArrayList<>();
+        List<SkuAttrVal> valForSkus = new ArrayList<>();
         for (ProdSkuAttr skuAttr:skuAttrList){
             String valName = valInfoMap.get(skuAttr.getAttrvalueDefId());
             if (StringUtils.isBlank(valName)){
@@ -638,16 +638,16 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
                 valName = prodAttr.getAttrValueName();
                 valInfoMap.put(skuAttr.getAttrvalueDefId(),valName);
             }
-            SkuInfo.AttrValForSku valForSku = skuInfo.new AttrValForSku();
+            SkuAttrVal valForSku = new SkuAttrVal();
             valForSku.setAttrId(skuAttr.getAttrId());
             valForSku.setSerialNumber(attrSn.get(skuAttr.getAttrId()));
             valForSku.setValId(skuAttr.getAttrvalueDefId());
             valForSku.setValName(valName);
             valForSkus.add(valForSku);
         }
-        Collections.sort(valForSkus, new Comparator<SkuInfo.AttrValForSku>() {
+        Collections.sort(valForSkus, new Comparator<SkuAttrVal>() {
             @Override
-            public int compare(SkuInfo.AttrValForSku o1, SkuInfo.AttrValForSku o2) {
+            public int compare(SkuAttrVal o1, SkuAttrVal o2) {
                 if (o1.getSerialNumber()>o2.getSerialNumber())
                     return 1;
                 else if (o1.getSerialNumber()<o2.getSerialNumber())
