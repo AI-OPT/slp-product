@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.attach.StandedProdAttrAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
@@ -159,6 +160,26 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
     @Override
     public int countOfAttrValOfCat(String tenantId, String catId, String attrValDefId) {
         return prodAttrAttachMapper.countOfAttrValOfCat(tenantId,catId,attrValDefId);
+    }
+
+    /**
+     * 查询标准品下某个属性值的信息
+     *
+     * @param tenantId
+     * @param standedId
+     * @param attrValId
+     * @return
+     */
+    @Override
+    public StandedProdAttr queryByProdIdAndAttrValId(String tenantId, String standedId, String attrValId) {
+        StandedProdAttrCriteria example = new StandedProdAttrCriteria();
+        example.createCriteria()
+                .andTenantIdEqualTo(tenantId)
+                .andStandedProdIdEqualTo(standedId)
+                .andAttrvalueDefIdEqualTo(attrValId)
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
+        List<StandedProdAttr> prodAttrList = standedProdAttrMapper.selectByExample(example);
+        return CollectionUtil.isEmpty(prodAttrList)?null:prodAttrList.get(0);
     }
 
 }

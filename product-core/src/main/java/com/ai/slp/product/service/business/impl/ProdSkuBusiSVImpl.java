@@ -187,55 +187,40 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         	logger.warn("未找到指定商品,租户ID{},商品标识{}:"+tenantId+","+productId);
             throw new BusinessException("","查询商品信息不存在,租户ID:"+tenantId+",商品标识:"+productId);
         }
+        List<String> attrIdSnList = new ArrayList<>();
+        //查询商品对应标准品的销售属性,已按照属性排序
+        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
+                tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
         //查询商品的SKU信息
-        Map<String,SkuInfo> skuInfoMap = new HashMap<>();
-        Map<String,String> saleAttrsMap = new HashMap<>();
         SkuSetForProduct skuSetForProduct = new SkuSetForProduct();
-        skuSetForProduct.setSkuInfoMap(skuInfoMap);
-        skuSetForProduct.setSaleAttrsMap(saleAttrsMap);
+        skuSetForProduct.setProdId(product.getProdId());
+        skuSetForProduct.setStorageGroupId(product.getStorageGroupId());
+        List<SkuAttrInfo> attrInfoList = new ArrayList<>();
+        Map<Long,Short> attrSn = new HashMap<>();
+        //查询已设置SKU的属性和属性值信息
+        for (ProdCatAttrAttch attrAttch:catAttrAttches){
+            attrIdSnList.add(Long.toString(attrAttch.getAttrId()));
+            attrSn.put(attrAttch.getAttrId(),attrAttch.getSerialNumber());
+            //设置对象集合
+            SkuAttrInfo skuAttrInfo = new SkuAttrInfo();
+            BeanUtils.copyProperties(skuAttrInfo,attrAttch);
+            attrInfoList.add(skuAttrInfo);
+        }
+        skuSetForProduct.setAttrInfoList(attrInfoList);
+        //属性值 k:属性值标识; v:属性值名称
+        Map<String,String> valInfoMap = new HashMap<>();
+        List<SkuInfo> skuInfoList = new ArrayList<>();
+        //查询所有单品信息
         List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(tenantId,productId);
         //设置SKU单品信息集合
         for (ProdSku sku:skuList){
             //设置属性串和SKU标识
-            saleAttrsMap.put(sku.getSaleAttrs(),sku.getSkuId());
             SkuInfo skuInfo = new SkuInfo();
             BeanUtils.copyProperties(skuInfo,sku);
-            skuInfoMap.put(sku.getSkuId(),skuInfo);
+            skuInfoList.add(skuInfo);
+            skuInfo.setValForSkuList(genSkuAttrVal(skuInfo,product,sku.getSkuId(),valInfoMap,attrSn));
         }
-
-        //查询商品对应标准品的销售属性,已按照属性属性排序
-        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
-                tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-        Map<Long,Set<String>> attrAndValIdMap = new LinkedHashMap<>();
-        Map<SkuAttrInfo,List<SkuAttrValInfo>> attrAndValInfoMap = new LinkedHashMap<>();
-        skuSetForProduct.setAttrAndValIdMap(attrAndValIdMap);
-        skuSetForProduct.setAttrAndValInfoMap(attrAndValInfoMap);
-        //查询已设置SKU的属性和属性值信息
-        for (ProdCatAttrAttch attrAttch:catAttrAttches){
-            //设置标识集合
-            Set<String> attrValSet = new LinkedHashSet<>();
-            attrAndValIdMap.put(attrAttch.getAttrId(),attrValSet);
-            //设置对象集合
-            SkuAttrInfo skuAttrInfo = new SkuAttrInfo();
-            BeanUtils.copyProperties(skuAttrInfo,attrAttch);
-            List<SkuAttrValInfo> valInfoList = new ArrayList<>();
-            attrAndValInfoMap.put(skuAttrInfo,valInfoList);
-            //查询属性对应属性值集合
-            List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(
-                    tenantId,productId,attrAttch.getAttrId());
-            for (StandedProdAttr prodAttr:prodAttrs){
-                //若SKU不包含当前属性值,则查询下一个属性值
-                if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId,productId,prodAttr.getAttrvalueDefId())<=0)
-                    continue;
-                attrValSet.add(prodAttr.getAttrvalueDefId());
-                SkuAttrValInfo valInfo = new SkuAttrValInfo();
-                BeanUtils.copyProperties(valInfo,prodAttr);
-                valInfoList.add(valInfo);
-            }
-        }
-        //设置属性下每个属性值跨行数
-        Iterator<Map.Entry<SkuAttrInfo,List<SkuAttrValInfo>>> entryIterator = attrAndValInfoMap.entrySet().iterator();
-        skuSetForProduct.setSkuNum(entryIterator.hasNext()?getAttrRowspan(entryIterator):0);
+        skuSetForProduct.setSkuInfoList(skuInfoList);
         return skuSetForProduct;
     }
 
@@ -608,5 +593,44 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
             skuAttrList.add(productSKUAttr);
         }
         return skuAttrList;
+    }
+
+    private List<SkuInfo.AttrValForSku> genSkuAttrVal(SkuInfo skuInfo,
+            Product product,String skuId,Map<String,String> valInfoMap,Map<Long,Short> attrSn){
+        String tenantId = product.getTenantId();
+        //获取所有的属性信息
+        List<ProdSkuAttr> skuAttrList = prodSkuAttrAtomSV.queryBySkuId(tenantId,skuId);
+        List<SkuInfo.AttrValForSku> valForSkus = new ArrayList<>();
+        for (ProdSkuAttr skuAttr:skuAttrList){
+            String valName = valInfoMap.get(skuAttr.getAttrvalueDefId());
+            if (StringUtils.isBlank(valName)){
+                StandedProdAttr prodAttr = standedProdAttrAtomSV.queryByProdIdAndAttrValId(
+                        tenantId,product.getStandedProdId(),skuAttr.getAttrvalueDefId());
+                if (prodAttr==null) {
+                    logger.error("Query standedProdAttr is fail,it is null, tenantId:{},standedProdId:{},attrValId:{}",
+                            tenantId,product.getStandedProdId(),skuAttr.getAttrvalueDefId());
+                    throw new BusinessException("", "查询属性值错误,属性值:"+skuAttr.getAttrvalueDefId());
+                }
+                valName = prodAttr.getAttrValueName();
+                valInfoMap.put(skuAttr.getAttrvalueDefId(),valName);
+            }
+            SkuInfo.AttrValForSku valForSku = skuInfo.new AttrValForSku();
+            valForSku.setAttrId(skuAttr.getAttrId());
+            valForSku.setSerialNumber(attrSn.get(skuAttr.getAttrId()));
+            valForSku.setValId(skuAttr.getAttrvalueDefId());
+            valForSku.setValName(valName);
+            valForSkus.add(valForSku);
+        }
+        Collections.sort(valForSkus, new Comparator<SkuInfo.AttrValForSku>() {
+            @Override
+            public int compare(SkuInfo.AttrValForSku o1, SkuInfo.AttrValForSku o2) {
+                if (o1.getSerialNumber()>o2.getSerialNumber())
+                    return 1;
+                else if (o1.getSerialNumber()<o2.getSerialNumber())
+                    return -1;
+                return 0;
+            }
+        });
+        return valForSkus;
     }
 }

@@ -87,4 +87,13 @@ public interface IStandedProdAttrAtomSV {
      */
     public int countOfAttrValOfCat(String tenantId,  String catId, String attrValDefId);
 
+    /**
+     * 查询标准品下某个属性值的信息
+     *
+     * @param tenantId
+     * @param standedId
+     * @param attrValId
+     * @return
+     */
+    public StandedProdAttr queryByProdIdAndAttrValId(String tenantId,String standedId,String attrValId);
 }

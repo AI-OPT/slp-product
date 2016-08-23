@@ -1,9 +1,8 @@
 package com.ai.slp.product.api.product.param;
 
-import java.io.Serializable;
+import com.ai.opt.base.vo.BaseResponse;
+
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * 某个商城商品的SKU单品信息集合
@@ -12,7 +11,7 @@ import java.util.Set;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class SkuSetForProduct implements Serializable {
+public class SkuSetForProduct extends BaseResponse {
     private static final long serialVersionUID = 1L;
 
 	/**
@@ -24,32 +23,16 @@ public class SkuSetForProduct implements Serializable {
      * 库存组标识
      */
     private String storageGroupId;
-    /**
-     * SKU总数
-     */
-    private int skuNum;
+
     /**
      * sku单品信息集合
-     * k:sku标识;v:sku对象
      */
-    private Map<String,SkuInfo> skuInfoMap;
-    /**
-     * sku属性串对应的属性标识<br>
-     * k:sku属性串;v:sku标识
-     */
-    private Map<String,String> saleAttrsMap;
+    private List<SkuInfo> skuInfoList;
 
     /**
-     * 属性标识和属性值标识的集合<br>
-     * K:属性标识;V:属性值标识集合(标准品属性值)
+     * 属性的集合,根据属性顺序排序<br>
      */
-    private Map<Long,Set<String>> attrAndValIdMap;
-
-    /**
-     * 属性和属性值对象的集合<br>
-     * K:属性对象;V:属性值集合
-     */
-    private Map<SkuAttrInfo,List<SkuAttrValInfo>> attrAndValInfoMap;
+    private List<SkuAttrInfo> attrInfoList;
 
     public String getProdId() {
         return prodId;
@@ -67,43 +50,19 @@ public class SkuSetForProduct implements Serializable {
         this.storageGroupId = storageGroupId;
     }
 
-    public int getSkuNum() {
-        return skuNum;
+    public List<SkuInfo> getSkuInfoList() {
+        return skuInfoList;
     }
 
-    public void setSkuNum(int skuNum) {
-        this.skuNum = skuNum;
+    public void setSkuInfoList(List<SkuInfo> skuInfoList) {
+        this.skuInfoList = skuInfoList;
     }
 
-    public Map<String, SkuInfo> getSkuInfoMap() {
-        return skuInfoMap;
+    public List<SkuAttrInfo> getAttrInfoList() {
+        return attrInfoList;
     }
 
-    public void setSkuInfoMap(Map<String, SkuInfo> skuInfoMap) {
-        this.skuInfoMap = skuInfoMap;
-    }
-
-    public Map<String, String> getSaleAttrsMap() {
-        return saleAttrsMap;
-    }
-
-    public void setSaleAttrsMap(Map<String, String> saleAttrsMap) {
-        this.saleAttrsMap = saleAttrsMap;
-    }
-
-    public Map<Long, Set<String>> getAttrAndValIdMap() {
-        return attrAndValIdMap;
-    }
-
-    public void setAttrAndValIdMap(Map<Long, Set<String>> attrAndValIdMap) {
-        this.attrAndValIdMap = attrAndValIdMap;
-    }
-
-    public Map<SkuAttrInfo, List<SkuAttrValInfo>> getAttrAndValInfoMap() {
-        return attrAndValInfoMap;
-    }
-
-    public void setAttrAndValInfoMap(Map<SkuAttrInfo, List<SkuAttrValInfo>> attrAndValInfoMap) {
-        this.attrAndValInfoMap = attrAndValInfoMap;
+    public void setAttrInfoList(List<SkuAttrInfo> attrInfoList) {
+        this.attrInfoList = attrInfoList;
     }
 }

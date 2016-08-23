@@ -2,13 +2,9 @@ package com.ai.slp.product.api.product;
 
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
-import com.ai.slp.product.api.product.param.ProductEditQueryReq;
-import com.ai.slp.product.api.product.param.ProductInfo;
-import com.ai.slp.product.api.product.param.ProductInfoQuery;
-import com.ai.slp.product.api.product.param.TargetAreaForProd;
+import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.CommonTestConstants;
 import com.google.gson.Gson;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +42,16 @@ public class IProductSVTest {
     	PageInfoResponse<TargetAreaForProd> searchProdTargetArea = productSV.searchProdTargetArea(queryReq);
     	Gson gson = new Gson();
     	System.out.println(gson.toJson(searchProdTargetArea.getResult().get(0)));
+    }
+
+    @Test
+    public void querySkuSetForProductTest(){
+        ProductInfoQuery query = new ProductInfoQuery();
+        query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        query.setSupplierId("-1");
+        query.setProductId("1");
+        SkuSetForProduct skuSetForProduct = productSV.querySkuSetForProduct(query);
+        System.out.println(skuSetForProduct.getProdId());
     }
     
 }

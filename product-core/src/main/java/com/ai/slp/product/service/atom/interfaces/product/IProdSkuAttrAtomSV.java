@@ -48,4 +48,12 @@ public interface IProdSkuAttrAtomSV {
      */
     public List<String> queryAttrValIdByProdIdAndAttrId(String tenantId, String prodId, Long attrId);
 
+    /**
+     * 查询SKU的属性及属性值
+     * @param tenantId
+     * @param skuId
+     * @return
+     */
+    public List<ProdSkuAttr> queryBySkuId(String tenantId,String skuId);
+
 }

@@ -95,7 +95,10 @@ public class IProductSVImpl implements IProductSV {
     public SkuSetForProduct querySkuSetForProduct(ProductInfoQuery query)
             throws BusinessException, SystemException {
         CommonUtils.checkTenantId(query.getTenantId());
-        return prodSkuBusiSV.querySkuByProdId(query.getTenantId(),query.getSupplierId(),query.getProductId());
+        SkuSetForProduct skuSetForProduct = prodSkuBusiSV.querySkuByProdId(
+                query.getTenantId(),query.getSupplierId(),query.getProductId());
+        CommonUtils.addSuccessResHeader(skuSetForProduct,"");
+        return skuSetForProduct;
     }
 
     /**
@@ -118,7 +121,7 @@ public class IProductSVImpl implements IProductSV {
 
     /**
      * 根据商品ID查询商品目标地域
-     * @param productInfoQuery 商品标识信息
+     * @param productEditParam 商品标识信息
      * @return 商品目标地域对象
      * @throws BusinessException
      * @throws SystemException
