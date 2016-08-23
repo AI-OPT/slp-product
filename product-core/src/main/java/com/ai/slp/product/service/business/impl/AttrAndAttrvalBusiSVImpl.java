@@ -49,8 +49,6 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     IProdCatAttrAtomSV prodCatAttrAtomSV;
     @Autowired
     IStandedProdAttrAtomSV standedProdAttrAtomSV;
-    @Autowired
-    ISysUserQuerySV sysUserQuerySV;
 
     @Override
     public AttrInfo queryAttrById(String tenantId, Long attrId) {
@@ -78,16 +76,6 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             //根据当前的属性ID 查询当前ID下的属性值的数量
             int attrValNum = prodAttrValDefAtomSV.selectAttrValNum(tenantId, attrId);
             attrDefInfo.setAttrValNum(attrValNum);
-            Long operId = prodAttrDef.getOperId();
-            if(operId != null){
-            	SysUserQueryRequest userQueryRequest=new SysUserQueryRequest();
-            	userQueryRequest.setId(Long.toString(operId));
-            	userQueryRequest.setTenantId(tenantId);
-            	SysUserQueryResponse userInfo = sysUserQuerySV.queryUserInfo(userQueryRequest);
-            	if(userInfo != null){
-            		attrDefInfo.setOperName(userInfo.getName());
-            	}
-            }
             attrDefInfoList.add(attrDefInfo);
         }
         PageInfoResponse<AttrDefInfo> attrDefInfoPage = new PageInfoResponse<>();
