@@ -103,12 +103,7 @@ public class INormProductSVImpl implements INormProductSV {
                 || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId()))
             throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
         normProductBusiSV.updateNormProd(productInfoRequest);
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultCode("");
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        return CommonUtils.genSuccessResponse("");
     }
 
     /**
@@ -126,12 +121,7 @@ public class INormProductSVImpl implements INormProductSV {
         normProductBusiSV.discardProduct(
                 invalidRequest.getTenantId(),invalidRequest.getProductId(),
                 invalidRequest.getOperId(), invalidRequest.getSupplierId());
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultCode("");
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        return CommonUtils.genSuccessResponse("");
     }
 
     /**
