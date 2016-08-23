@@ -187,43 +187,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         	logger.warn("未找到指定商品,租户ID{},商品标识{}:"+tenantId+","+productId);
             throw new BusinessException("","查询商品信息不存在,租户ID:"+tenantId+",商品标识:"+productId);
         }
-        List<String> attrIdSnList = new ArrayList<>();
-        //查询商品对应标准品的销售属性,已按照属性排序
-        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
-                tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-        //查询商品的SKU信息
-        SkuSetForProduct skuSetForProduct = new SkuSetForProduct();
-        skuSetForProduct.setProdId(product.getProdId());
-        skuSetForProduct.setStorageGroupId(product.getStorageGroupId());
-        List<SkuAttrInfo> attrInfoList = new ArrayList<>();
-        Map<Long,Short> attrSn = new HashMap<>();
-        //查询已设置SKU的属性和属性值信息
-        for (ProdCatAttrAttch attrAttch:catAttrAttches){
-            attrIdSnList.add(Long.toString(attrAttch.getAttrId()));
-            attrSn.put(attrAttch.getAttrId(),attrAttch.getSerialNumber());
-            //设置对象集合
-            SkuAttrInfo skuAttrInfo = new SkuAttrInfo();
-            BeanUtils.copyProperties(skuAttrInfo,attrAttch);
-            attrInfoList.add(skuAttrInfo);
-        }
-        skuSetForProduct.setAttrInfoList(attrInfoList);
-        //属性值 k:属性值标识; v:属性值名称
-        Map<String,String> valInfoMap = new HashMap<>();
-        List<SkuInfo> skuInfoList = new ArrayList<>();
-        //查询所有单品信息
-        List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(tenantId,productId);
-        if (!CollectionUtil.isEmpty(catAttrAttches) && CollectionUtil.isEmpty(skuList))
-            throw new BusinessException("","该商品未设置SKU单品信息");
-        //设置SKU单品信息集合
-        for (ProdSku sku:skuList){
-            //设置属性串和SKU标识
-            SkuInfo skuInfo = new SkuInfo();
-            BeanUtils.copyProperties(skuInfo,sku);
-            skuInfoList.add(skuInfo);
-            skuInfo.setValForSkuList(genSkuAttrVal(skuInfo,product,sku.getSkuId(),valInfoMap,attrSn));
-        }
-        skuSetForProduct.setSkuInfoList(skuInfoList);
-        return skuSetForProduct;
+        return querySkuByProdId(tenantId,product);
     }
 
     /**
@@ -282,6 +246,64 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         //查询SKU对应销售属性
         configResponse.getProductAttrList().addAll(getSkuAttr(product,skuId));
         return configResponse;
+    }
+
+    /**
+     * 查询库组下SKU的信息
+     *
+     * @param tenantId
+     * @param supplierId
+     * @param groupId
+     * @return
+     */
+    @Override
+    public SkuSetForProduct querySkuByStoGroupId(String tenantId, String supplierId, String groupId) {
+        //查看库组对应的销售商品
+        Product product = productAtomSV.selectByGroupId(tenantId,groupId);
+        if (product == null || !supplierId.equals(product.getSupplierId())){
+            throw new BusinessException("","未查到对应的商品信息");
+        }
+        return querySkuByProdId(tenantId,product);
+    }
+
+    private SkuSetForProduct querySkuByProdId(String tenantId,Product product){
+        List<String> attrIdSnList = new ArrayList<>();
+        //查询商品对应标准品的销售属性,已按照属性排序
+        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
+                tenantId,product.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+        //查询商品的SKU信息
+        SkuSetForProduct skuSetForProduct = new SkuSetForProduct();
+        skuSetForProduct.setProdId(product.getProdId());
+        skuSetForProduct.setStorageGroupId(product.getStorageGroupId());
+        List<SkuAttrInfo> attrInfoList = new ArrayList<>();
+        Map<Long,Short> attrSn = new HashMap<>();
+        //查询已设置SKU的属性和属性值信息
+        for (ProdCatAttrAttch attrAttch:catAttrAttches){
+            attrIdSnList.add(Long.toString(attrAttch.getAttrId()));
+            attrSn.put(attrAttch.getAttrId(),attrAttch.getSerialNumber());
+            //设置对象集合
+            SkuAttrInfo skuAttrInfo = new SkuAttrInfo();
+            BeanUtils.copyProperties(skuAttrInfo,attrAttch);
+            attrInfoList.add(skuAttrInfo);
+        }
+        skuSetForProduct.setAttrInfoList(attrInfoList);
+        //属性值 k:属性值标识; v:属性值名称
+        Map<String,String> valInfoMap = new HashMap<>();
+        List<SkuInfo> skuInfoList = new ArrayList<>();
+        //查询所有单品信息
+        List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(tenantId,product.getProdId());
+        if (!CollectionUtil.isEmpty(catAttrAttches) && CollectionUtil.isEmpty(skuList))
+            throw new BusinessException("","该商品未设置SKU单品信息");
+        //设置SKU单品信息集合
+        for (ProdSku sku:skuList){
+            //设置属性串和SKU标识
+            SkuInfo skuInfo = new SkuInfo();
+            BeanUtils.copyProperties(skuInfo,sku);
+            skuInfoList.add(skuInfo);
+            skuInfo.setValForSkuList(genSkuAttrVal(skuInfo,product,sku.getSkuId(),valInfoMap,attrSn));
+        }
+        skuSetForProduct.setSkuInfoList(skuInfoList);
+        return skuSetForProduct;
     }
 
     /**

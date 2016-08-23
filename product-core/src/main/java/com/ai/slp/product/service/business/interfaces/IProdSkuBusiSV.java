@@ -52,4 +52,13 @@ public interface IProdSkuBusiSV {
      * @return
      */
     public ProductSKUConfigResponse querySkuAttr(String tenantId,String skuId,String skuAttrs);
+
+    /**
+     * 查询库组下SKU的信息
+     * @param tenantId
+     * @param supplierId
+     * @param groupId
+     * @return
+     */
+    public SkuSetForProduct querySkuByStoGroupId(String tenantId,String supplierId, String groupId);
 }

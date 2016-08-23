@@ -1,13 +1,9 @@
 package com.ai.slp.product.api.product.param;
 
-import java.util.List;
-
+import com.ai.opt.base.vo.BaseInfo;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
-import com.ai.slp.product.api.product.interfaces.IProductManagerSV.QueryProductRefuse;
+import java.util.List;
 
 /**
  * 商品管理待编辑查询参数
@@ -66,9 +62,7 @@ public class ProductEditQueryReq extends BaseInfo{
      * -1:自营
      *  0:全部
      */
-    @NotBlank(message = "商户标识不能为空",
-            groups = {IProductManagerSV.QueryProductEdit.class,
-            		  IProductManagerSV.QueryProductRefuse.class})
+    @NotBlank(message = "商户标识不能为空")
     private String supplierId;
 
     

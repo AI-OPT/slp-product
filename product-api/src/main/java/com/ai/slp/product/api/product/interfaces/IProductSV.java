@@ -129,4 +129,22 @@ public interface IProductSV {
     public PageInfoResponse<TargetAreaForProd> searchProdTargetArea(ProductEditQueryReq productEditParam)
             throws BusinessException,SystemException;
         @interface SearchProdTargetArea{}
+
+    /**
+     * 查询单个库存组下的sku集合信息
+     *
+     * @param query 库存组信息
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @RestRelativeURL productManager/searchSKUInfoGroup
+     * @ApiCode PRODUCT_0107
+     */
+    @POST
+    @Path("/searchSKUInfoGroup")
+    public SkuSetForProduct querySkuSetForGroup(StoGroupInfoQuery query)
+            throws BusinessException,SystemException;
+    @interface QuerySkuSetForGroup{}
 }

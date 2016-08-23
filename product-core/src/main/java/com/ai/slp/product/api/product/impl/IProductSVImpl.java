@@ -132,9 +132,28 @@ public class IProductSVImpl implements IProductSV {
 	@Override
 	public PageInfoResponse<TargetAreaForProd> searchProdTargetArea(ProductEditQueryReq productEditParam)
 			throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(productEditParam.getTenantId(),"");
-		CommonUtils.checkSupplierId(productEditParam.getSupplierId(),"");
-
+		CommonUtils.checkTenantId(productEditParam.getTenantId());
 		return productManagerBsuiSV.searchProdTargetArea(productEditParam);
 	}
+
+    /**
+     * 查询单个库存组下的sku集合信息
+     *
+     * @param query 库存组信息
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @RestRelativeURL productManager/searchSKUInfoGroup
+     * @ApiCode PRODUCT_0107
+     */
+    @Override
+    public SkuSetForProduct querySkuSetForGroup(StoGroupInfoQuery query) throws BusinessException, SystemException {
+        CommonUtils.checkTenantId(query.getTenantId());
+        SkuSetForProduct skuSetForProduct = prodSkuBusiSV.querySkuByStoGroupId(
+                query.getTenantId(),query.getSupplierId(),query.getGroupId());
+        CommonUtils.addSuccessResHeader(skuSetForProduct,"");
+        return skuSetForProduct;
+    }
 }
