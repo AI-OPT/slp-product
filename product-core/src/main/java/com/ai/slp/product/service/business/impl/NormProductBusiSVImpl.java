@@ -1,22 +1,14 @@
 package com.ai.slp.product.service.business.impl;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.vo.PageInfo;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.normproduct.param.*;
-import com.ai.slp.product.constants.CommonConstants;
-import com.ai.slp.product.constants.StandedProductConstants;
-import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
-import com.ai.slp.product.dao.mapper.bo.*;
-import com.ai.slp.product.service.atom.interfaces.*;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
-import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
-import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
-import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
-import com.ai.slp.product.util.DateUtils;
-import com.ai.slp.product.vo.StandedProdPageQueryVo;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +16,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.*;
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.slp.product.api.normproduct.param.AttrMap;
+import com.ai.slp.product.api.normproduct.param.AttrValInfo;
+import com.ai.slp.product.api.normproduct.param.AttrValRequest;
+import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
+import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
+import com.ai.slp.product.api.normproduct.param.NormProdRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdResponse;
+import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
+import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
+import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.StandedProductConstants;
+import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
+import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
+import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
+import com.ai.slp.product.dao.mapper.bo.ProductCat;
+import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
+import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
+import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
+import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IProdCatAttrValAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProductLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.vo.StandedProdPageQueryVo;
 
 /**
  * Created by jackieliu on 16/4/27.
@@ -177,8 +209,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         BeanUtils.copyProperties(response, product);
         response.setProductId(product.getStandedProdId());
         response.setProductName(product.getStandedProductName());
-        // response.setCreateName("");//TODO... 获取创建者名称
-        // response.setOperName("");//TODO... 获取操作者名称
         Map<Long, Set<String>> attrAndValueIds = new HashMap<>();
         // 查询属性信息
         List<StandedProdAttr> attrList = standedProdAttrAtomSV.queryByNormProduct(tenantId,
@@ -214,8 +244,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         for (StandedProduct standedProduct : productList) {
             NormProdResponse normProduct = new NormProdResponse();
             BeanUtils.copyProperties(normProduct, standedProduct);
-            // normProduct.setCreateName(""); //TODO... 创建者账户名
-            // normProduct.setOperTime(""); //TODO... 操作者账号名
             ProductCat productCat = catDefAtomSV.selectAllStateById(standedProduct.getTenantId(),
                     standedProduct.getProductCatId());
             if (productCat != null)
