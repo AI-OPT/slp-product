@@ -46,7 +46,7 @@ public class SkuInfo implements Serializable {
     /**
      * SKU属性及属性值信息
      */
-    private List<AttrValForSku> valForSkuList;
+    private List<SkuAttrVal> valForSkuList;
 
     public String getSkuId() {
         return skuId;
@@ -104,66 +104,12 @@ public class SkuInfo implements Serializable {
         this.operTime = operTime;
     }
 
-    public List<AttrValForSku> getValForSkuList() {
+    public List<SkuAttrVal> getValForSkuList() {
         return valForSkuList;
     }
 
-    public void setValForSkuList(List<AttrValForSku> valForSkuList) {
+    public void setValForSkuList(List<SkuAttrVal> valForSkuList) {
         this.valForSkuList = valForSkuList;
     }
 
-    /**
-     * SKU属性值
-     */
-    public class AttrValForSku implements Serializable{
-        private static final long serialVersionUID = 1L;
-        /**
-         * 属性标识
-         */
-        private Long attrId;
-        /**
-         * 属性值标识
-         */
-        private String valId;
-        /**
-         * 属性名称
-         */
-        private String valName;
-        /**
-         * 属性序列号
-         */
-        private Short serialNumber;
-
-        public Long getAttrId() {
-            return attrId;
-        }
-
-        public void setAttrId(Long attrId) {
-            this.attrId = attrId;
-        }
-
-        public String getValId() {
-            return valId;
-        }
-
-        public void setValId(String valId) {
-            this.valId = valId;
-        }
-
-        public String getValName() {
-            return valName;
-        }
-
-        public void setValName(String valName) {
-            this.valName = valName;
-        }
-
-        public Short getSerialNumber() {
-            return serialNumber;
-        }
-
-        public void setSerialNumber(Short serialNumber) {
-            this.serialNumber = serialNumber;
-        }
-    }
 }

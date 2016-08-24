@@ -4,6 +4,8 @@ import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.ProductInfo;
 import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.SkuSetForProduct;
+import com.ai.slp.product.api.product.param.StoGroupInfoQuery;
 import com.ai.slp.product.constants.CommonTestConstants;
 import org.junit.Test;
 
@@ -19,5 +21,16 @@ public class IProductSVConsumerTest {
         infoQuery.setProductId("1000000000000001");
         ProductInfo productInfo = productSV.queryProductById(infoQuery);
         System.out.println(productInfo.getState());
+    }
+
+    @Test
+    public void querySkuSetForGroupTest(){
+        IProductSV productSV = DubboConsumerFactory.getService(IProductSV.class);
+        StoGroupInfoQuery infoQuery = new StoGroupInfoQuery();
+        infoQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        infoQuery.setGroupId("1");
+        infoQuery.setSupplierId("-1");
+        SkuSetForProduct skuSetForProduct = productSV.querySkuSetForGroup(infoQuery);
+        System.out.println(skuSetForProduct.getProdId());
     }
 }
