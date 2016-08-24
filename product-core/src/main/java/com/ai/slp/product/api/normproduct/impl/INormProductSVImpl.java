@@ -136,8 +136,7 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public BaseResponse updateMarketPrice(MarketPriceUpdate marketPrice) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(marketPrice.getTenantId(),"");
-        CommonUtils.checkSupplierId(marketPrice.getSupplierId(),"");
+        CommonUtils.checkTenantId(marketPrice.getTenantId());
         normProductBusiSV.updateMarketPrice(marketPrice);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
