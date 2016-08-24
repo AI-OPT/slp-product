@@ -94,7 +94,7 @@ public interface IStorageBusiSV {
     public StorageRes queryStorageById(String tenantId,String supplierId,String storageId);
     
     /**
-     * 查询SKU库存信息
+     * 查询SKU库存信息,包括废弃
      *
      * @param tenantId
      * @param supplierId

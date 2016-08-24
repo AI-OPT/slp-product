@@ -2,12 +2,10 @@ package com.ai.slp.product.api.storage;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.BaseListResponse;
+import com.ai.opt.base.vo.BaseMapResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
-import com.ai.slp.product.api.storage.param.StorageGroup4List;
-import com.ai.slp.product.api.storage.param.StorageGroupQuery;
-import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
-import com.ai.slp.product.api.storage.param.StorageGroupRes;
+import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.constants.CommonTestConstants;
 import org.elasticsearch.common.joda.time.DateTime;
 import org.junit.Test;
@@ -53,4 +51,15 @@ public class StorageTest {
         BaseListResponse<StorageGroupRes> groupResList = storageSV.queryGroupInfoByNormProdId(storageGroupQuery);
         System.out.println(groupResList.getResult().size());
     }
+
+    @Test
+    public void querySkuStorageById(){
+        StorageUniQuery query = new StorageUniQuery();
+        query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        query.setSupplierId("-1");
+        query.setStorageId("000000000000000061");
+        BaseMapResponse<String, SkuStorageInfo> mapResponse = storageSV.querySkuStorageById(query);
+        System.out.println(mapResponse.getResult().size());
+    }
+
 }
