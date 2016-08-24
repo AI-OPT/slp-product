@@ -518,10 +518,19 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //查询库存组是否为"启用"状态
         StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(
                 tenantId,product.getSupplierId(),product.getStorageGroupId());
-        if (storageGroup==null
-                || (!StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState()))
+        if (storageGroup==null){
+            throw new BusinessException("","对应库存组不存在,租户ID:"+tenantId
+                    +"库存组ID:"+product.getStorageGroupId());
+        }
+        //若商品为停用下架,且库存组为停用,则不处理
+        if ( ProductConstants.Product.State.STOP.equals(product.getState())
+                && (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())
+                    || !StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState()))){
+            return;
+        }
+        if (!StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState())
                 && !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storageGroup.getState())){
-            throw new BusinessException("","对应库存组不存在,或库存组不是[启用]状态,租户ID:"+tenantId
+            throw new BusinessException("","库存组不是[启用]状态,租户ID:"+tenantId
                     +"库存组ID:"+product.getStorageGroupId());
         }
         //检查缓存中商品的库存是否大于零
