@@ -437,7 +437,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	@Override
 	public Map<String,SkuStorageInfo> querySkuStorageById(String tenantId, String supplierId, String storageId) {
 		// 通过库存标识查询SKU库存集合
-		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storageId);
+		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storageId,true);
 		if (CollectionUtil.isEmpty(skuStorageList)) {
 			return Collections.emptyMap();
 		}

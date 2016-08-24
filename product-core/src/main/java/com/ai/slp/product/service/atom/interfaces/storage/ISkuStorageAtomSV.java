@@ -50,6 +50,14 @@ public interface ISkuStorageAtomSV {
     public List<SkuStorage> queryByStorageId(String storageId);
 
     /**
+     * 根据库存ID查询SKU库存
+     * @param storageId
+     * @param hasDiscard 是否包含已废弃数据
+     * @return
+     */
+    public List<SkuStorage> queryByStorageId(String storageId,boolean hasDiscard);
+
+    /**
      * 查询指定库存集合中没有销售价格的SKU库存数量
      * @param storageIdList
      * @return

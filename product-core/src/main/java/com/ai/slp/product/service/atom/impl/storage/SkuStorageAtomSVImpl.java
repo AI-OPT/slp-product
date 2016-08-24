@@ -106,6 +106,27 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	}
 
 	/**
+	 * 根据库存ID查询SKU库存
+	 *
+	 * @param storageId
+	 * @param hasDiscard 是否包含已废弃数据
+	 * @return
+	 */
+	@Override
+	public List<SkuStorage> queryByStorageId(String storageId, boolean hasDiscard) {
+		if (StringUtils.isEmpty(storageId)) {
+			return new ArrayList<SkuStorage>();
+		}
+		SkuStorageCriteria example = new SkuStorageCriteria();
+		SkuStorageCriteria.Criteria criteria = example.createCriteria()
+				.andStorageIdEqualTo(storageId);
+		//如果不包括废弃的
+		if (!hasDiscard)
+			criteria.andStateNotEqualTo(SkuStorageConstants.SkuStorage.State.AUTO_DISCARD);
+		return skuStorageMapper.selectByExample(example);
+	}
+
+	/**
 	 * 查询指定库存集合中没有销售价格的SKU库存数量
 	 *
 	 * @param storageIdList
