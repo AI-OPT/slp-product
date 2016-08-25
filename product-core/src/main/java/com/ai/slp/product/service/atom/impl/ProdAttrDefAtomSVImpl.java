@@ -78,6 +78,7 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
             request.andValueWayEqualTo(attrAndValPageQueryVo.getValueWay());
         //设置数据的查询状态为有效状态
         request.andStateEqualTo(CommonConstants.STATE_ACTIVE);
+        example.setOrderByClause("OPER_TIME desc");//操作时间倒序
         //获取查询到的条目数
         int count = prodAttrDefMapper.countByExample(example);
         if(attrAndValPageQueryVo.getPageNo() != null && attrAndValPageQueryVo.getPageSize() != null){
