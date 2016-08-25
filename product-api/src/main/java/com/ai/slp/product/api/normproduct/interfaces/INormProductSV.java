@@ -170,4 +170,22 @@ public interface INormProductSV {
     public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest)
             throws BusinessException,SystemException;
     @interface QueryNormProductForSalePrice {}
+
+
+    /**
+     * 分页查询标准品信息,包括标准品下的关键属性.<br>
+     *
+     * @param productRequest 查询标准品信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode NORM_PRODUCT_0109
+     * @RestRelativeURL normProduct/queryProdAndKeyAttrList
+     */
+    @POST
+    @Path("/queryProdAndKeyAttrList")
+    public PageInfoResponse<NormProdAndKeyAttrRes> queryNormProductAndKeyAttr(NormProdRequest productRequest)
+            throws BusinessException,SystemException;
+    @interface QueryNormProductAndKeyAttr {}
 }

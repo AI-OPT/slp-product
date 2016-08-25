@@ -1,56 +1,16 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.slp.product.api.normproduct.param.AttrMap;
-import com.ai.slp.product.api.normproduct.param.AttrValInfo;
-import com.ai.slp.product.api.normproduct.param.AttrValRequest;
-import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
-import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
-import com.ai.slp.product.api.normproduct.param.NormProdRequest;
-import com.ai.slp.product.api.normproduct.param.NormProdResponse;
-import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
-import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
+import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
-import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
-import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
-import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
-import com.ai.slp.product.dao.mapper.bo.ProductCat;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
-import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrValAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductLogAtomSV;
+import com.ai.slp.product.dao.mapper.bo.*;
+import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
@@ -58,6 +18,15 @@ import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.StandedProdPageQueryVo;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * Created by jackieliu on 16/4/27.
@@ -513,6 +482,80 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         normProdResponseList.setPageSize(productRequest.getPageSize());
         normProdResponseList.setCount(count);
         return normProdResponseList;
+    }
+
+    /**
+     * 查询标准品信息,包括关键属性
+     *
+     * @param productRequest
+     * @return
+     */
+    @Override
+    public PageInfoResponse<NormProdAndKeyAttrRes> queryProdAndKeyAttr(NormProdRequest productRequest) {
+        //查询出所有符合条件的标准品信息
+        StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
+        BeanUtils.copyProperties(pageQueryVo, productRequest);
+        pageQueryVo.setProductId(productRequest.getStandedProdId());
+        pageQueryVo.setProductName(productRequest.getStandedProductName());
+        // 查询结果
+        PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
+        // 接口输出接口
+        PageInfoResponse<NormProdAndKeyAttrRes> normProdPageInfo = new PageInfoResponse<NormProdAndKeyAttrRes>();
+        BeanUtils.copyProperties(normProdPageInfo, productPageInfo);
+        // 添加结果集
+        List<StandedProduct> productList = productPageInfo.getResult();
+        List<NormProdAndKeyAttrRes> normProductList = new ArrayList<NormProdAndKeyAttrRes>();
+        normProdPageInfo.setResult(normProductList);
+        for (StandedProduct standedProduct : productList) {
+            NormProdAndKeyAttrRes normProduct = new NormProdAndKeyAttrRes();
+            BeanUtils.copyProperties(normProduct, standedProduct);
+            normProduct.setProductId(standedProduct.getStandedProdId());
+            normProduct.setProductName(standedProduct.getStandedProductName());
+            //填充关键属性信息
+            normProduct.setKeyAttrMap(getAttrVal(productRequest.getTenantId(),standedProduct.getProductCatId(),
+                    standedProduct.getStandedProdId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY));
+            normProductList.add(normProduct);
+        }
+        return normProdPageInfo;
+
+    }
+
+    /**
+     * 获取属性对应的属性值信息
+     *
+     * @return K:属性标识;V:属性值集合
+     */
+    private Map<Long,List<AttrValInfo>> getAttrVal(
+            String tenantId,String catId,String standedProdId, String attrType){
+        // 查询对应类目属性
+        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
+                catId, attrType);
+        Map<Long,List<AttrValInfo>> attAndValMap = new HashMap<>();
+        // 查询标准品对应属性的属性值
+        for (ProdCatAttrAttch catAttrAttch : catAttrAttches) {
+            List<AttrValInfo> valInfoList = new ArrayList<>();
+            // 查询属性值
+            List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(tenantId,
+                    standedProdId, catAttrAttch.getAttrId());
+            for (StandedProdAttr prodAttr : prodAttrs) {
+                AttrValInfo valDef = new AttrValInfo();
+                BeanUtils.copyProperties(valDef, prodAttr);
+                valDef.setProductAttrValId(prodAttr.getStandedProdAttrId());
+                valDef.setProductId(prodAttr.getStandedProdId());
+                valDef.setAttrValId(prodAttr.getAttrvalueDefId());
+                valDef.setAttrVal(prodAttr.getAttrValueName());
+                valDef.setAttrVal2(prodAttr.getAttrValueName2());
+                if (prodAttr.getAttrvalueDefId() != null) {
+                    ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId,
+                            prodAttr.getAttrvalueDefId());
+                    if (attrvalueDef != null)
+                        valDef.setAttrVal(attrvalueDef.getAttrValueName());
+                }
+                valInfoList.add(valDef);
+            }
+            attAndValMap.put(catAttrAttch.getAttrId(),valInfoList);
+        }
+        return attAndValMap;
     }
 
 }

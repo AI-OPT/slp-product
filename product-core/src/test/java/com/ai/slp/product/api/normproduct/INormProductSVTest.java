@@ -2,6 +2,7 @@ package com.ai.slp.product.api.normproduct;
 
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import com.ai.slp.product.api.normproduct.param.NormProdAndKeyAttrRes;
 import com.ai.slp.product.api.normproduct.param.NormProdRequest;
 import com.ai.slp.product.api.normproduct.param.NormProdResponse;
 import com.ai.slp.product.constants.CommonTestConstants;
@@ -28,5 +29,15 @@ public class INormProductSVTest {
         //infoQuery.setProductId("100000000100");
         PageInfoResponse<NormProdResponse> productInfo = normProductSV.queryNormProduct(infoQuery);
         System.out.println(productInfo.toString());
+    }
+
+    @Test
+    public void queryNormProductAndKeyAttr(){
+        NormProdRequest prodRequest = new NormProdRequest();
+        prodRequest.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        prodRequest.setSupplierId("-1");
+        prodRequest.setProductCatId("1");
+        PageInfoResponse<NormProdAndKeyAttrRes> resPage = normProductSV.queryNormProductAndKeyAttr(prodRequest);
+        System.out.println(resPage.getCount());
     }
 }
