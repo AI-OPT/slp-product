@@ -25,6 +25,7 @@ public class NormProdSaveRequest extends BaseInfo {
     @NotBlank(message = "类目ID不能为空",
             groups = {INormProductSV.SaveProductInfo.class
                     ,INormProductSV.UpdateProductInfo.class
+                    ,INormProductSV.AddProductInfo.class
             })
     private String productCatId;
 
@@ -40,7 +41,8 @@ public class NormProdSaveRequest extends BaseInfo {
      */
     @NotBlank(message = "标准品名称不能为空",
             groups = { INormProductSV.SaveProductInfo.class
-                    ,INormProductSV.UpdateProductInfo.class })
+                    ,INormProductSV.UpdateProductInfo.class 
+                    ,INormProductSV.AddProductInfo.class})
     private String productName;
 
     /**
@@ -50,6 +52,7 @@ public class NormProdSaveRequest extends BaseInfo {
     @NotBlank(message = "标准品状态不能为空",
             groups = { INormProductSV.SaveProductInfo.class
                     ,INormProductSV.UpdateProductInfo.class
+                    ,INormProductSV.AddProductInfo.class
             })
     private String state;
 
@@ -59,13 +62,15 @@ public class NormProdSaveRequest extends BaseInfo {
      */
     @NotBlank(message = "标准品类型不能为空",
             groups = { INormProductSV.SaveProductInfo.class,
-                    INormProductSV.UpdateProductInfo.class })
+                    INormProductSV.UpdateProductInfo.class
+                    ,INormProductSV.AddProductInfo.class})
     private String productType;
     /**
      * 创建人ID,添加时必填<br>
      */
     @NotNull(message = "创建人ID不能为空",
-            groups = { INormProductSV.SaveProductInfo.class})
+            groups = { INormProductSV.SaveProductInfo.class
+            		,INormProductSV.AddProductInfo.class})
     private Long createId;
 
     /**
@@ -84,7 +89,8 @@ public class NormProdSaveRequest extends BaseInfo {
      */
     @NotBlank(message = "商户ID不能为空",
             groups = { INormProductSV.SaveProductInfo.class,
-                    INormProductSV.UpdateProductInfo.class })
+                    INormProductSV.UpdateProductInfo.class
+                    ,INormProductSV.AddProductInfo.class})
     private String supplierId;
     
 

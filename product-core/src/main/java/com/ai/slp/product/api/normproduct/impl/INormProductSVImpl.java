@@ -1,21 +1,34 @@
 package com.ai.slp.product.api.normproduct.impl;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.api.normproduct.param.AttrMap;
+import com.ai.slp.product.api.normproduct.param.AttrQuery;
+import com.ai.slp.product.api.normproduct.param.AttrValRequest;
+import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
+import com.ai.slp.product.api.normproduct.param.NormProdAndKeyAttrRes;
+import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
+import com.ai.slp.product.api.normproduct.param.NormProdRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdResponse;
+import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdUniqueReq;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * 标准品接口
@@ -29,6 +42,8 @@ public class INormProductSVImpl implements INormProductSV {
     INormProductBusiSV normProductBusiSV;
     @Autowired
     IStorageGroupBusiSV storageGroupBusiSV;
+    @Autowired
+    IProdSkuBusiSV prodSkuBusiSV;
     /**
      * 标准品列表查询. <br>
      *
@@ -198,4 +213,23 @@ public class INormProductSVImpl implements INormProductSV {
         CommonUtils.addSuccessResHeader(pageRes,"OK");
         return pageRes;
     }
+
+	@Override
+	public BaseResponse addProductInfo(NormProdSaveRequest request) throws BusinessException, SystemException {
+		String tenantId = request.getTenantId();
+		CommonUtils.checkTenantId(tenantId);
+        String normProdId = normProductBusiSV.installNormProd(request);
+        //自动添加一个库存组
+        STOStorageGroup storageGroup = new STOStorageGroup();
+        storageGroup.setTenantId(tenantId);
+        storageGroup.setCreateId(request.getOperId());
+        storageGroup.setStandedProdId(normProdId);
+        storageGroup.setSupplierId(request.getSupplierId());
+        storageGroup.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
+        String groupId = storageGroupBusiSV.addGroup(storageGroup);
+        //添加SKU
+        List<AttrValRequest> attrValList = request.getAttrValList();
+        prodSkuBusiSV.createSkuOfProduct(tenantId, groupId, attrValList);
+        return CommonUtils.genSuccessResponse(normProdId);
+	}
 }

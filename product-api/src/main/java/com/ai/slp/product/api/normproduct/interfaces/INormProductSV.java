@@ -188,4 +188,22 @@ public interface INormProductSV {
     public PageInfoResponse<NormProdAndKeyAttrRes> queryNormProductAndKeyAttr(NormProdRequest productRequest)
             throws BusinessException,SystemException;
     @interface QueryNormProductAndKeyAttr {}
+    
+    /**
+     * 添加标准品信息.(长虹 同时生成sku) <br>
+     *
+     * @param request 标准品信息
+     * @return 标准品保存结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiaxs
+     * @ApiDocMethod
+     * @ApiCode NORM_PRODUCT_0110
+     * @RestRelativeURL normProduct/addProduct
+     */
+    @POST
+    @Path("/addProduct")
+    public BaseResponse addProductInfo(NormProdSaveRequest request)
+            throws BusinessException,SystemException;
+    @interface AddProductInfo {}
 }

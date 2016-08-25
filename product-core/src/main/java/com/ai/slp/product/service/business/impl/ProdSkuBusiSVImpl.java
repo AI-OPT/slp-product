@@ -1,13 +1,47 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.opt.sdk.util.DateUtil;
+import com.ai.opt.sdk.util.StringUtil;
 import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.normproduct.param.AttrValInfo;
+import com.ai.slp.product.api.normproduct.param.AttrValRequest;
 import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
-import com.ai.slp.product.api.product.param.*;
-import com.ai.slp.product.api.webfront.param.*;
+import com.ai.slp.product.api.product.param.CatAttrInfoForProd;
+import com.ai.slp.product.api.product.param.ProdAttrMap;
+import com.ai.slp.product.api.product.param.ProdAttrValInfo;
+import com.ai.slp.product.api.product.param.SkuAttrInfo;
+import com.ai.slp.product.api.product.param.SkuAttrVal;
+import com.ai.slp.product.api.product.param.SkuAttrValInfo;
+import com.ai.slp.product.api.product.param.SkuInfo;
+import com.ai.slp.product.api.product.param.SkuInfoMultSave;
+import com.ai.slp.product.api.product.param.SkuSetForProduct;
+import com.ai.slp.product.api.webfront.param.ProductImage;
+import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
+import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
+import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
+import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
@@ -16,7 +50,11 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.product.*;
+import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSkuLog;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -25,21 +63,22 @@ import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSaleAllAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
-import com.ai.slp.product.service.business.interfaces.*;
+import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.vo.SkuStorageVo;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 /**
  * 商品SKU操作
@@ -93,12 +132,16 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
      * @param group
      */
     @Override
-    public void createSkuOfProduct(StorageGroup group) {
-        if (group==null){
+    public void createSkuOfProduct(String tenantId,String groupId,List<AttrValRequest> attrValList) {
+        if (StringUtil.isBlank(groupId)||StringUtil.isBlank(tenantId)){
+            logger.warn("tenantId、groupId不能为空");
+            throw new BusinessException("","tenantId、groupId不能为空");
+        }
+		StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId, groupId);
+		if (group==null){
             logger.warn("库存组不能为空");
             throw new BusinessException("","库存组不能为空");
         }
-        String tenantId = group.getTenantId();
         //只有在库存组停用时,才允许变更SKU.
         if (!StorageConstants.StorageGroup.State.STOP.equals(group.getState())){
             logger.warn("库存组不是停用状态,不允许更新SKU信息,租户ID:{},库存组标识:{}.",tenantId, group.getStorageGroupId());
@@ -109,12 +152,72 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
         //查询类目下指定类型的属性信息
         List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
                 tenantId,product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-        //参数属性值的所有SKU组合
-        Set<String> skuSaleAttrs = new HashSet<>();//新SKU属性串集合
-        //获取标准品下的销售属性
-
-//        genSkuSalAttr(attrAndValMap,"",0,skuSaleAttrs,catAttrList);
+        //创建所有sku组合
+        createSkuProduct(tenantId, attrValList, group, product, catAttrList);
     }
+
+    /**
+     * 创建sku
+     * @param tenantId
+     * @param attrValList
+     * @param group
+     * @param product
+     * @param catAttrList
+     * @author jiaxs
+     * @ApiDocMethod
+     * @ApiCode
+     * @RestRelativeURL
+     */
+	private void createSkuProduct(String tenantId, List<AttrValRequest> attrValList, StorageGroup group,
+			Product product, List<ProdCatAttr> catAttrList) {
+		Set<String> skuSaleAttrs = new HashSet<>();//新SKU属性串集合
+        Map<Long, List<String>> attrAndValMap = getAttrAndValMap(attrValList);
+        //参数属性值的所有SKU组合
+		genSkuSalAttr(attrAndValMap,"",0,skuSaleAttrs,catAttrList);
+		for(String saleAttrs : skuSaleAttrs){
+			 ProdSku prodSku = new ProdSku();
+             prodSku.setTenantId(tenantId);
+             prodSku.setProdId(product.getProdId());
+             prodSku.setStorageGroupId(group.getStorageGroupId());
+             prodSku.setSkuName(product.getProdName());
+             prodSku.setSaleAttrs(saleAttrs);
+             prodSku.setIsSaleAttr(ProductConstants.ProdSku.IsSaleAttr.YES);
+             prodSku.setSerialNumber((short)0);
+             prodSku.setState(ProductConstants.ProdSku.State.ACTIVE);
+             prodSku.setOperId(product.getOperId());
+             prodSku.setOperTime(DateUtil.getSysDate());
+             if (prodSkuAtomSV.createObj(prodSku)>0){
+                 ProdSkuLog prodSkuLog = new ProdSkuLog();
+                 BeanUtils.copyProperties(prodSkuLog,prodSku);
+                 prodSkuLogAtomSV.install(prodSkuLog);
+             }
+		}
+	}
+
+    /**
+     * 转换格式 获得属性key 属性值集合的map
+     * @param attrValList
+     * @return
+     * @author jiaxs
+     * @ApiDocMethod
+     * @ApiCode
+     * @RestRelativeURL
+     */
+	private Map<Long, List<String>> getAttrAndValMap(List<AttrValRequest> attrValList) {
+		Map<Long, List<String>> attrAndValMap=new HashMap<Long, List<String>>();
+        if(attrValList != null && attrValList.size()>0){
+        	for(AttrValRequest attrVal : attrValList){
+        		Long attrId = attrVal.getAttrId();
+        		List<String> valuelist = attrAndValMap.get(attrId);
+        		if(valuelist == null){
+        			valuelist = new LinkedList<String>();
+        		}
+        		valuelist.add(attrVal.getAttrValId());
+        		attrAndValMap.put(attrId, valuelist);
+        	}
+        }
+		return attrAndValMap;
+	}
 
     /**
      * 更新商品SKU信息
