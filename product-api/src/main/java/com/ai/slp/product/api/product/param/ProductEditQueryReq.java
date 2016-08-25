@@ -37,7 +37,6 @@ public class ProductEditQueryReq extends BaseInfo{
     /**
      * 商品类目ID,必填
      */
-    @NotBlank(message = "类目标识不能为空")
     private String productCatId;
     /**
      * 商品类型<br>
