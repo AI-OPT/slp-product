@@ -1,7 +1,6 @@
 package com.ai.slp.product.api.normproduct.param;
 
 import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.sql.Timestamp;
@@ -33,8 +32,7 @@ public class NormProdRequest extends BaseInfo {
      * 销售商(商户)标识,必填<br>
      * -1:自营平台;其余为销售商(商户)标识
      */
-    @NotBlank(message = "销售商(商户)标识不能为空",
-            groups = {INormProductSV.QueryNormProduct.class,INormProductSV.QueryNormProductForSalePrice.class})
+    @NotBlank(message = "销售商(商户)标识不能为空")
     private String supplierId;
 
     /**

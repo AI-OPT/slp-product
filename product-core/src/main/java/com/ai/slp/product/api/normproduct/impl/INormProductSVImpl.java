@@ -177,4 +177,25 @@ public class INormProductSVImpl implements INormProductSV {
             throws BusinessException, SystemException {
     	return  normProductBusiSV.queryNormProductForSalePrice(productRequest);
     }
+
+    /**
+     * 制定商品销售价中标准品列表查询.<br>
+     * 库存组数量为非废弃的数量
+     *
+     * @param productRequest 查询标准品信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiCode NORM_PRODUCT_0109
+     * @RestRelativeURL normProduct/queryListForSalePrice
+     */
+    @Override
+    public PageInfoResponse<NormProdAndKeyAttrRes> queryNormProductAndKeyAttr(NormProdRequest productRequest)
+            throws BusinessException, SystemException {
+        CommonUtils.checkTenantId(productRequest.getTenantId());
+        PageInfoResponse<NormProdAndKeyAttrRes> pageRes = normProductBusiSV.queryProdAndKeyAttr(productRequest);
+        CommonUtils.addSuccessResHeader(pageRes,"OK");
+        return pageRes;
+    }
 }

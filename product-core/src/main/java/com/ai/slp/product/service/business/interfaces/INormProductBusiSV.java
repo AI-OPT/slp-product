@@ -75,4 +75,11 @@ public interface INormProductBusiSV {
      */
     public PageInfoResponse<NormProdResponse> queryNormProductForSalePrice(NormProdRequest productRequest);
 
+    /**
+     * 查询标准品信息,包括关键属性
+     *
+     * @param productRequest
+     * @return
+     */
+    public PageInfoResponse<NormProdAndKeyAttrRes> queryProdAndKeyAttr(NormProdRequest productRequest);
 }
