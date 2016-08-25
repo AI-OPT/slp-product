@@ -29,7 +29,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     public PageInfo<ProductCat> queryForPage(Integer pageNo,Integer pageSize,String parentProductCatId,
             String tenantId, String productCatId, String productCatName, String isChild) {
         ProductCatCriteria example = new ProductCatCriteria();
-        example.setOrderByClause("SERIAL_NUMBER");//顺序号正序
+        example.setOrderByClause("SERIAL_NUMBER ASC,OPER_TIME DESC");//顺序号正序
         ProductCatCriteria.Criteria criteria = example.createCriteria();
         criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         if (StringUtils.isNotBlank(tenantId))
