@@ -124,6 +124,4 @@ public interface IAttrAndAttrvalBusiSV {
 	public int queryNum(String tenantId, Long attrId);
     
     
-    
-    
 }

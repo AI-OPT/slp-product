@@ -71,8 +71,10 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         if(attrPageQueryVo.getAttrId() != null)
             request.andAttrIdEqualTo(attrPageQueryVo.getAttrId());
 
+        //属性名称模糊查询
         if(StringUtils.isNoneBlank(attrPageQueryVo.getAttrName()))
-            request.andAttrNameEqualTo(attrPageQueryVo.getAttrName());
+           // request.andAttrNameEqualTo(attrPageQueryVo.getAttrName());
+        	request.andAttrNameLike("%"+ attrPageQueryVo.getAttrName() +"%");
 
         if(StringUtils.isNotBlank(attrPageQueryVo.getValueWay()))
             request.andValueWayEqualTo(attrPageQueryVo.getValueWay());
@@ -115,6 +117,7 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodAttrDefMapper.selectByExample(example);
     }
+
 
 	@Override
 	public int selectNumById(String tenantId, Long attrId) {
