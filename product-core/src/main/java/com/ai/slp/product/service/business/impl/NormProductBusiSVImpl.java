@@ -4,6 +4,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.StringUtil;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.constants.CommonConstants;
@@ -94,6 +95,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
             StandedProdAttr prodAttr = new StandedProdAttr();
             BeanUtils.copyProperties(prodAttr, attrValReq);
             prodAttr.setTenantId(normProduct.getTenantId());
+            prodAttr.setStandedProdId(standedProduct.getStandedProdId());
             prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
             prodAttr.setAttrValueName(attrValReq.getAttrVal());
             prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
@@ -114,7 +116,11 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     @Override
 	public String installNormProdAndPtoGroup(NormProdSaveRequest normProduct) {
     	String tenantId = normProduct.getTenantId();
+    	//添加标准品
     	String normProdId = installNormProd(normProduct);
+    	if(StringUtil.isBlank(normProdId)){
+    		return null;
+    	}
     	//自动添加一个库存组
         STOStorageGroup storageGroup = new STOStorageGroup();
         storageGroup.setTenantId(tenantId);
@@ -123,9 +129,15 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         storageGroup.setSupplierId(normProduct.getSupplierId());
         storageGroup.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
         String groupId = groupBusiSV.addGroup(storageGroup);
+        if(StringUtil.isBlank(groupId)){
+    		return null;
+    	}
         //添加SKU
         List<AttrValRequest> attrValList = normProduct.getAttrValList();
-        prodSkuBusiSV.createSkuOfProduct(tenantId, groupId, attrValList);
+        int createCount = prodSkuBusiSV.createSkuOfProduct(tenantId, groupId, attrValList);
+        if(createCount == 0){
+        	return null;
+        }
 		return normProdId;
 	}
 

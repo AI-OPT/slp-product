@@ -22,7 +22,7 @@ public interface IProdSkuBusiSV {
      *
      * @param group
      */
-    public void createSkuOfProduct(String tenantId,String groupId,List<AttrValRequest> attrValList);
+    public int createSkuOfProduct(String tenantId,String groupId,List<AttrValRequest> attrValList);
 
     /**
      * 更新商品SKU信息

@@ -9,6 +9,8 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
+import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.normproduct.param.AttrQuery;
@@ -84,14 +86,20 @@ public class INormProductSVImpl implements INormProductSV {
     }
     
     /**
-     * 
+     * 添加标准品信息.(同时生成标准品属性、库存组、sku) 
      */
     @Override
 	public BaseResponse createProductAndStoGroup(NormProdSaveRequest request) throws BusinessException, SystemException {
 		String tenantId = request.getTenantId();
 		CommonUtils.checkTenantId(tenantId);
         String normProdId = normProductBusiSV.installNormProdAndPtoGroup(request);
-        return CommonUtils.genSuccessResponse(normProdId);
+        if(StringUtil.isBlank(normProdId)){
+        	 BaseResponse baseResponse = new BaseResponse();
+             baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SYSTEM_ERROR,"添加失败！"));
+             return baseResponse;
+        }else{
+        	return CommonUtils.genSuccessResponse(normProdId);
+        }
 	}
 
     /**
