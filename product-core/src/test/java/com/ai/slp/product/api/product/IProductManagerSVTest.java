@@ -1,11 +1,16 @@
 package com.ai.slp.product.api.product;
 
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.google.gson.Gson;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,4 +70,18 @@ public class IProductManagerSVTest {
         System.out.println(header!=null?header.isSuccess():false);
     }
     
+    /**
+     * 查询待编辑
+     */
+    @Test
+    public void queryProductEditTest(){
+    	ProductEditQueryReq req = new ProductEditQueryReq();
+    	req.setTenantId("changhong");
+    	req.setSupplierId("-1");
+    	PageInfoResponse<ProductEditUp> queryProductEdit = productManagerSV.queryProductEdit(req);
+    	
+        Gson gson = new Gson();
+		System.out.println(gson.toJson(queryProductEdit));
+    	
+    }
 }
