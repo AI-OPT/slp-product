@@ -2,7 +2,7 @@ package com.ai.slp.product.service.atom.interfaces;
 
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-import com.ai.slp.product.vo.AttrAndValPageQueryVo;
+import com.ai.slp.product.vo.AttrValPageQueryVo;
 
 import java.util.List;
 
@@ -54,11 +54,11 @@ public interface IProdAttrValDefAtomSV {
     /**
      * 根据信息分页查询属性值信息
      * 
-     * @param attrAndValPageQueryVo
+     * @param pageQueryVo
      * @return
      * @author lipeng16
      */
-    public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrAndValPageQueryVo attrAndValPageQueryVo);
+    public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrValPageQueryVo pageQueryVo);
 
     /**
      * 查询属性对应的所有有效属性值

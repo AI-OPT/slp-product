@@ -8,7 +8,7 @@ import com.ai.slp.product.dao.mapper.interfaces.ProdAttrvalueDefMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import com.ai.slp.product.vo.AttrAndValPageQueryVo;
+import com.ai.slp.product.vo.AttrValPageQueryVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -67,25 +67,27 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
 
 
     @Override
-    public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrAndValPageQueryVo attrAndValPageQueryVo) {
+    public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrValPageQueryVo pageQueryVo) {
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
         ProdAttrvalueDefCriteria.Criteria param = example.createCriteria();
-        param.andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId())
+        param.andTenantIdEqualTo(pageQueryVo.getTenantId())
             .andStateEqualTo(CommonConstants.STATE_ACTIVE);
 
-        if(attrAndValPageQueryVo.getAttrId()!=null)
-        	param.andAttrvalueDefIdLike("%"+attrAndValPageQueryVo.getAttrId()+"%");
-        if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrValueName()))
-            param.andAttrValueNameLike("%"+attrAndValPageQueryVo.getAttrValueName()+"%");
+        if(pageQueryVo.getAttrId()!=null)
+            param.andAttrIdEqualTo(pageQueryVo.getAttrId());
+        if(StringUtils.isNotBlank(pageQueryVo.getAttrvalueDefId()))
+        	param.andAttrvalueDefIdLike("%"+ pageQueryVo.getAttrvalueDefId()+"%");
+        if(StringUtils.isNotBlank(pageQueryVo.getAttrValueName()))
+            param.andAttrValueNameLike("%"+ pageQueryVo.getAttrValueName()+"%");
         //统计查询条目数
         int count = prodAttrvalueDefMapper.countByExample(example);
         
-        example.setLimitStart((attrAndValPageQueryVo.getPageNo()-1)*attrAndValPageQueryVo.getPageSize());
-        example.setLimitEnd(attrAndValPageQueryVo.getPageSize());
+        example.setLimitStart((pageQueryVo.getPageNo()-1)* pageQueryVo.getPageSize());
+        example.setLimitEnd(pageQueryVo.getPageSize());
         
         PageInfo<ProdAttrvalueDef> attrValPage = new PageInfo<ProdAttrvalueDef>();
-        attrValPage.setPageSize(attrAndValPageQueryVo.getPageSize());
-        attrValPage.setPageNo(attrAndValPageQueryVo.getPageNo());
+        attrValPage.setPageSize(pageQueryVo.getPageSize());
+        attrValPage.setPageNo(pageQueryVo.getPageNo());
         attrValPage.setResult(prodAttrvalueDefMapper.selectByExample(example));
         attrValPage.setCount(count);
         System.out.println("count"+count);

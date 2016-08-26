@@ -12,7 +12,7 @@ import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrDefAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import com.ai.slp.product.vo.AttrAndValPageQueryVo;
+import com.ai.slp.product.vo.AttrPageQueryVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -63,32 +63,32 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     }
 
     @Override
-    public PageInfo<ProdAttrDef> selectPageAttrs(AttrAndValPageQueryVo attrAndValPageQueryVo) {
+    public PageInfo<ProdAttrDef> selectPageAttrs(AttrPageQueryVo attrPageQueryVo) {
         //添加查询条件参数
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
         ProdAttrDefCriteria.Criteria request = example.createCriteria();
-        request.andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId());
-        if(attrAndValPageQueryVo.getAttrId() != null)
-            request.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId());
+        request.andTenantIdEqualTo(attrPageQueryVo.getTenantId());
+        if(attrPageQueryVo.getAttrId() != null)
+            request.andAttrIdEqualTo(attrPageQueryVo.getAttrId());
 
-        if(StringUtils.isNoneBlank(attrAndValPageQueryVo.getAttrName()))
-            request.andAttrNameEqualTo(attrAndValPageQueryVo.getAttrName());
+        if(StringUtils.isNoneBlank(attrPageQueryVo.getAttrName()))
+            request.andAttrNameEqualTo(attrPageQueryVo.getAttrName());
 
-        if(StringUtils.isNotBlank(attrAndValPageQueryVo.getValueWay()))
-            request.andValueWayEqualTo(attrAndValPageQueryVo.getValueWay());
+        if(StringUtils.isNotBlank(attrPageQueryVo.getValueWay()))
+            request.andValueWayEqualTo(attrPageQueryVo.getValueWay());
         //设置数据的查询状态为有效状态
         request.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         example.setOrderByClause("OPER_TIME desc");//操作时间倒序
         //获取查询到的条目数
         int count = prodAttrDefMapper.countByExample(example);
-        if(attrAndValPageQueryVo.getPageNo() != null && attrAndValPageQueryVo.getPageSize() != null){
-            example.setLimitStart((attrAndValPageQueryVo.getPageNo()-1) * attrAndValPageQueryVo.getPageSize());
-            example.setLimitEnd(attrAndValPageQueryVo.getPageSize());
+        if(attrPageQueryVo.getPageNo() != null && attrPageQueryVo.getPageSize() != null){
+            example.setLimitStart((attrPageQueryVo.getPageNo()-1) * attrPageQueryVo.getPageSize());
+            example.setLimitEnd(attrPageQueryVo.getPageSize());
         }
         //分页返回对象设置
         PageInfo<ProdAttrDef> pageInfo = new PageInfo<ProdAttrDef>();
-        pageInfo.setPageNo(attrAndValPageQueryVo.getPageNo());
-        pageInfo.setPageSize(attrAndValPageQueryVo.getPageSize());
+        pageInfo.setPageNo(attrPageQueryVo.getPageNo());
+        pageInfo.setPageSize(attrPageQueryVo.getPageSize());
         pageInfo.setResult(prodAttrDefMapper.selectByExample(example));
         pageInfo.setCount(count);
             
