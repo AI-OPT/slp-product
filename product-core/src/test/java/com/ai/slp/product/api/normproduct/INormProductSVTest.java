@@ -53,7 +53,7 @@ public class INormProductSVTest {
     	String data = "{'productCatId':'10000010010000','productName':'jiaxs测试数据','state':'1','productType':'2','createId':1,'operId':1,'attrValList':[{'attrId':100001,'attrValId':'100003','attrVal':'','attrVal2':''},{'attrId':100002,'attrValId':'100008','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100013','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100014','attrVal':'','attrVal2':''}],'supplierId':'-1','tenantId':'changhong'}";
     	NormProdSaveRequest request = gson.fromJson(data, new TypeToken<NormProdSaveRequest>() {
 		}.getType());
-    	BaseResponse baseResponse = normProductSV.addProductInfo(request);
+    	BaseResponse baseResponse = normProductSV.createProductAndStoGroup(request);
         System.out.println(JSonUtil.toJSon(baseResponse));
     }
 }

@@ -190,7 +190,7 @@ public interface INormProductSV {
     @interface QueryNormProductAndKeyAttr {}
     
     /**
-     * 添加标准品信息.(长虹 同时生成sku) <br>
+     * 添加标准品信息.(同时生成标准品属性、库存组、sku) <br>
      *
      * @param request 标准品信息
      * @return 标准品保存结果
@@ -199,11 +199,11 @@ public interface INormProductSV {
      * @author jiaxs
      * @ApiDocMethod
      * @ApiCode NORM_PRODUCT_0110
-     * @RestRelativeURL normProduct/addProduct
+     * @RestRelativeURL normProduct/createProductAndStoGroup
      */
     @POST
-    @Path("/addProduct")
-    public BaseResponse addProductInfo(NormProdSaveRequest request)
+    @Path("/createProductAndStoGroup")
+    public BaseResponse createProductAndStoGroup(NormProdSaveRequest request)
             throws BusinessException,SystemException;
     @interface AddProductInfo {}
 }

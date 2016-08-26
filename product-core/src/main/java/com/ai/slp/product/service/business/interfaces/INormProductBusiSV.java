@@ -16,6 +16,13 @@ public interface INormProductBusiSV {
      * @return 标准品标识
      */
     public String installNormProd(NormProdSaveRequest normProduct);
+    
+    /**
+     * 添加标准品,包括属性值 库存组 和 SKU
+     * @param normProduct
+     * @return
+     */
+    public String installNormProdAndPtoGroup(NormProdSaveRequest normProduct);
 
     /**
      * 更新标准品,包括属性值
@@ -23,7 +30,7 @@ public interface INormProductBusiSV {
      * @param normProduct
      */
     public void updateNormProd(NormProdSaveRequest normProduct);
-
+    
     /**
      * 查询指定的标准品嘻嘻
      * @param tenantId  租户id
