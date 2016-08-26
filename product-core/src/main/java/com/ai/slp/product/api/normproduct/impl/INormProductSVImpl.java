@@ -121,6 +121,16 @@ public class INormProductSVImpl implements INormProductSV {
         normProductBusiSV.updateNormProd(productInfoRequest);
         return CommonUtils.genSuccessResponse("");
     }
+    
+    @Override
+	public BaseResponse updateProductAndStoGroup(NormProdSaveRequest productInfoRequest)
+			throws BusinessException, SystemException {
+    	if (StringUtils.isBlank(productInfoRequest.getTenantId())
+                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId()))
+            throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
+        normProductBusiSV.updateNormProdAndStoGroup(productInfoRequest);
+        return CommonUtils.genSuccessResponse("");
+	}
 
     /**
      * 废弃标准品. <br>
@@ -161,7 +171,7 @@ public class INormProductSVImpl implements INormProductSV {
         baseResponse.setResponseHeader(responseHeader);
         return baseResponse;
     }
-
+    
     /**
      * 查询指定标准品下某种类型的属性集合<br>
      * 类型分为:关键属性,销售属性

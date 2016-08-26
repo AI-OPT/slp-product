@@ -1,5 +1,14 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
@@ -10,10 +19,6 @@ import com.ai.slp.product.dao.mapper.interfaces.product.ProdSkuMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/6.
@@ -140,6 +145,27 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 	@Override
 	public List<ProdFastSkuAttach> queryLocalFastProd(String tenantId, String productCatId, String basicOrgId, String userType, String userId, Long attrId, Integer provCode) {
 		return prodSkuAttachMapper.queryLocalFast(tenantId,productCatId,basicOrgId,userType,userId,attrId,provCode);
+	}
+
+	@Override
+	public List<ProdSku> queryProdSkuBySaleAttrs(String tenantId, Map<Long, List<String>> attrAndValueMap) {
+		List<ProdSku> resultList = new LinkedList<ProdSku>(); 
+		ProdSkuCriteria example = new ProdSkuCriteria();
+		ProdSkuCriteria.Criteria criteria = example.createCriteria().
+				andTenantIdEqualTo(tenantId);
+		criteria.andStateNotEqualTo(ProductConstants.ProdSku.State.INACTIVE);
+		Set<Entry<Long, List<String>>> entrySet = attrAndValueMap.entrySet();
+		for(Entry<Long, List<String>> entry : entrySet){
+			Long attrId = entry.getKey();
+			List<String> valueList = entry.getValue();
+			for(String value : valueList){
+				String saleAttr = attrId+ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT+value;
+				criteria.andSaleAttrsLike("%"+saleAttr+"%");
+				List<ProdSku> prodSkuList = prodSkuMapper.selectByExample(example);
+				resultList.addAll(prodSkuList);
+			}
+		}
+		return resultList;
 	}
 
 

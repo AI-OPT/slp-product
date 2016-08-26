@@ -130,7 +130,33 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	 * @param group
 	 */
 	@Override
-	public int createSkuOfProduct(String tenantId, String groupId, List<AttrValRequest> attrValList) {
+	public int createSkuOfProduct(String tenantId, String groupId, List<AttrValRequest> attrValList, Long operId) {
+		StorageGroup group = checkBefUpdateSkuByGroupId(tenantId, groupId);
+		// 查询商品信息
+		Product product = productAtomSV.queryProductByGroupId(tenantId, group.getStorageGroupId());
+		// 查询类目下销售属性信息
+		List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId, product.getProductCatId(),
+				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+		// 创建所有sku组合
+		if (catAttrList != null && catAttrList.size() > 0) {
+			return createSkuProduct(attrValList, group, product, catAttrList, operId);
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * 更改sku前检查
+	 * 
+	 * @param tenantId
+	 * @param groupId
+	 * @return
+	 * @author jiaxs
+	 * @ApiDocMethod
+	 * @ApiCode
+	 * @RestRelativeURL
+	 */
+	private StorageGroup checkBefUpdateSkuByGroupId(String tenantId, String groupId) {
 		if (StringUtil.isBlank(groupId) || StringUtil.isBlank(tenantId)) {
 			logger.warn("tenantId、groupId不能为空");
 			throw new BusinessException("", "tenantId、groupId不能为空");
@@ -145,15 +171,21 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			logger.warn("库存组不是停用状态,不允许更新SKU信息,租户ID:{},库存组标识:{}.", tenantId, group.getStorageGroupId());
 			throw new BusinessException("", "库存组不是停用状态,不允许更新SKU信息");
 		}
+		return group;
+	}
+
+	@Override
+	public int createSkuOfAttrValue(String tenantId, String groupId, Map<Long, List<String>> attrValMap, Long operId) {
+		StorageGroup group = checkBefUpdateSkuByGroupId(tenantId, groupId);
 		// 查询商品信息
 		Product product = productAtomSV.queryProductByGroupId(tenantId, group.getStorageGroupId());
 		// 查询类目下销售属性信息
 		List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId, product.getProductCatId(),
 				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
 		// 创建所有sku组合
-		if(catAttrList != null && catAttrList.size()>0){
-			return createSkuProduct(tenantId, attrValList, group, product, catAttrList);
-		}else{
+		if (catAttrList != null && catAttrList.size() > 0) {
+			return createSkuProduct(group, product, catAttrList, attrValMap, operId);
+		} else {
 			return 0;
 		}
 	}
@@ -169,17 +201,33 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	 * @return 添加的条数
 	 * @author jiaxs
 	 */
-	private int createSkuProduct(String tenantId, List<AttrValRequest> attrValList, StorageGroup group,
-			Product product, List<ProdCatAttr> catAttrList) {
+	private int createSkuProduct(List<AttrValRequest> attrValList, StorageGroup group, Product product,
+			List<ProdCatAttr> catAttrList, Long operId) {
+		Map<Long, List<String>> attrAndValMap = getAttrAndValMap(attrValList);
+		return createSkuProduct(group, product, catAttrList, attrAndValMap, operId);
+	}
+
+	/**
+	 * 根据属性集合创建sku
+	 * 
+	 * @param tenantId
+	 * @param group
+	 * @param product
+	 * @param catAttrList
+	 * @param count
+	 * @param attrAndValMap
+	 * @return
+	 */
+	private int createSkuProduct(StorageGroup group, Product product, List<ProdCatAttr> catAttrList,
+			Map<Long, List<String>> attrAndValMap, Long operId) {
 		int count = 0;
 		Set<String> skuSaleAttrs = new HashSet<>();// 新SKU属性串集合
-		Map<Long, List<String>> attrAndValMap = getAttrAndValMap(attrValList);
 		// 参数属性值的所有SKU组合
 		genSkuSalAttr(attrAndValMap, "", 0, skuSaleAttrs, catAttrList);
 		if (skuSaleAttrs.size() > 0) {
 			for (String saleAttrs : skuSaleAttrs) {
 				ProdSku prodSku = new ProdSku();
-				prodSku.setTenantId(tenantId);
+				prodSku.setTenantId(product.getTenantId());
 				prodSku.setProdId(product.getProdId());
 				prodSku.setStorageGroupId(group.getStorageGroupId());
 				prodSku.setSkuName(product.getProdName());
@@ -187,14 +235,15 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 				prodSku.setIsSaleAttr(ProductConstants.ProdSku.IsSaleAttr.YES);
 				prodSku.setSerialNumber((short) 0);
 				prodSku.setState(ProductConstants.ProdSku.State.ACTIVE);
-				prodSku.setOperId(product.getOperId());
+				prodSku.setOperId(operId);
 				prodSku.setOperTime(DateUtil.getSysDate());
 				if (prodSkuAtomSV.createObj(prodSku) > 0) {
 					count++;
-					if(!StringUtil.isBlank(saleAttrs)){
+					if (!StringUtil.isBlank(saleAttrs)) {
 						String[] salAttrValueArray = saleAttrs.split(ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT);
-						for(String salAttrValue : salAttrValueArray){
-							String[] attrValueArray = salAttrValue.split(ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT); 
+						for (String salAttrValue : salAttrValueArray) {
+							String[] attrValueArray = salAttrValue
+									.split(ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT);
 							ProdSkuAttr prodSkuAttr = new ProdSkuAttr();
 							prodSkuAttr.setAttrId(Long.valueOf(attrValueArray[0]));
 							prodSkuAttr.setAttrvalueDefId(attrValueArray[1]);
@@ -204,7 +253,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 							prodSkuAttr.setSkuId(prodSku.getSkuId());
 							prodSkuAttr.setTenantId(prodSku.getTenantId());
 							int createAttr = prodSkuAttrAtomSV.createAttr(prodSkuAttr);
-							if(createAttr == 0){
+							if (createAttr == 0) {
 								return 0;
 							}
 						}
@@ -238,7 +287,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 					valuelist = new LinkedList<String>();
 				}
 				valuelist.add(attrVal.getAttrValId());
-				attrAndValMap.put(attrId, valuelist);
+				if (!attrAndValMap.containsKey(attrId)) {
+					attrAndValMap.put(attrId, valuelist);
+				}
 			}
 		}
 		return attrAndValMap;
@@ -468,10 +519,10 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		List<String> valList = attrAndValMap.get(attrId);
 		// 拼装sku属性串
 		String newSkuAttr = null;
-		if(StringUtil.isBlank(skuInfo)){
+		if (StringUtil.isBlank(skuInfo)) {
 			newSkuAttr = ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT + attrId
 					+ ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT;
-		}else{
+		} else {
 			newSkuAttr = skuInfo + ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT + attrId
 					+ ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT;
 		}
@@ -787,5 +838,22 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			}
 		});
 		return valForSkus;
+	}
+
+	@Override
+	public int discardSkuOfAttrValue(String tenantId, String groupId, Map<Long, List<String>> attrValMap,Long operId) {
+		if (attrValMap != null && attrValMap.size() > 0) {
+			StorageGroup group = checkBefUpdateSkuByGroupId(tenantId, groupId);
+			List<ProdSku> prodSkuList = prodSkuAtomSV.queryProdSkuBySaleAttrs(tenantId, attrValMap);
+			if(prodSkuList != null && prodSkuList.size()>0){
+				for(ProdSku prodSku : prodSkuList){
+					discardSku(prodSku, operId);
+				}
+				return prodSkuList.size();
+			}
+			return 0;
+		} else {
+			return 0;
+		}
 	}
 }

@@ -25,7 +25,8 @@ public class NormProdSaveRequest extends BaseInfo {
     @NotBlank(message = "类目ID不能为空",
             groups = {INormProductSV.SaveProductInfo.class
                     ,INormProductSV.UpdateProductInfo.class
-                    ,INormProductSV.AddProductInfo.class
+                    ,INormProductSV.UpdateProductAndStoGroup.class
+                    ,INormProductSV.CreateProductAndStoGroup.class
             })
     private String productCatId;
 
@@ -33,7 +34,8 @@ public class NormProdSaveRequest extends BaseInfo {
      * 标准品ID,更新时必填
      */
     @NotBlank(message = "标准品ID不能为空",
-            groups = { INormProductSV.UpdateProductInfo.class })
+            groups = { INormProductSV.UpdateProductInfo.class
+            		,INormProductSV.UpdateProductAndStoGroup.class})
     private String productId;
 
     /**
@@ -41,8 +43,9 @@ public class NormProdSaveRequest extends BaseInfo {
      */
     @NotBlank(message = "标准品名称不能为空",
             groups = { INormProductSV.SaveProductInfo.class
-                    ,INormProductSV.UpdateProductInfo.class 
-                    ,INormProductSV.AddProductInfo.class})
+                    ,INormProductSV.UpdateProductInfo.class
+                    ,INormProductSV.UpdateProductAndStoGroup.class
+                    ,INormProductSV.CreateProductAndStoGroup.class})
     private String productName;
 
     /**
@@ -52,7 +55,8 @@ public class NormProdSaveRequest extends BaseInfo {
     @NotBlank(message = "标准品状态不能为空",
             groups = { INormProductSV.SaveProductInfo.class
                     ,INormProductSV.UpdateProductInfo.class
-                    ,INormProductSV.AddProductInfo.class
+                    ,INormProductSV.UpdateProductAndStoGroup.class
+                    ,INormProductSV.CreateProductAndStoGroup.class
             })
     private String state;
 
@@ -63,21 +67,23 @@ public class NormProdSaveRequest extends BaseInfo {
     @NotBlank(message = "标准品类型不能为空",
             groups = { INormProductSV.SaveProductInfo.class,
                     INormProductSV.UpdateProductInfo.class
-                    ,INormProductSV.AddProductInfo.class})
+                    ,INormProductSV.UpdateProductAndStoGroup.class
+                    ,INormProductSV.CreateProductAndStoGroup.class})
     private String productType;
     /**
      * 创建人ID,添加时必填<br>
      */
     @NotNull(message = "创建人ID不能为空",
             groups = { INormProductSV.SaveProductInfo.class
-            		,INormProductSV.AddProductInfo.class})
+            		,INormProductSV.CreateProductAndStoGroup.class})
     private Long createId;
 
     /**
      * 操作人ID,更新时必填<br>
      */
     @NotNull(message = "创建人ID不能为空",
-            groups = { INormProductSV.UpdateProductInfo.class})
+            groups = { INormProductSV.UpdateProductInfo.class
+            		,INormProductSV.UpdateProductAndStoGroup.class})
     private Long operId;
     /**
      * 标准品属性值集合
@@ -90,7 +96,8 @@ public class NormProdSaveRequest extends BaseInfo {
     @NotBlank(message = "商户ID不能为空",
             groups = { INormProductSV.SaveProductInfo.class,
                     INormProductSV.UpdateProductInfo.class
-                    ,INormProductSV.AddProductInfo.class})
+                    ,INormProductSV.UpdateProductAndStoGroup.class
+                    ,INormProductSV.CreateProductAndStoGroup.class})
     private String supplierId;
     
 
