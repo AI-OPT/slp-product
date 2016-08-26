@@ -72,7 +72,7 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         ProdAttrvalueDefCriteria.Criteria param = example.createCriteria();
         param.andTenantIdEqualTo(pageQueryVo.getTenantId())
             .andStateEqualTo(CommonConstants.STATE_ACTIVE);
-
+        example.setOrderByClause("OPER_TIME desc");//操作时间倒序
         if(pageQueryVo.getAttrId()!=null)
             param.andAttrIdEqualTo(pageQueryVo.getAttrId());
         if(StringUtils.isNotBlank(pageQueryVo.getAttrvalueDefId()))

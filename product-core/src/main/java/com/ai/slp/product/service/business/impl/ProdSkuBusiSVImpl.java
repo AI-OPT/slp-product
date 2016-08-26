@@ -130,7 +130,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	 * @param group
 	 */
 	@Override
-	public void createSkuOfProduct(String tenantId, String groupId, List<AttrValRequest> attrValList) {
+	public int createSkuOfProduct(String tenantId, String groupId, List<AttrValRequest> attrValList) {
 		if (StringUtil.isBlank(groupId) || StringUtil.isBlank(tenantId)) {
 			logger.warn("tenantId、groupId不能为空");
 			throw new BusinessException("", "tenantId、groupId不能为空");
@@ -152,7 +152,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
 		// 创建所有sku组合
 		if(catAttrList != null && catAttrList.size()>0){
-			createSkuProduct(tenantId, attrValList, group, product, catAttrList);
+			return createSkuProduct(tenantId, attrValList, group, product, catAttrList);
+		}else{
+			return 0;
 		}
 	}
 
@@ -164,13 +166,12 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	 * @param group
 	 * @param product
 	 * @param catAttrList
+	 * @return 添加的条数
 	 * @author jiaxs
-	 * @ApiDocMethod
-	 * @ApiCode
-	 * @RestRelativeURL
 	 */
-	private void createSkuProduct(String tenantId, List<AttrValRequest> attrValList, StorageGroup group,
+	private int createSkuProduct(String tenantId, List<AttrValRequest> attrValList, StorageGroup group,
 			Product product, List<ProdCatAttr> catAttrList) {
+		int count = 0;
 		Set<String> skuSaleAttrs = new HashSet<>();// 新SKU属性串集合
 		Map<Long, List<String>> attrAndValMap = getAttrAndValMap(attrValList);
 		// 参数属性值的所有SKU组合
@@ -189,12 +190,32 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 				prodSku.setOperId(product.getOperId());
 				prodSku.setOperTime(DateUtil.getSysDate());
 				if (prodSkuAtomSV.createObj(prodSku) > 0) {
+					count++;
+					if(!StringUtil.isBlank(saleAttrs)){
+						String[] salAttrValueArray = saleAttrs.split(ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT);
+						for(String salAttrValue : salAttrValueArray){
+							String[] attrValueArray = salAttrValue.split(ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT); 
+							ProdSkuAttr prodSkuAttr = new ProdSkuAttr();
+							prodSkuAttr.setAttrId(Long.valueOf(attrValueArray[0]));
+							prodSkuAttr.setAttrvalueDefId(attrValueArray[1]);
+							prodSkuAttr.setState(ProductConstants.ProdSkuAttr.State.ACTIVE);
+							prodSkuAttr.setOperId(prodSku.getOperId());
+							prodSkuAttr.setProdId(prodSku.getProdId());
+							prodSkuAttr.setSkuId(prodSku.getSkuId());
+							prodSkuAttr.setTenantId(prodSku.getTenantId());
+							int createAttr = prodSkuAttrAtomSV.createAttr(prodSkuAttr);
+							if(createAttr == 0){
+								return 0;
+							}
+						}
+					}
 					ProdSkuLog prodSkuLog = new ProdSkuLog();
 					BeanUtils.copyProperties(prodSkuLog, prodSku);
 					prodSkuLogAtomSV.install(prodSkuLog);
 				}
 			}
 		}
+		return count;
 	}
 
 	/**
@@ -446,16 +467,18 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		Long attrId = catAttr.getAttrId();
 		List<String> valList = attrAndValMap.get(attrId);
 		// 拼装sku属性串
-		String newSkuAttr = skuInfo + ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT + attrId
-				+ ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT;
+		String newSkuAttr = null;
+		if(StringUtil.isBlank(skuInfo)){
+			newSkuAttr = ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT + attrId
+					+ ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT;
+		}else{
+			newSkuAttr = skuInfo + ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT + attrId
+					+ ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT;
+		}
 		for (String val : valList) {
 			String skuAttrVal = newSkuAttr + val;
 			genSkuSalAttr(attrAndValMap, skuAttrVal, attrIndex + 1, skuSalInfo, catAttrList);
 		}
-	}
-
-	private void genSkuSal() {
-
 	}
 
 	/**
