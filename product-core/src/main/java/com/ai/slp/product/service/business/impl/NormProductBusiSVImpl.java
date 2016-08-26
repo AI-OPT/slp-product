@@ -5,9 +5,11 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
+import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.*;
 import com.ai.slp.product.service.atom.interfaces.*;
@@ -108,6 +110,24 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         }
         return standedProduct.getStandedProdId();
     }
+    
+    @Override
+	public String installNormProdAndPtoGroup(NormProdSaveRequest normProduct) {
+    	String tenantId = normProduct.getTenantId();
+    	String normProdId = installNormProd(normProduct);
+    	//自动添加一个库存组
+        STOStorageGroup storageGroup = new STOStorageGroup();
+        storageGroup.setTenantId(tenantId);
+        storageGroup.setCreateId(normProduct.getOperId());
+        storageGroup.setStandedProdId(normProdId);
+        storageGroup.setSupplierId(normProduct.getSupplierId());
+        storageGroup.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
+        String groupId = groupBusiSV.addGroup(storageGroup);
+        //添加SKU
+        List<AttrValRequest> attrValList = normProduct.getAttrValList();
+        prodSkuBusiSV.createSkuOfProduct(tenantId, groupId, attrValList);
+		return normProdId;
+	}
 
     /**
      * 更新标准品
@@ -558,5 +578,4 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         }
         return attAndValMap;
     }
-
 }
