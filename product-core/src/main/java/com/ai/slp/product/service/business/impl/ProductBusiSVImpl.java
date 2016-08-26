@@ -522,11 +522,16 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new BusinessException("","对应库存组不存在,租户ID:"+tenantId
                     +"库存组ID:"+product.getStorageGroupId());
         }
-        //若商品为停用下架,且库存组为停用,则不处理
-        if ( ProductConstants.Product.State.STOP.equals(product.getState())
-                && (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())
-                    || !StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState()))){
-            return;
+        //库存组为停用
+        if (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())
+                || !StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())){
+            //若商品为"停用下架"则不处理
+            if (ProductConstants.Product.State.STOP.equals(product.getState())){
+                return;
+            }//若商品为"售罄下架",则变更为"停用下架"
+            else if(ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
+                changeToStop(storageGroup,product,operId);
+            }
         }
         if (!StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState())
                 && !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storageGroup.getState())){
