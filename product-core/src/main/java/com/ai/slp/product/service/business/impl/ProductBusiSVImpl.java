@@ -531,6 +531,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             }//若商品为"售罄下架",则变更为"停用下架"
             else if(ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
                 changeToStop(storageGroup,product,operId);
+                return;
             }
         }
         if (!StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState())
