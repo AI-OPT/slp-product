@@ -70,20 +70,13 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
     public PageInfo<ProdAttrvalueDef> selectAttrValPage(AttrAndValPageQueryVo attrAndValPageQueryVo) {
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
         ProdAttrvalueDefCriteria.Criteria param = example.createCriteria();
+        param.andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId())
+            .andStateEqualTo(CommonConstants.STATE_ACTIVE);
 
         if(attrAndValPageQueryVo.getAttrId()!=null)
-        	param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId())
-                    .andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId())
-                    .andStateEqualTo(CommonConstants.STATE_ACTIVE);
-        if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrName()))
-            param.andAttrIdEqualTo(attrAndValPageQueryVo.getAttrId())
-                    .andTenantIdEqualTo(attrAndValPageQueryVo.getTenantId())
-                    .andStateEqualTo(CommonConstants.STATE_ACTIVE);
+        	param.andAttrvalueDefIdLike("%"+attrAndValPageQueryVo.getAttrId()+"%");
         if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrValueName()))
-            param.andAttrValueNameEqualTo(attrAndValPageQueryVo.getAttrValueName());
-
-        if(StringUtils.isNotBlank(attrAndValPageQueryVo.getAttrvalueDefId()))
-            param.andAttrvalueDefIdEqualTo(attrAndValPageQueryVo.getAttrvalueDefId());
+            param.andAttrValueNameLike("%"+attrAndValPageQueryVo.getAttrValueName()+"%");
         //统计查询条目数
         int count = prodAttrvalueDefMapper.countByExample(example);
         
