@@ -29,7 +29,7 @@ public interface INormProductBusiSV {
      *
      * @param normProduct
      */
-    public void updateNormProd(NormProdSaveRequest normProduct);
+    public int updateNormProd(NormProdSaveRequest normProduct);
     
     /**
      * 查询指定的标准品嘻嘻
@@ -89,4 +89,11 @@ public interface INormProductBusiSV {
      * @return
      */
     public PageInfoResponse<NormProdAndKeyAttrRes> queryProdAndKeyAttr(NormProdRequest productRequest);
+
+    /**
+     * 修改标准品及库存 sku
+     * @param productInfoRequest
+     * @author jiaxs
+     */
+	public int updateNormProdAndStoGroup(NormProdSaveRequest productInfoRequest);
 }

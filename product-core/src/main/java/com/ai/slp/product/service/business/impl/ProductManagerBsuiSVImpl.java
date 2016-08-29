@@ -106,6 +106,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
                 productEditUp.setVfsId(prodPicture.getVfsId());
                 productEditUp.setPicType(prodPicture.getPicType());
             }
+             editUpList.add(productEditUp);
         }
         
         PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();

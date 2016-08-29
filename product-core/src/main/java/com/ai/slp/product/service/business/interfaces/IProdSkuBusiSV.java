@@ -1,14 +1,13 @@
 package com.ai.slp.product.service.business.interfaces;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
-import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
 import com.ai.slp.product.api.product.param.SkuInfoMultSave;
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
 import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 /**
  * 商品SKU业务操作
@@ -22,7 +21,14 @@ public interface IProdSkuBusiSV {
      *
      * @param group
      */
-    public int createSkuOfProduct(String tenantId,String groupId,List<AttrValRequest> attrValList);
+    public int createSkuOfProduct(String tenantId,String groupId,List<AttrValRequest> attrValList, Long operId);
+    
+    /**
+     * 产生库存组对应商品的SKU
+     * 完全使用配置到标准品的销售属性
+     *
+     */
+    public int createSkuOfAttrValue(String tenantId,String groupId,Map<Long, List<String>> attrValMap,Long operId);
 
     /**
      * 更新商品SKU信息
@@ -65,4 +71,13 @@ public interface IProdSkuBusiSV {
      * @return
      */
     public SkuSetForProduct querySkuByStoGroupId(String tenantId,String supplierId, String groupId);
+    
+    /**
+     * 废除sku
+     * @param tenantId
+     * @param groupId
+     * @param attrValMap
+     * @return
+     */
+    public int discardSkuOfAttrValue(String tenantId,String groupId,Map<Long, List<String>> attrValMap, Long operId);
 }

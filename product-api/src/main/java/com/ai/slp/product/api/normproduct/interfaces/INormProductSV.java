@@ -205,5 +205,22 @@ public interface INormProductSV {
     @Path("/createProductAndStoGroup")
     public BaseResponse createProductAndStoGroup(NormProdSaveRequest request)
             throws BusinessException,SystemException;
-    @interface AddProductInfo {}
+    @interface CreateProductAndStoGroup {}
+    
+    /**
+     * 添加标准品信息.(同时修改标准品属性、库存、sku) <br>
+     * @param productInfoRequest
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiaxs
+     * @ApiDocMethod
+     * @ApiCode	NORM_PRODUCT_0111
+     * @RestRelativeURL
+     */
+    @POST
+    @Path("/updateProductAndStoGroup")
+    public BaseResponse updateProductAndStoGroup(NormProdSaveRequest productInfoRequest)
+            throws BusinessException,SystemException;
+    @interface UpdateProductAndStoGroup {}
 }
