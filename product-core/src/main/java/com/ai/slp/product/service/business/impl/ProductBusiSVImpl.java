@@ -11,10 +11,7 @@ import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.api.webfront.param.FastSkuProdInfo;
-import com.ai.slp.product.constants.ProdAttrAndValDefConstants;
-import com.ai.slp.product.constants.ProductCatConstants;
-import com.ai.slp.product.constants.ProductConstants;
-import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.constants.*;
 import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
@@ -372,8 +369,15 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     @Override
     public void changeToInSale(String tenantId,String supplierId, String prodId, Long operId) {
         Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
-        if (prodId == null){
+        if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
+        }
+        //查询标准品是否为"可使用"状态
+        StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getStandedProdId());
+        if (standedProduct==null || !StandedProductConstants.STATUS_ACTIVE.equals(standedProduct.getState())){
+            logger.warn("未找到指定的标准品或标准品状态为不可用,租户ID:{},商户ID:{},标准品ID:{}"
+                ,tenantId,supplierId,product.getStandedProdId());
+            throw new BusinessException("","未找到相关的商品信息或商品状态为不可用");
         }
         //若商品状态是"停用下架"或"售罄下架"
         if(ProductConstants.Product.State.STOP.equals(product.getState())
