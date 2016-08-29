@@ -4,13 +4,8 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
-import com.ai.slp.product.api.product.param.OtherSetOfProduct;
-import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
-import com.ai.slp.product.api.product.param.ProductEditQueryReq;
-import com.ai.slp.product.api.product.param.ProductEditUp;
-import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.*;
 import com.google.gson.Gson;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +58,9 @@ public class IProductManagerSVTest {
     @Test
     public void prodInStoreTest(){
         ProductInfoQuery infoQuery = new ProductInfoQuery();
-        infoQuery.setTenantId("SLP");
-        infoQuery.setProductId("1000000000000093");
+        infoQuery.setTenantId("changhong");
+        infoQuery.setSupplierId("-1");
+        infoQuery.setProductId("1000000000000096");
         BaseResponse response = productManagerSV.changeToInStore(infoQuery);
         ResponseHeader header = response.getResponseHeader();
         System.out.println(header!=null?header.isSuccess():false);

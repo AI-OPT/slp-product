@@ -53,5 +53,7 @@ public class IProductSVTest {
         SkuSetForProduct skuSetForProduct = productSV.querySkuSetForProduct(query);
         System.out.println(skuSetForProduct.getProdId());
     }
+
+
     
 }
