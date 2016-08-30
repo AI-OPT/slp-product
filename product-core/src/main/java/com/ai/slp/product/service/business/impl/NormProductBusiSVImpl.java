@@ -579,6 +579,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
 				prodAttr.setOperId(operId);
 				prodAttr.setTenantId(tenantId);
+				prodAttr.setStandedProdId(normProdct.getProductId());
 				// prodAttr.setSerialNumber(
 				// queryValInfoSerialNum(tenantId, catId,
 				// attrValReq.getAttrId(), attrValReq.getAttrValId()));

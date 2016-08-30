@@ -60,7 +60,7 @@ public class INormProductSVTest {
     @Test
     public void updateNormProduct(){
     	Gson gson = new Gson();
-    	String data = "{'productCatId':'1','productId':'1','productName':'测试销售属性商品 20160603无限额超级商品','state':'1','productType':'2','createId':1,'operId':1,'attrValList':[{'attrId':100001,'attrValId':'100002','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100014','attrVal':'','attrVal2':''},{'attrId':100010,'attrValId':'100083','attrVal':'','attrVal2':''},{'attrId':100010,'attrValId':'100082','attrVal':'','attrVal2':''}],'supplierId':'-1','tenantId':'changhong'}";
+    	String data = "{'productCatId':'1','productId':'1','productName':'测试销售属性商品 20160603无限额超级商品','state':'1','productType':'2','createId':1,'operId':2,'attrValList':[{'attrId':100001,'attrValId':'100002','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100013','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100014','attrVal':'','attrVal2':''},{'attrId':100010,'attrValId':'100083','attrVal':'','attrVal2':''}],'supplierId':'-1','tenantId':'changhong'}";
     	NormProdSaveRequest request = gson.fromJson(data, new TypeToken<NormProdSaveRequest>() {
 		}.getType());
     	BaseResponse baseResponse = normProductSV.updateProductAndStoGroup(request);
