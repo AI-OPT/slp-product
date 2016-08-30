@@ -56,4 +56,13 @@ public interface IProdSkuAttrAtomSV {
      */
     public List<ProdSkuAttr> queryBySkuId(String tenantId,String skuId);
 
+    /**
+     * 查询SKU的属性及属性值
+     * @param tenantId
+     * @param skuId
+     * @param hasDiscard
+     * @return
+     */
+    public List<ProdSkuAttr> queryBySkuId(String tenantId,String skuId,boolean hasDiscard);
+
 }

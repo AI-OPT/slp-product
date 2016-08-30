@@ -776,7 +776,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			Map<String, String> valInfoMap, Map<Long, Short> attrSn) {
 		String tenantId = product.getTenantId();
 		// 获取所有的属性信息
-		List<ProdSkuAttr> skuAttrList = prodSkuAttrAtomSV.queryBySkuId(tenantId, skuId);
+		List<ProdSkuAttr> skuAttrList = prodSkuAttrAtomSV.queryBySkuId(tenantId, skuId,true);
 		List<SkuAttrVal> valForSkus = new ArrayList<>();
 		for (ProdSkuAttr skuAttr : skuAttrList) {
 			String valName = valInfoMap.get(skuAttr.getAttrvalueDefId());

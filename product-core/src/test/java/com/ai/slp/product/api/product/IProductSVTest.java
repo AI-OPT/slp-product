@@ -59,7 +59,7 @@ public class IProductSVTest {
         StorageInfoQuery query = new StorageInfoQuery();
         query.setTenantId("changhong");
         query.setSupplierId("-1");
-        query.setStorageId("000000000000000069");
+        query.setStorageId("1");
         SkuSetForProduct skuSetForProduct = productSV.querySkuSetForStorage(query);
         System.out.println(skuSetForProduct.getProdId());
     }
