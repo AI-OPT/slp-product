@@ -48,6 +48,7 @@ import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
@@ -245,6 +246,13 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		updateStoGroupInfo(productInfoRequest);
 		// 更新标准品及属性
 		int updateCount = updateNormProd(productInfoRequest);
+		if(updateCount>0){
+			Product product = new Product();
+			BeanUtils.copyProperties(product, productInfoRequest);
+			product.setStandedProdId(productInfoRequest.getProductId());
+			product.setProdName(productInfoRequest.getProductName());
+			productAtomSV.updateByStandedProdId(product);
+		}
 		return updateCount;
 	}
 
@@ -314,29 +322,39 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			Long attrId = prodCatAttr.getAttrId();
 			List<String> attrAndValSet = attrAndValMap.get(attrId);
 			List<String> oldAttrAndValSet = oldAttrAndValueMap.get(attrId);
+			if (attrAndValSet == null && oldAttrAndValSet == null) {
+				continue;
+			}
+			if (attrAndValSet == null) {
+				delAttrAndValueMap.put(attrId, oldAttrAndValSet);
+				continue;
+			}
+			if (oldAttrAndValSet == null) {
+				addAttrAndValueMap.put(attrId, attrAndValSet);
+				continue;
+			}
 			if (attrAndValSet.containsAll(oldAttrAndValSet) && oldAttrAndValSet.containsAll(attrAndValSet)) {
 				continue;
-			} else {
-				List<String> addValueSet = new LinkedList<String>();// 新增的属性值
-				for (String attrValue : attrAndValSet) {
-					// 原属性值不包含 说明为新增数据
-					if (!oldAttrAndValSet.contains(attrValue)) {
-						addValueSet.add(attrValue);
-					}
+			}
+			List<String> addValueSet = new LinkedList<String>();// 新增的属性值
+			for (String attrValue : attrAndValSet) {
+				// 原属性值不包含 说明为新增数据
+				if (!oldAttrAndValSet.contains(attrValue)) {
+					addValueSet.add(attrValue);
 				}
-				if (addValueSet.size() > 0) {
-					addAttrAndValueMap.put(attrId, addValueSet);
+			}
+			if (addValueSet.size() > 0) {
+				addAttrAndValueMap.put(attrId, addValueSet);
+			}
+			List<String> delValueSet = new LinkedList<String>();// 删除的属性值
+			for (String attrValue : oldAttrAndValSet) {
+				// 新属性值不包含 说明为删除数据
+				if (!attrAndValSet.contains(attrValue)) {
+					delValueSet.add(attrValue);
 				}
-				List<String> delValueSet = new LinkedList<String>();// 删除的属性值
-				for (String attrValue : oldAttrAndValSet) {
-					// 新属性值不包含 说明为删除数据
-					if (!attrAndValSet.contains(attrValue)) {
-						delValueSet.add(attrValue);
-					}
-				}
-				if (delValueSet.size() > 0) {
-					delAttrAndValueMap.put(attrId, delValueSet);
-				}
+			}
+			if (delValueSet.size() > 0) {
+				delAttrAndValueMap.put(attrId, delValueSet);
 			}
 		}
 		if (addAttrAndValueMap.size() > 0 || delAttrAndValueMap.size() > 0) {
@@ -556,7 +574,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		// 查询原来的属性值
 		Map<String, StandedProdAttr> oldAttrValMap = queryOldProdAttr(normProdct.getTenantId(),
 				normProdct.getProductId());
-		String tenantId = normProdct.getTenantId(), catId = normProdct.getProductCatId();
+		String tenantId = normProdct.getTenantId();
 		Long operId = normProdct.getOperId();
 		for (AttrValRequest attrValReq : attrValList) {
 			// 查询属性值是否已存在

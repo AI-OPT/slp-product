@@ -5,8 +5,6 @@ import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 
-import java.util.List;
-
 /**
  * 销售商品原子操作
  * Created by jackieliu on 16/5/5.
@@ -56,6 +54,14 @@ public interface IProductAtomSV {
      * @return
      */
     public int updateById(Product product);
+    
+    /**
+     * 根据标准品id更新商品信息
+     *
+     * @param product
+     * @return
+     */
+    public int updateByStandedProdId(Product product);
 
     /**
      * 待编辑商品分页查询
