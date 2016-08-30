@@ -149,11 +149,36 @@ public class IProductSVImpl implements IProductSV {
      * @ApiCode PRODUCT_0107
      */
     @Override
-    public SkuSetForProduct querySkuSetForGroup(StoGroupInfoQuery query) throws BusinessException, SystemException {
+    public SkuSetForProduct querySkuSetForGroup(StoGroupInfoQuery query)
+            throws BusinessException, SystemException {
         CommonUtils.checkTenantId(query.getTenantId());
         SkuSetForProduct skuSetForProduct = prodSkuBusiSV.querySkuByStoGroupId(
                 query.getTenantId(),query.getSupplierId(),query.getGroupId());
         CommonUtils.addSuccessResHeader(skuSetForProduct,"");
         return skuSetForProduct;
     }
+
+    /**
+     * 查询单个库存下的sku集合信息,包括废弃的库存
+     *
+     * @param query 库存信息
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @RestRelativeURL productManager/searchSKUInfoStorage
+     * @ApiCode PRODUCT_0108
+     */
+    @Override
+    public SkuSetForProduct querySkuSetForStorage(StorageInfoQuery query)
+            throws BusinessException, SystemException {
+        CommonUtils.checkTenantId(query.getTenantId());
+        SkuSetForProduct skuSetForProduct = prodSkuBusiSV.querySkuByStorageId(
+                query.getTenantId(),query.getSupplierId(),query.getStorageId());
+        CommonUtils.addSuccessResHeader(skuSetForProduct,"");
+        return skuSetForProduct;
+    }
+
+
 }
