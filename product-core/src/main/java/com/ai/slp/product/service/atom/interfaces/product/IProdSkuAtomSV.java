@@ -4,7 +4,6 @@ import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -98,4 +97,14 @@ public interface IProdSkuAtomSV {
      * @author jiaxs
      */
     public List<ProdSku> queryProdSkuBySaleAttrs(String tenantId, String groupId,Set<String> skuSaleAttrs);
+
+    /**
+     * 通过SKU标识查询SKU信息
+     *
+     * @param tenantId
+     * @param skuId
+     * @return
+     * @author lipeng16
+     */
+    public ProdSku querySkuById(String tenantId,String skuId,boolean hasDiscard);
 }

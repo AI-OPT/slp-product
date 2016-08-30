@@ -1,12 +1,5 @@
 package com.ai.slp.product.service.atom.impl.product;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
@@ -17,6 +10,12 @@ import com.ai.slp.product.dao.mapper.interfaces.product.ProdSkuMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by jackieliu on 16/5/6.
@@ -155,5 +154,26 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 		saleAttrList.addAll(skuSaleAttrs);
 		criteria.andSaleAttrsIn(saleAttrList);
 		return prodSkuMapper.selectByExample(example);
+	}
+
+	/**
+	 * 通过SKU标识查询SKU信息
+	 *
+	 * @param tenantId
+	 * @param skuId
+	 * @param hasDiscard
+	 * @return
+	 * @author lipeng16
+	 */
+	@Override
+	public ProdSku querySkuById(String tenantId, String skuId, boolean hasDiscard) {
+		ProdSkuCriteria example = new ProdSkuCriteria();
+		ProdSkuCriteria.Criteria criteria = example.createCriteria()
+				.andTenantIdEqualTo(tenantId)
+				.andSkuIdEqualTo(skuId);
+		if (!hasDiscard)
+			criteria.andStateEqualTo(ProductConstants.ProdSku.State.ACTIVE);
+		List<ProdSku> prodSkuList = prodSkuMapper.selectByExample(example);
+		return CollectionUtil.isEmpty(prodSkuList) ? null : prodSkuList.get(0);
 	}
 }

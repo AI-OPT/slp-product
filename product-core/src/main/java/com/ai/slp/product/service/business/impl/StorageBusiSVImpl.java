@@ -445,7 +445,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		// 通过SKU库存的SKU标识查对应的商品SKU
 		for (SkuStorage skuStorage : skuStorageList) {
 			String skuId = skuStorage.getSkuId();
-			ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
+			ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId,true);
 			if (prodSku == null) {
 				continue;
 			}
