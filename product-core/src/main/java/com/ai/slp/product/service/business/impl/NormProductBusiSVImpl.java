@@ -490,16 +490,16 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	public void discardProduct(String tenantId, String productId, Long operId, String supplierId) {
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
 		if (standedProduct == null)
-			throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
+			throw new BusinessException("", "不存在指定商品,租户ID:" + tenantId + ",商品标识:" + productId);
 
 		if (!standedProduct.getSupplierId().equals(supplierId))
 			throw new BusinessException("",
-					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + supplierId + "不一致!");
+					"商品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + supplierId + "不一致!");
 
 		// 查询没有废弃的库存组
 		int noDiscardNum = storageGroupAtomSV.queryCountNoDiscard(tenantId, productId);
 		if (noDiscardNum > 0)
-			throw new BusinessException("", "该标准品下存在[" + noDiscardNum + "]个未废弃库存组");
+			throw new BusinessException("", "该商品下存在[" + noDiscardNum + "]个未废弃库存组");
 		standedProduct.setOperId(operId);
 		standedProduct.setOperTime(standedProduct.getOperTime());
 		standedProduct.setState(StandedProductConstants.STATUS_DISCARD);// 设置废弃
