@@ -139,12 +139,30 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @RestRelativeURL productManager/searchSKUInfoGroup
+     * @RestRelativeURL productManager/searchSKUInfoStoGroup
      * @ApiCode PRODUCT_0107
      */
     @POST
-    @Path("/searchSKUInfoGroup")
+    @Path("/searchSKUInfoStoGroup")
     public SkuSetForProduct querySkuSetForGroup(StoGroupInfoQuery query)
             throws BusinessException,SystemException;
     @interface QuerySkuSetForGroup{}
+
+    /**
+     * 查询单个库存下的sku集合信息,包括废弃的库存
+     *
+     * @param query 库存信息
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @RestRelativeURL productManager/searchSKUInfoStorage
+     * @ApiCode PRODUCT_0108
+     */
+    @POST
+    @Path("/searchSKUInfoStorage")
+    public SkuSetForProduct querySkuSetForStorage(StorageInfoQuery query)
+            throws BusinessException,SystemException;
+    @interface querySkuSetForStorage{}
 }

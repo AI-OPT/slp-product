@@ -112,4 +112,22 @@ public class ProdSkuAttrAtomSV implements IProdSkuAttrAtomSV {
                 .andStateEqualTo(ProductConstants.ProdSkuAttr.State.ACTIVE);
         return skuAttrMapper.selectByExample(example);
     }
+
+    /**
+     * 查询SKU的属性及属性值
+     *
+     * @param tenantId
+     * @param skuId
+     * @param hasDiscard
+     * @return
+     */
+    @Override
+    public List<ProdSkuAttr> queryBySkuId(String tenantId, String skuId, boolean hasDiscard) {
+        ProdSkuAttrCriteria example = new ProdSkuAttrCriteria();
+        ProdSkuAttrCriteria.Criteria criteria = example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andSkuIdEqualTo(skuId);
+        if(!hasDiscard)
+            criteria.andStateEqualTo(ProductConstants.ProdSkuAttr.State.ACTIVE);
+        return skuAttrMapper.selectByExample(example);
+    }
 }

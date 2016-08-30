@@ -47,10 +47,20 @@ public class IProductSVTest {
     @Test
     public void querySkuSetForProductTest(){
         ProductInfoQuery query = new ProductInfoQuery();
-        query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        query.setTenantId("changhong");
         query.setSupplierId("-1");
         query.setProductId("1");
         SkuSetForProduct skuSetForProduct = productSV.querySkuSetForProduct(query);
+        System.out.println(skuSetForProduct.getProdId());
+    }
+
+    @Test
+    public void querySkuSetForStorageTest(){
+        StorageInfoQuery query = new StorageInfoQuery();
+        query.setTenantId("changhong");
+        query.setSupplierId("-1");
+        query.setStorageId("1");
+        SkuSetForProduct skuSetForProduct = productSV.querySkuSetForStorage(query);
         System.out.println(skuSetForProduct.getProdId());
     }
     

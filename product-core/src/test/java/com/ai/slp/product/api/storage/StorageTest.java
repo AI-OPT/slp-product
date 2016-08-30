@@ -55,7 +55,7 @@ public class StorageTest {
     @Test
     public void querySkuStorageById(){
         StorageUniQuery query = new StorageUniQuery();
-        query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        query.setTenantId("changhong");
         query.setSupplierId("-1");
         query.setStorageId("000000000000000061");
         BaseMapResponse<String, SkuStorageInfo> mapResponse = storageSV.querySkuStorageById(query);

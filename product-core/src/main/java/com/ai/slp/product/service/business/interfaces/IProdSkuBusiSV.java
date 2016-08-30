@@ -1,13 +1,13 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import java.util.List;
-import java.util.Map;
-
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
 import com.ai.slp.product.api.product.param.SkuInfoMultSave;
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
 import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 商品SKU业务操作
@@ -80,4 +80,13 @@ public interface IProdSkuBusiSV {
      * @return
      */
     public int discardSkuOfAttrValue(String tenantId,String groupId,Map<Long, List<String>> attrValMap, Long operId);
+
+    /**
+     * 查询某个库存下的SKU信息
+     * @param tenantId
+     * @param supplierId
+     * @param storageId
+     * @return
+     */
+    public SkuSetForProduct querySkuByStorageId(String tenantId,String supplierId, String storageId);
 }
