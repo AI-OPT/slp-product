@@ -1,5 +1,12 @@
 package com.ai.slp.product.service.atom.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
@@ -12,12 +19,6 @@ import com.ai.slp.product.dao.mapper.interfaces.ProdCatAttrValueMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
@@ -140,6 +141,18 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     @Override
     public List<ProdCatAttr> queryAttrOfCatByIdAndType(String tenantId, String catId, String attrType) {
         ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+        example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
+                .andAttrTypeEqualTo(attrType)
+                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
+        return prodCatAttrMapper.selectByExample(example);
+    }
+    
+    @Override
+    public List<ProdCatAttr> queryAttrOfCatByIdAndType(String tenantId, String catId,String attrType, String orderField){
+    	ProdCatAttrCriteria example = new ProdCatAttrCriteria();
+        if(StringUtils.isNotBlank(orderField)){
+        	example.setOrderByClause(orderField);
+        }
         example.createCriteria().andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
                 .andAttrTypeEqualTo(attrType)
                 .andStateEqualTo(CommonConstants.STATE_ACTIVE);

@@ -136,7 +136,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		Product product = productAtomSV.queryProductByGroupId(tenantId, group.getStorageGroupId());
 		// 查询类目下销售属性信息
 		List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId, product.getProductCatId(),
-				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE,"ATTR_ID");
 		// 创建所有sku组合
 		if (catAttrList != null && catAttrList.size() > 0) {
 			return createSkuProduct(attrValList, group, product, catAttrList, operId);
@@ -176,12 +176,15 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 
 	@Override
 	public int createSkuOfAttrValue(String tenantId, String groupId, Map<Long, List<String>> attrValMap, Long operId) {
+		if(attrValMap==null || attrValMap.size()==0){
+			return 0;
+		}
 		StorageGroup group = checkBefUpdateSkuByGroupId(tenantId, groupId);
 		// 查询商品信息
 		Product product = productAtomSV.queryProductByGroupId(tenantId, group.getStorageGroupId());
 		// 查询类目下销售属性信息
 		List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId, product.getProductCatId(),
-				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE,"ATTR_ID");
 		// 创建所有sku组合
 		if (catAttrList != null && catAttrList.size() > 0) {
 			return createSkuProduct(group, product, catAttrList, attrValMap, operId);
@@ -323,7 +326,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		Map<Long, List<String>> attrAndValMap = saveInfo.getAttrAndValIdMap();
 		// 查询类目下指定类型的属性信息
 		List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId, product.getProductCatId(),
-				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE,"ATTR_ID");
 		if (attrAndValMap.size() != catAttrList.size())
 			throw new BusinessException("",
 					"已选择销售属性数量与实际数量不符,已选择属性数量:" + attrAndValMap.size() + ",实际属性数量:" + catAttrList.size());
@@ -517,11 +520,13 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		ProdCatAttr catAttr = catAttrList.get(attrIndex);
 		Long attrId = catAttr.getAttrId();
 		List<String> valList = attrAndValMap.get(attrId);
+		if(valList == null || valList.size()==0){
+			return;
+		}
 		// 拼装sku属性串
 		String newSkuAttr = null;
 		if (StringUtil.isBlank(skuInfo)) {
-			newSkuAttr = ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT + attrId
-					+ ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT;
+			newSkuAttr = attrId	+ ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT;
 		} else {
 			newSkuAttr = skuInfo + ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT + attrId
 					+ ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT;
@@ -844,7 +849,16 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	public int discardSkuOfAttrValue(String tenantId, String groupId, Map<Long, List<String>> attrValMap,Long operId) {
 		if (attrValMap != null && attrValMap.size() > 0) {
 			StorageGroup group = checkBefUpdateSkuByGroupId(tenantId, groupId);
-			List<ProdSku> prodSkuList = prodSkuAtomSV.queryProdSkuBySaleAttrs(tenantId, attrValMap);
+			// 查询商品信息
+			Product product = productAtomSV.queryProductByGroupId(tenantId, group.getStorageGroupId());
+			// 查询类目下销售属性信息
+			List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId, product.getProductCatId(),
+					ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE,"ATTR_ID");
+			Set<String> skuSaleAttrs = new HashSet<>();// 删除的SKU属性串集合
+			// 参数属性值的所有SKU组合
+			genSkuSalAttr(attrValMap, "", 0, skuSaleAttrs, catAttrList);
+			
+			List<ProdSku> prodSkuList = prodSkuAtomSV.queryProdSkuBySaleAttrs(tenantId, groupId, skuSaleAttrs);
 			if(prodSkuList != null && prodSkuList.size()>0){
 				for(ProdSku prodSku : prodSkuList){
 					discardSku(prodSku, operId);

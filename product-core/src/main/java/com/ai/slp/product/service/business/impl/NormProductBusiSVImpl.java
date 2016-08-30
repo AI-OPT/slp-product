@@ -21,6 +21,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.normproduct.param.AttrValInfo;
@@ -144,7 +145,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
 			prodAttr.setOperId(normProduct.getOperId());
 			prodAttr.setOperTime(nowTime);
-			prodAttr.setSerialNumber(Short.valueOf("1"));
+			prodAttr.setSerialNumber(getProductAttrSerialNo());
 			// 添加成功,添加日志
 			if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
 				StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
@@ -214,7 +215,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				throw new BusinessException("", "不允许将[废弃]状态变更为其他状态");
 			// 将可用变为不可用
 			else if (StandedProductConstants.STATUS_ACTIVE.equals(standedProduct.getState())
-					&& StandedProductConstants.STATUS_INACTIVE.equals(normProdct)) {
+					&& StandedProductConstants.STATUS_INACTIVE.equals(normProdct.getState())) {
 				// 检查是否有启用状态库存组
 				int groupNum = storageGroupAtomSV.queryCountActive(tenantId, productId);
 				if (groupNum > 0)
@@ -229,6 +230,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		if (updateCount > 0) {
 			StandedProductLog productLog = new StandedProductLog();
 			BeanUtils.copyProperties(productLog, standedProduct);
+			productLog.setCreateTime(DateUtil.getSysDate());
+			productLog.setCreateId(standedProduct.getOperId());
 			standedProductLogAtomSV.insert(productLog);
 		}
 		// 变更属性值. 1.将原来属性值设置为不可用;2,启用新的属性值.
@@ -238,10 +241,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 	@Override
 	public int updateNormProdAndStoGroup(NormProdSaveRequest productInfoRequest) {
-		// 更新标准品及属性
-		int updateCount = updateNormProd(productInfoRequest);
 		// 更新库存组相关信息
 		updateStoGroupInfo(productInfoRequest);
+		// 更新标准品及属性
+		int updateCount = updateNormProd(productInfoRequest);
 		return updateCount;
 	}
 
@@ -268,14 +271,20 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			for (StorageGroup group : groupList) {
 				String storageGroupId = group.getStorageGroupId();
 				List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId, storageGroupId);
-				if(storageList == null || storageList.size() ==0){
+				if (storageList == null || storageList.size() == 0) {
 					return;
 				}
-				for(Storage storage:storageList){
+				for (Storage storage : storageList) {
 					storageBusiSV.discardStorage(tenantId, storage, productInfoRequest.getOperId(), true);
 				}
-				prodSkuBusiSV.createSkuOfAttrValue(tenantId, storageGroupId, addAttrAndValueMap, operId);
-				prodSkuBusiSV.discardSkuOfAttrValue(tenantId, storageGroupId, delAttrAndValueMap, operId);
+				// 新增数据
+				if (addAttrAndValueMap.size() > 0) {
+					prodSkuBusiSV.createSkuOfAttrValue(tenantId, storageGroupId, addAttrAndValueMap, operId);
+				}
+				// 删除数据
+				if (delAttrAndValueMap.size() > 0) {
+					prodSkuBusiSV.discardSkuOfAttrValue(tenantId, storageGroupId, delAttrAndValueMap, operId);
+				}
 			}
 		}
 	}
@@ -315,7 +324,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 						addValueSet.add(attrValue);
 					}
 				}
-				addAttrAndValueMap.put(attrId, addValueSet);
+				if (addValueSet.size() > 0) {
+					addAttrAndValueMap.put(attrId, addValueSet);
+				}
 				List<String> delValueSet = new LinkedList<String>();// 删除的属性值
 				for (String attrValue : oldAttrAndValSet) {
 					// 新属性值不包含 说明为删除数据
@@ -323,7 +334,28 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 						delValueSet.add(attrValue);
 					}
 				}
-				delAttrAndValueMap.put(attrId, delValueSet);
+				if (delValueSet.size() > 0) {
+					delAttrAndValueMap.put(attrId, delValueSet);
+				}
+			}
+		}
+		if (addAttrAndValueMap.size() > 0 || delAttrAndValueMap.size() > 0) {
+			for (ProdCatAttr prodCatAttr : catAttrList) {
+				Long attrId = prodCatAttr.getAttrId();
+				// 新增数据
+				if (addAttrAndValueMap.size() > 0) {
+					Set<Long> addkeySet = addAttrAndValueMap.keySet();
+					if (!addkeySet.contains(attrId)) {
+						addAttrAndValueMap.put(attrId, attrAndValMap.get(attrId));
+					}
+				}
+				// 删除数据
+				if (delAttrAndValueMap.size() > 0) {
+					Set<Long> delkeySet = delAttrAndValueMap.keySet();
+					if (!delkeySet.contains(attrId)) {
+						delAttrAndValueMap.put(attrId, attrAndValMap.get(attrId));
+					}
+				}
 			}
 		}
 	}
@@ -535,7 +567,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			if (prodAttr != null) {
 				prodAttr.setAttrValueName(attrValReq.getAttrVal());
 				prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
-				prodAttr.setSerialNumber(attrValReq.getSerialNumber());
+				// prodAttr.setSerialNumber(attrValReq.getSerialNumber());
+				prodAttr.setSerialNumber(getProductAttrSerialNo());
 				prodAttr.setOperId(operId);
 				upNum = standedProdAttrAtomSV.updateObj(prodAttr);
 			} else {
@@ -544,8 +577,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
 				prodAttr.setAttrValueName(attrValReq.getAttrVal());
 				prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
-				prodAttr.setSerialNumber(
-						queryValInfoSerialNum(tenantId, catId, attrValReq.getAttrId(), attrValReq.getAttrValId()));
+				prodAttr.setOperId(operId);
+				prodAttr.setTenantId(tenantId);
+				// prodAttr.setSerialNumber(
+				// queryValInfoSerialNum(tenantId, catId,
+				// attrValReq.getAttrId(), attrValReq.getAttrValId()));
+				prodAttr.setSerialNumber(getProductAttrSerialNo());
 				prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
 				upNum = standedProdAttrAtomSV.installObj(prodAttr);
 			}
@@ -559,6 +596,19 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		}
 		// 将未更新属性值设置为无效.
 		loseActiveAttr(oldAttrValMap.values(), normProdct.getOperId());
+	}
+
+	/**
+	 * 获得商品属性序列号
+	 * 
+	 * @return
+	 * @author jiaxs
+	 * @ApiDocMethod
+	 * @ApiCode
+	 * @RestRelativeURL
+	 */
+	private Short getProductAttrSerialNo() {
+		return Short.valueOf("1");
 	}
 
 	/**
