@@ -683,6 +683,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		int count = standedProductAtomSV.updateMarketPrice(marketPrice.getTenantId(), marketPrice.getProductId(),
 				marketPrice.getMarketPrice(), marketPrice.getOperId());
 		if (count > 0) {
+			standedProduct.setMarketPrice(marketPrice.getMarketPrice());
 			// 更行标准品日志
 			StandedProductLog standedProductLog = new StandedProductLog();
 			BeanUtils.copyProperties(standedProductLog, standedProduct);
