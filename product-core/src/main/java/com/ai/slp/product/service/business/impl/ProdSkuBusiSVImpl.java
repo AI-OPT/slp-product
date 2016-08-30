@@ -1,24 +1,5 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
@@ -28,20 +9,8 @@ import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.normproduct.param.AttrValInfo;
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
 import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
-import com.ai.slp.product.api.product.param.CatAttrInfoForProd;
-import com.ai.slp.product.api.product.param.ProdAttrMap;
-import com.ai.slp.product.api.product.param.ProdAttrValInfo;
-import com.ai.slp.product.api.product.param.SkuAttrInfo;
-import com.ai.slp.product.api.product.param.SkuAttrVal;
-import com.ai.slp.product.api.product.param.SkuAttrValInfo;
-import com.ai.slp.product.api.product.param.SkuInfo;
-import com.ai.slp.product.api.product.param.SkuInfoMultSave;
-import com.ai.slp.product.api.product.param.SkuSetForProduct;
-import com.ai.slp.product.api.webfront.param.ProductImage;
-import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
-import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
-import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
-import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
+import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.webfront.param.*;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
@@ -50,11 +19,7 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSkuLog;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.product.*;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -63,22 +28,21 @@ import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSaleAllAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
-import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
-import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
-import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
-import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.service.business.interfaces.*;
 import com.ai.slp.product.vo.SkuStorageVo;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 /**
  * 商品SKU操作 Created by jackieliu on 16/5/12.
@@ -898,7 +862,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		}
 		//若库存没有废弃,则按照商品的SKU返回
 		if (!StorageConstants.Storage.State.DISCARD.equals(storage.getState())
-				&& StorageConstants.Storage.State.AUTO_DISCARD.equals(storage.getState())){
+				&& !StorageConstants.Storage.State.AUTO_DISCARD.equals(storage.getState())){
 			return querySkuByProdId(tenantId,product);
 		}
 
@@ -918,7 +882,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		for (SkuStorage skuSto : skuStoList) {
 			// 设置属性串和SKU标识
 			SkuInfo skuInfo = new SkuInfo();
-			ProdSku sku = prodSkuAtomSV.querySkuById(tenantId,skuSto.getSkuId());
+			ProdSku sku = prodSkuAtomSV.querySkuById(tenantId,skuSto.getSkuId(),true);
 			BeanUtils.copyProperties(skuInfo, sku);
 			skuInfoList.add(skuInfo);
 			skuInfo.setValForSkuList(genSkuAttrVal(product, sku.getSkuId(), valInfoMap, attrSn));
