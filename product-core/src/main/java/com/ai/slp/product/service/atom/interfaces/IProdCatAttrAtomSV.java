@@ -92,6 +92,17 @@ public interface IProdCatAttrAtomSV {
      * @return
      */
     public List<ProdCatAttr> queryAttrOfCatByIdAndType(String tenantId, String catId,String attrType);
+    
+    /**
+     * 查询类目下某个类型的属性
+     *
+     * @param tenantId
+     * @param catId
+     * @param attrType
+     * @param orderField排序字段
+     * @return
+     */
+    public List<ProdCatAttr> queryAttrOfCatByIdAndType(String tenantId, String catId,String attrType, String orderField);
 
     /**
      * 查询类目下指定属性类型和属性标识的关联信息
