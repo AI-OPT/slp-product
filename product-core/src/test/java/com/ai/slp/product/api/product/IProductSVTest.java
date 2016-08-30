@@ -47,7 +47,7 @@ public class IProductSVTest {
     @Test
     public void querySkuSetForProductTest(){
         ProductInfoQuery query = new ProductInfoQuery();
-        query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        query.setTenantId("changhong");
         query.setSupplierId("-1");
         query.setProductId("1");
         SkuSetForProduct skuSetForProduct = productSV.querySkuSetForProduct(query);
