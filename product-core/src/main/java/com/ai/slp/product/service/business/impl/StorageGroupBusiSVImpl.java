@@ -1,5 +1,17 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
@@ -7,8 +19,20 @@ import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
-import com.ai.slp.product.api.storage.param.*;
-import com.ai.slp.product.constants.*;
+import com.ai.slp.product.api.storage.param.NameUpReq;
+import com.ai.slp.product.api.storage.param.STOStorageGroup;
+import com.ai.slp.product.api.storage.param.StorageGroup4List;
+import com.ai.slp.product.api.storage.param.StorageGroupOfNormProdPage;
+import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
+import com.ai.slp.product.api.storage.param.StorageGroupRes;
+import com.ai.slp.product.api.storage.param.StorageGroupSalePrice;
+import com.ai.slp.product.api.storage.param.StorageRes;
+import com.ai.slp.product.constants.ProdPriceLogConstants;
+import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.RouteConstants;
+import com.ai.slp.product.constants.StandedProductConstants;
+import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.StorageGroupAttach4List;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
@@ -23,7 +47,11 @@ import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.*;
+import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
@@ -31,17 +59,6 @@ import com.ai.slp.product.util.IPaasStorageUtils;
 import com.ai.slp.product.vo.StoGroupPageQueryVo;
 import com.ai.slp.route.api.routequery.interfaces.IRouteQuerySV;
 import com.ai.slp.route.api.routequery.param.RouteGroupQueryResult;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 库存组操作 Created by jackieliu on 16/5/5.

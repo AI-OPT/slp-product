@@ -147,7 +147,6 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 
 	@Override
 	public List<ProdSku> queryProdSkuBySaleAttrs(String tenantId, String groupId, Set<String> skuSaleAttrs) {
-//		List<ProdSku> resultList = new LinkedList<ProdSku>(); 
 		ProdSkuCriteria example = new ProdSkuCriteria();
 		ProdSkuCriteria.Criteria criteria = example.createCriteria().
 				andTenantIdEqualTo(tenantId);
@@ -156,20 +155,5 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 		saleAttrList.addAll(skuSaleAttrs);
 		criteria.andSaleAttrsIn(saleAttrList);
 		return prodSkuMapper.selectByExample(example);
-//		Set<Entry<Long, List<String>>> entrySet = attrAndValueMap.entrySet();
-//		for(Entry<Long, List<String>> entry : entrySet){
-//			Long attrId = entry.getKey();
-//			List<String> valueList = entry.getValue();
-//			for(String value : valueList){
-//				criteria.andStorageGroupIdEqualTo(groupId);
-//				String saleAttr = attrId+ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT+value;
-//				criteria.andSaleAttrsLike("%"+saleAttr+"%");
-//				List<ProdSku> prodSkuList = prodSkuMapper.selectByExample(example);
-//				resultList.addAll(prodSkuList);
-//			}
-//		}
-//		return resultList;
 	}
-
-
 }
