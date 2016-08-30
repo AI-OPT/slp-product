@@ -25,6 +25,12 @@ public class ProductEditUp implements Serializable{
     private String prodId;
     
     /**
+     * 标准品ID
+     * 
+     */
+    private String standedProdId;
+    
+    /**
      * 商品类目ID
      */
     private String productCatId;
@@ -98,6 +104,15 @@ public class ProductEditUp implements Serializable{
      */
     private List<String> userTypes;
     
+
+    
+	public String getStandedProdId() {
+		return standedProdId;
+	}
+
+	public void setStandedProdId(String standedProdId) {
+		this.standedProdId = standedProdId;
+	}
 
 	public List<String> getUserTypes() {
 		return userTypes;

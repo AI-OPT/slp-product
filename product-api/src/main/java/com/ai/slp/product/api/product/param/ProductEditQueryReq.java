@@ -35,6 +35,11 @@ public class ProductEditQueryReq extends BaseInfo{
      */
     private String prodId;
     /**
+     * 标准品ID
+     * 
+     */
+    private String standedProdId;
+    /**
      * 商品类目ID,必填
      */
     private String productCatId;
@@ -63,9 +68,16 @@ public class ProductEditQueryReq extends BaseInfo{
      */
     @NotBlank(message = "商户标识不能为空")
     private String supplierId;
-
     
-    public String getSupplierId() {
+    public String getStandedProdId() {
+		return standedProdId;
+	}
+
+	public void setStandedProdId(String standedProdId) {
+		this.standedProdId = standedProdId;
+	}
+
+	public String getSupplierId() {
 		return supplierId;
 	}
 
