@@ -114,7 +114,8 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public PageInfo<Product> selectPageForEdit(ProductEditQueryReq queryReq) {
 		ProductCriteria example = new ProductCriteria();
-		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+//		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+		example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
 		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
@@ -127,10 +128,11 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		if (StringUtils.isNotBlank(queryReq.getProdName()))
 			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
 		//对商户标识的查询
-		if (StringUtils.isNotBlank(queryReq.getSupplierId())) {
+		if (StringUtils.isNotBlank(queryReq.getSupplierId())) 
 			criteria.andSupplierIdLike("%"+queryReq.getSupplierId()+"%");
-		}
-		
+		//根据标准品ID模糊查询
+		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) 
+			criteria.andStandedProdIdLike("%"+queryReq.getStandedProdId()+"%");
 		//获取页数和每页条数
 		int pageNo = queryReq.getPageNo();
 		int pageSize = queryReq.getPageSize();
