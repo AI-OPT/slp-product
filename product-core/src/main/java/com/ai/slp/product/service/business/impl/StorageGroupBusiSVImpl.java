@@ -15,6 +15,7 @@ import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
@@ -249,6 +250,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 					continue;
 				// 添加库存总量
 				storageTotal += storage.getTotalNum();
+			}
+			//若没有销售属性,则填充销售价
+			if(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR.equals(group.getIsSaleAttr())){
+				//查询库存对应SKU库存的信息.
+				List<SkuStorage> skuStoList = skuStorageAtomSV.queryByStorageId(storage.getStorageId(),true);
+				if (!CollectionUtil.isEmpty(skuStoList))
+					stoStorage.setSalePrice(skuStoList.get(0).getSalePrice());
 			}
 		}
 		groupInfo.setStorageTotal(storageTotal);
