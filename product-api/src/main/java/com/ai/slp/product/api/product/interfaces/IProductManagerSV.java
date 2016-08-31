@@ -215,4 +215,20 @@ public interface IProductManagerSV {
         throws BusinessException,SystemException;
     @interface ChangeToInStore {}
     
+    /**
+     * 查询在售商品  -- 按上架时间倒序
+     * 
+     * @param productEditParam
+     * @return 满足条件的商品集合
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+     * @RestRelativeURL productManager/searchInSale
+     * @ApiCode PROMAN_0111
+     */
+    @POST
+    @Path("/searchInSale")
+    public BaseResponse searchInSale(ProductQueryInSale queryInSale) throws BusinessException, SystemException;
+    @interface SearchInSale {}
+    
 }
