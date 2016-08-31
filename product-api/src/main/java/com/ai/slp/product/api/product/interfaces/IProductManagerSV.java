@@ -228,7 +228,7 @@ public interface IProductManagerSV {
      */
     @POST
     @Path("/searchInSale")
-    public BaseResponse searchInSale(ProductQueryInSale queryInSale) throws BusinessException, SystemException;
+    public PageInfoResponse<ProductEditUp> searchInSale(ProductQueryInSale queryInSale) throws BusinessException, SystemException;
     @interface SearchInSale {}
     
 }

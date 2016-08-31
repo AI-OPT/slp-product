@@ -216,7 +216,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @author jiawen
 	 */
 	@Override
-	public BaseResponse searchInSale(ProductQueryInSale queryInSale) throws BusinessException, SystemException {
+	public PageInfoResponse<ProductEditUp> searchInSale(ProductQueryInSale queryInSale) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(queryInSale.getTenantId(),"");
         CommonUtils.checkSupplierId(queryInSale.getSupplierId(),"");
         return productManagerBsuiSV.queryInSale(queryInSale);
