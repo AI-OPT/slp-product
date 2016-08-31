@@ -60,4 +60,11 @@ public interface IProductManagerBsuiSV {
      * @return
      */
 	public PageInfoResponse<TargetAreaForProd> searchProdTargetArea(ProductEditQueryReq productEditParam);
+	
+	/**
+     * 查询在售商品 -- 按上架时间排序
+     * @param queryReq
+     * @return
+     */
+    public PageInfoResponse<ProductEditUp> queryInSale(ProductQueryInSale queryInSale);
 }
