@@ -560,5 +560,41 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         response.setResult(targetAreaList);
         return response;
     }
+
+	/**
+     * 查询在商品 -- 按上架时间排序
+     * @param queryReq
+     * @return
+     */
+	@Override
+	public PageInfoResponse<ProductEditUp> queryInSale(ProductQueryInSale queryReq) {
+
+        String tenantId = queryReq.getTenantId();
+        //查询所有符合条件商品
+        PageInfo<Product> productPage = productAtomSV.selectPageForInsale(queryReq);
+        List<ProductEditUp> editUpList = new ArrayList<>();
+        for (Product product:productPage.getResult()){
+            ProductEditUp productEditUp = new ProductEditUp();
+            BeanUtils.copyProperties(productEditUp,product);
+            //设置类目名称
+            ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
+            if (cat!=null)
+                productEditUp.setProductCatName(cat.getProductCatName());
+            //查询主预览图
+            ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
+            if (prodPicture!=null){
+                productEditUp.setProPictureId(prodPicture.getProPictureId());
+                productEditUp.setVfsId(prodPicture.getVfsId());
+                productEditUp.setPicType(prodPicture.getPicType());
+            }
+             editUpList.add(productEditUp);
+        }
+        
+        PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();
+        BeanUtils.copyProperties(response,productPage);
+        response.setResult(editUpList);
+        return response;
+    
+	}
 	
 }
