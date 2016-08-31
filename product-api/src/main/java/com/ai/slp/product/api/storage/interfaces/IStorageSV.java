@@ -230,7 +230,7 @@ public interface IStorageSV {
     @interface UpdateStorageGroupSalePrice{}
 
     /**
-     * 查询标准品列表,包含标准品的库存组,适用于商城商品定销售价<br>
+     * 查询标准品列表,包含标准品的库存组,适用于商城商品定最低最高销售价<br>
      *  库存组不包括废弃状态的
      *
      * @param groupQuery 库存组查询信息对象
@@ -280,7 +280,7 @@ public interface IStorageSV {
      */
     @POST
     @Path("/updateStorageSalePrice")
-    public BaseResponse updateMultiStorageSalePrice(StoNoSkuSalePrice salePrice)
+    public BaseResponse updateMultiStorageSalePrice(StoNoSkuSalePriceReq salePrice)
             throws BusinessException,SystemException;
     @interface UpdateMultiStorageSalePrice{}
     

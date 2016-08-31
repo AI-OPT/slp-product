@@ -30,6 +30,7 @@ public class ProductPageSqlProvider {
 			seqBuffer.append("and sg.storage_group_name like '%" + param.get("storageGroupName") + "%'");
 		if(param.get("standedProdName") != null)
 			seqBuffer.append("and sp.standed_prod_name like '%" + param.get("standedProdName") + "%'");
+		seqBuffer.append("p.CREATE_TIME DESC");
 		return seqBuffer.toString();
 	}
 

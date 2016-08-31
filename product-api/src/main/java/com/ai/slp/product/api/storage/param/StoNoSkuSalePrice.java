@@ -1,70 +1,38 @@
 package com.ai.slp.product.api.storage.param;
 
-import com.ai.opt.base.vo.BaseInfo;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
-import java.util.Map;
+import java.io.Serializable;
 
 /**
  * 库存售价信息<br>
  * 用于更新没有销售属性库存销售价
  *
- * Date: 2016年4月24日 <br>
+ * Date: 2016年8月31日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class StoNoSkuSalePrice extends BaseInfo {
+public class StoNoSkuSalePrice implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 销售商（商户）标识，必填<br>
-     */
-    @NotBlank(message = "销售商（商户）标识不能为空",
-            groups = { IStorageSV.UpdateMultiStorageSalePrice.class})
-    private String supplierId;
     /**
      * 库存组标识,必填
      */
     @NotBlank(message = "库存组标识不能为空",
             groups = { IStorageSV.UpdateMultiStorageSalePrice.class})
     private String groupId;
+
     /**
-     * 操作人ID，必填
+     * 优先级,必填
      */
-    @NotNull(message = "操作人不能为空",
-            groups = { IStorageSV.UpdateMultiStorageSalePrice.class })
-    private Long operId;
+    @NotNull(message = "优先级不能为空")
+    private Short PriorityNumber;
     /**
-     * 库存与待更新价格<br>
-     * K:库存优先级;V:库存对应销售价,不能为空,不能小于0
+     * 销售价格(单位:厘),必填
      */
-    private Map<Short,Long> storageSalePrice;
-
-    public Long getOperId() {
-        return operId;
-    }
-
-    public String getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(String supplierId) {
-        this.supplierId = supplierId;
-    }
-
-    public void setOperId(Long operId) {
-        this.operId = operId;
-    }
-
-    public Map<Short, Long> getStorageSalePrice() {
-        return storageSalePrice;
-    }
-
-    public void setStorageSalePrice(Map<Short, Long> storageSalePrice) {
-        this.storageSalePrice = storageSalePrice;
-    }
+    @NotNull(message = "销售价格不能为空")
+    private Long salePrice;
 
     public String getGroupId() {
         return groupId;
@@ -73,5 +41,20 @@ public class StoNoSkuSalePrice extends BaseInfo {
     public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
-}
 
+    public Short getPriorityNumber() {
+        return PriorityNumber;
+    }
+
+    public void setPriorityNumber(Short priorityNumber) {
+        PriorityNumber = priorityNumber;
+    }
+
+    public Long getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(Long salePrice) {
+        this.salePrice = salePrice;
+    }
+}

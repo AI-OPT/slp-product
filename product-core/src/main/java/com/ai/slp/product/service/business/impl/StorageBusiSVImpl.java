@@ -184,26 +184,27 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	/**
 	 * 批量更新库存销售价
 	 *
-	 * @param salePrice
+	 * @param salePriceReq
 	 * @return
 	 * @author lipeng16
 	 */
 	@Override
-	public int updateNoSkuStoSalePrice(StoNoSkuSalePrice salePrice) {
+	public int updateNoSkuStoSalePrice(StoNoSkuSalePriceReq salePriceReq) {
 		//K:优先级;V:价格
-		Map<Short, Long> priceMap = salePrice.getStorageSalePrice();
-		if (priceMap == null || priceMap.isEmpty())
+		List<StoNoSkuSalePrice> salePriceList = salePriceReq.getStorageSalePrice();
+		if (CollectionUtil.isEmpty(salePriceList))
 			return 0;
-		String groupId = salePrice.getGroupId();
-		Long operId = salePrice.getOperId();
+		String tenantId = salePriceReq.getTenantId();
 		int count = 0;
-		for (Short priorityNum : priceMap.keySet()) {
+		Long operId = salePriceReq.getOperId();
+		for(StoNoSkuSalePrice salePrice:salePriceList){
 			// 库存标识为空,库存对应价格为空,库存销售价小于等于0,均不处理
-			if (priorityNum==null || priceMap.get(priorityNum) == null || priceMap.get(priorityNum) <= 0) {
-				logger.warn("库存标识为空或销售价不大于零,库存标识[{}],销售价[{}]", priorityNum, priceMap.get(priorityNum));
+			if (salePrice.getPriorityNumber()==null
+					|| salePrice.getSalePrice() == null || salePrice.getSalePrice() <= 0) {
+				logger.warn("库存标识为空或销售价不大于零,库存组标识[{}],销售价[{}]", salePrice.getGroupId(), salePrice.getPriorityNumber());
 				continue;
 			}
-			count += updateSkuPrice(groupId,null,priorityNum,priceMap.get(priorityNum),operId);
+			count += updateSkuPrice(salePrice.getGroupId(),null,salePrice.getPriorityNumber(),salePrice.getSalePrice(),operId);
 		}
 		return count;
 	}

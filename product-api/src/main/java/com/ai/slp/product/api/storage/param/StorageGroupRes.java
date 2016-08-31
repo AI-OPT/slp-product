@@ -45,6 +45,10 @@ public class StorageGroupRes extends BaseResponse {
      */
     private long storageTotal;
     /**
+     * 库存组下库存的个数
+     */
+    private int storageNum;
+    /**
      * 操作人名称
      */
     private String operName;
@@ -220,4 +224,12 @@ public class StorageGroupRes extends BaseResponse {
 	public void setStateName(String stateName) {
 		this.stateName = stateName;
 	}
+
+    public int getStorageNum() {
+        return storageNum;
+    }
+
+    public void setStorageNum(int storageNum) {
+        this.storageNum = storageNum;
+    }
 }
