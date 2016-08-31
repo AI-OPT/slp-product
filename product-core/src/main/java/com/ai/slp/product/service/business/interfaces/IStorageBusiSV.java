@@ -43,7 +43,7 @@ public interface IStorageBusiSV {
 	 * @return
 	 * @author lipeng16
 	 */
-	public int updateNoSkuStoSalePrice(StoNoSkuSalePrice salePrice);
+	public int updateNoSkuStoSalePrice(StoNoSkuSalePriceReq salePrice);
 
     /**
      * 批量更新有销售属性库存销售价

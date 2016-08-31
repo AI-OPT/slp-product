@@ -280,7 +280,7 @@ public interface IStorageSV {
      */
     @POST
     @Path("/updateStorageSalePrice")
-    public BaseResponse updateMultiStorageSalePrice(StoNoSkuSalePrice salePrice)
+    public BaseResponse updateMultiStorageSalePrice(StoNoSkuSalePriceReq salePrice)
             throws BusinessException,SystemException;
     @interface UpdateMultiStorageSalePrice{}
     
