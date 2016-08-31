@@ -205,4 +205,20 @@ public class IProductManagerSVImpl implements IProductManagerSV {
                 query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
         return CommonUtils.genSuccessResponse("");
 	}
+
+	/**
+	 * 查询在售商品 -- 按上架时间排序
+	 * 
+	 * @param productEditParam
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+	 */
+	@Override
+	public BaseResponse searchInSale(ProductQueryInSale queryInSale) throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(queryInSale.getTenantId(),"");
+        CommonUtils.checkSupplierId(queryInSale.getSupplierId(),"");
+        return productManagerBsuiSV.queryInSale(queryInSale);
+	}
 }
