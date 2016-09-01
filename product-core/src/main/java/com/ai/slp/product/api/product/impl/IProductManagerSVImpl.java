@@ -232,10 +232,10 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @author jiawen
 	 */
 	@Override
-	public PageInfoResponse<ProductEditUp> searchAudit(ProductQueryInfo queryInSale)
+	public PageInfoResponse<ProductEditUp> searchAudit(ProductQueryInfo queryInfo)
 			throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(queryInSale.getTenantId(),"");
-        CommonUtils.checkSupplierId(queryInSale.getSupplierId(),"");
-        return productManagerBsuiSV.queryPageForAudit(queryInSale);
+		CommonUtils.checkTenantId(queryInfo.getTenantId(),"");
+        CommonUtils.checkSupplierId(queryInfo.getSupplierId(),"");
+        return productManagerBsuiSV.queryPageForAudit(queryInfo);
 	}
 }

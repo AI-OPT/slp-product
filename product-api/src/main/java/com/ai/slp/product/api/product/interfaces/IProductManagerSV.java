@@ -243,7 +243,7 @@ public interface IProductManagerSV {
      */
     @POST
     @Path("/searchInSale")
-    public PageInfoResponse<ProductEditUp> searchAudit(ProductQueryInfo queryInSale) throws BusinessException, SystemException;
+    public PageInfoResponse<ProductEditUp> searchAudit(ProductQueryInfo queryInfo) throws BusinessException, SystemException;
     @interface SearchAudit {}
     
 }
