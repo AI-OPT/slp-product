@@ -2,7 +2,7 @@ package com.ai.slp.product.service.atom.interfaces.product;
 
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
-import com.ai.slp.product.api.product.param.ProductQueryInSale;
+import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 
@@ -98,5 +98,14 @@ public interface IProductAtomSV {
      * @return
      * @author jiawen
      */
-    public PageInfo<Product> selectPageForInsale(ProductQueryInSale queryReq);
+    public PageInfo<Product> selectPageForInsale(ProductQueryInfo queryReq);
+
+    /**
+	 * 商品审核分页查询
+	 *
+	 * @param queryReq
+	 * @return
+	 * @author jiawen
+	 */
+    public PageInfo<Product> selectPageForAudit(ProductQueryInfo queryReq);
 }

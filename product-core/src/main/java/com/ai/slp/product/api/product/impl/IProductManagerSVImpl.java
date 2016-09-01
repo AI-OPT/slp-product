@@ -209,16 +209,33 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	/**
 	 * 查询在售商品 -- 按上架时间排序
 	 * 
-	 * @param productEditParam
+	 * @param ProductQueryInfo
      * @return
      * @throws BusinessException
      * @throws SystemException
      * @author jiawen
 	 */
 	@Override
-	public PageInfoResponse<ProductEditUp> searchInSale(ProductQueryInSale queryInSale) throws BusinessException, SystemException {
+	public PageInfoResponse<ProductEditUp> searchInSale(ProductQueryInfo queryInSale) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(queryInSale.getTenantId(),"");
         CommonUtils.checkSupplierId(queryInSale.getSupplierId(),"");
         return productManagerBsuiSV.queryInSale(queryInSale);
+	}
+
+	/**
+	 * 查询商品审核
+	 * 
+	 * @param ProductQueryInfo
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+	 */
+	@Override
+	public PageInfoResponse<ProductEditUp> searchAudit(ProductQueryInfo queryInfo)
+			throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(queryInfo.getTenantId(),"");
+        CommonUtils.checkSupplierId(queryInfo.getSupplierId(),"");
+        return productManagerBsuiSV.queryPageForAudit(queryInfo);
 	}
 }

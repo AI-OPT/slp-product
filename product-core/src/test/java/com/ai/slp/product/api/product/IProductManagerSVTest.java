@@ -91,7 +91,7 @@ public class IProductManagerSVTest {
      */
     @Test
     public void searchInSaleTest(){
-    	ProductQueryInSale queryInSale = new ProductQueryInSale();
+    	ProductQueryInfo queryInSale = new ProductQueryInfo();
     	queryInSale.setTenantId("changhong");
     	queryInSale.setSupplierId("-1");
     	List<String> stateList = new ArrayList<>();
@@ -102,4 +102,22 @@ public class IProductManagerSVTest {
     	System.out.println(gson.toJson(inSale));
     	
     }
+    /**
+     * 查询审核商品
+     * jiawen
+     */
+    @Test
+    public void searchAuditTest(){
+    	ProductQueryInfo queryInSale = new ProductQueryInfo();
+    	queryInSale.setTenantId("changhong");
+    	queryInSale.setSupplierId("-1");
+    	List<String> stateList = new ArrayList<>();
+    	stateList.add("4");
+    	queryInSale.setStateList(stateList);
+    	PageInfoResponse<ProductEditUp> inSale = productManagerSV.searchInSale(queryInSale);
+    	Gson gson = new Gson();
+    	System.out.println(gson.toJson(inSale));
+    	
+    }
+    
 }

@@ -228,7 +228,22 @@ public interface IProductManagerSV {
      */
     @POST
     @Path("/searchInSale")
-    public PageInfoResponse<ProductEditUp> searchInSale(ProductQueryInSale queryInSale) throws BusinessException, SystemException;
+    public PageInfoResponse<ProductEditUp> searchInSale(ProductQueryInfo queryInSale) throws BusinessException, SystemException;
     @interface SearchInSale {}
+    /**
+     * 查询商品审核 
+     * 
+     * @param productEditParam
+     * @return 满足条件的商品集合
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+     * @RestRelativeURL productManager/searchAudit
+     * @ApiCode PROMAN_0111
+     */
+    @POST
+    @Path("/searchInSale")
+    public PageInfoResponse<ProductEditUp> searchAudit(ProductQueryInfo queryInfo) throws BusinessException, SystemException;
+    @interface SearchAudit {}
     
 }

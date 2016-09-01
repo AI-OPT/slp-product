@@ -66,5 +66,15 @@ public interface IProductManagerBsuiSV {
      * @param queryReq
      * @return
      */
-    public PageInfoResponse<ProductEditUp> queryInSale(ProductQueryInSale queryInSale);
+    public PageInfoResponse<ProductEditUp> queryInSale(ProductQueryInfo queryInSale);
+
+
+    /**
+	 * 商品审核分页查询
+	 *
+	 * @param queryReq
+	 * @return
+	 * @author jiawen
+	 */
+    public PageInfoResponse<ProductEditUp> queryPageForAudit(ProductQueryInfo queryReq);
 }

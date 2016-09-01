@@ -14,7 +14,7 @@ import com.ai.opt.base.vo.BaseInfo;
  *
  */
 
-public class ProductQueryInSale extends BaseInfo{
+public class ProductQueryInfo extends BaseInfo{
 	 private static final long serialVersionUID = 1L;
 	/**
      * 请求查询的页码
@@ -77,6 +77,54 @@ public class ProductQueryInSale extends BaseInfo{
      * 上架时间范围的截止时间
      */
     private Timestamp upEndTime;
+    /**
+     * 创建时间范围的截止时间
+     */
+    private Timestamp createStartTime;
+    /**
+     * 创建时间范围的截止时间
+     */
+    private Timestamp createEndTime;
+    /**
+     * 操作时间范围的截止时间
+     */
+    private Timestamp operStartTime;
+    /**
+     * 操作时间范围的截止时间
+     */
+    private Timestamp operEndTime;
+
+	public Timestamp getCreateStartTime() {
+		return createStartTime;
+	}
+
+	public void setCreateStartTime(Timestamp createStartTime) {
+		this.createStartTime = createStartTime;
+	}
+
+	public Timestamp getCreateEndTime() {
+		return createEndTime;
+	}
+
+	public void setCreateEndTime(Timestamp createEndTime) {
+		this.createEndTime = createEndTime;
+	}
+
+	public Timestamp getOperStartTime() {
+		return operStartTime;
+	}
+
+	public void setOperStartTime(Timestamp operStartTime) {
+		this.operStartTime = operStartTime;
+	}
+
+	public Timestamp getOperEndTime() {
+		return operEndTime;
+	}
+
+	public void setOperEndTime(Timestamp operEndTime) {
+		this.operEndTime = operEndTime;
+	}
 
 	public Integer getPageNo() {
 		return pageNo;

@@ -114,6 +114,41 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
         response.setResult(editUpList);
         return response;
     }
+    /**
+	 * 商品审核分页查询
+	 *
+	 * @param queryReq
+	 * @return
+	 * @author jiawen
+	 */
+    @Override
+    public PageInfoResponse<ProductEditUp> queryPageForAudit(ProductQueryInfo queryReq) {
+    	String tenantId = queryReq.getTenantId();
+    	//查询所有符合条件商品
+    	PageInfo<Product> productPage = productAtomSV.selectPageForAudit(queryReq);
+    	List<ProductEditUp> editUpList = new ArrayList<>();
+    	for (Product product:productPage.getResult()){
+    		ProductEditUp productEditUp = new ProductEditUp();
+    		BeanUtils.copyProperties(productEditUp,product);
+    		//设置类目名称
+    		ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
+    		if (cat!=null)
+    			productEditUp.setProductCatName(cat.getProductCatName());
+    		//查询主预览图
+    		ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
+    		if (prodPicture!=null){
+    			productEditUp.setProPictureId(prodPicture.getProPictureId());
+    			productEditUp.setVfsId(prodPicture.getVfsId());
+    			productEditUp.setPicType(prodPicture.getPicType());
+    		}
+    		editUpList.add(productEditUp);
+    	}
+    	
+    	PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();
+    	BeanUtils.copyProperties(response,productPage);
+    	response.setResult(editUpList);
+    	return response;
+    }
 
     /**
      *商品管理中分页查询被拒绝商品信息
@@ -567,7 +602,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
      * @return
      */
 	@Override
-	public PageInfoResponse<ProductEditUp> queryInSale(ProductQueryInSale queryReq) {
+	public PageInfoResponse<ProductEditUp> queryInSale(ProductQueryInfo queryReq) {
 
         String tenantId = queryReq.getTenantId();
         //查询所有符合条件商品

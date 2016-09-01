@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
-import com.ai.slp.product.api.product.param.ProductQueryInSale;
+import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
@@ -147,6 +147,40 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 
 		return pageQuery(example, pageNo, pageSize);
 	}
+	/**
+	 * 商品审核分页查询
+	 *
+	 * @param queryReq
+	 * @return
+	 * @author jiawen
+	 */
+	@Override
+	public PageInfo<Product> selectPageForAudit(ProductQueryInfo queryReq) {
+		ProductCriteria example = new ProductCriteria();
+		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+		ProductCriteria.Criteria criteria = example.createCriteria();
+		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
+			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
+		if (StringUtils.isNotBlank(queryReq.getProductType()))
+			criteria.andProductTypeEqualTo(queryReq.getProductType());
+		if (!CollectionUtil.isEmpty(queryReq.getStateList()))
+			criteria.andStateIn(queryReq.getStateList());
+		if (StringUtils.isNotBlank(queryReq.getProdId()))
+			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
+		if (StringUtils.isNotBlank(queryReq.getProdName()))
+			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+		//对商户标识的查询
+		if (StringUtils.isNotBlank(queryReq.getSupplierId())) 
+			criteria.andSupplierIdLike("%"+queryReq.getSupplierId()+"%");
+		//根据标准品ID模糊查询
+		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) 
+			criteria.andStandedProdIdLike("%"+queryReq.getStandedProdId()+"%");
+		//获取页数和每页条数
+		int pageNo = queryReq.getPageNo();
+		int pageSize = queryReq.getPageSize();
+		
+		return pageQuery(example, pageNo, pageSize);
+	}
 
 	private PageInfo<Product> pageQuery(ProductCriteria example, int pageNo, int pageSize) {
 		PageInfo<Product> pageInfo = new PageInfo<>();
@@ -200,7 +234,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	 * 查询在售商品 -- 按上架时间排序
 	 */
 	@Override
-	public PageInfo<Product> selectPageForInsale(ProductQueryInSale queryReq) {
+	public PageInfo<Product> selectPageForInsale(ProductQueryInfo queryReq) {
 
 		ProductCriteria example = new ProductCriteria();
 		example.setOrderByClause("UP_TIME desc");//上架时间倒序
