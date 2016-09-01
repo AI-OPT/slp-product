@@ -122,7 +122,7 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
 	 * @author jiawen
 	 */
     @Override
-    public PageInfoResponse<ProductEditUp> queryPageForAudit(ProductEditQueryReq queryReq) {
+    public PageInfoResponse<ProductEditUp> queryPageForAudit(ProductQueryInfo queryReq) {
     	String tenantId = queryReq.getTenantId();
     	//查询所有符合条件商品
     	PageInfo<Product> productPage = productAtomSV.selectPageForAudit(queryReq);

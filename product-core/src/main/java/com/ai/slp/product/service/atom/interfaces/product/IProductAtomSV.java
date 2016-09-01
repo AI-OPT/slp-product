@@ -107,5 +107,5 @@ public interface IProductAtomSV {
 	 * @return
 	 * @author jiawen
 	 */
-    public PageInfo<Product> selectPageForAudit(ProductEditQueryReq queryReq);
+    public PageInfo<Product> selectPageForAudit(ProductQueryInfo queryReq);
 }

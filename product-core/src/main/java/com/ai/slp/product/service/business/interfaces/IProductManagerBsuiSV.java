@@ -76,5 +76,5 @@ public interface IProductManagerBsuiSV {
 	 * @return
 	 * @author jiawen
 	 */
-    public PageInfoResponse<ProductEditUp> queryPageForAudit(ProductEditQueryReq queryReq);
+    public PageInfoResponse<ProductEditUp> queryPageForAudit(ProductQueryInfo queryReq);
 }

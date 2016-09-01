@@ -155,7 +155,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	 * @author jiawen
 	 */
 	@Override
-	public PageInfo<Product> selectPageForAudit(ProductEditQueryReq queryReq) {
+	public PageInfo<Product> selectPageForAudit(ProductQueryInfo queryReq) {
 		ProductCriteria example = new ProductCriteria();
 		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
