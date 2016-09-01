@@ -32,7 +32,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @RestRelativeURL productManager/searchProdList
+     * @RestRelativeURL product/searchProdList
      * @ApiCode PRODUCT_0100
      */
 	@POST
@@ -50,7 +50,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @RestRelativeURL productManager/searchProdInfo
+     * @RestRelativeURL product/searchProdInfo
      * @ApiCode PRODUCT_0101
      */
     @POST
@@ -68,7 +68,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @RestRelativeURL productManager/updateSKUInfo
+     * @RestRelativeURL product/updateSKUInfo
      * @ApiCode PRODUCT_0103
      */
     @POST
@@ -86,7 +86,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @RestRelativeURL productManager/searchSKUInfo
+     * @RestRelativeURL product/searchSKUInfo
      * @ApiCode PRODUCT_0104
      */
     @POST
@@ -104,7 +104,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @RestRelativeURL productManager/searchNoKeyInfo
+     * @RestRelativeURL product/searchNoKeyInfo
      * @ApiCode PRODUCT_0105
      */
     @POST
@@ -121,7 +121,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author jiawen
      * @ApiDocMethod
-     * @RestRelativeURL 
+     * @RestRelativeURL product/searchProdTargetArea
      * @ApiCode PRODUCT_0106
      */
     @POST
@@ -139,7 +139,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @RestRelativeURL productManager/searchSKUInfoStoGroup
+     * @RestRelativeURL product/searchSKUInfoStoGroup
      * @ApiCode PRODUCT_0107
      */
     @POST
@@ -157,7 +157,7 @@ public interface IProductSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @RestRelativeURL productManager/searchSKUInfoStorage
+     * @RestRelativeURL product/searchSKUInfoStorage
      * @ApiCode PRODUCT_0108
      */
     @POST
