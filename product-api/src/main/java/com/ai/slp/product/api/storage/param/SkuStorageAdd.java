@@ -1,11 +1,18 @@
 package com.ai.slp.product.api.storage.param;
 
-import javax.validation.constraints.NotNull;
-
+import com.ai.opt.base.vo.BaseInfo;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.ai.opt.base.vo.BaseInfo;
+import javax.validation.constraints.NotNull;
 
+/**
+ *	sku库存新增信息
+ *
+ * Date: 2016年5月21日 <br>
+ * Copyright (c) 2016 asiainfo.com <br>
+ *
+ * @author lipeng16
+ */
 public class SkuStorageAdd extends BaseInfo {
 
 	private static final long serialVersionUID = 1L;

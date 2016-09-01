@@ -483,4 +483,28 @@ public class IStorageSVImpl implements IStorageSV {
 		return CommonUtils.genSuccessResponse("");
 	}
 
+	/**
+	 * 查看库存组下某个级别的SKU价格
+	 *
+	 * @param groupPnReq
+	 * @return map K:SKUID,V:价格(单位:厘)
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author liutong5
+	 * @ApiDocMethod
+	 * @ApiCode STORAGE_0119
+	 * @RestRelativeURL storage/querySkuPriceByGroupPn
+	 */
+	@Override
+	public BaseMapResponse<String, Long> querySkuPriceByGroupPn(SkuPriceOfGroupPnReq groupPnReq)
+			throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(groupPnReq.getTenantId());
+		Map<String,Long> priceMap = storageGroupBusiSV.querySkuPriceOfGroupPn(groupPnReq.getTenantId(),groupPnReq.getSupplierId(),
+				groupPnReq.getGroupId(),groupPnReq.getPriorityNum());
+		BaseMapResponse<String, Long> mapResponse = new BaseMapResponse<>();
+		mapResponse.setResult(priceMap);
+		CommonUtils.addSuccessResHeader(mapResponse,"");
+		return mapResponse;
+	}
+
 }
