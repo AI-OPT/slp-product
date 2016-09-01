@@ -91,7 +91,7 @@ public class IProductManagerSVTest {
      */
     @Test
     public void searchInSaleTest(){
-    	ProductQueryInSale queryInSale = new ProductQueryInSale();
+    	ProductQueryInfo queryInSale = new ProductQueryInfo();
     	queryInSale.setTenantId("changhong");
     	queryInSale.setSupplierId("-1");
     	List<String> stateList = new ArrayList<>();
