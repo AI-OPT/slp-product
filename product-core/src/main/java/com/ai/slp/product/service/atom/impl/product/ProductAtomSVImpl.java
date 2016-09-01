@@ -175,6 +175,12 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		//根据标准品ID模糊查询
 		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) 
 			criteria.andStandedProdIdLike("%"+queryReq.getStandedProdId()+"%");
+		// 操作时间 开始时间
+		if (queryReq.getOperStartTime() != null)
+			criteria.andOperTimeGreaterThanOrEqualTo(DateUtils.toTimeStamp(queryReq.getOperStartTime()));
+		// 操作时间 截止时间
+		if (queryReq.getOperEndTime() != null)
+			criteria.andOperTimeLessThanOrEqualTo(DateUtils.toTimeStamp(queryReq.getOperEndTime()));
 		//获取页数和每页条数
 		int pageNo = queryReq.getPageNo();
 		int pageSize = queryReq.getPageSize();
@@ -232,6 +238,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 
 	/**
 	 * 查询在售商品 -- 按上架时间排序
+	 * @param queryReq
+	 * @return
+	 * @author jiawen
 	 */
 	@Override
 	public PageInfo<Product> selectPageForInsale(ProductQueryInfo queryReq) {
