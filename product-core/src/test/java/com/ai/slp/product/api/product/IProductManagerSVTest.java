@@ -6,6 +6,10 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +82,24 @@ public class IProductManagerSVTest {
     	
         Gson gson = new Gson();
 		System.out.println(gson.toJson(queryProductEdit));
+    	
+    }
+    
+    /**
+     * 查询在售商品--按上架时间倒序
+     * jiawen
+     */
+    @Test
+    public void searchInSaleTest(){
+    	ProductQueryInSale queryInSale = new ProductQueryInSale();
+    	queryInSale.setTenantId("changhong");
+    	queryInSale.setSupplierId("-1");
+    	List<String> stateList = new ArrayList<>();
+		stateList.add("5");
+		queryInSale.setStateList(stateList);
+    	PageInfoResponse<ProductEditUp> inSale = productManagerSV.searchInSale(queryInSale);
+    	Gson gson = new Gson();
+    	System.out.println(gson.toJson(inSale));
     	
     }
 }
