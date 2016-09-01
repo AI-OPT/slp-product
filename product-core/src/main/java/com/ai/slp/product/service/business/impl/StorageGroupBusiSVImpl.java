@@ -693,6 +693,39 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	}
 
 	/**
+	 * 查询库存组下某个优先级中sku的价格
+	 *
+	 * @param tenantId
+	 * @param supplierId
+	 * @param pn
+	 * @return
+	 */
+	@Override
+	public Map<String, Long> querySkuPriceOfGroupPn(String tenantId, String supplierId,String groupId, Short pn) {
+		//确认库存组是否存在
+		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,supplierId,groupId);
+		//查询库存组是否废弃
+		if (group == null ){
+			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,group,group==null?null:group.getState());
+			throw new BusinessException("","库存组不存在");
+		}
+		//查询库存组下改优先级中非废弃的库存信息
+		List<Storage> storageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,pn,false);
+		if (CollectionUtil.isEmpty(storageList)){
+			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,group,group==null?null:group.getState());
+			throw new BusinessException("","库存组的优先级中没有有效库存");
+		}
+		//查询库存对应的SKU库存信息
+		Storage storage = storageList.get(0);
+		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryByStorageId(storage.getStorageId(),false);
+		Map<String,Long> skuPriceMap = new HashMap<>();
+		for (SkuStorage skuStorage:skuStorageList){
+			skuPriceMap.put(skuStorage.getSkuId(),skuStorage.getSalePrice());
+		}
+		return skuPriceMap;
+	}
+
+	/**
 	 * 清空缓存中库存数据
 	 */
 	private void cleanStorageCache(String tenantId,String groupId,String priority){

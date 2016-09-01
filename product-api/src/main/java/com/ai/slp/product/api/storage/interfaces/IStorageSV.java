@@ -369,4 +369,20 @@ public interface IStorageSV {
     public BaseResponse chargeGroupStatusAuto(StoGroupAStatus aStatus)
             throws BusinessException,SystemException;
     @interface ChargeGroupStatusAuto{}
+
+    /**
+     * 查看库存组下某个级别的SKU价格
+     *
+     * @return map K:SKUID,V:价格(单位:厘)
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode STORAGE_0119
+     * @RestRelativeURL storage/querySkuPriceByGroupPn
+     */
+    @POST
+    @Path("/querySkuPriceByGroupPn")
+    public BaseMapResponse<String,Long> querySkuPriceByGroupPn(SkuPriceOfGroupPnReq groupPnReq)
+            throws BusinessException,SystemException;
 }

@@ -5,6 +5,7 @@ import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 库存组业务操作
@@ -120,4 +121,15 @@ public interface IStorageGroupBusiSV {
      * @param groupId
      */
     public boolean changeGroupAutoStop(String tenantId, String groupId);
+
+    /**
+     * 查询库存组下某个优先级中sku的价格
+     *
+     * @param tenantId
+     * @param supplierId
+     * @param pn
+     * @return
+     */
+    public Map<String,Long> querySkuPriceOfGroupPn(
+            String tenantId, String supplierId,String groupId, Short pn);
 }
