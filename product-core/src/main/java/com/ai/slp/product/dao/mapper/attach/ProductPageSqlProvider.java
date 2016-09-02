@@ -1,5 +1,8 @@
 package com.ai.slp.product.dao.mapper.attach;
 
+import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Map;
 
 public class ProductPageSqlProvider {
@@ -34,4 +37,53 @@ public class ProductPageSqlProvider {
 		return seqBuffer.toString();
 	}
 
+	/**
+	 * 统计商品数量包括路由组条件约束
+	 * @param queryVo
+	 * @return
+     */
+	public String countProdRouteGroup(ProdRouteGroupQueryVo queryVo){
+		StringBuffer seqBuffer = new StringBuffer();
+		seqBuffer.append("select count(*) ");
+		seqBuffer.append(addBuild(queryVo));
+		return seqBuffer.toString();
+	}
+
+	/**
+	 * 统计商品数量包括路由组条件约束
+	 * @param queryVo
+	 * @return
+	 */
+	public String queryProdRouteGroup(ProdRouteGroupQueryVo queryVo){
+		StringBuffer seqBuffer = new StringBuffer();
+		seqBuffer.append("select p.PROD_ID,p.PROD_NAME,p.STANDED_PROD_ID,sp.STANDED_PRODUCT_NAME,sg.ROUTE_GROUP_ID");
+		seqBuffer.append(addBuild(queryVo));
+		if (queryVo.getLimitStart()!=null && queryVo.getLimitStart()>=0) {
+			seqBuffer.append(" limit "+queryVo.getLimitStart());
+			if (queryVo.getLimitEnd()!=null && queryVo.getLimitEnd() >queryVo.getLimitStart())
+				seqBuffer.append(","+queryVo.getLimitEnd());
+		}
+		//排序信息
+		if (StringUtils.isNotBlank(queryVo.getOrderByClause()))
+			seqBuffer.append(" order by "+queryVo.getOrderByClause());
+		return seqBuffer.toString();
+	}
+
+	private String addBuild(ProdRouteGroupQueryVo queryVo){
+		StringBuffer seqBuffer = new StringBuffer();
+		seqBuffer.append(" from product p,storage_group sg,standed_product sp");
+		seqBuffer.append(" WHERE p.STORAGE_GROUP_ID = sg.STORAGE_GROUP_ID and p.STANDED_PROD_ID=sp.STANDED_PROD_ID");
+		seqBuffer.append(" and p.TENANT_ID = '"+queryVo.getTenantId()+"'");
+		if (StringUtils.isNotBlank(queryVo.getProdId()))
+			seqBuffer.append(" and p.PROD_ID like '%"+queryVo.getProdId()+"%' ");
+		if (StringUtils.isNotBlank(queryVo.getProdName()))
+			seqBuffer.append(" and p.PROD_NAME like '%"+queryVo.getProdName()+"%' ");
+		if (StringUtils.isNotBlank(queryVo.getStandedProdId()))
+			seqBuffer.append(" and p.STANDED_PROD_ID like '%"+queryVo.getStandedProdId()+"%' ");
+		if (StringUtils.isNotBlank(queryVo.getStandedProdName()))
+			seqBuffer.append(" and sp.STANDED_PRODUCT_NAME like '%"+queryVo.getStandedProdName()+"%' ");
+		if (StringUtils.isNotBlank(queryVo.getRouteGroupId()))
+			seqBuffer.append(" and sg.ROUTE_GROUP_ID like '%"+queryVo.getRouteGroupId()+"%' ");
+		return seqBuffer.toString();
+	}
 }

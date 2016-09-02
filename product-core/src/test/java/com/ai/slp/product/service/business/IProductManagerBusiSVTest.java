@@ -1,9 +1,7 @@
 package com.ai.slp.product.service.business;
 
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.product.param.OtherSetOfProduct;
-import com.ai.slp.product.api.product.param.ProductEditQueryReq;
-import com.ai.slp.product.api.product.param.ProductEditUp;
+import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
@@ -46,6 +44,15 @@ public class IProductManagerBusiSVTest {
             System.out.println(otherSet.getPersonAudiences().getUserId());
         }
 
+    }
+
+    @Test
+    public void queryProdAndRouteGroup(){
+        RouteGroupQuery query = new RouteGroupQuery();
+        query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        query.setSupplierId("-1");
+        PageInfoResponse<ProductRouteGroupInfo> pageResponse = productManagerBsuiSV.queryProdAndRouteGroup(query);
+        System.out.println(pageResponse.getCount()+","+pageResponse.getPageCount());
     }
 
 

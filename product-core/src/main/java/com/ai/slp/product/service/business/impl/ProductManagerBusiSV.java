@@ -25,6 +25,7 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupKeyInfoRequest;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupUserInfoResponse;
@@ -163,6 +164,26 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         }
         storageGroupBusiSV.changeRouteGroupId(tenantId,product.getStorageGroupId(),
                 routeGroupId,operId);
+    }
+
+    /**
+     * 查询销售商品信息和配货组信息
+     *
+     * @param query
+     * @return
+     */
+    @Override
+    public PageInfoResponse<ProductRouteGroupInfo> queryProdAndRouteGroup(RouteGroupQuery query) {
+        ProdRouteGroupQueryVo queryVo = new ProdRouteGroupQueryVo();
+        BeanUtils.copyProperties(queryVo,query);
+        PageInfo<ProductRouteGroupInfo> pageInfo = productAtomSV.selectPageForRouteGroup(queryVo);
+        PageInfoResponse<ProductRouteGroupInfo> pageRespone = new PageInfoResponse<ProductRouteGroupInfo>();
+        pageRespone.setCount(pageInfo.getCount());
+        pageRespone.setPageSize(pageInfo.getPageSize());
+        pageRespone.setPageNo(pageInfo.getPageNo());
+        pageRespone.setPageCount(pageInfo.getPageCount());
+        pageRespone.setResult(pageInfo.getResult());
+        return pageRespone;
     }
 
     /**

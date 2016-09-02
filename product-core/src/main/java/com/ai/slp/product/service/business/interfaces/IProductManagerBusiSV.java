@@ -77,4 +77,11 @@ public interface IProductManagerBusiSV {
      */
     public void changeRouteGroup(String tenantId,String supplierId,String prodId,
                                  String routeGroupId,Long operId);
+
+    /**
+     * 查询销售商品信息和配货组信息
+     * @param query
+     * @return
+     */
+    public PageInfoResponse<ProductRouteGroupInfo> queryProdAndRouteGroup(RouteGroupQuery query);
 }

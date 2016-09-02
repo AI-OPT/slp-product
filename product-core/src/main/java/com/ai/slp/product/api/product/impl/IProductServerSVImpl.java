@@ -108,7 +108,9 @@ public class IProductServerSVImpl implements IProductServerSV {
      */
     @Override
     public PageInfoResponse<ProductRouteGroupInfo> queryProductAndRouteGroup(RouteGroupQuery query) throws BusinessException, SystemException {
-
-        return null;
+        CommonUtils.checkTenantId(query.getTenantId());
+        PageInfoResponse<ProductRouteGroupInfo>  response = productManagerBusiSV.queryProdAndRouteGroup(query);
+        CommonUtils.addSuccessResHeader(response,"");
+        return response;
     }
 }

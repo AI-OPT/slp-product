@@ -1,23 +1,24 @@
 package com.ai.slp.product.service.atom.impl.product;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
+import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.dao.mapper.attach.ProductAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
-import com.ai.slp.product.dao.mapper.interfaces.product.ProdAudiencesMapper;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
+import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -26,8 +27,8 @@ import com.ai.slp.product.util.SequenceUtil;
 public class ProductAtomSVImpl implements IProductAtomSV {
 	@Autowired
 	ProductMapper productMapper;
-	ProdAudiencesMapper prodAudiencesMapper;
-
+	@Autowired
+	ProductAttachMapper productAttachMapper;
 	/**
 	 * 添加销售商品信息
 	 *
@@ -186,6 +187,34 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		int pageSize = queryReq.getPageSize();
 		
 		return pageQuery(example, pageNo, pageSize);
+	}
+
+	/**
+	 * 分页查询商品信息,包括路由组标识
+	 *
+	 * @param queryVo
+	 * @return
+	 */
+	@Override
+	public PageInfo<ProductRouteGroupInfo> selectPageForRouteGroup(ProdRouteGroupQueryVo queryVo) {
+		PageInfo<ProductRouteGroupInfo> pageInfo = new PageInfo<>();
+		// 设置总数
+		int count = productAttachMapper.countProductAndRouteGroup(queryVo);
+		int pageNo = queryVo.getPageNo(),
+				pageSize = queryVo.getPageSize();
+		pageInfo.setCount(count);
+		//设置分页查询条件
+		queryVo.setLimitStart((pageNo-1)*pageSize);
+		queryVo.setLimitEnd(pageSize);
+		//设置页数和每页条数
+		pageInfo.setPageNo(pageNo);
+		pageInfo.setPageSize(pageSize);
+		//设置结果集
+		pageInfo.setResult(productAttachMapper.queryProductAndRouteGroupPage(queryVo));
+		//设置总页数
+		int pageCount = count/pageSize+(count%pageSize>0 ? 1 : 0);
+		pageInfo.setPageCount(pageCount);
+		return pageInfo;
 	}
 
 	private PageInfo<Product> pageQuery(ProductCriteria example, int pageNo, int pageSize) {

@@ -7,5 +7,5 @@ public final class CommonTestConstants {
     /**
      * 通用测试租户ID
      */
-    public static final String COMMON_TENANT_ID = "SLP";
+    public static final String COMMON_TENANT_ID = "changhong";
 }

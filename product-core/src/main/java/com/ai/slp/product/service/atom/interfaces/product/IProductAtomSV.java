@@ -3,8 +3,10 @@ package com.ai.slp.product.service.atom.interfaces.product;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
+import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 
 /**
  * 销售商品原子操作
@@ -108,4 +110,11 @@ public interface IProductAtomSV {
 	 * @author jiawen
 	 */
     public PageInfo<Product> selectPageForAudit(ProductQueryInfo queryReq);
+
+    /**
+     * 分页查询商品信息,包括路由组标识
+     * @param queryVo
+     * @return
+     */
+    public PageInfo<ProductRouteGroupInfo> selectPageForRouteGroup(ProdRouteGroupQueryVo queryVo);
 }

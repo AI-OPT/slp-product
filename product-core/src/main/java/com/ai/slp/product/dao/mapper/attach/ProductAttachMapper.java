@@ -1,5 +1,7 @@
 package com.ai.slp.product.dao.mapper.attach;
 
+import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
+import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -39,4 +41,25 @@ public interface ProductAttachMapper {
 			@Param("standedProdId") Long standedProdId, @Param("standedProdName") String standedProdName,
 			@Param("tenantId") String tenantId);
 
+	/**
+	 * 统计符合要求的商品数量,包括路由组信息
+	 * @return
+     */
+	@SelectProvider(type = ProductPageSqlProvider.class, method = "countProdRouteGroup")
+	public int countProductAndRouteGroup(ProdRouteGroupQueryVo queryVo);
+
+	/**
+	 * 查询符合要求的商品信息,包括路由组标识
+	 * @param queryVo
+	 * @return
+     */
+	@SelectProvider(type = ProductPageSqlProvider.class, method = "queryProdRouteGroup")
+	@Results({
+			@Result(id = true, property = "productId", column = "prod_id", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "productName", column = "prod_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "routeGroupId", column = "route_group_id", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "standedProdId", column = "standed_prod_id", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "standedProdName", column = "standed_product_name", javaType = String.class, jdbcType = JdbcType.VARCHAR)
+	})
+	public List<ProductRouteGroupInfo> queryProductAndRouteGroupPage(ProdRouteGroupQueryVo queryVo);
 }
