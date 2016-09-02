@@ -117,6 +117,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         boolean isSaleAttr = CollectionUtil.isEmpty(catAttrAttches)?false:true;
         //添加商品,商品名称同标准品名称
         Product product = new Product();
+        product.setSupplierId(group.getSupplierId());
         product.setTenantId(tenantId);
         product.setProductCatId(standedProduct.getProductCatId());
         product.setStandedProdId(standedProdId);

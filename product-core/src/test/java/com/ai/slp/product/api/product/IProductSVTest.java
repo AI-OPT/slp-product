@@ -63,5 +63,15 @@ public class IProductSVTest {
         SkuSetForProduct skuSetForProduct = productSV.querySkuSetForStorage(query);
         System.out.println(skuSetForProduct.getProdId());
     }
+
+    @Test
+    public void querySkuSetForGroup(){
+        StoGroupInfoQuery query = new StoGroupInfoQuery();
+        query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        query.setGroupId("0000000000103");
+        query.setSupplierId("-1");
+        SkuSetForProduct skuSetForProduct = productSV.querySkuSetForGroup(query);
+        System.out.println(skuSetForProduct.getProdId());
+    }
     
 }
