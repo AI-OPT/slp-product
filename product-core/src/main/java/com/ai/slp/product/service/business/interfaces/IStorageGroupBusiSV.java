@@ -132,4 +132,14 @@ public interface IStorageGroupBusiSV {
      */
     public Map<String,Long> querySkuPriceOfGroupPn(
             String tenantId, String supplierId,String groupId, Short pn);
+
+    /**
+     * 设置库存组的关联路由组的标识
+     *
+     * @param tenantId
+     * @param groupId
+     * @param routeGroupId
+     * @param operId
+     */
+    public void changeRouteGroupId(String tenantId,String groupId,String routeGroupId,Long operId);
 }

@@ -726,6 +726,35 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	}
 
 	/**
+	 * 设置库存组的关联路由组的标识
+	 *
+	 * @param tenantId
+	 * @param groupId
+	 * @param routeGroupId
+	 * @param operId
+	 */
+	@Override
+	public void changeRouteGroupId(String tenantId, String groupId, String routeGroupId, Long operId) {
+		//确认库存组是否存在
+		StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
+		//查询库存组是否废弃
+		if (group == null ){
+			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,group,group==null?null:group.getState());
+			throw new BusinessException("","库存组不存在");
+		}
+		//设置路由组/配货组标识
+		group.setRouteGroupId(routeGroupId);
+		if (operId!=null)
+			group.setOperId(operId);
+		// 添加日志
+		if (storageGroupAtomSV.updateById(group) > 0) {
+			StorageGroupLog groupLog = new StorageGroupLog();
+			BeanUtils.copyProperties(groupLog, group);
+			storageGroupLogAtomSV.install(groupLog);
+		}
+	}
+
+	/**
 	 * 清空缓存中库存数据
 	 */
 	private void cleanStorageCache(String tenantId,String groupId,String priority){
