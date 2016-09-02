@@ -2,10 +2,9 @@ package com.ai.slp.product.api.product.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.slp.product.api.product.param.ProductInfoQuery;
-import com.ai.slp.product.api.product.param.ProductRoute;
-import com.ai.slp.product.api.product.param.ProductSkuInfo;
-import com.ai.slp.product.api.product.param.SkuInfoQuery;
+import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.product.param.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -33,7 +32,7 @@ public interface IProductServerSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @RestRelativeURL productManager/searchProdInfo
+     * @RestRelativeURL productServer/searchProdInfo
      * @ApiCode PRODUCT_SERVER_0100
      */
 	@POST
@@ -50,7 +49,7 @@ public interface IProductServerSV {
      * @throws SystemException
      * @author liutong5
      * @ApiDocMethod
-     * @RestRelativeURL productManager/routeGroup
+     * @RestRelativeURL productServer/routeGroup
      * @ApiCode PRODUCT_SERVER_0101
      */
     @POST
@@ -58,4 +57,38 @@ public interface IProductServerSV {
     public ProductRoute queryRouteGroupOfProd(ProductInfoQuery productInfoQuery)
             throws BusinessException,SystemException;
     @interface QueryRouteGroupOfProd{}
+
+    /**
+     * 设置商品的配货组
+     * @param setInfo
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @RestRelativeURL productServer/changeRouteGroup
+     * @ApiCode PRODUCT_SERVER_0102
+     */
+    @POST
+    @Path("/changeRouteGroup")
+    public BaseResponse changeRouteGroup(RouteGroupSet setInfo)
+            throws BusinessException,SystemException;
+
+
+    /**
+     * 查询商品和配货组信息
+     *
+     * @param query
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @RestRelativeURL productServer/queryProductAndRouteGroup
+     * @ApiCode PRODUCT_SERVER_0102
+     */
+    @POST
+    @Path("/queryProductAndRouteGroup")
+    public PageInfoResponse<ProductRouteGroupInfo> queryProductAndRouteGroup(RouteGroupQuery query)
+            throws BusinessException,SystemException;
 }

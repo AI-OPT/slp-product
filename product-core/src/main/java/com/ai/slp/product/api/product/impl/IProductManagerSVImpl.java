@@ -7,7 +7,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
+import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class IProductManagerSVImpl implements IProductManagerSV {
     @Autowired
-    IProductManagerBsuiSV productManagerBsuiSV;
+    IProductManagerBusiSV productManagerBsuiSV;
     @Autowired
     IProductBusiSV productBusiSV;
     @Autowired

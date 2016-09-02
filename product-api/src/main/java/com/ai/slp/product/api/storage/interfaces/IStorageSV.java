@@ -386,19 +386,4 @@ public interface IStorageSV {
     public BaseMapResponse<String,Long> querySkuPriceByGroupPn(SkuPriceOfGroupPnReq groupPnReq)
             throws BusinessException,SystemException;
 
-    /**
-     * 设置库存组关联的路由组
-     *
-     * @return 操作结果
-     * @throws BusinessException
-     * @throws SystemException
-     * @author liutong5
-     * @ApiDocMethod
-     * @ApiCode STORAGE_0120
-     * @RestRelativeURL storage/changeRouteGroup
-     */
-    @POST
-    @Path("/changeRouteGroup")
-    public BaseResponse changeRouteGroup(StoGroupRouteSet setInfo)
-            throws BusinessException,SystemException;
 }

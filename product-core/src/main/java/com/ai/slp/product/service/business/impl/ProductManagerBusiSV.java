@@ -22,7 +22,8 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
-import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
+import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupKeyInfoRequest;
@@ -40,8 +41,8 @@ import java.util.*;
  */
 @Service
 @Transactional
-public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
-    private static Logger logger = LoggerFactory.getLogger(ProductManagerBsuiSVImpl.class);
+public class ProductManagerBusiSV implements IProductManagerBusiSV {
+    private static Logger logger = LoggerFactory.getLogger(ProductManagerBusiSV.class);
     @Autowired
     IProdAttrValDefAtomSV attrValDefAtomSV;
     @Autowired
@@ -72,6 +73,8 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     ProdAttrMapper prodAttrMapper;
     @Autowired
     IProductStateLogAtomSV productStateLogAtomSV;
+    @Autowired
+    IStorageGroupBusiSV storageGroupBusiSV;
     public static List<String> editStatus = new ArrayList<>();
     //	@Autowired
 //	ProductAttachMapper productAttachMapper;
@@ -148,6 +151,18 @@ public class ProductManagerBsuiSVImpl implements IProductManagerBsuiSV {
     	BeanUtils.copyProperties(response,productPage);
     	response.setResult(editUpList);
     	return response;
+    }
+
+    @Override
+    public void changeRouteGroup(String tenantId, String supplierId, String prodId,
+                                 String routeGroupId, Long operId) {
+        Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
+        if (product==null){
+            logger.warn("未查询到指定商品,租户ID:{},商户ID:{},商品标识:{}",tenantId,supplierId,prodId);
+            throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定商品");
+        }
+        storageGroupBusiSV.changeRouteGroupId(tenantId,product.getStorageGroupId(),
+                routeGroupId,operId);
     }
 
     /**

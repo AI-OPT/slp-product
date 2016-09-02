@@ -1,24 +1,13 @@
 package com.ai.slp.product.service.business.interfaces;
 
-import java.util.List;
-
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.product.param.OtherSetOfProduct;
-import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
-import com.ai.slp.product.api.product.param.ProductEditQueryReq;
-import com.ai.slp.product.api.product.param.ProductEditUp;
-import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
-import com.ai.slp.product.api.product.param.ProductStorageSale;
-import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
-import com.ai.slp.product.api.product.param.TargetAreaForProd;
-import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.api.product.param.*;
 
 /**
  * 销售商品管理
  * Created by jackieliu on 16/6/6.
  */
-public interface IProductManagerBsuiSV {
+public interface IProductManagerBusiSV {
     /**
      * 商品管理中分页查询商品信息
      * @param queryReq
@@ -63,7 +52,7 @@ public interface IProductManagerBsuiSV {
 	
 	/**
      * 查询在售商品 -- 按上架时间排序
-     * @param queryReq
+     * @param queryInSale
      * @return
      */
     public PageInfoResponse<ProductEditUp> queryInSale(ProductQueryInfo queryInSale);
@@ -77,4 +66,15 @@ public interface IProductManagerBsuiSV {
 	 * @author jiawen
 	 */
     public PageInfoResponse<ProductEditUp> queryPageForAudit(ProductQueryInfo queryReq);
+
+    /**
+     * 设置销售商品的路由组/配货组标识
+     * @param tenantId
+     * @param supplierId
+     * @param prodId
+     * @param routeGroupId
+     * @param operId
+     */
+    public void changeRouteGroup(String tenantId,String supplierId,String prodId,
+                                 String routeGroupId,Long operId);
 }

@@ -1,23 +1,23 @@
-package com.ai.slp.product.api.storage.param;
+package com.ai.slp.product.api.product.param;
 
 import com.ai.opt.base.vo.BaseInfo;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 库存组的路由组/配货组关联设置<br>
- *
- * Date: 2016年9月2日 <br>
- * Copyright (c) 2016 asiainfo.com <br>
- * @author liutong5
+ * Created by jackieliu on 16/9/2.
  */
-public class StoGroupRouteSet extends BaseInfo {
+public class RouteGroupSet extends BaseInfo{
     private static final long serialVersionUID = 1L;
-
     /**
-     * 库存组标识,必填
+     * 商户标识,必填
+     * -1:自营
      */
-    @NotBlank(message = "库存组标识不能为空")
-    private String groupId;
+    private String supplierId;
+    /**
+     * 商品标识,必填
+     */
+    @NotBlank(message = "商品标识不能为空")
+    private String prodId;
 
     /**
      * 路由组/配货组标识,必填
@@ -30,12 +30,20 @@ public class StoGroupRouteSet extends BaseInfo {
      */
     private Long operId;
 
-    public String getGroupId() {
-        return groupId;
+    public String getSupplierId() {
+        return supplierId;
     }
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public String getProdId() {
+        return prodId;
+    }
+
+    public void setProdId(String prodId) {
+        this.prodId = prodId;
     }
 
     public String getRouteGroupId() {

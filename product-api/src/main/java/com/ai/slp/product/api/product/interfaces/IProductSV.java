@@ -165,4 +165,6 @@ public interface IProductSV {
     public SkuSetForProduct querySkuSetForStorage(StorageInfoQuery query)
             throws BusinessException,SystemException;
     @interface querySkuSetForStorage{}
+
+
 }

@@ -6,7 +6,7 @@ import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.constants.ProductConstants;
-import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
+import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.List;
 @ContextConfiguration("classpath:context/core-context.xml")
 public class IProductManagerBusiSVTest {
     @Autowired
-    IProductManagerBsuiSV productManagerBsuiSV;
+    IProductManagerBusiSV productManagerBsuiSV;
 
     @Test
     public void queryPageForEditTest(){

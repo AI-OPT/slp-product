@@ -1,24 +1,23 @@
 package com.ai.slp.product.product;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
-import com.ai.slp.product.api.product.param.ProductEditQueryReq;
-import com.ai.slp.product.api.product.param.ProductInfoQuery;
-import com.ai.slp.product.service.business.interfaces.IProductManagerBsuiSV;
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:context/core-context.xml")
 public class ProductEditUpTest {
 	    @Autowired
-	    IProductManagerBsuiSV productManagerBsuiSV;
+		IProductManagerBusiSV productManagerBsuiSV;
 	    @Autowired
 	    IProductManagerSV productManagerSV;
 	    @Test

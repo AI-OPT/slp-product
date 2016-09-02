@@ -507,24 +507,4 @@ public class IStorageSVImpl implements IStorageSV {
 		return mapResponse;
 	}
 
-	/**
-	 * 设置库存组关联的路由组
-	 *
-	 * @param setInfo
-	 * @return 操作结果
-	 * @throws BusinessException
-	 * @throws SystemException
-	 * @author liutong5
-	 * @ApiDocMethod
-	 * @ApiCode STORAGE_0120
-	 * @RestRelativeURL storage/changeRouteGroup
-	 */
-	@Override
-	public BaseResponse changeRouteGroup(StoGroupRouteSet setInfo) throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(setInfo.getTenantId());
-		storageGroupBusiSV.changeRouteGroupId(setInfo.getTenantId(),setInfo.getGroupId(),
-				setInfo.getRouteGroupId(),setInfo.getOperId());
-		return CommonUtils.genSuccessResponse("Change success");
-	}
-
 }
