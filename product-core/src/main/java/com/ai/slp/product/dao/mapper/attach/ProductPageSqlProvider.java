@@ -58,14 +58,15 @@ public class ProductPageSqlProvider {
 		StringBuffer seqBuffer = new StringBuffer();
 		seqBuffer.append("select p.PROD_ID,p.PROD_NAME,p.STANDED_PROD_ID,sp.STANDED_PRODUCT_NAME,sg.ROUTE_GROUP_ID");
 		seqBuffer.append(addBuild(queryVo));
+		//排序信息
+		if (StringUtils.isNotBlank(queryVo.getOrderByClause()))
+			seqBuffer.append(" order by "+queryVo.getOrderByClause());
+		//limit信息
 		if (queryVo.getLimitStart()!=null && queryVo.getLimitStart()>=0) {
 			seqBuffer.append(" limit "+queryVo.getLimitStart());
 			if (queryVo.getLimitEnd()!=null && queryVo.getLimitEnd() >queryVo.getLimitStart())
 				seqBuffer.append(","+queryVo.getLimitEnd());
 		}
-		//排序信息
-		if (StringUtils.isNotBlank(queryVo.getOrderByClause()))
-			seqBuffer.append(" order by "+queryVo.getOrderByClause());
 		return seqBuffer.toString();
 	}
 

@@ -206,6 +206,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		//设置分页查询条件
 		queryVo.setLimitStart((pageNo-1)*pageSize);
 		queryVo.setLimitEnd(pageSize);
+		queryVo.setOrderByClause("p.CREATE_TIME desc");
 		//设置页数和每页条数
 		pageInfo.setPageNo(pageNo);
 		pageInfo.setPageSize(pageSize);
