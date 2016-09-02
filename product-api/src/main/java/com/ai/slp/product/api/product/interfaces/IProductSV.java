@@ -80,7 +80,7 @@ public interface IProductSV {
     /**
      * 查询单个商城商品下的sku集合信息
      *
-     * @param query sku销售价
+     * @param query 商品信息
      * @return 操作结果
      * @throws BusinessException
      * @throws SystemException
