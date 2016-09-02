@@ -47,6 +47,12 @@ public class IProductManagerBusiSVTest {
     }
 
     @Test
+    public void changeRouteGroup(){
+        productManagerBsuiSV.changeRouteGroup(CommonTestConstants.COMMON_TENANT_ID,"-1",
+                "0000000000000092","123",1l);
+    }
+
+    @Test
     public void queryProdAndRouteGroup(){
         RouteGroupQuery query = new RouteGroupQuery();
         query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);

@@ -85,7 +85,7 @@ public interface IProductServerSV {
      * @author liutong5
      * @ApiDocMethod
      * @RestRelativeURL productServer/queryProductAndRouteGroup
-     * @ApiCode PRODUCT_SERVER_0102
+     * @ApiCode PRODUCT_SERVER_0103
      */
     @POST
     @Path("/queryProductAndRouteGroup")
