@@ -94,7 +94,7 @@ public interface IProductAtomSV {
     /**
      * 待编辑商品分页查询
      *
-     * @param productPageQueryVo
+     * @param queryReq
      * @return
      * @author jiawen
      */
