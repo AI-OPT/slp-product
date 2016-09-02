@@ -82,9 +82,14 @@ public class NormProdInfoResponse extends BaseResponse {
     private Timestamp operTime;
 
     /**
-     * 属性与属性值对应关系
+     * 属性与属性值id对应关系
      */
     private Map<Long,Set<String>> attrAndValueIds;
+    
+    /**
+     * 属性与属性文本值对应关系
+     */
+    private Map<Long,String> attrAndValueMap;
     /**
      * (新增字段)
      * 商户ID--(-1:自运营)
@@ -210,4 +215,12 @@ public class NormProdInfoResponse extends BaseResponse {
     public void setAttrAndValueIds(Map<Long, Set<String>> attrAndValueIds) {
         this.attrAndValueIds = attrAndValueIds;
     }
+
+	public Map<Long,String> getAttrAndValueMap() {
+		return attrAndValueMap;
+	}
+
+	public void setAttrAndValueMap(Map<Long,String> attrAndValueMap) {
+		this.attrAndValueMap = attrAndValueMap;
+	}
 }

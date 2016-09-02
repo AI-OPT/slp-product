@@ -441,6 +441,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		response.setProductId(product.getStandedProdId());
 		response.setProductName(product.getStandedProductName());
 		Map<Long, Set<String>> attrAndValueIds = new HashMap<>();
+		Map<Long, String> attrAndValueMap = new HashMap<>();
 		// 查询属性信息
 		List<StandedProdAttr> attrList = standedProdAttrAtomSV.queryByNormProduct(tenantId, productId);
 		for (StandedProdAttr prodAttr : attrList) {
@@ -451,8 +452,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			attrVal.add(prodAttr.getAttrvalueDefId());
 			if (!attrAndValueIds.containsKey(prodAttr.getAttrId()))
 				attrAndValueIds.put(prodAttr.getAttrId(), attrVal);
+			if(StringUtils.isBlank(prodAttr.getAttrvalueDefId())){
+				attrAndValueMap.put(prodAttr.getAttrId(), prodAttr.getAttrValueName());
+			}
 		}
 		response.setAttrAndValueIds(attrAndValueIds);
+		response.setAttrAndValueMap(attrAndValueMap);
 		return response;
 	}
 
