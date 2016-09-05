@@ -57,6 +57,7 @@ public class IProductManagerBusiSVTest {
         RouteGroupQuery query = new RouteGroupQuery();
         query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
         query.setSupplierId("-1");
+        query.setPageNo(2);
         PageInfoResponse<ProductRouteGroupInfo> pageResponse = productManagerBsuiSV.queryProdAndRouteGroup(query);
         System.out.println(pageResponse.getCount()+","+pageResponse.getPageCount());
     }
