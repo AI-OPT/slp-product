@@ -208,7 +208,7 @@ public interface INormProductSV {
     @interface CreateProductAndStoGroup {}
     
     /**
-     * 添加标准品信息.(同时修改标准品属性、库存、sku) <br>
+     * 更新标准品信息.(同时修改标准品属性、库存、sku) <br>
      * @param productInfoRequest
      * @return
      * @throws BusinessException
