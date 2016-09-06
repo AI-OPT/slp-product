@@ -125,7 +125,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         product.setProductType(standedProduct.getProductType());
         product.setProdName(standedProduct.getStandedProductName());//使用标准品名称设置为商品名称
         product.setIsSaleAttr(isSaleAttr? ProductConstants.Product.IsSaleAttr.YES: ProductConstants.Product.IsSaleAttr.NO);
-        product.setState(ProductConstants.Product.State.ADD);//新增状态
+        product.setState(ProductConstants.Product.State.UNEDIT);//未编辑状态
         product.setOperId(group.getCreateId());
         int installNum = productAtomSV.installProduct(product);
         if (installNum > 0){
