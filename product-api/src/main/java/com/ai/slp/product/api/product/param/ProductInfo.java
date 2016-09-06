@@ -116,8 +116,21 @@ public class ProductInfo extends BaseResponse {
      * 非关键属性与属性值对应关系
      */
     private Map<Long,Set<Long>> attrAndValueIds;
+    /**
+     *是否可开发票 
+     * @return
+     */
+    private String isInvoice;
+    
+    public String getIsInvoice() {
+		return isInvoice;
+	}
 
-    public String getProdId() {
+	public void setIsInvoice(String isInvoice) {
+		this.isInvoice = isInvoice;
+	}
+
+	public String getProdId() {
         return prodId;
     }
 
