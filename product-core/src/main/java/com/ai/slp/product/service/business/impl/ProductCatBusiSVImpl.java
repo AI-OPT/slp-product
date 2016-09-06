@@ -358,7 +358,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catAttr.setProductCatId(catId);
                 catAttr.setAttrId(attId);
                 catAttr.setAttrType(attrType);
-                catAttr.setSerialNumber((short)0);
+                catAttr.setSerialNumber((short)1);
                 catAttr.setState(CommonConstants.STATE_ACTIVE);
                 catAttr.setOperId(addCatAttrParam.getOperId());
                 catAttr.setOperTime(operTime);
@@ -386,7 +386,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catAttrValue.setTenantId(tenantId);
                 catAttrValue.setAttrvalueDefId(valId);
                 catAttrValue.setCatAttrId(catAttr.getCatAttrId());
-                catAttrValue.setSerialNumber((short)0);
+                catAttrValue.setSerialNumber((short)1);
                 catAttrValue.setState(CommonConstants.STATE_ACTIVE);
                 catAttrValue.setOperId(addCatAttrParam.getOperId());
                 catAttrValue.setOperTime(operTime);
