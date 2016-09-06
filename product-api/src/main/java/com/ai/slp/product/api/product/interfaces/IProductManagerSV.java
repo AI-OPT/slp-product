@@ -233,16 +233,16 @@ public interface IProductManagerSV {
     /**
      * 查询商品审核 
      * 
-     * @param productEditParam
+     * @param ProductQueryInfo
      * @return 满足条件的商品集合
      * @throws BusinessException
      * @throws SystemException
      * @author jiawen
      * @RestRelativeURL productManager/searchAudit
-     * @ApiCode PROMAN_0111
+     * @ApiCode PROMAN_0112
      */
     @POST
-    @Path("/searchInSale")
+    @Path("/searchAudit")
     public PageInfoResponse<ProductEditUp> searchAudit(ProductQueryInfo queryInfo) throws BusinessException, SystemException;
     @interface SearchAudit {}
     
