@@ -213,18 +213,5 @@ public interface IAttrAndValDefSV {
     public BaseListResponse<AttrDef> queryAllAttrAndVal(BaseInfo baseInfo)
             throws BusinessException, SystemException;
     @interface QueryAllAttrAndVal {}
-    
-    /**
-	 * 根据属性ID查询有效的商品类目属性关系
-	 * @param attrDefParam
-     * @return 符合条件的数量
-     * @throws BusinessException
-     * @throws SystemException
-     * @author jiawen
-	 */
-    @POST
-	@Path("/queryNum")
-    public int queryNum(AttrDefParam attrDefParam)
-    		throws BusinessException, SystemException;
-    @interface QueryNum {}
+
 }

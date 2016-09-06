@@ -216,7 +216,7 @@ public interface INormProductSV {
      * @author jiaxs
      * @ApiDocMethod
      * @ApiCode	NORM_PRODUCT_0111
-     * @RestRelativeURL
+     * @RestRelativeURL normProduct/updateProductAndStoGroup
      */
     @POST
     @Path("/updateProductAndStoGroup")
