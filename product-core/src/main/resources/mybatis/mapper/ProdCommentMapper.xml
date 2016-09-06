@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.ProdCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.ProdComment" >
+    <id column="COMMENT_ID" property="commentId" jdbcType="VARCHAR" />
+    <result column="ORDER_ID" property="orderId" jdbcType="VARCHAR" />
+    <result column="SUB_ORDER_ID" property="subOrderId" jdbcType="VARCHAR" />
+    <result column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="SKU_ID" property="skuId" jdbcType="VARCHAR" />
+    <result column="SUPPLIER_ID" property="supplierId" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="COMMENT_BODY" property="commentBody" jdbcType="VARCHAR" />
+    <result column="SHOP_SCORE_MS" property="shopScoreMs" jdbcType="DECIMAL" />
+    <result column="SHOP_SCORE_FW" property="shopScoreFw" jdbcType="DECIMAL" />
+    <result column="SHOP_SCORE_WL" property="shopScoreWl" jdbcType="DECIMAL" />
+    <result column="COMMENT_TIME" property="commentTime" jdbcType="TIMESTAMP" />
+    <result column="STATE" property="state" jdbcType="CHAR" />
+    <result column="REPLY_STATE" property="replyState" jdbcType="CHAR" />
+    <result column="IS_PICTURE" property="isPicture" jdbcType="CHAR" />
+    <result column="OPER_ID" property="operId" jdbcType="VARCHAR" />
+    <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    COMMENT_ID, ORDER_ID, SUB_ORDER_ID, STANDED_PROD_ID, PROD_ID, SKU_ID, SUPPLIER_ID, 
+    USER_ID, COMMENT_BODY, SHOP_SCORE_MS, SHOP_SCORE_FW, SHOP_SCORE_WL, COMMENT_TIME, 
+    STATE, REPLY_STATE, IS_PICTURE, OPER_ID, OPER_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from prod_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from prod_comment
+    where COMMENT_ID = #{commentId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from prod_comment
+    where COMMENT_ID = #{commentId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentCriteria" >
+    delete from prod_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.ProdComment" >
+    insert into prod_comment (COMMENT_ID, ORDER_ID, SUB_ORDER_ID, 
+      STANDED_PROD_ID, PROD_ID, SKU_ID, 
+      SUPPLIER_ID, USER_ID, COMMENT_BODY, 
+      SHOP_SCORE_MS, SHOP_SCORE_FW, SHOP_SCORE_WL, 
+      COMMENT_TIME, STATE, REPLY_STATE, 
+      IS_PICTURE, OPER_ID, OPER_TIME
+      )
+    values (#{commentId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{subOrderId,jdbcType=VARCHAR}, 
+      #{standedProdId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{skuId,jdbcType=VARCHAR}, 
+      #{supplierId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{commentBody,jdbcType=VARCHAR}, 
+      #{shopScoreMs,jdbcType=DECIMAL}, #{shopScoreFw,jdbcType=DECIMAL}, #{shopScoreWl,jdbcType=DECIMAL}, 
+      #{commentTime,jdbcType=TIMESTAMP}, #{state,jdbcType=CHAR}, #{replyState,jdbcType=CHAR}, 
+      #{isPicture,jdbcType=CHAR}, #{operId,jdbcType=VARCHAR}, #{operTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProdComment" >
+    insert into prod_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commentId != null" >
+        COMMENT_ID,
+      </if>
+      <if test="orderId != null" >
+        ORDER_ID,
+      </if>
+      <if test="subOrderId != null" >
+        SUB_ORDER_ID,
+      </if>
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID,
+      </if>
+      <if test="prodId != null" >
+        PROD_ID,
+      </if>
+      <if test="skuId != null" >
+        SKU_ID,
+      </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="commentBody != null" >
+        COMMENT_BODY,
+      </if>
+      <if test="shopScoreMs != null" >
+        SHOP_SCORE_MS,
+      </if>
+      <if test="shopScoreFw != null" >
+        SHOP_SCORE_FW,
+      </if>
+      <if test="shopScoreWl != null" >
+        SHOP_SCORE_WL,
+      </if>
+      <if test="commentTime != null" >
+        COMMENT_TIME,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="replyState != null" >
+        REPLY_STATE,
+      </if>
+      <if test="isPicture != null" >
+        IS_PICTURE,
+      </if>
+      <if test="operId != null" >
+        OPER_ID,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commentId != null" >
+        #{commentId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderId != null" >
+        #{subOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProdId != null" >
+        #{standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null" >
+        #{skuId,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentBody != null" >
+        #{commentBody,jdbcType=VARCHAR},
+      </if>
+      <if test="shopScoreMs != null" >
+        #{shopScoreMs,jdbcType=DECIMAL},
+      </if>
+      <if test="shopScoreFw != null" >
+        #{shopScoreFw,jdbcType=DECIMAL},
+      </if>
+      <if test="shopScoreWl != null" >
+        #{shopScoreWl,jdbcType=DECIMAL},
+      </if>
+      <if test="commentTime != null" >
+        #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="replyState != null" >
+        #{replyState,jdbcType=CHAR},
+      </if>
+      <if test="isPicture != null" >
+        #{isPicture,jdbcType=CHAR},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=VARCHAR},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentCriteria" resultType="java.lang.Integer" >
+    select count(*) from prod_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update prod_comment
+    <set >
+      <if test="record.commentId != null" >
+        COMMENT_ID = #{record.commentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        ORDER_ID = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subOrderId != null" >
+        SUB_ORDER_ID = #{record.subOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.standedProdId != null" >
+        STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null" >
+        PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuId != null" >
+        SKU_ID = #{record.skuId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierId != null" >
+        SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        USER_ID = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commentBody != null" >
+        COMMENT_BODY = #{record.commentBody,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopScoreMs != null" >
+        SHOP_SCORE_MS = #{record.shopScoreMs,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shopScoreFw != null" >
+        SHOP_SCORE_FW = #{record.shopScoreFw,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shopScoreWl != null" >
+        SHOP_SCORE_WL = #{record.shopScoreWl,jdbcType=DECIMAL},
+      </if>
+      <if test="record.commentTime != null" >
+        COMMENT_TIME = #{record.commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=CHAR},
+      </if>
+      <if test="record.replyState != null" >
+        REPLY_STATE = #{record.replyState,jdbcType=CHAR},
+      </if>
+      <if test="record.isPicture != null" >
+        IS_PICTURE = #{record.isPicture,jdbcType=CHAR},
+      </if>
+      <if test="record.operId != null" >
+        OPER_ID = #{record.operId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update prod_comment
+    set COMMENT_ID = #{record.commentId,jdbcType=VARCHAR},
+      ORDER_ID = #{record.orderId,jdbcType=VARCHAR},
+      SUB_ORDER_ID = #{record.subOrderId,jdbcType=VARCHAR},
+      STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
+      PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      SKU_ID = #{record.skuId,jdbcType=VARCHAR},
+      SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR},
+      USER_ID = #{record.userId,jdbcType=VARCHAR},
+      COMMENT_BODY = #{record.commentBody,jdbcType=VARCHAR},
+      SHOP_SCORE_MS = #{record.shopScoreMs,jdbcType=DECIMAL},
+      SHOP_SCORE_FW = #{record.shopScoreFw,jdbcType=DECIMAL},
+      SHOP_SCORE_WL = #{record.shopScoreWl,jdbcType=DECIMAL},
+      COMMENT_TIME = #{record.commentTime,jdbcType=TIMESTAMP},
+      STATE = #{record.state,jdbcType=CHAR},
+      REPLY_STATE = #{record.replyState,jdbcType=CHAR},
+      IS_PICTURE = #{record.isPicture,jdbcType=CHAR},
+      OPER_ID = #{record.operId,jdbcType=VARCHAR},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProdComment" >
+    update prod_comment
+    <set >
+      <if test="orderId != null" >
+        ORDER_ID = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderId != null" >
+        SUB_ORDER_ID = #{subOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        PROD_ID = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null" >
+        SKU_ID = #{skuId,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentBody != null" >
+        COMMENT_BODY = #{commentBody,jdbcType=VARCHAR},
+      </if>
+      <if test="shopScoreMs != null" >
+        SHOP_SCORE_MS = #{shopScoreMs,jdbcType=DECIMAL},
+      </if>
+      <if test="shopScoreFw != null" >
+        SHOP_SCORE_FW = #{shopScoreFw,jdbcType=DECIMAL},
+      </if>
+      <if test="shopScoreWl != null" >
+        SHOP_SCORE_WL = #{shopScoreWl,jdbcType=DECIMAL},
+      </if>
+      <if test="commentTime != null" >
+        COMMENT_TIME = #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=CHAR},
+      </if>
+      <if test="replyState != null" >
+        REPLY_STATE = #{replyState,jdbcType=CHAR},
+      </if>
+      <if test="isPicture != null" >
+        IS_PICTURE = #{isPicture,jdbcType=CHAR},
+      </if>
+      <if test="operId != null" >
+        OPER_ID = #{operId,jdbcType=VARCHAR},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where COMMENT_ID = #{commentId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.ProdComment" >
+    update prod_comment
+    set ORDER_ID = #{orderId,jdbcType=VARCHAR},
+      SUB_ORDER_ID = #{subOrderId,jdbcType=VARCHAR},
+      STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
+      PROD_ID = #{prodId,jdbcType=VARCHAR},
+      SKU_ID = #{skuId,jdbcType=VARCHAR},
+      SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=VARCHAR},
+      COMMENT_BODY = #{commentBody,jdbcType=VARCHAR},
+      SHOP_SCORE_MS = #{shopScoreMs,jdbcType=DECIMAL},
+      SHOP_SCORE_FW = #{shopScoreFw,jdbcType=DECIMAL},
+      SHOP_SCORE_WL = #{shopScoreWl,jdbcType=DECIMAL},
+      COMMENT_TIME = #{commentTime,jdbcType=TIMESTAMP},
+      STATE = #{state,jdbcType=CHAR},
+      REPLY_STATE = #{replyState,jdbcType=CHAR},
+      IS_PICTURE = #{isPicture,jdbcType=CHAR},
+      OPER_ID = #{operId,jdbcType=VARCHAR},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where COMMENT_ID = #{commentId,jdbcType=VARCHAR}
+  </update>
+</mapper>
