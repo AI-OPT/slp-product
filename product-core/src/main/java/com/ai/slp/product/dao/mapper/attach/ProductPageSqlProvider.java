@@ -64,7 +64,7 @@ public class ProductPageSqlProvider {
 		//limit信息
 		if (queryVo.getLimitStart()!=null && queryVo.getLimitStart()>=0) {
 			seqBuffer.append(" limit "+queryVo.getLimitStart());
-			if (queryVo.getLimitEnd()!=null && queryVo.getLimitEnd() >queryVo.getLimitStart())
+			if (queryVo.getLimitEnd()!=null && queryVo.getLimitEnd() >0)
 				seqBuffer.append(","+queryVo.getLimitEnd());
 		}
 		return seqBuffer.toString();

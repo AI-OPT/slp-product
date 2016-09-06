@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.ProdCommentReplyMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.ProdCommentReply" >
+    <id column="REPLY_ID" property="replyId" jdbcType="VARCHAR" />
+    <result column="COMMENT_ID" property="commentId" jdbcType="VARCHAR" />
+    <result column="STANDED_PROD_ID" property="standedProdId" jdbcType="VARCHAR" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="SKU_ID" property="skuId" jdbcType="VARCHAR" />
+    <result column="SUPPLIER_ID" property="supplierId" jdbcType="VARCHAR" />
+    <result column="REPLY_COMMENT" property="replyComment" jdbcType="VARCHAR" />
+    <result column="REPLIER_ID" property="replierId" jdbcType="VARCHAR" />
+    <result column="REPLY_TIME" property="replyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    REPLY_ID, COMMENT_ID, STANDED_PROD_ID, PROD_ID, SKU_ID, SUPPLIER_ID, REPLY_COMMENT, 
+    REPLIER_ID, REPLY_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentReplyCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from prod_comment_reply
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from prod_comment_reply
+    where REPLY_ID = #{replyId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from prod_comment_reply
+    where REPLY_ID = #{replyId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentReplyCriteria" >
+    delete from prod_comment_reply
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentReply" >
+    insert into prod_comment_reply (REPLY_ID, COMMENT_ID, STANDED_PROD_ID, 
+      PROD_ID, SKU_ID, SUPPLIER_ID, 
+      REPLY_COMMENT, REPLIER_ID, REPLY_TIME
+      )
+    values (#{replyId,jdbcType=VARCHAR}, #{commentId,jdbcType=VARCHAR}, #{standedProdId,jdbcType=VARCHAR}, 
+      #{prodId,jdbcType=VARCHAR}, #{skuId,jdbcType=VARCHAR}, #{supplierId,jdbcType=VARCHAR}, 
+      #{replyComment,jdbcType=VARCHAR}, #{replierId,jdbcType=VARCHAR}, #{replyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentReply" >
+    insert into prod_comment_reply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="replyId != null" >
+        REPLY_ID,
+      </if>
+      <if test="commentId != null" >
+        COMMENT_ID,
+      </if>
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID,
+      </if>
+      <if test="prodId != null" >
+        PROD_ID,
+      </if>
+      <if test="skuId != null" >
+        SKU_ID,
+      </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID,
+      </if>
+      <if test="replyComment != null" >
+        REPLY_COMMENT,
+      </if>
+      <if test="replierId != null" >
+        REPLIER_ID,
+      </if>
+      <if test="replyTime != null" >
+        REPLY_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="replyId != null" >
+        #{replyId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentId != null" >
+        #{commentId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProdId != null" >
+        #{standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null" >
+        #{skuId,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyComment != null" >
+        #{replyComment,jdbcType=VARCHAR},
+      </if>
+      <if test="replierId != null" >
+        #{replierId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyTime != null" >
+        #{replyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentReplyCriteria" resultType="java.lang.Integer" >
+    select count(*) from prod_comment_reply
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update prod_comment_reply
+    <set >
+      <if test="record.replyId != null" >
+        REPLY_ID = #{record.replyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commentId != null" >
+        COMMENT_ID = #{record.commentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.standedProdId != null" >
+        STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null" >
+        PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuId != null" >
+        SKU_ID = #{record.skuId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierId != null" >
+        SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replyComment != null" >
+        REPLY_COMMENT = #{record.replyComment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replierId != null" >
+        REPLIER_ID = #{record.replierId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replyTime != null" >
+        REPLY_TIME = #{record.replyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update prod_comment_reply
+    set REPLY_ID = #{record.replyId,jdbcType=VARCHAR},
+      COMMENT_ID = #{record.commentId,jdbcType=VARCHAR},
+      STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
+      PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      SKU_ID = #{record.skuId,jdbcType=VARCHAR},
+      SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR},
+      REPLY_COMMENT = #{record.replyComment,jdbcType=VARCHAR},
+      REPLIER_ID = #{record.replierId,jdbcType=VARCHAR},
+      REPLY_TIME = #{record.replyTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentReply" >
+    update prod_comment_reply
+    <set >
+      <if test="commentId != null" >
+        COMMENT_ID = #{commentId,jdbcType=VARCHAR},
+      </if>
+      <if test="standedProdId != null" >
+        STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        PROD_ID = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null" >
+        SKU_ID = #{skuId,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyComment != null" >
+        REPLY_COMMENT = #{replyComment,jdbcType=VARCHAR},
+      </if>
+      <if test="replierId != null" >
+        REPLIER_ID = #{replierId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyTime != null" >
+        REPLY_TIME = #{replyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where REPLY_ID = #{replyId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentReply" >
+    update prod_comment_reply
+    set COMMENT_ID = #{commentId,jdbcType=VARCHAR},
+      STANDED_PROD_ID = #{standedProdId,jdbcType=VARCHAR},
+      PROD_ID = #{prodId,jdbcType=VARCHAR},
+      SKU_ID = #{skuId,jdbcType=VARCHAR},
+      SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR},
+      REPLY_COMMENT = #{replyComment,jdbcType=VARCHAR},
+      REPLIER_ID = #{replierId,jdbcType=VARCHAR},
+      REPLY_TIME = #{replyTime,jdbcType=TIMESTAMP}
+    where REPLY_ID = #{replyId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -114,14 +114,5 @@ public interface IAttrAndAttrvalBusiSV {
      * @author lipeng16
      */
     public List<AttrDef> queryAllAttrAndVals(String tenantId);
-    
-    /**
-	 * 根据属性ID查询有效的商品类目属性关系
-	 * @param attrDefParam
-     * @return 符合条件的数量
-     * @author jiawen
-	 */
-	public int queryNum(String tenantId, Long attrId);
-    
-    
+
 }
