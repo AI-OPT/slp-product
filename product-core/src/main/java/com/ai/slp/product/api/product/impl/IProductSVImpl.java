@@ -43,7 +43,7 @@ public class IProductSVImpl implements IProductSV {
     @Override
     public PageInfoResponse<Product4List> queryProductPage(ProductListQuery productQuery)
             throws BusinessException, SystemException {
-    	CommonUtils.checkTenantId(productQuery.getTenantId(),"");
+    	CommonUtils.checkTenantId(productQuery.getTenantId());
         return productBusiSV.queryProductPage(productQuery);
     }
 
