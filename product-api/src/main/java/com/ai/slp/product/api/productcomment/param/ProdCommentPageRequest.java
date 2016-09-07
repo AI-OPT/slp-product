@@ -12,7 +12,7 @@ public class ProdCommentPageRequest extends BaseInfo {
 	/**
 	 * 商品评价分数
 	 */
-	private String commentBody;
+	private Long shopScoreMs;
 	
 	/**
 	 * 商品SKU id
@@ -26,14 +26,6 @@ public class ProdCommentPageRequest extends BaseInfo {
 	@NotBlank(message = "PageNo不能为空",groups = { IProdCommentManagerSV.QueryPageInfoBySku.class})
 	private Integer PageNo;
 	
-	public String getCommentBody() {
-		return commentBody;
-	}
-
-	public void setCommentBody(String commentBody) {
-		this.commentBody = commentBody;
-	}
-
 	public String getSkuId() {
 		return skuId;
 	}
@@ -56,5 +48,13 @@ public class ProdCommentPageRequest extends BaseInfo {
 
 	public void setPageNo(Integer pageNo) {
 		PageNo = pageNo;
+	}
+
+	public Long getShopScoreMs() {
+		return shopScoreMs;
+	}
+
+	public void setShopScoreMs(Long shopScoreMs) {
+		this.shopScoreMs = shopScoreMs;
 	}
 }

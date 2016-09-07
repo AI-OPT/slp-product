@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentPicture;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentPictureCriteria;
@@ -34,6 +35,7 @@ public class ProdCommentPictureAtomSVImpl implements IProdCommentPictureAtomSV {
 		Long pictureDefId = SequenceUtil.createProdCommentPictureDefId();
 		prodCommentPicture.setProdCommentPicId(Long.toString(pictureDefId));
 		prodCommentPicture.setState(CommonConstants.STATE_ACTIVE);
+		prodCommentPicture.setCreateTime(DateUtil.getSysDate());
 		int insert = prodCommentPictureMapper.insert(prodCommentPicture);
 		if(insert > 0){
 			return prodCommentPicture.getProdCommentPicId();

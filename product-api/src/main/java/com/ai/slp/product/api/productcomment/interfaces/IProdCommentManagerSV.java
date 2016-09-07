@@ -6,6 +6,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
@@ -35,7 +37,7 @@ public interface IProdCommentManagerSV {
 	 */
 	@POST
 	@Path("/queryPageInfoBySku")
-	public PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku(ProdCommentPageRequest prodCommentPageRequest);
+	public PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku(ProdCommentPageRequest prodCommentPageRequest) throws BusinessException, SystemException;;
 	@interface QueryPageInfoBySku{}
 	/**
 	 * 发表商品评价
@@ -48,6 +50,6 @@ public interface IProdCommentManagerSV {
 	 */
 	@POST
 	@Path("/createProdComment")
-	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest);
+	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) throws BusinessException, SystemException;;
 	@interface CreateProdComment{}
 }

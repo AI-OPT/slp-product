@@ -21,7 +21,7 @@ public class PictureVO implements Serializable{
 	/**
 	 * 序列号
 	 */
-	private Integer serialNumber;
+	private Long serialNumber;
 	
 	public String getVfsId() {
 		return vfsId;
@@ -29,14 +29,6 @@ public class PictureVO implements Serializable{
 
 	public void setVfsId(String vfsId) {
 		this.vfsId = vfsId;
-	}
-
-	public Integer getSerialNumber() {
-		return serialNumber;
-	}
-
-	public void setSerialNumber(Integer serialNumber) {
-		this.serialNumber = serialNumber;
 	}
 
 	public String getPicDir() {
@@ -53,5 +45,13 @@ public class PictureVO implements Serializable{
 
 	public void setPicName(String picName) {
 		this.picName = picName;
+	}
+
+	public Long getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(Long serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 }

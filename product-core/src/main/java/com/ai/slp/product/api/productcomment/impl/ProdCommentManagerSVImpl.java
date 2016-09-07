@@ -3,6 +3,8 @@ package com.ai.slp.product.api.productcomment.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcomment.interfaces.IProdCommentManagerSV;
@@ -21,13 +23,13 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 	IProdCommentBusiSV prodCommentBusiSV;
 	
 	@Override
-	public PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku(ProdCommentPageRequest prodCommentPageRequest) {
+	public PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku(ProdCommentPageRequest prodCommentPageRequest)throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(prodCommentPageRequest.getTenantId());
 		return prodCommentBusiSV.queryPageBySku(prodCommentPageRequest);
 	}
 
 	@Override
-	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) {
+	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(prodCommentCreateRequest.getTenantId());
 		return prodCommentBusiSV.createProdComment(prodCommentCreateRequest);
 	}
