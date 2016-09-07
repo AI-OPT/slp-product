@@ -11,7 +11,7 @@ dependencies {
     //搜索
     compile 'com.ai:ipaas-ses:0.2.6.1'
     //地区
-     compile 'com.ai.slp.common:area:1.0-SNAPSHOT'
+    compile 'com.ai.platform.common:area:1.0-SNAPSHOT'
     //路由相关查询
     compile 'com.ai.slp.route:routequery:1.0-SNAPSHOT'
     //用户

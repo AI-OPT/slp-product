@@ -2,6 +2,7 @@ package com.ai.slp.product.api.product.interfaces;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
@@ -166,5 +167,20 @@ public interface IProductSV {
             throws BusinessException,SystemException;
     @interface querySkuSetForStorage{}
 
-
+    /**
+     * 查询单个商品的目标地域信息
+     *
+     * @param query
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @RestRelativeURL product/queryAreaInfosOfProduct
+     * @ApiCode PRODUCT_0109
+     */
+    @POST
+    @Path("/queryAreaInfosOfProduct")
+    public BaseListResponse<ProdTargetAreaInfo> queryAreaInfosOfProduct(ProductInfoQuery query)
+            throws BusinessException,SystemException;
 }

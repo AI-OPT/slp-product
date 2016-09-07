@@ -1,9 +1,7 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
-import com.ai.slp.product.api.product.param.TargetAreaForProd;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 
@@ -25,6 +23,17 @@ public interface IProdTargetAreaAtomSV {
      * @return
      */
     public List<ProdTargetArea> queryByAreaCode(String tenantId,String prodId,Integer provCode,boolean hasDiscard);
+
+    /**
+     * 根据地域编码查询目标地域信息
+     *
+     * @param tenantId 租户ID
+     * @param prodId 销售商品标识
+     * @param provCode 省份编码
+     * @param hasDiscard 是否包含废弃状态
+     * @return
+     */
+    public int countByAreaCode(String tenantId,String prodId,Integer provCode,boolean hasDiscard);
 
     /**
      * 设置指定商品的目标地域失效

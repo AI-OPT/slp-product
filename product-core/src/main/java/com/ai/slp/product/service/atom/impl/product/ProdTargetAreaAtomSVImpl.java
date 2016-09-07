@@ -1,7 +1,6 @@
 package com.ai.slp.product.service.atom.impl.product;
 
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
@@ -54,6 +53,34 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
             criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         }
         return areaMapper.selectByExample(example);
+    }
+
+    /**
+     * 根据地域编码查询目标地域信息
+     *
+     * @param tenantId   租户ID
+     * @param prodId     销售商品标识
+     * @param provCode   省份编码
+     * @param hasDiscard 是否包含废弃状态
+     * @return
+     */
+    @Override
+    public int countByAreaCode(String tenantId, String prodId, Integer provCode, boolean hasDiscard) {
+        //若省份,城市,区县编码均为空,则直接返回空
+        if (provCode==null && StringUtils.isBlank(prodId)){
+            return 0;
+        }
+        ProdTargetAreaCriteria example = new ProdTargetAreaCriteria();
+        ProdTargetAreaCriteria.Criteria criteria = example.createCriteria();
+        criteria.andTenantIdEqualTo(tenantId)
+                .andProdIdEqualTo(prodId);
+        if (provCode!=null)
+            criteria.andProvCodeEqualTo(provCode);
+        //若不包括废弃状态
+        if (!hasDiscard){
+            criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
+        }
+        return areaMapper.countByExample(example);
     }
 
     @Override

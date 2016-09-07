@@ -5,8 +5,11 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
+import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
+import com.ai.platform.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
@@ -85,7 +88,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     @Autowired
     IProdAudiencesAtomSV prodAudiencesAtomSV;
     @Autowired
-    IProdTargetAreaAtomSV targetAreaAtomSV;
+    IProdTargetAreaAtomSV prodTargetAreaAtomSV;
     @Autowired
     IStorageNumBusiSV storageNumBusiSV;
     @Autowired
@@ -630,28 +633,27 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
 	@Override
-	public void changeToInStore(String tenantId,String supplierId, String prodId, Long operId) {
-		Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
-        if (prodId != null){
-	        //若商品状态是"销售中"
-	        if (ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
-	        	//修改商品"state"为IN_STORE
-	        	product.setState(ProductConstants.Product.State.IN_STORE);
-	        	//将商品从搜索引擎中移除
-	        	skuIndexManage.deleteSKUIndexByProductId(prodId);
-	        	//添加下架时间
-	        	product.setDownTime(DateUtils.currTimeStamp());
-	        	
-	        	if (operId!=null){
-	                product.setOperId(operId);
-	        	}
-	            //添加日志
-	            updateProdAndStatusLog(product);
-			}
-        }else {
-        	throw new SystemException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
-		}
-	}
+    public void changeToInStore(String tenantId, String supplierId, String prodId, Long operId) {
+        Product product = productAtomSV.selectByProductId(tenantId, supplierId, prodId);
+        if (product == null) {
+            throw new SystemException("", "未找到相关的商品信息,租户ID:" + tenantId + ",商品标识:" + prodId);
+        }
+        //若商品部是在售,则直接返回
+        if (!ProductConstants.Product.State.IN_SALE.equals(product.getState()))
+            return;
+        //修改商品"state"为IN_STORE
+        product.setState(ProductConstants.Product.State.IN_STORE);
+        //将商品从搜索引擎中移除
+        skuIndexManage.deleteSKUIndexByProductId(prodId);
+        //添加下架时间
+        product.setDownTime(DateUtils.currTimeStamp());
+
+        if (operId != null) {
+            product.setOperId(operId);
+        }
+        //添加日志
+        updateProdAndStatusLog(product);
+    }
 
     public void updateProdAndStatusLog(Product product){
         if (productAtomSV.updateById(product)>0){
@@ -663,6 +665,42 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             BeanUtils.copyProperties(productStateLog, product);
             productStateLogAtomSV.insert(productStateLog);
         }
+    }
+
+    /**
+     * 查询商品的目标地域
+     *
+     * @param tenantId
+     * @param supplierId
+     * @param productId
+     * @return
+     */
+    @Override
+    public List<ProdTargetAreaInfo> queryProvinceInfoOfProduct(String tenantId, String supplierId, String productId) {
+        Product product = productAtomSV.selectByProductId(tenantId, supplierId, productId);
+        if (product == null) {
+            logger.warn("未找到对应商品信息,租户ID:{},商户ID:{},商品ID:{}",tenantId,supplierId,productId);
+            throw new SystemException("", "未找到相关的商品信息");
+        }
+        //是否为全国销售
+        boolean isNoAll = ProductConstants.Product.IsSaleNationwide.YES.equals(product.getIsSaleNationwide())?false:true;
+        //确定是否为全国销售
+        List<ProdTargetAreaInfo> areaInfoList = new ArrayList<>();
+        //查询所有省份信息
+        IGnAreaQuerySV gnAreaQuerySV = DubboConsumerFactory.getService("iGnAreaQuerySV");
+        List<GnAreaVo> provAreaList = gnAreaQuerySV.getProvinceList();
+        for (GnAreaVo areaVo:provAreaList){
+            //不为全国销售,且不是目标地域,直接忽略
+            if (isNoAll && prodTargetAreaAtomSV.countByAreaCode(
+                    tenantId,productId,Integer.parseInt(areaVo.getAreaCode()),false)<1){
+                continue;
+            }
+            ProdTargetAreaInfo areaInfo = new ProdTargetAreaInfo();
+            BeanUtils.copyProperties(areaInfo,areaVo);
+            areaInfo.setOwn(true);
+            areaInfoList.add(areaInfo);
+        }
+        return areaInfoList;
     }
 }
 	

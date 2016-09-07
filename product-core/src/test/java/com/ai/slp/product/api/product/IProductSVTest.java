@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.product;
 
+import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.*;
@@ -72,6 +73,16 @@ public class IProductSVTest {
         query.setSupplierId("-1");
         SkuSetForProduct skuSetForProduct = productSV.querySkuSetForGroup(query);
         System.out.println(skuSetForProduct.getProdId());
+    }
+
+    @Test
+    public void queryAreaInfosOfProduct(){
+        ProductInfoQuery query = new ProductInfoQuery();
+        query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        query.setSupplierId("-1");
+        query.setProductId("1000000000000120");
+        BaseListResponse<ProdTargetAreaInfo> listResponse = productSV.queryAreaInfosOfProduct(query);
+        System.out.println("======\r\n----"+listResponse.getResponseHeader().isSuccess());
     }
     
 }

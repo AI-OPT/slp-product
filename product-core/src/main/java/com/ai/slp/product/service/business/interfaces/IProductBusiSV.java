@@ -7,6 +7,8 @@ import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
+import java.util.List;
+
 
 /**
  * 商城商品业务操作
@@ -124,4 +126,14 @@ public interface IProductBusiSV {
      * @param product
      */
     public void updateProdAndStatusLog(Product product);
+
+    /**
+     * 查询商品的省级目标地域
+     *
+     * @param tenantId
+     * @param supplierId
+     * @param productId
+     * @return
+     */
+    public List<ProdTargetAreaInfo> queryProvinceInfoOfProduct(String tenantId, String supplierId, String productId);
 }

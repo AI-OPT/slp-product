@@ -6,8 +6,8 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.slp.common.api.area.interfaces.IGnAreaQuerySV;
-import com.ai.slp.common.api.area.param.GnAreaVo;
+import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
+import com.ai.platform.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
@@ -360,8 +360,6 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
      */
     private List<ProdTargetAreaInfo> getTargetOfProd(String tenantId,String prodId){
         List<ProdTargetAreaInfo> areaInfoList = new ArrayList<>();
-        
-        
         //查询所有省份信息
         IGnAreaQuerySV gnAreaQuerySV = DubboConsumerFactory.getService("iGnAreaQuerySV");
         List<GnAreaVo> provAreaList = gnAreaQuerySV.getProvinceList();
