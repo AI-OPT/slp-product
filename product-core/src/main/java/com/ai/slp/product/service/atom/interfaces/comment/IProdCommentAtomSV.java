@@ -13,5 +13,16 @@ public interface IProdCommentAtomSV {
 	 * @author jiaxs
 	 */
 	public List<ProdComment> queryPageList(ProdComment params, Integer pageSize, Integer pageNo);
+	
+	/**
+	 * 查询条数
+	 * @param params
+	 * @return
+	 * @author jiaxs
+	 * @ApiDocMethod
+	 * @ApiCode
+	 * @RestRelativeURL
+	 */
+	public Integer queryCountByParams(ProdComment params);
 
 }
