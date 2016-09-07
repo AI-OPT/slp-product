@@ -39,6 +39,8 @@ public class ProdComment {
 
     private Timestamp operTime;
 
+    private String tenantId;
+
     public String getCommentId() {
         return commentId;
     }
@@ -181,5 +183,13 @@ public class ProdComment {
 
     public void setOperTime(Timestamp operTime) {
         this.operTime = operTime;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId == null ? null : tenantId.trim();
     }
 }

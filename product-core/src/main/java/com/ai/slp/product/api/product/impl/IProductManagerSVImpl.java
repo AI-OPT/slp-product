@@ -39,8 +39,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq productEditParam) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(productEditParam.getTenantId(),"");
-        CommonUtils.checkSupplierId(productEditParam.getSupplierId(),"");
+        CommonUtils.checkTenantId(productEditParam.getTenantId());
+        CommonUtils.checkSupplierId(productEditParam.getSupplierId());
         return productManagerBsuiSV.queryPageForEdit(productEditParam);
     }
 
