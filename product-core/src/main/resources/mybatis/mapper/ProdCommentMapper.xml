@@ -20,6 +20,7 @@
     <result column="IS_PICTURE" property="isPicture" jdbcType="CHAR" />
     <result column="OPER_ID" property="operId" jdbcType="VARCHAR" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -82,7 +83,7 @@
   <sql id="Base_Column_List" >
     COMMENT_ID, ORDER_ID, SUB_ORDER_ID, STANDED_PROD_ID, PROD_ID, SKU_ID, SUPPLIER_ID, 
     USER_ID, COMMENT_BODY, SHOP_SCORE_MS, SHOP_SCORE_FW, SHOP_SCORE_WL, COMMENT_TIME, 
-    STATE, REPLY_STATE, IS_PICTURE, OPER_ID, OPER_TIME
+    STATE, REPLY_STATE, IS_PICTURE, OPER_ID, OPER_TIME, TENANT_ID
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.ProdCommentCriteria" >
     select
@@ -124,15 +125,15 @@
       SUPPLIER_ID, USER_ID, COMMENT_BODY, 
       SHOP_SCORE_MS, SHOP_SCORE_FW, SHOP_SCORE_WL, 
       COMMENT_TIME, STATE, REPLY_STATE, 
-      IS_PICTURE, OPER_ID, OPER_TIME
-      )
+      IS_PICTURE, OPER_ID, OPER_TIME, 
+      TENANT_ID)
     values (#{commentId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{subOrderId,jdbcType=VARCHAR}, 
       #{standedProdId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{skuId,jdbcType=VARCHAR}, 
       #{supplierId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{commentBody,jdbcType=VARCHAR}, 
       #{shopScoreMs,jdbcType=DECIMAL}, #{shopScoreFw,jdbcType=DECIMAL}, #{shopScoreWl,jdbcType=DECIMAL}, 
       #{commentTime,jdbcType=TIMESTAMP}, #{state,jdbcType=CHAR}, #{replyState,jdbcType=CHAR}, 
-      #{isPicture,jdbcType=CHAR}, #{operId,jdbcType=VARCHAR}, #{operTime,jdbcType=TIMESTAMP}
-      )
+      #{isPicture,jdbcType=CHAR}, #{operId,jdbcType=VARCHAR}, #{operTime,jdbcType=TIMESTAMP}, 
+      #{tenantId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.ProdComment" >
     insert into prod_comment
@@ -191,6 +192,9 @@
       <if test="operTime != null" >
         OPER_TIME,
       </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="commentId != null" >
@@ -246,6 +250,9 @@
       </if>
       <if test="operTime != null" >
         #{operTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -312,6 +319,9 @@
       <if test="record.operTime != null" >
         OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -336,7 +346,8 @@
       REPLY_STATE = #{record.replyState,jdbcType=CHAR},
       IS_PICTURE = #{record.isPicture,jdbcType=CHAR},
       OPER_ID = #{record.operId,jdbcType=VARCHAR},
-      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -395,6 +406,9 @@
       <if test="operTime != null" >
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
     </set>
     where COMMENT_ID = #{commentId,jdbcType=VARCHAR}
   </update>
@@ -416,7 +430,8 @@
       REPLY_STATE = #{replyState,jdbcType=CHAR},
       IS_PICTURE = #{isPicture,jdbcType=CHAR},
       OPER_ID = #{operId,jdbcType=VARCHAR},
-      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      TENANT_ID = #{tenantId,jdbcType=VARCHAR}
     where COMMENT_ID = #{commentId,jdbcType=VARCHAR}
   </update>
 </mapper>
