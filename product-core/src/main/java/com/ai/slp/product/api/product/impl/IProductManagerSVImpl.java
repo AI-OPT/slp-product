@@ -56,25 +56,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam) throws BusinessException, SystemException {
-    	CommonUtils.checkTenantId(productRefuseParam.getTenantId(),"");
-        CommonUtils.checkSupplierId(productRefuseParam.getSupplierId(),"");
+    	CommonUtils.checkTenantId(productRefuseParam.getTenantId());
+        CommonUtils.checkSupplierId(productRefuseParam.getSupplierId());
     	return productManagerBsuiSV.queryProductRefuse(productRefuseParam);
-    }
-
-    /**
-     * 商品管理查询商品审核状态-与商品审核中查询共用<br>
-     * 状态：3审核中<br>
-     * 提交时间为操作时间<br>
-     *
-     * @param productCheckingParam
-     * @return 满足条件的商品集合
-     * @throws BusinessException
-     * @throws SystemException
-     * @author lipeng16
-     */
-    @Override
-    public PageInfoResponse<ProductEditUp> queryProductCheck(ProductEditQueryReq productCheckingParam) throws BusinessException, SystemException {
-        return null;
     }
 
     /**
@@ -126,11 +110,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     }
 
     /**
-     * 查询仓库中的全部商品<br>
-     * 不判断状态返回所有商品<br>
-     * 根据状态不同返回不同类型的集合：<br>
-     * 5在售61售罄下架62废弃下架<br>
-     * 待上架:6仓库中（审核通过放入） 61售罄下架 定时上架-通过上架类型判断<br>
+     * 分页查询仓库中的商品列表<br>
+     * 商品状态:6仓库中（审核通过放入） 61售罄下架 定时上架-通过上架类型判断  62废弃下架<br>
      *
      * @param productStorageSaleParam
      * @return 商品管理售中与仓库商品返回类集合
@@ -209,7 +190,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	/**
 	 * 查询在售商品 -- 按上架时间排序
 	 * 
-	 * @param ProductQueryInfo
+	 * @param queryInSale
      * @return
      * @throws BusinessException
      * @throws SystemException
@@ -225,7 +206,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	/**
 	 * 查询商品审核
 	 * 
-	 * @param ProductQueryInfo
+	 * @param queryInfo
      * @return
      * @throws BusinessException
      * @throws SystemException

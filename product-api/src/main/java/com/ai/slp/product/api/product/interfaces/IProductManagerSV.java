@@ -26,9 +26,8 @@ import javax.ws.rs.core.MediaType;
 public interface IProductManagerSV {
     
     /**
-     * 商品管理分页查询商品待编辑商品列表<br>
-     * 操作时间倒序排列<br>
-     * 0新增\n
+     * 商品管理分页查询商品商品列表<br>
+     * 创建时间倒序排列<br>
      * 
      * @param productEditParam
      * @return 满足条件的商品集合
@@ -42,11 +41,11 @@ public interface IProductManagerSV {
 	@Path("/stateSearch")
     public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq productEditParam) throws BusinessException, SystemException;
     @interface QueryProductEdit {}
-    
+
     /**
-     * 商品管理查询商品被拒绝信息-与商品审核中查询共用<br>
+     * 查询被拒绝的商品信息<br>
      * 操作时间倒序排列<br>
-     * 
+     *
      * @param productRefuseParam
      * @return 满足条件的商品集合
      * @throws BusinessException
@@ -59,24 +58,6 @@ public interface IProductManagerSV {
 	@Path("/searchRefuseInfo")
     public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam) throws BusinessException, SystemException;
     @interface QueryProductRefuse {}
-    
-    /**
-     * 商品管理查询商品审核状态-与商品审核中查询共用<br>
-     * 状态：3审核中<br>
-     * 提交时间为操作时间<br>
-     * 
-     * @param productCheckingParam
-     * @return 满足条件的商品集合
-     * @throws BusinessException
-     * @throws SystemException
-     * @author lipeng16
-     * @RestRelativeURL productManager/searchCheckInfo
-    *  @ApiCode PROMAN_0102
-     */
-    @POST
-	@Path("/searchCheckInfo")
-    public PageInfoResponse<ProductEditUp> queryProductCheck(ProductEditQueryReq productCheckingParam) throws BusinessException, SystemException;
-    @interface QueryProductCheck {}
 
     /**
      * 商品审核通过/拒绝<br>
@@ -87,7 +68,7 @@ public interface IProductManagerSV {
      * @throws SystemException
      * @author lipeng16
      * @RestRelativeURL productManager/check
-     *  @ApiCode PROMAN_0103
+     * @ApiCode PROMAN_0103
      */
     @POST
 	@Path("/check")
@@ -132,11 +113,8 @@ public interface IProductManagerSV {
 
 
     /**
-     * 查询仓库中的全部商品<br>
-     * 不判断状态返回所有商品<br>
-     * 根据状态不同返回不同类型的集合：<br>
-     * 5在售61售罄下架62废弃下架<br>
-     * 待上架:6仓库中（审核通过放入） 61售罄下架 定时上架-通过上架类型判断<br>
+     * 分页查询仓库中的商品列表<br>
+     * 商品状态:6仓库中（审核通过放入） 61售罄下架 定时上架-通过上架类型判断  62废弃下架<br>
      *
      * @param productStorageSaleParam
      * @return 商品管理售中与仓库商品返回类集合
@@ -144,7 +122,7 @@ public interface IProductManagerSV {
      * @throws SystemException
      * @author lipeng16
      * @RestRelativeURL productManager/searchAll
-     *  @ApiCode PROMAN_0106
+     * @ApiCode PROMAN_0106
      */
     @POST
 	@Path("/searchAll")
@@ -218,7 +196,7 @@ public interface IProductManagerSV {
     /**
      * 查询在售商品  -- 按上架时间倒序
      * 
-     * @param productEditParam
+     * @param queryInSale
      * @return 满足条件的商品集合
      * @throws BusinessException
      * @throws SystemException
@@ -233,7 +211,7 @@ public interface IProductManagerSV {
     /**
      * 查询商品审核 
      * 
-     * @param ProductQueryInfo
+     * @param queryInfo
      * @return 满足条件的商品集合
      * @throws BusinessException
      * @throws SystemException
