@@ -37,7 +37,18 @@ public final class SequenceUtil {
     private static final String PROD_ATTR$PROD_ATTR_ID$SEQ = "PROD_ATTR$PROD_ATTR_ID$SEQ";
     private static final String PROD_ATTR_LOG$LOG_ID$SEQ = "PROD_ATTR_LOG$LOG_ID$SEQ";
     private static final String PRODUCT_STATE_LOG$LOG_ID$SEQ = "PRODUCT_STATE_LOG$LOG_ID$SEQ";
+    
+    private static final String PROD_COMMENT$COMMENT_ID$SEQ = "PROD_COMMENT$COMMENT_ID$SEQ";
+    private static final String PROD_COMMENT_PICTURE$PROD_COMMENT_PIC_ID$SEQ = "PROD_COMMENT_PICTURE$PROD_COMMENT_PIC_ID$SEQ";
 
+    public static Long createProdCommentDefId() {
+        return SeqUtil.getNewId(PROD_COMMENT$COMMENT_ID$SEQ);
+    }
+    
+    public static Long createProdCommentPictureDefId() {
+        return SeqUtil.getNewId(PROD_COMMENT_PICTURE$PROD_COMMENT_PIC_ID$SEQ);
+    }
+    
     public static Long createAttrDefId() {
         return SeqUtil.getNewId(PROD_ATTR_DEF$ATTR_ID$SEQ);
     }
@@ -151,5 +162,9 @@ public final class SequenceUtil {
 
     public static String genProductStateLogId(){
     	return SeqUtil.getNewId(PRODUCT_STATE_LOG$LOG_ID$SEQ, 16);
+    }
+    
+    public static String genProdCommentId(){
+        return SeqUtil.getNewId(STANDED_PRODUCT$STANDED_PROD_ID$SEQ,16);
     }
 }

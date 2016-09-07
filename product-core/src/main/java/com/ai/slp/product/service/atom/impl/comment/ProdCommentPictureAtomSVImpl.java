@@ -11,6 +11,7 @@ import com.ai.slp.product.dao.mapper.bo.ProdCommentPictureCriteria;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentPictureCriteria.Criteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdCommentPictureMapper;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentPictureAtomSV;
+import com.ai.slp.product.util.SequenceUtil;
 
 @Component
 public class ProdCommentPictureAtomSVImpl implements IProdCommentPictureAtomSV {
@@ -21,10 +22,24 @@ public class ProdCommentPictureAtomSVImpl implements IProdCommentPictureAtomSV {
 	@Override
 	public List<ProdCommentPicture> queryPictureListByCommentId(String commentId) {
 		ProdCommentPictureCriteria example = new ProdCommentPictureCriteria();
+		example.setOrderByClause("CREATE_TIME,SERIAL_NUMBER");
 		Criteria createCriteria = example.createCriteria();
 		createCriteria.andCommentIdEqualTo(commentId);
 		createCriteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
 		return prodCommentPictureMapper.selectByExample(example );
+	}
+
+	@Override
+	public String createPicture(ProdCommentPicture prodCommentPicture) {
+		Long pictureDefId = SequenceUtil.createProdCommentPictureDefId();
+		prodCommentPicture.setProdCommentPicId(Long.toString(pictureDefId));
+		prodCommentPicture.setState(CommonConstants.STATE_ACTIVE);
+		int insert = prodCommentPictureMapper.insert(prodCommentPicture);
+		if(insert > 0){
+			return prodCommentPicture.getProdCommentPicId();
+		}else{
+			return null;
+		}
 	}
 
 }

@@ -18,11 +18,18 @@ public interface IProdCommentAtomSV {
 	 * 查询条数
 	 * @param params
 	 * @return
+	 */
+	public Integer queryCountByParams(ProdComment params);
+	
+	/**
+	 * 创建商品评论
+	 * @param params
+	 * @return
 	 * @author jiaxs
 	 * @ApiDocMethod
 	 * @ApiCode
 	 * @RestRelativeURL
 	 */
-	public Integer queryCountByParams(ProdComment params);
+	public String createProdComment(ProdComment params);
 
 }

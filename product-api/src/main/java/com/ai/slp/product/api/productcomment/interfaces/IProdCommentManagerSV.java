@@ -6,7 +6,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 
@@ -34,5 +36,18 @@ public interface IProdCommentManagerSV {
 	@POST
 	@Path("/queryPageInfoBySku")
 	public PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku(ProdCommentPageRequest prodCommentPageRequest);
-
+	@interface QueryPageInfoBySku{}
+	/**
+	 * 发表商品评价
+	 * @param prodCommentCreateRequest
+	 * @return
+	 * @author jiaxs
+	 * @ApiDocMethod
+	 * @ApiCode PROD_COMM_0003
+	 * @RestRelativeURL prodCommentManager/createProdComment
+	 */
+	@POST
+	@Path("/createProdComment")
+	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest);
+	@interface CreateProdComment{}
 }

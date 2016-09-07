@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
@@ -12,6 +13,7 @@ import com.ai.slp.product.dao.mapper.bo.ProdCommentCriteria;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentCriteria.Criteria;
 import com.ai.slp.product.dao.mapper.interfaces.ProdCommentMapper;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
+import com.ai.slp.product.util.SequenceUtil;
 
 @Component
 public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
@@ -26,6 +28,7 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 			example.setLimitStart((pageNo -1) * pageSize);
 			example.setLimitEnd(pageSize);
 		}
+		example.setOrderByClause("COMMENT_TIME desc");
 		Criteria criteria = example.createCriteria();
 		String tenantId = params.getTenantId();
 		if(!StringUtil.isBlank(tenantId)){
@@ -74,5 +77,21 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
 		return prodCommentMapper.countByExample(example);
 	}
+
+	@Override
+	public String createProdComment(ProdComment params) {
+		Long prodCommentId = SequenceUtil.createProdCommentDefId();
+		params.setCommentId(Long.toString(prodCommentId));
+		params.setCommentTime(DateUtil.getSysDate());
+		params.setState(CommonConstants.STATE_ACTIVE);
+		int count = prodCommentMapper.insert(params);
+		if(count > 0){
+			return params.getCommentId();
+		}else{
+			return null;
+		}
+	}
+	
+	
 
 }

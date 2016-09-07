@@ -15,6 +15,29 @@ public class PictureVO implements Serializable{
 	 * 图片名称
 	 */
 	private String picName;
+	
+	private String vfsId;
+	
+	/**
+	 * 序列号
+	 */
+	private Integer serialNumber;
+	
+	public String getVfsId() {
+		return vfsId;
+	}
+
+	public void setVfsId(String vfsId) {
+		this.vfsId = vfsId;
+	}
+
+	public Integer getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(Integer serialNumber) {
+		this.serialNumber = serialNumber;
+	}
 
 	public String getPicDir() {
 		return picDir;
