@@ -39,8 +39,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq productEditParam) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(productEditParam.getTenantId(),"");
-        CommonUtils.checkSupplierId(productEditParam.getSupplierId(),"");
+        CommonUtils.checkTenantId(productEditParam.getTenantId());
+        CommonUtils.checkSupplierId(productEditParam.getSupplierId());
         return productManagerBsuiSV.queryPageForEdit(productEditParam);
     }
 
@@ -56,8 +56,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam) throws BusinessException, SystemException {
-    	CommonUtils.checkTenantId(productRefuseParam.getTenantId(),"");
-        CommonUtils.checkSupplierId(productRefuseParam.getSupplierId(),"");
+    	CommonUtils.checkTenantId(productRefuseParam.getTenantId());
+        CommonUtils.checkSupplierId(productRefuseParam.getSupplierId());
     	return productManagerBsuiSV.queryProductRefuse(productRefuseParam);
     }
 
@@ -140,7 +140,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public PageInfoResponse<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) throws BusinessException, SystemException {
-    	CommonUtils.checkTenantId(productStorageSaleParam.getTenantId(),"");
+    	CommonUtils.checkTenantId(productStorageSaleParam.getTenantId());
         return productManagerBsuiSV.queryStorageProdByState(productStorageSaleParam);
     }
 
@@ -155,7 +155,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(query.getTenantId(),"");
+        CommonUtils.checkTenantId(query.getTenantId());
         productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
         //将商品添加至搜索引擎
         skuIndexManage.updateSKUIndex(query.getProductId());
@@ -172,7 +172,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public ProdNoKeyAttr queryNoKeyAttrOfProd(ProductInfoQuery query) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(query.getTenantId(),"");
+        CommonUtils.checkTenantId(query.getTenantId());
         return productBusiSV.queryNoKeyAttrForEdit(query.getTenantId(),query.getProductId());
     }
 
@@ -217,8 +217,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	 */
 	@Override
 	public PageInfoResponse<ProductEditUp> searchInSale(ProductQueryInfo queryInSale) throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(queryInSale.getTenantId(),"");
-        CommonUtils.checkSupplierId(queryInSale.getSupplierId(),"");
+		CommonUtils.checkTenantId(queryInSale.getTenantId());
+        CommonUtils.checkSupplierId(queryInSale.getSupplierId());
         return productManagerBsuiSV.queryInSale(queryInSale);
 	}
 
@@ -234,8 +234,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	@Override
 	public PageInfoResponse<ProductEditUp> searchAudit(ProductQueryInfo queryInfo)
 			throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(queryInfo.getTenantId(),"");
-        CommonUtils.checkSupplierId(queryInfo.getSupplierId(),"");
+		CommonUtils.checkTenantId(queryInfo.getTenantId());
+        CommonUtils.checkSupplierId(queryInfo.getSupplierId());
         return productManagerBsuiSV.queryPageForAudit(queryInfo);
 	}
 }
