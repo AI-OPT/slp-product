@@ -45,6 +45,10 @@ public final class ProductConstants {
              * 定时上架
              */
             public static final String TIMING_UP = "3";
+            /**
+             * 预售
+             */
+            public static final String PRE_SALE = "4";
         }
 
         public final class State{
@@ -113,6 +117,17 @@ public final class ProductConstants {
         public final class RechargeType{
             public static final String DIRECT = "D";
             public static final String CARD = "C";
+        }
+
+        public final class auditStatus{
+            /**
+             * 通过
+             */
+            public static final String PASS = "1";
+            /**
+             * 拒绝
+             */
+            public static final String REJECT = "0";
         }
     }
 
@@ -240,6 +255,20 @@ public final class ProductConstants {
              * 待指定
              */
             public static final String WAIT_SET = "-2";
+        }
+    }
+
+    public final class ProdStatusLog{
+        public final class PriorityNumber{
+            /*
+                优先
+             */
+            public static final short PRIORITY = 1;
+
+            /*
+                普通
+             */
+            public static final short USUAL = 0;
         }
     }
 

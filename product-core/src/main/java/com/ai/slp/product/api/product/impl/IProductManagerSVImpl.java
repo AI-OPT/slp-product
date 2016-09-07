@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class IProductManagerSVImpl implements IProductManagerSV {
     @Autowired
-    IProductManagerBusiSV productManagerBsuiSV;
+    IProductManagerBusiSV productManagerBusiSV;
     @Autowired
     IProductBusiSV productBusiSV;
     @Autowired
@@ -41,7 +41,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq productEditParam) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(productEditParam.getTenantId());
         CommonUtils.checkSupplierId(productEditParam.getSupplierId());
-        return productManagerBsuiSV.queryPageForEdit(productEditParam);
+        return productManagerBusiSV.queryPageForEdit(productEditParam);
     }
 
     /**
@@ -58,7 +58,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     public PageInfoResponse<ProductEditUp> queryProductRefuse(ProductEditQueryReq productRefuseParam) throws BusinessException, SystemException {
     	CommonUtils.checkTenantId(productRefuseParam.getTenantId());
         CommonUtils.checkSupplierId(productRefuseParam.getSupplierId());
-    	return productManagerBsuiSV.queryProductRefuse(productRefuseParam);
+    	return productManagerBusiSV.queryProductRefuse(productRefuseParam);
     }
 
     /**
@@ -76,7 +76,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public BaseResponse productCheck(ProductCheckParam productCheckParam) throws BusinessException, SystemException {
-        return null;
+        CommonUtils.checkTenantId(productCheckParam.getTenantId());
+        productManagerBusiSV.auditProduct(productCheckParam);
+        return CommonUtils.genSuccessResponse("OK");
     }
 
     /**
@@ -105,7 +107,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Override
     public OtherSetOfProduct queryOtherSetOfProduct(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(productInfoQuery.getTenantId());
-        return productManagerBsuiSV.queryOtherSetOfProd(
+        return productManagerBusiSV.queryOtherSetOfProd(
                 productInfoQuery.getTenantId(),productInfoQuery.getSupplierId(),productInfoQuery.getProductId());
     }
 
@@ -122,7 +124,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Override
     public PageInfoResponse<ProductStorageSale> queryStorageProdByState(ProductStorageSaleParam productStorageSaleParam) throws BusinessException, SystemException {
     	CommonUtils.checkTenantId(productStorageSaleParam.getTenantId());
-        return productManagerBsuiSV.queryStorageProdByState(productStorageSaleParam);
+        return productManagerBusiSV.queryStorageProdByState(productStorageSaleParam);
     }
 
     /**
@@ -167,7 +169,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Override
     public BaseResponse updateProduct(ProductInfoForUpdate product) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(product.getTenantId());
-        productManagerBsuiSV.updateProdEdit(product);
+        productManagerBusiSV.updateProdEdit(product);
         return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
     }
 
@@ -182,7 +184,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	@Override
 	public BaseResponse changeToInStore(ProductInfoQuery query) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(query.getTenantId());
-        productBusiSV.changeToInStore(
+        productBusiSV.changeSaleToStore(
                 query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
         return CommonUtils.genSuccessResponse("");
 	}
@@ -200,7 +202,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	public PageInfoResponse<ProductEditUp> searchInSale(ProductQueryInfo queryInSale) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(queryInSale.getTenantId());
         CommonUtils.checkSupplierId(queryInSale.getSupplierId());
-        return productManagerBsuiSV.queryInSale(queryInSale);
+        return productManagerBusiSV.queryInSale(queryInSale);
 	}
 
 	/**
@@ -217,6 +219,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(queryInfo.getTenantId());
         CommonUtils.checkSupplierId(queryInfo.getSupplierId());
-        return productManagerBsuiSV.queryPageForAudit(queryInfo);
+        return productManagerBusiSV.queryPageForAudit(queryInfo);
 	}
 }

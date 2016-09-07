@@ -376,11 +376,23 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
+        changeToInSale(product,operId);
+    }
+
+    /**
+     * 对销售商品进行上架处理
+     *
+     * @param product
+     * @param operId
+     */
+    @Override
+    public void changeToInSale(Product product, Long operId) {
+        String tenantId = product.getTenantId();
         //查询标准品是否为"可使用"状态
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getStandedProdId());
         if (standedProduct==null || !StandedProductConstants.STATUS_ACTIVE.equals(standedProduct.getState())){
             logger.warn("未找到指定的标准品或标准品状态为不可用,租户ID:{},商户ID:{},标准品ID:{}"
-                ,tenantId,supplierId,product.getStandedProdId());
+                    ,tenantId,product.getSupplierId(),product.getStandedProdId());
             throw new BusinessException("","未找到相关的商品信息或商品状态为不可用");
         }
         //若商品状态是"停用下架"或"售罄下架"
@@ -392,12 +404,13 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //若商品既不是"停用下架"和"售罄下架",也不是"仓库中",则不允许上架
         else if(!ProductConstants.Product.State.IN_STORE.equals(product.getState())){
             logger.warn("商品当前状态不允许上架,租户ID:{},商品标识:{},当前状态:{}",
-                    tenantId,prodId,product.getState());
+                    tenantId,product.getProdId(),product.getState());
             throw new BusinessException("","商品当前状态不允许上架");
         }
 
         //1.库存组不存在,或已废弃
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,supplierId,product.getStorageGroupId());
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(
+                tenantId,product.getSupplierId(),product.getStorageGroupId());
         if (storageGroup==null
                 || StorageConstants.StorageGroup.State.DISCARD.equals(storageGroup.getState())
                 || StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(storageGroup.getState())){
@@ -633,12 +646,12 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
 	@Override
-    public void changeToInStore(String tenantId, String supplierId, String prodId, Long operId) {
+    public void changeSaleToStore(String tenantId, String supplierId, String prodId, Long operId) {
         Product product = productAtomSV.selectByProductId(tenantId, supplierId, prodId);
         if (product == null) {
             throw new SystemException("", "未找到相关的商品信息,租户ID:" + tenantId + ",商品标识:" + prodId);
         }
-        //若商品部是在售,则直接返回
+        //若商品不是在售,则直接返回
         if (!ProductConstants.Product.State.IN_SALE.equals(product.getState()))
             return;
         //修改商品"state"为IN_STORE

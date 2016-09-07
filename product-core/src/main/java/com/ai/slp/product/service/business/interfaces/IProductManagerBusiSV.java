@@ -84,4 +84,10 @@ public interface IProductManagerBusiSV {
      * @return
      */
     public PageInfoResponse<ProductRouteGroupInfo> queryProdAndRouteGroup(RouteGroupQuery query);
+
+    /**
+     * 审核商品
+     * @param productCheckParam
+     */
+    public void auditProduct(ProductCheckParam productCheckParam);
 }

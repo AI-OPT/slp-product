@@ -81,4 +81,18 @@ public class ProdAttrAtomSVImpl implements IProdAttrAtomSV {
     public int countOfAttrValOfCat(String tenantId, String catId, String attrValDefId) {
         return prodAttrAttachMapper.countOfAttrValOfCat(tenantId,catId,attrValDefId);
     }
+
+    /**
+     * 根据标识进行商品属性更新
+     *
+     * @param prodAttr
+     * @return
+     */
+    @Override
+    public int updateByProdAttrId(ProdAttr prodAttr) {
+        if (prodAttr==null)
+            return 0;
+        prodAttr.setOperTime(DateUtils.currTimeStamp());
+        return prodAttrMapper.updateByPrimaryKey(prodAttr);
+    }
 }

@@ -16,7 +16,6 @@ import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.product.*;
-import com.ai.slp.product.dao.mapper.interfaces.product.ProdAttrMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
@@ -24,7 +23,6 @@ import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
-import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupKeyInfoRequest;
@@ -70,8 +68,6 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
     IProdAttrLogAtomSV prodAttrLogAtomSV;
     @Autowired
     IProductBusiSV productBusiSV;
-    @Autowired
-    ProdAttrMapper prodAttrMapper;
     @Autowired
     IProductStateLogAtomSV productStateLogAtomSV;
     @Autowired
@@ -184,6 +180,57 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         pageRespone.setPageCount(pageInfo.getPageCount());
         pageRespone.setResult(pageInfo.getResult());
         return pageRespone;
+    }
+
+    /**
+     * 审核商品
+     *
+     * @param productCheckParam
+     */
+    @Override
+    public void auditProduct(ProductCheckParam productCheckParam) {
+        ProductStateLog stateLog = new ProductStateLog();
+        BeanUtils.copyProperties(stateLog,productCheckParam);
+        stateLog.setPriorityNumber(ProductConstants.ProdStatusLog.PriorityNumber.USUAL);
+        Set<String> prodIdSet = new HashSet(productCheckParam.getProdIdList());
+        for (String prodId:prodIdSet){
+            Product product = productAtomSV.selectByProductId(productCheckParam.getTenantId(),prodId);
+            //若未找到对应商品或商品状态不是"待审核",则不处理
+            if (product==null || ProductConstants.Product.State.VERIFYING.equals(product.getState()))
+                continue;
+            //商品标识
+            stateLog.setProdId(prodId);
+
+            //如果是拒绝
+            if (ProductConstants.Product.auditStatus.REJECT.equals(productCheckParam.getState())){
+                product.setState(ProductConstants.Product.State.REJECT);
+                product.setOperId(productCheckParam.getOperId());
+                updateProductStatusLog(product,stateLog);
+                continue;
+            }
+
+            //为审核通过
+            //若为立即上架或预售,则进行上架处理
+            if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())
+                    || ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType())){
+                product.setState(ProductConstants.Product.State.IN_SALE);
+                productBusiSV.changeToInSale(product,productCheckParam.getOperId());
+            }else {
+                product.setState(ProductConstants.Product.State.IN_STORE);
+                product.setOperId(productCheckParam.getOperId());
+                updateProductStatusLog(product,stateLog);
+            }
+        }
+    }
+
+    private void updateProductStatusLog(Product product,ProductStateLog stateLog){
+        if (productAtomSV.updateById(product)>0){
+            ProductLog log = new ProductLog();
+            BeanUtils.copyProperties(log,product);
+            productLogAtomSV.install(log);
+            stateLog.setState(product.getState());
+            productStateLogAtomSV.insert(stateLog);
+        }
     }
 
     /**
@@ -437,9 +484,8 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                 //废弃原
                 prodAttr.setState(CommonConstants.STATE_INACTIVE);
                 prodAttr.setOperId(operId);
-                prodAttr.setOperTime(DateUtils.currTimeStamp());
                 //添加日志
-                if (prodAttrMapper.updateByPrimaryKey(prodAttr)>0){
+                if (prodAttrAtomSV.updateByProdAttrId(prodAttr)>0){
                     ProdAttrLog prodAttrLog = new ProdAttrLog();
                     BeanUtils.copyProperties(prodAttrLog,prodAttr);
                     prodAttrLogAtomSV.installLog(prodAttrLog);

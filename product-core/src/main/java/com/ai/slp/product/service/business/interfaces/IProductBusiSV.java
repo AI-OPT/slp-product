@@ -97,13 +97,21 @@ public interface IProductBusiSV {
      * @param prodId
      */
     public void changeToInSale(String tenantId,String supplierId, String prodId, Long opeId);
+
+    /**
+     * 对销售商品进行上架处理
+     *
+     * @param product
+     * @param operId
+     */
+    public void changeToInSale(Product product, Long operId);
     
     /**
      * 手动下架
      * @param tenantId
      * @param prodId
      */
-    public void changeToInStore(String tenantId, String supplierId,String prodId, Long operId);
+    public void changeSaleToStore(String tenantId, String supplierId, String prodId, Long operId);
     
     /**
      * 查询管理界面中的非关键属性

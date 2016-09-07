@@ -44,4 +44,11 @@ public interface IProdAttrAtomSV {
      * @return
      */
     public int countOfAttrValOfCat(String tenantId,  String catId, String attrValDefId);
+
+    /**
+     * 根据标识进行商品属性更新
+     * @param prodAttr
+     * @return
+     */
+    public int updateByProdAttrId(ProdAttr prodAttr);
 }
