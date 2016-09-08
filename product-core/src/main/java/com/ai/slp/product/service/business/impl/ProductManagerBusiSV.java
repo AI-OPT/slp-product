@@ -196,7 +196,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         for (String prodId:prodIdSet){
             Product product = productAtomSV.selectByProductId(productCheckParam.getTenantId(),prodId);
             //若未找到对应商品或商品状态不是"待审核",则不处理
-            if (product==null || ProductConstants.Product.State.VERIFYING.equals(product.getState()))
+            if (product==null || !ProductConstants.Product.State.VERIFYING.equals(product.getState()))
                 continue;
             //商品标识
             stateLog.setProdId(prodId);
