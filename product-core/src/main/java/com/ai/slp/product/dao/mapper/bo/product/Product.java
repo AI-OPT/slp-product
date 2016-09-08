@@ -63,6 +63,10 @@ public class Product {
 
     private String supplierId;
 
+    private Timestamp presaleBeginTime;
+
+    private Timestamp presaleEndTime;
+
     public String getProdId() {
         return prodId;
     }
@@ -301,5 +305,21 @@ public class Product {
 
     public void setSupplierId(String supplierId) {
         this.supplierId = supplierId == null ? null : supplierId.trim();
+    }
+
+    public Timestamp getPresaleBeginTime() {
+        return presaleBeginTime;
+    }
+
+    public void setPresaleBeginTime(Timestamp presaleBeginTime) {
+        this.presaleBeginTime = presaleBeginTime;
+    }
+
+    public Timestamp getPresaleEndTime() {
+        return presaleEndTime;
+    }
+
+    public void setPresaleEndTime(Timestamp presaleEndTime) {
+        this.presaleEndTime = presaleEndTime;
     }
 }
