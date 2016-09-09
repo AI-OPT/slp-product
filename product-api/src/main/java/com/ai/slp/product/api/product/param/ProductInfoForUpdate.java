@@ -80,6 +80,7 @@ public class ProductInfoForUpdate extends BaseInfo {
      * 1:审核通过后立即上架；
      * 2:审核通过后放入仓库;
      * 3:定时上架
+     * 4:预售上架
      */
     @NotBlank(message = "上架类型不能为空",groups = {IProductManagerSV.SaveProduct.class})
     private String upshelfType;
@@ -147,6 +148,16 @@ public class ProductInfoForUpdate extends BaseInfo {
      * 销售商品非关键属性
      */
     private Map<Long,List<ProdAttrValInfo>> noKeyAttrValMap;
+    /**
+     *
+     * 预售开始时间,上架类型为预售时,必填
+     */
+    private Timestamp presaleBeginTime;
+    /**
+     *
+     * 预售结束时间,上架类型为预售时,必填
+     */
+    private Timestamp presaleEndTime;
 
     public String getSupplierId() {
         return supplierId;
@@ -354,5 +365,21 @@ public class ProductInfoForUpdate extends BaseInfo {
 
     public void setNoKeyAttrValMap(Map<Long, List<ProdAttrValInfo>> noKeyAttrValMap) {
         this.noKeyAttrValMap = noKeyAttrValMap;
+    }
+
+    public Timestamp getPresaleBeginTime() {
+        return presaleBeginTime;
+    }
+
+    public void setPresaleBeginTime(Timestamp presaleBeginTime) {
+        this.presaleBeginTime = presaleBeginTime;
+    }
+
+    public Timestamp getPresaleEndTime() {
+        return presaleEndTime;
+    }
+
+    public void setPresaleEndTime(Timestamp presaleEndTime) {
+        this.presaleEndTime = presaleEndTime;
     }
 }

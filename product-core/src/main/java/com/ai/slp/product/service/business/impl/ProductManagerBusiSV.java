@@ -328,6 +328,12 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         else if (ProductConstants.Product.State.DISCARD.equals(product.getState())){
             throw new SystemException("","商品已废弃,不允许编辑更新.");
         }
+        //判断预售时间是否存在
+        if(ProductConstants.Product.UpShelfType.PRE_SALE.equals(productInfo.getUpshelfType())
+                &&(productInfo.getPresaleBeginTime()==null || productInfo.getPresaleEndTime()==null)){
+            logger.warn("预售时间不完整,租户ID:{},商品标识:{}",tenantId,productId);
+            throw new SystemException("","当前为预售类型,预售时间不能为空");
+        }
         Long operId = productInfo.getOperId();
         //更新商品非关键属性信息
         updateNoKeyAttr(tenantId,productId,productInfo.getNoKeyAttrValMap(),operId);
