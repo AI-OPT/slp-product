@@ -51,4 +51,15 @@ public interface IProdAudiencesAtomSV {
      */
     public List<ProdAudiences> queryByUserType(String tenantId, String prodId, String userType, boolean hasDiscard);
 
+    /**
+     * 确认商品下某类型用户是否为全部可见
+     *
+     * @param tenantId
+     * @param prodId
+     * @param userType
+     * @param hasDiscard
+     * @return
+     */
+    public ProdAudiences queryAllByUserType(String tenantId, String prodId, String userType, boolean hasDiscard);
+
 }

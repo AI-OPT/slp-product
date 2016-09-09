@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.product.param;
 
-import java.io.Serializable;
+import com.ai.opt.base.vo.BaseResponse;
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import java.util.Map;
  * Copyright (c) 2016 asiainfo.com <br>
  * @author liutong5
  */
-public class OtherSetOfProduct implements Serializable {
+public class OtherSetOfProduct extends BaseResponse {
     private static final long serialVersionUID = 1L;
 
 	/**

@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
@@ -101,5 +102,32 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
             criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         }
         return audiencesMapper.selectByExample(example);
+    }
+
+    /**
+     * 确认商品下某类型用户是否为全部可见
+     *
+     * @param tenantId
+     * @param prodId
+     * @param userType
+     * @param hasDiscard
+     * @return
+     */
+    @Override
+    public ProdAudiences queryAllByUserType(String tenantId, String prodId, String userType, boolean hasDiscard) {
+        if (StringUtils.isBlank(userType))
+            return null;
+        ProdAudiencesCriteria example = new ProdAudiencesCriteria();
+        example.setOrderByClause("OPER_TIME desc");
+        ProdAudiencesCriteria.Criteria criteria = example.createCriteria();
+        criteria.andTenantIdEqualTo(tenantId)
+                .andProdIdEqualTo(prodId)
+                .andUserTypeEqualTo(userType)
+                .andUserIdEqualTo(ProductConstants.ProdAudiences.userId.USER_TYPE);
+        if (!hasDiscard){
+            criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
+        }
+        List<ProdAudiences> audList = audiencesMapper.selectByExample(example);
+        return CollectionUtil.isEmpty(audList)?null:audList.get(0);
     }
 }

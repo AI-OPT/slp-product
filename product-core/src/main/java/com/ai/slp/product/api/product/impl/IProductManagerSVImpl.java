@@ -107,8 +107,10 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Override
     public OtherSetOfProduct queryOtherSetOfProduct(ProductInfoQuery productInfoQuery) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(productInfoQuery.getTenantId());
-        return productManagerBusiSV.queryOtherSetOfProd(
+        OtherSetOfProduct otherSet =  productManagerBusiSV.queryOtherSetOfProd(
                 productInfoQuery.getTenantId(),productInfoQuery.getSupplierId(),productInfoQuery.getProductId());
+        CommonUtils.addSuccessResHeader(otherSet,"OK");
+        return otherSet;
     }
 
     /**

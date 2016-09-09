@@ -381,9 +381,17 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
     }
 
     private Map<String,ProdAudiencesInfo> getAudiencesInfo(String tenantId,String prodId,String userType){
-        List<ProdAudiences> boList = prodAudiencesAtomSV.queryByUserType(
-                tenantId,prodId, userType,false);
         Map<String,ProdAudiencesInfo> audiencesMap = new HashMap<>();
+        ProdAudiences allAud = prodAudiencesAtomSV.queryAllByUserType(tenantId,prodId,userType,false);
+        if(allAud!=null){
+            ProdAudiencesInfo audiencesInfo = new ProdAudiencesInfo();
+            BeanUtils.copyProperties(audiencesInfo,allAud);
+            audiencesMap.put(ProductConstants.ProdAudiences.userId.USER_TYPE,audiencesInfo);
+            return audiencesMap;
+        }
+        List<ProdAudiences> boList = prodAudiencesAtomSV.queryByUserType(tenantId,prodId, userType,false);
+        if (CollectionUtil.isEmpty(boList))
+            return audiencesMap;
         IUcKeyInfoSV ucKeyInfoSV = DubboConsumerFactory.getService(IUcKeyInfoSV.class);
         for (ProdAudiences audiences:boList){
             ProdAudiencesInfo audiencesInfo = new ProdAudiencesInfo();
