@@ -2,7 +2,7 @@ package com.ai.slp.product.api.webfront.impl;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.paas.ipaas.search.vo.Results;
+import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.webfront.interfaces.IProductHomeSV;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
@@ -54,8 +54,8 @@ public class IProductHomeSVImpl implements IProductHomeSV {
         ProductSearchCriteria productSearchCriteria =
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).categoryIdIs(request.getProductCatId()).basicOrgIdIs(request.getBasicOrgIdIs()).build();
-        Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
-        List<Map<String,Object>> list = result.getSearchList();
+        Result<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
+        List<Map<String,Object>> list = result.getContents();
         String info = JSON.toJSONString(list);
         List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){});
         List<ProductHomeResponse> productList = new ArrayList<ProductHomeResponse>();
@@ -97,8 +97,8 @@ public class IProductHomeSVImpl implements IProductHomeSV {
         ProductSearchCriteria productSearchCriteria =
                 new ProductSearchCriteria.ProductSearchCriteriaBuilder(request.getAreaCode(),ProductHomeConstants.TYPENATION_WIDE,user)
                 .rechargeTypeNotIs(ProductHomeConstants.FILL_TYPE).tenantID(request.getTenantId()).addOrderBy(ProductHomeConstants.ORDER_SALE_NUM_NAME).maxSearchSize(ProductHomeConstants.MAX_SIZE).build();
-        Results<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
-        List<Map<String,Object>> list = result.getSearchList();
+        Result<Map<String, Object>>  result = productSearch.search(productSearchCriteria);
+        List<Map<String,Object>> list = result.getContents();
         String info = JSON.toJSONString(list);
         List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){});
         List<ProductHomeResponse> productList = new ArrayList<ProductHomeResponse>();

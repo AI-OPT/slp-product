@@ -6,7 +6,7 @@ dependencies {
     compile 'org.springframework:spring-tx:4.1.7.RELEASE'
     compile 'org.springframework:spring-jdbc:4.1.7.RELEASE'
 
-    compile 'com.ai.opt.sdk:opt-sdk:2.1-SNAPSHOT'
+    compile 'com.ai.opt.sdk:opt-sdk:2.2-SNAPSHOT'
     
     //搜索
     compile 'com.ai:ipaas-ses:0.2.6.1'

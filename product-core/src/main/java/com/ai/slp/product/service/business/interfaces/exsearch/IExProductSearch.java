@@ -1,13 +1,13 @@
 package com.ai.slp.product.service.business.interfaces.exsearch;
 
 
-import java.util.Map;
-
-import com.ai.paas.ipaas.search.vo.Results;
+import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.slp.product.exsearch.dto.ExProductSearchCriteria;
 
-public interface IExProductSearch {
-    Results<Map<String, Object>> search(ExProductSearchCriteria criteria);
+import java.util.Map;
 
-    Results<Map<String, Long>> searchCategory(ExProductSearchCriteria criteria);
+public interface IExProductSearch {
+    Result<Map<String, Object>> search(ExProductSearchCriteria criteria);
+
+    Result<Map<String, Long>> searchCategory(ExProductSearchCriteria criteria);
 }

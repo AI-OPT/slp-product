@@ -1,7 +1,7 @@
 package com.ai.slp.product.search.ses;
 
 import com.ai.opt.sdk.components.ses.SESClientFactory;
-import com.ai.paas.ipaas.search.service.ISearchClient;
+import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.slp.product.constants.SearchConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class ProductDataSESTread extends Thread{
     }
     @Override
     public void run() {
-    	searchClient.bulkInsertData(resultList);
+    	searchClient.bulkJsonInsert(resultList);
     	LOG.info("【"+Thread.currentThread().getName()+"】");
     } 
 }
