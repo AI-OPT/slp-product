@@ -23,6 +23,7 @@ import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupKeyInfoRequest;
@@ -72,6 +73,8 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
     IProductStateLogAtomSV productStateLogAtomSV;
     @Autowired
     IStorageGroupBusiSV storageGroupBusiSV;
+    @Autowired
+    ISKUIndexManage skuIndexManage;
     public static List<String> editStatus = new ArrayList<>();
     //	@Autowired
 //	ProductAttachMapper productAttachMapper;
@@ -214,7 +217,10 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())
                     || ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType())){
                 product.setState(ProductConstants.Product.State.IN_SALE);
-                productBusiSV.changeToInSale(product,productCheckParam.getOperId());
+                productBusiSV.changeToInSaleFromAudit(product,productCheckParam.getOperId());
+                //将商品添加至搜索引擎
+                if(ProductConstants.Product.State.IN_SALE.equals(product.getState()))
+                    skuIndexManage.updateSKUIndex(product.getProdId());
             }else {
                 product.setState(ProductConstants.Product.State.IN_STORE);
                 product.setOperId(productCheckParam.getOperId());

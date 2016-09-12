@@ -105,6 +105,14 @@ public interface IProductBusiSV {
      * @param operId
      */
     public void changeToInSale(Product product, Long operId);
+
+    /**
+     * 对审核通过的商品进行上架处理
+     *
+     * @param product
+     * @param operId
+     */
+    public void changeToInSaleFromAudit(Product product, Long operId);
     
     /**
      * 手动下架

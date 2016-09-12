@@ -440,6 +440,65 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     }
 
     /**
+     * 对审核通过的商品进行上架处理
+     *
+     * @param product
+     * @param operId
+     */
+    @Override
+    public void changeToInSaleFromAudit(Product product, Long operId) {
+        String tenantId = product.getTenantId();
+        //若商品状态不是"待审核",则不处理
+        if(!ProductConstants.Product.State.VERIFYING.equals(product.getState())){
+            logger.warn("The state of product is not verifying. productId:{},state:{}"
+                    ,product.getProdId(),product.getState());
+            return;
+        }
+        //若标准品不存在,或不是"可使用"状态,则直接转为下架
+        StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getStandedProdId());
+        if (standedProduct==null){
+            logger.warn("未找到指定的标准品或标准品状态为不可用,租户ID:{},商户ID:{},标准品ID:{}"
+                    ,tenantId,product.getSupplierId(),product.getStandedProdId());
+            throw new BusinessException("","未找到相关的商品信息");
+        }
+
+        //1.库存组不存在,或已废弃,不处理
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(
+                tenantId,product.getSupplierId(),product.getStorageGroupId());
+        if (storageGroup==null
+                || StorageConstants.StorageGroup.State.DISCARD.equals(storageGroup.getState())
+                || StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(storageGroup.getState())){
+            logger.warn("The storage group is null or discard.groupId:{},groupState:{}",
+                    product.getStorageGroupId(),storageGroup==null?null:storageGroup.getState());
+            throw new BusinessException("","未找到相关的库存组或库存组已废弃");
+        }
+        //查询当前库存组可用量
+        Long usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,storageGroup.getStorageGroupId());
+        //若已启用库存下的SKU库存存在未设置价格,则将商品设置为仓库中
+        //或标准品状态不是"可使用"状态
+        if (skuStorageAtomSV.countOfNoPrice(tenantId,storageGroup.getStorageGroupId())>0
+                ||!StandedProductConstants.STATUS_ACTIVE.equals(standedProduct.getState())){
+            logger.warn("The sku price of product is not full .productId:{}",product.getProdId());
+            product.setState(ProductConstants.Product.State.IN_STORE);
+        }
+        //库存组停用或当前库存可用为零,直接切换至"售罄下架"
+        else if (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())
+                ||StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())
+                ||usableNum==null || usableNum<=0){
+            changeToStop(storageGroup,product, operId);
+            return;
+        }else {
+            //进行上架处理
+            product.setState(ProductConstants.Product.State.IN_SALE);
+        }
+        if (operId!=null)
+            product.setOperId(operId);
+        product.setUpTime(DateUtils.currTimeStamp());
+        //添加日志
+        updateProdAndStatusLog(product);
+    }
+
+    /**
      * 查询管理界面中的非关键属性
      *
      * @param tenantId
