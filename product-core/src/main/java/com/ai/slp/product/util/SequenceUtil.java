@@ -40,7 +40,12 @@ public final class SequenceUtil {
     
     private static final String PROD_COMMENT$COMMENT_ID$SEQ = "PROD_COMMENT$COMMENT_ID$SEQ";
     private static final String PROD_COMMENT_PICTURE$PROD_COMMENT_PIC_ID$SEQ = "PROD_COMMENT_PICTURE$PROD_COMMENT_PIC_ID$SEQ";
-
+    private static final String PROD_COMMENT_REPLY$REPLY_ID$SEQ = "PROD_COMMENT_REPLY$REPLY_ID$SEQ";
+    
+    
+    public static Long prodCommentReplyDefId() {
+    	return SeqUtil.getNewId(PROD_COMMENT_REPLY$REPLY_ID$SEQ);
+    }
     public static Long createProdCommentDefId() {
         return SeqUtil.getNewId(PROD_COMMENT$COMMENT_ID$SEQ);
     }
