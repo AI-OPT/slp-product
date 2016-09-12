@@ -15,7 +15,7 @@ import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 
-@Service
+@Service(validation = "true")
 @Component
 public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 
