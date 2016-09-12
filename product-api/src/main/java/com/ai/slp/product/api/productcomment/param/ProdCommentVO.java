@@ -15,7 +15,6 @@ public class ProdCommentVO implements Serializable{
 	/**
 	 * 子订单id
 	 */
-	@NotBlank(message = "subOrderId不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
 	private String subOrderId;
 	
 	/**
@@ -23,12 +22,6 @@ public class ProdCommentVO implements Serializable{
 	 */
 	@NotBlank(message = "skuId不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
 	private String skuId;
-
-	/**
-	 * 评价人
-	 */
-	@NotBlank(message = "userId不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
-	private String userId;
 
 	/**
 	 * 评价内容
@@ -73,14 +66,6 @@ public class ProdCommentVO implements Serializable{
 
 	public void setSkuId(String skuId) {
 		this.skuId = skuId;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 
 	public String getCommentBody() {

@@ -12,8 +12,17 @@ public class ProdCommentCreateRequest extends BaseInfo {
 	
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * 订单ID
+	 */
 	@NotBlank(message = "orderId不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
 	private String orderId;
+	
+	/**
+	 * 评价人
+	 */
+	@NotBlank(message = "userId不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
+	private String userId;
 	
 	@NotEmpty(message = "commentList不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
 	private List<ProdCommentVO> commentList;
@@ -24,6 +33,14 @@ public class ProdCommentCreateRequest extends BaseInfo {
 
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
+	}
+	
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public List<ProdCommentVO> getCommentList() {

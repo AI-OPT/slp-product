@@ -73,14 +73,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			if(StringUtils.isBlank(skuId)){
 				throw new BusinessException("skuId 不能为空");
 			}
-			String subOrderId = prodCommentVO.getSubOrderId();
-			if(StringUtils.isBlank(subOrderId)){
-				throw new BusinessException("subOrderId 不能为空");
-			}
-			String userId = prodCommentVO.getUserId();
-			if(StringUtils.isBlank(userId)){
-				throw new BusinessException("userId 不能为空");
-			}
 		}
 	}
 
