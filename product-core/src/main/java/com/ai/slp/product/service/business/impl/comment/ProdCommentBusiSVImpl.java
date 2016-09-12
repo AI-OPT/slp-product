@@ -140,12 +140,25 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	@Override
 	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) {
 		BaseResponse baseResponse = new BaseResponse();
+		String tenantId = prodCommentCreateRequest.getTenantId();
 		List<ProdCommentVO> commentList = prodCommentCreateRequest.getCommentList();
 		if(commentList != null && commentList.size() >0){
 			for(ProdCommentVO prodCommentVO : commentList){
-				//添加评论
 				ProdComment params = new ProdComment();
 				BeanUtils.copyProperties(params, prodCommentVO);
+				String skuId = prodCommentVO.getSkuId();
+				ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, skuId);
+				if(prodSku == null){
+					continue;
+				}
+				String prodId = prodSku.getProdId();
+				Product product = productAtomSV.selectByProductId(tenantId, prodId);
+				if(product == null){
+					continue;
+				}
+				params.setProdId(prodId);
+				params.setStandedProdId(product.getStandedProdId());
+				//添加评论
 				params.setTenantId(prodCommentCreateRequest.getTenantId());
 				params.setOrderId(prodCommentCreateRequest.getOrderId());
 				List<PictureVO> pictureList = prodCommentVO.getPictureList();
