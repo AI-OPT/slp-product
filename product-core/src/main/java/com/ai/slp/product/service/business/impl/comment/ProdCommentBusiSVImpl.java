@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
@@ -149,12 +150,12 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 				String skuId = prodCommentVO.getSkuId();
 				ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, skuId);
 				if(prodSku == null){
-					continue;
+					throw new BusinessException("skuId 数据错误，找不到对应的销售商品");
 				}
 				String prodId = prodSku.getProdId();
 				Product product = productAtomSV.selectByProductId(tenantId, prodId);
 				if(product == null){
-					continue;
+					throw new BusinessException("skuId 数据错误，找不到对应的标准商品");
 				}
 				params.setProdId(prodId);
 				params.setStandedProdId(product.getStandedProdId());
