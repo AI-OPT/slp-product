@@ -11,7 +11,9 @@ import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentCriteria;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentCriteria.Criteria;
+import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
 import com.ai.slp.product.dao.mapper.interfaces.ProdCommentMapper;
+import com.ai.slp.product.dao.mapper.interfaces.ProdCommentReplyMapper;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.util.SequenceUtil;
 
@@ -20,6 +22,8 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 
 	@Autowired
 	ProdCommentMapper prodCommentMapper;
+	@Autowired
+	ProdCommentReplyMapper prodCommentReplyMapper;
 	
 	@Override
 	public List<ProdComment> queryPageList(ProdComment params, Integer pageSize, Integer pageNo) {
@@ -91,7 +95,18 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 			return null;
 		}
 	}
-	
-	
+
+	@Override
+	public String prodCommentReply(ProdCommentReply commentReply) {
+		Long ReplyId = SequenceUtil.prodCommentReplyDefId();
+		commentReply.setReplyId(Long.toString(ReplyId));
+		commentReply.setReplyTime(DateUtil.getSysDate());
+		int count = prodCommentReplyMapper.insert(commentReply);
+		if (count > 0) {
+			return commentReply.getReplyId();
+		}else {
+			return null;
+		}
+	}
 
 }

@@ -22,9 +22,12 @@ import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
+import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCommentConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentPicture;
+import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentPictureAtomSV;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
@@ -146,6 +149,31 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 			baseResponse.setResponseHeader(responseHeader );
 		}else{
 			ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.NO_DATA_OR_CACAE_ERROR,"无数据");
+			baseResponse.setResponseHeader(responseHeader );
+		}
+		return baseResponse;
+	}
+
+	@Override
+	public BaseResponse replyProdComment(ProdReplyComment replyComment) {
+		BaseResponse baseResponse = new BaseResponse();
+		//查询是否有评论   有评论才可以回复评论
+		ProdComment params = new ProdComment();
+		params.setTenantId(replyComment.getTenantId());
+		params.setSupplierId(replyComment.getSupplierId());
+		params.setCommentId(replyComment.getCommentId());
+		params.setState(CommonConstants.STATE_ACTIVE);
+		Integer queryCountByParams = prodCommentAtomSV.queryCountByParams(params);
+		//判断评论条数
+		if (queryCountByParams>0) {
+			//对评论进行回复
+			ProdCommentReply commentReply = new ProdCommentReply();
+			commentReply.setCommentId(replyComment.getCommentId());
+			String replyId = prodCommentAtomSV.prodCommentReply(commentReply);
+			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
+			baseResponse.setResponseHeader(responseHeader );
+		}else{
+			ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.NO_DATA_OR_CACAE_ERROR,"没有评论");
 			baseResponse.setResponseHeader(responseHeader );
 		}
 		return baseResponse;

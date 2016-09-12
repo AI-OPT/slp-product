@@ -13,6 +13,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
+import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 
 /**
  * 商品评价
@@ -52,4 +53,19 @@ public interface IProdCommentManagerSV {
 	@Path("/createProdComment")
 	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) throws BusinessException, SystemException;;
 	@interface CreateProdComment{}
+	
+	/**
+	 * 回复商品评价
+	 * @param ProdReplyComment
+	 * @return
+	 * @author jiawen
+	 * @ApiDocMethod
+	 * @ApiCode PROD_COMM_0004
+	 * @RestRelativeURL prodCommentManager/replyComment
+	 */
+	@POST
+	@Path("replyComment")
+	public BaseResponse replyComment(ProdReplyComment replyComment) throws BusinessException, SystemException;;
+	@interface ReplyComment{}
+	
 }

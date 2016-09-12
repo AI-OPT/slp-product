@@ -11,6 +11,7 @@ import com.ai.slp.product.api.productcomment.interfaces.IProdCommentManagerSV;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
+import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -32,6 +33,13 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(prodCommentCreateRequest.getTenantId());
 		return prodCommentBusiSV.createProdComment(prodCommentCreateRequest);
+	}
+
+	@Override
+	public BaseResponse replyComment(ProdReplyComment replyComment) throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(replyComment.getTenantId());
+		CommonUtils.checkSupplierId(replyComment.getSupplierId());
+		return prodCommentBusiSV.replyProdComment(replyComment);
 	}
 
 }

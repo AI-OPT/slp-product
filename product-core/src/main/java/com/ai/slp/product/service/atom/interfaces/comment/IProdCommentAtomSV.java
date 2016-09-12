@@ -3,6 +3,8 @@ package com.ai.slp.product.service.atom.interfaces.comment;
 import java.util.List;
 
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
+import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
+
 
 public interface IProdCommentAtomSV {
 	
@@ -31,5 +33,16 @@ public interface IProdCommentAtomSV {
 	 * @RestRelativeURL
 	 */
 	public String createProdComment(ProdComment params);
+	
+	/**
+	 * 商品评论回复
+	 * @param params
+	 * @return
+	 * @author jiawen
+	 * @ApiDocMethod
+	 * @ApiCode
+	 * @RestRelativeURL
+	 */
+	public String prodCommentReply(ProdCommentReply CommentReply);
 
 }
