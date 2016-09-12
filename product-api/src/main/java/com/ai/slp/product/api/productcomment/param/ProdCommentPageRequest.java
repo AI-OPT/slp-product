@@ -1,5 +1,7 @@
 package com.ai.slp.product.api.productcomment.param;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.ai.opt.base.vo.BaseInfo;
@@ -20,10 +22,10 @@ public class ProdCommentPageRequest extends BaseInfo {
 	@NotBlank(message = "skuId不能为空",groups = { IProdCommentManagerSV.QueryPageInfoBySku.class})
 	private String skuId;
 	
-	@NotBlank(message = "pageSize不能为空",groups = { IProdCommentManagerSV.QueryPageInfoBySku.class})
+	@NotNull(message = "pageSize不能为空",groups = { IProdCommentManagerSV.QueryPageInfoBySku.class})
 	private Integer pageSize;
 	
-	@NotBlank(message = "PageNo不能为空",groups = { IProdCommentManagerSV.QueryPageInfoBySku.class})
+	@NotNull(message = "PageNo不能为空",groups = { IProdCommentManagerSV.QueryPageInfoBySku.class})
 	private Integer PageNo;
 	
 	public String getSkuId() {

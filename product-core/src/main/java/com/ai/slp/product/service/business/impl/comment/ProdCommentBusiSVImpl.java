@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
@@ -28,8 +29,12 @@ import com.ai.slp.product.constants.ProductCommentConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentPicture;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentPictureAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
 
 @Service
@@ -39,14 +44,34 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	@Autowired
 	IProdCommentAtomSV prodCommentAtomSV;
 	@Autowired
+	IProdSkuAtomSV prodSkuAtomSV;
+	@Autowired
+	IProductAtomSV productAtomSV;
+	@Autowired
 	IProdCommentPictureAtomSV prodCommentPictureAtomSV;
 	
 	@Override
 	public PageInfoResponse<ProdCommentPageResponse> queryPageBySku(ProdCommentPageRequest prodCommentPageRequest) {
 		PageInfoResponse<ProdCommentPageResponse> result = new PageInfoResponse<ProdCommentPageResponse>();
 		//查询评论信息
+		String tenantId = prodCommentPageRequest.getTenantId();
+		ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, prodCommentPageRequest.getSkuId());
+		if(prodSku == null){
+			result.setCount(0);
+			result.setResult(null);
+			return result;
+		}
+		String prodId = prodSku.getProdId();
+		Product product = productAtomSV.selectByProductId(tenantId, prodId);
+		if(product == null){
+			result.setCount(0);
+			result.setResult(null);
+			return result;
+		}
 		ProdComment params = new ProdComment();
 		BeanUtils.copyProperties(params, prodCommentPageRequest);
+		params.setSkuId(null);
+		params.setStandedProdId(product.getStandedProdId());
 		Integer pageSize = prodCommentPageRequest.getPageSize();
 		Integer pageNo = prodCommentPageRequest.getPageNo();
 		List<ProdComment> queryPageList = prodCommentAtomSV.queryPageList(params, pageSize, pageNo);
@@ -57,14 +82,15 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		if(queryPageList == null || queryPageList.size() == 0){
 			result.setCount(0);
 			result.setResult(null);
+			return result;
 		}else{
 			//查询条数
 			Integer count = prodCommentAtomSV.queryCountByParams(params);
 			result.setCount(count);
 			List<ProdCommentPageResponse> prodCommentList = getProdCommentResponseList(queryPageList);
 			result.setResult(prodCommentList);
+			return result;
 		}
-		return result;
 	}
 
 	/**
@@ -118,12 +144,25 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	@Override
 	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) {
 		BaseResponse baseResponse = new BaseResponse();
+		String tenantId = prodCommentCreateRequest.getTenantId();
 		List<ProdCommentVO> commentList = prodCommentCreateRequest.getCommentList();
 		if(commentList != null && commentList.size() >0){
 			for(ProdCommentVO prodCommentVO : commentList){
-				//添加评论
 				ProdComment params = new ProdComment();
 				BeanUtils.copyProperties(params, prodCommentVO);
+				String skuId = prodCommentVO.getSkuId();
+				ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, skuId);
+				if(prodSku == null){
+					throw new BusinessException("skuId 数据错误，找不到对应的销售商品");
+				}
+				String prodId = prodSku.getProdId();
+				Product product = productAtomSV.selectByProductId(tenantId, prodId);
+				if(product == null){
+					throw new BusinessException("skuId 数据错误，找不到对应的标准商品");
+				}
+				params.setProdId(prodId);
+				params.setStandedProdId(product.getStandedProdId());
+				//添加评论
 				params.setTenantId(prodCommentCreateRequest.getTenantId());
 				params.setOrderId(prodCommentCreateRequest.getOrderId());
 				List<PictureVO> pictureList = prodCommentVO.getPictureList();

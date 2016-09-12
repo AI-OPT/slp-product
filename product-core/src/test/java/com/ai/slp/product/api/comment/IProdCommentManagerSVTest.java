@@ -28,6 +28,7 @@ public class IProdCommentManagerSVTest {
 	public void createProdCommentTest(){
 		ProdCommentCreateRequest prodCommentCreateRequest = new ProdCommentCreateRequest();
 		prodCommentCreateRequest.setOrderId("0001");
+		prodCommentCreateRequest.setUserId("003");
 		prodCommentCreateRequest.setTenantId("changhong");
 		List<ProdCommentVO> commentList=new LinkedList<ProdCommentVO>();
 		ProdCommentVO prodComment = new ProdCommentVO();
@@ -37,7 +38,6 @@ public class IProdCommentManagerSVTest {
 		prodComment.setShopScoreWl(3L);
 		prodComment.setSkuId("002");
 		prodComment.setSubOrderId("00001");
-		prodComment.setUserId("003");
 		List<PictureVO> pictureList=new LinkedList<PictureVO>();
 		PictureVO pictureVO=new PictureVO();
 		pictureVO.setPicDir("test.image.01");
@@ -57,7 +57,7 @@ public class IProdCommentManagerSVTest {
 		ProdCommentPageRequest prodCommentPageRequest = new ProdCommentPageRequest();
 		prodCommentPageRequest.setPageNo(1);
 		prodCommentPageRequest.setPageSize(5);
-		prodCommentPageRequest.setSkuId("002");
+		prodCommentPageRequest.setSkuId("0000000000000153");
 		prodCommentPageRequest.setTenantId("changhong");
 		prodCommentPageRequest.setShopScoreMs(1L);
 		PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku = prodCommentManagerSV.queryPageInfoBySku(prodCommentPageRequest );

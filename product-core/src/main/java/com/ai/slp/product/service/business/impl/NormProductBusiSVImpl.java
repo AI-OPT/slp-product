@@ -207,7 +207,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		 * 总共有6种状态变化, 1.不允许变更为废弃状态;2.已废弃标准品不允许变更状态;3.可用变为不可用,需要检查.
 		 */
 		// 状态变更
-		if (normProdct.getState().equals(standedProduct.getState())) {
+		if (!standedProduct.getState().equals(normProdct.getState())) {
 			// 变更为废弃
 			if (StandedProductConstants.STATUS_DISCARD.equals(normProdct.getState()))
 				throw new BusinessException("", "不允许变更为[废弃]状态,请使用废弃接口");
@@ -246,11 +246,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		updateStoGroupInfo(productInfoRequest);
 		// 更新标准品及属性
 		int updateCount = updateNormProd(productInfoRequest);
+		// 更新销售品
 		if(updateCount>0){
 			Product product = new Product();
-			BeanUtils.copyProperties(product, productInfoRequest);
 			product.setStandedProdId(productInfoRequest.getProductId());
 			product.setProdName(productInfoRequest.getProductName());
+			product.setProductType(productInfoRequest.getProductType());
 			productAtomSV.updateByStandedProdId(product);
 		}
 		return updateCount;
