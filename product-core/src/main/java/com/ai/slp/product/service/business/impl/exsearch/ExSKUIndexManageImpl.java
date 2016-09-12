@@ -42,7 +42,6 @@ public class ExSKUIndexManageImpl implements IExSKUIndexManage {
             for (SKUInfo skuInfo : skuInfoList) {
                 string.add(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(skuInfo));
             }
-
             SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(string);
             return true;
         } catch (Exception e) {
@@ -67,7 +66,6 @@ public class ExSKUIndexManageImpl implements IExSKUIndexManage {
         } catch (Exception e) {
             logger.error("Failed to delete sku info", e);
         }
-
         return false;
     }
 
@@ -86,7 +84,6 @@ public class ExSKUIndexManageImpl implements IExSKUIndexManage {
         } catch (Exception e) {
             logger.error("Failed to delete sku info", e);
         }
-
         return false;
     }
 }
