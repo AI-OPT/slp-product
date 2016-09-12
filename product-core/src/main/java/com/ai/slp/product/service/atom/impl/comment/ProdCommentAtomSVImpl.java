@@ -45,8 +45,12 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 			}
 		}
 		String skuId = params.getSkuId();
-		if(!StringUtil.isBlank(skuId)){
+		if (!StringUtil.isBlank(skuId)) {
 			criteria.andSkuIdEqualTo(skuId);
+		}
+		String standedProdId = params.getStandedProdId();
+		if(!StringUtil.isBlank(standedProdId)){
+			criteria.andStandedProdIdEqualTo(standedProdId);
 		}
 		criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
 		return prodCommentMapper.selectByExample(example);
@@ -71,8 +75,12 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 			}
 		}
 		String skuId = params.getSkuId();
-		if(!StringUtil.isBlank(skuId)){
+		if (!StringUtil.isBlank(skuId)) {
 			criteria.andSkuIdEqualTo(skuId);
+		}
+		String standedProdId = params.getStandedProdId();
+		if(!StringUtil.isBlank(standedProdId)){
+			criteria.andStandedProdIdEqualTo(standedProdId);
 		}
 		criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
 		return prodCommentMapper.countByExample(example);

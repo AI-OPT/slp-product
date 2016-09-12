@@ -27,7 +27,7 @@ import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 public interface IProdCommentManagerSV {
 	
 	/**
-	 * 查询sku商品下的商品评论
+	 * 查询sku所属标准品下的商品评论
 	 * @param prodCommentPageRequest
 	 * @return
 	 * @author jiaxs
