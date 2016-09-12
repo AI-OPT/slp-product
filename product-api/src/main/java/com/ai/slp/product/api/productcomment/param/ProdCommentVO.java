@@ -3,6 +3,8 @@ package com.ai.slp.product.api.productcomment.param;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.ai.slp.product.api.productcomment.interfaces.IProdCommentManagerSV;
@@ -37,19 +39,19 @@ public class ProdCommentVO implements Serializable{
 	/**
 	 * 商品描述相符评分
 	 */
-	@NotBlank(message = "shopScoreMs不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
+	@NotNull(message = "shopScoreMs不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
 	private Long shopScoreMs;
 
 	/**
 	 * 卖家服务态度评分
 	 */
-	@NotBlank(message = "shopScoreWl不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
+	@NotNull(message = "shopScoreWl不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
 	private Long shopScoreWl;
 
 	/**
 	 * 物流发货速度评分
 	 */
-	@NotBlank(message = "shopScoreFw不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
+	@NotNull(message = "shopScoreFw不能为空",groups = { IProdCommentManagerSV.CreateProdComment.class})
 	private Long shopScoreFw;
 	
 	/**
