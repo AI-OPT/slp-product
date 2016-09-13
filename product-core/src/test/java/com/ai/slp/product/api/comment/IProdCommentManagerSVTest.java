@@ -13,6 +13,8 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.slp.product.api.productcomment.interfaces.IProdCommentManagerSV;
+import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
+import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
@@ -61,6 +63,17 @@ public class IProdCommentManagerSVTest {
 		prodCommentPageRequest.setTenantId("changhong");
 		prodCommentPageRequest.setShopScoreMs(1L);
 		PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku = prodCommentManagerSV.queryPageInfoBySku(prodCommentPageRequest );
+		System.out.println(JSonUtil.toJSon(queryPageInfoBySku));
+	}
+	
+	@Test
+	public void queryPageInfoTest(){
+		CommentPageRequest commentPageRequest = new CommentPageRequest();
+		commentPageRequest.setPageNo(1);
+		commentPageRequest.setPageSize(5);
+		commentPageRequest.setTenantId("changhong");
+		commentPageRequest.setShopScoreMs(1L);
+		PageInfoResponse<CommentPageResponse> queryPageInfoBySku = prodCommentManagerSV.queryPageInfo(commentPageRequest);
 		System.out.println(JSonUtil.toJSon(queryPageInfoBySku));
 	}
 

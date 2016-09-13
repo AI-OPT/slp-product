@@ -11,10 +11,13 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcomment.interfaces.IProdCommentManagerSV;
+import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
+import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
+import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
 import com.ai.slp.product.util.CommonUtils;
@@ -81,6 +84,20 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				throw new BusinessException("skuId 不能为空");
 			}
 		}
+	}
+
+	@Override
+	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest)
+			throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(commentPageRequest.getTenantId());
+		return prodCommentBusiSV.queryPageInfo(commentPageRequest);
+	}
+
+	@Override
+	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest)
+			throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(updateCommentStateRequest.getTenantId());
+		return prodCommentBusiSV.updateCommentState(updateCommentStateRequest);
 	}
 
 }
