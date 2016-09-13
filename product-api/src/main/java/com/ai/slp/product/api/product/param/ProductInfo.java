@@ -1,10 +1,10 @@
 package com.ai.slp.product.api.product.param;
 
-import com.ai.opt.base.vo.BaseResponse;
-
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Set;
+
+import com.ai.opt.base.vo.BaseResponse;
 
 /**
  * 商城商品详情中对象<br>
@@ -117,11 +117,18 @@ public class ProductInfo extends BaseResponse {
      */
     private Map<Long,Set<Long>> attrAndValueIds;
     /**
-     *是否可开发票 
-     * @return
+     *是否可开发票
      */
     private String isInvoice;
-    
+    /**
+     * 预售开始时间
+     */
+    private Timestamp presaleBeginTime;
+    /**
+     * 预售结束时间
+     */
+    private Timestamp presaleEndTime;
+
     public String getIsInvoice() {
 		return isInvoice;
 	}
@@ -328,5 +335,21 @@ public class ProductInfo extends BaseResponse {
 
     public void setAttrAndValueIds(Map<Long, Set<Long>> attrAndValueIds) {
         this.attrAndValueIds = attrAndValueIds;
+    }
+
+    public Timestamp getPresaleBeginTime() {
+        return presaleBeginTime;
+    }
+
+    public void setPresaleBeginTime(Timestamp presaleBeginTime) {
+        this.presaleBeginTime = presaleBeginTime;
+    }
+
+    public Timestamp getPresaleEndTime() {
+        return presaleEndTime;
+    }
+
+    public void setPresaleEndTime(Timestamp presaleEndTime) {
+        this.presaleEndTime = presaleEndTime;
     }
 }
