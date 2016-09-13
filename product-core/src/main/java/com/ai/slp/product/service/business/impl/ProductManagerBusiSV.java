@@ -1,5 +1,13 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.util.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
@@ -28,13 +36,6 @@ import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupKeyInfoRequest;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupUserInfoResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 /**
  * Created by jackieliu on 16/6/6.
@@ -191,11 +192,12 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
      * @param productCheckParam
      */
     @Override
-    public void auditProduct(ProductCheckParam productCheckParam) {
+    public List<String> auditProduct(ProductCheckParam productCheckParam) {
         ProductStateLog stateLog = new ProductStateLog();
         BeanUtils.copyProperties(stateLog,productCheckParam);
         stateLog.setPriorityNumber(ProductConstants.ProdStatusLog.PriorityNumber.USUAL);
         Set<String> prodIdSet = new HashSet(productCheckParam.getProdIdList());
+        List<String> skuIndexList = new ArrayList<>();
         for (String prodId:prodIdSet){
             Product product = productAtomSV.selectByProductId(productCheckParam.getTenantId(),prodId);
             //若未找到对应商品或商品状态不是"待审核",则不处理
@@ -216,17 +218,17 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             //若为立即上架或预售,则进行上架处理
             if (ProductConstants.Product.UpShelfType.NOW.equals(product.getUpshelfType())
                     || ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType())){
-                product.setState(ProductConstants.Product.State.IN_SALE);
                 productBusiSV.changeToInSaleFromAudit(product,productCheckParam.getOperId());
                 //将商品添加至搜索引擎
                 if(ProductConstants.Product.State.IN_SALE.equals(product.getState()))
-                    skuIndexManage.updateSKUIndex(product.getProdId());
+                    skuIndexList.add(product.getProdId());
             }else {
                 product.setState(ProductConstants.Product.State.IN_STORE);
                 product.setOperId(productCheckParam.getOperId());
                 updateProductStatusLog(product,stateLog);
             }
         }
+        return skuIndexList;
     }
 
     private void updateProductStatusLog(Product product,ProductStateLog stateLog){

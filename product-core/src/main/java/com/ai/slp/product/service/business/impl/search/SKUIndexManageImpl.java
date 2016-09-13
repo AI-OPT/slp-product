@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.constants.SearchConstants;
@@ -39,7 +40,8 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
     public boolean updateSKUIndex(String productId) {
         try {
             List<SKUInfo> skuInfoList = iskuService.getSKUInfoByProductId(productId);
-            SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+            if (!CollectionUtil.isEmpty(skuInfoList))
+                SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
             return true;
         } catch (Exception e) {
             logger.error("Failed to update sku info", e);

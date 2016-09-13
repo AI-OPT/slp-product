@@ -1,5 +1,10 @@
 package com.ai.slp.product.api.product.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
@@ -11,8 +16,6 @@ import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by jackieliu on 16/6/6.
@@ -77,7 +80,10 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Override
     public BaseResponse productCheck(ProductCheckParam productCheckParam) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(productCheckParam.getTenantId());
-        productManagerBusiSV.auditProduct(productCheckParam);
+        List<String> prodIndexList = productManagerBusiSV.auditProduct(productCheckParam);
+        for (String prodId:prodIndexList){
+            skuIndexManage.updateSKUIndex(prodId);
+        }
         return CommonUtils.genSuccessResponse("OK");
     }
 

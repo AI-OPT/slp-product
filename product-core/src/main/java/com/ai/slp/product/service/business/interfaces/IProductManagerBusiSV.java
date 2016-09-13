@@ -1,5 +1,7 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
 
@@ -88,6 +90,7 @@ public interface IProductManagerBusiSV {
     /**
      * 审核商品
      * @param productCheckParam
+     * @return 待添加搜索中的商品ID集合
      */
-    public void auditProduct(ProductCheckParam productCheckParam);
+    public List<String> auditProduct(ProductCheckParam productCheckParam);
 }

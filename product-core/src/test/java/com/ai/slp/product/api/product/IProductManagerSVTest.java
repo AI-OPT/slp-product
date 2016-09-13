@@ -1,12 +1,5 @@
 package com.ai.slp.product.api.product;
 
-import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
-import com.ai.slp.product.api.product.param.*;
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +8,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
+import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.constants.CommonTestConstants;
+import com.google.gson.Gson;
 
 /**
  * Created by jackieliu on 16/6/22.
@@ -118,6 +119,22 @@ public class IProductManagerSVTest {
     	Gson gson = new Gson();
     	System.out.println(gson.toJson(inSale));
     	
+    }
+
+    /**
+     * 对商品进行审核
+     */
+    @Test
+    public void productCheck(){
+        ProductCheckParam checkParam = new ProductCheckParam();
+        checkParam.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        checkParam.setState("1");
+        checkParam.setOperId(441l);
+        List<String> prodIdList = new ArrayList<>();
+        prodIdList.add("0000000000000178");
+        checkParam.setProdIdList(prodIdList);
+        BaseResponse response = productManagerSV.productCheck(checkParam);
+        System.out.println(response.getResponseHeader().getIsSuccess());
     }
     
 }
