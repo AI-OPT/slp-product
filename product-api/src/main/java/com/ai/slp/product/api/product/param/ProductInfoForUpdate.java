@@ -1,14 +1,16 @@
 package com.ai.slp.product.api.product.param;
 
-import com.ai.opt.base.vo.BaseInfo;
-import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
+
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.ai.opt.base.vo.BaseInfo;
+import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 
 /**
  * 商城商品更新信息<br>
@@ -73,7 +75,6 @@ public class ProductInfoForUpdate extends BaseInfo {
      * 是否允许平台代销，必填<br>
      * Y:是；N:否
      */
-    @NotBlank(message = "是否允许平台代销不能为空",groups = {IProductManagerSV.SaveProduct.class})
     private String isReplaceSell;
     /**
      * 上架类型，必填<br>
@@ -94,15 +95,17 @@ public class ProductInfoForUpdate extends BaseInfo {
     @NotNull(message = "操作人ID不能为空",groups = {IProductManagerSV.SaveProduct.class})
     private Long operId;
     /**
+     * 是否开发票
+     */
+    private String isInvoice;
+    /**
      * 充值类型，必填
      */
-    @NotBlank(message = "充值类型不能为空",groups = {IProductManagerSV.SaveProduct.class})
     private String rechargeType;
     /**
      * 运营商，必填
      * 
      */
-    @NotBlank(message = "运营商不能为空",groups = {IProductManagerSV.SaveProduct.class})
     private String basicOrgId;
     /**
      * 个人受众是否可见，必填<br>
@@ -381,5 +384,13 @@ public class ProductInfoForUpdate extends BaseInfo {
 
     public void setPresaleEndTime(Timestamp presaleEndTime) {
         this.presaleEndTime = presaleEndTime;
+    }
+
+    public String getIsInvoice() {
+        return isInvoice;
+    }
+
+    public void setIsInvoice(String isInvoice) {
+        this.isInvoice = isInvoice;
     }
 }
