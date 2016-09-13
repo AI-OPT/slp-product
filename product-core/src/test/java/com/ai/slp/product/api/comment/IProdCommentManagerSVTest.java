@@ -40,7 +40,7 @@ public class IProdCommentManagerSVTest {
 		prodComment.setSubOrderId("00001");
 		List<PictureVO> pictureList=new LinkedList<PictureVO>();
 		PictureVO pictureVO=new PictureVO();
-		pictureVO.setPicDir("test.image.01");
+		pictureVO.setPicAddr("test.image.01");
 		pictureVO.setPicName("测试图片添加");
 		pictureVO.setSerialNumber(1L);
 		pictureVO.setVfsId("001");

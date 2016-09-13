@@ -119,7 +119,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 				List<PictureVO> pictureVoList = new LinkedList<PictureVO>();
 				for(ProdCommentPicture pricture : pictureList){
 					PictureVO pictureVO = new PictureVO();
-					pictureVO.setPicDir(pricture.getPicAddr());
+					pictureVO.setPicAddr(pricture.getPicAddr());
 					pictureVO.setPicName(pricture.getPicName());
 					pictureVoList.add(pictureVO);
 				}

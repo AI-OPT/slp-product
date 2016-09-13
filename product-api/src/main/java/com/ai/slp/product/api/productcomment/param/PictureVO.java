@@ -9,7 +9,7 @@ public class PictureVO implements Serializable{
 	/**
 	 * 图片目录
 	 */
-	private String picDir;
+	private String picAddr;
 	
 	/**
 	 * 图片名称
@@ -31,14 +31,6 @@ public class PictureVO implements Serializable{
 		this.vfsId = vfsId;
 	}
 
-	public String getPicDir() {
-		return picDir;
-	}
-
-	public void setPicDir(String picDir) {
-		this.picDir = picDir;
-	}
-
 	public String getPicName() {
 		return picName;
 	}
@@ -53,5 +45,13 @@ public class PictureVO implements Serializable{
 
 	public void setSerialNumber(Long serialNumber) {
 		this.serialNumber = serialNumber;
+	}
+
+	public String getPicAddr() {
+		return picAddr;
+	}
+
+	public void setPicAddr(String picAddr) {
+		this.picAddr = picAddr;
 	}
 }
