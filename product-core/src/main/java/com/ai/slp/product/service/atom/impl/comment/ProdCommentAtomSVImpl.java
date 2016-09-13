@@ -39,6 +39,13 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		setQueryCriteria(params, commentTimeBegin, commentTimeEnd, example);
 		return prodCommentMapper.selectByExample(example);
 	}
+	
+	@Override
+	public Integer queryCountByParams(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd) {
+		ProdCommentCriteria example = new ProdCommentCriteria();
+		setQueryCriteria(params, commentTimeBegin, commentTimeEnd, example);
+		return prodCommentMapper.countByExample(example);
+	}
 
 	/**
 	 * 设置查询条件
@@ -53,6 +60,10 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		String tenantId = params.getTenantId();
 		if(!StringUtil.isBlank(tenantId)){
 			criteria.andTenantIdEqualTo(tenantId);
+		}
+		String commentId = params.getCommentId();
+		if(!StringUtil.isBlank(commentId)){
+			criteria.andCommentIdEqualTo(commentId);
 		}
 		String supplierId = params.getSupplierId();
 		if(!StringUtil.isBlank(supplierId)){
@@ -76,13 +87,13 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		if(shopScoreWl != null){
 			criteria.andShopScoreWlEqualTo(shopScoreWl);
 		}
-		// String skuId = params.getSkuId();
-		// if (!StringUtil.isBlank(skuId)) {
-		// criteria.andSkuIdEqualTo(skuId);
-		// }
+		String operId = params.getOperId();
+		if(!StringUtil.isBlank(operId)){
+			criteria.andOperIdLike("%"+operId+"%");
+		}
 		String standedProdId = params.getStandedProdId();
 		if(!StringUtil.isBlank(standedProdId)){
-			criteria.andStandedProdIdEqualTo(standedProdId);
+			criteria.andStandedProdIdLike("%"+standedProdId+"%");
 		}
 		if(commentTimeBegin != null){
 			criteria.andCommentTimeGreaterThanOrEqualTo(commentTimeBegin);
@@ -94,21 +105,45 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 	}
 	
 	@Override
-	public List<ProdComment> queryPageList(ProdComment params, Integer pageSize, Integer pageNo) {
-		return queryPageList(params, null, null, pageSize, pageNo);
+	public List<ProdComment> queryPageListByProductId(ProdComment params, Integer pageSize, Integer pageNo) {
+		ProdCommentCriteria example = new ProdCommentCriteria();
+		if(pageSize != null && pageNo != null){
+			example.setLimitStart((pageNo -1) * pageSize);
+			example.setLimitEnd(pageSize);
+		}
+		example.setOrderByClause("COMMENT_TIME desc");
+		setQueryCriteria(params,example);
+		return prodCommentMapper.selectByExample(example);
 	}
 
-
 	@Override
-	public Integer queryCountByParams(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd) {
+	public Integer queryCountByProductId(ProdComment params) {
 		ProdCommentCriteria example = new ProdCommentCriteria();
-		setQueryCriteria(params, commentTimeBegin, commentTimeEnd, example);
+		setQueryCriteria(params, example);
 		return prodCommentMapper.countByExample(example);
 	}
 	
-	@Override
-	public Integer queryCountByParams(ProdComment params) {
-		return queryCountByParams(params, null, null);
+	private void setQueryCriteria(ProdComment params, ProdCommentCriteria example) {
+		Criteria criteria = example.createCriteria();
+		String tenantId = params.getTenantId();
+		if(!StringUtil.isBlank(tenantId)){
+			criteria.andTenantIdEqualTo(tenantId);
+		}
+		Long shopScoreMs = params.getShopScoreMs();
+		if(shopScoreMs != null){
+			if(shopScoreMs == 1){
+				criteria.andShopScoreMsLessThan(3L);
+			}else if(shopScoreMs == 3){
+				criteria.andShopScoreMsEqualTo(3L);
+			}else{
+				criteria.andShopScoreMsGreaterThan(3L);
+			}
+		}
+		String standedProdId = params.getStandedProdId();
+		if(!StringUtil.isBlank(standedProdId)){
+			criteria.andStandedProdIdEqualTo(standedProdId);
+		}
+		criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
 	}
 
 	@Override

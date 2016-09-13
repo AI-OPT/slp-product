@@ -78,7 +78,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		params.setStandedProdId(product.getStandedProdId());
 		Integer pageSize = prodCommentPageRequest.getPageSize();
 		Integer pageNo = prodCommentPageRequest.getPageNo();
-		List<ProdComment> queryPageList = prodCommentAtomSV.queryPageList(params, pageSize, pageNo);
+		List<ProdComment> queryPageList = prodCommentAtomSV.queryPageListByProductId(params, pageSize, pageNo);
 		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
 		result.setResponseHeader(responseHeader );
 		result.setPageNo(pageNo);
@@ -89,7 +89,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 			return result;
 		}else{
 			//查询条数
-			Integer count = prodCommentAtomSV.queryCountByParams(params);
+			Integer count = prodCommentAtomSV.queryCountByProductId(params);
 			result.setCount(count);
 			List<ProdCommentPageResponse> prodCommentList = getProdCommentResponseList(queryPageList);
 			result.setResult(prodCommentList);
@@ -206,7 +206,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		params.setSupplierId(replyComment.getSupplierId());
 		params.setCommentId(replyComment.getCommentId());
 		params.setState(CommonConstants.STATE_ACTIVE);
-		Integer queryCountByParams = prodCommentAtomSV.queryCountByParams(params);
+		Integer queryCountByParams = prodCommentAtomSV.queryCountByParams(params, null, null);
 		//判断评论条数
 		if (queryCountByParams>0) {
 			//对评论进行回复

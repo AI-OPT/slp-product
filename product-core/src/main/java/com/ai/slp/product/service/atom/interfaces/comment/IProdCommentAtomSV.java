@@ -15,7 +15,7 @@ public interface IProdCommentAtomSV {
 	 * @return
 	 * @author jiaxs
 	 */
-	public List<ProdComment> queryPageList(ProdComment params, Integer pageSize, Integer pageNo);
+	public List<ProdComment> queryPageListByProductId(ProdComment params, Integer pageSize, Integer pageNo);
 	
 	/**
 	 * 根据条件 查询评论集合
@@ -30,7 +30,7 @@ public interface IProdCommentAtomSV {
 	 * @param params
 	 * @return
 	 */
-	public Integer queryCountByParams(ProdComment params);
+	public Integer queryCountByProductId(ProdComment params);
 	
 	/**
 	 * 查询条数

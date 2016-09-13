@@ -67,7 +67,7 @@ public interface IProdCommentManagerSV {
 	 * @RestRelativeURL prodCommentManager/replyComment
 	 */
 	@POST
-	@Path("replyComment")
+	@Path("/replyComment")
 	public BaseResponse replyComment(ProdReplyComment replyComment) throws BusinessException, SystemException;;
 	@interface ReplyComment{}
 	
