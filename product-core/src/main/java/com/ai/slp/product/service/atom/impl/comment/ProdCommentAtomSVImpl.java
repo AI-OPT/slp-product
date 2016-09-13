@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.ProductCommentConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentCriteria;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentCriteria.Criteria;
@@ -96,6 +97,7 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		params.setCommentId(Long.toString(prodCommentId));
 		params.setCommentTime(DateUtil.getSysDate());
 		params.setState(CommonConstants.STATE_ACTIVE);
+		params.setReplyState(ProductCommentConstants.ReplyState.NO);
 		int count = prodCommentMapper.insert(params);
 		if(count > 0){
 			return params.getCommentId();
