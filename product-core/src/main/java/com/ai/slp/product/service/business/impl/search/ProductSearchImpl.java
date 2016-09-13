@@ -16,15 +16,18 @@ import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 public class ProductSearchImpl implements IProductSearch {
     @Override
     public Result search(ProductSearchCriteria criteria) {
-        ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
-        return searchClient.search(criteria.getSearchfieldVos(), criteria.getStartSize(), criteria.getMaxSearchSize(),
-                criteria.getSortFields(),SKUInfo.class);
+        ISearchClient searchClient = SESClientFactory
+                .getSearchClient(SearchConstants.SearchNameSpace);
+        return searchClient.search(criteria.getSearchfieldVos(), criteria.getStartSize(),
+                criteria.getMaxSearchSize(), criteria.getSortFields(), SKUInfo.class);
     }
 
     @Override
     public Result searchCategory(ProductSearchCriteria criteria) {
-        ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
-        return searchClient.aggregate(criteria.getSearchfieldVos(), SearchFieldConfConstants.CATEGORY_ID);
+        ISearchClient searchClient = SESClientFactory
+                .getSearchClient(SearchConstants.SearchNameSpace);
+        return searchClient.aggregate(criteria.getSearchfieldVos(),
+                SearchFieldConfConstants.CATEGORY_ID);
     }
 
 
