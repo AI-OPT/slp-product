@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.impl.comment;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,12 +19,15 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.StringUtil;
+import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
+import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
 import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
+import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCommentConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
@@ -216,6 +220,70 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 			baseResponse.setResponseHeader(responseHeader );
 		}
 		return baseResponse;
+	}
+
+	@Override
+	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest) {
+		PageInfoResponse<CommentPageResponse> result = new PageInfoResponse<CommentPageResponse>();
+		//查询评论信息
+		ProdComment params = new ProdComment();
+		BeanUtils.copyProperties(params, commentPageRequest);
+		Integer pageSize = commentPageRequest.getPageSize();
+		Integer pageNo = commentPageRequest.getPageNo();
+		Timestamp commentTimeBegin = commentPageRequest.getCommentTimeBegin();
+		Timestamp commentTimeEnd = commentPageRequest.getCommentTimeEnd();
+		List<ProdComment> queryPageList = prodCommentAtomSV.queryPageList(params,commentTimeBegin, commentTimeEnd, pageSize, pageNo);
+		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
+		result.setResponseHeader(responseHeader );
+		result.setPageNo(pageNo);
+		result.setPageSize(pageSize);
+		if(queryPageList == null || queryPageList.size() == 0){
+			result.setCount(0);
+			result.setResult(null);
+			return result;
+		}else{
+			//查询条数
+			Integer count = prodCommentAtomSV.queryCountByParams(params,commentTimeBegin, commentTimeEnd);
+			result.setCount(count);
+			List<CommentPageResponse> prodCommentList = getCommentResponseList(queryPageList);
+			result.setResult(prodCommentList);
+			return result;
+		}
+	}
+
+	/**
+	 * 转换返回对象
+	 * @param prodCommentList
+	 * @return
+	 */
+	private List<CommentPageResponse> getCommentResponseList(List<ProdComment> prodCommentList) {
+		List<CommentPageResponse> responseList = new LinkedList<CommentPageResponse>();
+		for(ProdComment prodComment : prodCommentList ){
+			//转换返回对象
+			CommentPageResponse commentPageResponse = new CommentPageResponse();
+			BeanUtils.copyProperties(commentPageResponse, prodComment);
+			String prodId = prodComment.getProdId();
+			Product product = productAtomSV.selectByProductId(prodComment.getTenantId(), prodId);
+			commentPageResponse.setProdName(product.getProdName());
+			responseList.add(commentPageResponse);
+		}
+		return responseList;
+	}
+
+	@Override
+	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) {
+		int count = prodCommentAtomSV.updateStateByIds(updateCommentStateRequest.getState(),updateCommentStateRequest.getOperId(),updateCommentStateRequest.getCommentIdList());
+		if(count>0){
+			BaseResponse baseResponse = new BaseResponse();
+			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"更新成功");
+			baseResponse.setResponseHeader(responseHeader );
+			return baseResponse;
+		}else{
+			BaseResponse baseResponse = new BaseResponse();
+			ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.SUCCESS,"更新失败");
+			baseResponse.setResponseHeader(responseHeader );
+			return baseResponse;
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.interfaces.comment;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
@@ -17,11 +18,26 @@ public interface IProdCommentAtomSV {
 	public List<ProdComment> queryPageList(ProdComment params, Integer pageSize, Integer pageNo);
 	
 	/**
+	 * 根据条件 查询评论集合
+	 * @param params
+	 * @return
+	 * @author jiaxs
+	 */
+	public List<ProdComment> queryPageList(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd, Integer pageSize, Integer pageNo);
+	
+	/**
 	 * 查询条数
 	 * @param params
 	 * @return
 	 */
 	public Integer queryCountByParams(ProdComment params);
+	
+	/**
+	 * 查询条数
+	 * @param params
+	 * @return
+	 */
+	public Integer queryCountByParams(ProdComment params,Timestamp commentTimeBegin, Timestamp commentTimeEnd);
 	
 	/**
 	 * 创建商品评论
@@ -44,5 +60,13 @@ public interface IProdCommentAtomSV {
 	 * @RestRelativeURL
 	 */
 	public String prodCommentReply(ProdCommentReply CommentReply);
+
+	/**
+	 * 修改评价状态
+	 * @param state
+	 * @param operId
+	 * @param commentIdList
+	 */
+	public int updateStateByIds(String state, String operId, List<String> commentIdList);
 
 }

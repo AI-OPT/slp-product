@@ -10,10 +10,13 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
+import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
+import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 
 /**
  * 商品评价
@@ -67,5 +70,35 @@ public interface IProdCommentManagerSV {
 	@Path("replyComment")
 	public BaseResponse replyComment(ProdReplyComment replyComment) throws BusinessException, SystemException;;
 	@interface ReplyComment{}
+	
+	/**
+	 * 分页查询商品评论
+	 * @param commentPageRequest
+	 * @return
+	 * @author jiaxs
+	 * @ApiDocMethod
+	 * @ApiCode	PROD_COMM_0001
+	 * @RestRelativeURL prodCommentManager/queryPageInfo
+	 */
+	@POST
+	@Path("/queryPageInfoBySku")
+	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest) throws BusinessException, SystemException;;
+	@interface QueryPageInfo{}
+	
+	/**
+	 * 修改商品评价状态
+	 * @param updateCommentStateRequest
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author jiaxs
+	 * @ApiDocMethod
+	 * @ApiCode PROD_COMM_0005
+	 * @RestRelativeURL prodCommentManager/updateCommentState
+	 */
+	@POST
+	@Path("/updateCommentState")
+	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) throws BusinessException, SystemException;
+	@interface UpdateCommentState{}
 	
 }
