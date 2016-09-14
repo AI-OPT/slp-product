@@ -1,11 +1,12 @@
 package com.ai.slp.product.service.business;
 
-import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 
 /**
  * Created by jackieliu on 16/7/12.
@@ -20,5 +21,11 @@ public class ISKUIndexManageTest {
     public void deleteSKUIndexByProductId(){
         //搜索引擎中删除上信息
         iskuIndexManage.deleteSKUIndexByProductId("1000000000000078");
+    }
+
+    @Test
+    public void updateSKUIndex(){
+        //搜索引擎中添加信息
+        iskuIndexManage.updateSKUIndex("0000000000000176");
     }
 }

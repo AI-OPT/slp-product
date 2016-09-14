@@ -67,6 +67,6 @@ public interface IProdCommentAtomSV {
 	 * @param operId
 	 * @param commentIdList
 	 */
-	public int updateStateByIds(String state, String operId, List<String> commentIdList);
+	public int updateStateByIds(String state, String operId, String tenantId, List<String> commentIdList);
 
 }

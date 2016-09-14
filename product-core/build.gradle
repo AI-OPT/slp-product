@@ -13,7 +13,7 @@ dependencies {
     //地区
     compile 'com.ai.platform.common:area:1.0-SNAPSHOT'
     //路由相关查询
-    compile 'com.ai.slp.route:routequery:1.0-SNAPSHOT'
+    compile 'com.ai.slp.route:routegroupmanage:1.0-SNAPSHOT'
     //用户
     compile 'com.ai.slp.user:ucuser:1.0.1-SNAPSHOT'
     compile 'com.ai.platform.common:sysuser:1.0-SNAPSHOT'

@@ -1,13 +1,16 @@
 package com.ai.slp.product.api.storage;
 
+import org.junit.Test;
+
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.STOStorage;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
-import com.ai.slp.route.api.routequery.interfaces.IRouteQuerySV;
-import com.ai.slp.route.api.routequery.param.RouteGroupQueryResult;
-import org.junit.Test;
+import com.ai.slp.product.constants.CommonTestConstants;
+import com.ai.slp.route.api.routegroupmanage.interfaces.IRouteGroupManageSV;
+import com.ai.slp.route.api.routegroupmanage.param.RouteGroupStateRequest;
+import com.ai.slp.route.api.routegroupmanage.param.RouteGroupStateResponse;
 
 /**
  * Created by jackieliu on 16/7/11.
@@ -16,11 +19,11 @@ public class StorageSVConsumerTest {
 
     @Test
     public void queryStorageById(){
-//        IStorageSV storageSV = DubboConsumerFactory.getService(IStorageSV.class);
-//        StorageRes storageRes = storageSV.queryStorageById("100100000001");
-//        System.out.println(storageRes.getStorageGroupId());
-        IRouteQuerySV iRouteQuerySV = DubboConsumerFactory.getService("iRouteQuerySV");
-        RouteGroupQueryResult queryResult = iRouteQuerySV.routeGroupDetailQuery("0000000000000215");
+        IRouteGroupManageSV iRouteQuerySV = DubboConsumerFactory.getService(IRouteGroupManageSV.class);
+        RouteGroupStateRequest stateRequest = new RouteGroupStateRequest();
+        stateRequest.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        stateRequest.setRouteGroupId("0000000000000215");
+        RouteGroupStateResponse queryResult = iRouteQuerySV.findRouteGroupState(stateRequest);
         System.out.println(queryResult==null);
     }
 
