@@ -25,7 +25,7 @@ public class SKUInfo {
     private String productsellpoint = "";
     // 关键属性
     @Expose
-    private List<AttrInfo> attrInfos;
+    private List<AttrInfo> attrinfos;
     @Expose
     private int salenum;
     @Expose
@@ -68,7 +68,7 @@ public class SKUInfo {
         this.skuname = skuname;
         this.categoryinfos = new ArrayList<CategoryInfo>();
         this.audiences = new ArrayList<ProdAudiences>();
-        this.attrInfos = new ArrayList<AttrInfo>();
+        this.attrinfos = new ArrayList<AttrInfo>();
         this.saleareainfos = new ArrayList<SaleAreaInfo>();
         this.thumbnail = new ArrayList<ImageInfo>();
     }
@@ -85,9 +85,6 @@ public class SKUInfo {
         this.productsellpoint = productsellpoint;
     }
 
-    public void setAttrInfos(List<AttrInfo> attrInfos) {
-        this.attrInfos = attrInfos;
-    }
 
     public String getProductid() {
         return productid;
@@ -222,11 +219,15 @@ public class SKUInfo {
         return productsellpoint;
     }
 
-    public List<AttrInfo> getAttrInfos() {
-        return attrInfos;
-    }
+    public List<AttrInfo> getAttrinfos() {
+		return attrinfos;
+	}
 
-    public int getSalenum() {
+	public void setAttrinfos(List<AttrInfo> attrinfos) {
+		this.attrinfos = attrinfos;
+	}
+
+	public int getSalenum() {
         return salenum;
     }
 
