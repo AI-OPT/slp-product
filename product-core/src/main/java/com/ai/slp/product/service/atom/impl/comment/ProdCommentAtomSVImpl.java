@@ -175,13 +175,14 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 	}
 
 	@Override
-	public int updateStateByIds(String state, String operId, List<String> commentIdList) {
+	public int updateStateByIds(String state, String operId, String tenantId, List<String> commentIdList) {
 		ProdComment record = new ProdComment();
 		record.setOperId(operId);
 		record.setOperTime(DateUtil.getSysDate());
 		record.setState(state);
 		ProdCommentCriteria example = new ProdCommentCriteria();
 		Criteria criteria = example.createCriteria();
+		criteria.andTenantIdEqualTo(tenantId);
 		criteria.andCommentIdIn(commentIdList);
 		return prodCommentMapper.updateByExampleSelective(record, example);
 	}

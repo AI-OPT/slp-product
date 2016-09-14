@@ -272,7 +272,11 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 
 	@Override
 	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) {
-		int count = prodCommentAtomSV.updateStateByIds(updateCommentStateRequest.getState(),updateCommentStateRequest.getOperId(),updateCommentStateRequest.getCommentIdList());
+		String state = updateCommentStateRequest.getState();
+		String operId = updateCommentStateRequest.getOperId();
+		String tenantId = updateCommentStateRequest.getTenantId();
+		List<String> commentIdList = updateCommentStateRequest.getCommentIdList();
+		int count = prodCommentAtomSV.updateStateByIds(state,operId,tenantId,commentIdList);
 		if(count>0){
 			BaseResponse baseResponse = new BaseResponse();
 			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"更新成功");

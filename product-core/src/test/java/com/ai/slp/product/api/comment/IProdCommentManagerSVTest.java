@@ -20,6 +20,7 @@ import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
+import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:context/core-context.xml")
@@ -75,6 +76,21 @@ public class IProdCommentManagerSVTest {
 		commentPageRequest.setShopScoreMs(1L);
 		PageInfoResponse<CommentPageResponse> queryPageInfoBySku = prodCommentManagerSV.queryPageInfo(commentPageRequest);
 		System.out.println(JSonUtil.toJSon(queryPageInfoBySku));
+	}
+	
+	@Test
+	public void updateCommentStateTest(){
+		UpdateCommentStateRequest updateCommentStateRequest = new UpdateCommentStateRequest();
+		updateCommentStateRequest.setOperId("001");
+		updateCommentStateRequest.setState("0");
+		updateCommentStateRequest.setTenantId("changhong");
+		List<String> commentIdList = new LinkedList<String>();
+		commentIdList.add("10");
+		commentIdList.add("11");
+		commentIdList.add("12");
+		updateCommentStateRequest.setCommentIdList(commentIdList );
+		BaseResponse updateCommentState = prodCommentManagerSV.updateCommentState(updateCommentStateRequest);
+		System.out.println(JSonUtil.toJSon(updateCommentState));
 	}
 
 }
