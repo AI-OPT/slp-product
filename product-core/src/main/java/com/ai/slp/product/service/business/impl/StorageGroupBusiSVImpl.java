@@ -1,5 +1,17 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
@@ -30,19 +42,9 @@ import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.IPaasStorageUtils;
 import com.ai.slp.product.vo.StoGroupPageQueryVo;
-import com.ai.slp.route.api.routequery.interfaces.IRouteQuerySV;
-import com.ai.slp.route.api.routequery.param.RouteGroupQueryResult;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.ai.slp.route.api.routegroupmanage.interfaces.IRouteGroupManageSV;
+import com.ai.slp.route.api.routegroupmanage.param.RouteGroupStateRequest;
+import com.ai.slp.route.api.routegroupmanage.param.RouteGroupStateResponse;
 
 /**
  * 库存组操作 Created by jackieliu on 16/5/5.
@@ -369,8 +371,11 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			}
 		}
 		// 检查路由组是否已为启用状态
-		IRouteQuerySV iRouteQuerySV = DubboConsumerFactory.getService("iRouteQuerySV");
-		RouteGroupQueryResult queryResult = iRouteQuerySV.routeGroupDetailQuery(storageGroup.getRouteGroupId());
+		IRouteGroupManageSV iRouteQuerySV = DubboConsumerFactory.getService(IRouteGroupManageSV.class);
+		RouteGroupStateRequest stateRequest = new RouteGroupStateRequest();
+		stateRequest.setTenantId(storageGroup.getTenantId());
+		stateRequest.setRouteGroupId(storageGroup.getRouteGroupId());
+		RouteGroupStateResponse queryResult = iRouteQuerySV.findRouteGroupState(stateRequest);
 		if (queryResult==null || !RouteConstants.RouteGroup.State.RIGHT.equals(queryResult.getState())){
 			throw new BusinessException("","对应路由组状态不正常,无法启用库存组");
 		}

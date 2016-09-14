@@ -47,6 +47,7 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
             logger.error("Failed to update sku info", e);
             throw new SystemException("","商品加入搜索引擎失败,商品ID:"+productId);
         }
+
     }
 
     /**

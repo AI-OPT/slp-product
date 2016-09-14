@@ -131,7 +131,7 @@ public class IProductManagerSVTest {
         checkParam.setState("1");
         checkParam.setOperId(441l);
         List<String> prodIdList = new ArrayList<>();
-        prodIdList.add("0000000000000178");
+        prodIdList.add("0000000000000176");
         checkParam.setProdIdList(prodIdList);
         BaseResponse response = productManagerSV.productCheck(checkParam);
         System.out.println(response.getResponseHeader().getIsSuccess());
