@@ -1,5 +1,15 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.sql.Timestamp;
+import java.util.*;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
@@ -21,16 +31,9 @@ import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.IPaasStorageUtils;
 import com.ai.slp.product.vo.SkuStorageVo;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 /**
  * Created by jackieliu on 16/5/25.
@@ -94,6 +97,14 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     private StorageNumRes userStorageNum(Product product, String skuId, int skuNum,Long price){
         String tenantId = product.getTenantId();
         String groupId = product.getStorageGroupId();
+        Timestamp nowTime = DateUtils.currTimeStamp();
+        //若商品为预售,且当前不在预售期内,则不进行销售
+        if(product!=null && ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType()) &&
+                (nowTime.before(product.getPresaleBeginTime()) || nowTime.after(product.getPresaleEndTime()))){
+            logger.warn("商品为预售上架,不在预售期[{}]和[{}]",product.getPresaleBeginTime(),
+                    product.getPresaleEndTime());
+            throw new BusinessException("","不在预售期内,不允许销售");
+        }
         //获取缓存客户端
         ICacheClient cacheClient = IPaasStorageUtils.getClient();
         //2. 检查库存组状态是否为"启用"
