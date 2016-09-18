@@ -41,7 +41,7 @@ public interface IProdCommentManagerSV {
 	 */
 	@POST
 	@Path("/queryPageInfoBySku")
-	public PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku(ProdCommentPageRequest prodCommentPageRequest) throws BusinessException, SystemException;;
+	public PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku(ProdCommentPageRequest prodCommentPageRequest) throws BusinessException, SystemException;
 	@interface QueryPageInfoBySku{}
 	/**
 	 * 发表商品评价
@@ -54,7 +54,7 @@ public interface IProdCommentManagerSV {
 	 */
 	@POST
 	@Path("/createProdComment")
-	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) throws BusinessException, SystemException;;
+	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) throws BusinessException, SystemException;
 	@interface CreateProdComment{}
 	
 	/**
@@ -63,12 +63,12 @@ public interface IProdCommentManagerSV {
 	 * @return
 	 * @author jiawen
 	 * @ApiDocMethod
-	 * @ApiCode PROD_COMM_0004
+	 * @ApiCode	PROD_COMM_0004
 	 * @RestRelativeURL prodCommentManager/replyComment
 	 */
 	@POST
 	@Path("/replyComment")
-	public BaseResponse replyComment(ProdReplyComment replyComment) throws BusinessException, SystemException;;
+	public BaseResponse replyComment(ProdReplyComment replyComment) throws BusinessException, SystemException;
 	@interface ReplyComment{}
 	
 	/**
@@ -81,8 +81,8 @@ public interface IProdCommentManagerSV {
 	 * @RestRelativeURL prodCommentManager/queryPageInfo
 	 */
 	@POST
-	@Path("/queryPageInfoBySku")
-	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest) throws BusinessException, SystemException;;
+	@Path("/queryPageInfo")
+	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest) throws BusinessException, SystemException;
 	@interface QueryPageInfo{}
 	
 	/**

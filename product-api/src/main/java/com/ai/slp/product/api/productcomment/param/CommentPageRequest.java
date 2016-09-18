@@ -61,8 +61,8 @@ public class CommentPageRequest extends BaseInfo {
 	@NotNull(message = "pageSize不能为空",groups = { IProdCommentManagerSV.QueryPageInfo.class})
 	private Integer pageSize;
 	
-	@NotNull(message = "PageNo不能为空",groups = { IProdCommentManagerSV.QueryPageInfo.class})
-	private Integer PageNo;
+	@NotNull(message = "pageNo不能为空",groups = { IProdCommentManagerSV.QueryPageInfo.class})
+	private Integer pageNo;
 	
 	public String getSupplierId() {
 		return supplierId;
@@ -120,14 +120,6 @@ public class CommentPageRequest extends BaseInfo {
 		this.pageSize = pageSize;
 	}
 
-	public Integer getPageNo() {
-		return PageNo;
-	}
-
-	public void setPageNo(Integer pageNo) {
-		PageNo = pageNo;
-	}
-
 	public Long getShopScoreMs() {
 		return shopScoreMs;
 	}
@@ -142,5 +134,13 @@ public class CommentPageRequest extends BaseInfo {
 
 	public void setStandedProdId(String standedProdId) {
 		this.standedProdId = standedProdId;
+	}
+
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
 	}
 }
