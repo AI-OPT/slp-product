@@ -87,9 +87,9 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		if(shopScoreWl != null){
 			criteria.andShopScoreWlEqualTo(shopScoreWl);
 		}
-		String operId = params.getOperId();
-		if(!StringUtil.isBlank(operId)){
-			criteria.andOperIdLike("%"+operId+"%");
+		String orderId = params.getOrderId();
+		if(!StringUtil.isBlank(orderId)){
+			criteria.andOrderIdLike("%"+orderId+"%");
 		}
 		String standedProdId = params.getStandedProdId();
 		if(!StringUtil.isBlank(standedProdId)){
