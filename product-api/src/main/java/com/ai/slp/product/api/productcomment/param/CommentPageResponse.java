@@ -1,7 +1,6 @@
 package com.ai.slp.product.api.productcomment.param;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import com.ai.opt.base.vo.BaseInfo;
 
@@ -68,11 +67,6 @@ public class CommentPageResponse extends BaseInfo{
      * 是否有图片
      */
 	private String isPicture;
-    
-    /**
-     * 图片List
-     */
-    private List<PictureVO> pictureList;
 	
 	public String getCommentId() {
 		return commentId;
@@ -112,14 +106,6 @@ public class CommentPageResponse extends BaseInfo{
 
 	public void setCommentTime(Timestamp commentTime) {
 		this.commentTime = commentTime;
-	}
-
-	public List<PictureVO> getPictureList() {
-		return pictureList;
-	}
-
-	public void setPictureList(List<PictureVO> pictureList) {
-		this.pictureList = pictureList;
 	}
 
 	public Long getShopScoreFw() {
