@@ -81,8 +81,8 @@ public interface IProdCommentManagerSV {
 	 * @RestRelativeURL prodCommentManager/queryPageInfo
 	 */
 	@POST
-	@Path("/queryPageInfoBySku")
-	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest) throws BusinessException, SystemException;;
+	@Path("/queryPageInfo")
+	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest) throws BusinessException, SystemException;
 	@interface QueryPageInfo{}
 	
 	/**
