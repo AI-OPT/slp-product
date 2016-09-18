@@ -181,7 +181,7 @@ public class SearchSKUInfoUtil {
             attrInfo.setAttrname(resultSet.getString("attrName"));
             attrInfos.add(attrInfo);
         }
-        skuInfo.setAttrInfos(attrInfos);
+        skuInfo.setAttrinfos(attrInfos);
     }
 
     /**

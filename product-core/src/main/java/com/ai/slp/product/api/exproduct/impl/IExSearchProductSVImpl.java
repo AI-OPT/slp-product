@@ -130,7 +130,7 @@ public class IExSearchProductSVImpl implements IExSearchProductSV {
             //属性、属性值列表
             List<ProductAttrDef> attrList = new ArrayList<ProductAttrDef>();
             List<ProductAttrValueDef> attrValueList = new ArrayList<ProductAttrValueDef>();
-            List<AttrInfo> attrInfos = sku.getAttrInfos();
+            List<AttrInfo> attrInfos = sku.getAttrinfos();
             if (!CollectionUtil.isEmpty(attrInfos)) {
                 for (AttrInfo attr : attrInfos) {
                     ProductAttrDef attrDef = new ProductAttrDef();

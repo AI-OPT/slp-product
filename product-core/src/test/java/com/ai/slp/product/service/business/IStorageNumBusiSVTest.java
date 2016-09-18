@@ -34,6 +34,6 @@ public class IStorageNumBusiSVTest {
 
     @Test
     public void queryNowUsableNumOfGroup(){
-        System.out.println(storageNumBusiSV.queryNowUsableNumOfGroup(CommonTestConstants.COMMON_TENANT_ID,"0000000000141"));
+        System.out.println(storageNumBusiSV.queryNowUsableNumOfGroup(CommonTestConstants.COMMON_TENANT_ID,"0000000000120"));
     }
 }

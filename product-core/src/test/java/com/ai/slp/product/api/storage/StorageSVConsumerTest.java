@@ -22,7 +22,7 @@ public class StorageSVConsumerTest {
         IRouteGroupManageSV iRouteQuerySV = DubboConsumerFactory.getService(IRouteGroupManageSV.class);
         RouteGroupStateRequest stateRequest = new RouteGroupStateRequest();
         stateRequest.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
-        stateRequest.setRouteGroupId("0000000000000215");
+        stateRequest.setRouteGroupId("IRouteGroupManageSV");
         RouteGroupStateResponse queryResult = iRouteQuerySV.findRouteGroupState(stateRequest);
         System.out.println(queryResult==null);
     }
