@@ -13,6 +13,8 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcomment.interfaces.IProdCommentManagerSV;
 import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
+import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
+import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
@@ -98,6 +100,12 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(updateCommentStateRequest.getTenantId());
 		return prodCommentBusiSV.updateCommentState(updateCommentStateRequest);
+	}
+
+	@Override
+	public CommentPictureQueryResponse queryPictureByCommentId(CommentPictureQueryRequset queryRequset)
+			throws BusinessException, SystemException {
+		return prodCommentBusiSV.queryPictureByCommentId(queryRequset);
 	}
 
 }
