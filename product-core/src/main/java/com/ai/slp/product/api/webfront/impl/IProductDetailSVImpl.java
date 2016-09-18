@@ -1,5 +1,15 @@
 package com.ai.slp.product.api.webfront.impl;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.ResponseHeader;
@@ -9,15 +19,6 @@ import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 @Service(validation = "true")
 @Component
@@ -35,16 +36,13 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
 		ProductSKUResponse skuDetail = prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
-		if(skuDetail!=null){
-			ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
-			skuDetail.setResponseHeader(responseHeader);
-		}else{
-			ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.FAIL_CODE, "查询失败");
+		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
+		if(skuDetail==null){
 			skuDetail = new ProductSKUResponse();
-			skuDetail.setResponseHeader(responseHeader);
+			responseHeader = new ResponseHeader(true, ResultCodeConstants.FAIL_CODE, "查询失败");
 		}
+		skuDetail.setResponseHeader(responseHeader);
 		return skuDetail;
-//		return demoResponse();
 	}
 
 	@Override
@@ -56,14 +54,12 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
 		ProductSKUConfigResponse skuAttr = prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
-		if(skuAttr != null){
-			ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
-			skuAttr.setResponseHeader(responseHeader);
-		}else{
+		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
+		if(skuAttr == null){
 			skuAttr = new ProductSKUConfigResponse();
-			ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "无数据");
-			skuAttr.setResponseHeader(responseHeader);
+			responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "无数据");
 		}
+		skuAttr.setResponseHeader(responseHeader);
 		return skuAttr;
 		//return demoConfigResponse();
 	}

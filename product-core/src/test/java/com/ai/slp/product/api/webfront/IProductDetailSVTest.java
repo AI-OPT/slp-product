@@ -1,13 +1,16 @@
 package com.ai.slp.product.api.webfront;
 
-import com.ai.slp.product.api.webfront.interfaces.IProductDetailSV;
-import com.ai.slp.product.api.webfront.param.ProductSKURequest;
-import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.ai.slp.product.api.webfront.interfaces.IProductDetailSV;
+import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
+import com.ai.slp.product.api.webfront.param.ProductSKURequest;
+import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
+import com.ai.slp.product.constants.CommonTestConstants;
 
 /**
  * Created by jackieliu on 16/7/25.
@@ -26,5 +29,15 @@ public class IProductDetailSVTest {
         ProductSKUResponse skuResponse = productDetailSV.queryProducSKUById(skuRequest);
         if (skuResponse!=null)
             System.out.println(skuResponse.getProdName());
+    }
+
+    @Test
+    public void querySkuConfBySkuAttr(){
+        ProductSKURequest skuRequest = new ProductSKURequest();
+        skuRequest.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        skuRequest.setSkuAttrs("100010:100082;100004:100015");
+        ProductSKUConfigResponse skuResponse = productDetailSV.queryProductSKUConfig(skuRequest);
+        if (skuResponse!=null)
+            System.out.println(skuResponse.getProductAttrList().size());
     }
 }

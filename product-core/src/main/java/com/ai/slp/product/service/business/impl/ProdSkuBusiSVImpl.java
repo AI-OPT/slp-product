@@ -1,5 +1,14 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.util.*;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
@@ -34,15 +43,8 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.*;
+import com.ai.slp.product.vo.ProdSkuAttrStr;
 import com.ai.slp.product.vo.SkuStorageVo;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 /**
  * 商品SKU操作 Created by jackieliu on 16/5/12.
@@ -583,7 +585,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		}
 		// 通过属性串查询
 		else if (StringUtils.isNotBlank(skuAttrs)) {
-			prodSku = prodSkuAtomSV.querySkuByAttrs(tenantId, skuAttrs);
+			String sortSkuAttrs = skuAttrStrSort(skuAttrs);
+			prodSku = prodSkuAtomSV.querySkuByAttrs(tenantId, sortSkuAttrs);
 		}
 		if (prodSku == null) {
 			logger.warn("未查询到指定的SKU信息,租户ID:{},SKU标识:{},SKU属性串:{}", tenantId, skuId, skuAttrs);
@@ -890,5 +893,34 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		skuSetForProduct.setSkuInfoList(skuInfoList);
 		//查询已废弃的SKU库存.
 		return skuSetForProduct;
+	}
+
+	/**
+	 * 将属性串按照属性ID进行重新组合
+	 * @param skuAttrStr
+	 * @return
+     */
+	private String skuAttrStrSort(String skuAttrStr){
+		if (StringUtils.isBlank(skuAttrStr))
+			return "";
+		//进行拆解
+		String[] skuAttrArry = skuAttrStr.split(ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT);
+		List<ProdSkuAttrStr> skuAttrStrList = new ArrayList<>();
+		for (String skuAttr:skuAttrArry){
+			String[] attrAndVal = skuAttr.split(ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT);
+			if (attrAndVal==null || attrAndVal.length<2)
+				continue;
+			ProdSkuAttrStr attrStr = new ProdSkuAttrStr();
+			attrStr.setAttrId(attrAndVal[0]);
+			attrStr.setAttrValId(attrAndVal[1]);
+			skuAttrStrList.add(attrStr);
+		}
+		Collections.sort(skuAttrStrList, new Comparator<ProdSkuAttrStr>() {
+			@Override
+			public int compare(ProdSkuAttrStr o1, ProdSkuAttrStr o2) {
+				return o1.getAttrId().compareToIgnoreCase(o2.getAttrId());
+			}
+		});
+		return StringUtils.join(skuAttrStrList,ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT);
 	}
 }
