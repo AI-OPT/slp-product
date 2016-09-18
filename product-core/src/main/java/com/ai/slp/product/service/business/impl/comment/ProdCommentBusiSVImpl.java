@@ -264,7 +264,9 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 			BeanUtils.copyProperties(commentPageResponse, prodComment);
 			String prodId = prodComment.getProdId();
 			Product product = productAtomSV.selectByProductId(prodComment.getTenantId(), prodId);
-			commentPageResponse.setProdName(product.getProdName());
+			if(product != null){
+				commentPageResponse.setProdName(product.getProdName());
+			}
 			responseList.add(commentPageResponse);
 		}
 		return responseList;
