@@ -22,7 +22,7 @@ public class IStorageNumBusiSVTest {
 
     @Test
     public void queryStorageOfSku(){
-        SkuStorageVo storageVo = storageNumBusiSV.queryStorageOfSku(CommonTestConstants.COMMON_TENANT_ID,"1000000000002534");
+        SkuStorageVo storageVo = storageNumBusiSV.queryStorageOfSku(CommonTestConstants.COMMON_TENANT_ID,"1000000000002519");
         System.out.println(storageVo.toString());
     }
 
@@ -34,6 +34,6 @@ public class IStorageNumBusiSVTest {
 
     @Test
     public void queryNowUsableNumOfGroup(){
-        System.out.println(storageNumBusiSV.queryNowUsableNumOfGroup(CommonTestConstants.COMMON_TENANT_ID,"0000000000120"));
+        System.out.println(storageNumBusiSV.queryNowUsableNumOfGroup(CommonTestConstants.COMMON_TENANT_ID,"100000000119"));
     }
 }
