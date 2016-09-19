@@ -12,6 +12,8 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
+import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
+import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
@@ -101,4 +103,19 @@ public interface IProdCommentManagerSV {
 	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) throws BusinessException, SystemException;
 	@interface UpdateCommentState{}
 	
+	/**
+	 * 查询评论图片
+	 * @param queryRequset
+	 * @return
+	 * @throws BusinessException
+	 * @throws SystemException
+	 * @author jiaxs
+	 * @ApiDocMethod
+	 * @ApiCode PROD_COMM_0006
+	 * @RestRelativeURL prodCommentManager/queryPictureByCommentId
+	 */
+	@POST
+	@Path("/queryPictureByCommentId")
+	public CommentPictureQueryResponse queryPictureByCommentId(CommentPictureQueryRequset queryRequset) throws BusinessException, SystemException;
+	@interface QueryPictureByCommentId{}
 }

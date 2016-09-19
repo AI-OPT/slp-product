@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.business.impl.comment;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -21,6 +22,8 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
+import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
+import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
@@ -289,6 +292,24 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 			baseResponse.setResponseHeader(responseHeader );
 			return baseResponse;
 		}
+	}
+
+	@Override
+	public CommentPictureQueryResponse queryPictureByCommentId(CommentPictureQueryRequset queryRequset) {
+		List<ProdCommentPicture> pictureList = prodCommentPictureAtomSV.queryPictureListByCommentId(queryRequset.getCommentId());
+		CommentPictureQueryResponse queryResponse= new CommentPictureQueryResponse();
+		if(pictureList != null && pictureList.size()>0){
+			List<PictureVO> pictureVoList = new ArrayList<PictureVO>();
+			for(ProdCommentPicture picture : pictureList){
+				PictureVO pictureVO = new PictureVO();
+				BeanUtils.copyProperties(pictureVO, picture);
+				pictureVoList.add(pictureVO);
+			}
+			queryResponse.setPictureList(pictureVoList);
+		}
+		ResponseHeader responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "查询完成");
+		queryResponse.setResponseHeader(responseHeader);
+		return queryResponse;
 	}
 
 }
