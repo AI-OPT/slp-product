@@ -22,6 +22,7 @@ import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
+import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -101,6 +102,18 @@ public class IProdCommentManagerSVTest {
 		queryRequset.setCommentId("14");
 		CommentPictureQueryResponse queryPictureByCommentId = prodCommentManagerSV.queryPictureByCommentId(queryRequset );
 		System.out.println(JSonUtil.toJSon(queryPictureByCommentId));
+	}
+	
+	@Test
+	public void replyCommentTest(){
+		ProdReplyComment replyComment = new ProdReplyComment();
+		replyComment.setTenantId("changhong");
+		replyComment.setSupplierId("-1");
+		replyComment.setCommentId("22");
+		replyComment.setReplierId("01");
+		replyComment.setReplyComment("哇咔咔...");
+		BaseResponse baseResponse = prodCommentManagerSV.replyComment(replyComment);
+		System.out.println(JSonUtil.toJSon(baseResponse));
 	}
 
 }
