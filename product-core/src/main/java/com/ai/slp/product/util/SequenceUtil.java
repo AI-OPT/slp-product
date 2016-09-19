@@ -44,7 +44,7 @@ public final class SequenceUtil {
     
     
     public static Long prodCommentReplyDefId() {
-    	return SeqUtil.getNewId(PROD_COMMENT$COMMENT_ID$SEQ);
+    	return SeqUtil.getNewId(PROD_COMMENT_REPLY$REPLY_ID$SEQ);
     }
     public static Long createProdCommentDefId() {
         return SeqUtil.getNewId(PROD_COMMENT$COMMENT_ID$SEQ);
