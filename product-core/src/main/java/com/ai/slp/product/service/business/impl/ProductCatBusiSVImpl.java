@@ -1,5 +1,15 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.sql.Timestamp;
+import java.util.*;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
@@ -17,15 +27,6 @@ import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.util.DateUtils;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Timestamp;
-import java.util.*;
 
 /**
  * Created by jackieliu on 16/4/29.
@@ -121,7 +122,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             if (ProductCatConstants.ProductCat.IsChild.HAS_CHILD.equals(productCat.getIsChild())
                     && ProductCatConstants.ProductCat.IsChild.NO_CHILD.equals(catParam.getIsChild())){
                 //判断是否有子类目
-                if (prodCatDefAtomSV.queryOfParent(productCat.getParentProductCatId())>0)
+                if (prodCatDefAtomSV.queryActiveOfParent(productCat.getParentProductCatId())>0)
                     throw new BusinessException("","此类目下存在子类目,无法变更为[无子分类]");
             }else{
                 //判断是否有关联属性
@@ -146,7 +147,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         if (standedProductAtomSV.queryByCatId(tenantId,productCatId,false)>0)
             throw new BusinessException("","已关联了标准品，不可删除");
         //判断是否有子类目
-        if (prodCatDefAtomSV.queryOfParent(productCatId)>0)
+        if (prodCatDefAtomSV.queryActiveOfParent(productCatId)>0)
             throw new BusinessException("","此类目下存在子类目,不可删除");
         List<ProdCatAttr> catAttrList =
                 prodCatAttrAtomSV.queryAttrsByCatId(tenantId,productCatId);

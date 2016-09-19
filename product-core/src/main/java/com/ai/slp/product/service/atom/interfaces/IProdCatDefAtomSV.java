@@ -1,9 +1,9 @@
 package com.ai.slp.product.service.atom.interfaces;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
-
-import java.util.List;
 
 /**
  * 商品类目操作
@@ -75,7 +75,7 @@ public interface IProdCatDefAtomSV {
      * @param parentCatId
      * @return
      */
-    public int queryOfParent(String parentCatId);
+    public int queryActiveOfParent(String parentCatId);
 
     /**
      * 根据名称或首字母查询

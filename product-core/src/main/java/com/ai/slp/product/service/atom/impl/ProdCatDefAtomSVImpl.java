@@ -1,5 +1,11 @@
 package com.ai.slp.product.service.atom.impl;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
@@ -11,11 +17,6 @@ import com.ai.slp.product.dao.mapper.interfaces.ProductCatMapper;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 类目操作
@@ -127,9 +128,10 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     }
 
     @Override
-    public int queryOfParent(String parentCatId) {
+    public int queryActiveOfParent(String parentCatId) {
         ProductCatCriteria example = new ProductCatCriteria();
-        example.createCriteria().andParentProductCatIdEqualTo(parentCatId);
+        example.createCriteria().andParentProductCatIdEqualTo(parentCatId)
+            .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return productCatMapper.countByExample(example);
     }
 
