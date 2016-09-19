@@ -1,5 +1,13 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.StorageConstants;
@@ -10,13 +18,6 @@ import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -321,7 +322,7 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	public List<Storage> queryActiveByGroupIdAndPriorityNum(String groupId, Short priorityNum) {
 		StorageCriteria example = new StorageCriteria();
 		example.createCriteria().andStorageGroupIdEqualTo(groupId).andStateIn(ACTIVE_LIST)
-				.andPriorityNumberNotEqualTo(priorityNum);
+				.andPriorityNumberEqualTo(priorityNum);
 		return storageMapper.selectByExample(example);
 	}
 
