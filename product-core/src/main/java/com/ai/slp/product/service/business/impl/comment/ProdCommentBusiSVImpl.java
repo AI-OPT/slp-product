@@ -44,6 +44,7 @@ import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
 
+
 @Service
 @Transactional
 public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
@@ -212,13 +213,21 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		params.setSupplierId(replyComment.getSupplierId());
 		params.setCommentId(replyComment.getCommentId());
 		params.setState(CommonConstants.STATE_ACTIVE);
-		Integer queryCountByParams = prodCommentAtomSV.queryCountByParams(params, null, null);
+		Integer queryCountByParams = prodCommentAtomSV.queryCountByProductId(params);
+		ProdComment comment = prodCommentAtomSV.queryByCommentId(replyComment.getCommentId());
 		//判断评论条数
 		if (queryCountByParams>0) {
 			//对评论进行回复
 			ProdCommentReply commentReply = new ProdCommentReply();
 			commentReply.setCommentId(replyComment.getCommentId());
-			String replyId = prodCommentAtomSV.prodCommentReply(commentReply);
+			commentReply.setReplyComment(replyComment.getReplyComment());
+			commentReply.setSupplierId(replyComment.getSupplierId());
+			commentReply.setReplierId(replyComment.getReplierId());
+			commentReply.setProdId(comment.getProdId());
+			commentReply.setSkuId(comment.getSkuId());
+			commentReply.setStandedProdId(comment.getStandedProdId());
+			
+			prodCommentAtomSV.prodCommentReply(commentReply);
 			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
 			baseResponse.setResponseHeader(responseHeader );
 		}else{
