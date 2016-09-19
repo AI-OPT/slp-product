@@ -186,4 +186,10 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		criteria.andCommentIdIn(commentIdList);
 		return prodCommentMapper.updateByExampleSelective(record, example);
 	}
+
+	@Override
+	public ProdComment queryByCommentId(String commentId) {
+		
+		return prodCommentMapper.selectByPrimaryKey(commentId);
+	}
 }

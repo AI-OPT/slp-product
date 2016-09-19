@@ -59,8 +59,19 @@ public interface IProdCommentAtomSV {
 	 * @ApiCode
 	 * @RestRelativeURL
 	 */
-	public String prodCommentReply(ProdCommentReply CommentReply);
-
+	public String prodCommentReply(ProdCommentReply commentReply);
+	
+	/**
+	 * 根据评论编码查询评论
+	 * @param commentId
+	 * @return
+	 * @author jiawen
+	 * @ApiDocMethod
+	 * @ApiCode
+	 * @RestRelativeURL
+	 */
+	public ProdComment queryByCommentId(String commentId);
+	
 	/**
 	 * 修改评价状态
 	 * @param state
