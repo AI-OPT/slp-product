@@ -152,10 +152,12 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) {
 		BaseResponse baseResponse = new BaseResponse();
 		String tenantId = prodCommentCreateRequest.getTenantId();
+		String userId = prodCommentCreateRequest.getUserId();
 		List<ProdCommentVO> commentList = prodCommentCreateRequest.getCommentList();
 		if(commentList != null && commentList.size() >0){
 			for(ProdCommentVO prodCommentVO : commentList){
 				ProdComment params = new ProdComment();
+				params.setUserId(userId);
 				BeanUtils.copyProperties(params, prodCommentVO);
 				String skuId = prodCommentVO.getSkuId();
 				ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, skuId);
@@ -169,6 +171,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 				}
 				params.setProdId(prodId);
 				params.setStandedProdId(product.getStandedProdId());
+				params.setSupplierId(product.getSupplierId());
 				//添加评论
 				params.setTenantId(prodCommentCreateRequest.getTenantId());
 				params.setOrderId(prodCommentCreateRequest.getOrderId());

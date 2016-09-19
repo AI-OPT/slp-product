@@ -37,11 +37,11 @@ public class IProdCommentManagerSVTest {
 		prodCommentCreateRequest.setTenantId("changhong");
 		List<ProdCommentVO> commentList=new LinkedList<ProdCommentVO>();
 		ProdCommentVO prodComment = new ProdCommentVO();
-		prodComment.setCommentBody("测试商品评价：商品太次了!!");
+		prodComment.setCommentBody("测试商品评价：商品太次了!!2016-9-19 14:46:33");
 		prodComment.setShopScoreFw(3L);
 		prodComment.setShopScoreMs(2L);
 		prodComment.setShopScoreWl(3L);
-		prodComment.setSkuId("002");
+		prodComment.setSkuId("0000000000000153");
 		prodComment.setSubOrderId("00001");
 		List<PictureVO> pictureList=new LinkedList<PictureVO>();
 		PictureVO pictureVO=new PictureVO();
