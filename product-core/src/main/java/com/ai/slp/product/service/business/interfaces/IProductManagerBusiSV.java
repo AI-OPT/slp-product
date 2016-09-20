@@ -51,7 +51,7 @@ public interface IProductManagerBusiSV {
 	 * @param productRefuseParam
 	 * @return
 	 */
-	public PageInfoResponse<ProductEditUp> queryRefuse(ProductEditQueryReq productRefuseParam);
+	public ProdStateLog queryRefuseByProdId(ProductInfoQuery queryInfo);
 	
 	/**
      * 查收商品的目标地域

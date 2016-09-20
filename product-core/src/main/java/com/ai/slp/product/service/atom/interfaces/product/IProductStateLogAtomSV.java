@@ -25,5 +25,5 @@ public interface IProductStateLogAtomSV {
 	/**
 	 * 查询商品   拒绝原因   拒绝描述 --- 按操作时间倒序
 	 */
-	public ProductStateLog selectProdRefuseById(String prodId);
+	public ProductStateLog selectStateLogByProdId(String prodId);
 }

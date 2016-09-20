@@ -2,18 +2,21 @@ package com.ai.slp.product.service.business.impl;
 
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.opt.sdk.util.StringUtil;
 import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.platform.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.product.param.*;
@@ -36,6 +39,8 @@ import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupKeyInfoRequest;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupUserInfoResponse;
+
+import kafka.admin.AdminUtils;
 
 /**
  * Created by jackieliu on 16/6/6.
@@ -286,38 +291,23 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
      * @return
      */
     @Override
-    public PageInfoResponse<ProductEditUp> queryRefuse(ProductEditQueryReq productRefuseParam) {
-    	//获取租户ID
-    	String tenantId = productRefuseParam.getTenantId();
-    	//查询符合条件的商品
-    	PageInfo<Product> pageInfo = productAtomSV.selectPageForRefuse(productRefuseParam);
-    	ArrayList<ProductEditUp> editUpList = new ArrayList<>();
-    	for (Product product : pageInfo.getResult()) {
-    		ProductEditUp productEditUp = new ProductEditUp();
-    		BeanUtils.copyProperties(productEditUp,product);
-    		//设置类目名称
-    		ProductCat cat = catDefAtomSV.selectById(tenantId, product.getProductCatId());
-    		if (cat!=null) 
-    			productEditUp.setProductCatName(cat.getProductCatName());
-    		//查询预览主图
-    		ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
-    		if (prodPicture!=null) {
-    			productEditUp.setProPictureId(prodPicture.getProPictureId());
-    			productEditUp.setVfsId(prodPicture.getVfsId());
-    			productEditUp.setPicType(prodPicture.getPicType());
-    		}
-    		//获取    拒绝原因   拒绝描述
-    		ProductStateLog productStateLog = productStateLogAtomSV.selectProdRefuseById(productRefuseParam.getProdId());
-    		if (productStateLog.getRefuseReason()!=null || productStateLog.getRefuseDes()!=null) {
-    			productEditUp.setRefuseReason(productStateLog.getRefuseReason());
-    			productEditUp.setRefuseDes(productStateLog.getRefuseDes());
-    		}
-    		editUpList.add(productEditUp);
-    	}
-    	PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();
-    	BeanUtils.copyProperties(response, pageInfo);
-    	response.setResult(editUpList);
-    	return response;
+    public ProdStateLog queryRefuseByProdId(ProductInfoQuery queryInfo) {
+    	//商品检查
+    	Product product = productAtomSV.selectByProductId(queryInfo.getTenantId(),
+    			               queryInfo.getSupplierId(),queryInfo.getProductId());
+    	String prodState = product.getState();
+    	//1.有没有商品
+    	if (StringUtils.isBlank(product.getProdId())) {
+    		throw new BusinessException("","商品不存在");
+		}
+    	//2.商品状态为"被拒绝"
+    	if (!prodState.equals(ProductConstants.Product.State.REJECT)) {
+    		throw new BusinessException("","商品状态不是被拒绝");
+		}
+    	ProductStateLog stateLog = productStateLogAtomSV.selectStateLogByProdId(queryInfo.getProductId());
+    	ProdStateLog stateLogRes = new ProdStateLog();
+    	BeanUtils.copyProperties(stateLogRes, stateLog);
+    	return stateLogRes;
     }
     
     /**
