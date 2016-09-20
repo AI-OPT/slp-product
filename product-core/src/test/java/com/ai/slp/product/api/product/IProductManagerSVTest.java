@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.util.StringUtil;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.CommonTestConstants;
@@ -136,5 +137,29 @@ public class IProductManagerSVTest {
         BaseResponse response = productManagerSV.productCheck(checkParam);
         System.out.println(response.getResponseHeader().getIsSuccess());
     }
+    
+    /**
+     * 查询被拒绝商品信息
+     * jiawen
+     */
+    @Test
+    public void queryProductRefuseTest(){
+    	ProductEditQueryReq queryReq = new ProductEditQueryReq();
+    	queryReq.setTenantId("changhong");
+    	queryReq.setSupplierId("-1");
+    	queryReq.setProdId("0000000000000134");
+    	List<String> stateList = new ArrayList<>();
+    	stateList.add("4");
+    	queryReq.setStateList(stateList);
+    	//获取最新的拒绝愿意  --  按操作时间倒序 获取第一条
+    	
+    	PageInfoResponse<ProductEditUp> refuse = productManagerSV.queryRefuse(queryReq);
+    	if (StringUtil.isBlank(refuse.getResult().get(0).getRefuseDes())) {
+			System.out.println("没有记商品审核拒绝描述");
+		}else{
+			
+			System.out.println(refuse.getResult().get(0).getRefuseDes());
+		}
+    } 
     
 }
