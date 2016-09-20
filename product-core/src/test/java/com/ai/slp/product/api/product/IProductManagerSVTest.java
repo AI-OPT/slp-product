@@ -144,21 +144,17 @@ public class IProductManagerSVTest {
      */
     @Test
     public void queryProductRefuseTest(){
-    	ProductEditQueryReq queryReq = new ProductEditQueryReq();
+    	ProductInfoQuery queryReq = new ProductInfoQuery();
     	queryReq.setTenantId("changhong");
     	queryReq.setSupplierId("-1");
-    	queryReq.setProdId("0000000000000134");
-    	List<String> stateList = new ArrayList<>();
-    	//stateList.add("4");
-    	queryReq.setStateList(stateList);
+    	queryReq.setProductId("0000000000000134");
     	//获取最新的拒绝愿意  --  按操作时间倒序 获取第一条
-    	
-    	PageInfoResponse<ProductEditUp> refuse = productManagerSV.queryRefuse(queryReq);
-    	if (StringUtil.isBlank(refuse.getResult().get(0).getRefuseDes())) {
+		ProdStateLog refuse = productManagerSV.queryRefuseByPordId(queryReq);
+    	if (StringUtil.isBlank(refuse.getProdId())) {
 			System.out.println("没有记商品审核拒绝描述");
 		}else{
 			
-			System.out.println(refuse.getResult().get(0).getRefuseDes());
+			System.out.println(refuse.getRefuseDes());
 		}
     } 
     
