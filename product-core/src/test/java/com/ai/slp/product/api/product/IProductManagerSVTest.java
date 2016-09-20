@@ -149,7 +149,7 @@ public class IProductManagerSVTest {
     	queryReq.setSupplierId("-1");
     	queryReq.setProdId("0000000000000134");
     	List<String> stateList = new ArrayList<>();
-    	stateList.add("4");
+    	//stateList.add("4");
     	queryReq.setStateList(stateList);
     	//获取最新的拒绝愿意  --  按操作时间倒序 获取第一条
     	
