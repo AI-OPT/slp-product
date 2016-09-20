@@ -229,4 +229,20 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         CommonUtils.checkSupplierId(queryInfo.getSupplierId());
         return productManagerBusiSV.queryPageForAudit(queryInfo);
 	}
+
+	/**
+	 * 查询商品拒绝原因
+	 * @param productRefuseParam
+     * @return 满足条件的商品集合
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+	 */
+	@Override
+	public PageInfoResponse<ProductEditUp> queryRefuse(ProductEditQueryReq productRefuseParam)
+			throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(productRefuseParam.getTenantId());
+        CommonUtils.checkSupplierId(productRefuseParam.getSupplierId());
+    	return productManagerBusiSV.queryRefuse(productRefuseParam);
+	}
 }

@@ -224,4 +224,18 @@ public interface IProductManagerSV {
     public PageInfoResponse<ProductEditUp> searchAudit(ProductQueryInfo queryInfo) throws BusinessException, SystemException;
     @interface SearchAudit {}
     
+    /**
+     * 根据商品ID查询商品被拒绝原因描述
+     * @param productRefuseParam
+     * @return 满足条件的商品集合
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+     * @RestRelativeURL productManager/QueryRefuse
+     * @ApiCode PROMAN_0113
+     */
+    @POST
+   	@Path("/searchRefuseReson")
+       public PageInfoResponse<ProductEditUp> queryRefuse(ProductEditQueryReq productRefuseParam) throws BusinessException, SystemException;
+       @interface QueryRefuse {}
 }
