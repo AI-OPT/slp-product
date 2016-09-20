@@ -308,5 +308,40 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		return pageQuery(example, pageNo, pageSize);
 	
 	}
+	
+	/**
+	 * 查询符合条件的商品---不排序
+	 *
+	 * @param queryReq
+	 * @return
+	 * @author jiawen
+	 */
+	@Override
+	public PageInfo<Product> selectPageForRefuse(ProductEditQueryReq queryReq) {
+		ProductCriteria example = new ProductCriteria();
+		example.setOrderByClause("OPER_TIME asc");//操作时间倒序
+		ProductCriteria.Criteria criteria = example.createCriteria();
+		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
+			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
+		if (StringUtils.isNotBlank(queryReq.getProductType()))
+			criteria.andProductTypeEqualTo(queryReq.getProductType());
+		if (!CollectionUtil.isEmpty(queryReq.getStateList()))
+			criteria.andStateIn(queryReq.getStateList());
+		if (StringUtils.isNotBlank(queryReq.getProdId()))
+			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
+		if (StringUtils.isNotBlank(queryReq.getProdName()))
+			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+		//对商户标识的查询
+		if (StringUtils.isNotBlank(queryReq.getSupplierId())) 
+			criteria.andSupplierIdLike("%"+queryReq.getSupplierId()+"%");
+		//根据标准品ID模糊查询
+		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) 
+			criteria.andStandedProdIdLike("%"+queryReq.getStandedProdId()+"%");
+		//获取页数和每页条数
+		int pageNo = queryReq.getPageNo();
+		int pageSize = queryReq.getPageSize();
+
+		return pageQuery(example, pageNo, pageSize);
+	}
 
 }

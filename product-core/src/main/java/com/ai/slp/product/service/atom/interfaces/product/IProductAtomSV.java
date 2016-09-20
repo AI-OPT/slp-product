@@ -117,4 +117,13 @@ public interface IProductAtomSV {
      * @return
      */
     public PageInfo<ProductRouteGroupInfo> selectPageForRouteGroup(ProdRouteGroupQueryVo queryVo);
+    
+    /**
+     * 查询符合条件的商品---按操作时间倒序
+     *
+     * @param productPageQueryVo
+     * @return
+     * @author jiawen
+     */
+    public PageInfo<Product> selectPageForRefuse(ProductEditQueryReq productPageQueryVo);
 }
