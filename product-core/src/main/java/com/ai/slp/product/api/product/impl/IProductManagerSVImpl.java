@@ -239,10 +239,11 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @author jiawen
 	 */
 	@Override
-	public PageInfoResponse<ProductEditUp> queryRefuse(ProductEditQueryReq productRefuseParam)
+	public ProdStateLog queryRefuseByPordId(ProductInfoQuery queryInfo)
 			throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(productRefuseParam.getTenantId());
-        CommonUtils.checkSupplierId(productRefuseParam.getSupplierId());
-    	return productManagerBusiSV.queryRefuse(productRefuseParam);
+		CommonUtils.checkTenantId(queryInfo.getTenantId());
+		ProdStateLog stateLogRes = productManagerBusiSV.queryRefuseByProdId(queryInfo);
+		CommonUtils.addSuccessResHeader(stateLogRes, "OK");
+    	return stateLogRes;
 	}
 }

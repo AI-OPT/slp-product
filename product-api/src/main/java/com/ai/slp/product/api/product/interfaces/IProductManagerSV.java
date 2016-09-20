@@ -231,11 +231,11 @@ public interface IProductManagerSV {
      * @throws BusinessException
      * @throws SystemException
      * @author jiawen
-     * @RestRelativeURL productManager/QueryRefuse
+     * @RestRelativeURL productManager/queryRefuseReson
      * @ApiCode PROMAN_0113
      */
     @POST
-   	@Path("/searchRefuseReson")
-       public PageInfoResponse<ProductEditUp> queryRefuse(ProductEditQueryReq productRefuseParam) throws BusinessException, SystemException;
+   	@Path("/queryRefuseReson")
+       public ProdStateLog queryRefuseByPordId(ProductInfoQuery queryInfo) throws BusinessException, SystemException;
        @interface QueryRefuse {}
 }
