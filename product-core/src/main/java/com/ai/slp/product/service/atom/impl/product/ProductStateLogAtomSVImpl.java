@@ -47,7 +47,7 @@ public class ProductStateLogAtomSVImpl implements IProductStateLogAtomSV{
 	 * 根据ID查询   拒绝原因   拒绝描述 -- 按操作时间倒序
 	 */
 	@Override
-	public ProductStateLog selectProdRefuseById(String prodId) {
+	public ProductStateLog selectStateLogByProdId(String prodId) {
 		ProductStateLogCriteria example = new ProductStateLogCriteria();
 		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
 		example.createCriteria().andProdIdEqualTo(prodId);
