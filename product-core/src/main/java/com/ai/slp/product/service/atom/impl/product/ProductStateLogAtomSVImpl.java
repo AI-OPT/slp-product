@@ -43,5 +43,16 @@ public class ProductStateLogAtomSVImpl implements IProductStateLogAtomSV{
 		List<ProductStateLog> productStateLogList = productStateLogMapper.selectByExample(example);
 		return CollectionUtil.isEmpty(productStateLogList)?null:productStateLogList.get(0);
 	}
+	/**
+	 * 根据ID查询   拒绝原因   拒绝描述 -- 按操作时间倒序
+	 */
+	@Override
+	public ProductStateLog selectProdRefuseById(String prodId) {
+		ProductStateLogCriteria example = new ProductStateLogCriteria();
+		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+		example.createCriteria().andProdIdEqualTo(prodId);
+		List<ProductStateLog> productStateLogList = productStateLogMapper.selectByExample(example);
+		return CollectionUtil.isEmpty(productStateLogList)?null:productStateLogList.get(0);
+	}
 
 }
