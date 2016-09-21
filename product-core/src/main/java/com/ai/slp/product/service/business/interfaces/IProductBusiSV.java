@@ -1,13 +1,13 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-
-import java.util.List;
 
 
 /**
@@ -46,6 +46,13 @@ public interface IProductBusiSV {
      * @param prodId
      */
     public void offSale(String tenantId,String supplierId, String prodId, Long operId);
+
+    /**
+     * 进行停用下架
+     * @param product
+     * @param operId
+     */
+    public void offSale(StorageGroup storageGroup,Product product,Long operId);
   
     /**
      * 废弃商品

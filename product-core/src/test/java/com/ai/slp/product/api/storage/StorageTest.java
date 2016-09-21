@@ -1,12 +1,7 @@
 package com.ai.slp.product.api.storage;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.vo.BaseListResponse;
-import com.ai.opt.base.vo.BaseMapResponse;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.storage.interfaces.IStorageSV;
-import com.ai.slp.product.api.storage.param.*;
-import com.ai.slp.product.constants.CommonTestConstants;
+import java.sql.Timestamp;
+
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.sql.Timestamp;
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.BaseListResponse;
+import com.ai.opt.base.vo.BaseMapResponse;
+import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.storage.interfaces.IStorageSV;
+import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.constants.CommonTestConstants;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:context/core-context.xml")
@@ -60,6 +62,19 @@ public class StorageTest {
         query.setStorageId("000000000000000061");
         BaseMapResponse<String, SkuStorageInfo> mapResponse = storageSV.querySkuStorageById(query);
         System.out.println(mapResponse.getResult().size());
+    }
+
+    @Test
+    public void chargeStorageGroupStatus(){
+        StoGroupStatus groupStatus = new StoGroupStatus();
+        groupStatus.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        groupStatus.setSupplierId("-1");
+        groupStatus.setOperId(1l);
+        groupStatus.setGroupId("0000000000184");
+//        groupStatus.setState("2");//停用
+        groupStatus.setState("1");//启用
+        BaseResponse response = storageSV.chargeStorageGroupStatus(groupStatus);
+        System.out.println(response.getResponseHeader().isSuccess());
     }
 
 }

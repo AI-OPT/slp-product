@@ -12,8 +12,7 @@ public final class SearchConstants {
                 "product.TENANT_ID as tenantid, sku.SKU_ID as skuid ,sku.SKU_NAME as skuname," +
                 "product.PROD_ID as producetid,product.PRODUCT_SELL_POINT as productsellpoint," +
                 "product.PROD_NAME as producetname,product.PRODUCT_CAT_ID as productCatId " +
-                "FROM prod_sku sku INNER JOIN product product ON sku.PROD_ID = product.PROD_ID AND product.STATE = '5' " +
-                "AND product.PROD_ID = ?";
+                "FROM prod_sku sku INNER JOIN product product ON sku.PROD_ID = product.PROD_ID AND product.PROD_ID = ? ";
 
         public static final String FETCH_ATTR_INFO_SQL = "SELECT standed_prod_attr.ATTR_ID as attrID, " +
                 "standed_prod_attr.ATTR_VALUE_NAME as attrValue,standed_prod_attr.ATTRVALUE_DEF_ID as attrValueDefId," +

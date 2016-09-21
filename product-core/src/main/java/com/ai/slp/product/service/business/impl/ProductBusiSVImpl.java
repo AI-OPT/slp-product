@@ -1,5 +1,16 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfoResponse;
@@ -39,16 +50,6 @@ import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.ProductPageQueryVo;
 import com.ai.slp.product.vo.SkuStorageVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -181,15 +182,29 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     @Override
     public void offSale(String tenantId,String supplierId, String prodId, Long operId) {
         Product product = productAtomSV.selectByProductId(tenantId,prodId);
-        if (product == null){
-            throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
+        if (product == null
+                || !ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+            logger.warn("未找到对应商品信息,租户ID:{},商品ID:{}",tenantId,prodId);
+            throw new BusinessException("","未找到相关的商品信息或商品非[在售]状态");
         }
-        //若商品状态不是"在售",则不进行处理
-        if(!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
-            return;
-        }
+        //只处理在售商品
         StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(
-                tenantId,supplierId,product.getStorageGroupId());
+                product.getTenantId(),product.getSupplierId(),product.getStorageGroupId());
+        changeToStop(storageGroup,product,operId);
+    }
+
+    /**
+     * 进行停用下架
+     *
+     * @param product
+     * @param operId
+     */
+    @Override
+    public void offSale(StorageGroup storageGroup,Product product, Long operId) {
+        if (product == null
+                || !ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+            throw new BusinessException("","未找到相关的商品信息或商品非[在售]状态");
+        }
         changeToStop(storageGroup,product,operId);
     }
 
@@ -602,9 +617,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new BusinessException("","对应库存组不存在,租户ID:"+tenantId
                     +"库存组ID:"+product.getStorageGroupId());
         }
-        //库存组为停用
+        //库存组为停用或自动停用
         if (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())
-                || !StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())){
+                || StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())){
             //若商品为"停用下架"则不处理
             if (ProductConstants.Product.State.STOP.equals(product.getState())){
                 return;
@@ -644,6 +659,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             product.setOperId(operId);
         //添加日志
         updateProdAndStatusLog(product);
+        //添加搜索引擎
+//        skuIndexManage.updateSKUIndex(product.getProdId());
     }
 
     /**

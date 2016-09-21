@@ -388,7 +388,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			BeanUtils.copyProperties(groupLog, storageGroup);
 			storageGroupLogAtomSV.install(groupLog);
 		}
-
+		//刷新缓存
+		flushStorageCache(storageGroup);
+		// 若对应商品为"62停用下架",则进行自动上架.
+		Product product = productAtomSV.selectByGroupId(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
+		if (product != null && ProductConstants.Product.State.STOP.equals(product.getState())) {
+			productBusiSV.changeToSaleForStop(product.getTenantId(), product.getProdId(), operId);
+		}
 	}
 
 	/**
@@ -398,14 +404,14 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @param operId
 	 */
 	private void stopGroup(StorageGroup storageGroup, Long operId) {
-		// 商品进行停用下架
-		Product product = productAtomSV.selectByGroupId(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
-		if (product != null && ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
-			productBusiSV.offSale(product.getTenantId(),storageGroup.getSupplierId(), product.getProdId(), operId);
-		}
 		// 库存组变更为停用
 		storageGroup.setState(StorageConstants.StorageGroup.State.STOP);
 		storageGroup.setOperId(operId);
+		// 商品进行停用下架
+		Product product = productAtomSV.selectByGroupId(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
+		if (product != null && ProductConstants.Product.State.IN_SALE.equals(product.getState())) {
+			productBusiSV.offSale(storageGroup,product, operId);
+		}
 		// 添加日志信息
 		if (storageGroupAtomSV.updateById(storageGroup) > 0) {
 			StorageGroupLog groupLog = new StorageGroupLog();
@@ -447,6 +453,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			BeanUtils.copyProperties(groupLog, storageGroup);
 			storageGroupLogAtomSV.install(groupLog);
 		}
+		cleanGroupCache(storageGroup.getTenantId(),storageGroup.getStorageGroupId());
 	}
 
 	@Override

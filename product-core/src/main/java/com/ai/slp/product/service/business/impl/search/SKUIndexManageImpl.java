@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.constants.SearchConstants;
@@ -61,11 +62,11 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
             List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
             searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.SKU_ID, skuId,
                     new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
-            return SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).delete(searchfieldVos);
+            ISearchClient client = getSearchClient();
+            return client.delete(searchfieldVos);
         } catch (Exception e) {
             logger.error("Failed to delete sku info", e);
         }
-
         return false;
     }
 
@@ -78,13 +79,18 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
     public boolean deleteSKUIndexByProductId(String productId) {
         try {
             List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
-            searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID, productId,
+            searchfieldVos.add(new SearchCriteria(
+                    SearchFieldConfConstants.PRODUCT_ID, productId,
                     new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
-            return SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).delete(searchfieldVos);
+            ISearchClient client = getSearchClient();
+            return client.delete(searchfieldVos);
         } catch (Exception e) {
             logger.error("Failed to delete sku info", e);
         }
-
         return false;
+    }
+
+    private ISearchClient getSearchClient(){
+        return SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
     }
 }

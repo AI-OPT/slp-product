@@ -1,5 +1,11 @@
 package com.ai.slp.product.api.storage.impl;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.*;
@@ -18,11 +24,6 @@ import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by jackieliu on 16/5/4.
@@ -123,19 +124,7 @@ public class IStorageSVImpl implements IStorageSV {
 				groupId = groupStatus.getGroupId();
 		storageGroupBusiSV.updateGroupState(tenantId, groupStatus.getSupplierId(),
 				groupId,groupStatus.getState(),groupStatus.getOperId());
-		//如果为启用,则刷新缓存
-		if (StorageConstants.StorageGroup.State.ACTIVE.equals(groupStatus.getState())){
-			storageGroupBusiSV.flushStorageCache(tenantId, groupId);
-			// 若对应商品为"62停用下架",则进行自动上架.
-			Product product = productAtomSV.selectByGroupId(tenantId, groupId);
-			if (product != null && ProductConstants.Product.State.STOP.equals(product.getState())) {
-				productBusiSV.changeToSaleForStop(product.getTenantId(), product.getProdId(), groupStatus.getOperId());
-			}
-		}
-		//如为废弃,则删除缓存
-		else if(StorageConstants.StorageGroup.State.DISCARD.equals(groupStatus.getState()))
-			storageGroupBusiSV.cleanGroupCache(tenantId,groupId);
-		return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
+		return CommonUtils.addSuccessResHeader(new BaseResponse(),"OK");
 	}
 
 	/**
