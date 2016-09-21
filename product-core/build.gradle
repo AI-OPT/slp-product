@@ -6,10 +6,12 @@ dependencies {
     compile 'org.springframework:spring-tx:4.1.7.RELEASE'
     compile 'org.springframework:spring-jdbc:4.1.7.RELEASE'
 
-    compile 'com.ai.opt.sdk:opt-sdk:2.2-SNAPSHOT'
+    compile ('com.ai.opt.sdk:opt-sdk:2.2-SNAPSHOT'){
+        exclude group:"org.jboss.netty", module:"netty"
+    }
     
     //搜索
-    compile 'com.ai:ipaas-ses:0.2.6.1'
+    compile 'com.ai:ipaas-ses:0.3'
     //地区
     compile 'com.ai.platform.common:area:1.0-SNAPSHOT'
     //路由相关查询
