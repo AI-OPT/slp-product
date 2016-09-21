@@ -1,9 +1,9 @@
 package com.ai.slp.product.api.storageserver.param;
 
-import com.ai.opt.base.vo.BaseResponse;
-
 import java.sql.Timestamp;
 import java.util.Map;
+
+import com.ai.opt.base.vo.BaseResponse;
 
 /**
  * 库存量变化操作结果 <br>
@@ -68,6 +68,18 @@ public class StorageNumRes extends BaseResponse {
      * 10：中国移动; 11：中国电信; 12：中国联通
      */
     private String basicOrgId;
+    /**
+     * 是否提供发票<br>
+     * Y:是;N:否
+     */
+    private String isInvoice;
+    /**
+     * 上架类型<br>
+     *   1审核通过后立即上架
+     *   2审核通过后放入仓库
+     *   4预售
+     */
+    private String upshelfType;
     /**
      * 使用数量库存组成,K:SKU库存标识;V:库存提供量
      */
@@ -175,5 +187,25 @@ public class StorageNumRes extends BaseResponse {
 
     public void setBasicOrgId(String basicOrgId) {
         this.basicOrgId = basicOrgId;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getIsInvoice() {
+        return isInvoice;
+    }
+
+    public void setIsInvoice(String isInvoice) {
+        this.isInvoice = isInvoice;
+    }
+
+    public String getUpshelfType() {
+        return upshelfType;
+    }
+
+    public void setUpshelfType(String upshelfType) {
+        this.upshelfType = upshelfType;
     }
 }
