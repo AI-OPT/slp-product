@@ -164,8 +164,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         //若减少库存之后,剩余库存小于零,表示库存不足
         if (cacheClient.hincrBy(usableNumKey,skuId,-skuNum)<0){
             cacheClient.hincrBy(usableNumKey,skuId,skuNum);//需要将库存加回
-            logger.warn("该商品库存不足,租户ID:{},库存组ID:{}"
-                    ,tenantId,groupId);
+            logger.warn("该商品库存不足,租户ID:{},库存组ID:{}",tenantId,groupId);
             throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
         }
         //6.进行减少优先级库存可用量

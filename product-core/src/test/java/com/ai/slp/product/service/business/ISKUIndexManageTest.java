@@ -20,7 +20,7 @@ public class ISKUIndexManageTest {
     @Test
     public void deleteSKUIndexByProductId(){
         //搜索引擎中删除上信息
-        iskuIndexManage.deleteSKUIndexByProductId("1000000000000078");
+        iskuIndexManage.deleteSKUIndexByProductId("1000000000000024");
     }
 
     @Test

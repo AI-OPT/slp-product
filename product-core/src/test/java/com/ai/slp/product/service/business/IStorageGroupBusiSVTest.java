@@ -29,7 +29,7 @@ public class IStorageGroupBusiSVTest {
     @Test
     public void flushStorageCacheTest(){
         StorageGroup storageGroup = groupAtomSV.queryByGroupIdAndSupplierId(
-                CommonTestConstants.COMMON_TENANT_ID,"-1", "100000000119");
+                CommonTestConstants.COMMON_TENANT_ID,"-1", "0000000000148");
         groupBusiSV.flushStorageCache(storageGroup);
     }
 
