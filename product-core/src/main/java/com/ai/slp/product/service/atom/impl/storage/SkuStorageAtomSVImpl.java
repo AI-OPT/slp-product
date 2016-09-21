@@ -1,5 +1,14 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.constants.SkuStorageConstants;
@@ -11,14 +20,6 @@ import com.ai.slp.product.dao.mapper.interfaces.storage.SkuStorageMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * SKU库存原子操作 Created by jackieliu on 16/5/12.
@@ -138,7 +139,7 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 			return 0;
 		SkuStorageCriteria example = new SkuStorageCriteria();
 		example.createCriteria().andStorageIdIn(storageIdList)
-				.andSalePriceIsNull();
+				.andSalePriceIsNull().andStateEqualTo(StorageConstants.SkuStorage.State.ACTIVE);
 		return skuStorageMapper.countByExample(example);
 	}
 
@@ -152,7 +153,7 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	public int queryNoPriceOfStorageById(String storageId) {
 		SkuStorageCriteria example = new SkuStorageCriteria();
 		example.createCriteria().andStorageIdEqualTo(storageId)
-				.andSalePriceIsNull();
+				.andSalePriceIsNull().andStateEqualTo(StorageConstants.SkuStorage.State.ACTIVE);
 		return skuStorageMapper.countByExample(example);
 	}
 

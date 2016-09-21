@@ -60,6 +60,26 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	}
 
 	/**
+	 * 查询指定库存组下的库存信息,按照优先级正序排序
+	 *
+	 * @param tenantId
+	 * @param groupId
+	 * @param hasDiscard 是否包括废弃库存
+	 * @return
+	 */
+	@Override
+	public List<Storage> queryOfGroup(String tenantId, String groupId, boolean hasDiscard) {
+		StorageCriteria example = new StorageCriteria();
+		example.setOrderByClause("PRIORITY_NUMBER");
+		StorageCriteria.Criteria criteria = example.createCriteria().andStorageGroupIdEqualTo(groupId);
+		//若不包括废弃,则查询非废弃库存信息
+		if (!hasDiscard){
+			criteria.andStateNotIn(DISCARD_LIST);
+		}
+		return storageMapper.selectByExample(example);
+	}
+
+	/**
 	 * 查询库存是否存在(通过预警对象标识)
 	 */
 	@Override

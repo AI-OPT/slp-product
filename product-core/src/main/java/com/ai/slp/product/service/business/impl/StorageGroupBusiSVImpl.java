@@ -359,7 +359,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			throw new BusinessException("", "该库存组对应的标准品的状态不可用,不能启用");
 		}
 		// 判断库存组下SKU库存是否已经设置价格
-		List<Storage> storageList = storageAtomSV.queryOfGroup(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
+		List<Storage> storageList = storageAtomSV.queryOfGroup(
+				storageGroup.getTenantId(), storageGroup.getStorageGroupId(),false);
 		// 如果该库存组下有库存则判断库存下的SKU库存是否有销售价
 		if(!CollectionUtil.isEmpty(storageList)){
 			List<String> storageIdList = new ArrayList<>();
@@ -440,7 +441,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			productBusiSV.discardProduct(product.getTenantId(), product.getProdId(), operId);
 		}
 		// 废弃库存组下所有库存和SKU库存
-		List<Storage> storageList = storageAtomSV.queryOfGroup(storageGroup.getTenantId(),storageGroup.getStorageGroupId());
+		List<Storage> storageList = storageAtomSV.queryOfGroup(
+				storageGroup.getTenantId(),storageGroup.getStorageGroupId(),false);
 		for (Storage storage : storageList) {
 			storageBusiSV.discardStorage(storageGroup.getTenantId(),storage, operId,true);
 		}

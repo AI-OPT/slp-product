@@ -1,14 +1,7 @@
 package com.ai.slp.product.service.business.impl;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -21,46 +14,21 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.opt.sdk.util.StringUtil;
-import com.ai.slp.product.api.normproduct.param.AttrMap;
-import com.ai.slp.product.api.normproduct.param.AttrValInfo;
-import com.ai.slp.product.api.normproduct.param.AttrValRequest;
-import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
-import com.ai.slp.product.api.normproduct.param.NormProdAndKeyAttrRes;
-import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
-import com.ai.slp.product.api.normproduct.param.NormProdRequest;
-import com.ai.slp.product.api.normproduct.param.NormProdResponse;
-import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
-import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
+import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
-import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
-import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
-import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
-import com.ai.slp.product.dao.mapper.bo.ProductCat;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
+import com.ai.slp.product.dao.mapper.bo.*;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatAttrValAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrLogAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.IStandedProductLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.*;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
@@ -279,9 +247,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			}
 			for (StorageGroup group : groupList) {
 				String storageGroupId = group.getStorageGroupId();
-				List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId, storageGroupId);
-				if (storageList == null || storageList.size() == 0) {
-					return;
+				List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId, storageGroupId,false);
+				if (CollectionUtil.isEmpty(storageList)) {
+					continue;
 				}
 				for (Storage storage : storageList) {
 					storageBusiSV.discardStorage(tenantId, storage, productInfoRequest.getOperId(), true);

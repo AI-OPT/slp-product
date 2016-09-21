@@ -310,7 +310,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		// 若新添加SKU,则需要废除之前所有库存.
 		if (!CollectionUtil.isEmpty(skuSaleAttrs)) {
 			// 查询库存组下库存
-			List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId, group.getStorageGroupId());
+			List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId, group.getStorageGroupId(),false);
 			for (Storage storage : storageList) {
 				storageBusiSV.discardStorage(tenantId, storage, saveInfo.getOperId(), true);
 			}

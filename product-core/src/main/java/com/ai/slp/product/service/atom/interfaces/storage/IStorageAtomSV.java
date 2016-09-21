@@ -1,8 +1,8 @@
 package com.ai.slp.product.service.atom.interfaces.storage;
 
-import com.ai.slp.product.dao.mapper.bo.storage.Storage;
-
 import java.util.List;
+
+import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -16,6 +16,15 @@ public interface IStorageAtomSV {
      * @return
      */
     public List<Storage> queryOfGroup(String tenantId,String groupId);
+
+    /**
+     * 查询指定库存组下的库存信息,按照优先级正序排序
+     * @param tenantId
+     * @param groupId
+     * @param hasDiscard 是否包括废弃库存
+     * @return
+     */
+    public List<Storage> queryOfGroup(String tenantId,String groupId,boolean hasDiscard);
     
     /**
      * 查询库存是否存在(通过预警对象标识) 

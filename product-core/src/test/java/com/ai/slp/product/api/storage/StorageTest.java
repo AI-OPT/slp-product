@@ -71,8 +71,8 @@ public class StorageTest {
         groupStatus.setSupplierId("-1");
         groupStatus.setOperId(1l);
         groupStatus.setGroupId("0000000000184");
-//        groupStatus.setState("2");//停用
-        groupStatus.setState("1");//启用
+        groupStatus.setState("2");//停用
+//        groupStatus.setState("1");//启用
         BaseResponse response = storageSV.chargeStorageGroupStatus(groupStatus);
         System.out.println(response.getResponseHeader().isSuccess());
     }
