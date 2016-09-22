@@ -10,10 +10,7 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import com.ai.slp.product.api.normproduct.param.NormProdAndKeyAttrRes;
-import com.ai.slp.product.api.normproduct.param.NormProdRequest;
-import com.ai.slp.product.api.normproduct.param.NormProdResponse;
-import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
+import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.constants.CommonTestConstants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -65,5 +62,16 @@ public class INormProductSVTest {
 		}.getType());
     	BaseResponse baseResponse = normProductSV.updateProductAndStoGroup(request);
         System.out.println(JSonUtil.toJSon(baseResponse));
+    }
+
+    @Test
+    public void discardProductWithStorage(){
+        NormProdUniqueReq uniqueReq = new NormProdUniqueReq();
+        uniqueReq.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        uniqueReq.setSupplierId("-1");
+        uniqueReq.setProductId("0000000000000103");
+        uniqueReq.setOperId(1l);
+        BaseResponse response = normProductSV.discardProductWithStorage(uniqueReq);
+        System.out.print(response.getResponseHeader().isSuccess());
     }
 }

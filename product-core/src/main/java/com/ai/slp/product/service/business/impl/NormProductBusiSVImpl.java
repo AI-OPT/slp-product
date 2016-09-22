@@ -15,7 +15,6 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.opt.sdk.util.DateUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
@@ -195,12 +194,11 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		standedProduct.setStandedProductName(normProdct.getProductName());
 		standedProduct.setProductType(normProdct.getProductType());
 		standedProduct.setState(normProdct.getState());
+		StandedProductLog productLog = new StandedProductLog();
+		BeanUtils.copyProperties(productLog, standedProduct);
 		int updateCount = standedProductAtomSV.updateObj(standedProduct);
 		if (updateCount > 0) {
-			StandedProductLog productLog = new StandedProductLog();
-			BeanUtils.copyProperties(productLog, standedProduct);
-			productLog.setCreateTime(DateUtil.getSysDate());
-			productLog.setCreateId(standedProduct.getOperId());
+			productLog.setOperTime(standedProduct.getOperTime());
 			standedProductLogAtomSV.insert(productLog);
 		}
 		// 变更属性值. 1.将原来属性值设置为不可用;2,启用新的属性值.
@@ -479,12 +477,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 	private void discardProduct(StandedProduct standedProduct,Long operId){
 		standedProduct.setOperId(operId);
-		standedProduct.setOperTime(standedProduct.getOperTime());
 		standedProduct.setState(StandedProductConstants.STATUS_DISCARD);// 设置废弃
+		StandedProductLog productLog = new StandedProductLog();
+		BeanUtils.copyProperties(productLog, standedProduct);
 		// 添加日志
 		if (standedProductAtomSV.updateObj(standedProduct) > 0) {
-			StandedProductLog productLog = new StandedProductLog();
-			BeanUtils.copyProperties(productLog, standedProduct);
+			productLog.setOperTime(standedProduct.getOperTime());
 			standedProductLogAtomSV.insert(productLog);
 		}
 	}
@@ -518,7 +516,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		//查询标准品下所有非废弃库存组
 		List<StorageGroup> groupList = storageGroupAtomSV.queryNoDiscardOfStandProd(tenantId,supplierId,standedProdId);
 		for (StorageGroup group:groupList){
-			storageGroupBusiSV.updateGroupState(tenantId,supplierId,group.getStorageGroupId(),"",operId);
+			storageGroupBusiSV.updateGroupState(tenantId,supplierId,group.getStorageGroupId()
+					,StorageConstants.StorageGroup.State.AUTO_DISCARD,operId);
 		}
 		//废弃标准品
 		discardProduct(standedProduct,operId);

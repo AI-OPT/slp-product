@@ -135,7 +135,12 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public BaseResponse discardProductWithStorage(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
-        return null;
+        CommonUtils.checkTenantId(invalidRequest.getTenantId());
+        normProductBusiSV.discardProductWithProduct(
+                invalidRequest.getTenantId(),invalidRequest.getProductId(),
+                invalidRequest.getOperId(), invalidRequest.getSupplierId()
+        );
+        return CommonUtils.genSuccessResponse("");
     }
 
     /**
