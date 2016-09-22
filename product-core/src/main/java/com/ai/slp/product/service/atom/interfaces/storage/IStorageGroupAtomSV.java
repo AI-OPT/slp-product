@@ -1,13 +1,13 @@
 package com.ai.slp.product.service.atom.interfaces.storage;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.dao.mapper.attach.StorageGroupAttach4List;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.vo.StoGroupPageQueryVo;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
-
-import java.util.List;
 
 /**
  * 库存组原子操作
@@ -22,7 +22,7 @@ public interface IStorageGroupAtomSV {
      * @param standedProdId
      * @return
      */
-    public int queryCountNoDiscard(String tenantId,String standedProdId);
+    public int countNoDiscard(String tenantId, String standedProdId);
 
     /**
      * 查询标准品下启用状态的库存组
@@ -31,7 +31,7 @@ public interface IStorageGroupAtomSV {
      * @param standedProdId
      * @return
      */
-    public int queryCountActive(String tenantId,String standedProdId);
+    public int countActive(String tenantId, String standedProdId);
 
     /**
      * 添加库存组信息
@@ -75,6 +75,12 @@ public interface IStorageGroupAtomSV {
      * @return
      */
     public List<StorageGroup> queryOfStandedProd(String tenantId,String supplierId,String standedProdId);
+
+    /**
+     * 查询某个标准品下的非废弃库存组列表
+     * @return
+     */
+    public List<StorageGroup> queryNoDiscardOfStandProd(String tenantId, String supplierId, String standedProdId);
     
     /**
      * 更新库存组的最低最高销售价

@@ -1,5 +1,14 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.util.*;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
@@ -31,14 +40,6 @@ import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
 import com.google.gson.Gson;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 /**
  * 库存业务操作
@@ -90,8 +91,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		Product product = productAtomSV.selectByGroupId(tenantId,storage.getStorageGroupId());
 		//库存为启用,且商品为在售,则不允许进行废弃
 		if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())
-				&& product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState()))
-			throw new BusinessException("","对应商品在销售中,不允许停用");
+				&& product!=null
+				&& ProductConstants.Product.State.IN_SALE.equals(product.getState()))
+			throw new BusinessException("","对应商品在销售中,不允许废弃");
 		//如果库存为启用,需要从缓存中删除库存对应缓存信息
 		if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState()))
 			storageNumDbBusiSV.subStorageCache(tenantId,storage);

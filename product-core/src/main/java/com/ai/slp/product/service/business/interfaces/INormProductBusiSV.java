@@ -55,6 +55,14 @@ public interface INormProductBusiSV {
     public void discardProduct(String tenantId,String productId,Long operId,String supplierId);
 
     /**
+     * 废弃标准品及管理的库存组和销售商品
+     * @param tenantId 租户id
+     * @param standedProdId 标准品标识
+     * @param operId 操作者id
+     */
+    public void discardProductWithProduct(String tenantId,String standedProdId,Long operId,String supplierId);
+
+    /**
      * 查询标准品下指定类型的属性及属性值信息
      *
      * @param tenantId

@@ -1,16 +1,16 @@
 package com.ai.slp.product.api.normproduct.interfaces;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.normproduct.param.*;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.normproduct.param.*;
 
 /**
  * 标准品处理接口<br>
@@ -223,4 +223,22 @@ public interface INormProductSV {
     public BaseResponse updateProductAndStoGroup(NormProdSaveRequest productInfoRequest)
             throws BusinessException,SystemException;
     @interface UpdateProductAndStoGroup {}
+
+    /**
+     * 废弃标准品,并级联废弃销售商品和库存信息. <br>
+     *
+     * @param invalidRequest 标准品废弃请求参数
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     * @ApiDocMethod
+     * @ApiCode NORM_PRODUCT_0112
+     * @RestRelativeURL normProduct/discardwithprod
+     */
+    @POST
+    @Path("/discardwithprod")
+    public BaseResponse discardProductWithStorage(NormProdUniqueReq invalidRequest)
+            throws BusinessException,SystemException;
+    @interface discardProductWithStorage {}
 }

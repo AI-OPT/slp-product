@@ -60,6 +60,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Autowired
 	IStorageGroupAtomSV storageGroupAtomSV;
 	@Autowired
+	IStorageAtomSV storageAtomSV;
+	@Autowired
 	IProdCatAttrAttachAtomSV catAttrAttachAtomSV;
 	@Autowired
 	IProdCatAttrAtomSV prodCatAttrAtomSV;
@@ -74,13 +76,11 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Autowired
 	IProductAtomSV productAtomSV;
 	@Autowired
-	IStorageGroupBusiSV groupBusiSV;
+	IStorageGroupBusiSV storageGroupBusiSV;
 	@Autowired
 	IProdSkuBusiSV prodSkuBusiSV;
 	@Autowired
 	IStorageBusiSV storageBusiSV;
-	@Autowired
-	IStorageAtomSV storageAtomSV;
 
 	/**
 	 * 添加标准品
@@ -141,7 +141,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		storageGroup.setStandedProdId(normProdId);
 		storageGroup.setSupplierId(normProduct.getSupplierId());
 		storageGroup.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
-		String groupId = groupBusiSV.addGroup(storageGroup);
+		String groupId = storageGroupBusiSV.addGroup(storageGroup);
 		if (StringUtil.isBlank(groupId)) {
 			return null;
 		}
@@ -186,7 +186,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			else if (StandedProductConstants.STATUS_ACTIVE.equals(standedProduct.getState())
 					&& StandedProductConstants.STATUS_INACTIVE.equals(normProdct.getState())) {
 				// 检查是否有启用状态库存组
-				int groupNum = storageGroupAtomSV.queryCountActive(tenantId, productId);
+				int groupNum = storageGroupAtomSV.countActive(tenantId, productId);
 				if (groupNum > 0)
 					throw new BusinessException("", "该标准品下存在[" + groupNum + "]个启用的库存组,不允许变更为不可用");
 			}
@@ -471,9 +471,13 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 					"商品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + supplierId + "不一致!");
 
 		// 查询没有废弃的库存组
-		int noDiscardNum = storageGroupAtomSV.queryCountNoDiscard(tenantId, productId);
+		int noDiscardNum = storageGroupAtomSV.countNoDiscard(tenantId, productId);
 		if (noDiscardNum > 0)
 			throw new BusinessException("", "该商品下存在[" + noDiscardNum + "]个未废弃库存组");
+		discardProduct(standedProduct,operId);
+	}
+
+	private void discardProduct(StandedProduct standedProduct,Long operId){
 		standedProduct.setOperId(operId);
 		standedProduct.setOperTime(standedProduct.getOperTime());
 		standedProduct.setState(StandedProductConstants.STATUS_DISCARD);// 设置废弃
@@ -483,6 +487,41 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			BeanUtils.copyProperties(productLog, standedProduct);
 			standedProductLogAtomSV.insert(productLog);
 		}
+	}
+
+	/**
+	 * 废弃标准品
+	 *
+	 * @param tenantId   租户id
+	 * @param standedProdId  标准品标识
+	 * @param operId     操作者id
+	 * @param supplierId
+	 */
+	@Override
+	public void discardProductWithProduct(String tenantId, String standedProdId, Long operId, String supplierId) {
+		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
+		if (standedProduct == null) {
+			logger.warn("not find the product. tenantId:{},standedProdId:{}",tenantId,standedProdId);
+			throw new BusinessException("", "未查询到指定商品");
+		}
+		if (!standedProduct.getSupplierId().equals(supplierId)) {
+			logger.warn("the supplierId of query and product is not accord.querySupplierId:{},prodSupplierId:{}"
+				,supplierId,standedProduct.getSupplierId());
+			throw new BusinessException("","未查询到商户下指定的商品");
+		}
+		//查询启用状态的库组
+		int activeNum = storageGroupAtomSV.countActive(tenantId,standedProdId);
+		if (activeNum>0){
+			throw new BusinessException("", "该商品下存在[" + activeNum + "]个启用库存组");
+		}
+
+		//查询标准品下所有非废弃库存组
+		List<StorageGroup> groupList = storageGroupAtomSV.queryNoDiscardOfStandProd(tenantId,supplierId,standedProdId);
+		for (StorageGroup group:groupList){
+			storageGroupBusiSV.updateGroupState(tenantId,supplierId,group.getStorageGroupId(),"",operId);
+		}
+		//废弃标准品
+		discardProduct(standedProduct,operId);
 	}
 
 	/**

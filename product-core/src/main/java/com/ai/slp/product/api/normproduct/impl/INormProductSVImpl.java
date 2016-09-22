@@ -12,15 +12,7 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import com.ai.slp.product.api.normproduct.param.AttrMap;
-import com.ai.slp.product.api.normproduct.param.AttrQuery;
-import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
-import com.ai.slp.product.api.normproduct.param.NormProdAndKeyAttrRes;
-import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
-import com.ai.slp.product.api.normproduct.param.NormProdRequest;
-import com.ai.slp.product.api.normproduct.param.NormProdResponse;
-import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
-import com.ai.slp.product.api.normproduct.param.NormProdUniqueReq;
+import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.util.CommonUtils;
@@ -133,6 +125,20 @@ public class INormProductSVImpl implements INormProductSV {
 	}
 
     /**
+     * 废弃标准品,并级联废弃销售商品和库存信息. <br>
+     * 只有在库存组为停用状态时,方可废弃
+     * @param invalidRequest 标准品废弃请求参数
+     * @return 操作结果
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutong5
+     */
+    @Override
+    public BaseResponse discardProductWithStorage(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
+        return null;
+    }
+
+    /**
      * 废弃标准品. <br>
      *
      * @param invalidRequest 标准品废弃请求参数
@@ -205,16 +211,13 @@ public class INormProductSVImpl implements INormProductSV {
     }
 
     /**
-     * 制定商品销售价中标准品列表查询.<br>
-     * 库存组数量为非废弃的数量
+     * 分页查询标准品信息,包括标准品下的关键属性.<br>
      *
      * @param productRequest 查询标准品信息
      * @return
      * @throws BusinessException
      * @throws SystemException
      * @author liutong5
-     * @ApiCode NORM_PRODUCT_0109
-     * @RestRelativeURL normProduct/queryListForSalePrice
      */
     @Override
     public PageInfoResponse<NormProdAndKeyAttrRes> queryNormProductAndKeyAttr(NormProdRequest productRequest)

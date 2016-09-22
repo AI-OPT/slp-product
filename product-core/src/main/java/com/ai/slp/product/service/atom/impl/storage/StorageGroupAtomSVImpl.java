@@ -1,5 +1,12 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.CollectionUtil;
@@ -16,12 +23,6 @@ import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.StoGroupPageQueryVo;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 库存组原子操作 Created by jackieliu on 16/4/29.
@@ -31,9 +32,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	@Autowired
 	StorageGroupMapper storageGroupMapper;
 	@Autowired
-	IStandedProductAtomSV standedProductAtomSV;
-	@Autowired
 	StorageGroupAttachMapper attachMapper;
+	@Autowired
+	IStandedProductAtomSV standedProductAtomSV;
 
 	private static List<String> DISCARD_LIST = new ArrayList<>();
 
@@ -49,7 +50,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 * @return
 	 */
 	@Override
-	public int queryCountNoDiscard(String tenantId, String standedProdId) {
+	public int countNoDiscard(String tenantId, String standedProdId) {
 		StorageGroupCriteria example = new StorageGroupCriteria();
 		List<String> discard = new ArrayList<>();
 		discard.add(StorageConstants.StorageGroup.State.DISCARD);
@@ -67,7 +68,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 * @return
 	 */
 	@Override
-	public int queryCountActive(String tenantId, String standedProdId) {
+	public int countActive(String tenantId, String standedProdId) {
 		StorageGroupCriteria example = new StorageGroupCriteria();
 		List<String> stateList = new ArrayList<>();
 		stateList.add(StorageConstants.StorageGroup.State.ACTIVE);
@@ -155,6 +156,26 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 				.andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
 		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId))
 			criteria.andSupplierIdEqualTo(supplierId);
+		return storageGroupMapper.selectByExample(example);
+	}
+
+	/**
+	 * 查询某个标准品下的非废弃库存组列表
+	 *
+	 * @param tenantId
+	 * @param supplierId
+	 * @param standedProdId
+	 * @return
+	 */
+	@Override
+	public List<StorageGroup> queryNoDiscardOfStandProd(String tenantId, String supplierId, String standedProdId) {
+		StorageGroupCriteria example = new StorageGroupCriteria();
+		example.setOrderByClause(" CREATE_TIME desc");
+		StorageGroupCriteria.Criteria criteria = example.createCriteria()
+				.andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
+		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId))
+			criteria.andSupplierIdEqualTo(supplierId);
+		criteria.andStateNotIn(DISCARD_LIST);
 		return storageGroupMapper.selectByExample(example);
 	}
 

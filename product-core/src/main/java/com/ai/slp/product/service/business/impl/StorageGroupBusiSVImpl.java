@@ -312,7 +312,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,supplierId, groupId);
 		if (storageGroup == null) {
 			logger.warn("要查询库存组不存在,租户ID:" + tenantId + ",库存组标识:" + groupId);
-			throw new BusinessException("", "库存组不存在,租户ID:" + tenantId + ",库存组标识:" + groupId);
+			throw new BusinessException("", "指定库存组不存在");
 		}
 		String oldState = storageGroup.getState();
 		if (oldState.equals(state)) {
@@ -334,7 +334,10 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 				break;
 			//废弃
 			case StorageConstants.StorageGroup.State.DISCARD:
-				discardGroup(storageGroup, operId);
+				discardGroup(storageGroup, operId,false);
+				break;
+			case StorageConstants.StorageGroup.State.AUTO_DISCARD:
+				discardGroup(storageGroup, operId,true);
 				break;
 			//不识别
 			default:
@@ -434,7 +437,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @param storageGroup
 	 * @param operId
 	 */
-	private void discardGroup(StorageGroup storageGroup, Long operId) {
+	private void discardGroup(StorageGroup storageGroup, Long operId,boolean isAuto) {
 		// 商品废弃
 		Product product = productAtomSV.selectByGroupId(storageGroup.getTenantId(), storageGroup.getStorageGroupId());
 		if (product != null) {
@@ -447,7 +450,10 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			storageBusiSV.discardStorage(storageGroup.getTenantId(),storage, operId,true);
 		}
 		// 库存组废弃
-		storageGroup.setState(StorageConstants.StorageGroup.State.DISCARD);
+		if (isAuto)
+			storageGroup.setState(StorageConstants.StorageGroup.State.AUTO_DISCARD);
+		else
+			storageGroup.setState(StorageConstants.StorageGroup.State.DISCARD);
 		storageGroup.setOperId(operId);
 		// 添加日志
 		if (storageGroupAtomSV.updateById(storageGroup) > 0) {
@@ -465,7 +471,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 				infoQuery.getTenantId(), infoQuery.getSupplierId(),infoQuery.getStandedProdId(),
 				infoQuery.getPageNo(), infoQuery.getPageSize());
 		// 统计条件结果数量
-		int count = storageGroupAtomSV.queryCountNoDiscard(infoQuery.getTenantId(), infoQuery.getStandedProdId());
+		int count = storageGroupAtomSV.countNoDiscard(infoQuery.getTenantId(), infoQuery.getStandedProdId());
 		if (StorageGroupPage == null)
 			throw new BusinessException("",
 					"未找到对应的库存组信息,租户ID:" + infoQuery.getTenantId() + ",标准品标识:" + infoQuery.getStandedProdId());
