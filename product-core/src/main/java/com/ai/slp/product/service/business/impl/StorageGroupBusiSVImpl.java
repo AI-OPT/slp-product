@@ -167,16 +167,14 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId) {
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
 		if (standedProduct == null) {
-			throw new BusinessException("", "未找到对应的标准品信息,租户ID:" + tenantId + ",标准品标识:" + productId);
+			logger.warn("未找到对应的标准品信息,租户ID:{},标准品标识:{}",tenantId,productId);
+			throw new BusinessException("", "未找到对应的标准品信息");
 		}
 		// 查询出标准品下的所有库存组,创建时间倒序
 		List<StorageGroupRes> groupInfoList = new ArrayList<>();
 		List<StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId,supplierId, productId);
 		if (CollectionUtil.isEmpty(groupList))
 			logger.warn("查询库存组列表为空,租户ID:{},销售商ID:{},标准品ID:{}",tenantId,supplierId,productId);
-//		for (StorageGroup storageGroup : groupList) {
-//			groupInfoList.add(genStorageGroupInfo(storageGroup));
-//		}
 		for(int i= groupList.size()-1;i>=0;i--){
 			groupInfoList.add(genStorageGroupInfo(groupList.get(i)));
 		}

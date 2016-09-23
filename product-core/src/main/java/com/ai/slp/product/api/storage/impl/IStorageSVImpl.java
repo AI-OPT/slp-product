@@ -100,7 +100,7 @@ public class IStorageSVImpl implements IStorageSV {
 				infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getProductId());
 		BaseListResponse<StorageGroupRes> groupRes = new BaseListResponse<>();
 		groupRes.setResult(groupResList);
-		groupRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,""));
+		CommonUtils.addSuccessResHeader(groupRes,"Ok");
 		return groupRes;
 	}
 

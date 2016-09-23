@@ -49,7 +49,7 @@ public class StorageTest {
         StorageGroupQuery storageGroupQuery = new StorageGroupQuery();
         storageGroupQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
         storageGroupQuery.setSupplierId("-1");
-        storageGroupQuery.setProductId("100000000140");
+        storageGroupQuery.setProductId("0000000000000121");
         BaseListResponse<StorageGroupRes> groupResList = storageSV.queryGroupInfoByNormProdId(storageGroupQuery);
         System.out.println(groupResList.getResult().size());
     }

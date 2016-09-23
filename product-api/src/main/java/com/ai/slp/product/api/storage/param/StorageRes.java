@@ -1,8 +1,8 @@
 package com.ai.slp.product.api.storage.param;
 
-import com.ai.opt.base.vo.BaseResponse;
-
 import java.sql.Timestamp;
+
+import com.ai.opt.base.vo.BaseResponse;
 
 /**
  * 虚拟库存信息<br>
@@ -33,6 +33,10 @@ public class StorageRes extends BaseResponse {
      * 库存量
      */
     private Long totalNum;
+    /**
+     * 库存可用量,与实时数据有延迟
+     */
+    private Long usableNum;
     /**
      * 预警库存量
      */
@@ -182,4 +186,12 @@ public class StorageRes extends BaseResponse {
 	public void setStateName(String stateName) {
 		this.stateName = stateName;
 	}
+
+    public Long getUsableNum() {
+        return usableNum;
+    }
+
+    public void setUsableNum(Long usableNum) {
+        this.usableNum = usableNum;
+    }
 }
