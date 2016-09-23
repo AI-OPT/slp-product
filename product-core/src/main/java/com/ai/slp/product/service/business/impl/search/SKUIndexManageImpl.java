@@ -95,6 +95,7 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
                 if (ProductConstants.Product.IsSaleNationwide.NO.equals(prodSkuInfo.getSalenationwide()))
                     areaInfoList = fillSKUSaleArea(prodSkuInfo.getTenantid(),productId);
                 skuInfo.setSaleareainfos(areaInfoList);
+                skuInfoList.add(skuInfo);
             }
             if (!CollectionUtil.isEmpty(skuInfoList))
                 SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);

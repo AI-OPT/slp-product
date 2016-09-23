@@ -446,10 +446,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             return;
         }
         //进行上架处理
+        product.setUpTime(DateUtils.currTimeStamp());
         product.setState(ProductConstants.Product.State.IN_SALE);
         if (operId!=null)
             product.setOperId(operId);
-        product.setUpTime(DateUtils.currTimeStamp());
         //添加日志
         updateProdAndStatusLog(product);
     }
@@ -503,6 +503,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             changeToStop(storageGroup,product, operId);
             return;
         }else {
+            product.setUpTime(DateUtils.currTimeStamp());
             //进行上架处理
             product.setState(ProductConstants.Product.State.IN_SALE);
         }
@@ -652,6 +653,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if (userNum<1){
             product.setState(ProductConstants.Product.State.SALE_OUT);
         }else { //切换至上架
+            product.setUpTime(DateUtils.currTimeStamp());
             product.setState(ProductConstants.Product.State.IN_SALE);
         }
         //停用/售罄下架进行上架时,没有操作人
