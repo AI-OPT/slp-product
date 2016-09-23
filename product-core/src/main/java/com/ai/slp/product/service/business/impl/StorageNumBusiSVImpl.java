@@ -283,7 +283,15 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             priceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority);
         }
         //获取当前优先级中SKU的销售价
-        long salePrice = Long.parseLong(cacheClient.hget(priceKey,skuId));
+        String skuPriceCache= cacheClient.hget(priceKey,skuId);
+        Long salePrice = null;
+        try{
+            if (StringUtils.isNotBlank(skuPriceCache))
+                salePrice = Long.parseLong(skuPriceCache);
+        }catch (NumberFormatException e){
+            logger.error("Formate sale price is error,salePrice="+skuPriceCache,e);
+        }
+        Long.parseLong(cacheClient.hget(priceKey,skuId));
         String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
         //
         String skuUsableStr = cacheClient.hget(skuUsableKey,skuId);
