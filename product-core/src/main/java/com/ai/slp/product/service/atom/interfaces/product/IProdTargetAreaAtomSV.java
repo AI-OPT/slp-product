@@ -1,11 +1,11 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
-
-import java.util.List;
 
 /**
  * 商品目标地域原子操作
@@ -55,8 +55,6 @@ public interface IProdTargetAreaAtomSV {
      * 查询目标地域
      * @param tenantId
      * @param prodId
-     * @param provCode
-     * @param hasDiscard
      * @return
      */
 	public List<ProdTargetArea> searchProdTargetArea(String tenantId, String prodId);

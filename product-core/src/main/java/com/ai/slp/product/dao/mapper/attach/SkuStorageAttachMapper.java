@@ -1,10 +1,11 @@
 package com.ai.slp.product.dao.mapper.attach;
 
-import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 
 /**
  * Created by jackieliu on 16/8/8.
@@ -25,4 +26,11 @@ public interface SkuStorageAttachMapper {
      * @return
      */
     public Integer countOfNoPrice(@Param("groupId")String groupId);
+
+    /**
+     * 查询sku价格
+     * @param params
+     * @return
+     */
+    public Long selectPriceOfSku(Map<String,Object> params);
 }

@@ -1,8 +1,8 @@
 package com.ai.slp.product.service.atom.interfaces.storage;
 
-import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
-
 import java.util.List;
+
+import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 
 /**
  * Created by jackieliu on 16/5/12.
@@ -110,4 +110,13 @@ public interface ISkuStorageAtomSV {
      * @return
      */
     public int countOfNoPrice(String tenantId,String groupId);
+
+    /**
+     * 查询sku价格
+     * @param tenantId
+     * @param prodId
+     * @param skuId
+     * @return
+     */
+    public Long queryPriceOfSku(String tenantId,String prodId,String skuId);
 }

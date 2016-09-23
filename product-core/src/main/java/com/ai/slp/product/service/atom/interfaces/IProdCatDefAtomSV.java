@@ -33,6 +33,15 @@ public interface IProdCatDefAtomSV {
     public ProductCat selectById(String tenantId,String productCatId);
 
     /**
+     * 查询指定类目信息,不区分状态
+     *
+     * @param productCatId 商品类目标识
+     * @return
+     * @author liutong
+     */
+    public ProductCat selectById(String productCatId);
+
+    /**
      * 查询类目信息,包括所有状态
      *
      * @param tenantId

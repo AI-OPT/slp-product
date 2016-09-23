@@ -1,10 +1,11 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
-import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
-
 import java.util.List;
 import java.util.Set;
+
+import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
+import com.ai.slp.product.dao.mapper.attach.ProdSkuInfoSes;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 
 /**
  * 商品SKU信息
@@ -92,7 +93,7 @@ public interface IProdSkuAtomSV {
     /**
      * 通过销售属性串获得sku集合
      * @param tenantId
-     * @param attrAndValueMap
+     * @param skuSaleAttrs
      * @return
      * @author jiaxs
      */
@@ -107,4 +108,11 @@ public interface IProdSkuAtomSV {
      * @author lipeng16
      */
     public ProdSku querySkuById(String tenantId,String skuId,boolean hasDiscard);
+
+    /**
+     * 查询指定商品的SKU信息,用于添加搜索信息
+     * @param productId
+     * @return
+     */
+    public List<ProdSkuInfoSes> queryOfProdForSearch(String productId);
 }

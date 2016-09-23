@@ -1,8 +1,9 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
-import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
-
 import java.util.List;
+
+import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
+import com.ai.slp.product.search.bo.ImageInfo;
 
 /**
  * 商品图片原子操作
@@ -51,4 +52,19 @@ public interface IProdPictureAtomSV {
      * @return
      */
     public int installPic(ProdPicture prodPicture);
+
+    /**
+     * 查询sku的属性值的主图
+     * @param catId
+     * @param skuId
+     * @return
+     */
+    public ImageInfo queryMainOfSku(String catId,String skuId);
+
+    /**
+     * 查询商品的所有属性值的主图片
+     * @param prodId
+     * @return
+     */
+    public List<ImageInfo> queryAttrValOfProd(String prodId);
 }

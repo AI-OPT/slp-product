@@ -1,18 +1,20 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdAttrAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttrCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdAttrMapper;
+import com.ai.slp.product.search.bo.AttrInfo;
 import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by jackieliu on 16/6/1.
@@ -95,4 +97,9 @@ public class ProdAttrAtomSVImpl implements IProdAttrAtomSV {
         prodAttr.setOperTime(DateUtils.currTimeStamp());
         return prodAttrMapper.updateByPrimaryKey(prodAttr);
     }
+
+    public List<AttrInfo> queryAttrOfProdId(String prodId){
+        return prodAttrAttachMapper.selectAllAttrOfSku(prodId);
+    }
+
 }

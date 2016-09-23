@@ -1,21 +1,24 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
 import com.ai.slp.product.dao.mapper.attach.ProdSkuAttachMapper;
+import com.ai.slp.product.dao.mapper.attach.ProdSkuInfoSes;
+import com.ai.slp.product.dao.mapper.attach.ProdSkuMapperExt;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSkuCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProdSkuMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by jackieliu on 16/5/6.
@@ -26,6 +29,8 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 	ProdSkuMapper prodSkuMapper;
 	@Autowired
 	ProdSkuAttachMapper prodSkuAttachMapper;
+	@Autowired
+	ProdSkuMapperExt prodSkuMapperExt;
 	/**
 	 * 查询商品的SKU信息
 	 *
@@ -175,5 +180,16 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 			criteria.andStateEqualTo(ProductConstants.ProdSku.State.ACTIVE);
 		List<ProdSku> prodSkuList = prodSkuMapper.selectByExample(example);
 		return CollectionUtil.isEmpty(prodSkuList) ? null : prodSkuList.get(0);
+	}
+
+	/**
+	 * 查询指定商品的SKU信息,用于添加搜索信息
+	 *
+	 * @param productId
+	 * @return
+	 */
+	@Override
+	public List<ProdSkuInfoSes> queryOfProdForSearch(String productId) {
+		return prodSkuMapperExt.selectByProdId(productId);
 	}
 }

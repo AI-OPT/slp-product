@@ -1,8 +1,8 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
-import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
-
 import java.util.List;
+
+import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
 
 /**
  * 商品受众原子操作
@@ -62,4 +62,12 @@ public interface IProdAudiencesAtomSV {
      */
     public ProdAudiences queryAllByUserType(String tenantId, String prodId, String userType, boolean hasDiscard);
 
+    /**
+     * 查询商品的所有受众信息,包括所有类型
+     * @param tenantId
+     * @param prodId
+     * @param hasDiscard
+     * @return
+     */
+    public List<ProdAudiences> queryOfProductByProdId(String tenantId, String prodId,boolean hasDiscard);
 }

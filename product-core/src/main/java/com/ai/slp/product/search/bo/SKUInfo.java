@@ -1,9 +1,9 @@
 package com.ai.slp.product.search.bo;
 
-import com.google.gson.annotations.Expose;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.annotations.Expose;
 
 public class SKUInfo {
     @Expose
@@ -27,16 +27,16 @@ public class SKUInfo {
     @Expose
     private List<AttrInfo> attrinfos;
     @Expose
-    private int salenum;
+    private long salenum;
     @Expose
     private List<CategoryInfo> categoryinfos;
     @Expose
     private ImageInfo imageinfo;
     @Expose
-    private float price;
+    private long price;
     // 改成三级权限
     @Expose
-    private List<ProdAudiences> audiences;
+    private List<ProdAudiencesSes> audiences;
 
     //销售地域
     @Expose
@@ -67,7 +67,7 @@ public class SKUInfo {
         this.skuid = skuid;
         this.skuname = skuname;
         this.categoryinfos = new ArrayList<CategoryInfo>();
-        this.audiences = new ArrayList<ProdAudiences>();
+        this.audiences = new ArrayList<ProdAudiencesSes>();
         this.attrinfos = new ArrayList<AttrInfo>();
         this.saleareainfos = new ArrayList<SaleAreaInfo>();
         this.thumbnail = new ArrayList<ImageInfo>();
@@ -102,7 +102,7 @@ public class SKUInfo {
         this.categoryinfos.add(categoryInfo);
     }
 
-    public void setSalenum(int salenum) {
+    public void setSalenum(long salenum) {
         this.salenum = salenum;
     }
 
@@ -115,15 +115,15 @@ public class SKUInfo {
         this.imageinfo = imageinfo;
     }
 
-    public float getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 
-    public void addProductAudiences(ProdAudiences prodAudiences) {
+    public void addProductAudiences(ProdAudiencesSes prodAudiences) {
         audiences.add(prodAudiences);
     }
 
@@ -195,11 +195,11 @@ public class SKUInfo {
         this.categoryinfos = categoryinfos;
     }
 
-    public List<ProdAudiences> getAudiences() {
+    public List<ProdAudiencesSes> getAudiences() {
         return audiences;
     }
 
-    public void setAudiences(List<ProdAudiences> audiences) {
+    public void setAudiences(List<ProdAudiencesSes> audiences) {
         this.audiences = audiences;
     }
 
@@ -227,7 +227,7 @@ public class SKUInfo {
 		this.attrinfos = attrinfos;
 	}
 
-	public int getSalenum() {
+	public long getSalenum() {
         return salenum;
     }
 

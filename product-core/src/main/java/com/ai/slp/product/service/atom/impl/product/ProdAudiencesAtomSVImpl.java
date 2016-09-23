@@ -1,5 +1,13 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductConstants;
@@ -9,13 +17,6 @@ import com.ai.slp.product.dao.mapper.interfaces.product.ProdAudiencesMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProdAudiencesAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by jackieliu on 16/6/2.
@@ -129,5 +130,24 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
         }
         List<ProdAudiences> audList = audiencesMapper.selectByExample(example);
         return CollectionUtil.isEmpty(audList)?null:audList.get(0);
+    }
+
+    /**
+     * 查询商品的所有受众信息,包括所有类型
+     *
+     * @param tenantId
+     * @param prodId
+     * @param hasDiscard
+     * @return
+     */
+    @Override
+    public List<ProdAudiences> queryOfProductByProdId(String tenantId, String prodId, boolean hasDiscard) {
+        ProdAudiencesCriteria example = new ProdAudiencesCriteria();
+        ProdAudiencesCriteria.Criteria criteria = example.createCriteria();
+        criteria.andTenantIdEqualTo(tenantId).andProdIdEqualTo(prodId);
+        if (!hasDiscard){
+            criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
+        }
+        return audiencesMapper.selectByExample(example);
     }
 }

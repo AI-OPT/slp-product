@@ -1,5 +1,11 @@
 package com.ai.slp.product.api.exproduct.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
@@ -14,7 +20,7 @@ import com.ai.slp.product.constants.ExproductConstants;
 import com.ai.slp.product.constants.ProductExceptCode;
 import com.ai.slp.product.exsearch.dto.ExProductSearchCriteria;
 import com.ai.slp.product.search.bo.AttrInfo;
-import com.ai.slp.product.search.bo.ProdAudiences;
+import com.ai.slp.product.search.bo.ProdAudiencesSes;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.search.bo.SaleAreaInfo;
 import com.ai.slp.product.service.business.impl.exsearch.ExProductSearchImpl;
@@ -24,11 +30,6 @@ import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Service(validation = "true")
 @Component
@@ -111,9 +112,9 @@ public class IExSearchProductSVImpl implements IExSearchProductSV {
             product.setSkuId(sku.getSkuid());
             product.setBasicOrgId(sku.getBasicorgid());
             //获取受众id
-            List<ProdAudiences> list = sku.getAudiences();
+            List<ProdAudiencesSes> list = sku.getAudiences();
             if (!CollectionUtil.isEmpty(list)) {
-                ProdAudiences p = list.get(0);
+                ProdAudiencesSes p = list.get(0);
                 product.setProdRangeType(p.getUserid());
                 product.setSaleNationWide(sku.getSalenationwide());
             }

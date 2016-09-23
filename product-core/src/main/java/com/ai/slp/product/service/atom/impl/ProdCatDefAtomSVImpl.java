@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
-import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
@@ -58,12 +57,25 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
 
     @Override
     public ProductCat selectById(String tenantId, String productCatId) {
-        ProductCatCriteria example = new ProductCatCriteria();
-        example.createCriteria()
-                .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId)
-                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
-        List<ProductCat> productCatList = productCatMapper.selectByExample(example);
-        return CollectionUtil.isEmpty(productCatList)?null:productCatList.get(0);
+        ProductCat productCat = productCatMapper.selectByPrimaryKey(productCatId);
+        //租户不一致或状态不为有效
+        if (productCat!=null
+                && (!productCat.getTenantId().equals(tenantId)
+                    || !CommonConstants.STATE_ACTIVE.equals(productCat.getState())))
+            productCat = null;
+        return productCat;
+    }
+
+    /**
+     * 查询指定类目信息,不区分状态
+     *
+     * @param productCatId 商品类目标识
+     * @return
+     * @author liutong
+     */
+    @Override
+    public ProductCat selectById(String productCatId) {
+        return StringUtils.isBlank(productCatId)?null:productCatMapper.selectByPrimaryKey(productCatId);
     }
 
     /**
@@ -75,12 +87,11 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
      */
     @Override
     public ProductCat selectAllStateById(String tenantId, String productCatId) {
-        ProductCatCriteria example = new ProductCatCriteria();
-        example.createCriteria()
-                .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(productCatId);
-        List<ProductCat> productCatList = productCatMapper.selectByExample(example);
-
-        return productCatList==null || productCatList.isEmpty()?null:productCatList.get(0);
+        ProductCat productCat = productCatMapper.selectByPrimaryKey(productCatId);
+        if (productCat!=null
+                && !productCat.getTenantId().equals(productCat.getTenantId()))
+            productCat = null;
+        return productCat;
     }
 
     @Override

@@ -1,8 +1,9 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
-import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
-
 import java.util.List;
+
+import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
+import com.ai.slp.product.search.bo.AttrInfo;
 
 /**
  * 商品属性值原子操作
@@ -51,4 +52,11 @@ public interface IProdAttrAtomSV {
      * @return
      */
     public int updateByProdAttrId(ProdAttr prodAttr);
+
+    /**
+     *
+     * @param prodId
+     * @return
+     */
+    public List<AttrInfo> queryAttrOfProdId(String prodId);
 }

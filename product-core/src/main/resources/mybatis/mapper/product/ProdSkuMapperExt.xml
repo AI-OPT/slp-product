@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ai.slp.product.dao.mapper.attach.SkuStorageAttachMapper" >
-  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
-    <id column="SKU_STORAGE_ID" property="skuStorageId" jdbcType="VARCHAR" />
-    <result column="SKU_ID" property="skuId" jdbcType="VARCHAR" />
-    <result column="STORAGE_ID" property="storageId" jdbcType="VARCHAR" />
-    <result column="SALE_PRICE" property="salePrice" jdbcType="DECIMAL" />
-    <result column="TOTAL_NUM" property="totalNum" jdbcType="DECIMAL" />
-    <result column="USABLE_NUM" property="usableNum" jdbcType="DECIMAL" />
+<mapper namespace="com.ai.slp.product.dao.mapper.attach.ProdSkuMapperExt" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.product.ProdSku" >
+    <id column="SKU_ID" property="skuId" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="STORAGE_GROUP_ID" property="storageGroupId" jdbcType="VARCHAR" />
+    <result column="SKU_NAME" property="skuName" jdbcType="VARCHAR" />
+    <result column="IS_SALE_ATTR" property="isSaleAttr" jdbcType="CHAR" />
+    <result column="SALE_ATTRS" property="saleAttrs" jdbcType="VARCHAR" />
+    <result column="SERIAL_NUMBER" property="serialNumber" jdbcType="DECIMAL" />
     <result column="STATE" property="state" jdbcType="VARCHAR" />
     <result column="OPER_ID" property="operId" jdbcType="DECIMAL" />
     <result column="OPER_TIME" property="operTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="skuInfoSes" type="com.ai.slp.product.dao.mapper.attach.ProdSkuInfoSes">
+    <result column="tenantid" property="tenantid" jdbcType="VARCHAR" />
+    <result column="skuid" property="skuid" jdbcType="VARCHAR" />
+    <result column="skuname" property="skuname" jdbcType="VARCHAR" />
+    <result column="productCatId" property="productcategoryid" jdbcType="VARCHAR" />
+    <result column="productid" property="productid" jdbcType="VARCHAR" />
+    <result column="productname" property="productname" jdbcType="VARCHAR" />
+    <result column="productsellpoint" property="productsellpoint" jdbcType="VARCHAR" />
+    <result column="basicOrgId" property="basicorgid" jdbcType="VARCHAR" />
+    <result column="rechageType" property="rechagetype" jdbcType="VARCHAR" />
+    <result column="saleNationwide" property="salenationwide" jdbcType="VARCHAR" />
+    <result column="uptime" property="prodUpTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,38 +86,18 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    SKU_STORAGE_ID, SKU_ID, STORAGE_ID, SALE_PRICE, TOTAL_NUM, USABLE_NUM, STATE, OPER_ID, 
-    OPER_TIME
+    SKU_ID, TENANT_ID, PROD_ID, STORAGE_GROUP_ID, SKU_NAME, IS_SALE_ATTR, SALE_ATTRS, 
+    SERIAL_NUMBER, STATE, OPER_ID, OPER_TIME
   </sql>
-  <!-- 查询指定优先级下非废弃的SKU库存 -->
-  <select id="queryOfPriority" resultMap="BaseResultMap" parameterType="java.util.Map">
-    select
-    ss.SKU_STORAGE_ID, ss.SKU_ID, ss.STORAGE_ID, ss.SALE_PRICE, ss.TOTAL_NUM, ss.USABLE_NUM, ss.STATE, ss.OPER_ID,
-    ss.OPER_TIME
-    from sku_storage as ss,storage as s
-    WHERE ss.STORAGE_ID = s.STORAGE_ID
-    and s.STATE IN ('1','11','2','21') and ss.STATE = '1'
-    <if test="skuId != null" >
-      AND ss.SKU_ID = #{skuId}
-    </if>
-    and s.PRIORITY_NUMBER = #{priorityNum} and s.STORAGE_GROUP_ID = #{groupId}
-  </select>
-
-  <!-- 查询启用的库存下没有销售价格的SKU库存数量 -->
-  <select id="countOfNoPrice" resultType="java.lang.Integer" parameterType="java.lang.String">
-    select count(*)
-    from sku_storage as ss,storage as s
-    WHERE ss.STORAGE_ID = s.STORAGE_ID
-    and s.STATE IN ('1','11') and ss.STATE = '1' and ss.SALE_PRICE IS NULL
-    and s.STORAGE_GROUP_ID = #{groupId}
-  </select>
-  <!-- 查询SKU价格 -->
-  <select id="selectPriceOfSku" resultType="java.lang.Long" parameterType="java.util.Map">
+  <select id="selectByProdId" resultMap="skuInfoSes" parameterType="java.lang.String">
     SELECT
-      skuStor.SALE_PRICE as SALE_PRICE
+      product.TENANT_ID as tenantid,sku.SKU_ID as skuid ,sku.SKU_NAME as skuname,
+      product.PROD_ID as productid,product.PROD_NAME as productname,
+      product.PRODUCT_CAT_ID as productCatId,product.PRODUCT_SELL_POINT as productsellpoint,
+      product.BASIC_ORG_ID as basicOrgId, product.UP_TIME AS uptime,
+      product.RECHARGE_TYPE AS rechageType, product.IS_SALE_NATIONWIDE as saleNationwide
     FROM
-      sku_storage skuStor, storage
-    WHERE skuStor.STORAGE_ID = storage.STORAGE_ID AND skuStor.SKU_ID = #{skuId}
-      AND storage.PROD_ID = #{prodId} AND skuStor.STATE = '1' AND storage.STATE LIKE '1%' limit 1
+      prod_sku sku INNER JOIN product product
+      ON sku.PROD_ID = product.PROD_ID AND product.PROD_ID = #{prodId,jdbcType=VARCHAR}
   </select>
 </mapper>

@@ -54,7 +54,7 @@ public class SearchSKUInfoUtil {
         PreparedStatement ps;
         ResultSet resultSet;
         if ("N".equals(skuInfo.getSalenationwide())) {
-            // 价格
+            // 目标地域
             ps = connection.prepareStatement(FETCH_SEAL_AREA);
             ps.setString(1, skuInfo.getProductid());
             resultSet = ps.executeQuery();
@@ -74,7 +74,7 @@ public class SearchSKUInfoUtil {
             //if ("-1".equals(resultSet.getString("USER_ID"))) {
                 //skuInfo.addProductAudiences(new ProdAudiences(resultSet.getString("USER_TYPE")));
             //} else {
-                skuInfo.addProductAudiences(new ProdAudiences(resultSet.getString("USER_TYPE"),resultSet.getString("USER_ID")));
+                skuInfo.addProductAudiences(new ProdAudiencesSes(resultSet.getString("USER_TYPE"),resultSet.getString("USER_ID")));
             //}
 
         }
@@ -88,7 +88,7 @@ public class SearchSKUInfoUtil {
         ps.setString(2, skuInfo.getProductid());
         resultSet = ps.executeQuery();
         if(resultSet.next()){
-        	skuInfo.setPrice(resultSet.getFloat("SALE_PRICE"));
+        	skuInfo.setPrice(resultSet.getLong("SALE_PRICE"));
         }
     }
 
@@ -111,6 +111,7 @@ public class SearchSKUInfoUtil {
             	 skuInfo.setImageinfo(new ImageInfo(resultSet.getString("PIC_TYPE"), resultSet.getString("VFS_ID")));
              }
         }
+
         ps = connection.prepareStatement(PRO);
         ps.setString(1, skuInfo.getProductid());
         resultSet = ps.executeQuery();
@@ -128,7 +129,7 @@ public class SearchSKUInfoUtil {
         ps.setString(1, skuInfo.getProductid());
         resultSet = ps.executeQuery();
         if (resultSet.next()) {
-            skuInfo.setSalenum(resultSet.getInt("SALE_NUM"));
+            skuInfo.setSalenum(resultSet.getLong("SALE_NUM"));
         }
     }
 

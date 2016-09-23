@@ -230,4 +230,20 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	public int countOfNoPrice(String tenantId, String groupId) {
 		return skuStorageAttachMapper.countOfNoPrice(groupId);
 	}
+
+	/**
+	 * 查询sku价格
+	 *
+	 * @param tenantId
+	 * @param prodId
+	 * @param skuId
+	 * @return
+	 */
+	@Override
+	public Long queryPriceOfSku(String tenantId, String prodId, String skuId) {
+		Map<String,Object> params = new HashMap<>();
+		params.put("prodId",prodId);
+		params.put("skuId",skuId);
+		return skuStorageAttachMapper.selectPriceOfSku(params);
+	}
 }

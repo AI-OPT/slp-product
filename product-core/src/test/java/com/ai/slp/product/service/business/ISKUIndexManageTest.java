@@ -26,6 +26,6 @@ public class ISKUIndexManageTest {
     @Test
     public void updateSKUIndex(){
         //搜索引擎中添加信息
-        iskuIndexManage.updateSKUIndex("0000000000000176");
+        iskuIndexManage.updateSKUIndex("0000000000000183");
     }
 }
