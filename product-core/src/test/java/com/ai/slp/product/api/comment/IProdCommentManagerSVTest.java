@@ -13,17 +13,7 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.slp.product.api.productcomment.interfaces.IProdCommentManagerSV;
-import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
-import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
-import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
-import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
-import com.ai.slp.product.api.productcomment.param.PictureVO;
-import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
-import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
-import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
-import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
-import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
-import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
+import com.ai.slp.product.api.productcomment.param.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:context/core-context.xml")
@@ -115,5 +105,6 @@ public class IProdCommentManagerSVTest {
 		BaseResponse baseResponse = prodCommentManagerSV.replyComment(replyComment);
 		System.out.println(JSonUtil.toJSon(baseResponse));
 	}
+
 
 }

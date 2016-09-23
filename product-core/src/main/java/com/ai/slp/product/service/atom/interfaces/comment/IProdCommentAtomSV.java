@@ -31,6 +31,14 @@ public interface IProdCommentAtomSV {
 	 * @return
 	 */
 	public Integer queryCountByProductId(ProdComment params);
+
+	/**
+	 * 查询单品的评价的数量
+	 * @param prodId
+	 * @param isDiscard 是否包含废弃的状态
+	 * @return
+     */
+	public int countBySkuId(String prodId, boolean isDiscard);
 	
 	/**
 	 * 查询条数

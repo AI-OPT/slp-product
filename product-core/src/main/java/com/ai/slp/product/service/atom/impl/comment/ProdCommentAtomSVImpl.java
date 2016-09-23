@@ -122,7 +122,25 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		setQueryCriteria(params, example);
 		return prodCommentMapper.countByExample(example);
 	}
-	
+
+	/**
+	 * 查询商品下评价的数量
+	 *
+	 * @param skuId
+	 * @param isDiscard 是否包含废弃的状态
+	 * @return
+	 */
+	@Override
+	public int countBySkuId(String skuId, boolean isDiscard) {
+		ProdCommentCriteria example = new ProdCommentCriteria();
+		ProdCommentCriteria.Criteria criteria = example.createCriteria();
+		criteria.andSkuIdEqualTo(skuId);
+		if (!isDiscard){
+			criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
+		}
+		return prodCommentMapper.countByExample(example);
+	}
+
 	private void setQueryCriteria(ProdComment params, ProdCommentCriteria example) {
 		Criteria criteria = example.createCriteria();
 		String tenantId = params.getTenantId();

@@ -35,7 +35,8 @@ public class IProductDetailSVTest {
     public void querySkuConfBySkuAttr(){
         ProductSKURequest skuRequest = new ProductSKURequest();
         skuRequest.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
-        skuRequest.setSkuAttrs("100010:100082;100004:100015");
+//        skuRequest.setSkuAttrs("100010:100082;100004:100015");
+        skuRequest.setSkuId("0000000000000238");
         ProductSKUConfigResponse skuResponse = productDetailSV.queryProductSKUConfig(skuRequest);
         if (skuResponse!=null)
             System.out.println(skuResponse.getProductAttrList().size());

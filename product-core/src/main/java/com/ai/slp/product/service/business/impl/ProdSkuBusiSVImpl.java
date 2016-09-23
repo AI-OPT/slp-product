@@ -37,6 +37,7 @@ import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
@@ -89,6 +90,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	INormProductBusiSV normProductBusiSV;
 	@Autowired
 	IProdAttrValDefAtomSV attrValDefAtomSV;
+	@Autowired
+	IProdCommentAtomSV prodCommentAtomSV;
 
 	private static List<String> ACTIVE_STATUS_LIST = new ArrayList<>();
 
@@ -672,6 +675,8 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		}
 		// 设置主图
 		skuResponse.setProductImageList(getProductSkuPic(attrPic, product));
+		// 设置评论数
+		skuResponse.setCommentNum(new Long(prodCommentAtomSV.countBySkuId(prodSku.getSkuId(),false)));
 		// 设置商品销量
 		skuResponse.setSaleNum(prodSaleAllAtomSV.queryNumOfProduc(tenantId, product.getProdId()));
 		// 获取当前库存和价格
