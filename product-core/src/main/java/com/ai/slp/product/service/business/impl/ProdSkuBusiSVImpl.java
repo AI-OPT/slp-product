@@ -90,6 +90,14 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	@Autowired
 	IProdAttrValDefAtomSV attrValDefAtomSV;
 
+	private static List<String> ACTIVE_STATUS_LIST = new ArrayList<>();
+
+	static {
+		ACTIVE_STATUS_LIST.add(ProductConstants.Product.State.IN_SALE);
+		ACTIVE_STATUS_LIST.add(ProductConstants.Product.State.SALE_OUT);
+	}
+
+
 	/**
 	 * 产生库存组对应商品的SKU 完全使用配置到标准品的销售属性
 	 *
@@ -351,9 +359,15 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		// 查询商品
 		Product product = productAtomSV.selectByProductId(tenantId, prodSku.getProdId());
 		if (product == null) {
-			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}", tenantId, prodSku.getSkuId(), prodSku.getProdId());
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
-					"未查询到指定的SKU信息,租户ID:" + tenantId + ",SKU标识:" + prodSku.getSkuId() + "商品ID:" + prodSku.getProdId());
+			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",
+					tenantId, prodSku.getSkuId(), prodSku.getProdId());
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
+		}
+		//若不是有效状态,则不处理
+		if (!ACTIVE_STATUS_LIST.contains(product.getState())){
+			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",
+					tenantId, prodSku.getSkuId(), prodSku.getProdId(),product.getState());
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
 		return genSkuResponse(tenantId, product, prodSku);
 	}
@@ -372,9 +386,15 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		// 查询商品
 		Product product = productAtomSV.selectByProductId(tenantId, prodSku.getProdId());
 		if (product == null) {
-			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}", tenantId, prodSku.getSkuId(), prodSku.getProdId());
-			throw new BusinessException("",
-					"未查询到指定的SKU信息,租户ID:" + tenantId + ",SKU标识:" + prodSku.getSkuId() + "商品ID:" + prodSku.getProdId());
+			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",
+					tenantId, prodSku.getSkuId(), prodSku.getProdId());
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
+		}
+		//若不是有效状态,则不处理
+		if (!ACTIVE_STATUS_LIST.contains(product.getState())){
+			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",
+					tenantId, prodSku.getSkuId(), prodSku.getProdId(),product.getState());
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
 		ProductSKUConfigResponse configResponse = new ProductSKUConfigResponse();
 		configResponse.setProductAttrList(new ArrayList<ProductSKUAttr>());
