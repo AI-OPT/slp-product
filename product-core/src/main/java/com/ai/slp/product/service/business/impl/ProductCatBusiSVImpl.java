@@ -347,7 +347,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         //删除取消管理的属性值
         prodCatAttrValAtomSV.deleteByCatAttrId(tenantId,catAttrIds,addCatAttrParam.getOperId());
         //查询当前类目指定类型的属性信息
-        List<ProdCatAttr> oldAttr = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId,catId,attrType);
+//        List<ProdCatAttr> oldAttr = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId,catId,attrType);
         Timestamp operTime = DateUtils.currTimeStamp();
         for (Long attId:attrAndVal.keySet()){
             //检查是否已经关联

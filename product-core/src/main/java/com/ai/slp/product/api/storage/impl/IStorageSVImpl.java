@@ -257,7 +257,7 @@ public class IStorageSVImpl implements IStorageSV {
 	public BaseResponse updateStorageGroupName(NameUpReq storageGroup)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(storageGroup.getTenantId());
-		int updateNum = storageGroupBusiSV.updateGroupName(storageGroup);
+		storageGroupBusiSV.updateGroupName(storageGroup);
 		BaseResponse baseResponse = new BaseResponse();
 		CommonUtils.addSuccessResHeader(baseResponse,"");
 		return baseResponse;
@@ -380,7 +380,7 @@ public class IStorageSVImpl implements IStorageSV {
 		if(CollectionUtil.isEmpty(skuStorageAddList)){
 			throw new BusinessException("", "新增信息集合为空");
 		}
-		int addNum = storageBusiSV.insertSkuStorage(skuStorageAddList);
+		storageBusiSV.insertSkuStorage(skuStorageAddList);
 		BaseResponse baseResponse = new BaseResponse();
 		CommonUtils.addSuccessResHeader(baseResponse,"增加SKU库存信息成功");
 		return baseResponse;

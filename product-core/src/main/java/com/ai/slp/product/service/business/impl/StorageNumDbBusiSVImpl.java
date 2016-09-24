@@ -1,5 +1,15 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.sql.Timestamp;
+import java.util.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
@@ -17,15 +27,6 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.util.IPaasStorageUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Timestamp;
-import java.util.*;
 
 /**
  * Created by jackieliu on 16/5/26.
@@ -173,7 +174,7 @@ public class StorageNumDbBusiSVImpl {
         stopList.add(StorageConstants.Storage.State.STOP);
         stopList.add(StorageConstants.Storage.State.AUTO_STOP);
         //(C)
-        String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
+//        String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
         //优先级总可用量(F)
         String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
         //将优先级的库存量初始化为零
@@ -324,7 +325,7 @@ public class StorageNumDbBusiSVImpl {
         //获取库存组的cacheKey
         String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
         //库存组状态
-        String status = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE);
+//        String status = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE);
         //使用当前优先级
         String priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
         return new Short(priority);

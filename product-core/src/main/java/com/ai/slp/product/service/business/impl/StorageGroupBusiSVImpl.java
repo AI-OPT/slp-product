@@ -603,7 +603,6 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	public void cleanGroupCache(String tenantId,String groupId){
 		//查询所有截止时间在当前时间之后的促销的库存,不包括废弃库存
 		List<Storage> storageList = storageAtomSV.queryTimeStorageOfGroup(groupId,false);
-		List<Short> priorityNumList = new ArrayList<>();
 		logger.info("====清空促销优先级缓存(开始)====");
 		if (!CollectionUtil.isEmpty(storageList)){
 			storageList = storageAtomSV.queryTimeStorageOfGroup(groupId,true);

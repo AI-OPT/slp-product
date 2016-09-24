@@ -99,7 +99,6 @@ public class SearchSKUInfoUtil {
         ps.setString(1, skuInfo.getProductcategoryid());
         ps.setString(2, skuInfo.getSkuid());
         resultSet = ps.executeQuery();
-        List<SKUInfo> skuList = new ArrayList<SKUInfo>();
         List<ImageInfo> list = new ArrayList<ImageInfo>();
         if (resultSet.next()) {
         	skuInfo.setImageinfo(new ImageInfo(resultSet.getString("PIC_TYPE"), resultSet.getString("VFS_ID")));

@@ -196,7 +196,6 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		List<StoNoSkuSalePrice> salePriceList = salePriceReq.getStorageSalePrice();
 		if (CollectionUtil.isEmpty(salePriceList))
 			return 0;
-		String tenantId = salePriceReq.getTenantId();
 		int count = 0;
 		Long operId = salePriceReq.getOperId();
 		for(StoNoSkuSalePrice salePrice:salePriceList){
@@ -226,7 +225,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			throw new BusinessException("","未找到对应商品信息");
 		Map<String,Long> priceMap = salePrice.getStorageSalePrice();
 		//查询商品对应得SKU集合
-		List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(salePrice.getTenantId(),product.getProdId());
+//		List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(salePrice.getTenantId(),product.getProdId());
 		int count = 0;
 		for (String skuId:priceMap.keySet()){
 			count += updateSkuPrice(
