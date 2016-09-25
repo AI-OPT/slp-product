@@ -650,7 +650,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
 		//查询库存组是否废弃
 		if (group == null ){
-			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,group,group==null?null:group.getState());
+			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,groupId,group==null?null:group.getState());
 			throw new BusinessException("","库存组不存在");
 		}
 		//库存组状态若不是自动停用,则不进行处理
@@ -680,7 +680,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
 		//查询库存组是否废弃
 		if (group == null ){
-			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,group,group==null?null:group.getState());
+			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,groupId,group==null?null:group.getState());
 			throw new BusinessException("","库存组不存在");
 		}
 		//库存组状态若不是启动状态,则不进行处理
@@ -723,7 +723,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,supplierId,groupId);
 		//查询库存组是否废弃
 		if (group == null ){
-			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,group,group==null?null:group.getState());
+			logger.warn("tenantId:{},groupId:{},statu:{}",
+					tenantId,groupId,group==null?null:group.getState());
 			throw new BusinessException("","库存组不存在");
 		}
 		//查询库存组下改优先级中非废弃的库存信息
@@ -756,7 +757,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
 		//查询库存组是否废弃
 		if (group == null ){
-			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,group,group==null?null:group.getState());
+			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,groupId,group==null?null:group.getState());
 			throw new BusinessException("","库存组不存在");
 		}
 		//设置路由组/配货组标识
