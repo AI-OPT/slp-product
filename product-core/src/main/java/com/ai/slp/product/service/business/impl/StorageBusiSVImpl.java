@@ -227,9 +227,11 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		//查询商品对应得SKU集合
 //		List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(salePrice.getTenantId(),product.getProdId());
 		int count = 0;
-		for (String skuId:priceMap.keySet()){
-			count += updateSkuPrice(
-					groupId,skuId,salePrice.getPriorityNum(),priceMap.get(skuId),salePrice.getOperId());
+		if (priceMap==null || priceMap.isEmpty())
+			return count;
+		for (Map.Entry<String,Long> entry:priceMap.entrySet()){
+			count += updateSkuPrice(groupId,entry.getKey(),salePrice.getPriorityNum(),
+					entry.getValue(),salePrice.getOperId());
 		}
 		return count;
 	}
@@ -481,16 +483,19 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 
 	@Override
 	public void updateStoragePriority(StoragePriorityCharge stoPriorityCharge) {
+		if (stoPriorityCharge == null){
+			logger.warn("库存组优先级变更信息为空");
+			throw new BusinessException("","库存组优先级变更信息为空");
+		}
+		// 检查将移动优先级是否一致
+		if (stoPriorityCharge.getNewLevel() == stoPriorityCharge.getOldLevel()){
+			return;
+		}
 		// 获取库存组标识
 		String groupId = stoPriorityCharge.getStorageGroupId();
 		String tenantId = stoPriorityCharge.getTenantId();
-		// 检查将移动优先级是否一致
-		if (stoPriorityCharge.getNewLevel() == stoPriorityCharge.getOldLevel()){
-			throw new BusinessException("","优先级为发生变更");
-		}
 		// 检查库存组是否存在
-		if (stoPriorityCharge == null
-				|| storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,stoPriorityCharge.getSupplierId(), groupId) == null) {
+		if (storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,stoPriorityCharge.getSupplierId(), groupId) == null) {
 			logger.warn("找不到指定的库存组,租户表{},库存组标识{}",tenantId,groupId );
 			throw new BusinessException("","指定库存组不存在,租户ID:"+tenantId+",库存组ID:"+groupId);
 		}

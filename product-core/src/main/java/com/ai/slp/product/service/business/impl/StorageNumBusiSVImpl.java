@@ -1,7 +1,10 @@
 package com.ai.slp.product.service.business.impl;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -99,10 +102,10 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         String groupId = product.getStorageGroupId();
         Timestamp nowTime = DateUtils.currTimeStamp();
         //若商品为预售,且当前不在预售期内,则不进行销售
-        if(product!=null && ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType()) &&
+        if(ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType()) &&
                 (nowTime.before(product.getPresaleBeginTime()) || nowTime.after(product.getPresaleEndTime()))){
-            logger.warn("商品为预售上架,不在预售期[{}]和[{}]",product.getPresaleBeginTime(),
-                    product.getPresaleEndTime());
+            logger.warn("商品为预售上架,不在预售期[{}]和[{}]",product.getPresaleBeginTime().toString(),
+                    product.getPresaleEndTime().toString());
             throw new BusinessException("","不在预售期内,不允许销售");
         }
         //获取缓存客户端
@@ -193,12 +196,13 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
      */
     @Override
     public void backStorageNum(String tenantId, String skuId, Map<String, Integer> storageNum) {
+        if (storageNum==null || storageNum.isEmpty())
+            return;
         //检查SKU是否存在
-        Iterator<String> iterator = storageNum.keySet().iterator();
         ICacheClient cacheClient = IPaasStorageUtils.getClient();
-        while (iterator.hasNext()){
-            String skuStorageId = iterator.next();
-            Integer skuNum = storageNum.get(skuStorageId);
+        for (Map.Entry<String, Integer> entry:storageNum.entrySet()){
+            String skuStorageId = entry.getKey();
+            Integer skuNum = entry.getValue();
             //1. 根据SKU库存查询所属优先级
             //1.1 查询SKU库存信息
             SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);

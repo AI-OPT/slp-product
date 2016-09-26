@@ -1,25 +1,24 @@
 package com.ai.slp.product.service.business.impl;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
-import com.ai.paas.ipaas.util.JSonUtil;
-import com.ai.slp.product.api.productcat.param.ProductCatInfo;
-import com.ai.slp.product.cache.prodCat.ProdCatCache;
-import com.ai.slp.product.constants.ErrorCodeConstants;
-import com.ai.slp.product.dao.mapper.bo.ProductCat;
-import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
-import com.ai.slp.product.service.business.interfaces.IProductCatQueryBusiSV;
-import com.ai.slp.product.util.IPaasCatUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.util.JSonUtil;
+import com.ai.slp.product.api.productcat.param.ProductCatInfo;
+import com.ai.slp.product.cache.prodCat.ProdCatCache;
+import com.ai.slp.product.dao.mapper.bo.ProductCat;
+import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
+import com.ai.slp.product.service.business.interfaces.IProductCatQueryBusiSV;
+import com.ai.slp.product.util.IPaasCatUtils;
 
 /**
  * Created by jackieliu on 16/7/22.
@@ -50,12 +49,6 @@ public class ProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
         else {
             catInfo = productCatBusiSV.queryByCatId(tenantId,catId);
             catCache.flushCatInfo(tenantId,catId);
-        }
-
-        if (catInfo == null){
-            logger.error("The cat is null,tenantId={},catId={}",tenantId,catId);
-            throw new BusinessException(ErrorCodeConstants.ProductCat.CAT_NO_EXIST,
-                    "类目不存在,租户ID:"+tenantId+",类目ID:"+catId);
         }
         return catInfo;
     }

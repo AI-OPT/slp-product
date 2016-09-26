@@ -349,15 +349,15 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         //查询当前类目指定类型的属性信息
 //        List<ProdCatAttr> oldAttr = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId,catId,attrType);
         Timestamp operTime = DateUtils.currTimeStamp();
-        for (Long attId:attrAndVal.keySet()){
+        for (Map.Entry<Long,Set<String>> entry:attrAndVal.entrySet()){
             //检查是否已经关联
-            ProdCatAttr catAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(tenantId,catId,attId,attrType);
-            Set<String> attrValSet = attrAndVal.get(attId);
+            ProdCatAttr catAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(tenantId,catId,entry.getKey(),attrType);
+            Set<String> attrValSet = entry.getValue();
             if (catAttr==null){
                 catAttr = new ProdCatAttr();
                 catAttr.setTenantId(tenantId);
                 catAttr.setProductCatId(catId);
-                catAttr.setAttrId(attId);
+                catAttr.setAttrId(entry.getKey());
                 catAttr.setAttrType(attrType);
                 catAttr.setSerialNumber((short)1);
                 catAttr.setState(CommonConstants.STATE_ACTIVE);

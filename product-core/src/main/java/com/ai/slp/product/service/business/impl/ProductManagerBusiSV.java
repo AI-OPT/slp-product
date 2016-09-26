@@ -16,7 +16,6 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.opt.sdk.util.StringUtil;
 import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.platform.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.product.param.*;
@@ -39,8 +38,6 @@ import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupKeyInfoRequest;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupUserInfoResponse;
-
-import kafka.admin.AdminUtils;
 
 /**
  * Created by jackieliu on 16/6/6.
@@ -287,7 +284,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
     }
     /**
      *查询被拒绝原因
-     * @param productRefuseParam
+     * @param queryInfo
      * @return
      */
     @Override
@@ -408,10 +405,10 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         updateProdPic(tenantId,productId,"0",productInfo.getProdPics(),operId);
         //更新属性值图片信息
         Map<String, List<ProdPicInfo>> picMap =productInfo.getAttrValPics();
-        Iterator<String> attrValIterator = picMap.keySet().iterator();
-        while (attrValIterator.hasNext()){
-            String attrValId = attrValIterator.next();
-            updateProdPic(tenantId,productId,attrValId,picMap.get(attrValId),operId);
+        if (picMap!=null && !picMap.isEmpty()) {
+            for (Map.Entry<String, List<ProdPicInfo>> entry : picMap.entrySet()) {
+                updateProdPic(tenantId, productId, entry.getKey(), entry.getValue(), operId);
+            }
         }
         //更新目标地域
         updateTargetArea(tenantId,productId,productInfo.getIsSaleNationwide(),productInfo.getProvCodes(),operId);
@@ -526,10 +523,11 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
      */
     private void updateNoKeyAttr(String tenantId,String productId,
                                  Map<Long, List<ProdAttrValInfo>> attrValMap,Long operId){
+        if (attrValMap==null || attrValMap.isEmpty())
+            return;
         //查询原非关键属性
-        Iterator<Long> attrIdIterator = attrValMap.keySet().iterator();
-        while (attrIdIterator.hasNext()) {
-            Long attrId = attrIdIterator.next();
+        for (Map.Entry<Long, List<ProdAttrValInfo>> entry:attrValMap.entrySet()){
+            Long attrId = entry.getKey();
             List<ProdAttr> prodAttrList = prodAttrAtomSV.queryOfProdAndAttr(tenantId, productId, attrId);
             for (ProdAttr prodAttr:prodAttrList){
                 //废弃原
@@ -542,8 +540,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                     prodAttrLogAtomSV.installLog(prodAttrLog);
                 }
             }
-            List<ProdAttrValInfo> attrValInfoList = attrValMap.get(attrId);
-            for (ProdAttrValInfo valInfo:attrValInfoList){
+            for (ProdAttrValInfo valInfo:entry.getValue()){
                 //添加新
                 ProdAttr prodAttr = new ProdAttr();
                 prodAttr.setTenantId(tenantId);

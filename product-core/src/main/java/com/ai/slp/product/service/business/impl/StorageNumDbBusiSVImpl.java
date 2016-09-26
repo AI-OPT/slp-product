@@ -70,14 +70,12 @@ public class StorageNumDbBusiSVImpl {
         }
 
         boolean checkToSale = false;
-        Iterator<String> iterator = skuNumMap.keySet().iterator();
-        while (iterator.hasNext()){
-            String skuStorageId = iterator.next();
-            int skuNum = skuNumMap.get(skuStorageId);
+        for (Map.Entry<String,Integer> entry:skuNumMap.entrySet()){
+            int skuNum = entry.getValue();
             //若为使用量,则为减少量
             if (isUser)
                 skuNum = 0-skuNum;
-            SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);
+            SkuStorage skuStorage = skuStorageAtomSV.queryById(entry.getKey(),true);
             if (skuStorage ==null)
                 continue;
             skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
@@ -178,7 +176,7 @@ public class StorageNumDbBusiSVImpl {
         //优先级总可用量(F)
         String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
         //将优先级的库存量初始化为零
-        cacheClient.set(priorityUsableKey,new Long(0).toString());
+        cacheClient.set(priorityUsableKey,"0");
         //该优先级下,sku可用量已经做过初始化的SKU标识
         Set<String> skuIds = new HashSet<>();
         for (Storage storage:storageList){
@@ -243,7 +241,7 @@ public class StorageNumDbBusiSVImpl {
                     storage.getStorageId(),skuStorage.getSkuStorageId(),skuStorage.getTotalNum(),skuStorage.getUsableNum());
             //若没有将sku可用量进行初始操作,则需要将sku可用量设置为零
             if (skuIds!=null && !skuIds.contains(skuStorage.getSkuId())){
-                cacheClient.hset(skuUsableKey,skuStorage.getSkuId(),new Long(0).toString());
+                cacheClient.hset(skuUsableKey,skuStorage.getSkuId(),"0");
             }
             //设置SKU库存
             String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(

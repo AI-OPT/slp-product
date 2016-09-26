@@ -1,5 +1,12 @@
 package com.ai.slp.product.api.productcat.impl;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseListResponse;
@@ -13,12 +20,6 @@ import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.service.business.interfaces.IProductCatQueryBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by jackieliu on 16/7/21.
@@ -46,6 +47,11 @@ public class IProductCatCacheSVImpl implements IProductCatCacheSV {
                 catId = catUniqueReq.getProductCatId();
         CommonUtils.checkTenantId(tenantId,ErrorCodeConstants.TENANT_ID_NULL);
         ProductCatInfo catInfo = productCatQueryBusiSV.queryById(tenantId,catId);
+        if (catInfo == null){
+            logger.error("The cat is null,tenantId={},catId={}",tenantId,catId);
+            throw new BusinessException(ErrorCodeConstants.ProductCat.CAT_NO_EXIST,
+                    "类目不存在,租户ID:"+tenantId+",类目ID:"+catId);
+        }
         catInfo.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "OK"));
         return catInfo;
     }

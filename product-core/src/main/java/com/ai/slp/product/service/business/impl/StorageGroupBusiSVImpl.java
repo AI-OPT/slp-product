@@ -650,7 +650,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
 		//查询库存组是否废弃
 		if (group == null ){
-			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,groupId,group==null?null:group.getState());
+			logger.warn("tenantId:{},groupId:{}",tenantId,groupId);
 			throw new BusinessException("","库存组不存在");
 		}
 		//库存组状态若不是自动停用,则不进行处理
@@ -680,7 +680,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
 		//查询库存组是否废弃
 		if (group == null ){
-			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,groupId,group==null?null:group.getState());
+			logger.warn("tenantId:{},groupId:{}",tenantId,groupId);
 			throw new BusinessException("","库存组不存在");
 		}
 		//库存组状态若不是启动状态,则不进行处理
@@ -723,14 +723,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,supplierId,groupId);
 		//查询库存组是否废弃
 		if (group == null ){
-			logger.warn("tenantId:{},groupId:{},statu:{}",
-					tenantId,groupId,group==null?null:group.getState());
+			logger.warn("tenantId:{},groupId:{}",tenantId,groupId);
 			throw new BusinessException("","库存组不存在");
 		}
 		//查询库存组下改优先级中非废弃的库存信息
 		List<Storage> storageList = storageAtomSV.queryStorageByGroupIdAndPriority(groupId,pn,false);
 		if (CollectionUtil.isEmpty(storageList)){
-			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,group,group==null?null:group.getState());
+			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,groupId,group.getState());
 			throw new BusinessException("","库存组的优先级中没有有效库存");
 		}
 		//查询库存对应的SKU库存信息
@@ -757,7 +756,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		StorageGroup group = storageGroupAtomSV.queryByGroupId(tenantId,groupId);
 		//查询库存组是否废弃
 		if (group == null ){
-			logger.warn("tenantId:{},groupId:{},statu:{}",tenantId,groupId,group==null?null:group.getState());
+			logger.warn("tenantId:{},groupId:{}",tenantId,groupId);
 			throw new BusinessException("","库存组不存在");
 		}
 		//设置路由组/配货组标识
@@ -789,7 +788,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		//e 的数量先不做处理
 		//f 将优先级库存可用量设置为零
 		String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
-		cacheClient.set(priorityUsableKey,new Long(0).toString());
+		cacheClient.set(priorityUsableKey,"0");
 	}
 
 	/**

@@ -676,7 +676,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		// 设置主图
 		skuResponse.setProductImageList(getProductSkuPic(attrPic, product));
 		// 设置评论数
-		skuResponse.setCommentNum(new Long(prodCommentAtomSV.countBySkuId(prodSku.getSkuId(),false)));
+		skuResponse.setCommentNum((long)prodCommentAtomSV.countBySkuId(prodSku.getSkuId(),false));
 		// 设置商品销量
 		skuResponse.setSaleNum(prodSaleAllAtomSV.queryNumOfProduc(tenantId, product.getProdId()));
 		// 获取当前库存和价格
