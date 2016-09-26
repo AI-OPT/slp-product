@@ -3,6 +3,7 @@ package com.ai.slp.product.service.business.impl;
 import java.sql.Timestamp;
 import java.util.*;
 
+import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -538,7 +539,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		if (standedProduct == null)
 			throw new BusinessException("", "未找到对应标准品信息,租户ID:" + tenantId + ",标准品标识:" + standedProdId);
 		AttrMap attrMapOfNormProd = new AttrMap();
-		Map<Long, List<Long>> attrAndValMap = new HashMap<>();
+		Map<Long, List<Long>> attrAndValMap = new LinkedMap();
 		Map<Long, ProdCatAttrInfo> attrDefMap = new HashMap<>();
 		Map<Long, AttrValInfo> attrValDefMap = new HashMap<>();
 		// 查询对应类目属性
