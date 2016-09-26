@@ -638,7 +638,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			productSKUAttr.setAttrName(attrAttch.getAttrName());
 			List<ProductSKUAttrValue> attrValueList = new ArrayList<>();
 			// 查询属性对应属性值集合
-			List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(tenantId, product.getProdId(),
+			List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(tenantId, product.getStandedProdId(),
 					attrAttch.getAttrId());
 			for (StandedProdAttr prodAttr : prodAttrs) {
 				// 若SKU不包含当前属性值,则查询下一个属性值

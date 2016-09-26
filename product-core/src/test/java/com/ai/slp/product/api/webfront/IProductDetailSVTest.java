@@ -24,8 +24,8 @@ public class IProductDetailSVTest {
     @Test
     public void queryProducSKUById(){
         ProductSKURequest skuRequest = new ProductSKURequest();
-        skuRequest.setTenantId("SLP");
-        skuRequest.setSkuId("1");
+        skuRequest.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        skuRequest.setSkuId("0000000000000238");
         ProductSKUResponse skuResponse = productDetailSV.queryProducSKUById(skuRequest);
         if (skuResponse!=null)
             System.out.println(skuResponse.getProdName());
