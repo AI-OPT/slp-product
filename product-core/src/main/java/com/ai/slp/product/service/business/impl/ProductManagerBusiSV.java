@@ -194,12 +194,11 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
      * @param productCheckParam
      */
     @Override
-    public List<String> auditProduct(ProductCheckParam productCheckParam) {
+    public void auditProduct(ProductCheckParam productCheckParam) {
         ProductStateLog stateLog = new ProductStateLog();
         BeanUtils.copyProperties(stateLog,productCheckParam);
         stateLog.setPriorityNumber(ProductConstants.ProdStatusLog.PriorityNumber.USUAL);
         Set<String> prodIdSet = new HashSet(productCheckParam.getProdIdList());
-        List<String> skuIndexList = new ArrayList<>();
         for (String prodId:prodIdSet){
             Product product = productAtomSV.selectByProductId(productCheckParam.getTenantId(),prodId);
             //若未找到对应商品或商品状态不是"待审核",则不处理
@@ -223,14 +222,13 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                 productBusiSV.changeToInSaleFromAudit(product,productCheckParam.getOperId());
                 //将商品添加至搜索引擎
                 if(ProductConstants.Product.State.IN_SALE.equals(product.getState()))
-                    skuIndexList.add(product.getProdId());
+                    skuIndexManage.updateSKUIndex(prodId);
             }else {
                 product.setState(ProductConstants.Product.State.IN_STORE);
                 product.setOperId(productCheckParam.getOperId());
                 updateProductStatusLog(product,stateLog);
             }
         }
-        return skuIndexList;
     }
 
     private void updateProductStatusLog(Product product,ProductStateLog stateLog){

@@ -1,7 +1,5 @@
 package com.ai.slp.product.api.product.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -80,10 +78,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Override
     public BaseResponse productCheck(ProductCheckParam productCheckParam) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(productCheckParam.getTenantId());
-        List<String> prodIndexList = productManagerBusiSV.auditProduct(productCheckParam);
-        for (String prodId:prodIndexList){
-            skuIndexManage.updateSKUIndex(prodId);
-        }
+        productManagerBusiSV.auditProduct(productCheckParam);
         return CommonUtils.genSuccessResponse("OK");
     }
 
@@ -148,8 +143,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(query.getTenantId());
         productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
-        //将商品添加至搜索引擎
-        skuIndexManage.updateSKUIndex(query.getProductId());
         return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
     }
 
@@ -232,7 +225,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 
 	/**
 	 * 查询商品拒绝原因
-	 * @param productRefuseParam
+	 * @param queryInfo
      * @return 满足条件的商品集合
      * @throws BusinessException
      * @throws SystemException
