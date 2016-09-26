@@ -23,7 +23,7 @@ public class IStorageNumBusiSVTest {
     @Test
     public void queryStorageOfSku(){
         SkuStorageVo storageVo = storageNumBusiSV.queryStorageOfSku(
-                CommonTestConstants.COMMON_TENANT_ID,"1000000000002459");
+                CommonTestConstants.COMMON_TENANT_ID,"0000000000000238");
         System.out.println(storageVo.toString());
     }
 

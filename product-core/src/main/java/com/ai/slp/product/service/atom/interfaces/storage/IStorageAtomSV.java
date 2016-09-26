@@ -25,7 +25,6 @@ public interface IStorageAtomSV {
      * @return
      */
     public List<Storage> queryOfGroup(String tenantId,String groupId,boolean hasDiscard);
-    
     /**
      * 查询库存是否存在(通过预警对象标识) 
      * @param storageId
