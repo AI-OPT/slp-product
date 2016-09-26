@@ -1,21 +1,20 @@
 package com.ai.slp.product.service.business.impl.exsearch;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.search.bo.SKUInfo;
-import com.ai.slp.product.service.atom.interfaces.search.ISKUService;
 import com.ai.slp.product.service.business.interfaces.exsearch.IExSKUIndexManage;
 import com.google.gson.GsonBuilder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 搜索信息管理
@@ -26,8 +25,8 @@ public class ExSKUIndexManageImpl implements IExSKUIndexManage {
 
     private Logger logger = LogManager.getLogger(ExSKUIndexManageImpl.class);
 
-    @Autowired
-    private ISKUService iskuService;
+//    @Autowired
+//    private ISKUService iskuService;
 
     /**
      * 更新搜索信息
@@ -37,7 +36,8 @@ public class ExSKUIndexManageImpl implements IExSKUIndexManage {
     @Override
     public boolean updateSKUIndex(String productId) {
         try {
-            List<SKUInfo> skuInfoList = iskuService.getSKUInfoByProductId(productId);
+//            List<SKUInfo> skuInfoList = iskuService.getSKUInfoByProductId(productId);
+            List<SKUInfo> skuInfoList = new ArrayList<>();
             List<String> string = new ArrayList<String>();
             for (SKUInfo skuInfo : skuInfoList) {
                 string.add(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(skuInfo));
