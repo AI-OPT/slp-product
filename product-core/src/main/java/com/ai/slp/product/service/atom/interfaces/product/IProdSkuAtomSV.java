@@ -115,4 +115,12 @@ public interface IProdSkuAtomSV {
      * @return
      */
     public List<ProdSkuInfoSes> queryOfProdForSearch(String productId);
+
+    /**
+     * 为搜索信息,添加所有在售商品
+     * @param limitStart
+     * @param limitEnd
+     * @return
+     */
+    public List<ProdSkuInfoSes> queryInSaleForSearch(Integer limitStart,Integer limitEnd);
 }

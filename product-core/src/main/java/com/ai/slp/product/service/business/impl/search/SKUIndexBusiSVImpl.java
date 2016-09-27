@@ -6,7 +6,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
@@ -28,16 +29,16 @@ import com.ai.slp.product.search.bo.*;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
-import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 
 /**
  * 搜索信息管理
  * Created by xin on 16-6-1.
  */
-@Component
-public class SKUIndexManageImpl implements ISKUIndexManage {
+@Service
+public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
 
-    private Logger logger = LogManager.getLogger(SKUIndexManageImpl.class);
+    private Logger logger = LogManager.getLogger(SKUIndexBusiSVImpl.class);
 
     @Autowired
     private IProdCatDefAtomSV prodCatDefAtomSV;
@@ -63,40 +64,13 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
      * @return
      */
     @Override
+    @Transactional
     public boolean updateSKUIndex(String productId) {
         try {
             List<ProdSkuInfoSes> skuInfoSesList =prodSkuAtomSV.queryOfProdForSearch(productId);
             if (CollectionUtil.isEmpty(skuInfoSesList))
                 return true;
-            List<SKUInfo> skuInfoList = new ArrayList<>();
-            for (ProdSkuInfoSes prodSkuInfo:skuInfoSesList){
-                SKUInfo skuInfo = new SKUInfo();
-                BeanUtils.copyProperties(skuInfo,prodSkuInfo);
-                skuInfo.setUptime(prodSkuInfo.getProdUpTime().getTime());
-                //类目
-                skuInfo.setCategoryinfos(new ArrayList<CategoryInfo>());
-                fetchCategory(skuInfo,prodSkuInfo.getProductcategoryid());
-                //属性
-                skuInfo.setAttrinfos(prodAttrAtomSV.queryAttrOfProdId(productId));
-                // 销售量
-                ProdSaleAll prodSaleAll = prodSaleAllAtomSV.querySaleAllOfSku(
-                        prodSkuInfo.getTenantid(),prodSkuInfo.getSkuid());
-                skuInfo.setSalenum(prodSaleAll==null?0:prodSaleAll.getSaleNum());
-                // 图片
-                fillSKUImageInfo(skuInfo,prodSkuInfo.getProductcategoryid(),productId,prodSkuInfo.getSkuid());
-                // 价格
-                skuInfo.setPrice(
-                        skuStorageAtomSV.queryPriceOfSku(prodSkuInfo.getTenantid(),productId,prodSkuInfo.getSkuid()));
-                // 受众
-                skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),productId));
-                //销售地域
-                List<SaleAreaInfo> areaInfoList = new ArrayList<>();
-                //若不是全国销售,则查询销售地域
-                if (ProductConstants.Product.IsSaleNationwide.NO.equals(prodSkuInfo.getSalenationwide()))
-                    areaInfoList = fillSKUSaleArea(prodSkuInfo.getTenantid(),productId);
-                skuInfo.setSaleareainfos(areaInfoList);
-                skuInfoList.add(skuInfo);
-            }
+            List<SKUInfo> skuInfoList = fillSkuInfo(skuInfoSesList);
             if (!CollectionUtil.isEmpty(skuInfoList))
                 SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
             return true;
@@ -144,6 +118,40 @@ public class SKUIndexManageImpl implements ISKUIndexManage {
             logger.error("Failed to delete sku info", e);
         }
         return false;
+    }
+
+    @Override
+    public List<SKUInfo> fillSkuInfo(List<ProdSkuInfoSes> skuInfoSesList) {
+        List<SKUInfo> skuInfoList = new ArrayList<>();
+        for (ProdSkuInfoSes prodSkuInfo:skuInfoSesList){
+            SKUInfo skuInfo = new SKUInfo();
+            BeanUtils.copyProperties(skuInfo,prodSkuInfo);
+            skuInfo.setUptime(prodSkuInfo.getProdUpTime().getTime());
+            //类目
+            skuInfo.setCategoryinfos(new ArrayList<CategoryInfo>());
+            fetchCategory(skuInfo,prodSkuInfo.getProductcategoryid());
+            //属性
+            skuInfo.setAttrinfos(prodAttrAtomSV.queryAttrOfProdId(prodSkuInfo.getProductid()));
+            // 销售量
+            ProdSaleAll prodSaleAll = prodSaleAllAtomSV.querySaleAllOfSku(
+                    prodSkuInfo.getTenantid(),prodSkuInfo.getSkuid());
+            skuInfo.setSalenum(prodSaleAll==null?0:prodSaleAll.getSaleNum());
+            // 图片
+            fillSKUImageInfo(skuInfo,prodSkuInfo.getProductcategoryid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid());
+            // 价格
+            skuInfo.setPrice(skuStorageAtomSV.queryPriceOfSku(
+                    prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid()));
+            // 受众
+            skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid()));
+            //销售地域
+            List<SaleAreaInfo> areaInfoList = new ArrayList<>();
+            //若不是全国销售,则查询销售地域
+            if (ProductConstants.Product.IsSaleNationwide.NO.equals(prodSkuInfo.getSalenationwide()))
+                areaInfoList = fillSKUSaleArea(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid());
+            skuInfo.setSaleareainfos(areaInfoList);
+            skuInfoList.add(skuInfo);
+        }
+        return null;
     }
 
     private ISearchClient getSearchClient(){

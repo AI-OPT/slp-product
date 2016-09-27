@@ -33,7 +33,7 @@ import com.ai.slp.product.service.atom.interfaces.product.*;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
-import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupKeyInfoRequest;
@@ -77,7 +77,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
     @Autowired
     IStorageGroupBusiSV storageGroupBusiSV;
     @Autowired
-    ISKUIndexManage skuIndexManage;
+    ISKUIndexBusiSV skuIndexManage;
     public static List<String> editStatus = new ArrayList<>();
     //	@Autowired
 //	ProductAttachMapper productAttachMapper;

@@ -1,16 +1,18 @@
 package com.ai.slp.product.service.atom;
 
-import com.ai.slp.product.constants.CommonTestConstants;
-import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
+import com.ai.slp.product.constants.CommonTestConstants;
+import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
+import com.ai.slp.product.dao.mapper.attach.ProdSkuInfoSes;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 
 /**
  * Created by jackieliu on 16/6/1.
@@ -50,6 +52,12 @@ public class IProdSkuAtomSVTest {
         for (ProdFastSkuAttach skuAttach:localList){
             System.out.println(skuAttach.toString());
         }
+    }
+
+    @Test
+    public void queryInSaleForSearchTest(){
+        List<ProdSkuInfoSes> skuInfoSesList = prodSkuAtomSV.queryInSaleForSearch(0,1000);
+        System.out.print(skuInfoSesList.size());
     }
 
 }

@@ -37,7 +37,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
-import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
 import com.google.gson.Gson;
 
@@ -77,7 +77,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	@Autowired
     IProductStateLogAtomSV productStateLogAtomSV;
 	@Autowired
-	ISKUIndexManage iskuIndexManage;
+	ISKUIndexBusiSV iskuIndexManage;
 	@Autowired
 	StorageNumDbBusiSVImpl storageNumDbBusiSV;
 
