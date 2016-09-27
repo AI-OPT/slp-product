@@ -32,7 +32,7 @@ public class ProductDataSES extends AbstractSES {
     public void write() throws Exception {
         ExecutorService pool = null;
         try {
-            System.out.println(">>>>>>SES刷新数据开始");
+            LOG.info(">>>>>>SES刷新数据开始");
             pool = Executors.newCachedThreadPool();
 
             List<SKUInfo> skuInfoList;
@@ -53,7 +53,7 @@ public class ProductDataSES extends AbstractSES {
 
                 start += MAX_SIZE;
             }
-            System.out.println(">>>>>>SES刷新数据结束");
+            LOG.info(">>>>>>SES刷新数据结束");
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         } finally{

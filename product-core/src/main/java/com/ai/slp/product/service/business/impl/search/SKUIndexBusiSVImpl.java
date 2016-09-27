@@ -153,7 +153,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             skuInfo.setSaleareainfos(areaInfoList);
             skuInfoList.add(skuInfo);
         }
-        return null;
+        return skuInfoList;
     }
 
     private ISearchClient getSearchClient(){
@@ -222,7 +222,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
         //若SKU没有属性值图片,则查询所属商品的主图
         if (imageInfo==null) {
             ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(prodId);
-            imageInfo = new ImageInfo(prodPicture.getPicType(),prodPicture.getVfsId());
+            imageInfo = prodPicture==null?null:new ImageInfo(prodPicture.getPicType(),prodPicture.getVfsId());
         }
         skuInfo.setImageinfo(imageInfo);
         //查询该商品其他属性值的主图
