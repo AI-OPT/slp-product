@@ -104,8 +104,8 @@
   <select id="selectActive" resultMap="skuInfoSes" parameterType="java.util.Map">
     SELECT
       product.TENANT_ID as tenantid, sku.SKU_ID as skuid ,sku.SKU_NAME as skuname,
-      product.PROD_ID as producetid,product.PRODUCT_SELL_POINT as productsellpoint,
-      product.PROD_NAME as producetname,product.PRODUCT_CAT_ID as productCatId,
+      product.PROD_ID as productid,product.PRODUCT_SELL_POINT as productsellpoint,
+      product.PROD_NAME as productname,product.PRODUCT_CAT_ID as productCatId,
       product.BASIC_ORG_ID as basicOrgId, product.UP_TIME AS uptime,
       product.RECHARGE_TYPE AS rechageType, product.IS_SALE_NATIONWIDE as saleNationwide
     FROM

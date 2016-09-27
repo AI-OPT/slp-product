@@ -38,7 +38,7 @@ import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 @Service
 public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
 
-    private Logger logger = LogManager.getLogger(SKUIndexBusiSVImpl.class);
+    private static final Logger logger = LogManager.getLogger(SKUIndexBusiSVImpl.class);
 
     @Autowired
     private IProdCatDefAtomSV prodCatDefAtomSV;
@@ -124,6 +124,8 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
     public List<SKUInfo> fillSkuInfo(List<ProdSkuInfoSes> skuInfoSesList) {
         List<SKUInfo> skuInfoList = new ArrayList<>();
         for (ProdSkuInfoSes prodSkuInfo:skuInfoSesList){
+            logger.debug("fill sku info,tenantId:{},prodId:{},skuId:{}",
+                    prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid());
             SKUInfo skuInfo = new SKUInfo();
             BeanUtils.copyProperties(skuInfo,prodSkuInfo);
             skuInfo.setUptime(prodSkuInfo.getProdUpTime().getTime());
