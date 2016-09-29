@@ -87,8 +87,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	@Override
 	public int installGroup(StorageGroup group) {
 		group.setStorageGroupId(SequenceUtil.genStorageGroupId());
-		if (group.getCreateTime() == null)
+		if (group.getCreateTime() == null){
 			group.setCreateTime(DateUtils.currTimeStamp());
+		}
 		group.setOperTime(group.getCreateTime());
 		group.setOperId(group.getCreateId());
 		return storageGroupMapper.insert(group);
@@ -154,8 +155,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		example.setOrderByClause(" CREATE_TIME desc");
 		StorageGroupCriteria.Criteria criteria = example.createCriteria()
 				.andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
-		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId))
+		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId)){
 			criteria.andSupplierIdEqualTo(supplierId);
+		}
 		return storageGroupMapper.selectByExample(example);
 	}
 
@@ -173,8 +175,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		example.setOrderByClause(" CREATE_TIME desc");
 		StorageGroupCriteria.Criteria criteria = example.createCriteria()
 				.andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
-		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId))
+		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId)){
 			criteria.andSupplierIdEqualTo(supplierId);
+		}
 		criteria.andStateNotIn(DISCARD_LIST);
 		return storageGroupMapper.selectByExample(example);
 	}
@@ -201,8 +204,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		StorageGroupCriteria.Criteria criteria = example.createCriteria().andTenantIdEqualTo(tenantId)
 				.andStandedProdIdEqualTo(standedProdId).andStateNotIn(DISCARD_LIST);
 		//若不是查询全部,则指定查询的销售商(商户)标识
-		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId))
+		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId)){
 			criteria.andSupplierIdEqualTo(supplierId);
+		}
 		return storageGroupMapper.countByExample(example);
 	}
 
@@ -219,8 +223,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		StorageGroupCriteria.Criteria criteria = example.createCriteria()
 				.andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId).andStateNotIn(DISCARD_LIST);
 		//若不是查询全部,则指定查询的销售商(商户)标识
-		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId))
+		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId)){
 			criteria.andSupplierIdEqualTo(supplierId);
+		}
 		PageInfoResponse<StorageGroup> storageGroupPage = new PageInfoResponse<>();
 		storageGroupPage.setResult(storageGroupMapper.selectByExample(example));
 		storageGroupPage.setPageNo(pageNo);
@@ -240,17 +245,22 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		StorageGroupCriteria.Criteria request = example.createCriteria();
 		// 设置状态为除废弃外的所有状态
 		request.andTenantIdEqualTo(queryVo.getTenantId()).andStateNotIn(DISCARD_LIST);
-		if (queryVo.getStorageGroupName() != null)
+		if (queryVo.getStorageGroupName() != null){
 			request.andStorageGroupNameLike("%" + queryVo.getStorageGroupName() + "%");
-		if (queryVo.getStorageGroupId() != null)
+		}
+		if (queryVo.getStorageGroupId() != null){
 			request.andStorageGroupIdEqualTo(queryVo.getStorageGroupId());
-		if (queryVo.getStandedProdId() != null)
+		}
+		if (queryVo.getStandedProdId() != null){
 			request.andStandedProdIdEqualTo(queryVo.getStandedProdId());
+		}
 		//若不是查询全部,则指定查询的销售商(商户)标识
-		if (!CommonConstants.ALL_SUPPLIER.equals(queryVo.getSupplierId()))
+		if (!CommonConstants.ALL_SUPPLIER.equals(queryVo.getSupplierId())){
 			request.andSupplierIdEqualTo(queryVo.getSupplierId());
-		if(queryVo.getCreateTimeStart() != null && queryVo.getCreateTimeEnd() != null)
+		}
+		if(queryVo.getCreateTimeStart() != null && queryVo.getCreateTimeEnd() != null){
 			request.andCreateTimeBetween(queryVo.getCreateTimeStart(), queryVo.getCreateTimeEnd());
+		}
 		//设置页码相关参数
 		example.setLimitStart((queryVo.getPageNo() - 1) * queryVo.getPageSize());
 		example.setLimitEnd(queryVo.getPageSize());
@@ -276,8 +286,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		StorageGroupPage.setResult(result);
 		//设置总页数
 		int pageCount = count/queryVo.getPageSize();
-		if (count % queryVo.getPageSize() == 0)
+		if (count % queryVo.getPageSize() == 0){
 			pageCount++;
+		}
 		StorageGroupPage.setPageCount(pageCount);
 			
 		return StorageGroupPage;
@@ -321,8 +332,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		int count = attachMapper.count(queryVo);
 		int pageSize = queryVo.getPageSize(),
 				pageNo = queryVo.getPageNo();
-		if (pageNo<1)
+		if (pageNo<1){
 			pageNo = 1;
+		}
 		queryVo.setOrderByClause("OPER_TIME desc");
 		//设置页码相关参数
 		int start = (pageNo - 1) * pageSize;
@@ -357,16 +369,20 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 */
 	private void genLikeStr(StoGroupPageQueryVo queryVo){
 		//库存组ID
-		if (StringUtils.isNotBlank(queryVo.getStorageGroupId()))
+		if (StringUtils.isNotBlank(queryVo.getStorageGroupId())){
 			queryVo.setStorageGroupId("%"+queryVo.getStorageGroupId()+"%");
+		}
 		//库存组名称
-		if (StringUtils.isNotBlank(queryVo.getStorageGroupName()))
+		if (StringUtils.isNotBlank(queryVo.getStorageGroupName())){
 			queryVo.setStorageGroupId("%"+queryVo.getStorageGroupName()+"%");
+		}
 		//标准品id
-		if (StringUtils.isNotBlank(queryVo.getStandedProdId()))
+		if (StringUtils.isNotBlank(queryVo.getStandedProdId())){
 			queryVo.setStorageGroupId("%"+queryVo.getStandedProdId()+"%");
+		}
 		//标准品名称
-		if (StringUtils.isNotBlank(queryVo.getStandedProductName()))
+		if (StringUtils.isNotBlank(queryVo.getStandedProductName())){
 			queryVo.setStorageGroupId("%"+queryVo.getStandedProductName()+"%");
+		}
 	}
 }

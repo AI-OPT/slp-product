@@ -164,12 +164,14 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		String tenantId = normProdct.getTenantId(), productId = normProdct.getProductId();
 		// 查询是否存在
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
-		if (standedProduct == null)
+		if (standedProduct == null){
 			throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
+		}
 		// 判断商户ID是否传入的商户ID
-		if (!normProdct.getSupplierId().equals(standedProduct.getSupplierId()))
+		if (!normProdct.getSupplierId().equals(standedProduct.getSupplierId())){
 			throw new BusinessException("",
 					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + normProdct.getSupplierId() + "不一致!");
+		}
 
 		/*
 		 * 总共有6种状态变化, 1.不允许变更为废弃状态;2.已废弃标准品不允许变更状态;3.可用变为不可用,需要检查.
@@ -177,18 +179,21 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		// 状态变更
 		if (!standedProduct.getState().equals(normProdct.getState())) {
 			// 变更为废弃
-			if (StandedProductConstants.STATUS_DISCARD.equals(normProdct.getState()))
+			if (StandedProductConstants.STATUS_DISCARD.equals(normProdct.getState())){
 				throw new BusinessException("", "不允许变更为[废弃]状态,请使用废弃接口");
+			}
 			// 废弃状态下不允许变更为其他状态
-			else if (StandedProductConstants.STATUS_DISCARD.equals(standedProduct.getState()))
+			else if (StandedProductConstants.STATUS_DISCARD.equals(standedProduct.getState())){
 				throw new BusinessException("", "不允许将[废弃]状态变更为其他状态");
+			}
 			// 将可用变为不可用
 			else if (StandedProductConstants.STATUS_ACTIVE.equals(standedProduct.getState())
 					&& StandedProductConstants.STATUS_INACTIVE.equals(normProdct.getState())) {
 				// 检查是否有启用状态库存组
 				int groupNum = storageGroupAtomSV.countActive(tenantId, productId);
-				if (groupNum > 0)
+				if (groupNum > 0){
 					throw new BusinessException("", "该标准品下存在[" + groupNum + "]个启用的库存组,不允许变更为不可用");
+				}
 			}
 		}
 		// 变更信息
@@ -354,8 +359,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				attrVal = new LinkedList<String>();
 			}
 			attrVal.add(prodAttr.getAttrvalueDefId());
-			if (!attrAndValueIds.containsKey(prodAttr.getAttrId()))
+			if (!attrAndValueIds.containsKey(prodAttr.getAttrId())){
 				attrAndValueIds.put(prodAttr.getAttrId(), attrVal);
+			}
 		}
 		return attrAndValueIds;
 	}
@@ -380,8 +386,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 					valueSet = new LinkedList<String>();
 				}
 				valueSet.add(attrVal.getAttrValId());
-				if (!attrAndValMap.containsKey(attrVal.getAttrId()))
+				if (!attrAndValMap.containsKey(attrVal.getAttrId())){
 					attrAndValMap.put(attrVal.getAttrId(), valueSet);
+				}
 			}
 		}
 		return attrAndValMap;
@@ -418,8 +425,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				attrVal = new HashSet<>();
 			}
 			attrVal.add(prodAttr.getAttrvalueDefId());
-			if (!attrAndValueIds.containsKey(prodAttr.getAttrId()))
+			if (!attrAndValueIds.containsKey(prodAttr.getAttrId())){
 				attrAndValueIds.put(prodAttr.getAttrId(), attrVal);
+			}
 			if(StringUtils.isBlank(prodAttr.getAttrvalueDefId())){
 				attrAndValueMap.put(prodAttr.getAttrId(), prodAttr.getAttrValueName());
 			}
@@ -449,8 +457,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			BeanUtils.copyProperties(normProduct, standedProduct);
 			ProductCat productCat = catDefAtomSV.selectAllStateById(standedProduct.getTenantId(),
 					standedProduct.getProductCatId());
-			if (productCat != null)
+			if (productCat != null){
 				normProduct.setCatName(productCat.getProductCatName());
+			}
 			normProduct.setCatId(standedProduct.getProductCatId());
 			normProduct.setProductId(standedProduct.getStandedProdId());
 			normProduct.setProductName(standedProduct.getStandedProductName());
@@ -462,17 +471,20 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public void discardProduct(String tenantId, String productId, Long operId, String supplierId) {
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
-		if (standedProduct == null)
+		if (standedProduct == null){
 			throw new BusinessException("", "不存在指定商品,租户ID:" + tenantId + ",商品标识:" + productId);
+		}
 
-		if (!standedProduct.getSupplierId().equals(supplierId))
+		if (!standedProduct.getSupplierId().equals(supplierId)){
 			throw new BusinessException("",
 					"商品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + supplierId + "不一致!");
+		}
 
 		// 查询没有废弃的库存组
 		int noDiscardNum = storageGroupAtomSV.countNoDiscard(tenantId, productId);
-		if (noDiscardNum > 0)
+		if (noDiscardNum > 0){
 			throw new BusinessException("", "该商品下存在[" + noDiscardNum + "]个未废弃库存组");
+		}
 		discardProduct(standedProduct,operId);
 	}
 
@@ -536,8 +548,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	public AttrMap queryAttrOfProduct(String tenantId, String standedProdId, String attrType) {
 		// 查询标准品信息
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
-		if (standedProduct == null)
+		if (standedProduct == null){
 			throw new BusinessException("", "未找到对应标准品信息,租户ID:" + tenantId + ",标准品标识:" + standedProdId);
+		}
 		AttrMap attrMapOfNormProd = new AttrMap();
 		Map<Long, List<Long>> attrAndValMap = new LinkedMap();
 		Map<Long, ProdCatAttrInfo> attrDefMap = new HashMap<>();
@@ -665,8 +678,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	 * @param oldAttrValList
 	 */
 	private void loseActiveAttr(Collection<StandedProdAttr> oldAttrValList, Long operId) {
-		if (oldAttrValList == null || oldAttrValList.isEmpty())
+		if (oldAttrValList == null || oldAttrValList.isEmpty()){
 			return;
+		}
 		for (StandedProdAttr prodAttr : oldAttrValList) {
 			prodAttr.setOperId(operId);
 			prodAttr.setOperTime(DateUtils.currTimeStamp());
@@ -684,13 +698,15 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
 				marketPrice.getProductId());
 		// 判断此租户下是否存在次标准品
-		if (standedProduct == null)
+		if (standedProduct == null){
 			throw new BusinessException("",
 					"找不到指定的租户=" + marketPrice.getTenantId() + "下的标准品=" + marketPrice.getProductId() + "信息");
+		}
 		// 判断商户ID是否为传入的商户ID
-		if (!marketPrice.getSupplierId().equals(standedProduct.getSupplierId()))
+		if (!marketPrice.getSupplierId().equals(standedProduct.getSupplierId())){
 			throw new BusinessException("",
 					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + marketPrice.getSupplierId() + "不一致!");
+		}
 
 		// 更新市场价格信息
 		int count = standedProductAtomSV.updateMarketPrice(marketPrice.getTenantId(), marketPrice.getProductId(),
@@ -723,12 +739,14 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	 * @return
 	 */
 	private Short queryValInfoSerialNum(String tenantId, String catId, Long attrId, String valId) {
-		if (StringUtils.isBlank(valId))
+		if (StringUtils.isBlank(valId)){
 			return 0;
+		}
 		// 根据类目和属性查询关系信息
 		ProdCatAttr prodCatAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(tenantId, catId, attrId, null);
-		if (prodCatAttr == null)
+		if (prodCatAttr == null){
 			return 0;
+		}
 		// 根据关系和属性值查询属性值信息
 		ProdCatAttrValue attrValue = prodCatAttrValAtomSV.queryByCatAndCatAttrId(tenantId, prodCatAttr.getCatAttrId(),
 				valId);
@@ -835,8 +853,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				valDef.setAttrVal2(prodAttr.getAttrValueName2());
 				if (prodAttr.getAttrvalueDefId() != null) {
 					ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId, prodAttr.getAttrvalueDefId());
-					if (attrvalueDef != null)
+					if (attrvalueDef != null){
 						valDef.setAttrVal(attrvalueDef.getAttrValueName());
+					}
 				}
 				valInfoList.add(valDef);
 			}

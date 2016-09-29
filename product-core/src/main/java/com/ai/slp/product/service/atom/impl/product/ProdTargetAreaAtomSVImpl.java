@@ -46,8 +46,9 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
         ProdTargetAreaCriteria.Criteria criteria = example.createCriteria();
         criteria.andTenantIdEqualTo(tenantId)
             .andProdIdEqualTo(prodId);
-        if (provCode!=null)
-            criteria.andProvCodeEqualTo(provCode);
+        if (provCode!=null){
+        	criteria.andProvCodeEqualTo(provCode);
+        }
         //若不包括废弃状态
         if (!hasDiscard){
             criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
@@ -74,8 +75,9 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
         ProdTargetAreaCriteria.Criteria criteria = example.createCriteria();
         criteria.andTenantIdEqualTo(tenantId)
                 .andProdIdEqualTo(prodId);
-        if (provCode!=null)
-            criteria.andProvCodeEqualTo(provCode);
+        if (provCode!=null){
+        	criteria.andProvCodeEqualTo(provCode);
+        }
         //若不包括废弃状态
         if (!hasDiscard){
             criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
@@ -132,8 +134,9 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
     	ProductCriteria prodExample = new ProductCriteria();
     	prodExample.setOrderByClause("OPER_TIME desc");//操作时间倒序
 		ProductCriteria.Criteria criteria = prodExample.createCriteria();
-		if (StringUtils.isNotBlank(productEditParam.getProdId()))
+		if (StringUtils.isNotBlank(productEditParam.getProdId())){
 			criteria.andProdIdLike("%"+productEditParam.getProdId()+"%");
+		}
 		int pageNo = productEditParam.getPageNo();
         int pageSize = productEditParam.getPageSize();
         //符合条件的商品集合

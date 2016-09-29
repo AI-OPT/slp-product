@@ -122,8 +122,9 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 		SkuStorageCriteria.Criteria criteria = example.createCriteria()
 				.andStorageIdEqualTo(storageId);
 		//如果不包括废弃的
-		if (!hasDiscard)
+		if (!hasDiscard){
 			criteria.andStateNotEqualTo(SkuStorageConstants.SkuStorage.State.AUTO_DISCARD);
+		}
 		return skuStorageMapper.selectByExample(example);
 	}
 
@@ -135,8 +136,9 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	 */
 	@Override
 	public int queryNoPriceOfStorageByIdList(List<String> storageIdList) {
-		if (CollectionUtil.isEmpty(storageIdList))
+		if (CollectionUtil.isEmpty(storageIdList)){
 			return 0;
+		}
 		SkuStorageCriteria example = new SkuStorageCriteria();
 		example.createCriteria().andStorageIdIn(storageIdList)
 				.andSalePriceIsNull().andStateEqualTo(StorageConstants.SkuStorage.State.ACTIVE);
@@ -167,8 +169,9 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	public SkuStorage queryById(String skuStorageId,boolean hasDiscard) {
 		SkuStorage skuStorage = skuStorageMapper.selectByPrimaryKey(skuStorageId);
 		if (skuStorage!=null && !hasDiscard
-			&& StorageConstants.SkuStorage.State.AUTO_DISCARD.equals(skuStorage.getState()))
+			&& StorageConstants.SkuStorage.State.AUTO_DISCARD.equals(skuStorage.getState())){
 			skuStorage = null;
+		}
 		return skuStorage;
 	}
 

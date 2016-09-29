@@ -37,14 +37,16 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
      */
     @Override
     public List<ProdAudiences> queryByUserType(String tenantId,String prodId, String userType, String userId, boolean hasDiscard) {
-        if (StringUtils.isBlank(userType) && StringUtils.isBlank(userId))
-            return Collections.emptyList();
+        if (StringUtils.isBlank(userType) && StringUtils.isBlank(userId)){
+        	return Collections.emptyList();
+        }
         ProdAudiencesCriteria example = new ProdAudiencesCriteria();
         ProdAudiencesCriteria.Criteria criteria = example.createCriteria();
         criteria.andTenantIdEqualTo(tenantId)
                 .andProdIdEqualTo(prodId);
-        if (StringUtils.isNotBlank(userType))
-            criteria.andUserTypeEqualTo(userType);
+        if (StringUtils.isNotBlank(userType)){
+        	criteria.andUserTypeEqualTo(userType);
+        }
         if (StringUtils.isNotBlank(userId)) {
             List<String> userIdList = new ArrayList<>();
             userIdList.add(userId);
@@ -92,8 +94,9 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
      */
     @Override
     public List<ProdAudiences> queryByUserType(String tenantId, String prodId, String userType, boolean hasDiscard) {
-        if (StringUtils.isBlank(userType))
-            return Collections.emptyList();
+        if (StringUtils.isBlank(userType)){
+        	return Collections.emptyList();
+        }
         ProdAudiencesCriteria example = new ProdAudiencesCriteria();
         ProdAudiencesCriteria.Criteria criteria = example.createCriteria();
         criteria.andTenantIdEqualTo(tenantId)
@@ -116,8 +119,9 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
      */
     @Override
     public ProdAudiences queryAllByUserType(String tenantId, String prodId, String userType, boolean hasDiscard) {
-        if (StringUtils.isBlank(userType))
-            return null;
+        if (StringUtils.isBlank(userType)){
+        	return null;
+        }
         ProdAudiencesCriteria example = new ProdAudiencesCriteria();
         example.setOrderByClause("OPER_TIME desc");
         ProdAudiencesCriteria.Criteria criteria = example.createCriteria();

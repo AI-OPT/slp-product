@@ -33,15 +33,17 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     @Override
     public ProdCatAttr selectById(String tenantId, String catAttrId) {
         ProdCatAttr prodCatAttr = prodCatAttrMapper.selectByPrimaryKey(catAttrId);
-        if (prodCatAttr!=null && !tenantId.equals(prodCatAttr.getTenantId()))
-            prodCatAttr = null;
+        if (prodCatAttr!=null && !tenantId.equals(prodCatAttr.getTenantId())){
+        	prodCatAttr = null;
+        }
         return prodCatAttr;
     }
 
     @Override
     public int insertProdCatAttr(ProdCatAttr prodCatAttr) {
-        if (prodCatAttr.getOperTime()==null)
-            prodCatAttr.setOperTime(DateUtils.currTimeStamp());
+        if (prodCatAttr.getOperTime()==null){
+        	prodCatAttr.setOperTime(DateUtils.currTimeStamp());
+        }
         prodCatAttr.setCatAttrId(SequenceUtil.genProdCatAttrId());
         return prodCatAttrMapper.insertSelective(prodCatAttr);
     }
@@ -69,8 +71,9 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         ProdCatAttrCriteria.Criteria criteria = example.createCriteria()
                 .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
                 .andStateEqualTo(CommonConstants.STATE_ACTIVE).andAttrTypeEqualTo(attrType);
-        if (!CollectionUtil.isEmpty(attrIdList))
-            criteria.andAttrIdNotIn(attrIdList);
+        if (!CollectionUtil.isEmpty(attrIdList)){
+        	criteria.andAttrIdNotIn(attrIdList);
+        }
         return attrXmlAttachMapper.selectCatAttrIdS(example);
     }
 
@@ -109,8 +112,9 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
         ProdCatAttrCriteria.Criteria criteria = example.createCriteria()
                 .andTenantIdEqualTo(tenantId).andProductCatIdEqualTo(catId)
                 .andStateEqualTo(CommonConstants.STATE_ACTIVE).andAttrTypeEqualTo(attrType);
-        if (!CollectionUtil.isEmpty(attrIdList))
-            criteria.andAttrIdNotIn(attrIdList);
+        if (!CollectionUtil.isEmpty(attrIdList)){
+        	criteria.andAttrIdNotIn(attrIdList);
+        }
         ProdCatAttr catAttr = new ProdCatAttr();
         catAttr.setState(CommonConstants.STATE_INACTIVE);
         catAttr.setOperId(operId);
@@ -176,8 +180,9 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
                 .andProductCatIdEqualTo(catId)
                 .andAttrIdEqualTo(attrId)
                 .andStateEqualTo(CommonConstants.STATE_ACTIVE);
-        if (StringUtils.isNotBlank(attrType))
-            criteria.andAttrTypeEqualTo(attrType);
+        if (StringUtils.isNotBlank(attrType)){
+        	criteria.andAttrTypeEqualTo(attrType);
+        }
         List<ProdCatAttr> attrList = prodCatAttrMapper.selectByExample(example);
         return attrList==null||attrList.isEmpty()?null:attrList.get(0);
     }

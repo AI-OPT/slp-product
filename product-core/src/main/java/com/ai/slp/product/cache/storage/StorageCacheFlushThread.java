@@ -23,8 +23,9 @@ public class StorageCacheFlushThread extends Thread {
     @Override
     public void run() {
         logger.info("库存组数量{}",groupList.size());
-        if (CollectionUtil.isEmpty(groupList))
-            return;
+        if (CollectionUtil.isEmpty(groupList)){
+        	return;
+        }
         for (StorageGroup group:groupList){
             logger.info("Start flush----TenantId={},GroupId={},",group.getTenantId(),group.getStorageGroupId());
             groupBusiSV.flushStorageCache(group);

@@ -31,16 +31,18 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
         example.createCriteria().andTenantIdEqualTo(tenantId).andAttrvalueDefIdEqualTo(attrvalueDefId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<ProdAttrvalueDef> prodAttrvalueDefList = prodAttrvalueDefMapper.selectByExample(example);
-        if(prodAttrvalueDefList == null || prodAttrvalueDefList.isEmpty())
-            return null;
+        if(prodAttrvalueDefList == null || prodAttrvalueDefList.isEmpty()){
+        	return null;
+        }
         return prodAttrvalueDefList.get(0);
     }
     
     
     @Override
     public int insertProdAttrVal(ProdAttrvalueDef prodAttrvalueDef) {
-        if(prodAttrvalueDef.getOperTime() == null)
-            prodAttrvalueDef.setOperTime(DateUtils.currTimeStamp());
+        if(prodAttrvalueDef.getOperTime() == null){
+        	prodAttrvalueDef.setOperTime(DateUtils.currTimeStamp());
+        }
         prodAttrvalueDef.setAttrvalueDefId(SequenceUtil.genProdAttrvalueDefId());
         prodAttrvalueDef.setState(CommonConstants.STATE_ACTIVE);
         return prodAttrvalueDefMapper.insertSelective(prodAttrvalueDef);
@@ -73,12 +75,15 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         param.andTenantIdEqualTo(pageQueryVo.getTenantId())
             .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         example.setOrderByClause("OPER_TIME desc");//操作时间倒序
-        if(pageQueryVo.getAttrId()!=null)
-            param.andAttrIdEqualTo(pageQueryVo.getAttrId());
-        if(StringUtils.isNotBlank(pageQueryVo.getAttrvalueDefId()))
+        if(pageQueryVo.getAttrId()!=null){
+        	param.andAttrIdEqualTo(pageQueryVo.getAttrId());
+        }
+        if(StringUtils.isNotBlank(pageQueryVo.getAttrvalueDefId())){
         	param.andAttrvalueDefIdLike("%"+ pageQueryVo.getAttrvalueDefId()+"%");
-        if(StringUtils.isNotBlank(pageQueryVo.getAttrValueName()))
-            param.andAttrValueNameLike("%"+ pageQueryVo.getAttrValueName()+"%");
+        }
+        if(StringUtils.isNotBlank(pageQueryVo.getAttrValueName())){
+        	param.andAttrValueNameLike("%"+ pageQueryVo.getAttrValueName()+"%");
+        }
         //统计查询条目数
         int count = prodAttrvalueDefMapper.countByExample(example);
         

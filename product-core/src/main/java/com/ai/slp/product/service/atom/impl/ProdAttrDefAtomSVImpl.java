@@ -36,8 +36,9 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     @Override
     public int installObj(ProdAttrDef productAttr) {
         productAttr.setAttrId(SequenceUtil.createAttrDefId());
-        if(productAttr.getOperTime() == null)
+        if(productAttr.getOperTime() == null){
             productAttr.setOperTime(DateUtils.currTimeStamp());
+        }
         return prodAttrDefMapper.insertSelective(productAttr);
     }
 
@@ -68,16 +69,19 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
         ProdAttrDefCriteria.Criteria request = example.createCriteria();
         request.andTenantIdEqualTo(attrPageQueryVo.getTenantId());
-        if(attrPageQueryVo.getAttrId() != null)
-            request.andAttrIdEqualTo(attrPageQueryVo.getAttrId());
+        if(attrPageQueryVo.getAttrId() != null){
+        	request.andAttrIdEqualTo(attrPageQueryVo.getAttrId());
+        }
 
         //属性名称模糊查询
-        if(StringUtils.isNoneBlank(attrPageQueryVo.getAttrName()))
+        if(StringUtils.isNoneBlank(attrPageQueryVo.getAttrName())){
            // request.andAttrNameEqualTo(attrPageQueryVo.getAttrName());
         	request.andAttrNameLike("%"+ attrPageQueryVo.getAttrName() +"%");
+        }
 
-        if(StringUtils.isNotBlank(attrPageQueryVo.getValueWay()))
+        if(StringUtils.isNotBlank(attrPageQueryVo.getValueWay())){
             request.andValueWayEqualTo(attrPageQueryVo.getValueWay());
+        }
         //设置数据的查询状态为有效状态
         request.andStateEqualTo(CommonConstants.STATE_ACTIVE);
         example.setOrderByClause("OPER_TIME desc");//操作时间倒序

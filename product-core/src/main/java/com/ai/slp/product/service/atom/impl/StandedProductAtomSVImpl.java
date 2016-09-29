@@ -29,13 +29,15 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 	ProductMapper productMapper;
 	@Override
 	public int installObj(StandedProduct standedProduct) {
-		if (standedProduct == null)
+		if (standedProduct == null){
 			return 0;
+		}
 		// 设置标准品标识
 		standedProduct.setStandedProdId(SequenceUtil.genStandedProductId());
 		// 设置添加时间
-		if (standedProduct.getCreateTime() == null)
+		if (standedProduct.getCreateTime() == null){
 			standedProduct.setCreateTime(DateUtil.getSysDate());
+		}
 		standedProduct.setOperTime(standedProduct.getCreateTime());
 		standedProduct.setOperId(standedProduct.getCreateId());
 		return standedProductMapper.insertSelective(standedProduct);
@@ -43,8 +45,9 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 
 	@Override
 	public int updateObj(StandedProduct standedProduct) {
-		if (standedProduct == null)
+		if (standedProduct == null){
 			return 0;
+		}
 		// 不允许更新创建人,创建时间,所属类目
 		standedProduct.setCreateTime(null);
 		standedProduct.setCreateId(null);
@@ -58,8 +61,9 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 
 	@Override
 	public StandedProduct selectById(String tenantId, String standedProdId) {
-		if (StringUtils.isBlank(tenantId) || StringUtils.isBlank(standedProdId))
+		if (StringUtils.isBlank(tenantId) || StringUtils.isBlank(standedProdId)){
 			return null;
+		}
 		StandedProductCriteria example = new StandedProductCriteria();
 		example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
 		List<StandedProduct> productList = standedProductMapper.selectByExample(example);
@@ -72,35 +76,45 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		StandedProductCriteria.Criteria criteria = example.createCriteria();
 		criteria.andTenantIdEqualTo(request.getTenantId());
 		// 类目id
-		if (StringUtils.isNotBlank(request.getProductCatId()))
+		if (StringUtils.isNotBlank(request.getProductCatId())){
 			criteria.andProductCatIdEqualTo(request.getProductCatId());
+		}
 		// 商品标识
-		if (StringUtils.isNotBlank(request.getProductId()))
+		if (StringUtils.isNotBlank(request.getProductId())){
 			criteria.andStandedProdIdLike("%" + request.getProductId() + "%");
+		}
 		// 商品名称
-		if (StringUtils.isNotBlank(request.getProductName()))
+		if (StringUtils.isNotBlank(request.getProductName())){
 			criteria.andStandedProductNameLike("%" + request.getProductName() + "%");
+		}
 		// 商品状态
-		if (StringUtils.isNotBlank(request.getState()))
+		if (StringUtils.isNotBlank(request.getState())){
 			criteria.andStateEqualTo(request.getState());
+		}
 		// 商品类型
-		if (StringUtils.isNotBlank(request.getProductType()))
+		if (StringUtils.isNotBlank(request.getProductType())){
 			criteria.andProductTypeEqualTo(request.getProductType());
+		}
 		// 添加时间 开始时间
-		if (request.getCreateStartTime() != null)
+		if (request.getCreateStartTime() != null){
 			criteria.andCreateTimeGreaterThanOrEqualTo(DateUtils.toTimeStamp(request.getCreateStartTime()));
+		}
 		// 添加时间 截止时间
-		if (request.getCreateEndTime() != null)
+		if (request.getCreateEndTime() != null){
 			criteria.andCreateTimeLessThanOrEqualTo(DateUtils.toTimeStamp(request.getCreateEndTime()));
+		}
 		// 操作时间 开始时间
-		if (request.getOperStartTime() != null)
+		if (request.getOperStartTime() != null){
 			criteria.andOperTimeGreaterThanOrEqualTo(DateUtils.toTimeStamp(request.getOperStartTime()));
+		}
 		// 操作时间 截止时间
-		if (request.getOperEndTime() != null)
+		if (request.getOperEndTime() != null){
 			criteria.andOperTimeLessThanOrEqualTo(DateUtils.toTimeStamp(request.getOperEndTime()));
+		}
 		// 操作人
-		if (request.getOperId() != null)
+		if (request.getOperId() != null){
 			criteria.andOperIdEqualTo(request.getOperId());
+		}
 		
 		//商户ID	(需求新增)
 		if (StringUtils.isNotBlank(request.getSupplierId())) {
@@ -153,8 +167,9 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		StandedProductCriteria example = new StandedProductCriteria();
 		example.createCriteria().andStandedProductNameLike(standedProductName);
 		List<StandedProduct> standedProductList = standedProductMapper.selectByExample(example);
-		if (CollectionUtil.isEmpty(standedProductList))
+		if (CollectionUtil.isEmpty(standedProductList)){
 			return null;
+		}
 		// 遍历结果集获取ID集合
 		List<String> standedProductIdList = new ArrayList<>();
 		for (StandedProduct standedProduct : standedProductList) {

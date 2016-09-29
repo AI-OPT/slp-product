@@ -18,8 +18,9 @@ public class StandedProductLogAtomSVImpl implements IStandedProductLogAtomSV {
 
     @Override
     public int insert(StandedProductLog productLog) {
-        if (productLog==null)
-            return 0;
+        if (productLog==null){
+        	return 0;
+        }
         //日志id
         productLog.setLogId(SequenceUtil.genStandedProductLogId());
         return productLogMapper.insert(productLog);

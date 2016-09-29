@@ -65,8 +65,9 @@ public class ProdCatCache extends AbstractCache {
         //查询类目信息
         ProductCat cat = catDefAtomSV.selectById(tenantId,catId);
         //刷新缓存
-        if (cat!=null)
-            flushCatInfo(IPaasCatUtils.getCacheClient(),cat);
+        if (cat!=null){
+        	flushCatInfo(IPaasCatUtils.getCacheClient(),cat);
+        }
     }
 
     /**

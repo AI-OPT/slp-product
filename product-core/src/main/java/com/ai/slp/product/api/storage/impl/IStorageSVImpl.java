@@ -211,8 +211,9 @@ public class IStorageSVImpl implements IStorageSV {
 			storageNumDbBusiSV.flushStorageCache(tenantId,storage);
 			//若商品为售罄下架,则进行上架处理
 			Product product = productAtomSV.selectByGroupId(tenantId,storage.getStorageGroupId());
-			if (product!=null && ProductConstants.Product.State.SALE_OUT.equals(product.getState()))
+			if (product!=null && ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
 				productBusiSV.changeToInSale(tenantId,storageStatus.getSupplierId(),product.getProdId(),operId);
+			}
 		}else if(StorageConstants.Storage.State.STOP.equals(storageStatus.getState())){
 			storageNumDbBusiSV.subStorageCache(tenantId,storage);
 		}

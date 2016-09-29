@@ -28,8 +28,9 @@ public class ProductStateLogAtomSVImpl implements IProductStateLogAtomSV{
 	 */
 	@Override
 	public int insert(ProductStateLog productStateLog) {
-		if(productStateLog.getOperTime()==null)
+		if(productStateLog.getOperTime()==null){
 			productStateLog.setOperTime(DateUtils.currTimeStamp());
+		}
 		productStateLog.setLogId(SequenceUtil.genProductStateLogId());
 		return productStateLogMapper.insert(productStateLog);
 	}

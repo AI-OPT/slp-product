@@ -126,8 +126,9 @@ public class ProdSkuAttrAtomSV implements IProdSkuAttrAtomSV {
         ProdSkuAttrCriteria example = new ProdSkuAttrCriteria();
         ProdSkuAttrCriteria.Criteria criteria = example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andSkuIdEqualTo(skuId);
-        if(!hasDiscard)
-            criteria.andStateEqualTo(ProductConstants.ProdSkuAttr.State.ACTIVE);
+        if(!hasDiscard){
+        	criteria.andStateEqualTo(ProductConstants.ProdSkuAttr.State.ACTIVE);
+        }
         return skuAttrMapper.selectByExample(example);
     }
 }

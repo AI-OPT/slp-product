@@ -165,11 +165,13 @@ public class IProductCatSVImpl implements IProductCatSV {
             throws BusinessException, SystemException {
         CommonUtils.checkTenantId(productAttrValParam.getTenantId());
         //删除属性
-        if ("1".equals(productAttrValParam.getObjType()))
-            productCatBusiSV.deleteAttr(productAttrValParam);
+        if ("1".equals(productAttrValParam.getObjType())){
+        	productCatBusiSV.deleteAttr(productAttrValParam);
+        }
         //删除属性值
-        else if("2".equals(productAttrValParam.getObjType()))
-            productCatBusiSV.deleteAttrVal(productAttrValParam);
+        else if("2".equals(productAttrValParam.getObjType())){
+        	productCatBusiSV.deleteAttrVal(productAttrValParam);
+        }
         return CommonUtils.genSuccessResponse("OK");
     }
 
@@ -187,8 +189,9 @@ public class IProductCatSVImpl implements IProductCatSV {
             throws BusinessException, SystemException {
         String tenantId = catUniqueReq.getTenantId(),catId = catUniqueReq.getProductCatId();
         CommonUtils.checkTenantId(tenantId,"");
-        if (StringUtils.isBlank(catId))
-            throw new BusinessException("","类目标识不能为空");
+        if (StringUtils.isBlank(catId)){
+        	throw new BusinessException("","类目标识不能为空");
+        }
         return productCatBusiSV.queryByCatId(tenantId,catId);
     }
 

@@ -30,8 +30,9 @@ public class StorageGroupPageSqlProvider {
                 + "sg.LOW_SALE_PRICE,sg.HIGH_SALE_PRICE,sg.CREATE_ID,sg.CREATE_TIME ");
         seqBuffer = genQueryStr(seqBuffer,queryVo);
         //排序
-        if (StringUtils.isNotBlank(queryVo.getOrderByClause()))
-            seqBuffer.append(" order by "+queryVo.getOrderByClause()+" ");
+        if (StringUtils.isNotBlank(queryVo.getOrderByClause())){
+        	seqBuffer.append(" order by "+queryVo.getOrderByClause()+" ");
+        }
         seqBuffer.append(limitStr);//添加分页内容
         logger.debug("\r\n"+seqBuffer.toString());
         return seqBuffer.toString();
@@ -53,38 +54,49 @@ public class StorageGroupPageSqlProvider {
         seqBuffer.append("from standed_product as sp,storage_group as sg ");
         seqBuffer.append("where sp.STANDED_PROD_ID = sg.STANDED_PROD_ID and sg.TENANT_ID= #{vo.tenantId} ");
         //销售商(租户)标识
-        if (!CommonConstants.ALL_SUPPLIER.equals(queryVo.getSupplierId()))
-            seqBuffer.append(" and sg.SUPPLIER_ID = #{vo.supplierId}% ");
+        if (!CommonConstants.ALL_SUPPLIER.equals(queryVo.getSupplierId())){
+        	seqBuffer.append(" and sg.SUPPLIER_ID = #{vo.supplierId}% ");
+        }
         //库存组名称
-        if (StringUtils.isNotBlank(queryVo.getStorageGroupName()))
-            seqBuffer.append(" and sg.STORAGE_GROUP_NAME like #{vo.storageGroupName}% ");
+        if (StringUtils.isNotBlank(queryVo.getStorageGroupName())){
+        	seqBuffer.append(" and sg.STORAGE_GROUP_NAME like #{vo.storageGroupName}% ");
+        }
         //库存组ID
-        if (StringUtils.isNotBlank(queryVo.getStorageGroupId()))
-            seqBuffer.append(" and sg.STORAGE_GROUP_ID like #{vo.storageGroupId} ");
+        if (StringUtils.isNotBlank(queryVo.getStorageGroupId())){
+        	seqBuffer.append(" and sg.STORAGE_GROUP_ID like #{vo.storageGroupId} ");
+        }
         //标准品ID
-        if (StringUtils.isNotBlank(queryVo.getStandedProdId()))
-            seqBuffer.append(" and sp.STANDED_PROD_ID like #{vo.standedProdId}");
+        if (StringUtils.isNotBlank(queryVo.getStandedProdId())){
+        	seqBuffer.append(" and sp.STANDED_PROD_ID like #{vo.standedProdId}");
+        }
         //标准品名称
-        if (StringUtils.isNotBlank(queryVo.getStandedProductName()))
-            seqBuffer.append(" and sp.STANDED_PRODUCT_NAME like #{vo.standedProductName}");
+        if (StringUtils.isNotBlank(queryVo.getStandedProductName())){
+        	seqBuffer.append(" and sp.STANDED_PRODUCT_NAME like #{vo.standedProductName}");
+        }
         //库存组状态
-        if (StringUtils.isNotBlank(queryVo.getState()))
-            seqBuffer.append(" and sg.STATE = #{vo.state} ");
+        if (StringUtils.isNotBlank(queryVo.getState())){
+        	seqBuffer.append(" and sg.STATE = #{vo.state} ");
+        }
         //操作时间开始
-        if (queryVo.getOperTimeStart()!=null)
-            seqBuffer.append(" and sg.OPER_TIME >= #{vo.operTimeStart} ");
+        if (queryVo.getOperTimeStart()!=null){
+        	seqBuffer.append(" and sg.OPER_TIME >= #{vo.operTimeStart} ");
+        }
         //操作时间结束
-        if (queryVo.getOperTimeEnd()!=null)
-            seqBuffer.append(" and sg.OPER_TIME <= #{vo.operTimeEnd} ");
+        if (queryVo.getOperTimeEnd()!=null){
+        	seqBuffer.append(" and sg.OPER_TIME <= #{vo.operTimeEnd} ");
+        }
         //创建时间开始
-        if (queryVo.getCreateTimeStart() !=null)
-            seqBuffer.append(" and sg.CREATE_TIME >= #{vo.createTimeStart} ");
+        if (queryVo.getCreateTimeStart() !=null){
+        	seqBuffer.append(" and sg.CREATE_TIME >= #{vo.createTimeStart} ");
+        }
         //创建时间结束
-        if (queryVo.getCreateTimeEnd()!=null)
-            seqBuffer.append(" and sg.CREATE_TIME <= #{vo.createTimeEnd} ");
+        if (queryVo.getCreateTimeEnd()!=null){
+        	seqBuffer.append(" and sg.CREATE_TIME <= #{vo.createTimeEnd} ");
+        }
         //操作者标识
-        if (queryVo.getOperId()!=null)
-            seqBuffer.append(" and sg.OPER_ID = #{vo.operId} ");
+        if (queryVo.getOperId()!=null){
+        	seqBuffer.append(" and sg.OPER_ID = #{vo.operId} ");
+        }
         logger.debug("\r\n"+seqBuffer.toString());
         return seqBuffer;
     }

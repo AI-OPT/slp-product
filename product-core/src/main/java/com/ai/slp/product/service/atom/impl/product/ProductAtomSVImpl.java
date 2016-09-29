@@ -38,8 +38,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public int installProduct(Product product) {
 		product.setProdId(SequenceUtil.createProductProdId());
-		if (product.getCreateTime() == null)
+		if (product.getCreateTime() == null){
 			product.setCreateTime(DateUtils.currTimeStamp());
+		}
 		product.setOperTime(product.getCreateTime());
 		return productMapper.insert(product);
 	}
@@ -70,8 +71,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public Product selectByProductId(String tenantId, String prodId) {
 		Product product = productMapper.selectByPrimaryKey(prodId);
-		if (product==null || !product.getTenantId().equals(tenantId))
+		if (product==null || !product.getTenantId().equals(tenantId)){
 			product = null;
+		}
 		return product;
 	}
 
@@ -87,8 +89,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	public Product selectByProductId(String tenantId, String supplierId, String prodId) {
 		Product product = productMapper.selectByPrimaryKey(prodId);
 		if (product==null || !product.getTenantId().equals(tenantId)
-				|| !product.getSupplierId().equals(supplierId))
+				|| !product.getSupplierId().equals(supplierId)){
 			product = null;
+		}
 		return product;
 	}
 
@@ -126,22 +129,29 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 //		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
 		example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
-		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
+		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
-		if (StringUtils.isNotBlank(queryReq.getProductType()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProductType())){
 			criteria.andProductTypeEqualTo(queryReq.getProductType());
-		if (!CollectionUtil.isEmpty(queryReq.getStateList()))
+		}
+		if (!CollectionUtil.isEmpty(queryReq.getStateList())){
 			criteria.andStateIn(queryReq.getStateList());
-		if (StringUtils.isNotBlank(queryReq.getProdId()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProdId())){
 			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
-		if (StringUtils.isNotBlank(queryReq.getProdName()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProdName())){
 			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+		}
 		//对商户标识的查询
-		if (StringUtils.isNotBlank(queryReq.getSupplierId())) 
+		if (StringUtils.isNotBlank(queryReq.getSupplierId())) {
 			criteria.andSupplierIdLike("%"+queryReq.getSupplierId()+"%");
+		}
 		//根据标准品ID模糊查询
-		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) 
+		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) {
 			criteria.andStandedProdIdLike("%"+queryReq.getStandedProdId()+"%");
+		}
 		//获取页数和每页条数
 		int pageNo = queryReq.getPageNo();
 		int pageSize = queryReq.getPageSize();
@@ -160,28 +170,37 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		ProductCriteria example = new ProductCriteria();
 		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
-		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
+		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
-		if (StringUtils.isNotBlank(queryReq.getProductType()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProductType())){
 			criteria.andProductTypeEqualTo(queryReq.getProductType());
-		if (!CollectionUtil.isEmpty(queryReq.getStateList()))
+		}
+		if (!CollectionUtil.isEmpty(queryReq.getStateList())){
 			criteria.andStateIn(queryReq.getStateList());
-		if (StringUtils.isNotBlank(queryReq.getProdId()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProdId())){
 			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
-		if (StringUtils.isNotBlank(queryReq.getProdName()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProdName())){
 			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+		}
 		//对商户标识的查询
-		if (StringUtils.isNotBlank(queryReq.getSupplierId())) 
+		if (StringUtils.isNotBlank(queryReq.getSupplierId())) {
 			criteria.andSupplierIdLike("%"+queryReq.getSupplierId()+"%");
+		}
 		//根据标准品ID模糊查询
-		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) 
+		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) {
 			criteria.andStandedProdIdLike("%"+queryReq.getStandedProdId()+"%");
+		}
 		// 操作时间 开始时间
-		if (queryReq.getOperStartTime() != null)
+		if (queryReq.getOperStartTime() != null){
 			criteria.andOperTimeGreaterThanOrEqualTo(DateUtils.toTimeStamp(queryReq.getOperStartTime()));
+		}
 		// 操作时间 截止时间
-		if (queryReq.getOperEndTime() != null)
+		if (queryReq.getOperEndTime() != null){
 			criteria.andOperTimeLessThanOrEqualTo(DateUtils.toTimeStamp(queryReq.getOperEndTime()));
+		}
 		//获取页数和每页条数
 		int pageNo = queryReq.getPageNo();
 		int pageSize = queryReq.getPageSize();
@@ -249,16 +268,21 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		ProductCriteria example = new ProductCriteria();
 		example.setOrderByClause("OPER_TIME asc");//操作时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
-		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
+		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
-		if (StringUtils.isNotBlank(queryReq.getProductType()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProductType())){
 			criteria.andProductTypeEqualTo(queryReq.getProductType());
-		if (!CollectionUtil.isEmpty(queryReq.getStateList()))
+		}
+		if (!CollectionUtil.isEmpty(queryReq.getStateList())){
 			criteria.andStateIn(queryReq.getStateList());
-		if (StringUtils.isNotBlank(queryReq.getProdId()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProdId())){
 			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
-		if (StringUtils.isNotBlank(queryReq.getProdName()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProdName())){
 			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+		}
 		//获取页数和每页条数
 		int pageNo = queryReq.getPageNo();
 		int pageSize = queryReq.getPageSize();
@@ -278,29 +302,38 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		ProductCriteria example = new ProductCriteria();
 		example.setOrderByClause("UP_TIME desc");//上架时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
-		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
+		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
-		if (StringUtils.isNotBlank(queryReq.getProductType()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProductType())){
 			criteria.andProductTypeEqualTo(queryReq.getProductType());
-		if (!CollectionUtil.isEmpty(queryReq.getStateList()))
+		}
+		if (!CollectionUtil.isEmpty(queryReq.getStateList())){
 			criteria.andStateIn(queryReq.getStateList());
-		if (StringUtils.isNotBlank(queryReq.getProdId()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProdId())){
 			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
-		if (StringUtils.isNotBlank(queryReq.getProdName()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProdName())){
 			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+		}
 		//对商户标识的查询
-		if (StringUtils.isNotBlank(queryReq.getSupplierId())) 
+		if (StringUtils.isNotBlank(queryReq.getSupplierId())){
 			criteria.andSupplierIdLike("%"+queryReq.getSupplierId()+"%");
+		} 
 		//根据标准品ID模糊查询
-		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) 
+		if (StringUtils.isNotBlank(queryReq.getStandedProdId())){
 			criteria.andStandedProdIdLike("%"+queryReq.getStandedProdId()+"%");
+		} 
 		// 上架时间 开始时间
-		if (queryReq.getUpStartTime() != null)
+		if (queryReq.getUpStartTime() != null){
 			criteria.andUpTimeGreaterThanOrEqualTo(DateUtils.toTimeStamp(queryReq.getUpStartTime()));
+		}
 			
 		// 上架时间 截止时间
-		if (queryReq.getUpEndTime() != null)
+		if (queryReq.getUpEndTime() != null){
 			criteria.andUpTimeLessThanOrEqualTo(DateUtils.toTimeStamp(queryReq.getUpEndTime()));
+		}
 		//获取页数和每页条数
 		int pageNo = queryReq.getPageNo();
 		int pageSize = queryReq.getPageSize();
@@ -321,22 +354,29 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		ProductCriteria example = new ProductCriteria();
 		example.setOrderByClause("OPER_TIME asc");//操作时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
-		if (StringUtils.isNotBlank(queryReq.getProductCatId()))
+		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
-		if (StringUtils.isNotBlank(queryReq.getProductType()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProductType())){
 			criteria.andProductTypeEqualTo(queryReq.getProductType());
-		if (!CollectionUtil.isEmpty(queryReq.getStateList()))
+		}
+		if (!CollectionUtil.isEmpty(queryReq.getStateList())){
 			criteria.andStateIn(queryReq.getStateList());
-		if (StringUtils.isNotBlank(queryReq.getProdId()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProdId())){
 			criteria.andProdIdLike("%"+queryReq.getProdId()+"%");
-		if (StringUtils.isNotBlank(queryReq.getProdName()))
+		}
+		if (StringUtils.isNotBlank(queryReq.getProdName())){
 			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+		}
 		//对商户标识的查询
-		if (StringUtils.isNotBlank(queryReq.getSupplierId())) 
+		if (StringUtils.isNotBlank(queryReq.getSupplierId())){
 			criteria.andSupplierIdLike("%"+queryReq.getSupplierId()+"%");
+		} 
 		//根据标准品ID模糊查询
-		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) 
+		if (StringUtils.isNotBlank(queryReq.getStandedProdId())){
 			criteria.andStandedProdIdLike("%"+queryReq.getStandedProdId()+"%");
+		} 
 		//获取页数和每页条数
 		int pageNo = queryReq.getPageNo();
 		int pageSize = queryReq.getPageSize();

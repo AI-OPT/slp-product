@@ -24,8 +24,9 @@ public class StorageGroupLogAtomSVImpl implements IStorageGroupLogAtomSV {
     @Override
     public int install(StorageGroupLog groupLog) {
         groupLog.setLogId(SequenceUtil.genStorageGroupLogId());
-        if (groupLog.getOperTime()==null)
-            groupLog.setOperTime(DateUtils.currTimeStamp());
+        if (groupLog.getOperTime()==null){
+        	groupLog.setOperTime(DateUtils.currTimeStamp());
+        }
         return groupLogMapper.insert(groupLog);
     }
 }

@@ -108,8 +108,9 @@ public class INormProductSVImpl implements INormProductSV {
     @Override
     public BaseResponse updateProductInfo(NormProdSaveRequest productInfoRequest) throws BusinessException, SystemException {
         if (StringUtils.isBlank(productInfoRequest.getTenantId())
-                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId()))
-            throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
+                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
+        	throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
+        }
         normProductBusiSV.updateNormProd(productInfoRequest);
         return CommonUtils.genSuccessResponse("");
     }
@@ -118,8 +119,9 @@ public class INormProductSVImpl implements INormProductSV {
 	public BaseResponse updateProductAndStoGroup(NormProdSaveRequest productInfoRequest)
 			throws BusinessException, SystemException {
     	if (StringUtils.isBlank(productInfoRequest.getTenantId())
-                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId()))
-            throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
+                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
+    		throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
+    	}
         normProductBusiSV.updateNormProdAndStoGroup(productInfoRequest);
         return CommonUtils.genSuccessResponse("");
 	}

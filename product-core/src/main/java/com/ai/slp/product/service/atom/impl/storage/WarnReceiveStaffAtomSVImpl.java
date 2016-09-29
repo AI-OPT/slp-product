@@ -24,8 +24,9 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
         example.createCriteria().andTenantIdEqualTo(tenantId).
         andWarnReceiveStaffIdEqualTo(warnReceiveStaffId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<WarnReceiveStaff> warnReceiveStaffList = warnReceiveStaffMapper.selectByExample(example);
-        if(warnReceiveStaffList == null || warnReceiveStaffList.isEmpty())
-            return null;
+        if(warnReceiveStaffList == null || warnReceiveStaffList.isEmpty()){
+        	return null;
+        }
         return warnReceiveStaffList.get(0);
     }
 
@@ -39,20 +40,23 @@ public class WarnReceiveStaffAtomSVImpl implements IWarnReceiveStaffAtomSV{
 
     @Override
     public int insertWarnReceiveStaff(WarnReceiveStaff warnReceiveStaff) {
-        if(warnReceiveStaff.getOperTime()==null)
-            warnReceiveStaff.setOperTime(DateUtils.currTimeStamp());
+        if(warnReceiveStaff.getOperTime()==null){
+        	warnReceiveStaff.setOperTime(DateUtils.currTimeStamp());
+        }
         warnReceiveStaff.setWarnReceiveStaffId(SequenceUtil.genWarnReceiveStaffId());
         return warnReceiveStaffMapper.insert(warnReceiveStaff);
     }
 
     @Override
     public int insertWarnReceiveStaff(List<WarnReceiveStaff> warnReceiveStaffList) {
-        if(warnReceiveStaffList == null || warnReceiveStaffList.isEmpty())
-            return 0;
+        if(warnReceiveStaffList == null || warnReceiveStaffList.isEmpty()){
+        	return 0;
+        }
         int count = 0;
         for(WarnReceiveStaff warnReceiveStaff : warnReceiveStaffList){
-            if(warnReceiveStaff.getOperTime()==null)
-                warnReceiveStaff.setOperTime(DateUtils.currTimeStamp());
+            if(warnReceiveStaff.getOperTime()==null){
+            	warnReceiveStaff.setOperTime(DateUtils.currTimeStamp());
+            }
             //设置预警类型为库存预警11
             warnReceiveStaff.setObiectType("11");
             warnReceiveStaff.setWarnReceiveStaffId(SequenceUtil.genWarnReceiveStaffId());

@@ -36,12 +36,14 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
      */
     @Override
     public int installObj(StandedProdAttr prodAttr) {
-        if (prodAttr==null)
-            return 0;
+        if (prodAttr==null){
+        	return 0;
+        }
         //设置序列号
         prodAttr.setStandedProdAttrId(SequenceUtil.genStandedProdAttrId());
-        if (prodAttr.getOperTime()==null)
-            prodAttr.setOperTime(DateUtils.currTimeStamp());
+        if (prodAttr.getOperTime()==null){
+        	prodAttr.setOperTime(DateUtils.currTimeStamp());
+        }
         return standedProdAttrMapper.insert(prodAttr);
     }
 
@@ -61,8 +63,9 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
      */
     @Override
     public List<StandedProdAttr> queryByNormProduct(String tenantId, String standedId) {
-        if (StringUtils.isBlank(tenantId)||StringUtils.isBlank(standedId))
-            return new ArrayList<StandedProdAttr>();
+        if (StringUtils.isBlank(tenantId)||StringUtils.isBlank(standedId)){
+        	return new ArrayList<StandedProdAttr>();
+        }
         StandedProdAttrCriteria example = new StandedProdAttrCriteria();
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId)

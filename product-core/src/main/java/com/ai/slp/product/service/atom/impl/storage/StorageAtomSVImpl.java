@@ -110,8 +110,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 		StorageCriteria.Criteria criteria = example.createCriteria();
 		criteria.andStorageGroupIdEqualTo(groupId).andStateIn(activeList);
 		// 查询可用量大于0的
-		if (hasUsable)
+		if (hasUsable){
 			criteria.andUsableNumGreaterThan(0l);
+		}
 		return storageMapper.selectByExample(example);
 	}
 
@@ -134,8 +135,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	public Storage queryNoDiscardById(String storageId) {
 		Storage storage = storageMapper.selectByPrimaryKey(storageId);
 		if (StorageConstants.Storage.State.DISCARD.equals(storage.getState())
-				|| StorageConstants.Storage.State.AUTO_DISCARD.equals(storage.getState()))
+				|| StorageConstants.Storage.State.AUTO_DISCARD.equals(storage.getState())){
 			storage = null;
+		}
 		return storage;
 	}
 
@@ -153,8 +155,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	 */
 	@Override
 	public int insertStorage(Storage storage) {
-		if (storage == null)
+		if (storage == null){
 			return 0;
+		}
 		storage.setCreateTime(DateUtils.currTimeStamp());
 		storage.setOperTime(storage.getCreateTime());
 		storage.setStorageId(SequenceUtil.genStorageId());
@@ -252,8 +255,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 				.andUsableNumGreaterThan(0l)
 				.andActiveTimeLessThanOrEqualTo(nowTime)
 				.andInactiveTimeGreaterThan(nowTime);
-		if (!hasDiscard)
+		if (!hasDiscard){
 			criteria.andStateNotIn(DISCARD_LIST);
+		}
 
 		return storageMapper.selectByExample(example);
 	}
@@ -273,8 +277,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 		Timestamp nowTime = DateUtils.currTimeStamp();
 		criteria.andStorageGroupIdEqualTo(groupId)
 				.andInactiveTimeGreaterThan(nowTime);
-		if (!hasDiscard)
+		if (!hasDiscard){
 			criteria.andStateNotIn(DISCARD_LIST);
+		}
 
 		return storageMapper.selectByExample(example);
 	}
@@ -292,8 +297,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 		StorageCriteria.Criteria criteria = example.createCriteria();
 		criteria.andStorageGroupIdEqualTo(groupId);
 		//不包含废弃的
-		if (!hasDiscard)
+		if (!hasDiscard){
 			criteria.andStateNotIn(DISCARD_LIST);
+		}
 		return storageAttachMapper.sumTotalByExample(example);
 	}
 
@@ -310,8 +316,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 		StorageCriteria.Criteria criteria = example.createCriteria();
 		criteria.andStorageGroupIdEqualTo(groupId);
 		//不包含废弃的
-		if (!hasDiscard)
+		if (!hasDiscard){
 			criteria.andStateNotIn(DISCARD_LIST);
+		}
 		return storageMapper.countByExample(example);
 	}
 

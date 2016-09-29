@@ -57,8 +57,9 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 		ProdSkuCriteria.Criteria criteria = example.createCriteria().
 				andTenantIdEqualTo(tenantId).andProdIdEqualTo(prodId);
 		//如果不包含废弃状态
-		if (!hasDiscard)
+		if (!hasDiscard){
 			criteria.andStateNotEqualTo(ProductConstants.ProdSku.State.INACTIVE);
+		}
 		return prodSkuMapper.selectByExample(example);
 	}
 
@@ -176,8 +177,9 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 		ProdSkuCriteria.Criteria criteria = example.createCriteria()
 				.andTenantIdEqualTo(tenantId)
 				.andSkuIdEqualTo(skuId);
-		if (!hasDiscard)
+		if (!hasDiscard){
 			criteria.andStateEqualTo(ProductConstants.ProdSku.State.ACTIVE);
+		}
 		List<ProdSku> prodSkuList = prodSkuMapper.selectByExample(example);
 		return CollectionUtil.isEmpty(prodSkuList) ? null : prodSkuList.get(0);
 	}

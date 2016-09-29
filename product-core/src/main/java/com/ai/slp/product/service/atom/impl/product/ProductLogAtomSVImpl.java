@@ -24,8 +24,9 @@ public class ProductLogAtomSVImpl implements IProductLogAtomSV {
      */
     @Override
     public int install(ProductLog productLog) {
-        if (productLog.getOperTime()==null)
-            productLog.setOperTime(DateUtils.currTimeStamp());
+        if (productLog.getOperTime()==null){
+        	productLog.setOperTime(DateUtils.currTimeStamp());
+        }
         productLog.setLogId(SequenceUtil.createProductLogId());
         return productLogMapper.insert(productLog);
     }

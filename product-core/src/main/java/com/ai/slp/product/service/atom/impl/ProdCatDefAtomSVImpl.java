@@ -32,16 +32,21 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         example.setOrderByClause("SERIAL_NUMBER ASC,OPER_TIME DESC");//顺序号正序
         ProductCatCriteria.Criteria criteria = example.createCriteria();
         criteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
-        if (StringUtils.isNotBlank(tenantId))
-            criteria.andTenantIdEqualTo(tenantId);
-        if (StringUtils.isNotBlank(productCatId))
-            criteria.andProductCatIdLike("%"+productCatId+"%");
-        if (StringUtils.isNotBlank(productCatName))
-            criteria.andProductCatNameLike("%"+productCatName+"%");
-        if (StringUtils.isNotBlank(parentProductCatId))
-            criteria.andParentProductCatIdEqualTo(parentProductCatId);
-        if (StringUtils.isNotBlank(isChild))
-            criteria.andIsChildEqualTo(isChild);
+        if (StringUtils.isNotBlank(tenantId)){
+        	criteria.andTenantIdEqualTo(tenantId);
+        }
+        if (StringUtils.isNotBlank(productCatId)){
+        	criteria.andProductCatIdLike("%"+productCatId+"%");
+        }
+        if (StringUtils.isNotBlank(productCatName)){
+        	criteria.andProductCatNameLike("%"+productCatName+"%");
+        }
+        if (StringUtils.isNotBlank(parentProductCatId)){
+        	criteria.andParentProductCatIdEqualTo(parentProductCatId);
+        }
+        if (StringUtils.isNotBlank(isChild)){
+        	criteria.andIsChildEqualTo(isChild);
+        }
         PageInfo<ProductCat> pageInfo = new PageInfo<>();
         //设置总数
         pageInfo.setCount(productCatMapper.countByExample(example));
@@ -61,8 +66,9 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         //租户不一致或状态不为有效
         if (productCat!=null
                 && (!productCat.getTenantId().equals(tenantId)
-                    || !CommonConstants.STATE_ACTIVE.equals(productCat.getState())))
-            productCat = null;
+                    || !CommonConstants.STATE_ACTIVE.equals(productCat.getState()))){
+        	productCat = null;
+        }
         return productCat;
     }
 
@@ -89,29 +95,34 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     public ProductCat selectAllStateById(String tenantId, String productCatId) {
         ProductCat productCat = productCatMapper.selectByPrimaryKey(productCatId);
         if (productCat!=null
-                && !productCat.getTenantId().equals(productCat.getTenantId()))
-            productCat = null;
+                && !productCat.getTenantId().equals(productCat.getTenantId())){
+        	productCat = null;
+        }
         return productCat;
     }
 
     @Override
     public int insertProductCat(ProductCat productCat) {
-        if (productCat==null)
-            return 0;
+        if (productCat==null){
+        	return 0;
+        }
         productCat.setProductCatId(SequenceUtil.genProductCatId());
         //若为设置父类目标识,则为根类目
-        if (StringUtils.isBlank(productCat.getParentProductCatId()))
-            productCat.setParentProductCatId(ProductCatConstants.ProductCat.ParentProductCatId.ROOT_CAT);
-        if (productCat.getOperTime()==null)
-            productCat.setOperTime(DateUtils.currTimeStamp());
+        if (StringUtils.isBlank(productCat.getParentProductCatId())){
+        	productCat.setParentProductCatId(ProductCatConstants.ProductCat.ParentProductCatId.ROOT_CAT);
+        }
+        if (productCat.getOperTime()==null){
+        	productCat.setOperTime(DateUtils.currTimeStamp());
+        }
         productCat.setState(CommonConstants.STATE_ACTIVE);
         return productCatMapper.insertSelective(productCat);
     }
 
     @Override
     public int updateProductCat(ProductCat productCat) {
-        if (productCat==null )
-            return 0;
+        if (productCat==null ){
+        	return 0;
+        }
         if (StringUtils.isBlank(productCat.getTenantId())
                 || StringUtils.isBlank(productCat.getProductCatId())) {
             throw new BusinessException("", "参数不完整,无法更新,租户ID:" +productCat.getTenantId()
@@ -166,11 +177,14 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         criteria.andParentProductCatIdEqualTo(
                 StringUtils.isBlank(parentCatId)? ProductCatConstants.ProductCat.ParentProductCatId.ROOT_CAT:parentCatId);
 
-        if (StringUtils.isNotBlank(query))
-            if (isName)
-                criteria.andProductCatNameLike("%" + query + "%");
-            else
-                criteria.andFirstLetterEqualTo(query);
+        if (StringUtils.isNotBlank(query)){
+            if (isName){
+            	criteria.andProductCatNameLike("%" + query + "%");
+            }
+            else{
+            	criteria.andFirstLetterEqualTo(query);
+            }
+        }
 
         return productCatMapper.selectByExample(example);
     }

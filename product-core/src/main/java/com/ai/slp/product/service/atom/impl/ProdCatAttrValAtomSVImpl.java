@@ -68,8 +68,9 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
      */
     @Override
     public int deleteByCatAttrId(String tenantId, List<String> catAttrIdList,Long operId) {
-        if (CollectionUtil.isEmpty(catAttrIdList))
-            return 0;
+        if (CollectionUtil.isEmpty(catAttrIdList)){
+        	return 0;
+        }
         ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
         attrValue.setState(CommonConstants.STATE_INACTIVE);
@@ -93,8 +94,9 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         ProdCatAttrValueCriteria example = new ProdCatAttrValueCriteria();
         ProdCatAttrValueCriteria.Criteria criteria = example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andCatAttrIdEqualTo(catAttrId);
-        if (!CollectionUtil.isEmpty(valIdList))
-            criteria.andAttrvalueDefIdNotIn(valIdList);
+        if (!CollectionUtil.isEmpty(valIdList)){
+        	criteria.andAttrvalueDefIdNotIn(valIdList);
+        }
         ProdCatAttrValue attrValue = new ProdCatAttrValue();
         attrValue.setState(CommonConstants.STATE_INACTIVE);
         attrValue.setOperId(operId);
@@ -165,8 +167,9 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
     @Override
     public int installCatAttrVal(ProdCatAttrValue attrValue) {
         attrValue.setCatAttrValueId(SequenceUtil.genProdCatAttrValId());
-        if (attrValue.getOperTime()==null)
-            attrValue.setOperTime(DateUtils.currTimeStamp());
+        if (attrValue.getOperTime()==null){
+        	attrValue.setOperTime(DateUtils.currTimeStamp());
+        }
         return attrValueMapper.insert(attrValue);
     }
 
@@ -182,8 +185,9 @@ public class ProdCatAttrValAtomSVImpl implements IProdCatAttrValAtomSV {
         ProdCatAttrValue attrValue = attrValueMapper.selectByPrimaryKey(catAttrValId);
         //若唯一标识正确,但租户id不符合,则返回空
         if (attrValue!=null
-                && !tenantId.equals(attrValue.getTenantId()))
-            attrValue = null;
+                && !tenantId.equals(attrValue.getTenantId())){
+        	attrValue = null;
+        }
         return attrValue;
     }
 

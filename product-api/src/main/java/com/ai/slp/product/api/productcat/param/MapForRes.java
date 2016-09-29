@@ -217,8 +217,9 @@ public class MapForRes<K,V> extends BaseResponse implements Map<K,V> {
      */
     @Override
     public void clear() {
-        if (objMap!=null)
-            objMap.clear();
+        if (objMap!=null){
+        	objMap.clear();
+        }
     }
 
     /**

@@ -18,8 +18,9 @@ public class StandedProdAttrLogAtomSVImpl implements IStandedProdAttrLogAtomSV {
 
     @Override
     public int installObj(StandedProdAttrLog prodAttrLog) {
-        if (prodAttrLog==null)
-            return 0;
+        if (prodAttrLog==null){
+        	return 0;
+        }
         prodAttrLog.setLogId(SequenceUtil.genStandedProdAttrLogId());
         return prodAttrLogMapper.insert(prodAttrLog);
     }

@@ -42,8 +42,9 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     @Override
     public AttrInfo queryAttrById(String tenantId, Long attrId) {
         ProdAttrDef prodAttrDef = prodAttrDefAtomSV.selectById(tenantId, attrId);
-        if (prodAttrDef == null)
-            throw new BusinessException("", "未找到指定的属性信息，租户ID=" + tenantId + ",属性标识=" + attrId);
+        if (prodAttrDef == null){
+        	throw new BusinessException("", "未找到指定的属性信息，租户ID=" + tenantId + ",属性标识=" + attrId);
+        }
         AttrInfo attrInfo = new AttrInfo();
         BeanUtils.copyProperties(attrInfo, prodAttrDef);
 
@@ -78,21 +79,24 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     @Override
     public int updateAttr(AttrParam attrParam) {
         if(prodCatAttrAtomSV.selectCatNumByAttrId(attrParam.getTenantId(), attrParam.getAttrId()) > 0
-                || standedProdAttrAtomSV.queryProdNumOfAttr(attrParam.getTenantId(), attrParam.getAttrId()) > 0)
-            throw new BusinessException("", "该属性已被使用，不能修改");
+                || standedProdAttrAtomSV.queryProdNumOfAttr(attrParam.getTenantId(), attrParam.getAttrId()) > 0){
+        	throw new BusinessException("", "该属性已被使用，不能修改");
+        }
         
         ProdAttrDef prodAttrDef = new ProdAttrDef();
         BeanUtils.copyProperties(prodAttrDef, attrParam);
-        if (attrParam.getFirstLetter() != null)
-            prodAttrDef.setFirstLetter(attrParam.getFirstLetter());
+        if (attrParam.getFirstLetter() != null){
+        	prodAttrDef.setFirstLetter(attrParam.getFirstLetter());
+        }
         return prodAttrDefAtomSV.updateAttr(prodAttrDef);
     }
 
     @Override
     public int deleteAttr(AttrPam attrPam) {
         if(prodCatAttrAtomSV.selectCatNumByAttrId(attrPam.getTenantId(), attrPam.getAttrId()) > 0
-                || standedProdAttrAtomSV.queryProdNumOfAttr(attrPam.getTenantId(), attrPam.getAttrId()) > 0)
-            throw new BusinessException("", "该属性已被使用，不能删除");
+                || standedProdAttrAtomSV.queryProdNumOfAttr(attrPam.getTenantId(), attrPam.getAttrId()) > 0){
+        	throw new BusinessException("", "该属性已被使用，不能删除");
+        }
         return prodAttrDefAtomSV.deleteById(attrPam.getTenantId(), attrPam.getAttrId(),attrPam.getOperId());
     }
 
@@ -103,11 +107,13 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             ProdAttrDef prodAttrDef = new ProdAttrDef();
             BeanUtils.copyProperties(prodAttrDef, attrParam);
             prodAttrDef.setState(ProductConstants.ProdAttr.State.ACTIVE);
-            if (attrParam.getFirstLetter() != null)
-                prodAttrDef.setFirstLetter(attrParam.getFirstLetter());
+            if (attrParam.getFirstLetter() != null){
+            	prodAttrDef.setFirstLetter(attrParam.getFirstLetter());
+            }
             int ok = prodAttrDefAtomSV.installObj(prodAttrDef);
-            if (ok == 0)
-                throw new BusinessException("", "添加属性失败，属性名称=" + attrParam.getAttrName());
+            if (ok == 0){
+            	throw new BusinessException("", "添加属性失败，属性名称=" + attrParam.getAttrName());
+            }
             count++;
         }
         return count;
@@ -133,9 +139,10 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             queryReq.setId(Long.toString(attrVal.getOperId()));
             //查询
             SysUserQueryResponse queryRes = userQuerySv.queryUserInfo(queryReq);
-            if(queryRes!=null)
+            if(queryRes!=null){
             	//设置操作人名字
             	attrValInfo.setOperName(queryRes.getName());
+            }
             attrValInfoList.add(attrValInfo);
         }
         PageInfoResponse<AttrValInfo> attrValInfo = new PageInfoResponse<AttrValInfo>();
@@ -161,8 +168,9 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     @Override
     public int deleteAttrVal(AttrValUniqueReq attrValUniqueReq) {
         if(prodCatAttrAtomSV.selectCatNumByAttrValueId(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrvalueDefId()) > 0
-                || standedProdAttrAtomSV.queryProdNumOfAttrValue(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrvalueDefId()) > 0)
-            throw new BusinessException("", "该属性值已被使用，不能删除");
+                || standedProdAttrAtomSV.queryProdNumOfAttrValue(attrValUniqueReq.getTenantId(), attrValUniqueReq.getAttrvalueDefId()) > 0){
+        	throw new BusinessException("", "该属性值已被使用，不能删除");
+        }
         
         return prodAttrValDefAtomSV.deleteProdAttrVal(attrValUniqueReq.getTenantId(),
                 attrValUniqueReq.getAttrvalueDefId(), attrValUniqueReq.getOperId());
@@ -171,8 +179,9 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
     @Override
     public int updateAttrVal(AttrValParam attrValParam) {
         if(prodCatAttrAtomSV.selectCatNumByAttrId(attrValParam.getTenantId(), attrValParam.getAttrId()) > 0
-                || standedProdAttrAtomSV.queryProdNumOfAttr(attrValParam.getTenantId(), attrValParam.getAttrId()) > 0)
-            throw new BusinessException("", "该属性已被使用，不能修改");
+                || standedProdAttrAtomSV.queryProdNumOfAttr(attrValParam.getTenantId(), attrValParam.getAttrId()) > 0){
+        	throw new BusinessException("", "该属性已被使用，不能修改");
+        }
 
         ProdAttrvalueDef prodAttrvalueDef = new ProdAttrvalueDef();
         BeanUtils.copyProperties(prodAttrvalueDef, attrValParam);
@@ -187,8 +196,9 @@ public class AttrAndAttrvalBusiSVImpl implements IAttrAndAttrvalBusiSV {
             ProdAttrvalueDef prodAttrvalueDef = new ProdAttrvalueDef();
             BeanUtils.copyProperties(prodAttrvalueDef, attrValParam);
             int ok = prodAttrValDefAtomSV.insertProdAttrVal(prodAttrvalueDef);
-            if (ok == 0)
-                throw new BusinessException("", "添加属性值失败，属性值名称=" + attrValParam.getAttrValueName());
+            if (ok == 0){
+            	throw new BusinessException("", "添加属性值失败，属性值名称=" + attrValParam.getAttrValueName());
+            }
             count++;
         }
         return count;
