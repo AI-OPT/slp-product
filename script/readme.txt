@@ -18,7 +18,19 @@ docker push 10.19.13.19:5000/slp-product:v1.0
 # SDK_MODE 是否为SDK模式,1:启用SDK模式,0:启用服务模式
 # CCS_NAME 配置中心的应用名称
 # ZK_ADDR  配置中心的地址
-docker run -d --name slp-product -p 10882:10882 -e "REST_REGISTRY_ADDR=10.19.13.13:29181" -e "REST_PORT=10882" -e "CONTEXT_PATH=slp-product" -e "SDK_MODE=1" -e "CCS_NAME=aiopt-ch-product" -e "ZK_ADDR=10.19.13.13:29181"  10.19.13.19:5000/slp-product:v1.0
+# REG_HOST dubbo服务的注册host地址,一般为宿主机的IP
+3.1 默认方式
+docker run -d --name slp-product -p 10882:10882 \
+-e "REST_REGISTRY_ADDR=10.19.13.13:29181" -e "REST_PORT=10882" \
+-e "CONTEXT_PATH=slp-product" -e "SDK_MODE=1" \
+-e "CCS_NAME=aiopt-ch-product" -e "ZK_ADDR=10.19.13.13:29181"  \
+10.19.13.19:5000/slp-product:v1.0
+3.2 自定义host方式
+docker run -d --name slp-product -p 10882:10882 \
+-e "REST_REGISTRY_ADDR=10.19.13.13:29181" -e "REST_PORT=10882" \
+-e "CONTEXT_PATH=slp-product" -e "SDK_MODE=0" -e "CCS_NAME=aiopt-ch-product" \
+-e "ZK_ADDR=10.19.13.13:29181" -e "REG_HOST=10.1.65.96" \
+10.19.13.19:5000/slp-product:v1.0 /start-dubbo-service-host.sh
 #查看镜像启动日志
 docker logs slp-product
 #进入容器，查看镜像内部的情况
