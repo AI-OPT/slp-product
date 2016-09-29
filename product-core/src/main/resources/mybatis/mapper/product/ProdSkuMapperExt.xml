@@ -100,4 +100,18 @@
       prod_sku sku INNER JOIN product product
       ON sku.PROD_ID = product.PROD_ID AND product.PROD_ID = #{prodId,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectActive" resultMap="skuInfoSes" parameterType="java.util.Map">
+    SELECT
+      product.TENANT_ID as tenantid, sku.SKU_ID as skuid ,sku.SKU_NAME as skuname,
+      product.PROD_ID as productid,product.PRODUCT_SELL_POINT as productsellpoint,
+      product.PROD_NAME as productname,product.PRODUCT_CAT_ID as productCatId,
+      product.BASIC_ORG_ID as basicOrgId, product.UP_TIME AS uptime,
+      product.RECHARGE_TYPE AS rechageType, product.IS_SALE_NATIONWIDE as saleNationwide
+    FROM
+      prod_sku sku INNER JOIN product product ON sku.PROD_ID = product.PROD_ID AND product.STATE = '5'
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart,jdbcType=INTEGER} , #{limitEnd,jdbcType=INTEGER}
+    </if>
+  </select>
 </mapper>

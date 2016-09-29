@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 
 /**
  * Created by jackieliu on 16/7/12.
@@ -15,12 +15,12 @@ import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
 @ContextConfiguration("classpath:context/core-context.xml")
 public class ISKUIndexManageTest {
     @Autowired
-    ISKUIndexManage iskuIndexManage;
+    ISKUIndexBusiSV iskuIndexManage;
 
     @Test
     public void deleteSKUIndexByProductId(){
         //搜索引擎中删除上信息
-        iskuIndexManage.deleteSKUIndexByProductId("1000000000000024");
+        iskuIndexManage.deleteSKUIndexByProductId("1000000000000007");
     }
 
     @Test

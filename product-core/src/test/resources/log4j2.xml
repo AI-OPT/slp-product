@@ -46,7 +46,7 @@
         <logger name="java.sql.PreparedStatement" additivity="true">
             <level value="DEBUG"/>
         </logger>
-        <Root level="INFO">
+        <Root level="DEBUG">
             <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="STDOUT"/>
         </Root>

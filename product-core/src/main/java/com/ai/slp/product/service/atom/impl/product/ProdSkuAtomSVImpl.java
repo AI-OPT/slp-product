@@ -1,8 +1,6 @@
 package com.ai.slp.product.service.atom.impl.product;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -194,4 +192,21 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 	public List<ProdSkuInfoSes> queryOfProdForSearch(String productId) {
 		return prodSkuMapperExt.selectByProdId(productId);
 	}
+
+	/**
+	 * 为搜索信息,添加所有在售商品
+	 *
+	 * @param limitStart
+	 * @param limitEnd
+	 * @return
+	 */
+	@Override
+	public List<ProdSkuInfoSes> queryInSaleForSearch(Integer limitStart, Integer limitEnd) {
+		Map<String,Integer> params = new HashMap<>();
+		params.put("limitStart",limitStart);
+		params.put("limitEnd",limitEnd);
+		return prodSkuMapperExt.selectActive(params);
+	}
+
+
 }

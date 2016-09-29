@@ -7,6 +7,7 @@ APP_HOME=/dubbo-service
 APP_NAME="changhong.product"
 APP_PARM="aiopt.product.name=${APP_NAME}"
 
+PROCESS_PARM_HOST="dubbo.protocol.host=${REG_HOST}"
 #此处的端口要与dubbo.properties中的端口对应，
 #如，商品中心的为：slp.product.dubbo.port
 PROCESS_PARM="slp.product.dubbo.port=${REST_PORT}"
@@ -25,7 +26,7 @@ MEM_ARGS="-Xms256m -Xmx512m -XX:PermSize=64M -XX:MaxPermSize=128M"
 JAVA_OPTIONS="-Dfile.encoding=UTF-8 -Djava.net.preferIPv4Stack=true -Dsun.net.inetaddr.ttl=10 -Ddubbo.provider.timeout=20000 -Djava.security.egd=file:/dev/./urandom"
 
 echo "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
-START_CMD="${MEM_ARGS} -D${APP_PARM} -D${PROCESS_PARM}  ${JAVA_OPTIONS} com.ai.opt.sdk.appserver.DubboServiceStart  >> $LOG_PATH & 2 > 1 &"
+START_CMD="${MEM_ARGS} -D${APP_PARM} -D${PROCESS_PARM_HOST} -D${PROCESS_PARM}  ${JAVA_OPTIONS} com.ai.opt.sdk.appserver.DubboServiceStart  >> $LOG_PATH & 2 > 1 &"
 
 echo ${JAVA_HOME}
 echo ${CLASSPATH}

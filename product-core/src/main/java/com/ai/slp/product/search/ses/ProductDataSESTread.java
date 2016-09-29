@@ -1,24 +1,26 @@
 package com.ai.slp.product.search.ses;
 
-import com.ai.opt.sdk.components.ses.SESClientFactory;
-import com.ai.paas.ipaas.search.ISearchClient;
-import com.ai.slp.product.constants.SearchConstants;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import com.ai.opt.sdk.components.ses.SESClientFactory;
+import com.ai.paas.ipaas.search.ISearchClient;
+import com.ai.slp.product.constants.SearchConstants;
+import com.ai.slp.product.search.bo.SKUInfo;
 
 public class ProductDataSESTread extends Thread{
 	private static final Logger LOG=LoggerFactory.getLogger(ProductDataSESTread.class);
-    private List<String> resultList;
+    private List<SKUInfo> resultList;
     ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
     
-    public ProductDataSESTread(List<String> resultList){
+    public ProductDataSESTread(List<SKUInfo> resultList){
         this.resultList=resultList;
     }
     @Override
     public void run() {
-    	searchClient.bulkJsonInsert(resultList);
+    	searchClient.bulkInsert(resultList);
     	LOG.info("【"+Thread.currentThread().getName()+"】");
     } 
 }

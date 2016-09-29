@@ -10,8 +10,8 @@ COPY ./build/config /dubbo-service/config/
 RUN cd /dubbo-service && mkdir logs && cd /dubbo-service/logs
 
 ## copy start script
-COPY ./script/start-dubbo-service.sh /start-dubbo-service.sh
-RUN chmod 755 /start-dubbo-service.sh
+COPY ./script/*.sh /
+RUN chmod 755 /*.sh
 
 # Expose dubbo/rest ports.
 EXPOSE 10882

@@ -218,19 +218,19 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
                 continue;
             }
             String groupId = storage.getStorageGroupId(),
-                    serial = storage.getSerialNumber().toString();
+                    priorityNum = storage.getPriorityNumber().toString();
             //2. 回退缓存中库存所用量
             //2.1 回退优先级中,SKU可用量
-            String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,serial);
+            String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priorityNum);
             if (cacheClient.exists(skuUsableKey)){
                 cacheClient.hincrBy(skuUsableKey,skuId,skuNum);
             }
             //2.2 回退优先级中,SKU库存可用量
-            String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(tenantId,groupId,serial,skuId);
+            String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(tenantId,groupId,priorityNum,skuId);
             if (cacheClient.exists(skuStorageKey)){
                 cacheClient.zincrby(skuStorageKey,skuNum,skuStorageId);
             }
-            String priorityUsable = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,serial);
+            String priorityUsable = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priorityNum);
             //2.3 回退优先级中库存可用量
             if (cacheClient.exists(priorityUsable)){
                 cacheClient.incrBy(priorityUsable,skuNum);

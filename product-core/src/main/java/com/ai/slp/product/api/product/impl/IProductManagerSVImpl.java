@@ -11,7 +11,7 @@ import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
-import com.ai.slp.product.service.business.interfaces.search.ISKUIndexManage;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 
@@ -26,7 +26,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Autowired
     IProductBusiSV productBusiSV;
     @Autowired
-    ISKUIndexManage skuIndexManage;
+    ISKUIndexBusiSV skuIndexManage;
     /**
      * 商品管理查询商品编辑状态<br>
      * 状态 1未编辑2已编辑<br>
