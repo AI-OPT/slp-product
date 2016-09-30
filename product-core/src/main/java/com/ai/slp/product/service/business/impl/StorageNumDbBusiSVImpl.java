@@ -58,8 +58,9 @@ public class StorageNumDbBusiSVImpl {
     @Async
     public void storageNumChange(
             String tenantId,String skuId,Map<String,Integer> skuNumMap, boolean isUser, boolean priorityChange) {
-        if (skuNumMap==null || skuNumMap.isEmpty())
-            return;
+        if (skuNumMap==null || skuNumMap.isEmpty()){
+        	return;
+        }
         ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
         logger.info("tenantId={},skuId={},isUser={},priorityChange={}",tenantId,skuId,isUser,priorityChange);
         Product product = null;
@@ -73,11 +74,13 @@ public class StorageNumDbBusiSVImpl {
         for (Map.Entry<String,Integer> entry:skuNumMap.entrySet()){
             int skuNum = entry.getValue();
             //若为使用量,则为减少量
-            if (isUser)
-                skuNum = 0-skuNum;
+            if (isUser){
+            	skuNum = 0-skuNum;
+            }
             SkuStorage skuStorage = skuStorageAtomSV.queryById(entry.getKey(),true);
-            if (skuStorage ==null)
-                continue;
+            if (skuStorage ==null){
+            	continue;
+            }
             skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
             skuStorageAtomSV.updateById(skuStorage);
             //若未更新任何SKU库存,或sku库存不是"启用",则不进行处理
@@ -88,14 +91,16 @@ public class StorageNumDbBusiSVImpl {
 
             //更新库存信息
             Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
-            if (storage==null)
-                continue;
+            if (storage==null){
+            	continue;
+            }
             logger.info("\r\nThe usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
             storage.setUsableNum(storage.getUsableNum()+skuNum);
             logger.info("\r\nNow,the usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
             if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())
-                    && storage.getUsableNum()>0)
-                checkToSale = true;
+                    && storage.getUsableNum()>0){
+            	checkToSale = true;
+            }
             if (storageAtomSV.updateById(storage)>0){
                 StorageLog storageLog = new StorageLog();
                 BeanUtils.copyProperties(storageLog,storage);
@@ -164,8 +169,9 @@ public class StorageNumDbBusiSVImpl {
         //查询已"启用"状态库存.
         List<Storage> storageList = storageAtomSV.queryActiveByGroupIdAndPriorityNum(groupId,priority);
         //若当前优先级不存在启用的库存,则直接返回.
-        if (CollectionUtil.isEmpty(storageList))
-            return;
+        if (CollectionUtil.isEmpty(storageList)){
+        	return;
+        }
 
         ICacheClient cacheClient = IPaasStorageUtils.getClient();
         List<String> stopList = new ArrayList<>();
@@ -272,8 +278,9 @@ public class StorageNumDbBusiSVImpl {
         //缓存有效期
         long expireTime = 0;
         //便于在促销过期后仍能完成处理,需要将过期时间延长十分钟.
-        if (inActiveTime!=null)
-            expireTime = inActiveTime.getTime()/1000+StorageConstants.IPass.McsParams.CACHE_EXT_TIME;
+        if (inActiveTime!=null){
+        	expireTime = inActiveTime.getTime()/1000+StorageConstants.IPass.McsParams.CACHE_EXT_TIME;
+        }
         //若存在开始时间,则添加优先级开始时间
         if (activeTime!=null){
             //(D)

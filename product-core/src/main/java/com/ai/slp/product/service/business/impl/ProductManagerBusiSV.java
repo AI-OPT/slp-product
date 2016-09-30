@@ -103,8 +103,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             BeanUtils.copyProperties(productEditUp,product);
             //设置类目名称
             ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
-            if (cat!=null)
-                productEditUp.setProductCatName(cat.getProductCatName());
+            if (cat!=null){
+            	productEditUp.setProductCatName(cat.getProductCatName());
+            }
             //查询主预览图
             ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
             if (prodPicture!=null){
@@ -138,8 +139,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
     		BeanUtils.copyProperties(productEditUp,product);
     		//设置类目名称
     		ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
-    		if (cat!=null)
+    		if (cat!=null){
     			productEditUp.setProductCatName(cat.getProductCatName());
+    		}
     		//查询主预览图
     		ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
     		if (prodPicture!=null){
@@ -202,8 +204,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         for (String prodId:prodIdSet){
             Product product = productAtomSV.selectByProductId(productCheckParam.getTenantId(),prodId);
             //若未找到对应商品或商品状态不是"待审核",则不处理
-            if (product==null || !ProductConstants.Product.State.VERIFYING.equals(product.getState()))
-                continue;
+            if (product==null || !ProductConstants.Product.State.VERIFYING.equals(product.getState())){
+            	continue;
+            }
             //商品标识
             stateLog.setProdId(prodId);
 
@@ -221,8 +224,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                     || ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType())){
                 productBusiSV.changeToInSaleFromAudit(product,productCheckParam.getOperId());
                 //将商品添加至搜索引擎
-                if(ProductConstants.Product.State.IN_SALE.equals(product.getState()))
-                    skuIndexManage.updateSKUIndex(prodId);
+                if(ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+                	skuIndexManage.updateSKUIndex(prodId);
+                }
             }else {
                 product.setState(ProductConstants.Product.State.IN_STORE);
                 product.setOperId(productCheckParam.getOperId());
@@ -258,8 +262,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
 			BeanUtils.copyProperties(productEditUp,product);
 			//设置类目名称
 			ProductCat cat = catDefAtomSV.selectById(tenantId, product.getProductCatId());
-			if (cat!=null) 
+			if (cat!=null) {
 				productEditUp.setProductCatName(cat.getProductCatName());
+			}
 			//查询预览主图
 			ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
 			if (prodPicture!=null) {
@@ -428,8 +433,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             return audiencesMap;
         }
         List<ProdAudiences> boList = prodAudiencesAtomSV.queryByUserType(tenantId,prodId, userType,false);
-        if (CollectionUtil.isEmpty(boList))
-            return audiencesMap;
+        if (CollectionUtil.isEmpty(boList)){
+        	return audiencesMap;
+        }
         IUcKeyInfoSV ucKeyInfoSV = DubboConsumerFactory.getService(IUcKeyInfoSV.class);
         for (ProdAudiences audiences:boList){
             ProdAudiencesInfo audiencesInfo = new ProdAudiencesInfo();
@@ -462,8 +468,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             //是否已设置
             List<ProdTargetArea> areaList = prodTargetAreaAtomSV.queryByAreaCode(
                     tenantId,prodId,Integer.parseInt(areaVo.getAreaCode()),false);
-            if (!CollectionUtil.isEmpty(areaList))
-                areaInfo.setOwn(true);
+            if (!CollectionUtil.isEmpty(areaList)){
+            	areaInfo.setOwn(true);
+            }
             areaInfoList.add(areaInfo);
         }
         return areaInfoList;
@@ -521,8 +528,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
      */
     private void updateNoKeyAttr(String tenantId,String productId,
                                  Map<Long, List<ProdAttrValInfo>> attrValMap,Long operId){
-        if (attrValMap==null || attrValMap.isEmpty())
-            return;
+        if (attrValMap==null || attrValMap.isEmpty()){
+        	return;
+        }
         //查询原非关键属性
         for (Map.Entry<Long, List<ProdAttrValInfo>> entry:attrValMap.entrySet()){
             Long attrId = entry.getKey();
@@ -660,8 +668,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             BeanUtils.copyProperties(productStorageSale,product);
             //设置类目名称
             ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
-            if (cat!=null)
-                productStorageSale.setProductCatName(cat.getProductCatName());
+            if (cat!=null){
+            	productStorageSale.setProductCatName(cat.getProductCatName());
+            }
             //查询主预览图
             ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
             if (prodPicture!=null){
@@ -690,8 +699,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             BeanUtils.copyProperties(targetAreaForProd,product);
             //设置类目名称
             ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
-            if (cat!=null)
+            if (cat!=null){
             	targetAreaForProd.setProductCatName(cat.getProductCatName());
+            }
             //查询主预览图
             ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
             if (prodPicture!=null){
@@ -739,8 +749,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             BeanUtils.copyProperties(productEditUp,product);
             //设置类目名称
             ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
-            if (cat!=null)
-                productEditUp.setProductCatName(cat.getProductCatName());
+            if (cat!=null){
+            	productEditUp.setProductCatName(cat.getProductCatName());
+            }
             //查询主预览图
             ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
             if (prodPicture!=null){

@@ -196,8 +196,9 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
      */
     @Override
     public void backStorageNum(String tenantId, String skuId, Map<String, Integer> storageNum) {
-        if (storageNum==null || storageNum.isEmpty())
-            return;
+        if (storageNum==null || storageNum.isEmpty()){
+        	return;
+        }
         //检查SKU是否存在
         ICacheClient cacheClient = IPaasStorageUtils.getClient();
         for (Map.Entry<String, Integer> entry:storageNum.entrySet()){
@@ -290,8 +291,9 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         String skuPriceCache= cacheClient.hget(priceKey,skuId);
         Long salePrice = null;
         try{
-            if (StringUtils.isNotBlank(skuPriceCache))
-                salePrice = Long.parseLong(skuPriceCache);
+            if (StringUtils.isNotBlank(skuPriceCache)){
+            	salePrice = Long.parseLong(skuPriceCache);
+            }
         }catch (NumberFormatException e){
             logger.error("Formate sale price is error,salePrice="+skuPriceCache,e);
         }

@@ -105,8 +105,9 @@ public class ProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
         String infoKey = IPaasCatUtils.genMcsCatInfoKey(tenantId);
         for (String childId : catIdSet) {
             String catStr = cacheClient.hget(infoKey, childId);
-            if (StringUtils.isBlank(catStr))
-                continue;
+            if (StringUtils.isBlank(catStr)){
+            	continue;
+            }
             logger.info("catId={},jsonStr={}",childId,catStr);
             ProductCatInfo catInfo = new ProductCatInfo();
             ProductCat cat = JSonUtil.fromJSon(catStr, ProductCat.class);
@@ -118,15 +119,17 @@ public class ProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
 
     private void queryCatFoLinkById(List<ProductCatInfo> catInfoList,String tenantId, String productCatId){
         ProductCatInfo catInfo = queryById(tenantId,productCatId);
-        if (catInfo==null)
-            return;
+        if (catInfo==null){
+        	return;
+        }
         //已经达到根目录
         if (catInfo.getParentProductCatId()==null || "0".equals(catInfo.getParentProductCatId())){
             catInfoList.add(catInfo);
             return;
             //若不是跟类目,则继续查询
-        }else
-            queryCatFoLinkById(catInfoList,tenantId,catInfo.getParentProductCatId());
+        }else{
+        	queryCatFoLinkById(catInfoList,tenantId,catInfo.getParentProductCatId());
+        }
         catInfoList.add(catInfo);
     }
 }

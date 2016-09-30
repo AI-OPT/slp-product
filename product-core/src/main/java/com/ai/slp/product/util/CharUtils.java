@@ -13,8 +13,9 @@ public class CharUtils {
      * @return
      */
     public static int charToLowAscii(String charStr){
-        if (StringUtils.isBlank(charStr))
-            return 0;
+        if (StringUtils.isBlank(charStr)){
+        	return 0;
+        }
         charStr = charStr.toLowerCase();
         return (int)charStr.toCharArray()[0];
     }

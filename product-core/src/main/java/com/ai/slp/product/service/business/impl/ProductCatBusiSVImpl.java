@@ -76,8 +76,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
 
     @Override
     public void addCatList(List<ProductCatParam> pcpList) {
-        if (CollectionUtil.isEmpty(pcpList))
-            return;
+        if (CollectionUtil.isEmpty(pcpList)){
+        	return;
+        }
         for(ProductCatParam catParam:pcpList){
             ProductCat productCat = new ProductCat();
             BeanUtils.copyProperties(productCat,catParam);
@@ -88,8 +89,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                     catParam.getParentProductCatId())){
                 ProductCat parentCat = prodCatDefAtomSV.selectById(
                         catParam.getTenantId(),catParam.getParentProductCatId());
-                if (parentCat!=null)
-                    catLeve = (short) (parentCat.getCatLevel()+1);
+                if (parentCat!=null){
+                	catLeve = (short) (parentCat.getCatLevel()+1);
+                }
             }
             productCat.setCatLevel(catLeve);
             prodCatDefAtomSV.insertProductCat(productCat);
@@ -109,21 +111,24 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
 
     @Override
     public void updateByCatId(ProductCatParam catParam) {
-        if (catParam==null)
-            throw new BusinessException("","请求信息为空,无法更新");
+        if (catParam==null){
+        	throw new BusinessException("","请求信息为空,无法更新");
+        }
         //查询分类
         ProductCat productCat = prodCatDefAtomSV.selectById(catParam.getTenantId(),catParam.getProductCatId());
-        if (productCat==null)
+        if (productCat==null){
             throw new BusinessException("","没有找到对应的类目信息,租户id:"+catParam.getTenantId()
                     +",类目标识:"+catParam.getProductCatId());
+        }
         //判断是否变更了"是否有子分类"选项
         if (!productCat.getIsChild().equals(catParam.getIsChild())){
             //若把有改成无
             if (ProductCatConstants.ProductCat.IsChild.HAS_CHILD.equals(productCat.getIsChild())
                     && ProductCatConstants.ProductCat.IsChild.NO_CHILD.equals(catParam.getIsChild())){
                 //判断是否有子类目
-                if (prodCatDefAtomSV.queryActiveOfParent(productCat.getParentProductCatId())>0)
-                    throw new BusinessException("","此类目下存在子类目,无法变更为[无子分类]");
+                if (prodCatDefAtomSV.queryActiveOfParent(productCat.getParentProductCatId())>0){
+                	throw new BusinessException("","此类目下存在子类目,无法变更为[无子分类]");
+                }
             }else{
                 //判断是否有关联属性
                 List<ProdCatAttr> catAttrList =
@@ -141,14 +146,17 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     public void deleteByCatId(String tenantId, String productCatId,Long operId) {
         //查询是否存在类目
         ProductCat productCat = prodCatDefAtomSV.selectById(tenantId,productCatId);
-        if (productCat==null)
-            throw new BusinessException("","未找到要删除类目,租户id:"+tenantId+",类目标识:"+productCatId);
+        if (productCat==null){
+        	throw new BusinessException("","未找到要删除类目,租户id:"+tenantId+",类目标识:"+productCatId);
+        }
         //判断是否关联了标准品
-        if (standedProductAtomSV.queryByCatId(tenantId,productCatId,false)>0)
-            throw new BusinessException("","已关联了标准品，不可删除");
+        if (standedProductAtomSV.queryByCatId(tenantId,productCatId,false)>0){
+        	throw new BusinessException("","已关联了标准品，不可删除");
+        }
         //判断是否有子类目
-        if (prodCatDefAtomSV.queryActiveOfParent(productCatId)>0)
-            throw new BusinessException("","此类目下存在子类目,不可删除");
+        if (prodCatDefAtomSV.queryActiveOfParent(productCatId)>0){
+        	throw new BusinessException("","此类目下存在子类目,不可删除");
+        }
         List<ProdCatAttr> catAttrList =
                 prodCatAttrAtomSV.queryAttrsByCatId(tenantId,productCatId);
         //删除属性对应关系
@@ -253,8 +261,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catId = catAttrVal.getProductCatId();
         //查询属性值
         ProdCatAttr catAttr = prodCatAttrAtomSV.selectById(tenantId,catAttrVal.getId());
-        if (catAttr==null || CommonConstants.STATE_INACTIVE.equals(catAttr.getState()))
-            return;
+        if (catAttr==null || CommonConstants.STATE_INACTIVE.equals(catAttr.getState())){
+        	return;
+        }
         int count = standedProductAtomSV.queryByCatId(tenantId,catId,false);
         //若删除关键属性或销售属性,需要检查是否关联标准品
         if (count>0 && (ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(catAttr.getAttrType())
@@ -278,8 +287,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catId = catAttrVal.getProductCatId();
         //查询关联属性值是否存在
         ProdCatAttrValue catAttrValue = prodCatAttrValAtomSV.selectById(tenantId,catAttrVal.getId());
-        if (catAttrValue==null || CommonConstants.STATE_INACTIVE.equals(catAttrValue.getState()))
-            return;
+        if (catAttrValue==null || CommonConstants.STATE_INACTIVE.equals(catAttrValue.getState())){
+        	return;
+        }
         //查询属性值是否被标准品/销售商品使用
         if (standedProdAttrAtomSV.countOfAttrValOfCat(tenantId,catId,catAttrValue.getAttrvalueDefId())>0
                 ||prodAttrAtomSV.countOfAttrValOfCat(tenantId,catId,catAttrValue.getAttrvalueDefId())>0){
@@ -336,8 +346,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
         int count = standedProductAtomSV.queryByCatId(tenantId,catId,false);
         if(count>0&& ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(attrType)){
             throw new BusinessException("","此类目下存在标准品,不允许更改关键属性");
-        }else if(count>0 && ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(attrType))
-            throw new BusinessException("","此类目下存在标准品,不允许更改销售属性");
+        }else if(count>0 && ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(attrType)){
+        	throw new BusinessException("","此类目下存在标准品,不允许更改销售属性");
+        }
         Map<Long,Set<String>> attrAndVal = addCatAttrParam.getAttrAndVal();
         List<Long> attrIdList = new ArrayList<>(attrAndVal.keySet());
         //查询待删除属性关联关系ID
@@ -365,10 +376,12 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 catAttr.setOperTime(operTime);
                 //设置是否必填,关键属性和销售属性为必填,其他为非必填
                 if (ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY.equals(attrType)
-                        || ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(attrType))
-                    catAttr.setIsNecessary("Y");
-                else
-                    catAttr.setIsNecessary("N");
+                        || ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE.equals(attrType)){
+                	catAttr.setIsNecessary("Y");
+                }
+                else{
+                	catAttr.setIsNecessary("N");
+                }
                 prodCatAttrAtomSV.insertProdCatAttr(catAttr);
             }else {
                 //删除已取消关联的属性值
@@ -380,8 +393,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 //检查关联关系是否已经存在
                 ProdCatAttrValue catAttrValue = prodCatAttrValAtomSV.queryByCatAndCatAttrId(
                             tenantId,catAttr.getCatAttrId(),valId);
-                if (catAttrValue!=null)
-                    continue;
+                if (catAttrValue!=null){
+                	continue;
+                }
                 //添加属性值
                 catAttrValue = new ProdCatAttrValue();
                 catAttrValue.setTenantId(tenantId);
@@ -470,16 +484,18 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
 
     private void queryCatFoLinkById(List<ProductCatInfo> catInfoList,String tenantId, String productCatId){
         ProductCatInfo catInfo = queryByCatId(tenantId,productCatId);
-        if (catInfo==null)
-            return;
+        if (catInfo==null){
+        	return;
+        }
         //已经达到根目录
         if (catInfo.getParentProductCatId()==null
                 || "0".equals(catInfo.getParentProductCatId())){
             catInfoList.add(catInfo);
             return;
         //若不是跟类目,则继续查询
-        }else
-            queryCatFoLinkById(catInfoList,tenantId,catInfo.getParentProductCatId());
+        }else{
+        	queryCatFoLinkById(catInfoList,tenantId,catInfo.getParentProductCatId());
+        }
             catInfoList.add(catInfo);
     }
 }

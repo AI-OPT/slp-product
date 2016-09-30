@@ -92,16 +92,20 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		//库存为启用,且商品为在售,则不允许进行废弃
 		if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())
 				&& product!=null
-				&& ProductConstants.Product.State.IN_SALE.equals(product.getState()))
+				&& ProductConstants.Product.State.IN_SALE.equals(product.getState())){
 			throw new BusinessException("","对应商品在销售中,不允许废弃");
+		}
 		//如果库存为启用,需要从缓存中删除库存对应缓存信息
-		if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState()))
+		if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())){
 			storageNumDbBusiSV.subStorageCache(tenantId,storage);
+		}
 		//判断是否为自动废弃
-		if (isAuto)
+		if (isAuto){
 			storage.setState(StorageConstants.Storage.State.AUTO_DISCARD);
-		else
+		}
+		else{
 			storage.setState(StorageConstants.Storage.State.DISCARD);
+		}
 		storage.setOperId(operId);
 		if (storageAtomSV.updateById(storage) > 0) {
 			StorageLog storageLog = new StorageLog();
@@ -171,8 +175,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	private void stopStorage(String tenantId,Storage storage, Long operId) {
 		//判断商品是否在售
 		Product product = productAtomSV.selectByGroupId(tenantId,storage.getStorageGroupId());
-		if (product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState()))
+		if (product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState())){
 			throw new BusinessException("","对应商品在销售中,不允许停用");
+		}
 		//更新库存状态
 		storage.setOperId(operId);
 		storage.setState(StorageConstants.Storage.State.STOP);
@@ -194,8 +199,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	public int updateNoSkuStoSalePrice(StoNoSkuSalePriceReq salePriceReq) {
 		//K:优先级;V:价格
 		List<StoNoSkuSalePrice> salePriceList = salePriceReq.getStorageSalePrice();
-		if (CollectionUtil.isEmpty(salePriceList))
+		if (CollectionUtil.isEmpty(salePriceList)){
 			return 0;
+		}
 		int count = 0;
 		Long operId = salePriceReq.getOperId();
 		for(StoNoSkuSalePrice salePrice:salePriceList){
@@ -221,14 +227,16 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	public int updateSkuStoSalePrice(StoSkuSalePrice salePrice) {
 		String groupId = salePrice.getGroupId();
 		Product product = productAtomSV.selectByGroupId(salePrice.getTenantId(),groupId);
-		if (product == null)
+		if (product == null){
 			throw new BusinessException("","未找到对应商品信息");
+		}
 		Map<String,Long> priceMap = salePrice.getStorageSalePrice();
 		//查询商品对应得SKU集合
 //		List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(salePrice.getTenantId(),product.getProdId());
 		int count = 0;
-		if (priceMap==null || priceMap.isEmpty())
+		if (priceMap==null || priceMap.isEmpty()){
 			return count;
+		}
 		for (Map.Entry<String,Long> entry:priceMap.entrySet()){
 			count += updateSkuPrice(groupId,entry.getKey(),salePrice.getPriorityNum(),
 					entry.getValue(),salePrice.getOperId());
@@ -376,8 +384,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		String tenantId = stoStorage.getTenantId(),
 				supplierId = stoStorage.getSupplierId(),
 				storageId = stoStorage.getStorageId();
-		if (StringUtils.isBlank(stoStorage.getStorageName()) && stoStorage.getWarnNum()==null)
+		if (StringUtils.isBlank(stoStorage.getStorageName()) && stoStorage.getWarnNum()==null){
 			return 0;
+		}
 		Storage storage0 = storageAtomSV.queryAllStateStorage(stoStorage.getStorageId());
 		if (storage0 == null
 				|| StorageConstants.Storage.State.DISCARD.equals(storage0.getState())
@@ -512,8 +521,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * @param newLevel
      */
 	private void changeStoragePriority(List<Storage> storageList,short newLevel){
-		if (CollectionUtil.isEmpty(storageList))
+		if (CollectionUtil.isEmpty(storageList)){
 			return;
+		}
 		for (Storage storage:storageList){
 			storage.setPriorityNumber(newLevel);
 			if (storageAtomSV.updateById(storage)>0){
@@ -526,8 +536,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 
 	private Long getPriceOfSku(String groupId,String skuId,Short priorityNum){
 		List<SkuStorage> storageList = skuStorageAtomSV.queryPriorityOfGroup(groupId,skuId,priorityNum);
-		if (CollectionUtil.isEmpty(storageList))
+		if (CollectionUtil.isEmpty(storageList)){
 			return null;
+		}
 		SkuStorage storage = storageList.get(0);
 		return storage.getSalePrice();
 	}
