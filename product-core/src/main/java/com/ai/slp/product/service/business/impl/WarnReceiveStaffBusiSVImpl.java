@@ -32,8 +32,9 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
         List<WarnReceiveStaff> warnReceiveStaffList = 
                 warnReceiveStaffAtomSV.selectWarnRecList(warnReceStafForQuery.getTenantId(), 
                         warnReceStafForQuery.getStorageId());
-        if(warnReceiveStaffList == null || warnReceiveStaffList.isEmpty())
-            return null;
+        if(warnReceiveStaffList == null || warnReceiveStaffList.isEmpty()){
+        	return null;
+        }
         
         List<WarnReceStaff> warnReceStaffList = new ArrayList<>();
         for(WarnReceiveStaff warnReceiveStaff : warnReceiveStaffList){
@@ -49,13 +50,15 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
 
     @Override
     public int addWarnReceStafList(List<WarnReceiveStaffOper> operList) {
-        if(operList == null || operList.isEmpty())
-            return 0;
+        if(operList == null || operList.isEmpty()){
+        	return 0;
+        }
         int count = 0;
         for(WarnReceiveStaffOper warnReceiveStaffOper : operList){
-            if(warnReceiveStaffOper.getObjectId() == null || warnReceiveStaffOper.getOperId() == 0)
+            if(warnReceiveStaffOper.getObjectId() == null || warnReceiveStaffOper.getOperId() == 0){
                 throw new BusinessException("", "找不到指定的预警对象="+warnReceiveStaffOper.getObjectId()+
                         ",找不到操作人="+warnReceiveStaffOper.getOperId());
+            }
             //根据操作类型查询是否存在-现只有仓库-通过预警对象标识查库存是否存在
             if(storageAtomSV.findStorage(warnReceiveStaffOper.getObjectId())>0){
                 WarnReceiveStaff warnReceiveStaff = new WarnReceiveStaff();
@@ -69,12 +72,14 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
 
     @Override
     public int deleteWarnReceStaff(List<WarnReceiveStaffOper> operList) {
-        if(operList == null || operList.isEmpty())
-            return 0;
+        if(operList == null || operList.isEmpty()){
+        	return 0;
+        }
         int count = 0;
         for(WarnReceiveStaffOper warnReceiveStaffOper : operList){
-            if(warnReceiveStaffOper.getOperId() == 0)
-                throw new BusinessException("", "找不到操作人="+warnReceiveStaffOper.getOperId());
+            if(warnReceiveStaffOper.getOperId() == 0){
+            	throw new BusinessException("", "找不到操作人="+warnReceiveStaffOper.getOperId());
+            }
             warnReceiveStaffAtomSV.deleteWarnReceiveStaff(warnReceiveStaffOper.getTenantId(), 
                     warnReceiveStaffOper.getId(), warnReceiveStaffOper.getOperId());
             count++;

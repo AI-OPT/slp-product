@@ -578,8 +578,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				valDef.setAttrVal2(prodAttr.getAttrValueName2());
 				if (prodAttr.getAttrvalueDefId() != null) {
 					ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId, prodAttr.getAttrvalueDefId());
-					if (attrvalueDef != null)
+					if (attrvalueDef != null){
 						valDef.setAttrVal(attrvalueDef.getAttrValueName());
+					}
 				}
 				attrValDefMap.put(valDef.getProductAttrValId(), valDef);
 				attrValDefList.add(valDef.getProductAttrValId());

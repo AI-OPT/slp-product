@@ -68,11 +68,13 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
     public boolean updateSKUIndex(String productId) {
         try {
             List<ProdSkuInfoSes> skuInfoSesList =prodSkuAtomSV.queryOfProdForSearch(productId);
-            if (CollectionUtil.isEmpty(skuInfoSesList))
-                return true;
+            if (CollectionUtil.isEmpty(skuInfoSesList)){
+            	return true;
+            }
             List<SKUInfo> skuInfoList = fillSkuInfo(skuInfoSesList);
-            if (!CollectionUtil.isEmpty(skuInfoList))
-                SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+            if (!CollectionUtil.isEmpty(skuInfoList)){
+            	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+            }
             return true;
         } catch (Exception e) {
             logger.error("Failed to update sku info", e);
@@ -148,8 +150,9 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             //销售地域
             List<SaleAreaInfo> areaInfoList = new ArrayList<>();
             //若不是全国销售,则查询销售地域
-            if (ProductConstants.Product.IsSaleNationwide.NO.equals(prodSkuInfo.getSalenationwide()))
-                areaInfoList = fillSKUSaleArea(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid());
+            if (ProductConstants.Product.IsSaleNationwide.NO.equals(prodSkuInfo.getSalenationwide())){
+            	areaInfoList = fillSKUSaleArea(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid());
+            }
             skuInfo.setSaleareainfos(areaInfoList);
             skuInfoList.add(skuInfo);
         }
@@ -167,8 +170,9 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
      */
     private void fetchCategory(SKUInfo skuInfo, String prodCatId) {
         ProductCat productCat = prodCatDefAtomSV.selectById(prodCatId);
-        if (productCat == null)
-            return;
+        if (productCat == null){
+        	return;
+        }
 
         CategoryInfo categoryInfo = new CategoryInfo(productCat.getProductCatId(),
                 productCat.getProductCatName());
@@ -190,8 +194,9 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
         List<ProdAudiences> audiencesList = prodAudiencesAtomSV.queryOfProductByProdId(tenantId,
                 productId, false);
         List<ProdAudiencesSes> sesAudiList = new ArrayList<>();
-        if (CollectionUtil.isEmpty(audiencesList))
-            return sesAudiList;
+        if (CollectionUtil.isEmpty(audiencesList)){
+        	return sesAudiList;
+        }
         for (ProdAudiences prodAudiences : audiencesList) {
             sesAudiList.add(
                     new ProdAudiencesSes(prodAudiences.getUserType(), prodAudiences.getUserId()));
@@ -208,8 +213,9 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
     public List<SaleAreaInfo> fillSKUSaleArea(String tenantId,String productId){
         List<ProdTargetArea> targetAreaList = prodTargetAreaAtomSV.searchProdTargetArea(tenantId,productId);
         List<SaleAreaInfo> saleAreaInfoList = new ArrayList<>();
-        if (CollectionUtil.isEmpty(targetAreaList))
-            return saleAreaInfoList;
+        if (CollectionUtil.isEmpty(targetAreaList)){
+        	return saleAreaInfoList;
+        }
         for (ProdTargetArea targetArea:targetAreaList){
             saleAreaInfoList.add(new SaleAreaInfo(targetArea.getProvCode().toString()));
         }

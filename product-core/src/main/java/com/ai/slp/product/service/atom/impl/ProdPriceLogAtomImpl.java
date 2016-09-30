@@ -17,8 +17,9 @@ public class ProdPriceLogAtomImpl implements IProdPriceLogAtomSV {
     
     @Override
     public int insert(ProdPriceLog prodPriceLog) {
-        if(prodPriceLog == null)
-            return 0;
+        if(prodPriceLog == null){
+        	return 0;
+        }
         prodPriceLog.setLogId(SequenceUtil.genProdPriceLogId());
         prodPriceLog.setOperTime(DateUtils.currTimeStamp());
         return prodPriceLogMapper.insert(prodPriceLog);
