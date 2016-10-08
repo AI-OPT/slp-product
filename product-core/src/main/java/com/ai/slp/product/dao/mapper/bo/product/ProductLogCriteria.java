@@ -2214,6 +2214,196 @@ public class ProductLogCriteria {
             addCriterion("SUPPLIER_ID not between", value1, value2, "supplierId");
             return (Criteria) this;
         }
+
+        public Criteria andPresaleBeginTimeIsNull() {
+            addCriterion("PRESALE_BEGIN_TIME is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeIsNotNull() {
+            addCriterion("PRESALE_BEGIN_TIME is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeEqualTo(Timestamp value) {
+            addCriterion("PRESALE_BEGIN_TIME =", value, "presaleBeginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeNotEqualTo(Timestamp value) {
+            addCriterion("PRESALE_BEGIN_TIME <>", value, "presaleBeginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeGreaterThan(Timestamp value) {
+            addCriterion("PRESALE_BEGIN_TIME >", value, "presaleBeginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeGreaterThanOrEqualTo(Timestamp value) {
+            addCriterion("PRESALE_BEGIN_TIME >=", value, "presaleBeginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeLessThan(Timestamp value) {
+            addCriterion("PRESALE_BEGIN_TIME <", value, "presaleBeginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeLessThanOrEqualTo(Timestamp value) {
+            addCriterion("PRESALE_BEGIN_TIME <=", value, "presaleBeginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeIn(List<Timestamp> values) {
+            addCriterion("PRESALE_BEGIN_TIME in", values, "presaleBeginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeNotIn(List<Timestamp> values) {
+            addCriterion("PRESALE_BEGIN_TIME not in", values, "presaleBeginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("PRESALE_BEGIN_TIME between", value1, value2, "presaleBeginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleBeginTimeNotBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("PRESALE_BEGIN_TIME not between", value1, value2, "presaleBeginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeIsNull() {
+            addCriterion("PRESALE_END_TIME is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeIsNotNull() {
+            addCriterion("PRESALE_END_TIME is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeEqualTo(Timestamp value) {
+            addCriterion("PRESALE_END_TIME =", value, "presaleEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeNotEqualTo(Timestamp value) {
+            addCriterion("PRESALE_END_TIME <>", value, "presaleEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeGreaterThan(Timestamp value) {
+            addCriterion("PRESALE_END_TIME >", value, "presaleEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeGreaterThanOrEqualTo(Timestamp value) {
+            addCriterion("PRESALE_END_TIME >=", value, "presaleEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeLessThan(Timestamp value) {
+            addCriterion("PRESALE_END_TIME <", value, "presaleEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeLessThanOrEqualTo(Timestamp value) {
+            addCriterion("PRESALE_END_TIME <=", value, "presaleEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeIn(List<Timestamp> values) {
+            addCriterion("PRESALE_END_TIME in", values, "presaleEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeNotIn(List<Timestamp> values) {
+            addCriterion("PRESALE_END_TIME not in", values, "presaleEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("PRESALE_END_TIME between", value1, value2, "presaleEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPresaleEndTimeNotBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("PRESALE_END_TIME not between", value1, value2, "presaleEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeIsNull() {
+            addCriterion("PROD_CODE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeIsNotNull() {
+            addCriterion("PROD_CODE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeEqualTo(String value) {
+            addCriterion("PROD_CODE =", value, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeNotEqualTo(String value) {
+            addCriterion("PROD_CODE <>", value, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeGreaterThan(String value) {
+            addCriterion("PROD_CODE >", value, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("PROD_CODE >=", value, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeLessThan(String value) {
+            addCriterion("PROD_CODE <", value, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeLessThanOrEqualTo(String value) {
+            addCriterion("PROD_CODE <=", value, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeLike(String value) {
+            addCriterion("PROD_CODE like", value, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeNotLike(String value) {
+            addCriterion("PROD_CODE not like", value, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeIn(List<String> values) {
+            addCriterion("PROD_CODE in", values, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeNotIn(List<String> values) {
+            addCriterion("PROD_CODE not in", values, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeBetween(String value1, String value2) {
+            addCriterion("PROD_CODE between", value1, value2, "prodCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProdCodeNotBetween(String value1, String value2) {
+            addCriterion("PROD_CODE not between", value1, value2, "prodCode");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

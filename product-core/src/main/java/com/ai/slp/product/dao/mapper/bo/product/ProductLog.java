@@ -65,6 +65,12 @@ public class ProductLog {
 
     private String supplierId;
 
+    private Timestamp presaleBeginTime;
+
+    private Timestamp presaleEndTime;
+
+    private String prodCode;
+
     public String getLogId() {
         return logId;
     }
@@ -311,5 +317,29 @@ public class ProductLog {
 
     public void setSupplierId(String supplierId) {
         this.supplierId = supplierId == null ? null : supplierId.trim();
+    }
+
+    public Timestamp getPresaleBeginTime() {
+        return presaleBeginTime;
+    }
+
+    public void setPresaleBeginTime(Timestamp presaleBeginTime) {
+        this.presaleBeginTime = presaleBeginTime;
+    }
+
+    public Timestamp getPresaleEndTime() {
+        return presaleEndTime;
+    }
+
+    public void setPresaleEndTime(Timestamp presaleEndTime) {
+        this.presaleEndTime = presaleEndTime;
+    }
+
+    public String getProdCode() {
+        return prodCode;
+    }
+
+    public void setProdCode(String prodCode) {
+        this.prodCode = prodCode == null ? null : prodCode.trim();
     }
 }
