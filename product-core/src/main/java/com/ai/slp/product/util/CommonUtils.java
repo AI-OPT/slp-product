@@ -25,8 +25,9 @@ public class CommonUtils {
      */
     public static void checkTenantId(String tenantId,String errCode){
     	String nullErrorCode = StringUtils.isBlank(errCode)? ErrorCodeConstants.TENANT_ID_NULL:errCode;
-    	if (StringUtils.isBlank(tenantId))
+    	if (StringUtils.isBlank(tenantId)){
     		throw new BusinessException(nullErrorCode,"租户标识不能为空");
+    	}
     }
     
     /**
@@ -40,8 +41,9 @@ public class CommonUtils {
      */
     public static void checkSupplierId(String supplierId,String errCode){
     	String nullErrorCode = StringUtils.isBlank(errCode)? ErrorCodeConstants.SUPPLIER_ID_NULL:errCode;
-        if (StringUtils.isBlank(supplierId))
-            throw new BusinessException(nullErrorCode,"销售商（商户）标识不能为空");
+        if (StringUtils.isBlank(supplierId)){
+        	throw new BusinessException(nullErrorCode,"销售商（商户）标识不能为空");
+        }
     }
 
     /**

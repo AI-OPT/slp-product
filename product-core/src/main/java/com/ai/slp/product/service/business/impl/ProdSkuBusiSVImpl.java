@@ -301,9 +301,10 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		// 查询类目下指定类型的属性信息
 		List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId, product.getProductCatId(),
 				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE,"ATTR_ID");
-		if (attrAndValMap.size() != catAttrList.size())
+		if (attrAndValMap.size() != catAttrList.size()){
 			throw new BusinessException("",
 					"已选择销售属性数量与实际数量不符,已选择属性数量:" + attrAndValMap.size() + ",实际属性数量:" + catAttrList.size());
+		}
 		// 参数属性值的所有SKU组合
 		Set<String> skuSaleAttrs = new HashSet<>();// 新SKU属性串集合
 		genSkuSalAttr(attrAndValMap, "", 0, skuSaleAttrs, catAttrList);
@@ -441,8 +442,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		List<SkuInfo> skuInfoList = new ArrayList<>();
 		// 查询所有单品信息
 		List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId());
-		if (!CollectionUtil.isEmpty(skuSetForProduct.getAttrInfoList()) && CollectionUtil.isEmpty(skuList))
+		if (!CollectionUtil.isEmpty(skuSetForProduct.getAttrInfoList()) && CollectionUtil.isEmpty(skuList)){
 			throw new BusinessException("", "该商品未设置SKU单品信息");
+		}
 		// 设置SKU单品信息集合
 		for (ProdSku sku : skuList) {
 			// 设置属性串和SKU标识
@@ -487,8 +489,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		SkuAttrInfo skuAttrInfo = entry.getKey();
 		int valNum = entry.getValue().size();
 		int rowspan = 1;
-		if (entryIterator.hasNext())
+		if (entryIterator.hasNext()){
 			rowspan = getAttrRowspan(entryIterator);
+		}
 		skuAttrInfo.setRowspan(rowspan);
 		return rowspan * valNum;
 	}
@@ -554,10 +557,12 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			}
 			long totalNum = storage.getTotalNum();
 			long usableNum = storage.getUsableNum();
-			if (totalNum > 0)
+			if (totalNum > 0){
 				storage.setTotalNum(totalNum - skuStorage.getTotalNum());
-			if (usableNum > 0)
+			}
+			if (usableNum > 0){
 				storage.setUsableNum(usableNum - skuStorage.getUsableNum());
+			}
 			storage.setOperId(operId);
 			if (storageAtomSV.updateById(storage) > 0) {
 				StorageLog storageLog = new StorageLog();
@@ -565,8 +570,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 				storageLogAtomSV.installLog(storageLog);
 			}
 			// 可用量为零,则需要自动停用
-			if (storage.getUsableNum() <= 0)
+			if (storage.getUsableNum() <= 0){
 				storageBusiSV.autoStopStorage(storage);
+			}
 			skuStorageAtomSV.discardById(skuStorage.getSkuStorageId(), operId);
 		}
 
@@ -643,8 +649,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			for (StandedProdAttr prodAttr : prodAttrs) {
 				// 若SKU不包含当前属性值,则查询下一个属性值
 				if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId, product.getProdId(),
-						prodAttr.getAttrvalueDefId()) <= 0)
+						prodAttr.getAttrvalueDefId()) <= 0){
 					continue;
+				}
 				ProductSKUAttrValue skuAttrValue = new ProductSKUAttrValue();
 				skuAttrValue.setAttrvalueDefId(prodAttr.getAttrvalueDefId());
 				skuAttrValue.setAttrValueName(prodAttr.getAttrValueName());
@@ -666,8 +673,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 						skuAttrValue.setImage(productImage);
 					}
 					// 当前SKU包含当前属性值,且
-					if (StringUtils.isBlank(attrPic) && skuAttrValue.getIsOwn())
+					if (StringUtils.isBlank(attrPic) && skuAttrValue.getIsOwn()){
 						attrPic = prodAttr.getAttrvalueDefId();
+					}
 				}
 			}
 			productSKUAttr.setAttrValueList(attrValueList);
@@ -695,16 +703,18 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		List<ProductImage> productImageList = new ArrayList<>();
 		if (StringUtils.isNotBlank(attrPic)) {
 			pictureList = pictureAtomSV.queryProdIdAndAttrVal(product.getProdId(), attrPic);
-		} else
+		} else{
 			pictureList = pictureAtomSV.queryPicOfProd(product.getProdId());
+		}
 		for (ProdPicture picture : pictureList) {
 			ProductImage productImage = new ProductImage();
 			BeanUtils.copyProperties(productImage, picture);
 			// 将主图放在第一个位置
 			if (ProductConstants.ProdPicture.IsMainPic.YES.equals(picture.getIsMainPic())) {
 				productImageList.add(0, productImage);
-			} else
+			} else{
 				productImageList.add(productImage);
+			}
 		}
 		return productImageList;
 	}
@@ -831,10 +841,12 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		Collections.sort(valForSkus, new Comparator<SkuAttrVal>() {
 			@Override
 			public int compare(SkuAttrVal o1, SkuAttrVal o2) {
-				if (o1.getSerialNumber() > o2.getSerialNumber())
+				if (o1.getSerialNumber() > o2.getSerialNumber()){
 					return 1;
-				else if (o1.getSerialNumber() < o2.getSerialNumber())
+				}
+				else if (o1.getSerialNumber() < o2.getSerialNumber()){
 					return -1;
+				}
 				return 0;
 			}
 		});
@@ -904,8 +916,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		List<SkuInfo> skuInfoList = new ArrayList<>();
 		// 查询库存下SKU单品信息
 		List<SkuStorage> skuStoList = skuStorageAtomSV.queryByStorageId(storageId,true);
-		if (!CollectionUtil.isEmpty(skuSetForProduct.getAttrInfoList()) && CollectionUtil.isEmpty(skuStoList))
+		if (!CollectionUtil.isEmpty(skuSetForProduct.getAttrInfoList()) && CollectionUtil.isEmpty(skuStoList)){
 			throw new BusinessException("", "该商品未设置SKU单品信息");
+		}
 		// 设置SKU单品信息集合
 		for (SkuStorage skuSto : skuStoList) {
 			// 设置属性串和SKU标识
@@ -926,15 +939,17 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	 * @return
      */
 	private String skuAttrStrSort(String skuAttrStr){
-		if (StringUtils.isBlank(skuAttrStr))
+		if (StringUtils.isBlank(skuAttrStr)){
 			return "";
+		}
 		//进行拆解
 		String[] skuAttrArry = skuAttrStr.split(ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT);
 		List<ProdSkuAttrStr> skuAttrStrList = new ArrayList<>();
 		for (String skuAttr:skuAttrArry){
 			String[] attrAndVal = skuAttr.split(ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT);
-			if (attrAndVal==null || attrAndVal.length<2)
+			if (attrAndVal==null || attrAndVal.length<2){
 				continue;
+			}
 			ProdSkuAttrStr attrStr = new ProdSkuAttrStr();
 			attrStr.setAttrId(attrAndVal[0]);
 			attrStr.setAttrValId(attrAndVal[1]);

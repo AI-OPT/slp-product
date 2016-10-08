@@ -133,9 +133,10 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 查询库存组是否存在
 		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(
 				storageGroup.getTenantId(),storageGroup.getSupplierId(),storageGroup.getId());
-		if (group == null)
+		if (group == null){
 			throw new BusinessException("",
 					"要更新库存组信息不存在,租户ID:" + storageGroup.getTenantId() + ",库存组标识:" + storageGroup.getId());
+		}
 		// 已废弃,不允许变更
 		if (StorageConstants.StorageGroup.State.DISCARD.equals(group.getState())
 				|| StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(group.getState()))
@@ -173,8 +174,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 查询出标准品下的所有库存组,创建时间倒序
 		List<StorageGroupRes> groupInfoList = new ArrayList<>();
 		List<StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId,supplierId, productId);
-		if (CollectionUtil.isEmpty(groupList))
+		if (CollectionUtil.isEmpty(groupList)){
 			logger.warn("查询库存组列表为空,租户ID:{},销售商ID:{},标准品ID:{}",tenantId,supplierId,productId);
+		}
 		for(int i= groupList.size()-1;i>=0;i--){
 			groupInfoList.add(genStorageGroupInfo(groupList.get(i)));
 		}
@@ -217,8 +219,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 填充库存组信息
 		// 查询对应商品信息
 		Product product = productAtomSV.selectByGroupId(group.getTenantId(), group.getStorageGroupId());
-		if (product != null)
+		if (product != null){
 			groupInfo.setProdId(product.getProdId());
+		}
 		// 库存总量
 		Map<Short, List<StorageRes>> storageMap = new HashMap<>();
 		// ====填充库存集合信息
@@ -243,11 +246,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 					|| StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storage.getState()))
 			{
 				// 若为设置启用优先级,则设置第一个启用库存的优先级为启用优先级
-				if (activePriority == null)
+				if (activePriority == null){
 					activePriority = storage.getPriorityNumber();
+				}
 				// 若库存优先级与启用优先级不一致,则直接跳过
-				if (activePriority != storage.getPriorityNumber())
+				if (activePriority != storage.getPriorityNumber()){
 					continue;
+				}
 				// 添加库存总量
 				storageTotal += storage.getTotalNum();
 			}
@@ -255,8 +260,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			if(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR.equals(group.getIsSaleAttr())){
 				//查询库存对应SKU库存的信息.
 				List<SkuStorage> skuStoList = skuStorageAtomSV.queryByStorageId(storage.getStorageId(),true);
-				if (!CollectionUtil.isEmpty(skuStoList))
+				if (!CollectionUtil.isEmpty(skuStoList)){
 					stoStorage.setSalePrice(skuStoList.get(0).getSalePrice());
+				}
 			}
 		}
 		groupInfo.setStorageTotal(storageTotal);
@@ -266,13 +272,15 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 
 	@Override
 	public int updateStorageGroupPrice(StorageGroupSalePrice salePrice) {
-		if (salePrice == null)
+		if (salePrice == null){
 			return 0;
+		}
 		// 判断库存是否废弃
 		StorageGroup group = storageGroupAtomSV.queryByGroupIdAndSupplierId(
 				salePrice.getTenantId(),salePrice.getSupplierId(),salePrice.getStorageGroupId());
-		if (group == null || storageGroupAtomSV.isDiscard(group))
+		if (group == null || storageGroupAtomSV.isDiscard(group)){
 			throw new BusinessException("", "库存组不存在或已废弃");
+		}
 		// 填充价格等基本信息
 		StorageGroup storageGroup = new StorageGroup();
 		BeanUtils.copyProperties(storageGroup, salePrice);
@@ -285,8 +293,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			// 设置类型为库存组
 			prodPriceLog.setObjType(ProdPriceLogConstants.ProdPriceLog.ObjType.STORAGE_GROUP);
 			prodPriceLog.setUpdatePrice(storageGroup.getLowSalePrice());
-			if (storageGroup.getHighSalePrice() != null)
+			if (storageGroup.getHighSalePrice() != null){
 				prodPriceLog.setUpdatePeice2(storageGroup.getHighSalePrice());
+			}
 			prodPriceLogAtomSV.insert(prodPriceLog);
 		}
 		return updateNum;
@@ -448,10 +457,12 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			storageBusiSV.discardStorage(storageGroup.getTenantId(),storage, operId,true);
 		}
 		// 库存组废弃
-		if (isAuto)
+		if (isAuto){
 			storageGroup.setState(StorageConstants.StorageGroup.State.AUTO_DISCARD);
-		else
+		}
+		else{
 			storageGroup.setState(StorageConstants.StorageGroup.State.DISCARD);
+		}
 		storageGroup.setOperId(operId);
 		// 添加日志
 		if (storageGroupAtomSV.updateById(storageGroup) > 0) {
@@ -470,9 +481,10 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 				infoQuery.getPageNo(), infoQuery.getPageSize());
 		// 统计条件结果数量
 		int count = storageGroupAtomSV.countNoDiscard(infoQuery.getTenantId(), infoQuery.getStandedProdId());
-		if (StorageGroupPage == null)
+		if (StorageGroupPage == null){
 			throw new BusinessException("",
 					"未找到对应的库存组信息,租户ID:" + infoQuery.getTenantId() + ",标准品标识:" + infoQuery.getStandedProdId());
+		}
 		// 获取分页查询到的库存组集合-用于查询对应的库存与库存组信息对象
 		List<StorageGroup> storageGroupList = StorageGroupPage.getResult();
 		// 新建返回分页结果对象的结果集
@@ -518,8 +530,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @param storageGroup
      */
 	public void flushStorageCache(StorageGroup storageGroup){
-		if (storageGroup==null)
+		if (storageGroup==null){
 			return;
+		}
 		String tenantId = storageGroup.getTenantId(),groupId = storageGroup.getStorageGroupId();
 		ICacheClient cacheClient = IPaasStorageUtils.getClient();
 		//获取库存组的cacheKey
@@ -532,14 +545,17 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		if (CollectionUtil.isEmpty(storageList)){
 			storageList = storageAtomSV.queryTimeStorageOfGroup(storageGroup.getStorageGroupId(),true);
 			cleanTimeStorageCache(tenantId,groupId,storageList);
-		} else
+		} else{
+			
 			for (Storage storage : storageList) {
 				//若已经处理,则进行下一个
-				if (priorityNumList.contains(storage.getPriorityNumber()))
+				if (priorityNumList.contains(storage.getPriorityNumber())){
 					continue;
+				}
 				priorityNumList.add(storage.getPriorityNumber());
 				storageNumDbBusiSV.flushPriorityStorage(tenantId, groupId, storage.getPriorityNumber(), false);
 			}
+		}
 		logger.info("====刷新促销优先级缓存(结束)====");
 		//查询当前启用库存
 		List<Storage> activeList = storageAtomSV.queryActive(tenantId,groupId,false);
@@ -629,8 +645,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		cacheClient.expire(cachekey,0);
 		//查询库存组对应商品下的SKU
 		Product product = productAtomSV.selectByGroupId(tenantId,groupId);
-		if (product==null)
+		if (product==null){
 			return;
+		}
 		List<ProdSku> skuList = prodSkuAtomSV.querySkuOfProd(tenantId,product.getProdId());
 		for (ProdSku prodSku:skuList){
 			cachekey = IPaasStorageUtils.genMcsSkuStorageUsableKey(tenantId,groupId,priority,prodSku.getSkuId());
@@ -690,8 +707,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		}
 		Product product = productAtomSV.queryProductByGroupId(tenantId,groupId);
 		//若对应商品为在售,则进行下架处理
-		if (product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState()))
+		if (product!=null && ProductConstants.Product.State.IN_SALE.equals(product.getState())){
 			productBusiSV.offSale(tenantId,product.getSupplierId(),product.getProdId(),null);
+		}
 		//自启用状态
 		group.setState(StorageConstants.StorageGroup.State.AUTO_STOP);
 		// 添加日志
@@ -761,8 +779,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		}
 		//设置路由组/配货组标识
 		group.setRouteGroupId(routeGroupId);
-		if (operId!=null)
+		if (operId!=null){
 			group.setOperId(operId);
+		}
 		// 添加日志
 		if (storageGroupAtomSV.updateById(group) > 0) {
 			StorageGroupLog groupLog = new StorageGroupLog();
@@ -795,8 +814,9 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * 清空促销库存
 	 */
 	private void cleanTimeStorageCache(String tenantId,String groupId,List<Storage> storageList){
-		if (CollectionUtil.isEmpty(storageList))
+		if (CollectionUtil.isEmpty(storageList)){
 			return;
+		}
 		ICacheClient cacheClient = IPaasStorageUtils.getClient();
 		List<String> cKeyList = new ArrayList<>();
 		List<String> fKeyList = new ArrayList<>();
@@ -805,10 +825,12 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			cKeyList.add(IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority));
 			fKeyList.add(IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority));
 		}
-		if (!CollectionUtil.isEmpty(cKeyList))
+		if (!CollectionUtil.isEmpty(cKeyList)){
 			cacheClient.del(cKeyList.toArray(new String[cKeyList.size()]));
-		if (!CollectionUtil.isEmpty(fKeyList))
+		}
+		if (!CollectionUtil.isEmpty(fKeyList)){
 			cacheClient.del(fKeyList.toArray(new String[fKeyList.size()]));
+		}
 
 	}
 

@@ -344,8 +344,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                 if (prodAttr.getAttrvalueDefId() != null) {
                     ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId,
                             prodAttr.getAttrvalueDefId());
-                    if (attrvalueDef != null)
-                        valDef.setAttrVal(attrvalueDef.getAttrValueName());
+                    if (attrvalueDef != null){
+                    	valDef.setAttrVal(attrvalueDef.getAttrValueName());
+                    }
                 }
                 attrValDefMap.put(valDef.getProductAttrValId(), valDef);
                 attrValDefList.add(valDef.getProductAttrValId());
@@ -364,8 +365,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         Long attrId = 100002l;
         String catId = req.getProductCatId();
         //若为流量类目,则修改流量面额属性
-        if ("10000010020000".equals(catId))
-            attrId = 100003l;
+        if ("10000010020000".equals(catId)){
+        	attrId = 100003l;
+        }
 
         List<ProdFastSkuAttach> nationSkuList = prodSkuAtomSV.queryNationFastProd(req.getTenantId(),
                 req.getProductCatId(),req.getBasicOrgId(),req.getUserType(),req.getUserId(),attrId);
@@ -435,8 +437,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                     +"库存组ID:"+product.getStorageGroupId());
         }
         //判断已启用库存下的SKU库存是否均设置价格
-        if (skuStorageAtomSV.countOfNoPrice(tenantId,storageGroup.getStorageGroupId())>0)
-            throw new BusinessException("","启用库存下存在未设置价格的库存,无法上架");
+        if (skuStorageAtomSV.countOfNoPrice(tenantId,storageGroup.getStorageGroupId())>0){
+        	throw new BusinessException("","启用库存下存在未设置价格的库存,无法上架");
+        }
         //查询当前库存组可用量
         Long usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,storageGroup.getStorageGroupId());
         //库存组停用或当前库存可用为零,
@@ -450,8 +453,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //进行上架处理
         product.setUpTime(DateUtils.currTimeStamp());
         product.setState(ProductConstants.Product.State.IN_SALE);
-        if (operId!=null)
-            product.setOperId(operId);
+        if (operId!=null){
+        	product.setOperId(operId);
+        }
         //添加日志
         updateProdAndStatusLog(product);
     }
@@ -509,8 +513,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             //进行上架处理
             product.setState(ProductConstants.Product.State.IN_SALE);
         }
-        if (operId!=null)
-            product.setOperId(operId);
+        if (operId!=null){
+        	product.setOperId(operId);
+        }
         product.setUpTime(DateUtils.currTimeStamp());
         //添加日志
         updateProdAndStatusLog(product);
@@ -659,8 +664,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             product.setState(ProductConstants.Product.State.IN_SALE);
         }
         //停用/售罄下架进行上架时,没有操作人
-        if (operId!=null)
-            product.setOperId(operId);
+        if (operId!=null){
+        	product.setOperId(operId);
+        }
         //添加日志
         updateProdAndStatusLog(product);
         //添加搜索引擎
@@ -680,11 +686,13 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             product.setState(ProductConstants.Product.State.STOP);
         }
         //否则为"售罄停用"
-        else
-            product.setState(ProductConstants.Product.State.SALE_OUT);
+        else{
+        	product.setState(ProductConstants.Product.State.SALE_OUT);
+        }
         //当库存售光时,操作者ID为null
-        if (operId!=null)
-            product.setOperId(operId);
+        if (operId!=null){
+        	product.setOperId(operId);
+        }
         //添加日志
         updateProdAndStatusLog(product);
         //搜索中删除商品数据
@@ -732,8 +740,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new SystemException("", "未找到相关的商品信息,租户ID:" + tenantId + ",商品标识:" + prodId);
         }
         //若商品不是在售,则直接返回
-        if (!ProductConstants.Product.State.IN_SALE.equals(product.getState()))
-            return;
+        if (!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+        	return;
+        }
         //修改商品"state"为IN_STORE
         product.setState(ProductConstants.Product.State.IN_STORE);
         //将商品从搜索引擎中移除
