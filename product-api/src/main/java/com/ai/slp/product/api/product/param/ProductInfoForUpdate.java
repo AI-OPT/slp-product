@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -35,6 +36,12 @@ public class ProductInfoForUpdate extends BaseInfo {
 	 */
 	@NotBlank(message = "商品名称不能为空",groups = {IProductManagerSV.SaveProduct.class})
     private String prodName;
+
+    /**
+     * 商品自定义编码,最长16位
+     */
+    @Size(max = 16,message = "商品编码最大长度为16位")
+    private String prodCode;
 	/**
 	 * 商品卖点
 	 */
@@ -392,5 +399,13 @@ public class ProductInfoForUpdate extends BaseInfo {
 
     public void setIsInvoice(String isInvoice) {
         this.isInvoice = isInvoice;
+    }
+
+    public String getProdCode() {
+        return prodCode;
+    }
+
+    public void setProdCode(String prodCode) {
+        this.prodCode = prodCode;
     }
 }
