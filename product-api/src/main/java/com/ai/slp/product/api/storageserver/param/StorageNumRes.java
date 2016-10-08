@@ -34,6 +34,10 @@ public class StorageNumRes extends BaseResponse {
      */
     private String prodId;
     /**
+     * 商品编码
+     */
+    private String prodCode;
+    /**
      * 商品类目标识
      */
     private String productCatId;
@@ -207,5 +211,13 @@ public class StorageNumRes extends BaseResponse {
 
     public void setUpshelfType(String upshelfType) {
         this.upshelfType = upshelfType;
+    }
+
+    public String getProdCode() {
+        return prodCode;
+    }
+
+    public void setProdCode(String prodCode) {
+        this.prodCode = prodCode;
     }
 }

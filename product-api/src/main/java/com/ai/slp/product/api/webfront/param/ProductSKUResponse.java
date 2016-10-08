@@ -1,9 +1,9 @@
 package com.ai.slp.product.api.webfront.param;
 
-import com.ai.opt.base.vo.BaseResponse;
-
 import java.sql.Timestamp;
 import java.util.List;
+
+import com.ai.opt.base.vo.BaseResponse;
 
 public class ProductSKUResponse extends BaseResponse{
 
@@ -38,6 +38,10 @@ public class ProductSKUResponse extends BaseResponse{
      * 商品名称
      */
     private String prodName;
+	/**
+	 * 商品编码
+	 */
+	private String prodCode;
     /**
      * 商品卖点
      */
@@ -231,6 +235,14 @@ public class ProductSKUResponse extends BaseResponse{
 
 	public void setSupplierId(String supplierId) {
 		this.supplierId = supplierId;
+	}
+
+	public String getProdCode() {
+		return prodCode;
+	}
+
+	public void setProdCode(String prodCode) {
+		this.prodCode = prodCode;
 	}
 
 	@Override
