@@ -53,5 +53,5 @@ echo "-------------------${APP_NAME} dubbo service start --------------------"
 java ${START_CMD}
 echo "${APP_NAME} dubbo server started!! logs at $LOG_PATH"
 
-./start-cache-service.sh
-./start-ses-service.sh
+#./start-cache-service.sh
+#./start-ses-service.sh
