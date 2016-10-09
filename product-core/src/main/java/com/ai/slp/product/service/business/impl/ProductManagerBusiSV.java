@@ -371,6 +371,12 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             logger.warn("预售时间不完整,租户ID:{},商品标识:{}",tenantId,productId);
             throw new SystemException("","当前为预售类型,预售时间不能为空");
         }
+        //判断商品编码是否唯一(租户内)
+        if(StringUtils.isNotBlank(productInfo.getProdCode())
+                && productAtomSV.countOfProdCodeOutProdId(tenantId,productId,productInfo.getProdCode(),false)>0) {
+            logger.warn("商品编码重复,租户ID:{},商品标识:{},商品编码;{}",tenantId,productId,productInfo.getProdCode());
+            throw new BusinessException("","商品编码已存在");
+        }
         Long operId = productInfo.getOperId();
         //更新商品非关键属性信息
         updateNoKeyAttr(tenantId,productId,productInfo.getNoKeyAttrValMap(),operId);

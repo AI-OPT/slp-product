@@ -126,4 +126,14 @@ public interface IProductAtomSV {
      * @author jiawen
      */
     public PageInfo<Product> selectPageForRefuse(ProductEditQueryReq productPageQueryVo);
+
+    /**
+     * 查询除指定商品ID以外的商品是否已包含指定商品编码
+     * @param tenantId
+     * @param prodId
+     * @param prodCode
+     * @param hasDiscard
+     * @return
+     */
+    public int countOfProdCodeOutProdId(String tenantId,String prodId,String prodCode,boolean hasDiscard);
 }

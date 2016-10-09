@@ -171,7 +171,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     public BaseResponse updateProduct(ProductInfoForUpdate product) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(product.getTenantId());
         productManagerBusiSV.updateProdEdit(product);
-        return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
+        return CommonUtils.genSuccessResponse("OK");
     }
 
     /**

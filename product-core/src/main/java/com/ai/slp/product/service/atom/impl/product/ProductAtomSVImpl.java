@@ -1,11 +1,18 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProductAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
@@ -14,11 +21,6 @@ import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -382,6 +384,30 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		int pageSize = queryReq.getPageSize();
 
 		return pageQuery(example, pageNo, pageSize);
+	}
+
+	/**
+	 * 查询除指定商品ID以外的商品是否已包含指定商品编码
+	 *
+	 * @param tenantId
+	 * @param prodId
+	 * @param prodCode
+	 * @return
+	 */
+	@Override
+	public int countOfProdCodeOutProdId(String tenantId, String prodId, String prodCode,boolean hasDiscard) {
+		if (StringUtils.isBlank(tenantId)
+				||StringUtils.isBlank(prodId)
+				||StringUtils.isBlank(prodCode))
+			return 0;
+		ProductCriteria example = new ProductCriteria();
+		ProductCriteria.Criteria criteria = example.createCriteria();
+		criteria.andTenantIdEqualTo(tenantId)
+				.andProdCodeEqualTo(prodCode)
+				.andProdIdNotEqualTo(prodId);
+		if (!hasDiscard)
+			criteria.andStateNotEqualTo(ProductConstants.Product.State.DISCARD);
+		return productMapper.countByExample(example);
 	}
 
 }
