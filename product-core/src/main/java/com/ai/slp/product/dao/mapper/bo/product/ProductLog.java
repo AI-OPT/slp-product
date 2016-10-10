@@ -69,8 +69,6 @@ public class ProductLog {
 
     private Timestamp presaleEndTime;
 
-    private String prodCode;
-
     public String getLogId() {
         return logId;
     }
@@ -333,13 +331,5 @@ public class ProductLog {
 
     public void setPresaleEndTime(Timestamp presaleEndTime) {
         this.presaleEndTime = presaleEndTime;
-    }
-
-    public String getProdCode() {
-        return prodCode;
-    }
-
-    public void setProdCode(String prodCode) {
-        this.prodCode = prodCode == null ? null : prodCode.trim();
     }
 }

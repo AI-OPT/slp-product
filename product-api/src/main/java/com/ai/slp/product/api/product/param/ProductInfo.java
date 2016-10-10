@@ -25,10 +25,6 @@ public class ProductInfo extends BaseResponse {
      */
     private String productCatId;
     /**
-     * 商品编码
-     */
-    private String prodCode;
-    /**
      * 标准品标识
      */
     private String standedProdId;
@@ -355,13 +351,5 @@ public class ProductInfo extends BaseResponse {
 
     public void setPresaleEndTime(Timestamp presaleEndTime) {
         this.presaleEndTime = presaleEndTime;
-    }
-
-    public String getProdCode() {
-        return prodCode;
-    }
-
-    public void setProdCode(String prodCode) {
-        this.prodCode = prodCode;
     }
 }

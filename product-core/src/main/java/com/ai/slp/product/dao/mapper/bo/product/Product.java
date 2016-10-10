@@ -67,8 +67,6 @@ public class Product {
 
     private Timestamp presaleEndTime;
 
-    private String prodCode;
-
     public String getProdId() {
         return prodId;
     }
@@ -323,13 +321,5 @@ public class Product {
 
     public void setPresaleEndTime(Timestamp presaleEndTime) {
         this.presaleEndTime = presaleEndTime;
-    }
-
-    public String getProdCode() {
-        return prodCode;
-    }
-
-    public void setProdCode(String prodCode) {
-        this.prodCode = prodCode == null ? null : prodCode.trim();
     }
 }
