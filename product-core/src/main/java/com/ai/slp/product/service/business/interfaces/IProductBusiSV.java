@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.productserver.param.ProductInfoOfSku;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
@@ -159,4 +160,13 @@ public interface IProductBusiSV {
      * @return
      */
     public List<ProdTargetAreaInfo> queryProvinceInfoOfProduct(String tenantId, String supplierId, String productId);
+    
+    /**
+     * 根据商品编码查询商品信息
+     * @param tenantId
+     * @param prodCode
+     * @return
+     */
+    public ProductInfoOfSku queryByProdCode(String tenantId, String prodCode);
+
 }

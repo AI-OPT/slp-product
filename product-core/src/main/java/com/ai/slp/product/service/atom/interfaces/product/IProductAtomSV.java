@@ -136,4 +136,13 @@ public interface IProductAtomSV {
      * @return
      */
     public int countOfProdCodeOutProdId(String tenantId,String prodId,String prodCode,boolean hasDiscard);
+    
+    /**
+     * 根据商品编码查询指定商品
+     *
+     * @param tenantId
+     * @param prodCode
+     * @return
+     */
+    public Product selectByProdCode(String tenantId,String prodCode);
 }

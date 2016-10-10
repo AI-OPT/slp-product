@@ -22,6 +22,7 @@ import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.platform.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.productserver.param.ProductInfoOfSku;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.api.webfront.param.FastSkuProdInfo;
@@ -804,5 +805,41 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         return areaInfoList;
     }
+
+    /**
+     * 根据商品编码查询商品信息
+     * @param tenantId
+     * @param prodCode
+     * @return
+     */
+	@Override
+	public ProductInfoOfSku queryByProdCode(String tenantId, String prodCode) {
+		Product product = productAtomSV.selectByProdCode(tenantId, prodCode);
+		if (product == null) {
+            logger.warn("未找到对应商品信息,租户ID:{},商品编码:{}",tenantId,prodCode);
+            throw new SystemException("", "未找到相关的商品信息");
+        }
+		
+		if (ProductConstants.Product.State.UNEDIT.equals(product.getState()) 
+			|| ProductConstants.Product.State.EDITED.equals(product.getState())
+			|| ProductConstants.Product.State.VERIFYING.equals(product.getState())
+			|| ProductConstants.Product.State.REJECT.equals(product.getState())
+			|| ProductConstants.Product.State.ADD.equals(product.getState())) {
+			
+			logger.warn("未找到对应商品信息,租户ID:{},商品编码:{}",tenantId,prodCode);
+            throw new SystemException("", "未找到相关的商品信息");
+		}
+		List<ProdSku> skuOfProd = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId());
+		if (skuOfProd.get(0) == null) {
+			logger.warn("未找到对应商品信息,租户ID:{},商品编码:{}",tenantId,prodCode);
+            throw new SystemException("", "未找到相关的商品信息");
+		}
+		ProductInfoOfSku productInfoOfSku = new ProductInfoOfSku();
+		BeanUtils.copyProperties(productInfoOfSku,product);
+		//赋值 skuId skuName
+		productInfoOfSku.setSkuId(skuOfProd.get(0).getSkuId());
+		productInfoOfSku.setSkuName(skuOfProd.get(0).getSkuName());
+		return productInfoOfSku;
+	}
 }
 	

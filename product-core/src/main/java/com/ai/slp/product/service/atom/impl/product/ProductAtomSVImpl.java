@@ -410,4 +410,20 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		return productMapper.countByExample(example);
 	}
 
+	/**
+     * 根据商品编码查询指定商品
+     *
+     * @param tenantId
+     * @param prodCode
+     * @return
+     */
+	@Override
+	public Product selectByProdCode(String tenantId, String prodCode) {
+		//根据商品编码查询商品
+		ProductCriteria example = new ProductCriteria();
+		example.createCriteria().andTenantIdEqualTo(tenantId).andProdCodeEqualTo(prodCode);
+		List<Product> products = productMapper.selectByExample(example);
+		return products == null || products.isEmpty() ? null : products.get(0);
+	}
+
 }
