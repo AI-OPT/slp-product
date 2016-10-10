@@ -25,6 +25,10 @@ public class ProductSkuInfo extends BaseResponse {
      */
     private String prodId;
     /**
+     * 商品编码
+     */
+    private String prodCode;
+    /**
      * 商品名称
      */
     private String prodName;
@@ -139,5 +143,13 @@ public class ProductSkuInfo extends BaseResponse {
 
     public void setUsableNum(Long usableNum) {
         this.usableNum = usableNum;
+    }
+
+    public String getProdCode() {
+        return prodCode;
+    }
+
+    public void setProdCode(String prodCode) {
+        this.prodCode = prodCode;
     }
 }

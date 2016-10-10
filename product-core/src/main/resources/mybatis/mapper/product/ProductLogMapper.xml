@@ -35,6 +35,7 @@
     <result column="SUPPLIER_ID" property="supplierId" jdbcType="VARCHAR" />
     <result column="PRESALE_BEGIN_TIME" property="presaleBeginTime" jdbcType="TIMESTAMP" />
     <result column="PRESALE_END_TIME" property="presaleEndTime" jdbcType="TIMESTAMP" />
+    <result column="PROD_CODE" property="prodCode" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -99,7 +100,8 @@
     PROD_NAME, PRODUCT_SELL_POINT, ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, ACTIVE_CYCLE, 
     UNIT, PRO_DETAIL_CONTENT, IS_SALE_ATTR, IS_SALE_NATIONWIDE, IS_REPLACE_SELL, IS_INVOICE, 
     INVOICE_TYPE, AFTER_SALE, UPSHELF_TYPE, UP_TIME, DOWN_TIME, CREATE_TIME, STATE, OPER_ID, 
-    OPER_TIME, RECHARGE_TYPE, BASIC_ORG_ID, SUPPLIER_ID, PRESALE_BEGIN_TIME, PRESALE_END_TIME
+    OPER_TIME, RECHARGE_TYPE, BASIC_ORG_ID, SUPPLIER_ID, PRESALE_BEGIN_TIME, PRESALE_END_TIME, 
+    PROD_CODE
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLogCriteria" >
     select
@@ -146,7 +148,8 @@
       UPSHELF_TYPE, UP_TIME, DOWN_TIME, 
       CREATE_TIME, STATE, OPER_ID, 
       OPER_TIME, RECHARGE_TYPE, BASIC_ORG_ID, 
-      SUPPLIER_ID, PRESALE_BEGIN_TIME, PRESALE_END_TIME)
+      SUPPLIER_ID, PRESALE_BEGIN_TIME, PRESALE_END_TIME, 
+      PROD_CODE)
     values (#{logId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, 
       #{productCatId,jdbcType=VARCHAR}, #{standedProdId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=VARCHAR}, 
       #{productType,jdbcType=VARCHAR}, #{prodName,jdbcType=VARCHAR}, #{productSellPoint,jdbcType=VARCHAR}, 
@@ -157,7 +160,8 @@
       #{upshelfType,jdbcType=VARCHAR}, #{upTime,jdbcType=TIMESTAMP}, #{downTime,jdbcType=TIMESTAMP}, 
       #{createTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, 
       #{operTime,jdbcType=TIMESTAMP}, #{rechargeType,jdbcType=VARCHAR}, #{basicOrgId,jdbcType=VARCHAR}, 
-      #{supplierId,jdbcType=VARCHAR}, #{presaleBeginTime,jdbcType=TIMESTAMP}, #{presaleEndTime,jdbcType=TIMESTAMP})
+      #{supplierId,jdbcType=VARCHAR}, #{presaleBeginTime,jdbcType=TIMESTAMP}, #{presaleEndTime,jdbcType=TIMESTAMP}, 
+      #{prodCode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductLog" >
     insert into product_log
@@ -261,6 +265,9 @@
       <if test="presaleEndTime != null" >
         PRESALE_END_TIME,
       </if>
+      <if test="prodCode != null" >
+        PROD_CODE,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="logId != null" >
@@ -361,6 +368,9 @@
       </if>
       <if test="presaleEndTime != null" >
         #{presaleEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="prodCode != null" >
+        #{prodCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -472,6 +482,9 @@
       <if test="record.presaleEndTime != null" >
         PRESALE_END_TIME = #{record.presaleEndTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.prodCode != null" >
+        PROD_CODE = #{record.prodCode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -511,7 +524,8 @@
       BASIC_ORG_ID = #{record.basicOrgId,jdbcType=VARCHAR},
       SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR},
       PRESALE_BEGIN_TIME = #{record.presaleBeginTime,jdbcType=TIMESTAMP},
-      PRESALE_END_TIME = #{record.presaleEndTime,jdbcType=TIMESTAMP}
+      PRESALE_END_TIME = #{record.presaleEndTime,jdbcType=TIMESTAMP},
+      PROD_CODE = #{record.prodCode,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -615,6 +629,9 @@
       <if test="presaleEndTime != null" >
         PRESALE_END_TIME = #{presaleEndTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="prodCode != null" >
+        PROD_CODE = #{prodCode,jdbcType=VARCHAR},
+      </if>
     </set>
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
@@ -651,7 +668,8 @@
       BASIC_ORG_ID = #{basicOrgId,jdbcType=VARCHAR},
       SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR},
       PRESALE_BEGIN_TIME = #{presaleBeginTime,jdbcType=TIMESTAMP},
-      PRESALE_END_TIME = #{presaleEndTime,jdbcType=TIMESTAMP}
+      PRESALE_END_TIME = #{presaleEndTime,jdbcType=TIMESTAMP},
+      PROD_CODE = #{prodCode,jdbcType=VARCHAR}
     where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
 </mapper>

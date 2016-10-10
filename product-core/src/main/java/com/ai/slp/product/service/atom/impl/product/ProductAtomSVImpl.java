@@ -12,6 +12,7 @@ import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProductAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
@@ -395,7 +396,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	 */
 	@Override
 	public int countOfProdCodeOutProdId(String tenantId, String prodId, String prodCode,boolean hasDiscard) {
-		/*if (StringUtils.isBlank(tenantId)
+		if (StringUtils.isBlank(tenantId)
 				||StringUtils.isBlank(prodId)
 				||StringUtils.isBlank(prodCode))
 			return 0;
@@ -406,8 +407,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 				.andProdIdNotEqualTo(prodId);
 		if (!hasDiscard)
 			criteria.andStateNotEqualTo(ProductConstants.Product.State.DISCARD);
-		return productMapper.countByExample(example);*/
-		return 1;
+		return productMapper.countByExample(example);
 	}
 
 }
