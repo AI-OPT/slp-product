@@ -21,7 +21,7 @@ import com.ai.slp.product.api.productserver.param.ProductInfoOfSku;
 @Path("/newProductServer")
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
-public interface IProductServerSV {
+public interface IProductNewServerSV {
 
     /**
      * 根据销售商品编码查询商品单品详情信息<br>
