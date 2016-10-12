@@ -5,8 +5,11 @@ import java.sql.Timestamp;
 import com.ai.opt.base.vo.BaseResponse;
 
 /**
- * 销售商品下SKU单品的信息
- * Created by jackieliu on 16/5/20.
+ * 商品查询
+ *
+ * Date: 2016年10月10日 <br>
+ * Copyright (c) 2016 asiainfo.com <br>
+ * @author liutong5
  */
 public class ProductInfoOfSku extends BaseResponse {
     private static final long serialVersionUID = 1L;
