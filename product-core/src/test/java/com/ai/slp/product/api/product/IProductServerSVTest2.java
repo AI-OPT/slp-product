@@ -8,7 +8,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.ai.slp.product.api.productserver.interfaces.IProductNewServerSV;
 import com.ai.slp.product.api.productserver.param.ProdInfoQuery;
+import com.ai.slp.product.api.productserver.param.ProductInfoOfSku;
 import com.ai.slp.product.constants.CommonTestConstants;
+import com.google.gson.Gson;
 
 /**
  * Created by jiawen on 16/10/10.
@@ -24,7 +26,9 @@ public class IProductServerSVTest2 {
     public void queryProductSkuByProdCode(){
         ProdInfoQuery query = new ProdInfoQuery();
         query.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
-        query.setId("1");
-        productServerSV.queryProductSkuByProdCode(query);
+        query.setId("2");
+        ProductInfoOfSku queryProductSku = productServerSV.queryProductSkuByProdCode(query);
+        Gson gson = new Gson();
+    	System.out.println(gson.toJson(queryProductSku));
     }
 }
