@@ -820,17 +820,17 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new SystemException("", "未找到相关的商品信息");
         }
 		
-		if (ProductConstants.Product.State.UNEDIT.equals(product.getState()) 
-			|| ProductConstants.Product.State.EDITED.equals(product.getState())
-			|| ProductConstants.Product.State.VERIFYING.equals(product.getState())
-			|| ProductConstants.Product.State.REJECT.equals(product.getState())
-			|| ProductConstants.Product.State.ADD.equals(product.getState())) {
-			
+		//判断商品状态
+		if (!ProductConstants.Product.State.IN_SALE.equals(product.getState())
+			&& !ProductConstants.Product.State.IN_STORE.equals(product.getState())
+			&& !ProductConstants.Product.State.SALE_OUT.equals(product.getState())
+			&& !ProductConstants.Product.State.STOP.equals(product.getState())
+			) {
 			logger.warn("未找到对应商品信息,租户ID:{},商品编码:{}",tenantId,prodCode);
             throw new SystemException("", "未找到相关的商品信息");
 		}
 		List<ProdSku> skuOfProd = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId());
-		if (skuOfProd.get(0) == null) {
+		if (CollectionUtil.isEmpty(skuOfProd)) {
 			logger.warn("未找到对应商品信息,租户ID:{},商品编码:{}",tenantId,prodCode);
             throw new SystemException("", "未找到相关的商品信息");
 		}
