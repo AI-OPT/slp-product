@@ -395,8 +395,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
         changeToInSale(product,operId);
-        //将商品添加至搜索引擎
-        skuIndexManage.updateSKUIndex(prodId);
+
     }
 
     /**
@@ -459,6 +458,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         //添加日志
         updateProdAndStatusLog(product);
+        //将商品添加至搜索引擎
+        skuIndexManage.updateSKUIndex(product.getProdId());
     }
 
     /**
