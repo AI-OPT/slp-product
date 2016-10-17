@@ -53,7 +53,7 @@ import com.ai.slp.product.vo.SkuStorageVo;
 @Service
 @Transactional
 public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
-	private static Logger logger = LoggerFactory.getLogger(ProdSkuBusiSVImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProdSkuBusiSVImpl.class);
 	@Autowired
 	IProductAtomSV productAtomSV;
 	@Autowired

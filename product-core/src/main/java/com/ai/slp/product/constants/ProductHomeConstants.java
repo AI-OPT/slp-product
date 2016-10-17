@@ -23,7 +23,7 @@ public class ProductHomeConstants {
     public static final String TYPENATION_WIDE = "Y";
     
     
-    public final class UserType{
+    public static final class UserType{
         /**
          * 企业
          */

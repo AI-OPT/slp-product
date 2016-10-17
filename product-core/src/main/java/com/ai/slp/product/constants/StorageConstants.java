@@ -7,7 +7,7 @@ package com.ai.slp.product.constants;
  */
 public final class StorageConstants {
 
-    public final class IPass{
+    public static final class IPass{
         public final class McsParams {
             /**
              * 库存所用mds
@@ -54,7 +54,7 @@ public final class StorageConstants {
         }
     }
 
-    public final class StorageGroup{
+    public static final class StorageGroup{
 
         public static final String DEFAULT_NAME = "默认库存组";
         public final class State{
@@ -95,7 +95,7 @@ public final class StorageConstants {
         }
     }
 
-    public final class Storage{
+    public static final class Storage{
         public final class State{
             /**
              * 启用
@@ -124,7 +124,7 @@ public final class StorageConstants {
         }
     }
 
-    public final class SkuStorage{
+    public static final class SkuStorage{
         public final class State{
             /**
              * 启用

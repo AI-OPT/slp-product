@@ -8,7 +8,7 @@ public final class IPaasConstants {
     /**
      * 缓存相关参数
      */
-    public final class McsParams{
+    public static final class McsParams{
         /**
          * 库存所用mcs
          */

@@ -52,7 +52,7 @@ import com.ai.slp.route.api.routegroupmanage.param.RouteGroupStateResponse;
 @Service
 @Transactional
 public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
-	private static Logger logger = LoggerFactory.getLogger(StorageGroupBusiSVImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(StorageGroupBusiSVImpl.class);
 	@Autowired
 	IStandedProductAtomSV standedProductAtomSV;
 	@Autowired

@@ -44,7 +44,7 @@ import com.ai.slp.product.vo.SkuStorageVo;
 @Service
 @Transactional
 public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
-    private static Logger logger = LoggerFactory.getLogger(StorageNumBusiSVImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(StorageNumBusiSVImpl.class);
     @Autowired
     IProdSkuAtomSV skuAtomSV;
     @Autowired

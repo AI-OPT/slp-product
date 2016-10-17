@@ -34,7 +34,7 @@ import com.ai.slp.product.util.DateUtils;
 @Service
 @Transactional
 public class ProductCatBusiSVImpl implements IProductCatBusiSV {
-    private static Logger logger = LoggerFactory.getLogger(ProductCatBusiSVImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductCatBusiSVImpl.class);
     @Autowired
     IProdCatDefAtomSV prodCatDefAtomSV;
     @Autowired
