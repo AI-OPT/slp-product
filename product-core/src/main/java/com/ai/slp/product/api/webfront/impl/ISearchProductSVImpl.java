@@ -1,5 +1,11 @@
 package com.ai.slp.product.api.webfront.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
@@ -18,16 +24,11 @@ import com.ai.slp.product.search.dto.UserSearchAuthority;
 import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.ConvertImageUtil;
+import com.ai.slp.product.util.InitDataUtil;
 import com.ai.slp.product.util.ValidateUtil;
-import com.ai.slp.product.util.initDataUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 @Service(validation = "true")
 @Component
 public class ISearchProductSVImpl implements ISearchProductSV {
@@ -355,16 +356,16 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                 if(StringUtil.isBlank(request.getProductCatId())){
                 	request.setProductCatId(ProductHomeConstants.PHONE_BILL_PRO_CAT_ID);
                 }
-                product.setAccountList(initDataUtil.getAccountsOrFlow(request.getProductCatId()));
-                product.setAgentList(initDataUtil.getAgent());
-                product.setAreaList(initDataUtil.getArea());
+                product.setAccountList(InitDataUtil.getAccountsOrFlow(request.getProductCatId()));
+                product.setAgentList(InitDataUtil.getAgent());
+                product.setAreaList(InitDataUtil.getArea());
                 results.add(product);
             }
         }else{
         	 ProductData product = new ProductData();
-        	 product.setAccountList(initDataUtil.getAccountsOrFlow(ProductHomeConstants.PHONE_BILL_PRO_CAT_ID));
-             product.setAgentList(initDataUtil.getAgent());
-             product.setAreaList(initDataUtil.getArea());
+        	 product.setAccountList(InitDataUtil.getAccountsOrFlow(ProductHomeConstants.PHONE_BILL_PRO_CAT_ID));
+             product.setAgentList(InitDataUtil.getAgent());
+             product.setAreaList(InitDataUtil.getArea());
              results.add(product);
         }
         pageinfo.setResult(results);
@@ -531,16 +532,16 @@ public class ISearchProductSVImpl implements ISearchProductSV {
                 if(StringUtil.isBlank(productCatId)){
                 	productCatId=ProductHomeConstants.PHONE_BILL_PRO_CAT_ID;
                 }
-                product.setAccountList(initDataUtil.getAccountsOrFlow(productCatId));
-                product.setAgentList(initDataUtil.getAgent());
-                product.setAreaList(initDataUtil.getArea());
+                product.setAccountList(InitDataUtil.getAccountsOrFlow(productCatId));
+                product.setAgentList(InitDataUtil.getAgent());
+                product.setAreaList(InitDataUtil.getArea());
                 results.add(product);
             }
         }else{
         	ProductData product = new ProductData();
-        	product.setAccountList(initDataUtil.getAccountsOrFlow(ProductHomeConstants.PHONE_BILL_PRO_CAT_ID));
-            product.setAgentList(initDataUtil.getAgent());
-            product.setAreaList(initDataUtil.getArea());
+        	product.setAccountList(InitDataUtil.getAccountsOrFlow(ProductHomeConstants.PHONE_BILL_PRO_CAT_ID));
+            product.setAgentList(InitDataUtil.getAgent());
+            product.setAreaList(InitDataUtil.getArea());
             results.add(product);
         }
         pageinfo.setResult(results);
