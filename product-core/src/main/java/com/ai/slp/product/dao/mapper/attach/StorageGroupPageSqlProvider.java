@@ -12,7 +12,7 @@ import java.util.Map;
  * Created by jackieliu on 16/8/1.
  */
 public class StorageGroupPageSqlProvider {
-    private static Logger logger = LoggerFactory.getLogger(StorageGroupPageSqlProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(StorageGroupPageSqlProvider.class);
 
     /**
      * 产生查询语句

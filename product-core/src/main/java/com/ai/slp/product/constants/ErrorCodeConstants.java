@@ -13,14 +13,14 @@ public final class ErrorCodeConstants {
      */
     public static final String SUPPLIER_ID_NULL = "2000";
 
-    public final class ProductCat{
+    public static final class ProductCat{
         /**
          * 类目不存在
          */
         public static final String CAT_NO_EXIST = "1006";
     }
 
-    public final class Product{
+    public static final class Product{
         /**
          * sku不存在,或无效
          */
@@ -31,7 +31,7 @@ public final class ErrorCodeConstants {
         public static final String PRODUCT_NO_EXIST = "1002";
     }
 
-    public final class Storage{
+    public static final class Storage{
         /**
          * 库存不足
          */
@@ -42,7 +42,7 @@ public final class ErrorCodeConstants {
         public static final String PRICE_UN_MATCH = "1004";
     }
 
-    public final class ProdAudiences{
+    public static final class ProdAudiences{
         /**
          * 受众不符合
          */

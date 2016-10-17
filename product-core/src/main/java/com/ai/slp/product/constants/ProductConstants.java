@@ -5,7 +5,7 @@ package com.ai.slp.product.constants;
  */
 public final class ProductConstants {
 
-    public final class Product {
+    public static final class Product {
 
         public final class IsSaleAttr {
             /**
@@ -131,7 +131,7 @@ public final class ProductConstants {
         }
     }
 
-    public final class ProdSkuAttr{
+    public static final class ProdSkuAttr{
 
         public final class State {
             /**
@@ -145,7 +145,7 @@ public final class ProductConstants {
         }
     }
 
-    public final class ProdSku{
+    public static final class ProdSku{
 
         public final class IsSaleAttr {
             /**
@@ -181,7 +181,7 @@ public final class ProductConstants {
         }
     }
 
-    public final class ProdPicture{
+    public static final class ProdPicture{
         public final class PicType{
             /**
              * 商品预览图
@@ -205,7 +205,7 @@ public final class ProductConstants {
         }
     }
 
-    public final class ProdAttr{
+    public static final class ProdAttr{
         public final class State {
             /**
              * 有效状态
@@ -218,7 +218,7 @@ public final class ProductConstants {
         }
     }
 
-    public final class ProdAudiences{
+    public static final class ProdAudiences{
         public final class userType{
             /**
              * 个人
@@ -258,7 +258,7 @@ public final class ProductConstants {
         }
     }
 
-    public final class ProdStatusLog{
+    public static final class ProdStatusLog{
         public final class PriorityNumber{
             /*
                 优先

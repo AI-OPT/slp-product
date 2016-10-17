@@ -21,7 +21,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 @Service(validation = "true")
 @Component
 public class IProductDetailSVImpl implements IProductDetailSV {
-	private static Logger logger = LoggerFactory.getLogger(IProductDetailSVImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(IProductDetailSVImpl.class);
 	@Autowired
 	IProdSkuBusiSV prodSkuBusiSV;
 

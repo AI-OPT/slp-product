@@ -1,7 +1,7 @@
 package com.ai.slp.product.constants;
 
 public final class SkuStorageConstants {
-	public final class SkuStorage{
+	public static final class SkuStorage{
 		public final class State{
 			/**
              * 1启用[新增时]

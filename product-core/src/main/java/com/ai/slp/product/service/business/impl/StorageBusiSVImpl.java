@@ -49,7 +49,7 @@ import com.google.gson.Gson;
 @Service
 @Transactional
 public class StorageBusiSVImpl implements IStorageBusiSV {
-	private static Logger logger = LoggerFactory.getLogger(StorageBusiSVImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(StorageBusiSVImpl.class);
 	@Autowired
 	IStorageGroupAtomSV storageGroupAtomSV;
 	@Autowired

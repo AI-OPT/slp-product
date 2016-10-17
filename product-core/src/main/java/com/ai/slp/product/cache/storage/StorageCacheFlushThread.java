@@ -12,7 +12,7 @@ import java.util.List;
  * Created by jackieliu on 16/6/6.
  */
 public class StorageCacheFlushThread extends Thread {
-    private static Logger logger = LoggerFactory.getLogger(StorageCacheFlushThread.class);
+    private static final Logger logger = LoggerFactory.getLogger(StorageCacheFlushThread.class);
     IStorageGroupBusiSV groupBusiSV;
     private List<StorageGroup> groupList;
     public StorageCacheFlushThread(IStorageGroupBusiSV groupBusiSV,List<StorageGroup> groupList){

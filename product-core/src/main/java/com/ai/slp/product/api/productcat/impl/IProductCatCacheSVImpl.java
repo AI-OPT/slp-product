@@ -27,7 +27,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 @Service(validation = "true")
 @Component
 public class IProductCatCacheSVImpl implements IProductCatCacheSV {
-    private static Logger logger = LoggerFactory.getLogger(IProductCatCacheSVImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(IProductCatCacheSVImpl.class);
     @Autowired
     IProductCatQueryBusiSV productCatQueryBusiSV;
     /**

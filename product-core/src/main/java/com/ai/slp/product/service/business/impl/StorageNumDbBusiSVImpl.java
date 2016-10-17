@@ -34,7 +34,7 @@ import com.ai.slp.product.util.IPaasStorageUtils;
 @Service
 @Transactional
 public class StorageNumDbBusiSVImpl {
-    private static Logger logger = LoggerFactory.getLogger(StorageNumDbBusiSVImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(StorageNumDbBusiSVImpl.class);
     @Autowired
     ISkuStorageAtomSV skuStorageAtomSV;
     @Autowired

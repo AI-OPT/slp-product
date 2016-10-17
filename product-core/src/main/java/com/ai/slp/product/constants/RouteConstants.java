@@ -5,7 +5,7 @@ package com.ai.slp.product.constants;
  * Created by jackieliu on 16/5/25.
  */
 public final class RouteConstants {
-    public final class RouteGroup{
+    public static final class RouteGroup{
         public final class State{
             /**
              * 新增

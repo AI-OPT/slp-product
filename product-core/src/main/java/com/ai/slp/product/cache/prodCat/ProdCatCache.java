@@ -27,7 +27,7 @@ import java.util.Set;
  */
 @Component
 public class ProdCatCache extends AbstractCache {
-    private static Logger logger = LoggerFactory.getLogger(ProdCatCache.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProdCatCache.class);
     @Autowired
     ProductCatMapper productCatMapper;
     @Autowired

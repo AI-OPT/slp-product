@@ -45,7 +45,7 @@ import com.ai.slp.product.vo.StandedProdPageQueryVo;
 @Service
 @Transactional
 public class NormProductBusiSVImpl implements INormProductBusiSV {
-	private static Logger logger = LoggerFactory.getLogger(NormProductBusiSVImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(NormProductBusiSVImpl.class);
 
 	private static String ATTR_LINE_VAL = "||";
 

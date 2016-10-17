@@ -4,7 +4,7 @@ package com.ai.slp.product.constants;
  * Created by jackieliu on 16/6/13.
  */
 public final class ProdAttrAndValDefConstants {
-    public final class ProdAttrDef{
+    public static final class ProdAttrDef{
         public final class ValueWay{
             /**
              * 下拉方式

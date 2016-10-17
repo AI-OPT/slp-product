@@ -19,7 +19,7 @@ import com.ai.slp.product.service.business.interfaces.IProdSaleAllBusiSV;
 @Service
 @Transactional
 public class ProdSaleAllBusiSVImpl implements IProdSaleAllBusiSV {
-    private static Logger logger = LoggerFactory.getLogger(ProdSaleAllBusiSVImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProdSaleAllBusiSVImpl.class);
     @Autowired
     IProdSaleAllAtomSV prodSaleAllAtomSV;
     @Autowired

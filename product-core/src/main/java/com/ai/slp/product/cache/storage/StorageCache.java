@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
  */
 @Component
 public class StorageCache extends AbstractCache {
-    private static Logger logger = LoggerFactory.getLogger(StorageCache.class);
+    private static final Logger logger = LoggerFactory.getLogger(StorageCache.class);
     @Autowired
     IStorageGroupBusiSV groupBusiSV;
     @Autowired

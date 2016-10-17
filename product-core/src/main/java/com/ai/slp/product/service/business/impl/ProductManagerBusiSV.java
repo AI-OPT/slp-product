@@ -45,7 +45,7 @@ import com.ai.slp.user.api.keyinfo.param.SearchGroupUserInfoResponse;
 @Service
 @Transactional
 public class ProductManagerBusiSV implements IProductManagerBusiSV {
-    private static Logger logger = LoggerFactory.getLogger(ProductManagerBusiSV.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductManagerBusiSV.class);
     @Autowired
     IProdAttrValDefAtomSV attrValDefAtomSV;
     @Autowired

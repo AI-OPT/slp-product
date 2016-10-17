@@ -57,7 +57,7 @@ import com.ai.slp.product.vo.SkuStorageVo;
 @Service
 @Transactional
 public class ProductBusiSVImpl implements IProductBusiSV {
-    private static Logger logger = LoggerFactory.getLogger(ProductBusiSVImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductBusiSVImpl.class);
     @Autowired
     IProductCatBusiSV productCatBusiSV;
     @Autowired

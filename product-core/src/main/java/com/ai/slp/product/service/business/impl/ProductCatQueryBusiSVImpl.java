@@ -25,7 +25,7 @@ import com.ai.slp.product.util.IPaasCatUtils;
  */
 @Service
 public class ProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
-    private static Logger logger = LoggerFactory.getLogger(ProductCatQueryBusiSVImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductCatQueryBusiSVImpl.class);
     @Autowired
     IProductCatBusiSV productCatBusiSV;
     @Autowired
