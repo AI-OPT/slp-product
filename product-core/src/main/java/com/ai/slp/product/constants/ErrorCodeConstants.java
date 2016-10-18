@@ -3,7 +3,7 @@ package com.ai.slp.product.constants;
 /**
  * Created by jackieliu on 16/6/14.
  */
-public final class ErrorCodeConstants {
+public class ErrorCodeConstants {
     /**
      * 租户标识为空
      */

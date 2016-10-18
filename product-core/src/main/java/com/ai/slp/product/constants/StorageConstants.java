@@ -5,10 +5,10 @@ package com.ai.slp.product.constants;
  *
  * Created by jackieliu on 16/4/29.
  */
-public final class StorageConstants {
+public class StorageConstants {
 
     public static final class IPass{
-        public final class McsParams {
+        public static final class McsParams {
             /**
              * 库存所用mds
              */
@@ -57,7 +57,7 @@ public final class StorageConstants {
     public static final class StorageGroup{
 
         public static final String DEFAULT_NAME = "默认库存组";
-        public final class State{
+        public static final class State{
             /**
              * 启用
              */
@@ -83,7 +83,7 @@ public final class StorageConstants {
              */
             public static final String AUTO_DISCARD = "31";
         }
-        public final class isSaleAttr{
+        public static final class isSaleAttr{
             /**
              * 有销售属性
              */
@@ -96,7 +96,7 @@ public final class StorageConstants {
     }
 
     public static final class Storage{
-        public final class State{
+        public static final class State{
             /**
              * 启用
              */
@@ -125,7 +125,7 @@ public final class StorageConstants {
     }
 
     public static final class SkuStorage{
-        public final class State{
+        public static final class State{
             /**
              * 启用
              */

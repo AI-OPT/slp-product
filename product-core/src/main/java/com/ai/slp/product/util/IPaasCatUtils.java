@@ -11,6 +11,9 @@ import com.ai.slp.product.constants.ProductCatConstants;
  */
 public class IPaasCatUtils {
 
+    private IPaasCatUtils() {
+    }
+
     /**
      * 缓存key分割符
      */

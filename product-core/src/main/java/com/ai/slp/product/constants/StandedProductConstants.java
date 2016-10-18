@@ -4,7 +4,7 @@ package com.ai.slp.product.constants;
  * 标准品固定值
  * Created by jackieliu on 16/4/27.
  */
-public final class StandedProductConstants {
+public class StandedProductConstants {
     /**
      * 标准品状态,可用
      */

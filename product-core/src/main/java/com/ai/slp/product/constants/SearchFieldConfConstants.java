@@ -3,7 +3,7 @@ package com.ai.slp.product.constants;
 /**
  * Created by xin on 16-5-25.
  */
-public final class SearchFieldConfConstants {
+public class SearchFieldConfConstants {
     public static final String SALE_AREA = "provcode";
     public static final String USER_AUTHORITY = "audiencecode";
     public static final String USER_ID = "userid";

@@ -6,6 +6,9 @@ import com.ai.slp.product.api.exproduct.param.QueryProductRequest;
 import com.ai.slp.product.constants.ProductExceptCode;
 
 public final class ExProductValidata {
+    private ExProductValidata() {
+    }
+
     public static void validateSearch(QueryProductRequest request) throws BusinessException {
         if (request == null) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,

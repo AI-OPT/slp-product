@@ -6,6 +6,8 @@ import org.apache.commons.lang.StringUtils;
  * Created by jackieliu on 16/7/22.
  */
 public class CharUtils {
+    private CharUtils() {
+    }
 
     /**
      * 将字母转换为ascii编码

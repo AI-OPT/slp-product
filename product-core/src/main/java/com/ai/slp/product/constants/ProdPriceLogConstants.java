@@ -8,9 +8,9 @@ package com.ai.slp.product.constants;
  * 
  * @author lipeng16
  */
-public final class ProdPriceLogConstants {
+public class ProdPriceLogConstants {
 	public static final class ProdPriceLog{
-		public final class ObjType{
+		public static final class ObjType{
 			/**
 			 * SP:供应商品
 			 */

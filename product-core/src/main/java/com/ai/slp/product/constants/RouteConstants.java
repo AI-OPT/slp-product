@@ -4,9 +4,9 @@ package com.ai.slp.product.constants;
  * 路由相关常量
  * Created by jackieliu on 16/5/25.
  */
-public final class RouteConstants {
+public class RouteConstants {
     public static final class RouteGroup{
-        public final class State{
+        public static final class State{
             /**
              * 新增
              */

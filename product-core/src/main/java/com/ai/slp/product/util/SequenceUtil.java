@@ -4,6 +4,8 @@ package com.ai.slp.product.util;
 import com.ai.opt.sdk.components.sequence.util.SeqUtil;
 
 public final class SequenceUtil {
+    private SequenceUtil() {
+    }
 
     /**
      * 属性定义标识序列

@@ -4,7 +4,7 @@ package com.ai.slp.product.constants;
  * ipaas平台常亮
  * Created by jackieliu on 16/7/21.
  */
-public final class IPaasConstants {
+public class IPaasConstants {
     /**
      * 缓存相关参数
      */

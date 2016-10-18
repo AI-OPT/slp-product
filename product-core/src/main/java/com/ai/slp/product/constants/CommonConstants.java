@@ -4,7 +4,7 @@ package com.ai.slp.product.constants;
  * 通用状态值
  * Created by jackieliu on 16/5/1.
  */
-public final class CommonConstants {
+public class CommonConstants {
     /**
      * 有效
      */

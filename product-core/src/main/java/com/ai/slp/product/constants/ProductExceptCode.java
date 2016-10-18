@@ -1,9 +1,6 @@
 package com.ai.slp.product.constants;
 
-public final class ProductExceptCode {
-    private ProductExceptCode() {
-
-    }
+public class ProductExceptCode {
 
     public final static class ErrorCode {
         private ErrorCode() {

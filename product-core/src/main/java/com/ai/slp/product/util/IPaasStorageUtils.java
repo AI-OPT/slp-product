@@ -10,6 +10,8 @@ import com.ai.slp.product.constants.StorageConstants;
  * Created by jackieliu on 16/5/25.
  */
 public final class IPaasStorageUtils {
+    private IPaasStorageUtils() {
+    }
 
     /**
      * 缓存key分割符

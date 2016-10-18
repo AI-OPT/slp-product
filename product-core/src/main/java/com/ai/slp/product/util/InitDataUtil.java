@@ -8,6 +8,9 @@ import com.ai.slp.product.constants.ProductHomeConstants;
 
 public class InitDataUtil {
 
+    private InitDataUtil() {
+    }
+
     public static List<ProductAttrInfo> getArea() {
         // 地区
         List<ProductAttrInfo> areas = new ArrayList<ProductAttrInfo>();

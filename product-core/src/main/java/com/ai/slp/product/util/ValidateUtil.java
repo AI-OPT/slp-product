@@ -7,6 +7,8 @@ import com.ai.slp.product.api.webfront.param.ProductQueryRequest;
 import com.ai.slp.product.constants.ProductExceptCode;
 
 public final class ValidateUtil {
+    private ValidateUtil() {
+    }
 
     public static void validateHomeProduct(ProductHomeRequest request) throws BusinessException {
         if (request == null) {

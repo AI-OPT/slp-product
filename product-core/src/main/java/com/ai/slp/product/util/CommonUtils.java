@@ -1,17 +1,20 @@
 package com.ai.slp.product.util;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * 通用工具类
  * Created by jackieliu on 16/5/2.
  */
 public class CommonUtils {
+    private CommonUtils() {
+    }
 
     /**
      * 检查租户id是否为空

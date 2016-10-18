@@ -5,7 +5,7 @@ package com.ai.slp.product.constants;
  *
  * Created by jackieliu on 16/5/1.
  */
-public final class ProductCatConstants {
+public class ProductCatConstants {
 
     public static final class McsParam{
         /**
@@ -27,7 +27,7 @@ public final class ProductCatConstants {
     }
 
     public static final class ProductCat{
-        public final class IsChild{
+        public static final class IsChild{
             /**
              * 有子分类
              */
@@ -39,7 +39,7 @@ public final class ProductCatConstants {
             public static final String NO_CHILD = "N";
         }
 
-        public final class ParentProductCatId {
+        public static final class ParentProductCatId {
             /**
              * 根类目标识
              */
@@ -48,7 +48,7 @@ public final class ProductCatConstants {
     }
 
     public static final class ProductCatAttr{
-        public final class AttrType{
+        public static final class AttrType{
             /**
              * 关键属性类型
              */
@@ -62,7 +62,7 @@ public final class ProductCatConstants {
              */
             public static final String ATTR_TYPE_NONKEY = "3";
         }
-        public final class IsPicture{
+        public static final class IsPicture{
             public static final String YES = "Y";
             public static final String NO = "N";
         }

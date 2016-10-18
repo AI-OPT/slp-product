@@ -3,11 +3,11 @@ package com.ai.slp.product.constants;
 /**
  * Created by jackieliu on 16/5/5.
  */
-public final class ProductConstants {
+public class ProductConstants {
 
     public static final class Product {
 
-        public final class IsSaleAttr {
+        public static final class IsSaleAttr {
             /**
              * 具有销售属性
              */
@@ -18,7 +18,7 @@ public final class ProductConstants {
             public static final String NO = "N";
         }
 
-        public final class ActiveType {
+        public static final class ActiveType {
             /**
              * 固定有效期类型
              */
@@ -30,7 +30,7 @@ public final class ProductConstants {
             public static final String CHANGE = "2";
         }
 
-        public final class UpShelfType {
+        public static final class UpShelfType {
             /**
              * 立即上架
              */
@@ -51,7 +51,7 @@ public final class ProductConstants {
             public static final String PRE_SALE = "4";
         }
 
-        public final class State{
+        public static final class State{
             /**
              * 新增状态
              */
@@ -94,7 +94,7 @@ public final class ProductConstants {
             public static final String DISCARD = "7";
         }
 
-        public final class BasicOrgId {
+        public static final class BasicOrgId {
             /**
              * 中国移动
              */
@@ -109,17 +109,17 @@ public final class ProductConstants {
             public static final String TELECOM = "11";
         }
 
-        public final class IsSaleNationwide{
+        public static final class IsSaleNationwide{
             public static final String YES = "Y";
             public static final String NO = "N";
         }
 
-        public final class RechargeType{
+        public static final class RechargeType{
             public static final String DIRECT = "D";
             public static final String CARD = "C";
         }
 
-        public final class auditStatus{
+        public static final class auditStatus{
             /**
              * 通过
              */
@@ -133,7 +133,7 @@ public final class ProductConstants {
 
     public static final class ProdSkuAttr{
 
-        public final class State {
+        public static final class State {
             /**
              * 有效状态
              */
@@ -147,7 +147,7 @@ public final class ProductConstants {
 
     public static final class ProdSku{
 
-        public final class IsSaleAttr {
+        public static final class IsSaleAttr {
             /**
              * 具有销售属性
              */
@@ -158,7 +158,7 @@ public final class ProductConstants {
             public static final String NO = "N";
         }
 
-        public final class SaleAttrs{
+        public static final class SaleAttrs{
             /**
              * 属性串中属性之间分隔符
              */
@@ -169,7 +169,7 @@ public final class ProductConstants {
             public static final String ATTRVAL_SPLIT = ":";
         }
 
-        public final class State {
+        public static final class State {
             /**
              * 有效状态
              */
@@ -182,7 +182,7 @@ public final class ProductConstants {
     }
 
     public static final class ProdPicture{
-        public final class PicType{
+        public static final class PicType{
             /**
              * 商品预览图
              */
@@ -192,7 +192,7 @@ public final class ProductConstants {
              */
             public static final String ATTR = "A";
         }
-        public final class IsMainPic{
+        public static final class IsMainPic{
             /**
              * 是
              */
@@ -206,7 +206,7 @@ public final class ProductConstants {
     }
 
     public static final class ProdAttr{
-        public final class State {
+        public static final class State {
             /**
              * 有效状态
              */
@@ -219,7 +219,7 @@ public final class ProductConstants {
     }
 
     public static final class ProdAudiences{
-        public final class userType{
+        public static final class userType{
             /**
              * 个人
              */
@@ -238,7 +238,7 @@ public final class ProductConstants {
             public static final String SUPPLIER = "13";
         }
 
-        public final class userId{
+        public static final class userId{
             /**
              * 全部不可见
              */
@@ -259,7 +259,7 @@ public final class ProductConstants {
     }
 
     public static final class ProdStatusLog{
-        public final class PriorityNumber{
+        public static final class PriorityNumber{
             /*
                 优先
              */

@@ -6,6 +6,9 @@ import java.util.List;
 import com.ai.slp.product.api.webfront.param.ProductImage;
 
 public class ConvertImageUtil {
+    private ConvertImageUtil() {
+    }
+
     /**
      * 转换商品图片对象
      */
