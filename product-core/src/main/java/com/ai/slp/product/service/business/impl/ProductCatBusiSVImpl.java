@@ -453,6 +453,7 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
                 //未知类型
                 default:
                     logger.warn("未知更新类型:\r\n"+updateParam.toString());
+                    break;
             }
 
         }
