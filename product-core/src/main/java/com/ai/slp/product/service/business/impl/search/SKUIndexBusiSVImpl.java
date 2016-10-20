@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.impl.search;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -65,7 +67,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
      */
     @Override
     @Transactional
-    public boolean updateSKUIndex(String productId) {
+    public boolean updateSKUIndex(String productId,long upTime) {
         try {
             List<ProdSkuInfoSes> skuInfoSesList =prodSkuAtomSV.queryOfProdForSearch(productId);
             if (CollectionUtil.isEmpty(skuInfoSesList)){
@@ -130,7 +132,8 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
                     prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid());
             SKUInfo skuInfo = new SKUInfo();
             BeanUtils.copyProperties(skuInfo,prodSkuInfo);
-            skuInfo.setUptime(prodSkuInfo.getProdUpTime().getTime());
+            Timestamp upTime = prodSkuInfo.getProdUpTime();
+            skuInfo.setUptime(upTime==null? DateUtil.getCurrentTimeMillis():upTime.getTime());
             //类目
             skuInfo.setCategoryinfos(new ArrayList<CategoryInfo>());
             fetchCategory(skuInfo,prodSkuInfo.getProductcategoryid());

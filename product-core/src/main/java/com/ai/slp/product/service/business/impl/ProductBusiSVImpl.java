@@ -458,7 +458,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //添加日志
         updateProdAndStatusLog(product);
         //将商品添加至搜索引擎
-        skuIndexManage.updateSKUIndex(product.getProdId());
+        skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
     }
 
     /**
@@ -670,8 +670,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         //添加日志
         updateProdAndStatusLog(product);
-        //添加搜索引擎
-        skuIndexManage.updateSKUIndex(product.getProdId());
+        if (userNum>0) {
+            //添加搜索引擎
+            skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
+        }
     }
 
     /**

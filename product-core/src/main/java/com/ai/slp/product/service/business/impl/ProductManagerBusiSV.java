@@ -225,7 +225,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                 productBusiSV.changeToInSaleFromAudit(product,productCheckParam.getOperId());
                 //将商品添加至搜索引擎
                 if(ProductConstants.Product.State.IN_SALE.equals(product.getState())){
-                	skuIndexManage.updateSKUIndex(prodId);
+                	skuIndexManage.updateSKUIndex(prodId,product.getUpTime().getTime());
                 }
             }else {
                 product.setState(ProductConstants.Product.State.IN_STORE);

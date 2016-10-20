@@ -7,7 +7,7 @@ import com.ai.slp.product.search.bo.SKUInfo;
 
 public interface ISKUIndexBusiSV {
 
-    public boolean updateSKUIndex(String productId);
+    public boolean updateSKUIndex(String productId,long upTime);
 
     public boolean deleteSKUIndexBySKUId(String skuId);
 
