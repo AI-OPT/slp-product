@@ -389,7 +389,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToInSale(String tenantId,String supplierId, String prodId, Long operId) {
+        logger.info("start changeToInSale");
         Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
+        logger.info("query product");
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
@@ -405,6 +407,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToInSale(Product product, Long operId) {
+        logger.info("start changeToInSale product");
         String tenantId = product.getTenantId();
         //查询标准品是否为"可使用"状态
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getStandedProdId());
@@ -457,8 +460,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         //添加日志
         updateProdAndStatusLog(product);
+        logger.info("update product is finish");
         //将商品添加至搜索引擎
         skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
+        logger.info("update ses is finish");
     }
 
     /**

@@ -1,5 +1,8 @@
 package com.ai.slp.product.api.product.impl;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +24,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 @Service(validation = "true")
 @Component
 public class IProductManagerSVImpl implements IProductManagerSV {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IProductManagerSVImpl.class);
     @Autowired
     IProductManagerBusiSV productManagerBusiSV;
     @Autowired
@@ -141,8 +145,10 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
+        LOGGER.info("start changeToInSale");
         CommonUtils.checkTenantId(query.getTenantId());
         productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
+        LOGGER.info("end changeToInSale");
         return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
     }
 
