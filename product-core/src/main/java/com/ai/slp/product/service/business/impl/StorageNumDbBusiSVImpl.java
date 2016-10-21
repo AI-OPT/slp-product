@@ -317,22 +317,4 @@ public class StorageNumDbBusiSVImpl {
         logger.info("===设置相关缓存的指定失效时间(结束)");
     }
 
-    /**
-     * 查询商品当前使用且有效(非促销)优先级
-     * 有效:库存组不为废弃,优先级可用量大于零
-     *
-     * @param tenantId
-     * @param groupId
-     * @return null:库存组不存在/停用/废弃.
-     */
-    private Short queryPriorityNumOfGroup(String tenantId, String groupId) {
-        ICacheClient cacheClient = IPaasStorageUtils.getClient();
-        //获取库存组的cacheKey
-        String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
-        //库存组状态
-//        String status = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE);
-        //使用当前优先级
-        String priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
-        return new Short(priority);
-    }
 }

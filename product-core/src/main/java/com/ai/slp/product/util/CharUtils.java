@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Created by jackieliu on 16/7/22.
  */
-public class CharUtils {
+public final class CharUtils {
     private CharUtils() {
     }
 

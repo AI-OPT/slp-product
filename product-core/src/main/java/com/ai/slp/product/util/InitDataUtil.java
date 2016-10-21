@@ -6,7 +6,7 @@ import java.util.List;
 import com.ai.slp.product.api.webfront.param.ProductAttrInfo;
 import com.ai.slp.product.constants.ProductHomeConstants;
 
-public class InitDataUtil {
+public final class InitDataUtil {
 
     private InitDataUtil() {
     }

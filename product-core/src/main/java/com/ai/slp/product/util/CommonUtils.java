@@ -12,7 +12,7 @@ import com.ai.slp.product.constants.ErrorCodeConstants;
  * 通用工具类
  * Created by jackieliu on 16/5/2.
  */
-public class CommonUtils {
+public final class CommonUtils {
     private CommonUtils() {
     }
 

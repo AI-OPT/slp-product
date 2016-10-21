@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.ai.slp.product.api.webfront.param.ProductImage;
 
-public class ConvertImageUtil {
+public final class ConvertImageUtil {
     private ConvertImageUtil() {
     }
 

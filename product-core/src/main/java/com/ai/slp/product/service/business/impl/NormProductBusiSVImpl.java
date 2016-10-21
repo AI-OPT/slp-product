@@ -732,29 +732,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	}
 
 	/**
-	 * 查询类目属性值的顺序
-	 *
-	 * @param catId
-	 * @param attrId
-	 * @param valId
-	 * @return
-	 */
-	private Short queryValInfoSerialNum(String tenantId, String catId, Long attrId, String valId) {
-		if (StringUtils.isBlank(valId)){
-			return 0;
-		}
-		// 根据类目和属性查询关系信息
-		ProdCatAttr prodCatAttr = prodCatAttrAtomSV.queryByCatIdAndTypeAndAttrId(tenantId, catId, attrId, null);
-		if (prodCatAttr == null){
-			return 0;
-		}
-		// 根据关系和属性值查询属性值信息
-		ProdCatAttrValue attrValue = prodCatAttrValAtomSV.queryByCatAndCatAttrId(tenantId, prodCatAttr.getCatAttrId(),
-				valId);
-		return attrValue == null ? 0 : attrValue.getSerialNumber();
-	}
-
-	/**
 	 * 分页查询标准品及数据信息-添加商场商品销售价页面
 	 */
 	@Override

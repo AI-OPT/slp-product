@@ -1,5 +1,8 @@
 package com.ai.slp.product.search.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.paas.ipaas.search.vo.SearchOption.SearchLogic;
@@ -7,13 +10,10 @@ import com.ai.paas.ipaas.search.vo.SearchOption.SearchType;
 import com.ai.paas.ipaas.search.vo.Sort;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by xin on 16-5-25.
  */
-public class ProductSearchCriteria {
+public final class ProductSearchCriteria {
 
     private List<SearchCriteria> searchfieldVos;
     private List<Sort> sortFields = new ArrayList<Sort>();

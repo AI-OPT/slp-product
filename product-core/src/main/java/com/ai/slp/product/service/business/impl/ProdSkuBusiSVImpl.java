@@ -579,26 +579,6 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	}
 
 	/**
-	 * 添加指定SKU属性值
-	 */
-	private void addSkuAttrs(ProdSku prodSku) {
-		String saleAttrs = prodSku.getSaleAttrs();
-		String[] attrs = saleAttrs.split(ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT);
-		for (int i = 0; i < attrs.length; i++) {
-			String[] attrVal = attrs[i].split(ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT);
-			ProdSkuAttr prodSkuAttr = new ProdSkuAttr();
-			prodSkuAttr.setTenantId(prodSku.getTenantId());
-			prodSkuAttr.setProdId(prodSku.getProdId());
-			prodSkuAttr.setSkuId(prodSku.getSkuId());
-			prodSkuAttr.setAttrId(Long.parseLong(attrVal[0]));
-			prodSkuAttr.setAttrvalueDefId(attrVal[1]);
-			prodSkuAttr.setState(ProductConstants.ProdSkuAttr.State.ACTIVE);
-			prodSkuAttr.setOperId(prodSku.getOperId());
-			prodSkuAttrAtomSV.createAttr(prodSkuAttr);
-		}
-	}
-
-	/**
 	 * 根据SkuId或属性串查询SKU信息
 	 * 
 	 * @param tenantId

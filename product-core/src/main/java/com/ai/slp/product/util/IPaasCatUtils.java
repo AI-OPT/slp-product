@@ -9,7 +9,7 @@ import com.ai.slp.product.constants.ProductCatConstants;
  * ipaas中类目相关工具类
  * Created by jackieliu on 16/7/21.
  */
-public class IPaasCatUtils {
+public final class IPaasCatUtils {
 
     private IPaasCatUtils() {
     }

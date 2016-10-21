@@ -1,17 +1,17 @@
 package com.ai.slp.product.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 时间格式化工具
  */
-public class DateUtils {
+public final class DateUtils {
 	private  static final Logger logger = LoggerFactory.getLogger(DateUtils.class);
 	private DateUtils(){}
 

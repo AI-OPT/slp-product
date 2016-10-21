@@ -1,5 +1,8 @@
 package com.ai.slp.product.exsearch.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.paas.ipaas.search.vo.SearchOption.SearchLogic;
@@ -9,9 +12,6 @@ import com.ai.paas.ipaas.search.vo.Sort.SortOrder;
 import com.ai.slp.product.constants.ExproductConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 
  * Date: 2016年6月29日 <br>
@@ -19,7 +19,7 @@ import java.util.List;
  * 
  * @author zhanglh
  */
-public class ExProductSearchCriteria {
+public final class ExProductSearchCriteria {
 
     private List<SearchCriteria> searchfieldVos;
     private List<Sort> sortFields = new ArrayList<Sort>();
