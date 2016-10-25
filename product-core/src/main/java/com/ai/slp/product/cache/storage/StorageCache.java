@@ -1,17 +1,18 @@
 package com.ai.slp.product.cache.storage;
 
-import com.ai.opt.sdk.cache.base.AbstractCache;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
-import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.ai.opt.sdk.cache.base.AbstractCache;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 
 /**
  * 刷新库存相关缓存
@@ -24,7 +25,7 @@ public class StorageCache extends AbstractCache {
     IStorageGroupBusiSV groupBusiSV;
     @Autowired
     IStorageGroupAtomSV groupAtomSV;
-    private static final int PAGE_SIZE = 200;
+    private static final int PAGE_SIZE = 1000;
 
     @Override
     public void write() throws Exception {
