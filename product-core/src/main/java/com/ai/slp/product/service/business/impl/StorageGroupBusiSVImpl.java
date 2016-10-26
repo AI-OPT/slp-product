@@ -103,9 +103,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			logger.warn("未找到对应标准品,租户ID:{},标准品标识:{}", tenantId, standedProdId);
 			throw new BusinessException("", "未找到对应标准品信息,租户id:" + tenantId + ",标准品标识:" + standedProdId);
 		}
+		atomStart = System.currentTimeMillis();
+		logger.info("===== 开始 prodCatAttrAtomSV.queryAttrOfCatByIdAndType 标准品属性查询原子,当前时间戳:{}",atomStart);
 		//通过标准品查询类目属性类型为销售属性的属性
 		List<ProdCatAttr> prodCatAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
 				tenantId,standedProduct.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+		atomEnd = System.currentTimeMillis();
+		logger.info("===== 结束 prodCatAttrAtomSV.queryAttrOfCatByIdAndType 标准品属性查询原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 		//通过是否查询到相关属性来设定库存组是否有销售属性
 		StorageGroup group = new StorageGroup();
 		BeanUtils.copyProperties(group, storageGroup);
@@ -118,14 +122,24 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		// 添加库存组信息,状态默认为停用
 		group.setState(StorageConstants.StorageGroup.State.STOP);
 		// 添加库存组日志
+		atomStart = System.currentTimeMillis();
+		logger.info("===== 开始 storageGroupAtomSV.installGroup 添加库存组原子,当前时间戳:{}",atomStart);
 		int installNum = storageGroupAtomSV.installGroup(group);
+		atomEnd = System.currentTimeMillis();
+		logger.info("===== 结束 storageGroupAtomSV.installGroup 添加库存组原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 		if (installNum > 0) {
 			StorageGroupLog groupLog = new StorageGroupLog();
 			BeanUtils.copyProperties(groupLog, group);
+			atomStart = System.currentTimeMillis();
+			logger.info("===== 开始 storageGroupLogAtomSV.install 添加库存组日志原子,当前时间戳:{}",atomStart);
 			storageGroupLogAtomSV.install(groupLog);
+			atomEnd = System.currentTimeMillis();
+			logger.info("===== 结束 storageGroupLogAtomSV.install 添加库存组日志原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 		}
 		// 添加商品
 		productBusiSV.addProductWithStorageGroup(group, storageGroup.getCreateId());
+		long endTime = System.currentTimeMillis();
+		logger.info("===== 结束 StorageGroupBusiSVImpl.addGroup 库存组添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
 		return group.getStorageGroupId();
 	}
 

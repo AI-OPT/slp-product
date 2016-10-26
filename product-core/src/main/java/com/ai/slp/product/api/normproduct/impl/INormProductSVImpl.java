@@ -97,7 +97,7 @@ public class INormProductSVImpl implements INormProductSV {
 		CommonUtils.checkTenantId(tenantId);
         String normProdId = normProductBusiSV.installNormProdAndPtoGroup(request);
         long endTime = System.currentTimeMillis();
-        LOGGER.info("===== 结束 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:{}",endTime,(endTime-startTime));
+        LOGGER.info("===== 结束 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
         if(StringUtil.isBlank(normProdId)){
         	 BaseResponse baseResponse = new BaseResponse();
              baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SYSTEM_ERROR,"添加失败！"));

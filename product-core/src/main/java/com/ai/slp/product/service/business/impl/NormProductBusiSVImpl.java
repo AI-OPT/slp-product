@@ -106,10 +106,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			StandedProductLog productLog = new StandedProductLog();
 			BeanUtils.copyProperties(productLog, standedProduct);
 			atomStart = System.currentTimeMillis();
-			logger.info("===== 开始 standedProductLogAtomSV.insert 商品日志原子操作,当前时间戳:{}",atomStart);
+			logger.info("===== 开始 standedProductLogAtomSV.insert 商品添加日志原子操作,当前时间戳:{}",atomStart);
 			standedProductLogAtomSV.insert(productLog);
 			atomEnd = System.currentTimeMillis();
-			logger.info("===== 结束 standedProductLogAtomSV.insert 商品日志原子操作,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
+			logger.info("===== 结束 standedProductLogAtomSV.insert 商品添加日志原子操作,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 		}
 		// 添加标准品属性值
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
