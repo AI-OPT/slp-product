@@ -15,7 +15,6 @@ import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.*;
-import com.ai.slp.product.api.product.impl.IProductManagerSVImpl;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.util.CommonUtils;
@@ -46,6 +45,8 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public PageInfoResponse<NormProdResponse> queryNormProduct(NormProdRequest productRequest) throws BusinessException, SystemException {
+        long startTime = System.nanoTime();
+        LOGGER.info("=====开始INormProductSVImpl.queryNormProduct,商品列表查询,当前时间戳:"+startTime);
         return normProductBusiSV.queryForPage(productRequest);
     }
 
@@ -76,8 +77,12 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public BaseResponse createProductInfo(NormProdSaveRequest request) throws BusinessException, SystemException {
+        long startTime = System.currentTimeMillis();
+        LOGGER.info("=====开始INormProductSVImpl.createProductInfo,商品添加,当前时间戳:"+startTime);
         CommonUtils.checkTenantId(request.getTenantId());
         String normProdId = normProductBusiSV.installNormProd(request);
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("=====结束INormProductSVImpl.createProductInfo,商品添加,当前时间戳:{}",endTime,(endTime-startTime));
         return CommonUtils.genSuccessResponse(normProdId);
     }
     
@@ -86,10 +91,13 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
 	public BaseResponse createProductAndStoGroup(NormProdSaveRequest request) throws BusinessException, SystemException {
-    	LOGGER.info("start createProduct");
+        long startTime = System.currentTimeMillis();
+        LOGGER.info("===== 开始 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:"+startTime);
 		String tenantId = request.getTenantId();
 		CommonUtils.checkTenantId(tenantId);
         String normProdId = normProductBusiSV.installNormProdAndPtoGroup(request);
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("===== 结束 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:{}",endTime,(endTime-startTime));
         if(StringUtil.isBlank(normProdId)){
         	 BaseResponse baseResponse = new BaseResponse();
              baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SYSTEM_ERROR,"添加失败！"));

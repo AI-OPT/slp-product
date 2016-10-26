@@ -88,10 +88,17 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 */
 	@Override
 	public String addGroup(STOStorageGroup storageGroup) {
+		long startTime = System.currentTimeMillis();
+		logger.info("===== 开始 StorageGroupBusiSVImpl.addGroup 库存组添加,当前时间戳:{}",startTime);
 		// 查询标准品是否有销售属性
 		String tenantId = storageGroup.getTenantId();
 		String standedProdId = storageGroup.getStandedProdId();
+		long atomStart = System.currentTimeMillis();
+		long atomEnd ;
+		logger.info("===== 开始 standedProductAtomSV.selectById 标准品查询原子,当前时间戳:{}",atomStart);
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
+		atomEnd = System.currentTimeMillis();
+		logger.info("===== 结束 standedProductAtomSV.selectById 标准品查询原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 		if (standedProduct == null) {
 			logger.warn("未找到对应标准品,租户ID:{},标准品标识:{}", tenantId, standedProdId);
 			throw new BusinessException("", "未找到对应标准品信息,租户id:" + tenantId + ",标准品标识:" + standedProdId);

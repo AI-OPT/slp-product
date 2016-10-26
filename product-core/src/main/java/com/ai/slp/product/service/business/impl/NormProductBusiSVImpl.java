@@ -90,16 +90,26 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	 */
 	@Override
 	public String installNormProd(NormProdSaveRequest normProduct) {
-		logger.info("start installNormProd");
+		long startTime = System.currentTimeMillis();
+		logger.info("===== 开始NormProductBusiSVImpl.installNormProd 商品添加,当前时间戳:{}",startTime);
 		// 添加标准品
 		StandedProduct standedProduct = new StandedProduct();
 		BeanUtils.copyProperties(standedProduct, normProduct);
 		standedProduct.setStandedProductName(normProduct.getProductName());
+		long atomStart = System.currentTimeMillis();
+		long atomEnd;
+		logger.info("===== 开始standedProductAtomSV.installObj 商品添加原子操作,当前时间戳:{}",atomStart);
 		// 添加成功,添加标准品日志
 		if (standedProductAtomSV.installObj(standedProduct) > 0) {
+			atomEnd = System.currentTimeMillis();
+			logger.info("===== 结束standedProductAtomSV.installObj 商品添加原子操作,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 			StandedProductLog productLog = new StandedProductLog();
 			BeanUtils.copyProperties(productLog, standedProduct);
+			atomStart = System.currentTimeMillis();
+			logger.info("===== 开始 standedProductLogAtomSV.insert 商品日志原子操作,当前时间戳:{}",atomStart);
 			standedProductLogAtomSV.insert(productLog);
+			atomEnd = System.currentTimeMillis();
+			logger.info("===== 结束 standedProductLogAtomSV.insert 商品日志原子操作,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 		}
 		// 添加标准品属性值
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
@@ -117,26 +127,35 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			prodAttr.setOperTime(nowTime);
 			prodAttr.setSerialNumber(getProductAttrSerialNo());
 			// 添加成功,添加日志
+			atomStart = System.currentTimeMillis();
+			logger.info("===== 开始 standedProdAttrAtomSV.installObj 商品属性添加原子操作,当前时间戳:{}",atomStart);
 			if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
+				atomEnd = System.currentTimeMillis();
+				logger.info("===== 结束 standedProdAttrAtomSV.installObj 商品属性添加原子操作,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 				StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
 				BeanUtils.copyProperties(prodAttrLog, prodAttr);
+				atomStart = System.currentTimeMillis();
+				logger.info("===== 开始 standedProdAttrLogAtomSV.installObj 商品属性日志添加原子操作,当前时间戳:{}",atomStart);
 				standedProdAttrLogAtomSV.installObj(prodAttrLog);
+				atomEnd = System.currentTimeMillis();
+				logger.info("===== 结束 standedProdAttrLogAtomSV.installObj 商品属性日志添加原子操作,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 			}
 		}
-		logger.info("end installNormProd");
+		long endTime = System.currentTimeMillis();
+		logger.info("===== 结束 NormProductBusiSVImpl.installNormProd 商品添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
 		return standedProduct.getStandedProdId();
 	}
 
 	@Override
 	public String installNormProdAndPtoGroup(NormProdSaveRequest normProduct) {
-		logger.info("start installNormProd");
+		long startTime = System.currentTimeMillis();
+		logger.info("===== 开始 NormProductBusiSVImpl.installNormProdAndPtoGroup 商品(级联)添加,当前时间戳:{}",startTime);
 		String tenantId = normProduct.getTenantId();
 		// 添加标准品
 		String normProdId = installNormProd(normProduct);
 		if (StringUtil.isBlank(normProdId)) {
 			return null;
 		}
-		logger.info("end installNormProd");
 		// 自动添加一个库存组
 		STOStorageGroup storageGroup = new STOStorageGroup();
 		storageGroup.setTenantId(tenantId);
@@ -149,14 +168,15 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		if (StringUtil.isBlank(groupId)) {
 			return null;
 		}
-		logger.info("end addGroup");
 		// 添加SKU
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
 		int createCount = prodSkuBusiSV.createSkuOfProduct(tenantId, groupId, attrValList, operId);
 		if (createCount == 0) {
 			return null;
 		}
-		logger.info("end createSku");
+		long endTime = System.currentTimeMillis();
+		logger.info("===== 结束 NormProductBusiSVImpl.installNormProdAndPtoGroup 商品(级联)添加,当前时间戳:{},用时:{}"
+				,endTime,(endTime-startTime));
 		return normProdId;
 	}
 
@@ -445,13 +465,18 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 	@Override
 	public PageInfoResponse<NormProdResponse> queryForPage(NormProdRequest productRequest) {
-		logger.info("start queryNormForPage");
+		long startTime = System.currentTimeMillis();
+		logger.info("=====开始商品查询 NormProductBusiSVImpl.queryNormForPage, 时间戳:{}",startTime);
 		StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
 		BeanUtils.copyProperties(pageQueryVo, productRequest);
 		pageQueryVo.setProductId(productRequest.getStandedProdId());
 		pageQueryVo.setProductName(productRequest.getStandedProductName());
+		long atomStart = System.currentTimeMillis();
+		logger.info("===== 开始商品查询原子服务:standedProductAtomSV.queryForPage, 时间戳:{}",atomStart);
 		// 查询结果
 		PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
+		long atomEnd = System.currentTimeMillis();
+		logger.info("===== 结束商品查询原子服务:standedProductAtomSV.queryForPage, 当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 		// 接口输出接口
 		PageInfoResponse<NormProdResponse> normProdPageInfo = new PageInfoResponse<NormProdResponse>();
 		BeanUtils.copyProperties(normProdPageInfo, productPageInfo);
@@ -459,11 +484,16 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		List<StandedProduct> productList = productPageInfo.getResult();
 		List<NormProdResponse> normProductList = new ArrayList<NormProdResponse>();
 		normProdPageInfo.setResult(normProductList);
+
 		for (StandedProduct standedProduct : productList) {
 			NormProdResponse normProduct = new NormProdResponse();
 			BeanUtils.copyProperties(normProduct, standedProduct);
+			atomStart = System.currentTimeMillis();
+			logger.info("===== 开始商品类目查询原子服务:catDefAtomSV.selectAllStateById, 类目ID:{},时间戳:{}",standedProduct.getProductCatId(),atomStart);
 			ProductCat productCat = catDefAtomSV.selectAllStateById(standedProduct.getTenantId(),
 					standedProduct.getProductCatId());
+			atomEnd = System.currentTimeMillis();
+			logger.info("===== 结束商品类目查询原子服务:catDefAtomSV.selectAllStateById, 当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
 			if (productCat != null){
 				normProduct.setCatName(productCat.getProductCatName());
 			}
@@ -472,7 +502,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			normProduct.setProductName(standedProduct.getStandedProductName());
 			normProductList.add(normProduct);
 		}
-		logger.info("queryNormForPage is finnish");
+		long endTime = System.currentTimeMillis();
+		logger.info("=====结束商品查询 NormProductBusiSVImpl.queryNormForPage, 当前时间戳:{},用时:{}",endTime,(endTime-startTime));
 		return normProdPageInfo;
 	}
 
