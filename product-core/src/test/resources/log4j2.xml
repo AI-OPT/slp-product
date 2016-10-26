@@ -46,7 +46,15 @@
         <logger name="java.sql.PreparedStatement" additivity="true">
             <level value="DEBUG"/>
         </logger>
-        <Root level="DEBUG">
+        <logger name="com.ai.slp.product.dao.mapper.attach" level="debug" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="STDOUT"/>
+        </logger>
+        <logger name="com.ai.slp.product.dao.mapper.interfaces" level="debug" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="STDOUT"/>
+        </logger>
+        <Root level="info">
             <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="STDOUT"/>
         </Root>
