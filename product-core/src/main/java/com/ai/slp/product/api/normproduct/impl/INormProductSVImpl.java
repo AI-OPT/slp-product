@@ -1,6 +1,8 @@
 package com.ai.slp.product.api.normproduct.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,7 @@ import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.api.product.impl.IProductManagerSVImpl;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.util.CommonUtils;
@@ -25,6 +28,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 @Service(validation = "true")
 @Component
 public class INormProductSVImpl implements INormProductSV {
+	private static final Logger LOGGER = LoggerFactory.getLogger(INormProductSVImpl.class);
     //标准品处理对象
     @Autowired
     INormProductBusiSV normProductBusiSV;
@@ -82,6 +86,7 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
 	public BaseResponse createProductAndStoGroup(NormProdSaveRequest request) throws BusinessException, SystemException {
+    	LOGGER.info("start createProduct");
 		String tenantId = request.getTenantId();
 		CommonUtils.checkTenantId(tenantId);
         String normProdId = normProductBusiSV.installNormProdAndPtoGroup(request);
@@ -90,6 +95,7 @@ public class INormProductSVImpl implements INormProductSV {
              baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SYSTEM_ERROR,"添加失败！"));
              return baseResponse;
         }else{
+        	LOGGER.info("end createProduct");
         	return CommonUtils.genSuccessResponse(normProdId);
         }
 	}

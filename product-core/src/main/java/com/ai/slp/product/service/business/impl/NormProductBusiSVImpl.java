@@ -90,6 +90,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	 */
 	@Override
 	public String installNormProd(NormProdSaveRequest normProduct) {
+		logger.info("start installNormProd");
 		// 添加标准品
 		StandedProduct standedProduct = new StandedProduct();
 		BeanUtils.copyProperties(standedProduct, normProduct);
@@ -122,17 +123,20 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				standedProdAttrLogAtomSV.installObj(prodAttrLog);
 			}
 		}
+		logger.info("end installNormProd");
 		return standedProduct.getStandedProdId();
 	}
 
 	@Override
 	public String installNormProdAndPtoGroup(NormProdSaveRequest normProduct) {
+		logger.info("start installNormProd");
 		String tenantId = normProduct.getTenantId();
 		// 添加标准品
 		String normProdId = installNormProd(normProduct);
 		if (StringUtil.isBlank(normProdId)) {
 			return null;
 		}
+		logger.info("end installNormProd");
 		// 自动添加一个库存组
 		STOStorageGroup storageGroup = new STOStorageGroup();
 		storageGroup.setTenantId(tenantId);
@@ -145,12 +149,14 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		if (StringUtil.isBlank(groupId)) {
 			return null;
 		}
+		logger.info("end addGroup");
 		// 添加SKU
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
 		int createCount = prodSkuBusiSV.createSkuOfProduct(tenantId, groupId, attrValList, operId);
 		if (createCount == 0) {
 			return null;
 		}
+		logger.info("end createSku");
 		return normProdId;
 	}
 
@@ -439,6 +445,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 	@Override
 	public PageInfoResponse<NormProdResponse> queryForPage(NormProdRequest productRequest) {
+		logger.info("start queryNormForPage");
 		StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
 		BeanUtils.copyProperties(pageQueryVo, productRequest);
 		pageQueryVo.setProductId(productRequest.getStandedProdId());
@@ -465,6 +472,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			normProduct.setProductName(standedProduct.getStandedProductName());
 			normProductList.add(normProduct);
 		}
+		logger.info("queryNormForPage is finnish");
 		return normProdPageInfo;
 	}
 
