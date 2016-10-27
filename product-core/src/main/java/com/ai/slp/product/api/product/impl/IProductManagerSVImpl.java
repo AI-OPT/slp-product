@@ -145,10 +145,12 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
-        LOGGER.info("start changeToInSale");
         CommonUtils.checkTenantId(query.getTenantId());
+        long  inSaleStart= System.currentTimeMillis();
+        LOGGER.info("=====执行productBusiSV.changeToInSale进行上架操作,当前时间戳:" + inSaleStart);
         productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
-        LOGGER.info("end changeToInSale");
+        long inSaleEnd = System.currentTimeMillis();
+        LOGGER.info("=====执行productBusiSV.changeToInSale结束,当前时间戳:" + inSaleEnd + ", 用时:" + (inSaleEnd-inSaleStart) + "毫秒");
         return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
     }
 

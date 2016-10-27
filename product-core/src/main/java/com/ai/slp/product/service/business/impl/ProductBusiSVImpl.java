@@ -419,13 +419,19 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     @Override
     public void changeToInSale(String tenantId,String supplierId, String prodId, Long operId) {
         logger.info("start changeToInSale");
+        long queryStart = System.currentTimeMillis();
+        logger.info("=====执行原子服务productAtomSV.selectByProductId 查询指定的商品,当前时间戳:"+ queryStart );
         Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
-        logger.info("query product");
+        long queryEnd = System.currentTimeMillis();
+        logger.info("=====查询指定商品结束,当前时间戳:" + queryEnd + ",用时:" + (queryEnd - queryStart) + "毫秒");
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
+        long changeStart = System.currentTimeMillis();
+        logger.info("=====执行上架操作,当前时间戳:"+changeStart);
         changeToInSale(product,operId);
-
+        long changeEnd = System.currentTimeMillis();
+        logger.info("=====执行上架操作结束,当前时间戳:" + changeEnd + ",用时:" + (changeEnd-changeStart) + "毫秒" );
     }
 
     /**
@@ -436,7 +442,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToInSale(Product product, Long operId) {
-        logger.info("start changeToInSale product");
+    	long toinSaleStart = System.currentTimeMillis();
+    	logger.info("======对符合条件的商品进行上架处理,当前时间戳:" + toinSaleStart );
         String tenantId = product.getTenantId();
         //查询标准品是否为"可使用"状态
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getStandedProdId());
@@ -489,10 +496,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         //添加日志
         updateProdAndStatusLog(product);
-        logger.info("update product is finish");
+        long toinSaleEnd = System.currentTimeMillis();
+        logger.info("=====对商品上架操作结束,当前时间戳:" + toinSaleEnd + ",用时:" + (toinSaleEnd-toinSaleStart) +"毫秒" );
         //将商品添加至搜索引擎
         skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
-        logger.info("update ses is finish");
     }
 
     /**
