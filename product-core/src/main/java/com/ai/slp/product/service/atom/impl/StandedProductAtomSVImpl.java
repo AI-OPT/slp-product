@@ -81,7 +81,9 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		}
 		// 商品标识
 		if (StringUtils.isNotBlank(request.getProductId())){
-			criteria.andStandedProdIdLike("%" + request.getProductId() + "%");
+			//精确查询
+			criteria.andStandedProdIdEqualTo(request.getProductId());
+			//criteria.andStandedProdIdLike("%" + request.getProductId() + "%");
 		}
 		// 商品名称
 		if (StringUtils.isNotBlank(request.getProductName())){

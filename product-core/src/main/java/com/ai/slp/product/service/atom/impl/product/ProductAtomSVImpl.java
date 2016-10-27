@@ -151,7 +151,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		}
 		//根据标准品ID模糊查询
 		if (StringUtils.isNotBlank(queryReq.getStandedProdId())) {
-			criteria.andStandedProdIdLike("%"+queryReq.getStandedProdId()+"%");
+			//精确查询
+			criteria.andStandedProdIdEqualTo(queryReq.getStandedProdId());
+			//criteria.andStandedProdIdLike("%"+queryReq.getStandedProdId()+"%");
 		}
 		//获取页数和每页条数
 		int pageNo = queryReq.getPageNo();
