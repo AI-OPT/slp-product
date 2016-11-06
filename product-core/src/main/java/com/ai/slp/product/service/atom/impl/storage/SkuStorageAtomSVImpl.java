@@ -199,7 +199,8 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 		params.put("groupId",groupId);
 		params.put("priorityNum",priorityNum);
 		params.put("skuId",skuId);
-		return skuStorageAttachMapper.queryOfPriority(params);
+		//return skuStorageAttachMapper.queryOfPriority(params);
+		return skuStorageAttachMapper.queryAllOfPriority(params);
 	}
 
 	/**

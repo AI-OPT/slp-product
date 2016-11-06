@@ -87,6 +87,20 @@
     </if>
     and s.PRIORITY_NUMBER = #{priorityNum} and s.STORAGE_GROUP_ID = #{groupId}
   </select>
+  
+  <!-- 查询指定优先级下所有的SKU库存 -->
+  <select id="queryAllOfPriority" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select
+    ss.SKU_STORAGE_ID, ss.SKU_ID, ss.STORAGE_ID, ss.SALE_PRICE, ss.TOTAL_NUM, ss.USABLE_NUM, ss.STATE, ss.OPER_ID,
+    ss.OPER_TIME
+    from sku_storage as ss,storage as s
+    WHERE ss.STORAGE_ID = s.STORAGE_ID
+    and s.STATE IN ('1','11','2','21','3','31') and ss.STATE = '1'
+    <if test="skuId != null" >
+      AND ss.SKU_ID = #{skuId}
+    </if>
+    and s.PRIORITY_NUMBER = #{priorityNum} and s.STORAGE_GROUP_ID = #{groupId}
+  </select>
 
   <!-- 查询启用的库存下没有销售价格的SKU库存数量 -->
   <select id="countOfNoPrice" resultType="java.lang.Integer" parameterType="java.lang.String">

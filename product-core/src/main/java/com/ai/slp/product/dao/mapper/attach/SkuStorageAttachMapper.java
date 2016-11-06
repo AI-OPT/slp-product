@@ -19,6 +19,14 @@ public interface SkuStorageAttachMapper {
      * @return
      */
     public List<SkuStorage> queryOfPriority(Map<String,Object> params);
+ 
+    /**
+     * 查询指定优先级下所有的SKU库存
+     *
+     * @param params
+     * @return
+     */
+    public List<SkuStorage> queryAllOfPriority(Map<String,Object> params);
 
     /**
      * 查询库存组下启用库存的SKU库存下没有价格的数量
