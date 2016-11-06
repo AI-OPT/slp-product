@@ -206,9 +206,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		Long operId = salePriceReq.getOperId();
 		for(StoNoSkuSalePrice salePrice:salePriceList){
 			// 库存标识为空,库存对应价格为空,库存销售价小于等于0,均不处理
-			/*if (salePrice.getPriorityNumber()==null
-					|| salePrice.getSalePrice() == null || salePrice.getSalePrice() <= 0) {*/
-			if (salePrice.getPriorityNumber()==null || salePrice.getSalePrice() <= 0) {
+			if (salePrice.getPriorityNumber()==null
+					|| salePrice.getSalePrice() == null || salePrice.getSalePrice() <= 0) {
 				logger.warn("库存标识为空或销售价不大于零,库存组标识[{}],销售价[{}]", salePrice.getGroupId(), salePrice.getPriorityNumber());
 				continue;
 			}
