@@ -1,6 +1,8 @@
 package com.ai.slp.product.api.storage;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -76,5 +78,22 @@ public class StorageTest {
         BaseResponse response = storageSV.chargeStorageGroupStatus(groupStatus);
         System.out.println(response.getResponseHeader().isSuccess());
     }
+    
+    @Test
+    public void updateMultiStorageSalePriceTest(){
+    	StoNoSkuSalePriceReq priceReq = new StoNoSkuSalePriceReq();
+    	priceReq.setTenantId("changhong");
+    	priceReq.setSupplierId("-1");
+    	priceReq.setOperId((long) 1);
+    	List<StoNoSkuSalePrice> salePrice = new ArrayList<>();
+    	StoNoSkuSalePrice skuSalePrice = new StoNoSkuSalePrice();
+    	skuSalePrice.setGroupId("0000000000243");
+    	skuSalePrice.setPriorityNumber((short) 2);
+    	skuSalePrice.setSalePrice((long) 88);
+    	salePrice.add(skuSalePrice);
+    	priceReq.setStorageSalePrice(salePrice);
+    	storageSV.updateMultiStorageSalePrice(priceReq);
+    }
+    
 
 }
