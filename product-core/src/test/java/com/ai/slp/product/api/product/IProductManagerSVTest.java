@@ -51,8 +51,11 @@ public class IProductManagerSVTest {
     @Test
     public void changeToInSaleTest(){
         ProductInfoQuery infoQuery = new ProductInfoQuery();
-        infoQuery.setTenantId("SLP");
-        infoQuery.setProductId("1000000000000093");
+ //       infoQuery.setTenantId("SLP");
+        infoQuery.setTenantId("changhong");
+        infoQuery.setSupplierId("-1");
+//        infoQuery.setProductId("1000000000000093");
+        infoQuery.setProductId("0000000000000286");
         BaseResponse response = productManagerSV.changeToInSale(infoQuery);
         ResponseHeader header = response.getResponseHeader();
         System.out.println(header!=null?header.isSuccess():false);

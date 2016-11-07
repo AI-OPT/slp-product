@@ -95,5 +95,19 @@ public class StorageTest {
     	storageSV.updateMultiStorageSalePrice(priceReq);
     }
     
+    @Test
+    public void chargeStorageStatusTest(){
+    	StorageStatus status = new StorageStatus();
+    	status.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+    	status.setSupplierId("-1");
+    	status.setOperId(1l);
+    	status.setStorageId("000000000000000268");
+    	status.setState("1");
+    	
+//        groupStatus.setState("2");//停用
+//        groupStatus.setState("1");//启用
+        BaseResponse response = storageSV.chargeStorageStatus(status);
+        System.out.println(response.getResponseHeader().isSuccess());
+    }
 
 }
