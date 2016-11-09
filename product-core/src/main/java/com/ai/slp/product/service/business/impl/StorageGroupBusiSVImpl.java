@@ -855,4 +855,77 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 
 	}
 
+	@Override
+	public StorageGroupRestwo queryGroupInfoAllByGroupId(String tenantId, String supplierId, String groupId) {
+		StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,supplierId, groupId);
+		if (storageGroup == null) {
+			logger.warn("未找到对应的标准品信息,租户ID:" + tenantId + ",库存组标识:" + groupId);
+			throw new BusinessException("", "未找到对应的标准品信息,租户ID:" + tenantId + ",库存组标识:" + groupId);
+		}
+		//查看标准品
+		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, storageGroup.getStandedProdId());
+		if (standedProduct == null) {
+			logger.warn("未找到对应的标准品信息,租户ID:" + tenantId + ",标准品标识:" + storageGroup.getStandedProdId());
+			throw new BusinessException("",
+					"未找到对应的标准品信息,租户ID:" + tenantId + ",标准品标识:" + storageGroup.getStandedProdId());
+		}
+		return genStorageGroupInfoAll(storageGroup);
+	}
+
+	private StorageGroupRestwo genStorageGroupInfoAll(StorageGroup group) {
+		StorageGroupRestwo groupInfo = new StorageGroupRestwo();
+		BeanUtils.copyProperties(groupInfo, group);
+		// 填充库存组信息
+		// 查询对应商品信息
+		Product product = productAtomSV.selectByGroupId(group.getTenantId(), group.getStorageGroupId());
+		if (product != null){
+			groupInfo.setProdId(product.getProdId());
+		}
+		// 库存总量
+		Map<Short, List<StorageRes>> storageMap = new HashMap<>();
+		// ====填充库存集合信息
+		// 当前启用的优先级
+		Short activePriority = null;
+		// 库存组库存总量
+		long storageTotal = 0;
+		// 查询库存组的库存集合
+		List<Storage> storageList = storageAtomSV.queryOfGroup(group.getTenantId(), group.getStorageGroupId());
+		groupInfo.setStorageNum(storageList.size());
+		for (Storage storage : storageList) {
+			List<StorageRes> stoStorageList = storageMap.get(storage.getPriorityNumber());
+			if (stoStorageList == null) {
+				stoStorageList = new ArrayList<>();
+				storageMap.put(storage.getPriorityNumber(), stoStorageList);
+			}
+			StorageRes stoStorage = new StorageRes();
+			BeanUtils.copyProperties(stoStorage, storage);
+			stoStorageList.add(stoStorage);
+			// 如果库存为启用状态
+			if (StorageConstants.StorageGroup.State.ACTIVE.equals(storage.getState())
+					|| StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storage.getState()))
+			{
+				// 若为设置启用优先级,则设置第一个启用库存的优先级为启用优先级
+				if (activePriority == null){
+					activePriority = storage.getPriorityNumber();
+				}
+				// 若库存优先级与启用优先级不一致,则直接跳过
+				if (activePriority != storage.getPriorityNumber()){
+					continue;
+				}
+				// 添加库存总量
+				storageTotal += storage.getTotalNum();
+			}
+			//若没有销售属性,则填充销售价
+			if(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR.equals(group.getIsSaleAttr())){
+				//查询库存对应SKU库存的信息.
+				List<SkuStorage> skuStoList = skuStorageAtomSV.queryByStorageId(storage.getStorageId(),true);
+				if (!CollectionUtil.isEmpty(skuStoList)){
+					stoStorage.setSalePrice(skuStoList.get(0).getSalePrice());
+				}
+			}
+		}
+		groupInfo.setStorageTotal(storageTotal);
+		groupInfo.setStorageList(storageMap);
+		return groupInfo;
+	}
 }

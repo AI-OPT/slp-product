@@ -142,4 +142,13 @@ public interface IStorageGroupBusiSV {
      * @param operId
      */
     public void changeRouteGroupId(String tenantId,String groupId,String routeGroupId,Long operId);
+    
+    /**
+     * 查询单个库存组的信息
+     *
+     * @param tenantId
+     * @param groupId
+     * @return
+     */
+    public StorageGroupRestwo queryGroupInfoAllByGroupId(String tenantId,String supplierId, String groupId);
 }

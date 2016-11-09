@@ -385,5 +385,23 @@ public interface IStorageSV {
     @Path("/querySkuPriceByGroupPn")
     public BaseMapResponse<String,Long> querySkuPriceByGroupPn(SkuPriceOfGroupPnReq groupPnReq)
             throws BusinessException,SystemException;
+    
+    /**
+     * 根据库存组标识查询库存组信息<br>
+     *
+     * @param infoQuery 库存组对象查询条件
+     * @return 查询到的库存组详细
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+     * @ApiDocMethod
+     * @ApiCode STORAGE_0120
+     * @RestRelativeURL storage/queryGroupInfoAllByGroupId
+     */
+    @POST
+    @Path("/queryGroupAllById")
+    public StorageGroupRestwo queryGroupInfoAllByGroupId(StorageGroupQuery infoQuery)
+            throws BusinessException,SystemException;
+    @interface QueryGroupInfoAllById{}
 
 }

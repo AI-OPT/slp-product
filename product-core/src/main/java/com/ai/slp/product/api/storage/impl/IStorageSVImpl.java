@@ -496,4 +496,26 @@ public class IStorageSVImpl implements IStorageSV {
 		return mapResponse;
 	}
 
+	/**
+     * 根据库存组标识查询库存组信息<br>
+     *
+     * @param infoQuery 库存组对象查询条件
+     * @return 查询到的库存组详细
+     * @throws BusinessException
+     * @throws SystemException
+     * @author jiawen
+     * @ApiDocMethod
+     * @ApiCode STORAGE_0120
+     * @RestRelativeURL storage/queryGroupInfoAllByGroupId
+     */
+	@Override
+	public StorageGroupRestwo queryGroupInfoAllByGroupId(StorageGroupQuery infoQuery)
+			throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(infoQuery.getTenantId());
+		StorageGroupRestwo groupRes = storageGroupBusiSV.queryGroupInfoAllByGroupId(
+				infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getGroupId());
+		CommonUtils.addSuccessResHeader(groupRes,"");
+		return groupRes;
+	}
+
 }
