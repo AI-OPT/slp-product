@@ -93,12 +93,13 @@ public class StorageGroupRes extends BaseResponse {
      */
     private String routeGroupId;
     
+    
 
-    private String getRouteGroupId() {
+	public String getRouteGroupId() {
 		return routeGroupId;
 	}
 
-	private void setRouteGroupId(String routeGroupId) {
+	public void setRouteGroupId(String routeGroupId) {
 		this.routeGroupId = routeGroupId;
 	}
 
