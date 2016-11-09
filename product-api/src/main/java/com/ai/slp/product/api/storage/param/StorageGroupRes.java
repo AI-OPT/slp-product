@@ -88,20 +88,7 @@ public class StorageGroupRes extends BaseResponse {
      * 优先级顺序库存集合
      */
     private Map<Short,List<StorageRes>> storageList;
-    /**
-     * 路由组id
-     */
-    private String routeGroupId;
     
-    
-
-	public String getRouteGroupId() {
-		return routeGroupId;
-	}
-
-	public void setRouteGroupId(String routeGroupId) {
-		this.routeGroupId = routeGroupId;
-	}
 
 	public String getStorageGroupId() {
         return storageGroupId;
