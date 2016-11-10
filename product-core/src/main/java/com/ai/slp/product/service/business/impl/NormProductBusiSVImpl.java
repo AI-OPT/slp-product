@@ -143,6 +143,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		}
 		long endTime = System.currentTimeMillis();
 		logger.info("===== 结束 NormProductBusiSVImpl.installNormProd 商品添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
+		System.out.println(standedProduct.getStandedProdId());
 		return standedProduct.getStandedProdId();
 	}
 
@@ -172,12 +173,14 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
 		int createCount = prodSkuBusiSV.createSkuOfProduct(tenantId, groupId, attrValList, operId);
 		if (createCount == 0) {
-			return null;
+			return normProdId;
 		}
 		long endTime = System.currentTimeMillis();
 		logger.info("===== 结束 NormProductBusiSVImpl.installNormProdAndPtoGroup 商品(级联)添加,当前时间戳:{},用时:{}"
 				,endTime,(endTime-startTime));
+		System.out.println(normProdId);
 		return normProdId;
+		
 	}
 
 	/**
