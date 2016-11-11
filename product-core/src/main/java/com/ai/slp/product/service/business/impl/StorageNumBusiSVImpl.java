@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -45,6 +47,8 @@ import com.ai.slp.product.vo.SkuStorageVo;
 @Transactional
 public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     private static final Logger logger = LoggerFactory.getLogger(StorageNumBusiSVImpl.class);
+    private Lock lock = new ReentrantLock();
+    		
     @Autowired
     IProdSkuAtomSV skuAtomSV;
     @Autowired
@@ -98,8 +102,10 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 
 
     private StorageNumRes userStorageNum(Product product, String skuId, int skuNum,Long price){
-        String tenantId = product.getTenantId();
-        String groupId = product.getStorageGroupId();
+    	String tenantId = product.getTenantId();
+    	String groupId = product.getStorageGroupId();
+	 try {
+     	lock.lock();
         Timestamp nowTime = DateUtils.currTimeStamp();
         //若商品为预售,且当前不在预售期内,则不进行销售
         if(ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType()) &&
@@ -171,20 +177,28 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
         }
         //6.进行减少优先级库存可用量
-        Long priorityUsableNum = cacheClient.decrBy(priorityUsable,skuNum);
-        String skuStoragekey = IPaasStorageUtils.genMcsSkuStorageUsableKey(tenantId,groupId,priority,skuId);
-        //8.组装返回值
-        StorageNumRes numRes = new StorageNumRes();
-        BeanUtils.copyProperties(numRes,product);
-        numRes.setProductCatId(product.getProductCatId());
-        numRes.setSkuId(skuId);
-        numRes.setSkuName(product.getProdName());
-        numRes.setSalePrice(salePrice);
-        numRes.setBasicOrgId(product.getBasicOrgId());
-        numRes.setStorageNum(getSkuNumSource(cacheClient,skuStoragekey,new Double(skuNum)));
-        //变更数据库信息
-        numDbBusiSV.storageNumChange(tenantId,skuId,numRes.getStorageNum(),true,priorityUsableNum<1?true:false);
-        return numRes;
+       
+            Long priorityUsableNum = cacheClient.decrBy(priorityUsable,skuNum);
+            String skuStoragekey = IPaasStorageUtils.genMcsSkuStorageUsableKey(tenantId,groupId,priority,skuId);
+            //8.组装返回值
+            StorageNumRes numRes = new StorageNumRes();
+            BeanUtils.copyProperties(numRes,product);
+            numRes.setProductCatId(product.getProductCatId());
+            numRes.setSkuId(skuId);
+            numRes.setSkuName(product.getProdName());
+            numRes.setSalePrice(salePrice);
+            numRes.setBasicOrgId(product.getBasicOrgId());
+            numRes.setStorageNum(getSkuNumSource(cacheClient,skuStoragekey,new Double(skuNum)));
+            //变更数据库信息
+            numDbBusiSV.storageNumChange(tenantId,skuId,numRes.getStorageNum(),true,priorityUsableNum<1?true:false);
+            return numRes;
+		} catch (Exception e) {
+			 logger.warn("库存扣减失败,租户ID:{},库存组ID:{}",tenantId,groupId);
+		}finally{
+			lock.unlock();
+		}
+        return null;
+        
     }
 
     /**
