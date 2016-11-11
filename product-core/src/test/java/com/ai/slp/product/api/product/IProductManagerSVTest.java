@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.product;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
@@ -101,6 +103,9 @@ public class IProductManagerSVTest {
     	queryInSale.setSupplierId("-1");
     	List<String> stateList = new ArrayList<>();
 		stateList.add("5");
+		queryInSale.setUpStartTime(DateUtil.getTimestamp("2016-11-01 13:18:04", "yyyy-MM-dd HH:mm:ss"));
+		//DateUtil.getTimestamp("2016-11-01 13:18:04", "yyyy-MM-dd HH:mm:ss");
+		queryInSale.setUpEndTime(DateUtil.getTimestamp("2016-11-11 13:18:04", "yyyy-MM-dd HH:mm:ss"));
 		queryInSale.setStateList(stateList);
     	PageInfoResponse<ProductEditUp> inSale = productManagerSV.searchInSale(queryInSale);
     	Gson gson = new Gson();
