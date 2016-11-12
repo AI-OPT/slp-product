@@ -171,13 +171,44 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         //5.进行减sku库存
         String usableNumKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
         //若减少库存之后,剩余库存小于零,表示库存不足
-        if (cacheClient.hincrBy(usableNumKey,skuId,-skuNum)<0){
-            cacheClient.hincrBy(usableNumKey,skuId,skuNum);//需要将库存加回
-            logger.warn("该商品库存不足,租户ID:{},库存组ID:{}",tenantId,groupId);
-            throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
-        }
+        
+        //如果当前优先级下库存量>要减的量
+        	//如果当前优先级下某个库存量小于等于要减量,   当前库存减为0   然后判断要减量是否大于0    是--进行去下一个减库存
+        	//需要当前库存的个数--一直进行减库存
+        if (cacheClient.decrBy(priorityUsable,skuNum)>=0) {
+        	//回退
+        	cacheClient.decrBy(priorityUsable,-skuNum);
+        	   int backNum = skuNum;
+        	   while(backNum>0){
+        		   if (cacheClient.hincrBy(usableNumKey,skuId,-0)>0) {
+        			   if (cacheClient.hincrBy(usableNumKey,skuId,-backNum)<0) {
+        				   //回退
+        				   cacheClient.hincrBy(usableNumKey,skuId,backNum);
+        				   backNum = cacheClient.hincrBy(usableNumKey,skuId,-backNum).intValue();
+        				   backNum = backNum*(-1);
+        				   cacheClient.hincrBy(usableNumKey,skuId,backNum);
+        				   //减当前库存量
+        				   cacheClient.hincrBy(usableNumKey,skuId,-cacheClient.hincrBy(usableNumKey,skuId,-0));
+        			   }else{
+        				   backNum = 0;
+        				   break;
+        			   }
+				}else {
+					break;
+				}
+            }
+		}else {
+			cacheClient.decrBy(priorityUsable,-skuNum);
+			logger.warn("该商品库存不足,租户ID:{},库存组ID:{}",tenantId,groupId);
+        	throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
+		}
+        
+ /*       if (cacheClient.hincrBy(usableNumKey,skuId,-skuNum)<0){
+        	cacheClient.hincrBy(usableNumKey,skuId,skuNum);//需要将库存加回
+        	logger.warn("该商品库存不足,租户ID:{},库存组ID:{}",tenantId,groupId);
+        	throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
+        }*/
         //6.进行减少优先级库存可用量
-       
             Long priorityUsableNum = cacheClient.decrBy(priorityUsable,skuNum);
             String skuStoragekey = IPaasStorageUtils.genMcsSkuStorageUsableKey(tenantId,groupId,priority,skuId);
             //8.组装返回值
