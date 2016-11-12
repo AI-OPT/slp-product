@@ -169,7 +169,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             throw new BusinessException(ErrorCodeConstants.Storage.PRICE_UN_MATCH,"商品价格不符");
         }
         //5.进行减sku库存
-        String usableNumKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
+  //      String usableNumKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
         //若减少库存之后,剩余库存小于零,表示库存不足
         
         //如果当前优先级下库存量>要减的量
@@ -180,6 +180,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         	cacheClient.decrBy(priorityUsable,-skuNum);
         	   int backNum = skuNum;
         	   while(backNum>0){
+        		   String usableNumKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
         		   if (cacheClient.hincrBy(usableNumKey,skuId,-0)>0) {
         			   if (cacheClient.hincrBy(usableNumKey,skuId,-backNum)<0) {
         				   //回退
