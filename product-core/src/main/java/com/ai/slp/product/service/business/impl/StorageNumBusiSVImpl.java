@@ -178,20 +178,43 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         if (cacheClient.decrBy(priorityUsable,skuNum)>=0) {
         	//回退
         	cacheClient.decrBy(priorityUsable,-skuNum);
+        	
         	   int backNum = skuNum;
-        	   while(backNum>0){
+        	   int incnum = skuNum;
+        	   
+        	   long startTimes = System.currentTimeMillis();
+    		   logger.info("=====开始执行,要减的量:"+incnum+",当前时间戳:"+startTimes);
+    		   
+        	   while(incnum>0){
         		   String usableNumKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
-        		   if (cacheClient.hincrBy(usableNumKey,skuId,-0)>0) {
-        			   if (cacheClient.hincrBy(usableNumKey,skuId,-backNum)<0) {
+        		   
+        		   long startTime = System.currentTimeMillis();
+        		   logger.info("=====开始执行判断库存量,当前时间戳:"+startTime);
+        		   
+        		   Long cachemum = cacheClient.hincrBy(usableNumKey,skuId,-0);
+        		   
+        		   long startTime1 = System.currentTimeMillis();
+        		   logger.info("=====当前库存量:"+cachemum+",当前时间戳:"+startTime1);
+        		   
+        		   if (cachemum>0) {
+        			   if (incnum-cachemum>0) {
         				   //回退
-        				   cacheClient.hincrBy(usableNumKey,skuId,backNum);
-        				   backNum = cacheClient.hincrBy(usableNumKey,skuId,-backNum).intValue();
-        				   backNum = backNum*(-1);
-        				   cacheClient.hincrBy(usableNumKey,skuId,backNum);
+        				   /*cacheClient.hincrBy(usableNumKey,skuId,incnum);*/
+        				/*   int backNum1 = cacheClient.hincrBy(usableNumKey,skuId,-backNum).intValue();
+        				   backNum = backNum1*(-1);
+        				   cacheClient.hincrBy(usableNumKey,skuId,backNum1);*/
         				   //减当前库存量
-        				   cacheClient.hincrBy(usableNumKey,skuId,-cacheClient.hincrBy(usableNumKey,skuId,-0));
+        				   cacheClient.hincrBy(usableNumKey,skuId,-cachemum);
+        				   backNum=(int) (incnum-cachemum);
+        				   incnum=backNum;
+        				   
+        				   long startTime2 = System.currentTimeMillis();
+                		   logger.info("=====下次库存要减量"+backNum+",当前时间戳:"+startTime2);
+        				   
         			   }else{
+        				   cacheClient.hincrBy(usableNumKey,skuId,-incnum);
         				   backNum = 0;
+        				   incnum = 0;
         				   break;
         			   }
 				}else {
@@ -204,6 +227,8 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         	throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
 		}
         
+        long endTime = System.currentTimeMillis();
+		   logger.info("=====扣减库存结束,当前时间戳:"+endTime);
  /*       if (cacheClient.hincrBy(usableNumKey,skuId,-skuNum)<0){
         	cacheClient.hincrBy(usableNumKey,skuId,skuNum);//需要将库存加回
         	logger.warn("该商品库存不足,租户ID:{},库存组ID:{}",tenantId,groupId);
