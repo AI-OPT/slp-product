@@ -175,15 +175,18 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         //如果当前优先级下库存量>要减的量
         	//如果当前优先级下某个库存量小于等于要减量,   当前库存减为0   然后判断要减量是否大于0    是--进行去下一个减库存
         	//需要当前库存的个数--一直进行减库存
-        if (cacheClient.decrBy(priorityUsable,skuNum)>=0) {
-        	//回退
-        	cacheClient.decrBy(priorityUsable,-skuNum);
+        Long decrBy = cacheClient.decrBy(priorityUsable,0);
+        
+        if (decrBy>=0) {
+        	
+        	long start = System.currentTimeMillis();
+ 		   logger.info("=====开始执行,当前优先级库存总量:"+decrBy+",当前时间戳:"+start);
         	
         	   int backNum = skuNum;
         	   int incnum = skuNum;
         	   
         	   long startTimes = System.currentTimeMillis();
-    		   logger.info("=====开始执行,要减的量:"+incnum+",当前时间戳:"+startTimes);
+    		   logger.info("=====开始执行,当前要减的量:"+incnum+",当前时间戳:"+startTimes);
     		   
         	   while(incnum>0){
         		   String usableNumKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
@@ -199,8 +202,8 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         		   if (cachemum>0) {
         			   if (incnum-cachemum>0) {
         				   //回退
-        				   /*cacheClient.hincrBy(usableNumKey,skuId,incnum);*/
-        				/*   int backNum1 = cacheClient.hincrBy(usableNumKey,skuId,-backNum).intValue();
+        				   /*cacheClient.hincrBy(usableNumKey,skuId,incnum);
+        				   int backNum1 = cacheClient.hincrBy(usableNumKey,skuId,-backNum).intValue();
         				   backNum = backNum1*(-1);
         				   cacheClient.hincrBy(usableNumKey,skuId,backNum1);*/
         				   //减当前库存量
@@ -227,7 +230,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         	throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
 		}
         
-        long endTime = System.currentTimeMillis();
+           long endTime = System.currentTimeMillis();
 		   logger.info("=====扣减库存结束,当前时间戳:"+endTime);
  /*       if (cacheClient.hincrBy(usableNumKey,skuId,-skuNum)<0){
         	cacheClient.hincrBy(usableNumKey,skuId,skuNum);//需要将库存加回
