@@ -24,7 +24,7 @@ public class IProdCommentManagerSVTest {
 	public void createProdCommentTest(){
 		ProdCommentCreateRequest prodCommentCreateRequest = new ProdCommentCreateRequest();
 		prodCommentCreateRequest.setOrderId("0001");
-		prodCommentCreateRequest.setUserId("003");
+		prodCommentCreateRequest.setUserId("3da3109cdb3f4d9e");
 		prodCommentCreateRequest.setTenantId("changhong");
 		List<ProdCommentVO> commentList=new LinkedList<ProdCommentVO>();
 		ProdCommentVO prodComment = new ProdCommentVO();
@@ -36,10 +36,11 @@ public class IProdCommentManagerSVTest {
 		prodComment.setSubOrderId("00001");
 		List<PictureVO> pictureList=new LinkedList<PictureVO>();
 		PictureVO pictureVO=new PictureVO();
-		pictureVO.setPicAddr("test.image.01");
+//		pictureVO.setPicAddr("test.image.01");
+		pictureVO.setPicAddr("/product-web/resources/template/default/images/2.jpg");
 		pictureVO.setPicName("测试图片添加");
 		pictureVO.setSerialNumber(1L);
-		pictureVO.setVfsId("001");
+		pictureVO.setVfsId("57514007d601800009c0b0f4");
 		pictureList.add(pictureVO);
 		prodComment.setPictureList(pictureList);
 		commentList.add(prodComment );
@@ -89,7 +90,7 @@ public class IProdCommentManagerSVTest {
 	@Test
 	public void queryPictureTest(){
 		CommentPictureQueryRequset queryRequset = new CommentPictureQueryRequset();
-		queryRequset.setCommentId("14");
+		queryRequset.setCommentId("64");
 		CommentPictureQueryResponse queryPictureByCommentId = prodCommentManagerSV.queryPictureByCommentId(queryRequset );
 		System.out.println(JSonUtil.toJSon(queryPictureByCommentId));
 	}
