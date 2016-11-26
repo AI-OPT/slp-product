@@ -70,8 +70,12 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 			List<ProdCommentPageResponse> arrayList = new ArrayList<>();
 			arrayList.add(null);
 			result.setResult(arrayList);
-			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到sku信息。"));
-			
+			//result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到sku信息。"));
+			ResponseHeader responseHeader = new ResponseHeader();
+			responseHeader.setIsSuccess(true);
+			responseHeader.setResultCode(ResultCodeConstants.FAIL_CODE);
+			responseHeader.setResultMessage("没有查询到sku信息");
+			result.setResponseHeader(responseHeader);
 	//		throw new BusinessException("没有查询到sku信息");
 			return result;
 		}
