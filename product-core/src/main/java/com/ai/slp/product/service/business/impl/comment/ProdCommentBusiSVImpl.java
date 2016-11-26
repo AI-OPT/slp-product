@@ -67,11 +67,13 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, prodCommentPageRequest.getSkuId());
 		if(prodSku == null){
 			result.setCount(0);
-			result.setResult(null);
-	//		result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到sku信息。"));
+			List<ProdCommentPageResponse> arrayList = new ArrayList<>();
+			arrayList.add(null);
+			result.setResult(arrayList);
+			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到sku信息。"));
 			
-			throw new BusinessException("没有查询到sku信息");
-	//		return result;
+	//		throw new BusinessException("没有查询到sku信息");
+			return result;
 		}
 		String prodId = prodSku.getProdId();
 		Product product = productAtomSV.selectByProductId(tenantId, prodId);
