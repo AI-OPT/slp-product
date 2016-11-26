@@ -80,10 +80,11 @@ public class INormProductSVImpl implements INormProductSV {
         long startTime = System.currentTimeMillis();
         LOGGER.info("=====开始INormProductSVImpl.createProductInfo,商品添加,当前时间戳:"+startTime);
         CommonUtils.checkTenantId(request.getTenantId());
-        String normProdId = normProductBusiSV.installNormProd(request);
+        PageInfoResponse<String> normProdIdResponse = normProductBusiSV.installNormProd(request);
         long endTime = System.currentTimeMillis();
         LOGGER.info("=====结束INormProductSVImpl.createProductInfo,商品添加,当前时间戳:{}",endTime,(endTime-startTime));
-        return CommonUtils.genSuccessResponse(normProdId);
+//        return CommonUtils.genSuccessResponse(normProdId);
+        return normProdIdResponse;
     }
     
     /**
@@ -95,16 +96,17 @@ public class INormProductSVImpl implements INormProductSV {
         LOGGER.info("===== 开始 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:"+startTime);
 		String tenantId = request.getTenantId();
 		CommonUtils.checkTenantId(tenantId);
-        String normProdId = normProductBusiSV.installNormProdAndPtoGroup(request);
+        PageInfoResponse<String> normProdIdResponse = normProductBusiSV.installNormProdAndPtoGroup(request);
         long endTime = System.currentTimeMillis();
         LOGGER.info("===== 结束 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
-        if(StringUtils.isEmpty(normProdId)){
-        	 BaseResponse baseResponse = new BaseResponse();
-             baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SYSTEM_ERROR,"添加失败！"));
-             return baseResponse;
+        if(StringUtils.isEmpty(normProdIdResponse.getResult().get(0))){
+        	/* BaseResponse baseResponse = new BaseResponse();
+             baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SYSTEM_ERROR,"添加失败！"));*/
+             return normProdIdResponse;
         }else{
         	LOGGER.info("end createProduct");
-        	return CommonUtils.genSuccessResponse(normProdId);
+        	//return CommonUtils.genSuccessResponse(normProdId);
+        	return normProdIdResponse;
         }
 	}
 

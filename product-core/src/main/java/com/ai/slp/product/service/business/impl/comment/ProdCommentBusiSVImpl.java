@@ -33,6 +33,7 @@ import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCommentConstants;
+import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentPicture;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
@@ -67,6 +68,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		if(prodSku == null){
 			result.setCount(0);
 			result.setResult(null);
+			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到sku信息。"));
 			return result;
 		}
 		String prodId = prodSku.getProdId();
@@ -74,6 +76,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		if(product == null){
 			result.setCount(0);
 			result.setResult(null);
+			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到商品信息。"));
 			return result;
 		}
 		ProdComment params = new ProdComment();
@@ -90,6 +93,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		if(queryPageList == null || queryPageList.size() == 0){
 			result.setCount(0);
 			result.setResult(null);
+			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"该商品没有评论信息。"));
 			return result;
 		}else{
 			//查询条数
