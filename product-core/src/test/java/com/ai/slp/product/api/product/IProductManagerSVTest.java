@@ -1,5 +1,7 @@
 package com.ai.slp.product.api.product;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.components.idps.IDPSClientFactory;
 import com.ai.opt.sdk.util.DateUtil;
+import com.ai.opt.sdk.util.ImageByteUtil;
 import com.ai.opt.sdk.util.StringUtil;
+import com.ai.paas.ipaas.image.IImageClient;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.CommonTestConstants;
@@ -165,5 +170,33 @@ public class IProductManagerSVTest {
 			System.out.println(refuse.getRefuseDes());
 		}
     } 
+    
+    /**
+     * 上传图片测试
+     */
+    @Test
+    public void addImgTest(){
+    	//应用场景
+    	String idpsns="slp-mall-web-idps";
+    	//获取imageClient
+    	IImageClient im = IDPSClientFactory.getImageClient(idpsns);
+    	//图片本地路径
+    	String filepath = "‪C:/Users/Gavin/Desktop/ce11.jpg";
+    	try {
+			FileInputStream fis=new FileInputStream(filepath);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		// 将路径转换为byte[]
+		byte[] buff = ImageByteUtil.image2byte(filepath);
+		// 上传图片，获取上传后的ID
+		String idpsId = im.upLoadImage(buff, "qie.jpg");
+		System.out.println("idpsId=" + idpsId);
+		// 获取上传图片的URL
+		System.out.println(im.getImageUrl(idpsId, ".jpg"));
+		// 获取上传图片指定尺寸的URL
+		System.out.println(im.getImageUrl("idpsId", ".jpg", "100x80"));
+    	
+    }
     
 }

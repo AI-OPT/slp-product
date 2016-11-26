@@ -54,9 +54,9 @@ public class IProdCommentManagerSVTest {
 		ProdCommentPageRequest prodCommentPageRequest = new ProdCommentPageRequest();
 		prodCommentPageRequest.setPageNo(1);
 		prodCommentPageRequest.setPageSize(5);
-		prodCommentPageRequest.setSkuId("0000000000000153");
+		prodCommentPageRequest.setSkuId("0000000000000195");
 		prodCommentPageRequest.setTenantId("changhong");
-		prodCommentPageRequest.setShopScoreMs(1L);
+		prodCommentPageRequest.setShopScoreMs((long) 1);
 		PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku = prodCommentManagerSV.queryPageInfoBySku(prodCommentPageRequest );
 		System.out.println(JSonUtil.toJSon(queryPageInfoBySku));
 	}
