@@ -77,14 +77,16 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public BaseResponse createProductInfo(NormProdSaveRequest request) throws BusinessException, SystemException {
+    	BaseResponse response = new BaseResponse();
         long startTime = System.currentTimeMillis();
         LOGGER.info("=====开始INormProductSVImpl.createProductInfo,商品添加,当前时间戳:"+startTime);
         CommonUtils.checkTenantId(request.getTenantId());
         PageInfoResponse<String> normProdIdResponse = normProductBusiSV.installNormProd(request);
         long endTime = System.currentTimeMillis();
         LOGGER.info("=====结束INormProductSVImpl.createProductInfo,商品添加,当前时间戳:{}",endTime,(endTime-startTime));
-//        return CommonUtils.genSuccessResponse(normProdId);
-        return normProdIdResponse;
+       // return CommonUtils.genSuccessResponse(normProdId);
+        return CommonUtils.genSuccessResponse(normProdIdResponse.getResult().get(0));
+        //return response.setResponseHeader(normProdIdResponse.getResponseHeader());
     }
     
     /**
