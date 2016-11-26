@@ -107,8 +107,8 @@ public class INormProductSVImpl implements INormProductSV {
              return normProdIdResponse;
         }else{
         	LOGGER.info("end createProduct");
-        	//return CommonUtils.genSuccessResponse(normProdId);
-        	return normProdIdResponse;
+        	return CommonUtils.genSuccessResponse(normProdIdResponse.getResult().get(0));
+        	//return normProdIdResponse;
         }
 	}
 
