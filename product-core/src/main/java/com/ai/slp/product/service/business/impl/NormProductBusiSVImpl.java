@@ -229,9 +229,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
 		int createCount = prodSkuBusiSV.createSkuOfProduct(tenantId, groupId, attrValList, operId);
 		if (createCount == 0) {
-			resultList.add("");
-			pageInfoResponse.setResult(resultList);
-			pageInfoResponse.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"产生 0 个库存组对应商品的SKU， 完全使用配置到标准品的销售属性") );
+			pageInfoResponse.setResult(normProdResponse.getResult());
+			pageInfoResponse.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.SUCCESS_CODE,"产生库存组对应商品的SKU， 完全使用配置到标准品的销售属性") );
 			return pageInfoResponse;
 			//return normProdId;
 		}
