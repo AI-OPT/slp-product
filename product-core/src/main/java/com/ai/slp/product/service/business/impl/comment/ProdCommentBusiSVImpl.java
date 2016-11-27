@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
@@ -32,6 +33,7 @@ import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
 import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCommentConstants;
 import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
@@ -66,10 +68,12 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		String tenantId = prodCommentPageRequest.getTenantId();
 		ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, prodCommentPageRequest.getSkuId());
 		if(prodSku == null){
-			result.setCount(0);
+			/*result.setCount(0);
 			result.setResult(null);
 			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到sku信息。"));
-			return result;
+			return result;*/
+			throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
+                    "未查询到指定商品,租户ID:"+tenantId+",销售商品id:"+prodCommentPageRequest.getSkuId());
 		}
 		String prodId = prodSku.getProdId();
 		Product product = productAtomSV.selectByProductId(tenantId, prodId);
