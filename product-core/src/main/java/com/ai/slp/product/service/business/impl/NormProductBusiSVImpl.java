@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
@@ -21,6 +22,7 @@ import com.ai.opt.sdk.util.StringUtil;
 import com.ai.slp.product.api.normproduct.param.*;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
@@ -143,8 +145,14 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			}
 		}
 		List<Object> attrValuelist = new ArrayList<>(); 
-		for (int i = 0; i < attrValList.size(); i++) {
-			attrValuelist.add(attrValList.get(i).getAttrValId());
+		if (attrValList == null && catAttrAllList != null) {
+			throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
+                    "标准品所属类目下的属性值与添加的属性值不符");
+		}else {
+			
+			for (int i = 0; i < attrValList.size(); i++) {
+				attrValuelist.add(attrValList.get(i).getAttrValId());
+			}
 		}
 		
 		if (!catAttrValList.containsAll(attrValuelist)) {
