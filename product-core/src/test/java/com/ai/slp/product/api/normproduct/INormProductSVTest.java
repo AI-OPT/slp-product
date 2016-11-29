@@ -29,6 +29,7 @@ public class INormProductSVTest {
     public void queryNormProductTest(){
         NormProdRequest infoQuery = new NormProdRequest();
         infoQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+        infoQuery.setProductCatId("00000000000160");
         //infoQuery.setProductId("100000000100");
         PageInfoResponse<NormProdResponse> productInfo = normProductSV.queryNormProduct(infoQuery);
         System.out.println(productInfo.toString());
@@ -48,8 +49,9 @@ public class INormProductSVTest {
     public void addNormProduct(){
     	Gson gson = new Gson();
    // 	String data = "{'productCatId':'10000010010000','productName':'测试数据','state':'1','productType':'2','createId':1,'operId':1,'attrValList':[{'attrId':100001,'attrValId':'100003','attrVal':'','attrVal2':''},{'attrId':100002,'attrValId':'100008','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100013','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100014','attrVal':'','attrVal2':''}],'supplierId':'-1','tenantId':'changhong'}";
-    	String data = "{'productCatId':'00000000000160','productName':'w测试数据','state':'1','productType':'2','createId':1,'operId':1,'attrValList':[{'attrId':101,'attrValId':'000000000071','attrVal':'红色','attrVal2':''}],'supplierId':'-1','tenantId':'changhong'}";
-   //  	String data = "{'productCatId':'000000000160','productName':'w测试数据','state':'1','productType':'2','createId':1,'operId':1,'attrValList':[{'attrId':100001,'attrValId':'100003','attrVal':'','attrVal2':''},{'attrId':100002,'attrValId':'100008','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100013','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100014','attrVal':'','attrVal2':''}],'supplierId':'-1','tenantId':'changhong'}";
+   // 	String data = "{'productCatId':'00000000000160','productName':'w测试数据','state':'1','productType':'2','createId':1,'operId':1,'attrValList':[{'attrId':101,'attrValId':'000000000071','attrVal':'红色','attrVal2':''}],'supplierId':'-1','tenantId':'changhong'}";
+   // 	String data = "{'productCatId':'00000000000160','productName':'w测试数据','state':'1','productType':'2','createId':1,'operId':1,'supplierId':'-1','tenantId':'changhong'}";
+     	String data = "{'productCatId':'000000000160','productName':'w测试数据','state':'1','productType':'2','createId':1,'operId':1,'attrValList':[{'attrId':100001,'attrValId':'100003','attrVal':'','attrVal2':''},{'attrId':100002,'attrValId':'100008','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100013','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100014','attrVal':'','attrVal2':''}],'supplierId':'-1','tenantId':'changhong'}";
     	NormProdSaveRequest request = gson.fromJson(data, new TypeToken<NormProdSaveRequest>() {
 		}.getType());
     	BaseResponse baseResponse = normProductSV.createProductAndStoGroup(request);
@@ -75,5 +77,18 @@ public class INormProductSVTest {
         uniqueReq.setOperId(1l);
         BaseResponse response = normProductSV.discardProductWithStorage(uniqueReq);
         System.out.print(response.getResponseHeader().isSuccess());
+    }
+    
+    @Test
+    public void discardProductTest(){
+    	
+    	NormProdUniqueReq req = new NormProdUniqueReq();
+    	req.setTenantId("changhong");
+    	req.setOperId(1l);
+    	req.setSupplierId("-1");
+    	req.setProductId("9000000000000360");
+		BaseResponse discardProduct = normProductSV.discardProduct(req);
+		System.out.print(discardProduct.getResponseHeader().isSuccess());
+    	
     }
 }
