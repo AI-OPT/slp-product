@@ -5,6 +5,10 @@ import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.exproduct.param.QueryProductRequest;
 import com.ai.slp.product.constants.ProductExceptCode;
 
+/**
+ *校验工具类 
+ *
+ */
 public final class ExProductValidata {
     private ExProductValidata() {
     }

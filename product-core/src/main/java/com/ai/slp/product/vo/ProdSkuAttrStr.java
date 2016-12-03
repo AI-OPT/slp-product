@@ -7,8 +7,14 @@ import com.ai.slp.product.constants.ProductConstants;
  * Created by jackieliu on 16/9/18.
  */
 public class ProdSkuAttrStr {
-
+	
+	/**
+	 * 属性标识
+	 */
     private String attrId;
+    /**
+     * 属性值标识
+     */
     private String attrValId;
 
     public String getAttrId() {
