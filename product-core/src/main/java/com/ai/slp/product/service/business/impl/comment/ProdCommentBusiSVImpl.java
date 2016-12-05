@@ -20,6 +20,7 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
@@ -195,11 +196,13 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 				String prodCommentId = prodCommentAtomSV.createProdComment(params);
 				//添加商品图片
 				if(!StringUtil.isBlank(prodCommentId) && isHasPicture){
-					for(PictureVO pictureVO : pictureList){
-						ProdCommentPicture prodCommentPicture = new ProdCommentPicture();
-						BeanUtils.copyProperties(prodCommentPicture, pictureVO);
-						prodCommentPicture.setCommentId(prodCommentId);
-						prodCommentPictureAtomSV.createPicture(prodCommentPicture);
+					if (CollectionUtil.isEmpty(pictureList)) {
+						for(PictureVO pictureVO : pictureList){
+							ProdCommentPicture prodCommentPicture = new ProdCommentPicture();
+							BeanUtils.copyProperties(prodCommentPicture, pictureVO);
+							prodCommentPicture.setCommentId(prodCommentId);
+							prodCommentPictureAtomSV.createPicture(prodCommentPicture);
+						}
 					}
 				}
 			}
