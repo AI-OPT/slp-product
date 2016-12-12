@@ -16,6 +16,7 @@ import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseMapResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.constants.CommonTestConstants;
@@ -108,6 +109,20 @@ public class StorageTest {
 //        groupStatus.setState("1");//启用
         BaseResponse response = storageSV.chargeStorageStatus(status);
         System.out.println(response.getResponseHeader().isSuccess());
+    }
+    
+    @Test
+    public void saveStorageTest(){
+    	STOStorage stoStorage = new STOStorage();
+    	stoStorage.setTenantId("changhong");
+    	stoStorage.setSupplierId("-1");
+    	stoStorage.setStorageName("www");
+    	stoStorage.setStorageGroupId("0000000000366");
+    	stoStorage.setOperId(1l);
+    	stoStorage.setTotalNum(12l);
+    	stoStorage.setWarnNum(1l);
+    	stoStorage.setPriorityNumber((short) 3);
+    	BaseResponse saveStorage = storageSV.saveStorage(stoStorage);
     }
 
 }

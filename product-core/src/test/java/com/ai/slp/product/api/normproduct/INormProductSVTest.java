@@ -91,4 +91,17 @@ public class INormProductSVTest {
 		System.out.print(discardProduct.getResponseHeader().isSuccess());
     	
     }
+    
+    @Test
+    public void updateMarketPriceTest(){
+    	MarketPriceUpdate priceUpdate = new MarketPriceUpdate();
+    	priceUpdate.setTenantId("changhong");
+    	priceUpdate.setSupplierId("-1");
+    	priceUpdate.setProductId("0000000000000368");
+    	priceUpdate.setOperId(1l);
+    	priceUpdate.setMarketPrice(210);
+    	BaseResponse price = normProductSV.updateMarketPrice(priceUpdate);
+    	System.out.println(price.getResponseHeader().isSuccess());
+    }
+    
 }
