@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl.product;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -19,6 +20,8 @@ import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
+import com.ai.slp.product.util.StoNoSkuSalePriceComparator;
+import com.ai.slp.product.util.productsComparator;
 import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 
 /**
@@ -56,10 +59,16 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public Product selectByGroupId(String tenantId, String groupId) {
 		ProductCriteria example = new ProductCriteria();
-		example.setOrderByClause("CREATE_TIME desc");
+		//example.setOrderByClause("CREATE_TIME desc");
 		example.createCriteria().andTenantIdEqualTo(tenantId).andStorageGroupIdEqualTo(groupId);
 		List<Product> products = productMapper.selectByExample(example);
-		return products == null || products.isEmpty() ? null : products.get(0);
+		if (products == null || products.isEmpty()) {
+			return null;
+		}
+		//排序
+		Collections.sort(products, new productsComparator());
+		
+		return  products.get(0);
 	}
 
 	/**
