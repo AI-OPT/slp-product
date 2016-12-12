@@ -207,7 +207,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		int count = 0;
 		Long operId = salePriceReq.getOperId();
 		
-		//对salePriceList进行排序
+		//对salePriceList进行排序   
 		Collections.sort(salePriceList, new StoNoSkuSalePriceComparator());
 		
 		for(StoNoSkuSalePrice salePrice:salePriceList){
@@ -407,7 +407,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			throw new BusinessException("", "未找到对应库存信息,库存ID:" + storageId);
 		}
 		Long operId = stoStorage.getOperId();
-		// 如果存在则修改库存信息,只能修改名称和最低预警库存量
+		// 如果存在则修改库存信息,只能修改名称和最低预警库存量 
 		Storage storage = new Storage();
 		storage.setStorageId(storageId);
 		if (StringUtils.isNotBlank(stoStorage.getStorageName())) {

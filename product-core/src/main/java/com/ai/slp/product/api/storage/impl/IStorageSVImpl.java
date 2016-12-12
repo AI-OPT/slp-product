@@ -337,7 +337,7 @@ public class IStorageSVImpl implements IStorageSV {
 	@Override
 	public BaseResponse updateMultiStorageSalePrice(StoNoSkuSalePriceReq salePrice)
 			throws BusinessException, SystemException {
-		// 判断集合元素
+		// 判断集合元素 
 		CommonUtils.checkTenantId(salePrice.getTenantId());
 		storageBusiSV.updateNoSkuStoSalePrice(salePrice);
 		BaseResponse baseResponse = new BaseResponse();
