@@ -123,7 +123,7 @@ public class ProductCatQueryBusiSVImpl implements IProductCatQueryBusiSV {
         	return;
         }
         //已经达到根目录
-        if (catInfo.getParentProductCatId()==null || "0".equals(catInfo.getParentProductCatId())){
+        if (catInfo.getParentProductCatId()==null || "0".equals(catInfo.getParentProductCatId())||catInfoList.size()>10){
             catInfoList.add(catInfo);
             return;
             //若不是跟类目,则继续查询
