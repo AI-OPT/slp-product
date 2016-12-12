@@ -478,7 +478,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if (skuStorageAtomSV.countOfNoPrice(tenantId,storageGroup.getStorageGroupId())>0){
         	throw new BusinessException("","启用库存下存在未设置价格的库存,无法上架");
         }
-        //查询当前库存组可用量
+        //查询当前库存组可用量 
         Long usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,storageGroup.getStorageGroupId());
         //库存组停用或当前库存可用为零,
         //直接切换至"售罄下架"

@@ -147,7 +147,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(query.getTenantId());
         long  inSaleStart= System.currentTimeMillis();
-        LOGGER.info("=====执行productBusiSV.changeToInSale进行上架操作,当前时间戳:" + inSaleStart);
+        LOGGER.info("=====执行productBusiSV.changeToInSale进行上架操作,当前时间戳:"  + inSaleStart);
         productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
         long inSaleEnd = System.currentTimeMillis();
         LOGGER.info("=====执行productBusiSV.changeToInSale结束,当前时间戳:" + inSaleEnd + ", 用时:" + (inSaleEnd-inSaleStart) + "毫秒");
