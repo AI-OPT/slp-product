@@ -41,7 +41,11 @@ import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.util.AttrValRequestComparator;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.StoNoSkuSalePriceComparator;
+import com.ai.slp.product.util.StorageComparator;
+import com.ai.slp.product.util.StorageGroupComparator;
 import com.ai.slp.product.vo.StandedProdPageQueryVo;
 
 import kafka.admin.AdminUtils;
@@ -352,6 +356,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				if (CollectionUtil.isEmpty(storageList)) {
 					continue;
 				}
+				
+				//list升序排序
+				Collections.sort(storageList, new StorageComparator());
+				
 				for (Storage storage : storageList) {
 					storageBusiSV.discardStorage(tenantId, storage, productInfoRequest.getOperId(), true);
 				}
@@ -638,6 +646,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 		//查询标准品下所有非废弃库存组
 		List<StorageGroup> groupList = storageGroupAtomSV.queryNoDiscardOfStandProd(tenantId,supplierId,standedProdId);
+		
+		//对groupList排序,
+		Collections.sort(groupList, new StorageGroupComparator());
+		
 		for (StorageGroup group:groupList){
 			storageGroupBusiSV.updateGroupState(tenantId,supplierId,group.getStorageGroupId()
 					,StorageConstants.StorageGroup.State.AUTO_DISCARD,operId);
@@ -713,6 +725,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				normProdct.getProductId());
 		String tenantId = normProdct.getTenantId();
 		Long operId = normProdct.getOperId();
+		
+		//把attrValList排序  -- 然后进行更新
+		Collections.sort(attrValList, new AttrValRequestComparator());
+		
 		for (AttrValRequest attrValReq : attrValList) {
 			// 查询属性值是否已存在
 			String attrKey = attrValReq.getAttrId() + ATTR_LINE_VAL + attrValReq.getAttrValId();

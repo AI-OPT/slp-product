@@ -38,6 +38,8 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
+import com.ai.slp.product.util.StoNoSkuSalePriceComparator;
+import com.ai.slp.product.util.StorageComparator;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
 import com.google.gson.Gson;
 
@@ -204,6 +206,10 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		}
 		int count = 0;
 		Long operId = salePriceReq.getOperId();
+		
+		//对salePriceList进行排序
+		Collections.sort(salePriceList, new StoNoSkuSalePriceComparator());
+		
 		for(StoNoSkuSalePrice salePrice:salePriceList){
 			// 库存标识为空,库存对应价格为空,库存销售价小于等于0,均不处理
 			if (salePrice.getPriorityNumber()==null
