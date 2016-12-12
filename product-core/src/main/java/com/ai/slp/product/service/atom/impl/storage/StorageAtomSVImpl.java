@@ -54,7 +54,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	@Override
 	public List<Storage> queryOfGroup(String tenantId, String groupId) {
 		StorageCriteria example = new StorageCriteria();
-		example.setOrderByClause("PRIORITY_NUMBER");
+		
+		//example.setOrderByClause("PRIORITY_NUMBER");
+		
 		example.createCriteria().andStorageGroupIdEqualTo(groupId);
 		return storageMapper.selectByExample(example);
 	}
@@ -70,7 +72,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	@Override
 	public List<Storage> queryOfGroup(String tenantId, String groupId, boolean hasDiscard) {
 		StorageCriteria example = new StorageCriteria();
-		example.setOrderByClause("PRIORITY_NUMBER");
+		
+		//example.setOrderByClause("PRIORITY_NUMBER");
+		
 		StorageCriteria.Criteria criteria = example.createCriteria().andStorageGroupIdEqualTo(groupId);
 		//若不包括废弃,则查询非废弃库存信息
 		if (!hasDiscard){
@@ -103,7 +107,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	@Override
 	public List<Storage> queryActive(String tenantId, String groupId, boolean hasUsable) {
 		StorageCriteria example = new StorageCriteria();
-		example.setOrderByClause("PRIORITY_NUMBER");
+		
+		//example.setOrderByClause("PRIORITY_NUMBER");
+		
 		List<String> activeList = new ArrayList<>();
 		activeList.add(StorageConstants.Storage.State.ACTIVE);
 		activeList.add(StorageConstants.Storage.State.AUTO_ACTIVE);
@@ -213,7 +219,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	@Override
 	public List<Storage> queryNoTimeNoPrioritySelf(String groupId, Short priority,Boolean after, boolean hasDestory) {
 		StorageCriteria example = new StorageCriteria();
-		example.setOrderByClause("PRIORITY_NUMBER");
+		
+		//example.setOrderByClause("PRIORITY_NUMBER");
+		
 		StorageCriteria.Criteria criteria = example.createCriteria();
 		criteria.andStorageGroupIdEqualTo(groupId)
 				.andUsableNumGreaterThan(0l)
@@ -248,7 +256,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	@Override
 	public List<Storage> queryTimeActiveOfNow(String groupId, boolean hasDiscard) {
 		StorageCriteria example = new StorageCriteria();
-		example.setOrderByClause("PRIORITY_NUMBER");
+		
+		//example.setOrderByClause("PRIORITY_NUMBER");
+		
 		StorageCriteria.Criteria criteria = example.createCriteria();
 		Timestamp nowTime = DateUtils.currTimeStamp();
 		criteria.andStorageGroupIdEqualTo(groupId)
@@ -272,7 +282,9 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 	@Override
 	public List<Storage> queryTimeStorageOfGroup(String groupId, boolean hasDiscard) {
 		StorageCriteria example = new StorageCriteria();
-		example.setOrderByClause("PRIORITY_NUMBER");
+		
+		//example.setOrderByClause("PRIORITY_NUMBER");
+		
 		StorageCriteria.Criteria criteria = example.createCriteria();
 		Timestamp nowTime = DateUtils.currTimeStamp();
 		criteria.andStorageGroupIdEqualTo(groupId)

@@ -137,7 +137,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	public PageInfo<Product> selectPageForEdit(ProductEditQueryReq queryReq) {
 		ProductCriteria example = new ProductCriteria();
 //		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
-		example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
+//		example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
 		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
@@ -180,7 +180,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public PageInfo<Product> selectPageForAudit(ProductQueryInfo queryReq) {
 		ProductCriteria example = new ProductCriteria();
-		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+		
+		//example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+		
 		ProductCriteria.Criteria criteria = example.createCriteria();
 		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
@@ -237,7 +239,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		//设置分页查询条件
 		queryVo.setLimitStart((pageNo-1)*pageSize);
 		queryVo.setLimitEnd(pageSize);
-		queryVo.setOrderByClause("p.CREATE_TIME desc");
+		
+		//queryVo.setOrderByClause("p.CREATE_TIME desc");
+		
 		//设置页数和每页条数
 		pageInfo.setPageNo(pageNo);
 		pageInfo.setPageSize(pageSize);
@@ -278,7 +282,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public PageInfo<Product> selectStorProdByState(ProductStorageSaleParam queryReq) {
 		ProductCriteria example = new ProductCriteria();
-		example.setOrderByClause("OPER_TIME asc");//操作时间倒序
+		
+		//example.setOrderByClause("OPER_TIME asc");//操作时间倒序
+		
 		ProductCriteria.Criteria criteria = example.createCriteria();
 		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
@@ -364,7 +370,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public PageInfo<Product> selectPageForRefuse(ProductEditQueryReq queryReq) {
 		ProductCriteria example = new ProductCriteria();
-		example.setOrderByClause("OPER_TIME asc");//操作时间倒序
+		
+		//example.setOrderByClause("OPER_TIME asc");//操作时间倒序
+		
 		ProductCriteria.Criteria criteria = example.createCriteria();
 		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());

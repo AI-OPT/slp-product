@@ -169,7 +169,9 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
     @Override
     public List<ProductCat> queryByNameOrFirst(String tenantId, String parentCatId, String query, Boolean isName) {
         ProductCatCriteria example = new ProductCatCriteria();
-        example.setOrderByClause("SERIAL_NUMBER ");
+        
+        //example.setOrderByClause("SERIAL_NUMBER ");
+        
         ProductCatCriteria.Criteria criteria = example.createCriteria();
         criteria.andTenantIdEqualTo(tenantId)
                 .andStateEqualTo(CommonConstants.STATE_ACTIVE);

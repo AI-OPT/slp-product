@@ -143,7 +143,9 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
     @Override
     public List<StandedProdAttr> queryAttrVal(String tenantId, String standedId, Long attrId) {
         StandedProdAttrCriteria example = new StandedProdAttrCriteria();
-        example.setOrderByClause("SERIAL_NUMBER ");
+        
+        //example.setOrderByClause("SERIAL_NUMBER ");
+        
         example.createCriteria()
                 .andTenantIdEqualTo(tenantId)
                 .andStandedProdIdEqualTo(standedId)

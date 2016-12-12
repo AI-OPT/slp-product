@@ -123,7 +123,9 @@ public class ProdAudiencesAtomSVImpl implements IProdAudiencesAtomSV {
         	return null;
         }
         ProdAudiencesCriteria example = new ProdAudiencesCriteria();
-        example.setOrderByClause("OPER_TIME desc");
+        
+       // example.setOrderByClause("OPER_TIME desc");
+        
         ProdAudiencesCriteria.Criteria criteria = example.createCriteria();
         criteria.andTenantIdEqualTo(tenantId)
                 .andProdIdEqualTo(prodId)

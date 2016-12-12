@@ -84,7 +84,9 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
         }
         //设置数据的查询状态为有效状态
         request.andStateEqualTo(CommonConstants.STATE_ACTIVE);
-        example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+        
+        //example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+        
         //获取查询到的条目数
         int count = prodAttrDefMapper.countByExample(example);
         if(attrPageQueryVo.getPageNo() != null && attrPageQueryVo.getPageSize() != null){
@@ -117,7 +119,9 @@ public class ProdAttrDefAtomSVImpl implements IProdAttrDefAtomSV {
     @Override
     public List<ProdAttrDef> selectAllAttrsOfFirstLetter(String tenantId) {
         ProdAttrDefCriteria example = new ProdAttrDefCriteria();
-        example.setOrderByClause("first_letter");
+        
+        //example.setOrderByClause("first_letter");
+        
         example.createCriteria().andTenantIdEqualTo(tenantId).andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodAttrDefMapper.selectByExample(example);
     }

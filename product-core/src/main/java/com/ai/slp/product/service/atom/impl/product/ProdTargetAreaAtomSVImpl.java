@@ -132,7 +132,9 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
 	public PageInfo<Product> searchProd(ProductEditQueryReq productEditParam) {
     	//根据商品ID查询符合条件的商品
     	ProductCriteria prodExample = new ProductCriteria();
-    	prodExample.setOrderByClause("OPER_TIME desc");//操作时间倒序
+    	
+    	//prodExample.setOrderByClause("OPER_TIME desc");//操作时间倒序
+    	
 		ProductCriteria.Criteria criteria = prodExample.createCriteria();
 		if (StringUtils.isNotBlank(productEditParam.getProdId())){
 			criteria.andProdIdLike("%"+productEditParam.getProdId()+"%");

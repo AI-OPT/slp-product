@@ -23,7 +23,9 @@ public class ProdCommentPictureAtomSVImpl implements IProdCommentPictureAtomSV {
 	@Override
 	public List<ProdCommentPicture> queryPictureListByCommentId(String commentId) {
 		ProdCommentPictureCriteria example = new ProdCommentPictureCriteria();
-		example.setOrderByClause("CREATE_TIME,SERIAL_NUMBER");
+		
+		//example.setOrderByClause("CREATE_TIME,SERIAL_NUMBER");
+		
 		Criteria createCriteria = example.createCriteria();
 		createCriteria.andCommentIdEqualTo(commentId);
 		createCriteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);

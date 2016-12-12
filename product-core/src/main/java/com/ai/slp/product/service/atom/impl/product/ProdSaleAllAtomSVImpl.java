@@ -46,7 +46,9 @@ public class ProdSaleAllAtomSVImpl implements IProdSaleAllAtomSV {
     @Override
     public ProdSaleAll querySaleAllOfSku(String tenantId, String skuId) {
         ProdSaleAllCriteria example = new ProdSaleAllCriteria();
-        example.setOrderByClause("UPDATE_TIME desc");
+        
+       // example.setOrderByClause("UPDATE_TIME desc");
+        
         example.createCriteria().andTenantIdEqualTo(tenantId)
                 .andSkuIdEqualTo(skuId);
         List<ProdSaleAll> prodSaleAllList = saleAllMapper.selectByExample(example);

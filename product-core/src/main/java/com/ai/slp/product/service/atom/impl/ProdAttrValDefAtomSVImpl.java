@@ -74,7 +74,9 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
         ProdAttrvalueDefCriteria.Criteria param = example.createCriteria();
         param.andTenantIdEqualTo(pageQueryVo.getTenantId())
             .andStateEqualTo(CommonConstants.STATE_ACTIVE);
-        example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+        
+        //example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+        
         if(pageQueryVo.getAttrId()!=null){
         	param.andAttrIdEqualTo(pageQueryVo.getAttrId());
         }
@@ -103,7 +105,9 @@ public class ProdAttrValDefAtomSVImpl implements IProdAttrValDefAtomSV{
     @Override
     public List<ProdAttrvalueDef> selectAttrValForAttr(String tenantId, Long attrId) {
         ProdAttrvalueDefCriteria example = new ProdAttrvalueDefCriteria();
-        example.setOrderByClause("first_letter");
+        
+        //example.setOrderByClause("first_letter");
+        
         example.createCriteria().andTenantIdEqualTo(tenantId).andAttrIdEqualTo(attrId)
                 .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         List<ProdAttrvalueDef> prodAttrValList = prodAttrvalueDefMapper.selectByExample(example);

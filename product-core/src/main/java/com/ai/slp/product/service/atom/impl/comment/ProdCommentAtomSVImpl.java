@@ -35,7 +35,9 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 			example.setLimitStart((pageNo -1) * pageSize);
 			example.setLimitEnd(pageSize);
 		}
-		example.setOrderByClause("COMMENT_TIME desc");
+		
+		//example.setOrderByClause("COMMENT_TIME desc");
+		
 		setQueryCriteria(params, commentTimeBegin, commentTimeEnd, example);
 		return prodCommentMapper.selectByExample(example);
 	}
@@ -111,7 +113,9 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 			example.setLimitStart((pageNo -1) * pageSize);
 			example.setLimitEnd(pageSize);
 		}
-		example.setOrderByClause("COMMENT_TIME desc");
+		
+		//example.setOrderByClause("COMMENT_TIME desc");
+		
 		setQueryCriteria(params,example);
 		return prodCommentMapper.selectByExample(example);
 	}

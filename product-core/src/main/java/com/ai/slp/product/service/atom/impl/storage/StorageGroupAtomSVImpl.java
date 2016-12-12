@@ -152,7 +152,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	@Override
 	public List<StorageGroup> queryOfStandedProd(String tenantId,String supplierId, String standedProdId) {
 		StorageGroupCriteria example = new StorageGroupCriteria();
-		example.setOrderByClause(" CREATE_TIME desc");
+		
+		//example.setOrderByClause(" CREATE_TIME desc");
+		
 		StorageGroupCriteria.Criteria criteria = example.createCriteria()
 				.andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
 		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId)){
@@ -172,7 +174,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	@Override
 	public List<StorageGroup> queryNoDiscardOfStandProd(String tenantId, String supplierId, String standedProdId) {
 		StorageGroupCriteria example = new StorageGroupCriteria();
-		example.setOrderByClause(" CREATE_TIME desc");
+		
+		//example.setOrderByClause(" CREATE_TIME desc");
+		
 		StorageGroupCriteria.Criteria criteria = example.createCriteria()
 				.andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
 		if (!CommonConstants.ALL_SUPPLIER.equals(supplierId)){
@@ -335,7 +339,9 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 		if (pageNo<1){
 			pageNo = 1;
 		}
-		queryVo.setOrderByClause("OPER_TIME desc");
+		
+		//queryVo.setOrderByClause("OPER_TIME desc");
+		
 		//设置页码相关参数
 		int start = (pageNo - 1) * pageSize;
 		String limitStr = "limit "+start+","+pageSize;
