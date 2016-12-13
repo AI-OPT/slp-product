@@ -250,4 +250,21 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 		params.put("skuId",skuId);
 		return skuStorageAttachMapper.selectPriceOfSku(params);
 	}
+
+    /**
+     * 根据条件修改SKU库存
+     * @param skuStorage
+     * @return
+     */
+	@Override
+	public int updateByCondtion(SkuStorage skuStorage, SkuStorage cond) {
+		skuStorage.setOperTime(DateUtils.currTimeStamp());
+		
+		SkuStorageCriteria example=new SkuStorageCriteria();
+		example.or().andSkuStorageIdEqualTo(cond.getSkuStorageId())
+		.andUsableNumEqualTo(cond.getUsableNum())
+		.andTotalNumEqualTo(cond.getTotalNum());
+		
+		return skuStorageMapper.updateByExampleSelective(skuStorage, example);
+	}
 }

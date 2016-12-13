@@ -2,6 +2,7 @@ package com.ai.slp.product.service.atom.interfaces.storage;
 
 import java.util.List;
 
+import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 
 /**
@@ -160,4 +161,11 @@ public interface IStorageAtomSV {
      * @return
      */
     public List<Storage> queryActiveByGroupIdAndPriorityNum(String groupId,Short priorityNum);
+    
+    /**
+     * 根据条件修改
+     * @param Storage
+     * @return
+     */
+    public int updateByCondtion(Storage storage,Storage cond); 
 }

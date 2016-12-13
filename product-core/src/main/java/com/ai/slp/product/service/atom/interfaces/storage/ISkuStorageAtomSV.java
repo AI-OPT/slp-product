@@ -84,7 +84,7 @@ public interface ISkuStorageAtomSV {
      * @param skuStorage
      * @return
      */
-    public int updateById(SkuStorage skuStorage);
+    public int updateById(SkuStorage skuStorage); 
 
     /**
      * 查询指定库存集合下的SKU库存
@@ -119,4 +119,11 @@ public interface ISkuStorageAtomSV {
      * @return
      */
     public Long queryPriceOfSku(String tenantId,String prodId,String skuId);
+    
+    /**
+     * 根据条件修改SKU库存
+     * @param skuStorage
+     * @return
+     */
+    public int updateByCondtion(SkuStorage skuStorage,SkuStorage cond); 
 }
