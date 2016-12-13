@@ -47,6 +47,12 @@ public class IProductServerSVImpl implements IProductServerSV {
         ProductSKUResponse skuResponse = prodSkuBusiSV.querySkuDetail(skuInfoQuery.getTenantId(),skuInfoQuery.getSkuId(),null);
         ProductSkuInfo skuInfo = new ProductSkuInfo();
         BeanUtils.copyProperties(skuInfo,skuResponse);
+        if(skuInfo.getUsableNum()==null){
+        	skuInfo.setUsableNum(0L);
+        }
+        if(skuInfo.getSalePrice()==null){
+        	skuInfo.setSalePrice(0L);
+        }
         //添加主图
         List<ProductImage> imageList = skuResponse.getProductImageList();
         if (!CollectionUtil.isEmpty(imageList)){
