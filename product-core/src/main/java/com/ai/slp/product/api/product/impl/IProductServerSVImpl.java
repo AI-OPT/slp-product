@@ -113,4 +113,25 @@ public class IProductServerSVImpl implements IProductServerSV {
         CommonUtils.addSuccessResHeader(response,"");
         return response;
     }
+
+    /**
+     * 根据销售商品sku标识查询商品单品详情信息(订单专用)
+     * @param skuInfoQuery 查询对象
+     * @return 商品sku信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author Gavin
+     * @ApiDocMethod
+     * @RestRelativeURL productServer/searchProdInfo4ShopCart
+     * @ApiCode PRODUCT_SERVER_0103
+     */
+	@Override
+	public ProductSkuInfo queryProductSkuById4ShopCart(SkuInfoQuery skuInfoQuery)
+			throws BusinessException, SystemException {
+			ProductSKUResponse skuResponse = prodSkuBusiSV.querySkuDetail4ShopCart(skuInfoQuery.getTenantId(),skuInfoQuery.getSkuId(),null);
+	        ProductSkuInfo skuInfo = new ProductSkuInfo();
+	        BeanUtils.copyProperties(skuInfo,skuResponse);
+	        
+	        return skuInfo;
+	}
 }

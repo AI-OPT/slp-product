@@ -943,4 +943,46 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		});
 		return StringUtils.join(skuAttrStrList,ProductConstants.ProdSku.SaleAttrs.ATTR_SPLIT);
 	}
+
+	/**
+	 * 根据SKU标识或SKU属性串查询SKU的信息(订单专用)
+	 *
+	 * @param tenantId
+	 * @param skuId
+	 * @param skuAttrs
+	 * @return
+	 */
+	@Override
+	public ProductSKUResponse querySkuDetail4ShopCart(String tenantId, String skuId, String skuAttrs) {
+		logger.info("--== querySkuDetail start time:" + System.currentTimeMillis());
+		ProdSku prodSku = selectSkuBySkuIdOrAttrs(tenantId, skuId, skuAttrs);
+
+		// 查询商品
+		Product product = productAtomSV.selectByProductId(tenantId, prodSku.getProdId());
+		if (product == null) {
+			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",
+					tenantId, prodSku.getSkuId(), prodSku.getProdId());
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
+		}
+		//若不是有效状态,则不处理
+		if (!ACTIVE_STATUS_LIST.contains(product.getState())){
+			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",
+					tenantId, prodSku.getSkuId(), prodSku.getProdId(),product.getState());
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
+		}
+		return genSkuResponse4ShopCart(tenantId, product, prodSku);
+	}
+	private ProductSKUResponse genSkuResponse4ShopCart(String tenantId, Product product, ProdSku prodSku) {
+		logger.info("--== genSkuResponse start time:" + System.currentTimeMillis());
+		ProductSKUResponse skuResponse = new ProductSKUResponse();
+		BeanUtils.copyProperties(skuResponse, prodSku);
+		BeanUtils.copyProperties(skuResponse, product);
+
+		// 获取当前库存和价格
+		SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(tenantId, prodSku.getSkuId());
+		skuResponse.setUsableNum(skuStorageVo.getUsableNum());
+		//skuResponse.setSalePrice(skuStorageVo.getSalePrice());
+		logger.info("--== genSkuResponse end time:" + System.currentTimeMillis());
+		return skuResponse;
+	}
 }

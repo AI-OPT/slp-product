@@ -89,4 +89,12 @@ public interface IProdSkuBusiSV {
      * @return
      */
     public SkuSetForProduct querySkuByStorageId(String tenantId,String supplierId, String storageId);
+    /**
+     * 根据SKU标识或SKU属性串查询SKU的信息(订单专用)
+     * @param tenantId
+     * @param skuId
+     * @param skuAttrs
+     * @return
+     */
+    public ProductSKUResponse querySkuDetail4ShopCart(String tenantId,String skuId,String skuAttrs);
 }

@@ -91,4 +91,21 @@ public interface IProductServerSV {
     @Path("/queryProductAndRouteGroup")
     public PageInfoResponse<ProductRouteGroupInfo> queryProductAndRouteGroup(RouteGroupQuery query)
             throws BusinessException,SystemException;
+    
+    /**
+     * 根据销售商品sku标识查询商品单品详情信息(订单专用)
+     * @param skuInfoQuery 查询对象
+     * @return 商品sku信息
+     * @throws BusinessException
+     * @throws SystemException
+     * @author Gavin
+     * @ApiDocMethod
+     * @RestRelativeURL productServer/searchProdInfo4ShopCart
+     * @ApiCode PRODUCT_SERVER_0104
+     */
+    @POST
+	@Path("/searchProdInfo4ShopCart")
+    public ProductSkuInfo queryProductSkuById4ShopCart(SkuInfoQuery skuInfoQuery)
+            throws BusinessException,SystemException;
+    @interface QueryProducSkutById4ShopCart{}
 }
