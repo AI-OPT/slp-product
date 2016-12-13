@@ -100,12 +100,11 @@ public interface IProductServerSV {
      * @throws SystemException
      * @author Gavin
      * @ApiDocMethod
-     * @RestRelativeURL productServer/searchProdInfo4ShopCart
+     * @RestRelativeURL productServer/queryProductSkuById4ShopCart
      * @ApiCode PRODUCT_SERVER_0104
      */
     @POST
-	@Path("/searchProdInfo4ShopCart")
+	@Path("/queryProductSkuById4ShopCart")
     public ProductSkuInfo queryProductSkuById4ShopCart(SkuInfoQuery skuInfoQuery)
             throws BusinessException,SystemException;
-    @interface QueryProducSkutById4ShopCart{}
 }
