@@ -1,6 +1,7 @@
 package com.ai.slp.product.service.business.impl;
 
 import java.sql.Timestamp;
+import java.text.Collator;
 import java.util.*;
 
 import org.slf4j.Logger;
@@ -71,20 +72,33 @@ public class StorageNumDbBusiSVImpl {
         }
 
         boolean checkToSale = false;
-        for (Map.Entry<String,Integer> entry:skuNumMap.entrySet()){
-            int skuNum = entry.getValue();
+        //对库存ID进行排序
+        List<String> skuStorageIdList = new ArrayList<String>();  
+        Iterator it = skuNumMap.keySet().iterator();  
+        while (it.hasNext()) {  
+            String key = it.next().toString();  
+            skuStorageIdList.add(key);  
+        }
+        //按skuStorageId排序
+        Collections.sort(skuStorageIdList,Collator.getInstance(Locale.CHINA));
+        
+        for(String skuStorageId:skuStorageIdList){
+            int skuNum = skuNumMap.get(skuStorageId);
             //若为使用量,则为减少量
             if (isUser){
             	skuNum = 0-skuNum;
             }
-            SkuStorage skuStorage = skuStorageAtomSV.queryById(entry.getKey(),true);
+            SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);
             if (skuStorage ==null){
             	continue;
             }
+            SkuStorage condSkuStorage=new SkuStorage();
+            BeanUtils.copyProperties(condSkuStorage, skuStorage);
+            
             skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
-            skuStorageAtomSV.updateById(skuStorage);
+            int updateSkuCnt=skuStorageAtomSV.updateByCondtion(skuStorage, condSkuStorage);
             //若未更新任何SKU库存,或sku库存不是"启用",则不进行处理
-            if (skuStorageAtomSV.updateById(skuStorage)<1
+            if (updateSkuCnt<1
                     ||!StorageConstants.SkuStorage.State.ACTIVE.equals(skuStorage.getState())){
                 continue;
             }
@@ -94,6 +108,9 @@ public class StorageNumDbBusiSVImpl {
             if (storage==null){
             	continue;
             }
+            Storage condStorage=new Storage();
+            BeanUtils.copyProperties(condStorage, storage);
+            
             logger.info("\r\nThe usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
             storage.setUsableNum(storage.getUsableNum()+skuNum);
             logger.info("\r\nNow,the usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
@@ -101,14 +118,14 @@ public class StorageNumDbBusiSVImpl {
                     && storage.getUsableNum()>0){
             	checkToSale = true;
             }
-            if (storageAtomSV.updateById(storage)>0){
+            if (storageAtomSV.updateByCondtion(storage,condStorage)>0){
                 StorageLog storageLog = new StorageLog();
                 BeanUtils.copyProperties(storageLog,storage);
                 storageLogAtomSV.installLog(storageLog);
             }
         }
 
-        //若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
+/*        //若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
         if (!isUser && product!=null
                 && ProductConstants.Product.State.SALE_OUT.equals(product.getState())
                 && checkToSale){
@@ -120,7 +137,7 @@ public class StorageNumDbBusiSVImpl {
 //            changeGroupPriority(tenantId,product.getSupplierId(),product.getStorageGroupId(),product.getProdId());
             //进行售罄操作
             productBusiSV.offSale(tenantId,product.getSupplierId(),product.getProdId(),null);
-        }
+        }*/
     }
 
     /**

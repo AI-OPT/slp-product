@@ -105,7 +105,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     	String tenantId = product.getTenantId();
     	String groupId = product.getStorageGroupId();
 	 try {
-     	lock.lock();
+     	//lock.lock();
         Timestamp nowTime = DateUtils.currTimeStamp();
         //若商品为预售,且当前不在预售期内,则不进行销售
         if(ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType()) &&
@@ -255,7 +255,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 		} catch (Exception e) {
 			 logger.warn("库存扣减失败,租户ID:{},库存组ID:{}",tenantId,groupId);
 		}finally{
-			lock.unlock();
+			//lock.unlock();
 		}
         return null;
         
