@@ -16,6 +16,8 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.opt.sdk.util.StringUtil;
+import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.platform.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.product.param.*;
@@ -34,10 +36,12 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
+import com.ai.slp.product.util.IPaasCatUtils;
 import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupKeyInfoRequest;
 import com.ai.slp.user.api.keyinfo.param.SearchGroupUserInfoResponse;
+import com.alibaba.fastjson.JSON;
 
 /**
  * Created by jackieliu on 16/6/6.
@@ -749,7 +753,15 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             ProductEditUp productEditUp = new ProductEditUp();
             BeanUtils.copyProperties(productEditUp,product);
             //设置类目名称
-            ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
+            //ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
+            //改为从cache中获取cat
+            String productCatStr=IPaasCatUtils.getCacheClient()
+            		.hget(IPaasCatUtils.genMcsCatInfoKey(tenantId),
+            		product.getProductCatId());
+            ProductCat cat=null;
+            if(!StringUtil.isBlank(productCatStr)){
+            	cat=JSonUtil.fromJSon(productCatStr, ProductCat.class);
+            }
             if (cat!=null){
             	productEditUp.setProductCatName(cat.getProductCatName());
             }
