@@ -62,11 +62,27 @@ public class StorageNumDbBusiSVImpl {
         if (skuNumMap==null || skuNumMap.isEmpty()){
         	return;
         }
+		long prodSkuStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行prodSkuAtomSV.querySkuById，通过SKU标识查询SKU信息,当前时间戳：" + prodSkuStart);
+        
         ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
+        
+        long prodSkuEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用prodSkuAtomSV.querySkuById，通过SKU标识查询SKU信息,当前时间戳：" + prodSkuEnd + ",用时:"
+				+ (prodSkuEnd - prodSkuStart) + "毫秒");
+        
         logger.info("tenantId={},skuId={},isUser={},priorityChange={}",tenantId,skuId,isUser,priorityChange);
         Product product = null;
         if (prodSku!=null){
+        	long productStart = System.currentTimeMillis();
+    		logger.info("####loadtest####开始执行productAtomSV.selectByProductId，查询指定商品,当前时间戳：" + productStart);
+        	
             product = productAtomSV.selectByProductId(tenantId,prodSku.getProdId());
+            
+            long productEnd = System.currentTimeMillis();
+    		logger.info("####loadtest####结束调用productAtomSV.selectByProductId，查询指定商品,当前时间戳：" + productEnd + ",用时:"
+    				+ (productEnd - productStart) + "毫秒");
+            
             logger.info("\r\nthe product[{}] is {} null,status is [{}]",
                     prodSku.getProdId(),product==null?"":"not",product==null?"null":product.getState());
         }
@@ -88,7 +104,17 @@ public class StorageNumDbBusiSVImpl {
             if (isUser){
             	skuNum = 0-skuNum;
             }
+            
+            long queryskuStorageStart = System.currentTimeMillis();
+    		logger.info("####loadtest####开始执行skuStorageAtomSV.queryById，查询指定标识的SKU库存,当前时间戳：" + queryskuStorageStart);
+            
             SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);
+            
+            long queryskuStorageEnd = System.currentTimeMillis();
+    		logger.info("####loadtest####结束调用skuStorageAtomSV.queryById，查询指定标识的SKU库存,当前时间戳：" + queryskuStorageEnd + ",用时:"
+    				+ (queryskuStorageEnd - queryskuStorageStart) + "毫秒");
+    		
+            
             if (skuStorage ==null){
             	continue;
             }
@@ -96,15 +122,33 @@ public class StorageNumDbBusiSVImpl {
             BeanUtils.copyProperties(condSkuStorage, skuStorage);
             
             skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
+            
+            long updateStart = System.currentTimeMillis();
+    		logger.info("####loadtest####开始执行skuStorageAtomSV.updateByCondtion，根据条件修改SKU库存,当前时间戳：" + updateStart);
+    		
             int updateSkuCnt=skuStorageAtomSV.updateByCondtion(skuStorage, condSkuStorage);
+            
+            long updateEnd = System.currentTimeMillis();
+    		logger.info("####loadtest####结束调用skuStorageAtomSV.updateByCondtion，根据条件修改SKU库存,当前时间戳：" + updateEnd + ",用时:"
+    				+ (updateEnd - updateStart) + "毫秒");
+    		
             //若未更新任何SKU库存,或sku库存不是"启用",则不进行处理
             if (updateSkuCnt<1
                     ||!StorageConstants.SkuStorage.State.ACTIVE.equals(skuStorage.getState())){
                 continue;
             }
 
+            long queryNoDiscardStart = System.currentTimeMillis();
+    		logger.info("####loadtest####开始执行storageAtomSV.queryNoDiscardById，查询指定标识的库存(不包括废弃的),当前时间戳：" + queryNoDiscardStart);
+    		
             //更新库存信息
             Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
+            
+            long queryNoDiscardEnd = System.currentTimeMillis();
+    		logger.info("####loadtest####结束调用storageAtomSV.queryNoDiscardById，查询指定标识的库存(不包括废弃的),当前时间戳：" + queryNoDiscardEnd + ",用时:"
+    				+ (queryNoDiscardEnd - queryNoDiscardStart) + "毫秒");
+    		
+            
             if (storage==null){
             	continue;
             }

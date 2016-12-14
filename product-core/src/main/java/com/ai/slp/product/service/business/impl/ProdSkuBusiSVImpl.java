@@ -358,10 +358,22 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	@Override
 	public ProductSKUResponse querySkuDetail(String tenantId, String skuId, String skuAttrs) {
 		logger.info("--== querySkuDetail start time:" + System.currentTimeMillis());
+		
+		long queryStart = System.currentTimeMillis();
+		logger.info("####loadtest#### 开始调用selectSkuBySkuIdOrAttrs,根据SkuId或属性串查询SKU信息,当前时间戳：" + queryStart);
 		ProdSku prodSku = selectSkuBySkuIdOrAttrs(tenantId, skuId, skuAttrs);
-
+		long queryEnd = System.currentTimeMillis();
+		logger.info("####loadtest#### 结束调用selectSkuBySkuIdOrAttrs,根据SkuId或属性串查询SKU信息,当前时间戳：" + queryEnd + ",用时:"
+				+ (queryEnd - queryStart) + "毫秒");
+		
 		// 查询商品
+		long queryProductStart = System.currentTimeMillis();
+		logger.info("####loadtest#### 开始调用productAtomSV.selectByProductId,查询指定商品,当前时间戳：" + queryProductStart);
 		Product product = productAtomSV.selectByProductId(tenantId, prodSku.getProdId());
+		long queryProductEnd = System.currentTimeMillis();
+		logger.info("####loadtest#### 结束调用productAtomSV.selectByProductId,查询指定商品,当前时间戳：" + queryProductEnd + ",用时:"
+				+ (queryProductEnd - queryProductStart) + "毫秒");
+		
 		if (product == null) {
 			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",
 					tenantId, prodSku.getSkuId(), prodSku.getProdId());
@@ -612,9 +624,18 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		BeanUtils.copyProperties(skuResponse, product);
 		skuResponse.setProductAttrList(new ArrayList<ProductSKUAttr>());
 		skuResponse.setProductImageList(new ArrayList<ProductImage>());
+		
+		long queryAttrStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行catAttrAttachAtomSV.queryAttrOfByIdAndType，查询指定类目下的属性信息,当前时间戳：" + queryAttrStart);
+		
 		// 查询商品对应标准品的销售属性,已按照属性属性排序
 		List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
 				product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+		
+		long queryAttrEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用catAttrAttachAtomSV.queryAttrOfByIdAndType，查询指定类目下的属性信息,当前时间戳：" + queryAttrEnd + ",用时:"
+				+ (queryAttrEnd - queryAttrStart) + "毫秒");
+		
 		// SKU图片
 		String attrPic = null;
 		// 查询已设置SKU的属性和属性值信息
@@ -623,15 +644,33 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			productSKUAttr.setAttrId(attrAttch.getAttrId());
 			productSKUAttr.setAttrName(attrAttch.getAttrName());
 			List<ProductSKUAttrValue> attrValueList = new ArrayList<>();
+			
+			long queryAttrValStart = System.currentTimeMillis();
+			logger.info("####loadtest####开始执行standedProdAttrAtomSV.queryAttrVal，查询属性对应属性值集合,当前时间戳：" + queryAttrValStart);
+			
 			// 查询属性对应属性值集合
 			List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(tenantId, product.getStandedProdId(),
 					attrAttch.getAttrId());
+			
+			long queryAttrValEnd = System.currentTimeMillis();
+			logger.info("####loadtest####结束调用standedProdAttrAtomSV.queryAttrVal，查询属性对应属性值集合,当前时间戳：" + queryAttrValEnd + ",用时:"
+					+ (queryAttrValEnd - queryAttrValStart) + "毫秒");
+			
 			for (StandedProdAttr prodAttr : prodAttrs) {
+				long queryAttrValNumStart = System.currentTimeMillis();
+				logger.info("####loadtest####开始执行prodSkuAttrAtomSV.queryAttrValNumOfSku，查询商品SKU下属性值被使用次数,当前时间戳：" + queryAttrValNumStart);
+				
+				
 				// 若SKU不包含当前属性值,则查询下一个属性值
 				if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId, product.getProdId(),
 						prodAttr.getAttrvalueDefId()) <= 0){
 					continue;
 				}
+				
+				long queryAttrValNumEnd = System.currentTimeMillis();
+				logger.info("####loadtest####结束调用prodSkuAttrAtomSV.queryAttrValNumOfSku，查询商品SKU下属性值被使用次数,当前时间戳：" + queryAttrValEnd + ",用时:"
+						+ (queryAttrValNumEnd - queryAttrValNumStart) + "毫秒");
+				
 				ProductSKUAttrValue skuAttrValue = new ProductSKUAttrValue();
 				skuAttrValue.setAttrvalueDefId(prodAttr.getAttrvalueDefId());
 				skuAttrValue.setAttrValueName(prodAttr.getAttrValueName());
@@ -644,9 +683,18 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 				attrValueList.add(skuAttrValue);
 				// 若此属性是否包含图片
 				if (ProductCatConstants.ProductCatAttr.IsPicture.YES.equals(attrAttch.getIsPicture())) {
+					long queryPictureStart = System.currentTimeMillis();
+					logger.info("####loadtest####开始执行pictureAtomSV.queryMainOfProdIdAndAttrVal，查询主图,当前时间戳：" + queryPictureStart);
+					
 					// 查询主图
 					ProdPicture prodPicture = pictureAtomSV.queryMainOfProdIdAndAttrVal(product.getProdId(),
 							prodAttr.getAttrvalueDefId());
+					
+					long queryPictureEnd = System.currentTimeMillis();
+					logger.info("####loadtest####结束调用pictureAtomSV.queryMainOfProdIdAndAttrVal，查询主图,当前时间戳：" + queryPictureEnd + ",用时:"
+							+ (queryPictureEnd - queryPictureStart) + "毫秒");
+					
+					
 					if (prodPicture != null) {
 						ProductImage productImage = new ProductImage();
 						BeanUtils.copyProperties(productImage, prodPicture);
@@ -667,8 +715,18 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		skuResponse.setCommentNum((long)prodCommentAtomSV.countBySkuId(prodSku.getSkuId(),false));
 		// 设置商品销量
 		skuResponse.setSaleNum(prodSaleAllAtomSV.queryNumOfProduc(tenantId, product.getProdId()));
+		
+		long queryStorageStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行storageNumBusiSV.queryStorageOfSku，获取当前库存和价格,当前时间戳：" + queryStorageStart);
+		
 		// 获取当前库存和价格
 		SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(tenantId, prodSku.getSkuId());
+		
+		long queryStorageEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用storageNumBusiSV.queryStorageOfSku，获取当前库存和价格,当前时间戳：" + queryStorageEnd + ",用时:"
+				+ (queryStorageEnd - queryStorageStart) + "毫秒");
+		
+		
 		skuResponse.setUsableNum(skuStorageVo.getUsableNum());
 		skuResponse.setSalePrice(skuStorageVo.getSalePrice());
 		logger.info("--== genSkuResponse end time:" + System.currentTimeMillis());

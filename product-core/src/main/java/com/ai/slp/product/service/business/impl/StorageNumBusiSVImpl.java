@@ -249,8 +249,18 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             numRes.setSalePrice(salePrice);
             numRes.setBasicOrgId(product.getBasicOrgId());
             numRes.setStorageNum(getSkuNumSource(cacheClient,skuStoragekey,new Double(skuNum)));
+            
+            long storageNumChangeStart = System.currentTimeMillis();
+            logger.info("####loadtest####开始执行numDbBusiSV.storageNumChange，库存量减少操作,当前时间戳：" + storageNumChangeStart);
+    		
             //变更数据库信息
             numDbBusiSV.storageNumChange(tenantId,skuId,numRes.getStorageNum(),true,priorityUsableNum<1?true:false);
+            
+            long storageNumChangeEnd = System.currentTimeMillis();
+    		logger.info("####loadtest####结束调用numDbBusiSV.storageNumChange，库存量减少操作，当前时间戳：" + storageNumChangeEnd + ",用时:"
+    				+ (storageNumChangeEnd - storageNumChangeStart) + "毫秒");
+    		
+            
             return numRes;
 		} catch (Exception e) {
 			 logger.warn("库存扣减失败,租户ID:{},库存组ID:{}",tenantId,groupId);
