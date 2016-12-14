@@ -12,14 +12,12 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.StorageAttachMapper;
-import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.storage.StorageMapper;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
 
 /**
  * Created by jackieliu on 16/5/5.
