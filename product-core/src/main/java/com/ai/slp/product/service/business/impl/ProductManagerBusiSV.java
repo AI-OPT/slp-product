@@ -746,8 +746,17 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
 	public PageInfoResponse<ProductEditUp> queryInSale(ProductQueryInfo queryReq) {
 
         String tenantId = queryReq.getTenantId();
+        
+        long productPageStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行productAtomSV.selectPageForInsale，查询在售商品,当前时间戳：" + productPageStart);
+        
         //查询所有符合条件商品
         PageInfo<Product> productPage = productAtomSV.selectPageForInsale(queryReq);
+
+        long productPageEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用productAtomSV.selectPageForInsale，查询在售商品,当前时间戳：" + productPageEnd + ",用时:"
+				+ (productPageEnd - productPageStart) + "毫秒");
+        
         List<ProductEditUp> editUpList = new ArrayList<>();
         for (Product product:productPage.getResult()){
             ProductEditUp productEditUp = new ProductEditUp();
@@ -755,6 +764,10 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             //设置类目名称
             //ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
             //改为从cache中获取cat
+            
+            long queryCatNameStart = System.currentTimeMillis();
+    		logger.info("####loadtest####开始执行IPaasCatUtils.getCacheClient，从缓存中获取类目名称,当前时间戳：" + queryCatNameStart);
+            
             String productCatStr=IPaasCatUtils.getCacheClient()
             		.hget(IPaasCatUtils.genMcsCatInfoKey(tenantId),
             		product.getProductCatId());
@@ -765,8 +778,21 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             if (cat!=null){
             	productEditUp.setProductCatName(cat.getProductCatName());
             }
+            
+            long queryCatNameEnd = System.currentTimeMillis();
+    		logger.info("####loadtest####结束调用IPaasCatUtils.getCacheClient，从缓存中获取类目名称,当前时间戳：" + queryCatNameEnd + ",用时:"
+    				+ (queryCatNameEnd - queryCatNameStart) + "毫秒");
+    		
+    		long queryPictureStart = System.currentTimeMillis();
+    		logger.info("####loadtest####开始执行prodPictureAtomSV.queryMainOfProd，查询主预览图,当前时间戳：" + queryPictureStart);
+            
             //查询主预览图
             ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
+            
+            long queryPictureEnd = System.currentTimeMillis();
+    		logger.info("####loadtest####结束调用prodPictureAtomSV.queryMainOfProd，查询主预览图,当前时间戳：" + queryPictureEnd + ",用时:"
+    				+ (queryPictureEnd - queryPictureStart) + "毫秒");
+            
             if (prodPicture!=null){
                 productEditUp.setProPictureId(prodPicture.getProPictureId());
                 productEditUp.setVfsId(prodPicture.getVfsId());

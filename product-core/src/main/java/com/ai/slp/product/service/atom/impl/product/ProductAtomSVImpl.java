@@ -318,7 +318,10 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	public PageInfo<Product> selectPageForInsale(ProductQueryInfo queryReq) {
 
 		ProductCriteria example = new ProductCriteria();
+		
+		
 		example.setOrderByClause("UP_TIME desc");//上架时间倒序
+		
 		ProductCriteria.Criteria criteria = example.createCriteria();
 		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
 			criteria.andProductCatIdEqualTo(queryReq.getProductCatId());
@@ -400,7 +403,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		//获取页数和每页条数
 		int pageNo = queryReq.getPageNo();
 		int pageSize = queryReq.getPageSize();
-
+		
 		return pageQuery(example, pageNo, pageSize);
 	}
 
