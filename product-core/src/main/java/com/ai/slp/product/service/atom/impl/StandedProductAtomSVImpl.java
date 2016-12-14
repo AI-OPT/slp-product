@@ -64,10 +64,11 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		if (StringUtils.isBlank(tenantId) || StringUtils.isBlank(standedProdId)){
 			return null;
 		}
-		StandedProductCriteria example = new StandedProductCriteria();
-		example.createCriteria().andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
-		List<StandedProduct> productList = standedProductMapper.selectByExample(example);
-		return (productList == null || productList.isEmpty()) ? null : productList.get(0);
+		StandedProduct product = standedProductMapper.selectByPrimaryKey(standedProdId);
+		if(product!=null&&!tenantId.equalsIgnoreCase(product.getTenantId())	){
+			return null;
+		}
+		return product;
 	}
 
 	@Override

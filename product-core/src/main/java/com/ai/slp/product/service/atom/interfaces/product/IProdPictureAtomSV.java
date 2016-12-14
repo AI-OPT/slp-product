@@ -67,4 +67,12 @@ public interface IProdPictureAtomSV {
      * @return
      */
     public List<ImageInfo> queryAttrValOfProd(String prodId);
+    
+
+    /**
+     * 查询商品主图
+     * @param list
+     * @return
+     */
+    public List<ProdPicture> queryMainOfProdList(List<String> prodIdList);
 }

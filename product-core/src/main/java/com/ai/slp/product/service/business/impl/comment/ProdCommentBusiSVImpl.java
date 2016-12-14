@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,13 +47,14 @@ import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentPictureAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.business.impl.NormProductBusiSVImpl;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
 
 
 @Service
 @Transactional
 public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
-
+	private static final Logger logger = LoggerFactory.getLogger(IProdCommentBusiSV.class);
 	@Autowired
 	IProdCommentAtomSV prodCommentAtomSV;
 	@Autowired
@@ -221,8 +224,25 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		params.setSupplierId(replyComment.getSupplierId());
 		params.setCommentId(replyComment.getCommentId());
 		params.setState(CommonConstants.STATE_ACTIVE);
+		
+		long queryCountStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行prodCommentAtomSV.queryCountByProductId，查询评论条数,当前时间戳：" + queryCountStart);
+		
 		Integer queryCountByParams = prodCommentAtomSV.queryCountByProductId(params);
+		
+		long queryCountEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用prodCommentAtomSV.queryCountByProductId，查询评论条数,当前时间戳：" + queryCountEnd + ",用时:"
+				+ (queryCountEnd - queryCountStart) + "毫秒");
+		
+		long queryCommenStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行prodCommentAtomSV.queryByCommentId，根据评论编码查询评论,当前时间戳：" + queryCommenStart);
+		
 		ProdComment comment = prodCommentAtomSV.queryByCommentId(replyComment.getCommentId());
+		
+		long queryCommenEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用prodCommentAtomSV.queryByCommentId，根据评论编码查询评论，查询评论条数,当前时间戳：" + queryCommenEnd + ",用时:"
+				+ (queryCommenEnd - queryCommenStart) + "毫秒");
+		
 		//判断评论条数
 		if (queryCountByParams>0) {
 			//对评论进行回复
@@ -235,7 +255,16 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 			commentReply.setSkuId(comment.getSkuId());
 			commentReply.setStandedProdId(comment.getStandedProdId());
 			
+			long queryCommenReplyStart = System.currentTimeMillis();
+			logger.info("####loadtest####开始执行prodCommentAtomSV.queryByCommentId，进行商品评论回复,当前时间戳：" + queryCommenReplyStart);
+			
 			prodCommentAtomSV.prodCommentReply(commentReply);
+			
+			long queryCommenReplyEnd = System.currentTimeMillis();
+			logger.info("####loadtest####结束调用prodCommentAtomSV.queryByCommentId，进行商品评论回复，查询评论条数,当前时间戳：" + queryCommenReplyEnd + ",用时:"
+					+ (queryCommenReplyEnd - queryCommenReplyStart) + "毫秒");
+			
+			
 			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
 			baseResponse.setResponseHeader(responseHeader );
 		}else{

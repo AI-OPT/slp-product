@@ -822,8 +822,18 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 	@Override
 	public int updateMarketPrice(MarketPriceUpdate marketPrice) {
+		
+		long querystandedProdStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行standedProductAtomSV.selectById，查询租户下的某个标准品,当前时间戳：" + querystandedProdStart);
+		
 		StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
 				marketPrice.getProductId());
+		
+		long querystandedProdEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用standedProductAtomSV.selectById，查询租户下的某个标准品,当前时间戳：" + querystandedProdEnd + ",用时:"
+				+ (querystandedProdEnd - querystandedProdStart) + "毫秒");
+		
+		
 		// 判断此租户下是否存在次标准品
 		if (standedProduct == null){
 			throw new BusinessException("",
@@ -835,15 +845,23 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + marketPrice.getSupplierId() + "不一致!");
 		}
 
+		long updateMarketPriceStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行standedProductAtomSV.updateMarketPrice，更新市场价格信息,当前时间戳：" + updateMarketPriceStart);
+		
 		// 更新市场价格信息
 		int count = standedProductAtomSV.updateMarketPrice(marketPrice.getTenantId(), marketPrice.getProductId(),
 				marketPrice.getMarketPrice(), marketPrice.getOperId());
+		
+		long updateMarketPriceEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用standedProductAtomSV.updateMarketPrice，更新市场价格信息,当前时间戳：" + updateMarketPriceEnd + ",用时:"
+				+ (updateMarketPriceEnd - updateMarketPriceStart) + "毫秒");
+		
 		if (count > 0) {
 			standedProduct.setMarketPrice(marketPrice.getMarketPrice());
 			// 更行标准品日志
 			StandedProductLog standedProductLog = new StandedProductLog();
 			BeanUtils.copyProperties(standedProductLog, standedProduct);
-			standedProductLogAtomSV.insert(standedProductLog);
+			//standedProductLogAtomSV.insert(standedProductLog);
 			// 更新价格类日志
 			ProdPriceLog prodPriceLog = new ProdPriceLog();
 			BeanUtils.copyProperties(prodPriceLog, standedProduct);
@@ -851,7 +869,16 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			prodPriceLog.setObjType("SA");
 			prodPriceLog.setObjId(standedProduct.getStandedProdId());
 			prodPriceLog.setUpdatePrice(standedProduct.getMarketPrice());
+			
+			long insertPriceStart = System.currentTimeMillis();
+			logger.info("####loadtest####开始执行prodPriceLogAtomSV.insert，添加价格类日志,当前时间戳：" + insertPriceStart);
+			
 			prodPriceLogAtomSV.insert(prodPriceLog);
+			
+			long insertPriceEnd = System.currentTimeMillis();
+			logger.info("####loadtest####结束调用prodPriceLogAtomSV.insert，添加价格类日志,当前时间戳：" + insertPriceEnd + ",用时:"
+					+ (insertPriceEnd - insertPriceStart) + "毫秒");
+			
 		}
 
 		return count;

@@ -758,6 +758,19 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
 				+ (productPageEnd - productPageStart) + "毫秒");
         
         List<ProductEditUp> editUpList = new ArrayList<>();
+        //组装prodIdList
+        List<String> prodIdList=new ArrayList<String>();
+        for (Product product:productPage.getResult()){
+        	prodIdList.add(product.getProdId());
+        }
+        //一次查询出所有的图片
+        long queryPictureStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行prodPictureAtomSV.queryMainOfProd，查询主预览图,当前时间戳：" + queryPictureStart);
+		List<ProdPicture> prodPictureList = prodPictureAtomSV.queryMainOfProdList(prodIdList);
+        long queryPictureEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用prodPictureAtomSV.queryMainOfProd，查询主预览图,当前时间戳：" + queryPictureEnd + ",用时:"
+				+ (queryPictureEnd - queryPictureStart) + "毫秒");
+        
         for (Product product:productPage.getResult()){
             ProductEditUp productEditUp = new ProductEditUp();
             BeanUtils.copyProperties(productEditUp,product);
@@ -783,16 +796,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
     		logger.info("####loadtest####结束调用IPaasCatUtils.getCacheClient，从缓存中获取类目名称,当前时间戳：" + queryCatNameEnd + ",用时:"
     				+ (queryCatNameEnd - queryCatNameStart) + "毫秒");
     		
-    		long queryPictureStart = System.currentTimeMillis();
-    		logger.info("####loadtest####开始执行prodPictureAtomSV.queryMainOfProd，查询主预览图,当前时间戳：" + queryPictureStart);
-            
-            //查询主预览图
-            ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
-            
-            long queryPictureEnd = System.currentTimeMillis();
-    		logger.info("####loadtest####结束调用prodPictureAtomSV.queryMainOfProd，查询主预览图,当前时间戳：" + queryPictureEnd + ",用时:"
-    				+ (queryPictureEnd - queryPictureStart) + "毫秒");
-            
+    		ProdPicture prodPicture=getProdPictureByProdId(product.getProdId(),prodPictureList);
             if (prodPicture!=null){
                 productEditUp.setProPictureId(prodPicture.getProPictureId());
                 productEditUp.setVfsId(prodPicture.getVfsId());
@@ -806,6 +810,16 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         response.setResult(editUpList);
         return response;
     
+	}
+	private ProdPicture getProdPictureByProdId(String prodId,List<ProdPicture> list) {
+		if(list!=null&&list.size()>0){
+			for(ProdPicture pic:list){
+				if(pic.getProdId().equalsIgnoreCase(prodId)){
+					return pic;
+				}
+			}
+		}
+		return null;
 	}
 	
 }

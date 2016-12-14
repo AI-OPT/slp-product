@@ -59,6 +59,8 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public Product selectByGroupId(String tenantId, String groupId) {
 		ProductCriteria example = new ProductCriteria();
+		example.setLimitStart(0);
+		example.setLimitEnd(1);
 		//example.setOrderByClause("CREATE_TIME desc");
 		example.createCriteria().andTenantIdEqualTo(tenantId).andStorageGroupIdEqualTo(groupId);
 		List<Product> products = productMapper.selectByExample(example);
@@ -66,7 +68,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 			return null;
 		}
 		//排序
-		Collections.sort(products, new productsComparator());
+		//Collections.sort(products, new productsComparator());
 		
 		return  products.get(0);
 	}
