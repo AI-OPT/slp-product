@@ -320,7 +320,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		ProductCriteria example = new ProductCriteria();
 		
 		
-		example.setOrderByClause("UP_TIME desc");//上架时间倒序
+		//example.setOrderByClause("UP_TIME desc");//上架时间倒序
 		
 		ProductCriteria.Criteria criteria = example.createCriteria();
 		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
