@@ -278,13 +278,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 				storageTotal += storage.getTotalNum();
 			}
 			//若没有销售属性,则填充销售价
-			if(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR.equals(group.getIsSaleAttr())){
+			/*if(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR.equals(group.getIsSaleAttr())){
 				//查询库存对应SKU库存的信息.
 				List<SkuStorage> skuStoList = skuStorageAtomSV.queryByStorageId(storage.getStorageId(),true);
 				if (!CollectionUtil.isEmpty(skuStoList)){
 					stoStorage.setSalePrice(skuStoList.get(0).getSalePrice());
 				}
-			}
+			}*/
 		}
 		groupInfo.setStorageTotal(storageTotal);
 		groupInfo.setStorageList(storageMap);
