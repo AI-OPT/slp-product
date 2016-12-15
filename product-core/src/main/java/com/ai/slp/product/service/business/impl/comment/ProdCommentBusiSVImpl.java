@@ -225,20 +225,14 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		params.setCommentId(replyComment.getCommentId());
 		params.setState(CommonConstants.STATE_ACTIVE);
 		
-		long queryCountStart = System.currentTimeMillis();
-		logger.info("####loadtest####开始执行prodCommentAtomSV.queryCountByProductId，查询评论条数,当前时间戳：" + queryCountStart);
-		
-		Integer queryCountByParams = prodCommentAtomSV.queryCountByProductId(params);
-		
-		long queryCountEnd = System.currentTimeMillis();
-		logger.info("####loadtest####结束调用prodCommentAtomSV.queryCountByProductId，查询评论条数,当前时间戳：" + queryCountEnd + ",用时:"
-				+ (queryCountEnd - queryCountStart) + "毫秒");
-		
 		long queryCommenStart = System.currentTimeMillis();
 		logger.info("####loadtest####开始执行prodCommentAtomSV.queryByCommentId，根据评论编码查询评论,当前时间戳：" + queryCommenStart);
 		
 		ProdComment comment = prodCommentAtomSV.queryByCommentId(replyComment.getCommentId());
-		
+		Integer queryCountByParams =0;
+		if(comment!=null){
+			queryCountByParams=1;
+		}
 		long queryCommenEnd = System.currentTimeMillis();
 		logger.info("####loadtest####结束调用prodCommentAtomSV.queryByCommentId，根据评论编码查询评论，查询评论条数,当前时间戳：" + queryCommenEnd + ",用时:"
 				+ (queryCommenEnd - queryCommenStart) + "毫秒");
