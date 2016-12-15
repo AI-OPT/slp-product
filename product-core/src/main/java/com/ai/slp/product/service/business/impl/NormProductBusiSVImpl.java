@@ -43,6 +43,7 @@ import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.AttrValRequestComparator;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.OldAttrValListComparator;
 import com.ai.slp.product.util.StoNoSkuSalePriceComparator;
 import com.ai.slp.product.util.StorageComparator;
 import com.ai.slp.product.util.StorageGroupComparator;
@@ -804,10 +805,17 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	 *
 	 * @param oldAttrValList
 	 */
-	private void loseActiveAttr(Collection<StandedProdAttr> oldAttrValList, Long operId) {
-		if (oldAttrValList == null || oldAttrValList.isEmpty()){
+	private void loseActiveAttr(Collection<StandedProdAttr> oldValList, Long operId) {
+		if (oldValList == null || oldValList.isEmpty()){
 			return;
 		}
+		
+		ArrayList<StandedProdAttr> oldAttrValList = new ArrayList<>();
+		oldAttrValList.addAll(oldValList);
+		
+		//排序
+		Collections.sort(oldAttrValList, new OldAttrValListComparator());
+		
 		for (StandedProdAttr prodAttr : oldAttrValList) {
 			prodAttr.setOperId(operId);
 			prodAttr.setOperTime(DateUtils.currTimeStamp());
