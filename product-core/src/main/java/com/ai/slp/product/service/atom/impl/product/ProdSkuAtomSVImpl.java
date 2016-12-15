@@ -56,7 +56,7 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 				andTenantIdEqualTo(tenantId).andProdIdEqualTo(prodId);
 		//如果不包含废弃状态
 		if (!hasDiscard){
-			criteria.andStateNotEqualTo(ProductConstants.ProdSku.State.INACTIVE);
+			criteria.andStateEqualTo(ProductConstants.ProdSku.State.ACTIVE);
 		}
 		return prodSkuMapper.selectByExample(example);
 	}
