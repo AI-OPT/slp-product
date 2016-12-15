@@ -117,6 +117,6 @@
     FROM
       sku_storage skuStor, storage
     WHERE skuStor.STORAGE_ID = storage.STORAGE_ID AND skuStor.SKU_ID = #{skuId}
-      AND storage.PROD_ID = #{prodId} AND skuStor.STATE = '1' AND storage.STATE LIKE '1%' limit 1
+      AND storage.PROD_ID = #{prodId} AND skuStor.STATE = '1' AND storage.STATE IN ('1','11') limit 1
   </select>
 </mapper>
