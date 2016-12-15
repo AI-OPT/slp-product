@@ -36,7 +36,7 @@ public class ProdCatDefAtomSVImpl implements IProdCatDefAtomSV{
         	criteria.andTenantIdEqualTo(tenantId);
         }
         if (StringUtils.isNotBlank(productCatId)){
-        	criteria.andProductCatIdLike("%"+productCatId+"%");
+        	criteria.andProductCatIdEqualTo(productCatId);
         }
         if (StringUtils.isNotBlank(productCatName)){
         	criteria.andProductCatNameLike("%"+productCatName+"%");

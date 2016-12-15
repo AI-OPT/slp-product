@@ -137,7 +137,7 @@ public class ProdTargetAreaAtomSVImpl implements IProdTargetAreaAtomSV {
     	
 		ProductCriteria.Criteria criteria = prodExample.createCriteria();
 		if (StringUtils.isNotBlank(productEditParam.getProdId())){
-			criteria.andProdIdLike("%"+productEditParam.getProdId()+"%");
+			criteria.andProdIdEqualTo(productEditParam.getProdId());
 		}
 		int pageNo = productEditParam.getPageNo();
         int pageSize = productEditParam.getPageSize();
