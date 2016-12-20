@@ -1035,12 +1035,34 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		ProductSKUResponse skuResponse = new ProductSKUResponse();
 		BeanUtils.copyProperties(skuResponse, prodSku);
 		BeanUtils.copyProperties(skuResponse, product);
-
+		
+		// SKU图片
+		String attrPic = null;
+		
+		// 设置主图
+		skuResponse.setProductImageList(getProductSkuPic(attrPic, product));
+		
+		// 设置商品销量
+		skuResponse.setSaleNum(prodSaleAllAtomSV.queryNumOfProduc(tenantId, product.getProdId()));
+		
+		long queryStorageStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行storageNumBusiSV.queryStorageOfSku，获取当前库存和价格,当前时间戳：" + queryStorageStart);
+		
 		// 获取当前库存和价格
 		SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(tenantId, prodSku.getSkuId());
+		
+		long queryStorageEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用storageNumBusiSV.queryStorageOfSku，获取当前库存和价格,当前时间戳：" + queryStorageEnd + ",用时:"
+				+ (queryStorageEnd - queryStorageStart) + "毫秒");
+		
+		
 		skuResponse.setUsableNum(skuStorageVo.getUsableNum());
-		//skuResponse.setSalePrice(skuStorageVo.getSalePrice());
+		skuResponse.setSalePrice(skuStorageVo.getSalePrice());
 		logger.info("--== genSkuResponse end time:" + System.currentTimeMillis());
+
+		
+		
+		
 		return skuResponse;
 	}
 }
