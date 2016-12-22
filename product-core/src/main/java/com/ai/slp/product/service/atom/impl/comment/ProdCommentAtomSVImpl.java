@@ -91,11 +91,13 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		}
 		String orderId = params.getOrderId();
 		if(!StringUtil.isBlank(orderId)){
-			criteria.andOrderIdLike("%"+orderId+"%");
+			//criteria.andOrderIdLike("%"+orderId+"%");
+			criteria.andOrderIdEqualTo(orderId);
 		}
 		String standedProdId = params.getStandedProdId();
 		if(!StringUtil.isBlank(standedProdId)){
-			criteria.andStandedProdIdLike("%"+standedProdId+"%");
+			//criteria.andStandedProdIdLike("%"+standedProdId+"%");
+			criteria.andStandedProdIdEqualTo(standedProdId);
 		}
 		if(commentTimeBegin != null){
 			criteria.andCommentTimeGreaterThanOrEqualTo(commentTimeBegin);
