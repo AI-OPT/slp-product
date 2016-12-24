@@ -38,6 +38,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
+import com.ai.slp.product.util.SkuStorageListComparator;
 import com.ai.slp.product.util.StoNoSkuSalePriceComparator;
 import com.ai.slp.product.util.StorageComparator;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
@@ -254,6 +255,10 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		int count = 0;
 		//查看对应优先级是否已经有库存信息
 		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryPriorityOfGroup(groupId,skuId,priorityNum);
+		
+		//排序
+		Collections.sort(skuStorageList, new SkuStorageListComparator());
+		
 		for (SkuStorage skuStorage:skuStorageList){
 			skuStorage.setSalePrice(price);
 			skuStorage.setOperId(operId);

@@ -455,7 +455,16 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //若商品状态是"停用下架"或"售罄下架"
         if(ProductConstants.Product.State.STOP.equals(product.getState())
                 || ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
+        	
+        	long toSaleForStopStart = System.currentTimeMillis();
+        	logger.info("======对不符合条件的商品进行下架处理,当前时间戳:" + toSaleForStopStart );
+        	
             changeToSaleForStop(product, operId);
+            
+            long toSaleForStopEnd = System.currentTimeMillis();
+            logger.info("=====对不符合条件的商品进行下架处理,当前时间戳:" + toSaleForStopEnd + ",用时:" + 
+            (toSaleForStopEnd-toSaleForStopStart) +"毫秒" );
+            
             return;
         }
         //若商品既不是"停用下架"和"售罄下架",也不是"仓库中",则不允许上架
