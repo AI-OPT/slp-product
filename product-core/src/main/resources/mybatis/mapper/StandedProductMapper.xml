@@ -249,12 +249,12 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update standed_product
     <set >
-      <if test="record.standedProdId != null" >
+   <!--    <if test="record.standedProdId != null" >
         STANDED_PROD_ID = #{record.standedProdId,jdbcType=VARCHAR},
       </if>
       <if test="record.tenantId != null" >
         TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
-      </if>
+      </if> -->
       <if test="record.productCatId != null" >
         PRODUCT_CAT_ID = #{record.productCatId,jdbcType=VARCHAR},
       </if>
