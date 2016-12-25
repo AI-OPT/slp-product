@@ -24,11 +24,11 @@
 
 	<!-- <dubbo:consumer timeout="${dubbo.consoumer.timeout}" /> -->
 	
-	<dubbo:reference id="iGnAreaQuerySV" interface="com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV"/>
-	<dubbo:reference id="iUcUserSV" interface="com.ai.slp.user.api.ucuser.intefaces.IUcUserSV"/>
-	<dubbo:reference id="iUcKeyInfoSV" interface="com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV"/>
-	<dubbo:reference id="iStorageSV" interface="com.ai.slp.product.api.storage.interfaces.IStorageSV"/>
-	<dubbo:reference id="iSysUserQuerySV" interface="com.ai.platform.common.api.sysuser.interfaces.ISysUserQuerySV"/>
-	<dubbo:reference id="iRouteGroupManageSV"
+	<dubbo:reference id="iGnAreaQuerySV"  loadbalance="roundrobin" interface="com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV"/>
+	<dubbo:reference id="iUcUserSV"  loadbalance="roundrobin" interface="com.ai.slp.user.api.ucuser.intefaces.IUcUserSV"/>
+	<dubbo:reference id="iUcKeyInfoSV" loadbalance="roundrobin" interface="com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV"/>
+	<dubbo:reference id="iStorageSV" loadbalance="roundrobin" interface="com.ai.slp.product.api.storage.interfaces.IStorageSV"/>
+	<dubbo:reference id="iSysUserQuerySV" loadbalance="roundrobin" interface="com.ai.platform.common.api.sysuser.interfaces.ISysUserQuerySV"/>
+	<dubbo:reference id="iRouteGroupManageSV" loadbalance="roundrobin" 
 					 interface="com.ai.slp.route.api.routegroupmanage.interfaces.IRouteGroupManageSV"/>
 </beans>

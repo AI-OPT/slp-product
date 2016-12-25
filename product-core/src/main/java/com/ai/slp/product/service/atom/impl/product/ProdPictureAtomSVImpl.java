@@ -88,6 +88,8 @@ public class ProdPictureAtomSVImpl implements IProdPictureAtomSV {
     @Override
     public ProdPicture queryMainOfProd(String prodId) {
         ProdPictureCriteria example = new ProdPictureCriteria();
+        example.setLimitStart(0);
+        example.setLimitEnd(1);
         example.createCriteria().andProdIdEqualTo(prodId)
                 .andPicUsesEqualTo(ProductConstants.ProdPicture.PicType.PRODUCT)
                 .andIsMainPicEqualTo(ProductConstants.ProdPicture.IsMainPic.YES)

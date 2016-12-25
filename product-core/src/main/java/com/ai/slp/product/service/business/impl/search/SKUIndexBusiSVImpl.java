@@ -149,7 +149,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             skuInfo.setPrice(skuStorageAtomSV.queryPriceOfSku(
                     prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid()));
             // 受众
-            skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid()));
+            //skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid()));
             //销售地域
             List<SaleAreaInfo> areaInfoList = new ArrayList<>();
             //若不是全国销售,则查询销售地域
@@ -226,15 +226,11 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
     }
 
     public void fillSKUImageInfo(SKUInfo skuInfo,String prodCatId,String prodId,String skuId) {
-        //查询商品对应的属性值是否有图片
-        ImageInfo imageInfo = prodPictureAtomSV.queryMainOfSku(prodCatId,skuId);
-        //若SKU没有属性值图片,则查询所属商品的主图
-        if (imageInfo==null) {
-            ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(prodId);
-            imageInfo = prodPicture==null?null:new ImageInfo(prodPicture.getPicType(),prodPicture.getVfsId());
-        }
+    	 ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(prodId);
+    	 ImageInfo imageInfo = prodPicture==null?null:new ImageInfo(prodPicture.getPicType(),prodPicture.getVfsId());
+         
         skuInfo.setImageinfo(imageInfo);
         //查询该商品其他属性值的主图
-        skuInfo.setThumbnail(prodPictureAtomSV.queryAttrValOfProd(prodId));
+        //skuInfo.setThumbnail(prodPictureAtomSV.queryAttrValOfProd(prodId));
     }
 }
