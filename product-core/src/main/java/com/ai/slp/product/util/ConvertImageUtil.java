@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ai.slp.product.api.webfront.param.ProductImage;
-
+/**
+ *图片转换工具类 
+ *
+ */
 public final class ConvertImageUtil {
     private ConvertImageUtil() {
     }

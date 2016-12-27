@@ -6,14 +6,27 @@ import com.google.gson.annotations.Expose;
  * Created by xin on 16-5-13.
  */
 public class AttrInfo {
+	/**
+	 * 属性值
+	 */
     @Expose
     private String attrvalue;
+    /**
+	 * 属性标识
+	 */
     @Expose
     private String attrid;
+    /**
+	 * 属性值ID
+	 */
     @Expose
     private String attrvaluedefid;
+    /**
+	 * 属性名称
+	 */
     @Expose
     private String attrname;
+    
     public String getAttrname() {
         return attrname;
     }

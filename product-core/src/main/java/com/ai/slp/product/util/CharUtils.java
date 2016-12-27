@@ -3,6 +3,8 @@ package com.ai.slp.product.util;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * 字符轉換工具類
+ * 
  * Created by jackieliu on 16/7/22.
  */
 public final class CharUtils {

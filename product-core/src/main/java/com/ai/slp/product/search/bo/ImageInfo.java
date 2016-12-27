@@ -6,8 +6,14 @@ import com.google.gson.annotations.Expose;
  * Created by xin on 16-5-17.
  */
 public class ImageInfo {
+	/**
+	 * 图片类型
+	 */
     @Expose
     private String imagetype;
+    /**
+	 * 文件附件模块ID
+	 */
     @Expose
     private String vfsid;
 

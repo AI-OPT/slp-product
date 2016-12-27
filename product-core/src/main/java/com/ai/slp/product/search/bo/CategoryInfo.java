@@ -6,8 +6,14 @@ import com.google.gson.annotations.Expose;
  * Created by xin on 16-5-13.
  */
 public class CategoryInfo {
+	/**
+	 * 类目ID
+	 */
     @Expose
     private String categorid;
+    /**
+	 * 类目名称
+	 */
     private String categoryname;
 
 

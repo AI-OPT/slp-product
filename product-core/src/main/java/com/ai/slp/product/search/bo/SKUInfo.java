@@ -6,32 +6,66 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 
 public class SKUInfo {
+	/**
+	 * 租户
+	 */
     @Expose
     private String tenantid;
+    /**
+	 * sku标识
+	 */
     @Expose
     private String skuid;
+    /**
+	 * sku名称
+	 */
     @Expose
     private String skuname;
+    
     //叶子
     @Expose
     private String productcategoryid;
+    /**
+	 * 标识
+	 */
     @Expose
     private String rootcategorid;
+    /**
+	 * 商品标识
+	 */
     @Expose
     private String productid;
+    /**
+	 * 商品名称
+	 */
     @Expose
     private String productname;
+    /**
+	 * 卖点
+	 */
     @Expose
     private String productsellpoint = "";
     // 关键属性
     @Expose
     private List<AttrInfo> attrinfos;
+    /**
+	 * 可销售数
+	 */
     @Expose
     private long salenum;
+    /**
+	 * 类目
+	 */
     @Expose
     private List<CategoryInfo> categoryinfos;
+    /**
+	 * 图片
+	 */
     @Expose
     private ImageInfo imageinfo;
+    /**
+	 * 价格
+	 */
     @Expose
     private long price;
     // 改成三级权限
@@ -50,10 +84,12 @@ public class SKUInfo {
     // 是否是全国销售
     @Expose
     private String salenationwide = "";
-    //
+    //图片信息
     @Expose
     private List<ImageInfo> thumbnail;
-
+    /**
+	 * 上架时间
+	 */
     @Expose
     private long uptime;
 

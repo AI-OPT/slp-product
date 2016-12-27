@@ -13,22 +13,24 @@ import com.ai.opt.base.vo.BaseResponse;
  */
 public class ProdStateLog extends BaseResponse {
 	private static final long serialVersionUID = 1L;
+	
+	//日志标识
 	private String logId;
-
+	//商品标识
     private String prodId;
-
+    //优先级
     private Short priorityNumber;
-
+    //优先理由
     private String priorityReason;
-
+    //拒绝原因
     private String refuseReason;
-
+    //拒绝理由
     private String refuseDes;
-
+    //状态值
     private String state;
-
+    //操作人标识
     private Long operId;
-
+    //操作是时间
     private Timestamp operTime;
 
 	public String getLogId() {

@@ -6,6 +6,9 @@ import com.google.gson.annotations.Expose;
  * Created by xin on 16-5-20.
  */
 public class SaleAreaInfo {
+	/**
+	 * 省份编码
+	 */
     @Expose
     private String provcode;
 

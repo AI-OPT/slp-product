@@ -6,8 +6,14 @@ import com.google.gson.annotations.Expose;
  * Created by xin on 16-5-17.
  */
 public class ProdAudiencesSes {
+	/**
+	 * 用户权限
+	 */
     @Expose
     private String audiencecode;
+    /**
+     * 用户ID
+     */
     @Expose
     private String userid;
 
