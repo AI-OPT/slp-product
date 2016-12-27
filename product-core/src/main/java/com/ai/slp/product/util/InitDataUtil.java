@@ -6,6 +6,10 @@ import java.util.List;
 import com.ai.slp.product.api.webfront.param.ProductAttrInfo;
 import com.ai.slp.product.constants.ProductHomeConstants;
 
+/**
+ *地域信息工具类 
+ *
+ */
 public final class InitDataUtil {
 
     private InitDataUtil() {

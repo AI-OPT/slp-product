@@ -5,8 +5,10 @@ import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.webfront.param.ProductHomeRequest;
 import com.ai.slp.product.api.webfront.param.ProductQueryRequest;
 import com.ai.slp.product.constants.ProductExceptCode;
+
 /**
- * 校验工具类 
+ * 校验工具类
+ *
  *
  */
 public final class ValidateUtil {

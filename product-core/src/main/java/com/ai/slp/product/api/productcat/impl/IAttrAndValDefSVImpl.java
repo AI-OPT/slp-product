@@ -65,16 +65,21 @@ public class IAttrAndValDefSVImpl implements IAttrAndValDefSV {
     @Override
     public BaseResponse createAttrs(List<AttrParam> attrParamList)
             throws BusinessException, SystemException {
+    	BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
     	if(attrParamList != null && !attrParamList.isEmpty()){
 	    	for(AttrParam attrParam : attrParamList){
 	    		CommonUtils.checkTenantId(attrParam.getTenantId(),"");
 	    	}
 	        attrAndAttrvalBusiSV.addAttr(attrParamList);
-    	}
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultCode("");
+	        responseHeader.setIsSuccess(true);
+	        responseHeader.setResultCode("");
+    	}else {
+    		responseHeader.setIsSuccess(false);
+            responseHeader.setResultCode("");
+		}
+        
+        
         baseResponse.setResponseHeader(responseHeader);
         return baseResponse;
     }
