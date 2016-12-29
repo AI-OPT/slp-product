@@ -147,10 +147,18 @@ public class ProdPictureAtomSVImpl implements IProdPictureAtomSV {
 	@Override
 	public List<ProdPicture> queryMainOfProdList(List<String> prodIdList) {
 		ProdPictureCriteria example = new ProdPictureCriteria();
-        example.createCriteria().andProdIdIn(prodIdList)
-                .andPicUsesEqualTo(ProductConstants.ProdPicture.PicType.PRODUCT)
-                .andIsMainPicEqualTo(ProductConstants.ProdPicture.IsMainPic.YES)
-                .andStateEqualTo(CommonConstants.STATE_ACTIVE);
+		
+		if (!CollectionUtil.isEmpty(prodIdList)) {
+			example.createCriteria().andProdIdIn(prodIdList)
+			.andPicUsesEqualTo(ProductConstants.ProdPicture.PicType.PRODUCT)
+			.andIsMainPicEqualTo(ProductConstants.ProdPicture.IsMainPic.YES)
+			.andStateEqualTo(CommonConstants.STATE_ACTIVE);
+		}else {
+			example.createCriteria().andPicUsesEqualTo(ProductConstants.ProdPicture.PicType.PRODUCT)
+			.andIsMainPicEqualTo(ProductConstants.ProdPicture.IsMainPic.YES)
+			.andStateEqualTo(CommonConstants.STATE_ACTIVE);
+		}
+		
         List<ProdPicture> pictureList = prodPictureMapper.selectByExample(example);
         return pictureList;
 	}
