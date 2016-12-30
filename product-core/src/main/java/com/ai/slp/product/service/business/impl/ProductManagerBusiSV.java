@@ -775,10 +775,15 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             ProductEditUp productEditUp = new ProductEditUp();
             BeanUtils.copyProperties(productEditUp,product);
             //设置类目名称
-            //ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
+            ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
+            if (cat!=null){
+    			productEditUp.setProductCatName(cat.getProductCatName());
+    		}
+            
+            
             //改为从cache中获取cat
             
-            long queryCatNameStart = System.currentTimeMillis();
+          /*  long queryCatNameStart = System.currentTimeMillis();
     		logger.info("####loadtest####开始执行IPaasCatUtils.getCacheClient，从缓存中获取类目名称,当前时间戳：" + queryCatNameStart);
             
             String productCatStr=IPaasCatUtils.getCacheClient()
@@ -795,7 +800,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             long queryCatNameEnd = System.currentTimeMillis();
     		logger.info("####loadtest####结束调用IPaasCatUtils.getCacheClient，从缓存中获取类目名称,当前时间戳：" + queryCatNameEnd + ",用时:"
     				+ (queryCatNameEnd - queryCatNameStart) + "毫秒");
-    		
+    		*/
     		ProdPicture prodPicture=getProdPictureByProdId(product.getProdId(),prodPictureList);
             if (prodPicture!=null){
                 productEditUp.setProPictureId(prodPicture.getProPictureId());
