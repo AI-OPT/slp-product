@@ -38,7 +38,19 @@ public class ProductRouteGroupInfo implements Serializable {
      */
     private String routeGroupId;
 
-    public String getProductId() {
+    /**
+     * 商品状态
+     */
+    private String state;
+    public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getProductId() {
         return productId;
     }
 
