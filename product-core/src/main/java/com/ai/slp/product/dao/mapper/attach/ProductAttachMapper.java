@@ -59,7 +59,8 @@ public interface ProductAttachMapper {
 			@Result(property = "productName", column = "prod_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "routeGroupId", column = "route_group_id", javaType = String.class, jdbcType = JdbcType.VARCHAR),
 			@Result(property = "standedProdId", column = "standed_prod_id", javaType = String.class, jdbcType = JdbcType.VARCHAR),
-			@Result(property = "standedProdName", column = "standed_product_name", javaType = String.class, jdbcType = JdbcType.VARCHAR)
+			@Result(property = "standedProdName", column = "standed_product_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result(property = "state", column = "state", javaType = String.class, jdbcType = JdbcType.VARCHAR)
 	})
 	public List<ProductRouteGroupInfo> queryProductAndRouteGroupPage(ProdRouteGroupQueryVo queryVo);
 }
