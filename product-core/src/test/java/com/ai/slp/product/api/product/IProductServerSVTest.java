@@ -1,7 +1,10 @@
 package com.ai.slp.product.api.product;
 
+import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.interfaces.IProductServerSV;
+import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
 import com.ai.slp.product.api.product.param.ProductSkuInfo;
+import com.ai.slp.product.api.product.param.RouteGroupQuery;
 import com.ai.slp.product.api.product.param.SkuInfoQuery;
 import com.ai.slp.product.constants.CommonTestConstants;
 import com.google.gson.Gson;
@@ -40,5 +43,16 @@ public class IProductServerSVTest {
     	
     	Gson gson = new Gson();
     	System.out.println(gson.toJson(skuById));
+    }
+    @Test
+    public void queryProductAndRouteGroupTest(){
+    	RouteGroupQuery query = new RouteGroupQuery();
+    	query.setTenantId("changhong");
+    	query.setSupplierId("-1");
+    	query.setStandedProdId("221120");
+    	PageInfoResponse<ProductRouteGroupInfo> response = productServerSV.queryProductAndRouteGroup(query);
+    	
+    	Gson gson = new Gson();
+    	System.out.println(gson.toJson(response.getResult()));
     }
 }
