@@ -62,7 +62,7 @@ public class ProductPageSqlProvider {
 	 */
 	public String queryProdRouteGroup(ProdRouteGroupQueryVo queryVo){
 		StringBuffer seqBuffer = new StringBuffer();
-		seqBuffer.append("select p.PROD_ID,p.PROD_NAME,p.STANDED_PROD_ID,sp.STANDED_PRODUCT_NAME,sg.ROUTE_GROUP_ID");
+		seqBuffer.append("select p.PROD_ID,p.PROD_NAME,p.STANDED_PROD_ID,p.STATE,sp.STANDED_PRODUCT_NAME,sg.ROUTE_GROUP_ID");
 		seqBuffer.append(addBuild(queryVo));
 		//排序信息
 		if (StringUtils.isNotBlank(queryVo.getOrderByClause())){
