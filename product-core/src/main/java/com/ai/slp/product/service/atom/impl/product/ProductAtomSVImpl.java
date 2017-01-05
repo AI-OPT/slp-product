@@ -339,8 +339,8 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 			criteria.andProdIdEqualTo(queryReq.getProdId());
 		}
 		if (StringUtils.isNotBlank(queryReq.getProdName())){
-			//criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
-			criteria.andProdNameEqualTo(queryReq.getProdName());
+			criteria.andProdNameLike("%"+queryReq.getProdName()+"%");
+			//criteria.andProdNameEqualTo(queryReq.getProdName());
 		}
 		//对商户标识的查询
 		if (StringUtils.isNotBlank(queryReq.getSupplierId())){
