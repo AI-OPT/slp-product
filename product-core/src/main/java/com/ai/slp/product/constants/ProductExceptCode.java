@@ -1,5 +1,9 @@
 package com.ai.slp.product.constants;
 
+/**
+ * 错误返回编码 
+ *
+ */
 public class ProductExceptCode {
 
     public final static class ErrorCode {

@@ -2,6 +2,8 @@ package com.ai.slp.product.constants;
 
 /**
  * Created by xin on 16-5-25.
+ * 
+ * 相关字段常量
  */
 public class SearchFieldConfConstants {
     public static final String SALE_AREA = "provcode";

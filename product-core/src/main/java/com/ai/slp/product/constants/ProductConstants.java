@@ -108,14 +108,26 @@ public class ProductConstants {
              */
             public static final String TELECOM = "11";
         }
-
+        
         public static final class IsSaleNationwide{
+        	/**
+             * 是
+             */
             public static final String YES = "Y";
+            /**
+             * 否
+             */
             public static final String NO = "N";
         }
 
         public static final class RechargeType{
+        	/**
+        	 * 直充
+        	 */
             public static final String DIRECT = "D";
+            /**
+             * 卡充
+             */
             public static final String CARD = "C";
         }
 
