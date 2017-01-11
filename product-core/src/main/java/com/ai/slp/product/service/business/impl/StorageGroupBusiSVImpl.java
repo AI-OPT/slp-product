@@ -275,7 +275,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 					continue;
 				}
 				// 添加库存总量
-				storageTotal += storage.getTotalNum();
+//				storageTotal += storage.getTotalNum();
+				storageTotal += storage.getUsableNum();
 			}
 			//若没有销售属性,则填充销售价
 			if(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR.equals(group.getIsSaleAttr())){
