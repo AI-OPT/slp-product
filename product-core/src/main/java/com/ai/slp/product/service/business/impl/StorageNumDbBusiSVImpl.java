@@ -86,8 +86,48 @@ public class StorageNumDbBusiSVImpl {
             logger.info("\r\nthe product[{}] is {} null,status is [{}]",
                     prodSku.getProdId(),product==null?"":"not",product==null?"null":product.getState());
         }
-
+        
+        
         boolean checkToSale = false;
+        for (Map.Entry<String,Integer> entry:skuNumMap.entrySet()){
+            int skuNum = entry.getValue();
+            //若为使用量,则为减少量
+            if (isUser){
+            	skuNum = 0-skuNum;
+            }
+            SkuStorage skuStorage = skuStorageAtomSV.queryById(entry.getKey(),true);
+            if (skuStorage ==null){
+            	continue;
+            }
+            skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
+            skuStorageAtomSV.updateById(skuStorage);
+            //若未更新任何SKU库存,或sku库存不是"启用",则不进行处理
+            if (skuStorageAtomSV.updateById(skuStorage)<1
+                    ||!StorageConstants.SkuStorage.State.ACTIVE.equals(skuStorage.getState())){
+                continue;
+            }
+
+            //更新库存信息
+            Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
+            if (storage==null){
+            	continue;
+            }
+            logger.info("\r\nThe usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
+            storage.setUsableNum(storage.getUsableNum()+skuNum);
+            logger.info("\r\nNow,the usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
+            if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())
+                    && storage.getUsableNum()>0){
+            	checkToSale = true;
+            }
+            if (storageAtomSV.updateById(storage)>0){
+                StorageLog storageLog = new StorageLog();
+                BeanUtils.copyProperties(storageLog,storage);
+                storageLogAtomSV.installLog(storageLog);
+            }
+        }
+
+
+/*        boolean checkToSale = false;
         //对库存ID进行排序
         List<String> skuStorageIdList = new ArrayList<String>();  
         Iterator it = skuNumMap.keySet().iterator();  
@@ -167,9 +207,9 @@ public class StorageNumDbBusiSVImpl {
                 BeanUtils.copyProperties(storageLog,storage);
                 storageLogAtomSV.installLog(storageLog);
             }
-        }
+        }*/
 
-/*        //若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
+        //若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
         if (!isUser && product!=null
                 && ProductConstants.Product.State.SALE_OUT.equals(product.getState())
                 && checkToSale){
@@ -181,7 +221,7 @@ public class StorageNumDbBusiSVImpl {
 //            changeGroupPriority(tenantId,product.getSupplierId(),product.getStorageGroupId(),product.getProdId());
             //进行售罄操作
             productBusiSV.offSale(tenantId,product.getSupplierId(),product.getProdId(),null);
-        }*/
+        }
     }
 
     /**

@@ -175,7 +175,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         //如果当前优先级下库存量>要减的量
         	//如果当前优先级下某个库存量小于等于要减量,   当前库存减为0   然后判断要减量是否大于0    是--进行去下一个减库存
         	//需要当前库存的个数--一直进行减库存
-        Long decrBy = cacheClient.decrBy(priorityUsable,0);
+        Long decrBy = cacheClient.decrBy(priorityUsable,0);//总库存量
         
         if (decrBy>=0) {
         	
@@ -215,6 +215,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
                 		   logger.info("=====下次库存要减量"+backNum+",当前时间戳:"+startTime2);
         				   
         			   }else{
+        				   //减当前库存量
         				   cacheClient.hincrBy(usableNumKey,skuId,-incnum);
         				   backNum = 0;
         				   incnum = 0;
@@ -238,6 +239,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         	throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
         }*/
         //6.进行减少优先级库存可用量
+		   //在总库存量上扣减
             Long priorityUsableNum = cacheClient.decrBy(priorityUsable,skuNum);
             String skuStoragekey = IPaasStorageUtils.genMcsSkuStorageUsableKey(tenantId,groupId,priority,skuId);
             //8.组装返回值
@@ -264,9 +266,9 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             return numRes;
 		} catch (Exception e) {
 			 logger.warn("库存扣减失败,租户ID:{},库存组ID:{}",tenantId,groupId);
-		}finally{
+		}/*finally{
 			//lock.unlock();
-		}
+		}*/
         return null;
         
     }
