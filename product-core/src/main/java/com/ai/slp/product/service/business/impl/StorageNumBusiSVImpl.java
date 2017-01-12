@@ -175,9 +175,9 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         //如果当前优先级下库存量>要减的量
         	//如果当前优先级下某个库存量小于等于要减量,   当前库存减为0   然后判断要减量是否大于0    是--进行去下一个减库存
         	//需要当前库存的个数--一直进行减库存
-        Long decrBy = cacheClient.decrBy(priorityUsable,0);
+        Long decrBy = cacheClient.decrBy(priorityUsable,0);//总库存
         
-        if (decrBy>=0) {
+        if (decrBy-skuNum>=0) {
         	
         	long start = System.currentTimeMillis();
  		   logger.info("=====开始执行,当前优先级库存总量:"+decrBy+",当前时间戳:"+start);
@@ -225,7 +225,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 				}
             }
 		}else {
-			cacheClient.decrBy(priorityUsable,-skuNum);
+			//cacheClient.decrBy(priorityUsable,-skuNum);
 			logger.warn("该商品库存不足,租户ID:{},库存组ID:{}",tenantId,groupId);
         	throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
 		}
