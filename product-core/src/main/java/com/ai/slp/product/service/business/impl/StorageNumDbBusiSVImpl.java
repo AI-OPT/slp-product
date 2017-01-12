@@ -169,7 +169,7 @@ public class StorageNumDbBusiSVImpl {
             }
         }
 
-/*        //若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
+        //若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
         if (!isUser && product!=null
                 && ProductConstants.Product.State.SALE_OUT.equals(product.getState())
                 && checkToSale){
@@ -181,7 +181,7 @@ public class StorageNumDbBusiSVImpl {
 //            changeGroupPriority(tenantId,product.getSupplierId(),product.getStorageGroupId(),product.getProdId());
             //进行售罄操作
             productBusiSV.offSale(tenantId,product.getSupplierId(),product.getProdId(),null);
-        }*/
+        }
     }
 
     /**
