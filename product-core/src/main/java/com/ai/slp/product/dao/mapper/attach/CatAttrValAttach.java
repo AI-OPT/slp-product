@@ -6,29 +6,53 @@ import java.sql.Timestamp;
  * Created by jackieliu on 16/8/18.
  */
 public class CatAttrValAttach {
-
+	/**
+	 * 类目属性值id
+	 */
     private String catAttrValueId;
-
+    /**
+	 * 属性值标识
+	 */
     private String attrvalueDefId;
-
+    /**
+	 * 租户id
+	 */
     private String tenantId;
-
+    /**
+	 * 属性标识
+	 */
     private Long attrId;
-
+    /**
+	 * 属性值标识
+	 */
     private String attrValueId;
-
+    /**
+	 * 属性值名称
+	 */
     private String attrValueName;
-
+    /**
+	 * 首字母
+	 */
     private String firstLetter;
-
+    /**
+	 * 序号
+	 */
     private Short serialNumber;
-
+    /**
+	 * 备注
+	 */
     private String remark;
-
+    /**
+	 * 状态
+	 */
     private String state;
-
+    /**
+	 * 操作人id
+	 */
     private Long operId;
-
+    /**
+	 * 操作时间
+	 */
     private Timestamp operTime;
 
     public String getCatAttrValueId() {

@@ -62,7 +62,7 @@ public class IProductManagerSVTest {
         infoQuery.setTenantId("changhong");
         infoQuery.setSupplierId("-1");
 //        infoQuery.setProductId("1000000000000093");
-        infoQuery.setProductId("0000000000000351");
+        infoQuery.setProductId("0000000000000264");
         BaseResponse response = productManagerSV.changeToInSale(infoQuery);
         ResponseHeader header = response.getResponseHeader();
         System.out.println(header!=null?header.isSuccess():false);

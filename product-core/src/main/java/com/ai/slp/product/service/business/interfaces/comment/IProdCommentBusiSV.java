@@ -13,16 +13,28 @@ import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 
 public interface IProdCommentBusiSV {
-	
+	/**
+	 * 查询评论
+	 */
 	public PageInfoResponse<ProdCommentPageResponse> queryPageBySku(ProdCommentPageRequest prodCommentPageRequest);
-
+	/**
+	 * 发表评论
+	 */
 	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest);
-	
+	/**
+	 * 回复评价
+	 */
 	public BaseResponse replyProdComment(ProdReplyComment replyComment);
-
+	/**
+	 * 查询评论
+	 */
 	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest);
-
+	/**
+	 * 更新评论状态
+	 */
 	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest);
-
+	/**
+	 * 查看评论图片
+	 */
 	public CommentPictureQueryResponse queryPictureByCommentId(CommentPictureQueryRequset queryRequset);
 }

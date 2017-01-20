@@ -6,12 +6,27 @@ import java.sql.Timestamp;
  * Created by jackieliu on 16/9/22.
  */
 public class ProdSkuInfoSes {
+	/**
+	 * 租户id
+	 */
     private String tenantid;
+    /**
+	 * sku标识
+	 */
     private String skuid;
+    /**
+	 * sku名称
+	 */
     private String skuname;
     //类目标识
     private String productcategoryid;
+    /**
+	 * 商品标识
+	 */
     private String productid;
+    /**
+	 * 商品名称
+	 */
     private String productname;
     //卖点
     private String productsellpoint;

@@ -6,11 +6,17 @@ import com.ai.slp.product.dao.mapper.attach.ProdSkuInfoSes;
 import com.ai.slp.product.search.bo.SKUInfo;
 
 public interface ISKUIndexBusiSV {
-
+	/**
+	 * 更新
+	 */
     public boolean updateSKUIndex(String productId,long upTime);
-
+    /**
+	 * 根据skuid删除
+	 */
     public boolean deleteSKUIndexBySKUId(String skuId);
-
+    /**
+	 *根据productid删除
+	 */
     public boolean deleteSKUIndexByProductId(String productId);
 
     /**

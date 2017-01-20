@@ -4,18 +4,33 @@ package com.ai.slp.product.dao.mapper.attach;
  * Created by jackieliu on 16/6/2.
  */
 public class ProdFastSkuAttach {
+	/**
+	 *sku标识 
+	 */
     private String skuId;
-
+    /**
+	 * 商品标识
+	 */
     private String prodId;
-
+    /**
+	 * 标准品标识
+	 */
     private String standedProdId;
-
+    /**
+	 * 库存组标识
+	 */
     private String storageGroupId;
-
+    /**
+	 * 属性标识
+	 */
     private Long attrId;
-
+    /**
+	 * 属性值标识
+	 */
     private String attrvalueDefId;
-
+    /**
+	 * 属性值
+	 */
     private String attrValueName;
 
     public String getSkuId() {
