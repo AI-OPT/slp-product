@@ -3,6 +3,7 @@ package com.ai.slp.product.mds.changetoinsale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.paas.ipaas.mds.IMessageProcessor;
 import com.ai.paas.ipaas.mds.vo.MessageAndMetadata;
 import com.ai.slp.product.api.product.param.ProductInfoQuery;
@@ -30,6 +31,11 @@ public class ChangeToInSaleMessProcessorImpl implements IMessageProcessor{
 	         ProductInfoQuery request = JSON.parseObject(content,ProductInfoQuery.class);
 	         if (request==null)
 	             return;
-	         this.productBusiSV.changeToInSale(request.getTenantId(),request.getSupplierId(),request.getProductId(),request.getOperId());        
+	         try {
+				this.productBusiSV.changeToInSale(request.getTenantId(),request.getSupplierId(),request.getProductId(),request.getOperId());
+			} catch (BusinessException e) {
+				logger.info("消息处理异常"+e.getMessage());
+			} 
+	         
 	     }
 }

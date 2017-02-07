@@ -15,6 +15,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
@@ -48,8 +49,11 @@ import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.MQConfigUtil;
 import com.ai.slp.product.vo.ProductPageQueryVo;
 import com.ai.slp.product.vo.SkuStorageVo;
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.dataformat.yaml.snakeyaml.events.Event.ID;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -418,7 +422,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToInSale(String tenantId,String supplierId, String prodId, Long operId) {
-        logger.info("start changeToInSale");
+      /*  logger.info("start changeToInSale");
         long queryStart = System.currentTimeMillis();
         logger.info("=====执行原子服务productAtomSV.selectByProductId 查询指定的商品,当前时间戳:"+ queryStart );
         Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
@@ -431,7 +435,36 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         logger.info("=====执行上架操作,当前时间戳:"+changeStart);
         changeToInSale(product,operId);
         long changeEnd = System.currentTimeMillis();
-        logger.info("=====执行上架操作结束,当前时间戳:" + changeEnd + ",用时:" + (changeEnd-changeStart) + "毫秒" );
+        logger.info("=====执行上架操作结束,当前时间戳:" + changeEnd + ",用时:" + (changeEnd-changeStart) + "毫秒" );*/
+    	
+    	boolean ccsMqFlag=false;
+	   	//从配置中心获取mq_enable
+	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+    	if (!ccsMqFlag) {
+    		logger.info("start changeToInSale");
+            long queryStart = System.currentTimeMillis();
+            logger.info("=====执行原子服务productAtomSV.selectByProductId 查询指定的商品,当前时间戳:"+ queryStart );
+            Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
+            long queryEnd = System.currentTimeMillis();
+            logger.info("=====查询指定商品结束,当前时间戳:" + queryEnd + ",用时:" + (queryEnd - queryStart) + "毫秒");
+            if (product == null){
+                throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
+            }
+            long changeStart = System.currentTimeMillis();
+            logger.info("=====执行上架操作,当前时间戳:"+changeStart);
+            changeToInSale(product,operId);
+            long changeEnd = System.currentTimeMillis();
+            logger.info("=====执行上架操作结束,当前时间戳:" + changeEnd + ",用时:" + (changeEnd-changeStart) + "毫秒" );
+		} else {
+			 ProductInfoQuery productInfoQuery = new ProductInfoQuery();
+			 productInfoQuery.setOperId(operId);
+			 productInfoQuery.setProductId(prodId);
+			 productInfoQuery.setSupplierId(supplierId);
+			 productInfoQuery.setTenantId(tenantId);
+			//发送消息
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_CHANGETOINSALE_TOPIC).send(JSON.toJSONString(productInfoQuery), 0);
+			
+		}
     }
 
     /**
@@ -788,7 +821,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
 	@Override
     public void changeSaleToStore(String tenantId, String supplierId, String prodId, Long operId) {
-        Product product = productAtomSV.selectByProductId(tenantId, supplierId, prodId);
+        /*Product product = productAtomSV.selectByProductId(tenantId, supplierId, prodId);
         if (product == null) {
             throw new SystemException("", "未找到相关的商品信息,租户ID:" + tenantId + ",商品标识:" + prodId);
         }
@@ -807,7 +840,40 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             product.setOperId(operId);
         }
         //添加日志
-        updateProdAndStatusLog(product);
+        updateProdAndStatusLog(product);*/
+		
+		boolean ccsMqFlag=false;
+	   	//从配置中心获取mq_enable
+	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+		if (!ccsMqFlag) {
+			Product product = productAtomSV.selectByProductId(tenantId, supplierId, prodId);
+	        if (product == null) {
+	            throw new SystemException("", "未找到相关的商品信息,租户ID:" + tenantId + ",商品标识:" + prodId);
+	        }
+	        //若商品不是在售,则直接返回
+	        if (!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+	        	return;
+	        }
+	        //修改商品"state"为IN_STORE
+	        product.setState(ProductConstants.Product.State.IN_STORE);
+	        //将商品从搜索引擎中移除
+	        skuIndexManage.deleteSKUIndexByProductId(prodId);
+	        //添加下架时间
+	        product.setDownTime(DateUtils.currTimeStamp());
+
+	        if (operId != null) {
+	            product.setOperId(operId);
+	        }
+	        //添加日志
+	        updateProdAndStatusLog(product);
+		} else {
+			 ProductInfoQuery productInfoQuery = new ProductInfoQuery();
+			 productInfoQuery.setOperId(operId);
+			 productInfoQuery.setProductId(prodId);
+			 productInfoQuery.setSupplierId(supplierId);
+			 productInfoQuery.setTenantId(tenantId);
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_CHANGETOINSTORE_TOPIC).send(JSON.toJSONString(productInfoQuery), 0);
+		}
     }
 
     public void updateProdAndStatusLog(Product product){

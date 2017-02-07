@@ -162,7 +162,7 @@ public class INormProductSVImpl implements INormProductSV {
 			//消息模式下，异步调用服务
 			BaseResponse response = CommonUtils.genSuccessResponse("");
 			//发送消息
-			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(productInfoRequest), 0);
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_MARKETPRICE_TOPIC).send(JSON.toJSONString(productInfoRequest), 0);
 			ResponseHeader responseHeader = new ResponseHeader(true,
 					ExceptCodeConstants.Special.SUCCESS, "成功");
 			response.setResponseHeader(responseHeader);

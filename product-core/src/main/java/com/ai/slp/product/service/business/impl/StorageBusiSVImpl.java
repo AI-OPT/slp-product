@@ -12,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.constants.ProdPriceLogConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SkuStorageConstants;
@@ -38,10 +40,12 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
+import com.ai.slp.product.util.MQConfigUtil;
 import com.ai.slp.product.util.SkuStorageListComparator;
 import com.ai.slp.product.util.StoNoSkuSalePriceComparator;
 import com.ai.slp.product.util.StorageComparator;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 
 /**
@@ -340,6 +344,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 */
 	@Override
 	public String saveStorage(STOStorage stoStorage) {
+		/*
 		String tenantId = stoStorage.getTenantId();
 		Long operId = stoStorage.getOperId();
 		String groupId = stoStorage.getStorageGroupId();
@@ -399,12 +404,12 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		
 		
 		// 如果有销售属性,则添加SKU对应的库存信息
-		/*if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)) {
+		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)) {
 			for (Map.Entry<String,Long> entry:stoStorage.getSkuStorageNum().entrySet()){
 				Long price = getPriceOfSku(groupId,entry.getKey(),storage.getPriorityNumber());
 				installSkuStorage(entry.getKey(),storage.getStorageId(),entry.getValue(),price,operId);
 			}
-		} else*/ 
+		} else 
 		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.NO)) {
 			//通过商品id查出商品SKU信息,更新SKU库存信息
 			
@@ -439,6 +444,136 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			throw new BusinessException("", "不是有效的是否有销售属性状态" + isSaleAttr);
 		}
 		return storage.getStorageId();
+	*/
+		
+	boolean ccsMqFlag=false;
+   	//从配置中心获取mq_enable
+  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+	if (!ccsMqFlag) {
+		String tenantId = stoStorage.getTenantId();
+		Long operId = stoStorage.getOperId();
+		String groupId = stoStorage.getStorageGroupId();
+		
+		long queryInsaleProdStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行productAtomSV.selectByGroupId，查询指定库存组下的销售商品,当前时间戳：" + queryInsaleProdStart);
+		
+//		查询指定库存组下的销售商品
+		Product product = productAtomSV.selectByGroupId(tenantId, groupId);
+		
+		long queryInsaleProdEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用productAtomSV.selectByGroupId，查询指定库存组下的销售商品,当前时间戳：" + queryInsaleProdEnd + ",用时:"
+				+ (queryInsaleProdEnd - queryInsaleProdStart) + "毫秒");
+		
+		if(product == null){
+			logger.warn("未找到对应的商品信息,租户ID:{},销售商ID:{},库存组ID:{},库存ID:{}",
+					stoStorage.getTenantId());
+			throw new BusinessException("", "找不到指定标示的商品:" + groupId);
+		}
+		String isSaleAttr = product.getIsSaleAttr();
+		// 新增库存信息
+		Storage storage = new Storage();
+		BeanUtils.copyProperties(storage, stoStorage);
+		storage.setProdId(product.getProdId());
+		storage.setIsSaleAttr(isSaleAttr);
+		// 设置优先级
+		storage.setPriorityNumber(stoStorage.getPriorityNumber());
+		storage.setCreateId(stoStorage.getOperId());
+		//新增可用量为库存量
+		storage.setUsableNum(stoStorage.getTotalNum());
+		
+		long insertStorageStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行storageAtomSV.insertStorage，新增库存信息,当前时间戳：" + insertStorageStart);
+		
+		int saveNum = storageAtomSV.insertStorage(storage);
+		
+		long insertStorageEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用storageAtomSV.insertStorage，新增库存信息,当前时间戳：" + insertStorageEnd + ",用时:"
+				+ (insertStorageEnd - insertStorageStart) + "毫秒");
+		
+		if (saveNum <= 0) {
+			logger.error("Install storage num is 0.\r\n{}", new Gson().toJson(storage));
+			throw new BusinessException("","添加库存失败");
+		}
+		// 添加库存日志
+		StorageLog storageLog = new StorageLog();
+		BeanUtils.copyProperties(storageLog, storage);
+		
+		long installLogStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行storageLogAtomSV.installLog，插入日志信息,当前时间戳：" + installLogStart);
+		
+		storageLogAtomSV.installLog(storageLog);
+		
+		long installLogEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用storageLogAtomSV.installLog，插入日志信息,当前时间戳：" + installLogEnd + ",用时:"
+				+ (installLogEnd - installLogStart) + "毫秒");
+		
+		
+		// 如果有销售属性,则添加SKU对应的库存信息
+		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)) {
+			for (Map.Entry<String,Long> entry:stoStorage.getSkuStorageNum().entrySet()){
+				Long price = getPriceOfSku(groupId,entry.getKey(),storage.getPriorityNumber());
+				installSkuStorage(entry.getKey(),storage.getStorageId(),entry.getValue(),price,operId);
+			}
+		} else 
+		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.NO)) {
+			//通过商品id查出商品SKU信息,更新SKU库存信息
+			
+			long querySkuStart = System.currentTimeMillis();
+			logger.info("####loadtest####开始执行prodSkuAtomSV.querySkuOfProd，查询商品的SKU信息,当前时间戳：" + querySkuStart);
+			
+			String skuId = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId()).get(0).getSkuId();
+			
+			long querySkuEnd = System.currentTimeMillis();
+			logger.info("####loadtest####结束调用prodSkuAtomSV.querySkuOfProd，查询商品的SKU信息,当前时间戳：" + querySkuEnd + ",用时:"
+					+ (querySkuEnd - querySkuStart) + "毫秒");
+			
+			long getPriceOfSkuStart = System.currentTimeMillis();
+			logger.info("####loadtest####开始执行getPriceOfSku，查询商品的SKU的价格,当前时间戳：" + getPriceOfSkuStart);
+			
+			Long price = getPriceOfSku(groupId,skuId,storage.getPriorityNumber());
+			
+			long getPriceOfSkuEnd = System.currentTimeMillis();
+			logger.info("####loadtest####结束调用prodSkuAtomSV.querySkuOfProd，查询商品的SKU信息,当前时间戳：" + getPriceOfSkuEnd + ",用时:"
+					+ (getPriceOfSkuEnd - getPriceOfSkuStart) + "毫秒");
+			
+			long installSkuStorageStart = System.currentTimeMillis();
+			logger.info("####loadtest####开始执行installSkuStorage，添加SKU库存,当前时间戳：" + installSkuStorageStart);
+			
+			installSkuStorage(skuId,storage.getStorageId(),storage.getTotalNum(),price,operId);
+			
+			long installSkuStorageEnd = System.currentTimeMillis();
+			logger.info("####loadtest####结束调用prodSkuAtomSV.querySkuOfProd，查询商品的SKU信息,当前时间戳：" + installSkuStorageEnd + ",用时:"
+					+ (installSkuStorageEnd - installSkuStorageStart) + "毫秒");
+			
+		} else {
+			throw new BusinessException("", "不是有效的是否有销售属性状态" + isSaleAttr);
+		}
+		return storage.getStorageId();
+	} else {
+		String tenantId = stoStorage.getTenantId();
+		Long operId = stoStorage.getOperId();
+		String groupId = stoStorage.getStorageGroupId();
+		
+		Product product = productAtomSV.selectByGroupId(tenantId, groupId);
+		String isSaleAttr = product.getIsSaleAttr();
+		// 新增库存信息
+		Storage storage = new Storage();
+		BeanUtils.copyProperties(storage, stoStorage);
+		storage.setProdId(product.getProdId());
+		storage.setIsSaleAttr(isSaleAttr);
+		// 设置优先级
+		storage.setPriorityNumber(stoStorage.getPriorityNumber());
+		storage.setCreateId(stoStorage.getOperId());
+		//新增可用量为库存量
+		storage.setUsableNum(stoStorage.getTotalNum());
+		//发送消息
+		MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_STORAGE_TOPIC).send(JSON.toJSONString(stoStorage), 0);
+		return storage.getStorageId();
+	}
+	
+	
+	
+	
 	}
 
 	/**

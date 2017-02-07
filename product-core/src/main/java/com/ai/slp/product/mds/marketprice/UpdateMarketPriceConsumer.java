@@ -38,7 +38,7 @@ import com.alibaba.dubbo.common.logger.LoggerFactory;
 	            }
 	        };
 	        IMessageConsumer msgConsumer= MDSClientFactory.getConsumerClient(
-	        		NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC, msgProcessorHandler);
+	        		NormProdConstants.MDSNS.MDS_NS_MARKETPRICE_TOPIC, msgProcessorHandler);
 	        msgConsumer.start();
 	        logger.error("成功启动UpdateMarketPriceConsumer。。。。。");
 	

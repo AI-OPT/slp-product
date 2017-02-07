@@ -3,6 +3,7 @@ package com.ai.slp.product.mds.marketprice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.paas.ipaas.mds.IMessageProcessor;
 import com.ai.paas.ipaas.mds.vo.MessageAndMetadata;
 import com.ai.slp.product.api.normproduct.impl.INormProductSVImpl;
@@ -30,6 +31,10 @@ public class UpdateMarketPriceMessProcessorImpl implements IMessageProcessor{
 	         MarketPriceUpdate request = JSON.parseObject(content,MarketPriceUpdate.class);
 	         if (request==null)
 	             return;
-	         this.normProductSVImpl.updateMarketPrice(request);        
+	         try {
+				this.normProductSVImpl.updateMarketPrice(request);
+			} catch (BusinessException e) {
+				logger.info("消息处理异常"+e.getMessage());
+			}        
 	     }
 }
