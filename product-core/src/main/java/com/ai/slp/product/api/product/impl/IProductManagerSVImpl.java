@@ -10,13 +10,19 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.components.mds.MDSClientFactory;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.CommonUtils;
+import com.ai.slp.product.util.MQConfigUtil;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 
 /**
  * Created by jackieliu on 16/6/6.
@@ -145,13 +151,34 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(query.getTenantId());
+      /*  CommonUtils.checkTenantId(query.getTenantId());
         long  inSaleStart= System.currentTimeMillis();
         LOGGER.info("=====执行productBusiSV.changeToInSale进行上架操作,当前时间戳:"  + inSaleStart);
         productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
         long inSaleEnd = System.currentTimeMillis();
         LOGGER.info("=====执行productBusiSV.changeToInSale结束,当前时间戳:" + inSaleEnd + ", 用时:" + (inSaleEnd-inSaleStart) + "毫秒");
-        return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
+        return CommonUtils.addSuccessResHeader(new BaseResponse(),"");*/
+    	
+    	boolean ccsMqFlag=false;
+	   	//从配置中心获取mq_enable
+	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+    	if (!ccsMqFlag) {
+    		CommonUtils.checkTenantId(query.getTenantId());
+            long  inSaleStart= System.currentTimeMillis();
+            LOGGER.info("=====执行productBusiSV.changeToInSale进行上架操作,当前时间戳:"  + inSaleStart);
+            productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
+            long inSaleEnd = System.currentTimeMillis();
+            LOGGER.info("=====执行productBusiSV.changeToInSale结束,当前时间戳:" + inSaleEnd + ", 用时:" + (inSaleEnd-inSaleStart) + "毫秒");
+            return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
+		} else {
+			BaseResponse response = CommonUtils.genSuccessResponse("");
+			//发送消息
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(query), 0);
+			ResponseHeader responseHeader = new ResponseHeader(true,
+					ExceptCodeConstants.Special.SUCCESS, "成功");
+			response.setResponseHeader(responseHeader);
+			return response;  
+		}
     }
 
     /**
@@ -192,10 +219,28 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
 	@Override
 	public BaseResponse changeToInStore(ProductInfoQuery query) throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(query.getTenantId());
+		/*CommonUtils.checkTenantId(query.getTenantId());
         productBusiSV.changeSaleToStore(
                 query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
-        return CommonUtils.genSuccessResponse("");
+        return CommonUtils.genSuccessResponse("");*/
+		
+		boolean ccsMqFlag=false;
+	   	//从配置中心获取mq_enable
+	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+		if (!ccsMqFlag) {
+			CommonUtils.checkTenantId(query.getTenantId());
+	        productBusiSV.changeSaleToStore(
+	                query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
+	        return CommonUtils.genSuccessResponse("");
+		} else {
+			BaseResponse response = CommonUtils.genSuccessResponse("");
+			//发送消息
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(query), 0);
+			ResponseHeader responseHeader = new ResponseHeader(true,
+					ExceptCodeConstants.Special.SUCCESS, "成功");
+			response.setResponseHeader(responseHeader);
+			return response; 
+		}
 	}
 
 	/**

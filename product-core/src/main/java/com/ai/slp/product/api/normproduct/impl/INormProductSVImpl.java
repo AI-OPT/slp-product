@@ -11,14 +11,25 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
-import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.api.normproduct.param.AttrMap;
+import com.ai.slp.product.api.normproduct.param.AttrQuery;
+import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
+import com.ai.slp.product.api.normproduct.param.NormProdAndKeyAttrRes;
+import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
+import com.ai.slp.product.api.normproduct.param.NormProdRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdResponse;
+import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdUniqueReq;
+import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.util.CommonUtils;
+import com.ai.slp.product.util.MQConfigUtil;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 
 /**
  * 标准品接口
@@ -125,12 +136,38 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public BaseResponse updateProductInfo(NormProdSaveRequest productInfoRequest) throws BusinessException, SystemException {
-        if (StringUtils.isBlank(productInfoRequest.getTenantId())
+      /*  if (StringUtils.isBlank(productInfoRequest.getTenantId())
                 || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
         	throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
         }
         normProductBusiSV.updateNormProd(productInfoRequest);
-        return CommonUtils.genSuccessResponse("");
+        return CommonUtils.genSuccessResponse("");*/
+    	
+    	boolean ccsMqFlag=false;
+	   	//从配置中心获取mq_enable
+	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+    	
+	  //非消息模式下，同步调用服务
+		if(!ccsMqFlag){
+			
+			if (StringUtils.isBlank(productInfoRequest.getTenantId())
+	                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
+	        	throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
+	        }
+	        normProductBusiSV.updateNormProd(productInfoRequest);
+	        return CommonUtils.genSuccessResponse("");
+			
+		}
+		else{
+			//消息模式下，异步调用服务
+			BaseResponse response = CommonUtils.genSuccessResponse("");
+			//发送消息
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(productInfoRequest), 0);
+			ResponseHeader responseHeader = new ResponseHeader(true,
+					ExceptCodeConstants.Special.SUCCESS, "成功");
+			response.setResponseHeader(responseHeader);
+			return response;    
+		}
     }
     
     @Override
@@ -193,14 +230,36 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public BaseResponse updateMarketPrice(MarketPriceUpdate marketPrice) throws BusinessException, SystemException {
-        CommonUtils.checkTenantId(marketPrice.getTenantId());
+ /*       CommonUtils.checkTenantId(marketPrice.getTenantId());
         normProductBusiSV.updateMarketPrice(marketPrice);
         BaseResponse baseResponse = new BaseResponse();
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setIsSuccess(true);
         responseHeader.setResultCode("");
         baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;
+        return baseResponse;*/
+    	
+    	boolean ccsMqFlag=false;
+	   	//从配置中心获取mq_enable
+	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+    	if (!ccsMqFlag) {
+    		CommonUtils.checkTenantId(marketPrice.getTenantId());
+	        normProductBusiSV.updateMarketPrice(marketPrice);
+	        BaseResponse baseResponse = new BaseResponse();
+	        ResponseHeader responseHeader = new ResponseHeader();
+	        responseHeader.setIsSuccess(true);
+	        responseHeader.setResultCode("");
+	        baseResponse.setResponseHeader(responseHeader);
+	        return baseResponse;
+		} else {
+			BaseResponse response = new BaseResponse();
+			//发送消息
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(marketPrice), 0);
+			ResponseHeader responseHeader = new ResponseHeader(true,
+					ExceptCodeConstants.Special.SUCCESS, "成功");
+			response.setResponseHeader(responseHeader);
+			return response; 
+		}
     }
     
     /**

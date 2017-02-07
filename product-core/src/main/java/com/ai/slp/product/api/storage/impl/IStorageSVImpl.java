@@ -9,10 +9,12 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.*;
+import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
@@ -23,7 +25,9 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.CommonUtils;
+import com.ai.slp.product.util.MQConfigUtil;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 
 /**
  * Created by jackieliu on 16/5/4.
@@ -161,9 +165,26 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public BaseResponse saveStorage(STOStorage stoStorage) throws BusinessException, SystemException {
-		CommonUtils.checkTenantId(stoStorage.getTenantId());
+		/*CommonUtils.checkTenantId(stoStorage.getTenantId());
 		String storageId = storageBusiSV.saveStorage(stoStorage);
-		return CommonUtils.addSuccessResHeader(new BaseResponse(),storageId);
+		return CommonUtils.addSuccessResHeader(new BaseResponse(),storageId);*/
+		
+		boolean ccsMqFlag=false;
+	   	//从配置中心获取mq_enable
+	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+		if (!ccsMqFlag) {
+			CommonUtils.checkTenantId(stoStorage.getTenantId());
+			String storageId = storageBusiSV.saveStorage(stoStorage);
+			return CommonUtils.addSuccessResHeader(new BaseResponse(),storageId);
+		} else {
+			BaseResponse response = new BaseResponse();
+			//发送消息
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(stoStorage), 0);
+			ResponseHeader responseHeader = new ResponseHeader(true,
+					ExceptCodeConstants.Special.SUCCESS, "成功");
+			response.setResponseHeader(responseHeader);
+			return response; 
+		}
 	}
 
 	/**
