@@ -136,49 +136,46 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public BaseResponse updateProductInfo(NormProdSaveRequest productInfoRequest) throws BusinessException, SystemException {
-      /*  if (StringUtils.isBlank(productInfoRequest.getTenantId())
+        if (StringUtils.isBlank(productInfoRequest.getTenantId())
                 || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
         	throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
         }
         normProductBusiSV.updateNormProd(productInfoRequest);
-        return CommonUtils.genSuccessResponse("");*/
+        return CommonUtils.genSuccessResponse("");
     	
-    	boolean ccsMqFlag=false;
-	   	//从配置中心获取mq_enable
-	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
-    	
-	  //非消息模式下，同步调用服务
-		if(!ccsMqFlag){
-			
-			if (StringUtils.isBlank(productInfoRequest.getTenantId())
-	                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
-	        	throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
-	        }
-	        normProductBusiSV.updateNormProd(productInfoRequest);
-	        return CommonUtils.genSuccessResponse("");
-			
-		}
-		else{
-			//消息模式下，异步调用服务
-			BaseResponse response = CommonUtils.genSuccessResponse("");
-			//发送消息
-			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_MARKETPRICE_TOPIC).send(JSON.toJSONString(productInfoRequest), 0);
-			ResponseHeader responseHeader = new ResponseHeader(true,
-					ExceptCodeConstants.Special.SUCCESS, "成功");
-			response.setResponseHeader(responseHeader);
-			return response;    
-		}
     }
     
     @Override
 	public BaseResponse updateProductAndStoGroup(NormProdSaveRequest productInfoRequest)
 			throws BusinessException, SystemException {
-    	if (StringUtils.isBlank(productInfoRequest.getTenantId())
+    	/*if (StringUtils.isBlank(productInfoRequest.getTenantId())
                 || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
     		throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
     	}
         normProductBusiSV.updateNormProdAndStoGroup(productInfoRequest);
-        return CommonUtils.genSuccessResponse("");
+        return CommonUtils.genSuccessResponse("");*/
+    	
+    	boolean ccsMqFlag=false;
+	   	//从配置中心获取mq_enable
+	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+	  	if (!ccsMqFlag) {
+	  		if (StringUtils.isBlank(productInfoRequest.getTenantId())
+	                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
+	    		throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
+	    	}
+	        normProductBusiSV.updateNormProdAndStoGroup(productInfoRequest);
+	        return CommonUtils.genSuccessResponse("");
+		} else {
+			//消息模式下，异步调用服务
+			BaseResponse response = CommonUtils.genSuccessResponse("");
+			//发送消息
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(productInfoRequest), 0);
+			ResponseHeader responseHeader = new ResponseHeader(true,
+					ExceptCodeConstants.Special.SUCCESS, "成功");
+			response.setResponseHeader(responseHeader);
+			return response; 
+		}
+    	
 	}
 
     /**
