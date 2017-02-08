@@ -13,6 +13,7 @@ import com.ai.paas.ipaas.mds.IMessageProcessor;
 import com.ai.paas.ipaas.mds.IMsgProcessorHandler;
 import com.ai.slp.product.api.normproduct.impl.INormProductSVImpl;
 import com.ai.slp.product.constants.NormProdConstants;
+import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
 
@@ -21,7 +22,7 @@ import com.alibaba.dubbo.common.logger.LoggerFactory;
 		private static Logger logger = LoggerFactory.getLogger(NormProductConsumer.class);
 	
 		@Autowired
-		 private INormProductSVImpl normProductSVImpl;
+		 private INormProductBusiSV normProductBusiSV;
 		@Override
 		public void startMdsConsumer() throws Exception {
 			logger.error("开始启动NormProductConsumer。。。。。");
@@ -31,7 +32,7 @@ import com.alibaba.dubbo.common.logger.LoggerFactory;
 	                List<IMessageProcessor> processors = new ArrayList<>();
 	                IMessageProcessor processor = null;
 	                for (int i = 0; i < paramInt; i++) {
-	                    processor = new INormProductSVMessProcessorImpl(normProductSVImpl);
+	                    processor = new INormProductSVMessProcessorImpl(normProductBusiSV);
 	                    processors.add(processor);
 	                }
 	                return processors.toArray(new IMessageProcessor[processors.size()]);
