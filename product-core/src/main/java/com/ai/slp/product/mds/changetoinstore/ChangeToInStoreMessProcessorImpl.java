@@ -33,7 +33,7 @@ public class ChangeToInStoreMessProcessorImpl implements IMessageProcessor{
 	         if (request==null)
 	             return;
 	         try {
-				this.productBusiSV.changeToInSale(request.getTenantId(),request.getSupplierId(),request.getProductId(),request.getOperId());
+				this.productBusiSV.changeSaleToStore(request.getTenantId(),request.getSupplierId(),request.getProductId(),request.getOperId());
 			} catch (BusinessException e) {
 				logger.info("消息处理异常"+e.getMessage());
 			}
