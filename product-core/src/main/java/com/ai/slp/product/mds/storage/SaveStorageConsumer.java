@@ -11,6 +11,7 @@ import com.ai.opt.sdk.components.mds.base.AbstractMdsConsumer;
 import com.ai.paas.ipaas.mds.IMessageConsumer;
 import com.ai.paas.ipaas.mds.IMessageProcessor;
 import com.ai.paas.ipaas.mds.IMsgProcessorHandler;
+import com.ai.slp.product.api.storage.impl.IStorageSVImpl;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.alibaba.dubbo.common.logger.Logger;

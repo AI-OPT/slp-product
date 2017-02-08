@@ -179,7 +179,7 @@ public class IStorageSVImpl implements IStorageSV {
 		} else {
 			BaseResponse response = new BaseResponse();
 			//发送消息
-			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(stoStorage), 0);
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_STORAGE_TOPIC).send(JSON.toJSONString(stoStorage), 0);
 			ResponseHeader responseHeader = new ResponseHeader(true,
 					ExceptCodeConstants.Special.SUCCESS, "成功");
 			response.setResponseHeader(responseHeader);

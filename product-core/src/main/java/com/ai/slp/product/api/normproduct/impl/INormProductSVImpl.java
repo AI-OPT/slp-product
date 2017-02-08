@@ -251,7 +251,7 @@ public class INormProductSVImpl implements INormProductSV {
 		} else {
 			BaseResponse response = new BaseResponse();
 			//发送消息
-			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(marketPrice), 0);
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_MARKETPRICE_TOPIC).send(JSON.toJSONString(marketPrice), 0);
 			ResponseHeader responseHeader = new ResponseHeader(true,
 					ExceptCodeConstants.Special.SUCCESS, "成功");
 			response.setResponseHeader(responseHeader);

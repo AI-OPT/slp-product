@@ -11,7 +11,9 @@ import com.ai.opt.sdk.components.mds.base.AbstractMdsConsumer;
 import com.ai.paas.ipaas.mds.IMessageConsumer;
 import com.ai.paas.ipaas.mds.IMessageProcessor;
 import com.ai.paas.ipaas.mds.IMsgProcessorHandler;
+import com.ai.slp.product.api.product.impl.IProductManagerSVImpl;
 import com.ai.slp.product.constants.NormProdConstants;
+import com.ai.slp.product.service.business.impl.ProductBusiSVImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
@@ -21,7 +23,7 @@ import com.alibaba.dubbo.common.logger.LoggerFactory;
 		private static Logger logger = LoggerFactory.getLogger(ChangeToInSaleConsumer.class);
 	
 		@Autowired
-		 private IProductBusiSV productBusiSV;
+		private IProductBusiSV productBusiSV;
 		@Override
 		public void startMdsConsumer() throws Exception {
 			logger.error("开始启动ChangeToInSaleConsumer。。。。。");

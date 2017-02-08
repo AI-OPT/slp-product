@@ -12,6 +12,7 @@ import com.ai.paas.ipaas.mds.IMessageConsumer;
 import com.ai.paas.ipaas.mds.IMessageProcessor;
 import com.ai.paas.ipaas.mds.IMsgProcessorHandler;
 import com.ai.slp.product.api.normproduct.impl.INormProductSVImpl;
+import com.ai.slp.product.api.product.impl.IProductManagerSVImpl;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.alibaba.dubbo.common.logger.Logger;

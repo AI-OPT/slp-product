@@ -173,7 +173,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		} else {
 			BaseResponse response = CommonUtils.genSuccessResponse("");
 			//发送消息
-			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(query), 0);
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_CHANGETOINSTORE_TOPIC).send(JSON.toJSONString(query), 0);
 			ResponseHeader responseHeader = new ResponseHeader(true,
 					ExceptCodeConstants.Special.SUCCESS, "成功");
 			response.setResponseHeader(responseHeader);
