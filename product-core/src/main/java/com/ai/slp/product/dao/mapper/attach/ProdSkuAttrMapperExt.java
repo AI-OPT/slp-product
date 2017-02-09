@@ -10,6 +10,6 @@ import java.util.List;
  * Created by jackieliu on 16/6/14.
  */
 public interface ProdSkuAttrMapperExt {
-
+	//查询属性值id
     List<String> selectAttrValId(ProdSkuAttrCriteria example);
 }

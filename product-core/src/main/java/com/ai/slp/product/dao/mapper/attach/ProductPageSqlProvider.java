@@ -77,7 +77,7 @@ public class ProductPageSqlProvider {
 		}
 		return seqBuffer.toString();
 	}
-
+	//拼接sql
 	private String addBuild(ProdRouteGroupQueryVo queryVo){
 		StringBuffer seqBuffer = new StringBuffer();
 		seqBuffer.append(" from product p,storage_group sg,standed_product sp");

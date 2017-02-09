@@ -9,7 +9,8 @@ import java.util.Map;
  * 搜索
  */
 public interface IExProductSearch {
+	//商品搜索的接口
     Result<Map<String, Object>> search(ExProductSearchCriteria criteria);
-
+    //商品相关收索
     Result<Map<String, Long>> searchCategory(ExProductSearchCriteria criteria);
 }

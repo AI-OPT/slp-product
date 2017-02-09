@@ -8,7 +8,8 @@ import java.util.Map;
  * 商品搜索
  */
 public interface IProductSearch {
+	//商品相关查询
     Result<Map<String, Object>> search(ProductSearchCriteria criteria);
-
+    //商品搜索返回map集合
     Result<Map<String, Long>> searchCategory(ProductSearchCriteria criteria);
 }

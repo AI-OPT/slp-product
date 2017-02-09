@@ -49,7 +49,7 @@ public class StorageGroupPageSqlProvider {
         seqBuffer.append("select COUNT(sg.STORAGE_GROUP_ID) ");
         return genQueryStr(seqBuffer,queryVo).toString();
     }
-
+    //商品相关查询的sql拼接
     private StringBuffer genQueryStr(StringBuffer seqBuffer,StoGroupPageQueryVo queryVo){
         seqBuffer.append("from standed_product as sp,storage_group as sg ");
         seqBuffer.append("where sp.STANDED_PROD_ID = sg.STANDED_PROD_ID and sg.TENANT_ID= #{vo.tenantId} ");

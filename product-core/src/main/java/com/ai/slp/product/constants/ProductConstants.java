@@ -1,6 +1,7 @@
 package com.ai.slp.product.constants;
 
 /**
+ * 商品常量
  * Created by jackieliu on 16/5/5.
  */
 public class ProductConstants {
