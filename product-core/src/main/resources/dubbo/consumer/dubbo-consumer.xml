@@ -23,12 +23,17 @@
 	<!-- <dubbo:monitor protocol="registry" /> -->
 
 	<!-- <dubbo:consumer timeout="${dubbo.consoumer.timeout}" /> -->
-	
+	<!-- 地域服务 -->
 	<dubbo:reference id="iGnAreaQuerySV"  loadbalance="roundrobin" interface="com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV"/>
+	<!-- 用户服务 -->
 	<dubbo:reference id="iUcUserSV"  loadbalance="roundrobin" interface="com.ai.slp.user.api.ucuser.intefaces.IUcUserSV"/>
+	<!-- 用户服务 -->
 	<dubbo:reference id="iUcKeyInfoSV" loadbalance="roundrobin" interface="com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV"/>
+	<!-- 库存服务 -->
 	<dubbo:reference id="iStorageSV" loadbalance="roundrobin" interface="com.ai.slp.product.api.storage.interfaces.IStorageSV"/>
+	<!-- 用户服务 -->
 	<dubbo:reference id="iSysUserQuerySV" loadbalance="roundrobin" interface="com.ai.platform.common.api.sysuser.interfaces.ISysUserQuerySV"/>
+	<!-- 路由服务 -->
 	<dubbo:reference id="iRouteGroupManageSV" loadbalance="roundrobin" 
 					 interface="com.ai.slp.route.api.routegroupmanage.interfaces.IRouteGroupManageSV"/>
 </beans>
