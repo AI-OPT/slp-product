@@ -14,7 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- * 商品类目缓存方式查询接口<br>
+ * 商品类目缓存方式查询接口<br>                                                                                                       
  *
  * Date: 2016年7月21日 <br>
  * Copyright (c) 2016 asiainfo.com <br>

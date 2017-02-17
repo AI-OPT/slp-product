@@ -18,7 +18,7 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
 
-@Component
+//@Component
 	public class ChangeToInSaleConsumer extends AbstractMdsConsumer {
 		private static Logger logger = LoggerFactory.getLogger(ChangeToInSaleConsumer.class);
 	

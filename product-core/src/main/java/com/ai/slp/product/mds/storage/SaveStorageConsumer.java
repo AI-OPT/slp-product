@@ -17,7 +17,7 @@ import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
 
-@Component
+//@Component
 	public class SaveStorageConsumer extends AbstractMdsConsumer {
 		private static Logger logger = LoggerFactory.getLogger(SaveStorageConsumer.class);
 	
