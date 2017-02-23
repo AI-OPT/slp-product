@@ -3,6 +3,8 @@ package com.ai.slp.product.api.storage.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,7 @@ import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.business.impl.StorageBusiSVImpl;
 import com.ai.slp.product.service.business.impl.StorageNumDbBusiSVImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
@@ -35,6 +38,7 @@ import com.alibaba.fastjson.JSON;
 @Service(validation = "true")
 @Component
 public class IStorageSVImpl implements IStorageSV {
+	private static final Logger logger = LoggerFactory.getLogger(IStorageSVImpl.class);
 	@Autowired
 	IStorageGroupBusiSV storageGroupBusiSV;
 	@Autowired
@@ -168,6 +172,22 @@ public class IStorageSVImpl implements IStorageSV {
 		/*CommonUtils.checkTenantId(stoStorage.getTenantId());
 		String storageId = storageBusiSV.saveStorage(stoStorage);
 		return CommonUtils.addSuccessResHeader(new BaseResponse(),storageId);*/
+		
+		String tenantId = stoStorage.getTenantId();
+		Long operId = stoStorage.getOperId();
+		String groupId = stoStorage.getStorageGroupId();
+		
+		long queryInsaleProdStart = System.currentTimeMillis();
+		
+//		查询指定库存组下的销售商品
+		Product product = productAtomSV.selectByGroupId(tenantId, groupId);
+		
+		long queryInsaleProdEnd = System.currentTimeMillis();
+		if(product == null){
+			logger.warn("未找到对应的商品信息,租户ID:{},销售商ID:{},库存组ID:{},库存ID:{}",
+					stoStorage.getTenantId());
+			throw new BusinessException("", "找不到指定标示的商品:" + groupId);
+		}
 		
 		boolean ccsMqFlag=false;
 	   	//从配置中心获取mq_enable

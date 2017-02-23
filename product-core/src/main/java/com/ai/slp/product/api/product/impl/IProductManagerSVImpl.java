@@ -14,8 +14,22 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
-import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.product.param.OtherSetOfProduct;
+import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
+import com.ai.slp.product.api.product.param.ProdStateLog;
+import com.ai.slp.product.api.product.param.ProductCheckParam;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductEditUp;
+import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.ProductPriorityParam;
+import com.ai.slp.product.api.product.param.ProductQueryInfo;
+import com.ai.slp.product.api.product.param.ProductStorageSale;
+import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.constants.NormProdConstants;
+import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
@@ -37,6 +51,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     IProductBusiSV productBusiSV;
     @Autowired
     ISKUIndexBusiSV skuIndexManage;
+    @Autowired
+    IProductAtomSV productAtomSV;
     /**
      * 商品管理查询商品编辑状态<br>
      * 状态 1未编辑2已编辑<br>
@@ -149,17 +165,22 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @throws SystemException
      * @author liutong5
      */
+    
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
-      /*  CommonUtils.checkTenantId(query.getTenantId());
+    	boolean ccsMqFlag=false;
+    	
+    	Product product = productAtomSV.selectByProductId(query.getTenantId(),query.getSupplierId(),query.getProductId());
+        if (product == null){
+            throw new BusinessException("","未找到相关的商品信息,租户ID:"+query.getTenantId()+",商品标识:"+query.getProductId());
+        }
+    	/*  CommonUtils.checkTenantId(query.getTenantId());
         long  inSaleStart= System.currentTimeMillis();
         LOGGER.info("=====执行productBusiSV.changeToInSale进行上架操作,当前时间戳:"  + inSaleStart);
         productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
         long inSaleEnd = System.currentTimeMillis();
         LOGGER.info("=====执行productBusiSV.changeToInSale结束,当前时间戳:" + inSaleEnd + ", 用时:" + (inSaleEnd-inSaleStart) + "毫秒");
         return CommonUtils.addSuccessResHeader(new BaseResponse(),"");*/
-    	
-    	boolean ccsMqFlag=false;
 	   	//从配置中心获取mq_enable
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
     	if (!ccsMqFlag) {
@@ -223,6 +244,15 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         productBusiSV.changeSaleToStore(
                 query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
         return CommonUtils.genSuccessResponse("");*/
+		
+		Product product = productAtomSV.selectByProductId(query.getTenantId(), query.getSupplierId(), query.getProductId());
+        if (product == null) {
+            throw new SystemException("", "未找到相关的商品信息,租户ID:" + query.getTenantId() + ",商品标识:" + query.getProductId());
+        }
+        //若商品不是在售,则直接返回
+        if (!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+        	return null;
+        }
 		
 		boolean ccsMqFlag=false;
 	   	//从配置中心获取mq_enable
