@@ -6,6 +6,9 @@ import com.ai.slp.product.dao.mapper.bo.product.Product;
 
 public class productsComparator implements Comparator<Product> {
 
+	/**
+	 * 商品创建时间对比
+	 */
 	@Override
 	public int compare(Product o1, Product o2) {
 		if (null == o1 || null == o2) 

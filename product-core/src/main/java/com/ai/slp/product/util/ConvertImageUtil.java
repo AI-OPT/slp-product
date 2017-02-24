@@ -27,6 +27,9 @@ public final class ConvertImageUtil {
         }
         return image;
     }
+    /**
+     * 图片集合转换
+     */
     public static List<ProductImage> convertThum(String imageinfo){
         List<ProductImage> list = new ArrayList<ProductImage>();
         imageinfo = imageinfo.replace("{", "");

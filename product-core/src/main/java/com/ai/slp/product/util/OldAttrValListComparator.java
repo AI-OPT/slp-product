@@ -6,6 +6,9 @@ import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 
 public class OldAttrValListComparator implements Comparator<StandedProdAttr> {
 
+	/**
+	 * 属性标识对比
+	 */
 	@Override
 	public int compare(StandedProdAttr o1, StandedProdAttr o2) {
 		if (null == o1 || null == o2) 

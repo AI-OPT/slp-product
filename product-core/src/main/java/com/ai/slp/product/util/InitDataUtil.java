@@ -15,6 +15,9 @@ public final class InitDataUtil {
     private InitDataUtil() {
     }
 
+    /**
+     * 获取地域信息
+     */
     public static List<ProductAttrInfo> getArea() {
         // 地区
         List<ProductAttrInfo> areas = new ArrayList<ProductAttrInfo>();
@@ -148,6 +151,9 @@ public final class InitDataUtil {
         return areas;
     }
 
+    /**
+     * 获取运营商信息
+     */
     public static List<ProductAttrInfo> getAgent() {
         // 代理商
         List<ProductAttrInfo> agents = new ArrayList<ProductAttrInfo>();
@@ -166,6 +172,13 @@ public final class InitDataUtil {
         return agents;
     }
 
+    /**
+     * 获取面额对应的code
+     * @param proCatId
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
     public static List<ProductAttrInfo> getAccountsOrFlow(String proCatId) {
         if (ProductHomeConstants.PHONE_BILL_PRO_CAT_ID.equals(proCatId)) {
             // 面额

@@ -6,6 +6,9 @@ import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 
 public class SkuStorageListComparator implements Comparator<SkuStorage> {
 
+	/**
+	 * sku库存标识对比
+	 */
 	@Override
 	public int compare(SkuStorage o1, SkuStorage o2) {
 		if (null == o1 || null == o2) 

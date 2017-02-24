@@ -15,6 +15,12 @@ public final class ValidateUtil {
     private ValidateUtil() {
     }
 
+    /**
+     * 商品参数校验
+     * @param request
+     * @throws BusinessException
+     * @UCUSER
+     */
     public static void validateHomeProduct(ProductHomeRequest request) throws BusinessException {
         if (request == null) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
@@ -34,6 +40,12 @@ public final class ValidateUtil {
         }
     }
 
+    /**
+     * 商品参数校验
+     * @param request
+     * @throws BusinessException
+     * @UCUSER
+     */
     public static void validateHotProduct(ProductQueryRequest request) throws BusinessException {
         if (request == null) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
@@ -47,6 +59,13 @@ public final class ValidateUtil {
         }
     }
 
+    /**
+     * 商品的参数检验的规则
+     * @param request
+     * @throws BusinessException
+     * @author Gavin
+     * @UCUSER
+     */
     public static void validateHomeHotProduct(ProductHomeRequest request) throws BusinessException {
         if (request == null) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
@@ -60,6 +79,12 @@ public final class ValidateUtil {
         }
     }
 
+    /**
+     * 商品参数属性校验
+     * @param request
+     * @throws BusinessException
+     * @UCUSER
+     */
     public static void validateQueryProduct(ProductQueryRequest request) throws BusinessException {
         if (request == null) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,
@@ -92,6 +117,13 @@ public final class ValidateUtil {
             }
         }
     }
+    
+    /**
+     * 搜索参数校验
+     * @param request
+     * @throws BusinessException
+     * @UCUSER
+     */
     public static void validateSearch(ProductQueryRequest request) throws BusinessException {
         if (request == null) {
             throw new BusinessException(ProductExceptCode.ErrorCode.PARAM_NULL_ERROR,

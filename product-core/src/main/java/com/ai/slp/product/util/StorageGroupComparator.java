@@ -6,6 +6,9 @@ import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 public class StorageGroupComparator implements Comparator<StorageGroup> {
 
+	/**
+	 * 库存组标识对比
+	 */
 	@Override
 	public int compare(StorageGroup o1, StorageGroup o2) {
 		if (null == o1 || null == o2) 
