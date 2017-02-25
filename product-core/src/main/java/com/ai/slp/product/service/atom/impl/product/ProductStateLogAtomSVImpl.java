@@ -51,7 +51,7 @@ public class ProductStateLogAtomSVImpl implements IProductStateLogAtomSV{
 	public ProductStateLog selectStateLogByProdId(String prodId) {
 		ProductStateLogCriteria example = new ProductStateLogCriteria();
 		
-		//example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
 		
 		example.createCriteria().andProdIdEqualTo(prodId);
 		List<ProductStateLog> productStateLogList = productStateLogMapper.selectByExample(example);
