@@ -16,7 +16,7 @@ public interface IProdCommentBusiSV {
 	/**
 	 * 查询评论
 	 */
-	public PageInfoResponse<ProdCommentPageResponse> queryPageBySku(ProdCommentPageRequest prodCommentPageRequest);
+	public PageInfoResponse<ProdCommentPageResponse> queryPageBySku(ProdCommentPageRequest prodCommentPageRequest,String standedProdId);
 	/**
 	 * 发表评论
 	 */

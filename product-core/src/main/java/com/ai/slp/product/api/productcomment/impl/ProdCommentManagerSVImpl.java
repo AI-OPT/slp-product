@@ -10,6 +10,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.productcomment.interfaces.IProdCommentManagerSV;
 import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
@@ -20,7 +21,13 @@ import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
+import com.ai.slp.product.constants.ErrorCodeConstants;
+import com.ai.slp.product.constants.ResultCodeConstants;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -32,10 +39,31 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 	@Autowired
 	IProdCommentBusiSV prodCommentBusiSV;
 	
+	@Autowired
+	IProdSkuAtomSV prodSkuAtomSV;
+	
+	@Autowired
+	IProductAtomSV productAtomSV;
+	
 	@Override
 	public PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku(ProdCommentPageRequest prodCommentPageRequest)throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(prodCommentPageRequest.getTenantId());
-		return prodCommentBusiSV.queryPageBySku(prodCommentPageRequest);
+		//查询商品信息
+		PageInfoResponse<ProdCommentPageResponse> result = new PageInfoResponse<ProdCommentPageResponse>();
+		String tenantId = prodCommentPageRequest.getTenantId();
+		ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, prodCommentPageRequest.getSkuId());
+		if(prodSku == null){
+			throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定商品,租户ID:"+tenantId+",销售商品id:"+prodCommentPageRequest.getSkuId());
+		}
+		String prodId = prodSku.getProdId();
+		Product product = productAtomSV.selectByProductId(tenantId, prodId);
+		if(product == null){
+			result.setCount(0);
+			result.setResult(null);
+			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到商品信息。"));
+			return result;
+		}
+		return prodCommentBusiSV.queryPageBySku(prodCommentPageRequest,product.getStandedProdId());
 	}
 
 	@Override

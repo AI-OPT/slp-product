@@ -25,7 +25,6 @@ public class ProdCommentPictureAtomSVImpl implements IProdCommentPictureAtomSV {
 		ProdCommentPictureCriteria example = new ProdCommentPictureCriteria();
 		
 		//example.setOrderByClause("CREATE_TIME,SERIAL_NUMBER");
-		
 		Criteria createCriteria = example.createCriteria();
 		createCriteria.andCommentIdEqualTo(commentId);
 		createCriteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
