@@ -24,7 +24,6 @@ import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.StringUtil;
-import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
@@ -48,7 +47,6 @@ import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentPictureAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.business.impl.NormProductBusiSVImpl;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
 
 
@@ -272,7 +270,14 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	}
 
 	@Override
-	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest) {
+	public List<ProdComment> queryPageInfo(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd, Integer pageSize, Integer pageNo) {
+		
+		List<ProdComment> queryPageList = prodCommentAtomSV.queryPageList(params,commentTimeBegin, commentTimeEnd, pageSize, pageNo);
+		
+		return queryPageList;
+	}
+	
+	/*public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest) {
 		PageInfoResponse<CommentPageResponse> result = new PageInfoResponse<CommentPageResponse>();
 		//查询评论信息
 		ProdComment params = new ProdComment();
@@ -298,14 +303,15 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 			result.setResult(prodCommentList);
 			return result;
 		}
-	}
+	}*/
 
 	/**
 	 * 转换返回对象
 	 * @param prodCommentList
 	 * @return
 	 */
-	private List<CommentPageResponse> getCommentResponseList(List<ProdComment> prodCommentList) {
+//	private List<CommentPageResponse> getCommentResponseList(List<ProdComment> prodCommentList) {
+	public List<CommentPageResponse> getCommentResponseList(List<ProdComment> prodCommentList) {
 		List<CommentPageResponse> responseList = new LinkedList<CommentPageResponse>();
 		for(ProdComment prodComment : prodCommentList ){
 			//转换返回对象

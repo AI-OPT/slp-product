@@ -1,5 +1,8 @@
 package com.ai.slp.product.service.business.interfaces.comment;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
@@ -11,6 +14,7 @@ import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
+import com.ai.slp.product.dao.mapper.bo.ProdComment;
 
 public interface IProdCommentBusiSV {
 	/**
@@ -28,7 +32,8 @@ public interface IProdCommentBusiSV {
 	/**
 	 * 查询评论
 	 */
-	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest);
+	public List<ProdComment> queryPageInfo(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd, Integer pageSize, Integer pageNo);
+	//public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest);
 	/**
 	 * 更新评论状态
 	 */
@@ -37,4 +42,6 @@ public interface IProdCommentBusiSV {
 	 * 查看评论图片
 	 */
 	public CommentPictureQueryResponse queryPictureByCommentId(CommentPictureQueryRequset queryRequset);
+	
+	public List<CommentPageResponse> getCommentResponseList(List<ProdComment> prodCommentList);
 }
