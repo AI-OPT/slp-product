@@ -51,27 +51,14 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
     IStandedProdAttrAtomSV standedProdAttrAtomSV;
 
     @Override
-    public PageInfoResponse<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery) {
+    public PageInfo<ProductCat> queryProductCat(ProductCatPageQuery pageQuery) {
         PageInfo<ProductCat> catInfoPageInfo = prodCatDefAtomSV.queryForPage(
                 pageQuery.getPageNo(),pageQuery.getPageSize(),pageQuery.getParentProductCatId(),
                 pageQuery.getTenantId(),pageQuery.getProductCatId(),
                 pageQuery.getProductCatName(),pageQuery.getIsChild()
         );
-        PageInfoResponse<ProductCatInfo> pageInfoWrapper = new PageInfoResponse<>();
-        pageInfoWrapper.setCount(catInfoPageInfo.getCount());
-        pageInfoWrapper.setPageSize(catInfoPageInfo.getPageSize());
-        pageInfoWrapper.setPageCount(catInfoPageInfo.getPageCount());
-        pageInfoWrapper.setPageNo(catInfoPageInfo.getPageNo());
-        List<ProductCat> productCatList = catInfoPageInfo.getResult();
-        List<ProductCatInfo> catInfoList = new ArrayList<>();
-        pageInfoWrapper.setResult(catInfoList);
-        for (ProductCat productCat:productCatList){
-            ProductCatInfo productCatInfo = new ProductCatInfo();
-            BeanUtils.copyProperties(productCatInfo,productCat);
-            productCatInfo.setSerialNumber(productCat.getSerialNumber());
-            catInfoList.add(productCatInfo);
-        }
-        return pageInfoWrapper;
+       
+        return catInfoPageInfo;
     }
 
     @Override

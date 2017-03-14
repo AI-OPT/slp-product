@@ -186,7 +186,16 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @return
 	 */
 	@Override
-	public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId) {
+	public List<StorageGroup> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId) {
+		// 查询出标准品下的所有库存组,创建时间倒序
+		List<StorageGroup> groupList = storageGroupAtomSV.queryOfStandedProd(tenantId,supplierId, productId);
+		if (CollectionUtil.isEmpty(groupList)){
+			logger.warn("查询库存组列表为空,租户ID:{},销售商ID:{},标准品ID:{}",tenantId,supplierId,productId);
+		}
+		
+		return groupList;
+	}
+/*	public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId) {
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
 		if (standedProduct == null) {
 			logger.warn("未找到对应的标准品信息,租户ID:{},标准品标识:{}",tenantId,productId);
@@ -202,7 +211,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			groupInfoList.add(genStorageGroupInfo(groupList.get(i)));
 		}
 		return groupInfoList;
-	}
+	}*/
 
 	/**
 	 * 查询单个库存组的信息
@@ -234,7 +243,8 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @param group
 	 * @return
 	 */
-	private StorageGroupRes genStorageGroupInfo(StorageGroup group) {
+//	private StorageGroupRes genStorageGroupInfo(StorageGroup group) {
+	public StorageGroupRes genStorageGroupInfo(StorageGroup group) {
 		StorageGroupRes groupInfo = new StorageGroupRes();
 		BeanUtils.copyProperties(groupInfo, group);
 		// 填充库存组信息

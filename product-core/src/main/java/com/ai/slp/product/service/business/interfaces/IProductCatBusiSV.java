@@ -1,8 +1,10 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
+import com.ai.slp.product.dao.mapper.bo.ProductCat;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,7 @@ public interface IProductCatBusiSV {
      * @param pageQuery 查询条件
      * @return
      */
-    public PageInfoResponse<ProductCatInfo> queryProductCat(ProductCatPageQuery pageQuery);
+    public PageInfo<ProductCat> queryProductCat(ProductCatPageQuery pageQuery);
 
     /**
      * 批量添加类目

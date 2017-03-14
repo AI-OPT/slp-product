@@ -1,7 +1,9 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 
 /**
  * 对标准品的相关操作
@@ -44,7 +46,8 @@ public interface INormProductBusiSV {
      *
      * @return
      */
-    public PageInfoResponse<NormProdResponse> queryForPage(NormProdRequest productRequest);
+    public PageInfo<StandedProduct> queryForPage(NormProdRequest productRequest);
+//    public PageInfoResponse<NormProdResponse> queryForPage(NormProdRequest productRequest);
 
     /**
      * 废弃标准品

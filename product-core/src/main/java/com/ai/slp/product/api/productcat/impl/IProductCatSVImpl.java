@@ -4,9 +4,11 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.*;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
+import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
 import com.ai.slp.product.api.productcat.param.*;
+import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -14,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,9 +42,26 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public PageInfoResponse<ProductCatInfo> queryPageProductCat(ProductCatPageQuery pageQuery) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(pageQuery.getTenantId());
-        PageInfoResponse<ProductCatInfo> catInfoPageInfoWrapper = productCatBusiSV.queryProductCat(pageQuery);
-        CommonUtils.addSuccessResHeader(catInfoPageInfoWrapper,"");
-        return catInfoPageInfoWrapper;
+//        PageInfoResponse<ProductCatInfo> catInfoPageInfoWrapper = productCatBusiSV.queryProductCat(pageQuery);
+        
+        PageInfo<ProductCat> catInfoPageInfo = productCatBusiSV.queryProductCat(pageQuery);
+        PageInfoResponse<ProductCatInfo> pageInfoWrapper = new PageInfoResponse<>();
+        pageInfoWrapper.setCount(catInfoPageInfo.getCount());
+        pageInfoWrapper.setPageSize(catInfoPageInfo.getPageSize());
+        pageInfoWrapper.setPageCount(catInfoPageInfo.getPageCount());
+        pageInfoWrapper.setPageNo(catInfoPageInfo.getPageNo());
+        List<ProductCat> productCatList = catInfoPageInfo.getResult();
+        List<ProductCatInfo> catInfoList = new ArrayList<>();
+        pageInfoWrapper.setResult(catInfoList);
+        for (ProductCat productCat:productCatList){
+            ProductCatInfo productCatInfo = new ProductCatInfo();
+            BeanUtils.copyProperties(productCatInfo,productCat);
+            productCatInfo.setSerialNumber(productCat.getSerialNumber());
+            catInfoList.add(productCatInfo);
+        }
+        
+        CommonUtils.addSuccessResHeader(pageInfoWrapper,"");
+        return pageInfoWrapper;
     }
 
 	/**

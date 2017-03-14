@@ -1,5 +1,8 @@
 package com.ai.slp.product.api.normproduct.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +12,12 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
+import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.normproduct.param.AttrQuery;
@@ -24,7 +29,9 @@ import com.ai.slp.product.api.normproduct.param.NormProdResponse;
 import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
 import com.ai.slp.product.api.normproduct.param.NormProdUniqueReq;
 import com.ai.slp.product.constants.NormProdConstants;
+import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
+import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
@@ -48,6 +55,8 @@ public class INormProductSVImpl implements INormProductSV {
     IProdSkuBusiSV prodSkuBusiSV;
     @Autowired
 	IStandedProductAtomSV standedProductAtomSV;
+    @Autowired
+	IProdCatDefAtomSV catDefAtomSV;
     /**
      * 标准品列表查询. <br>
      *
@@ -62,7 +71,31 @@ public class INormProductSVImpl implements INormProductSV {
     public PageInfoResponse<NormProdResponse> queryNormProduct(NormProdRequest productRequest) throws BusinessException, SystemException {
         long startTime = System.nanoTime();
         LOGGER.info("=====开始INormProductSVImpl.queryNormProduct,商品列表查询,当前时间戳:"+startTime);
-        return normProductBusiSV.queryForPage(productRequest);
+       // return normProductBusiSV.queryForPage(productRequest);
+        PageInfo<StandedProduct> productPageInfo = normProductBusiSV.queryForPage(productRequest);
+        
+        PageInfoResponse<NormProdResponse> normProdPageInfo = new PageInfoResponse<NormProdResponse>();
+		BeanUtils.copyProperties(normProdPageInfo, productPageInfo);
+		// 添加结果集
+		List<StandedProduct> productList = productPageInfo.getResult();
+		List<NormProdResponse> normProductList = new ArrayList<NormProdResponse>();
+		normProdPageInfo.setResult(normProductList);
+
+		for (StandedProduct standedProduct : productList) {
+			NormProdResponse normProduct = new NormProdResponse();
+			BeanUtils.copyProperties(normProduct, standedProduct);
+			ProductCat productCat = catDefAtomSV.selectAllStateById(standedProduct.getTenantId(),
+					standedProduct.getProductCatId());
+			if (productCat != null){
+				normProduct.setCatName(productCat.getProductCatName());
+			}
+			normProduct.setCatId(standedProduct.getProductCatId());
+			normProduct.setProductId(standedProduct.getStandedProdId());
+			normProduct.setProductName(standedProduct.getStandedProductName());
+			normProductList.add(normProduct);
+		}
+        
+		return normProdPageInfo;
     }
 
     /**
