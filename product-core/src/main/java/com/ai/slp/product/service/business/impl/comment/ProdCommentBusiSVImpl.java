@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
@@ -27,7 +26,6 @@ import com.ai.slp.product.api.productcomment.param.PictureVO;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
-import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
 import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.constants.CommonConstants;
@@ -36,7 +34,6 @@ import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentPicture;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentPictureAtomSV;
@@ -119,43 +116,13 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	}
 
 	@Override
-	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) {
+	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest,List<ProdComment> prodComments,List<PictureVO> pictureList) {
 		BaseResponse baseResponse = new BaseResponse();
-		String tenantId = prodCommentCreateRequest.getTenantId();
-		String userId = prodCommentCreateRequest.getUserId();
-		List<ProdCommentVO> commentList = prodCommentCreateRequest.getCommentList();
-		if(commentList != null && commentList.size() >0){
-			for(ProdCommentVO prodCommentVO : commentList){
-				ProdComment params = new ProdComment();
-				params.setUserId(userId);
-				BeanUtils.copyProperties(params, prodCommentVO);
-				String skuId = prodCommentVO.getSkuId();
-				ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, skuId);
-				if(prodSku == null){
-					throw new BusinessException("skuId 数据错误，找不到对应的销售商品");
-				}
-				String prodId = prodSku.getProdId();
-				Product product = productAtomSV.selectByProductId(tenantId, prodId);
-				if(product == null){
-					throw new BusinessException("skuId 数据错误，找不到对应的标准商品");
-				}
-				params.setProdId(prodId);
-				params.setStandedProdId(product.getStandedProdId());
-				params.setSupplierId(product.getSupplierId());
-				//添加评论
-				params.setTenantId(prodCommentCreateRequest.getTenantId());
-				params.setOrderId(prodCommentCreateRequest.getOrderId());
-				List<PictureVO> pictureList = prodCommentVO.getPictureList();
-				//判断是否有图片
-				boolean isHasPicture = pictureList != null && pictureList.size() >0;
-				if(isHasPicture){
-					params.setIsPicture(ProductCommentConstants.HasPicture.YSE);
-				}else{
-					params.setIsPicture(ProductCommentConstants.HasPicture.NO);
-				}
-				String prodCommentId = prodCommentAtomSV.createProdComment(params);
+		if(!CollectionUtil.isEmpty(prodComments)){
+			for(ProdComment prodComment : prodComments){
+				String prodCommentId = prodCommentAtomSV.createProdComment(prodComment);
 				//添加商品图片
-				if(!StringUtil.isBlank(prodCommentId) && isHasPicture){
+				if(!StringUtil.isBlank(prodCommentId) && ProductCommentConstants.HasPicture.YSE.equals(prodComment.getIsPicture())){
 					if (CollectionUtil.isEmpty(pictureList)) {
 						for(PictureVO pictureVO : pictureList){
 							ProdCommentPicture prodCommentPicture = new ProdCommentPicture();

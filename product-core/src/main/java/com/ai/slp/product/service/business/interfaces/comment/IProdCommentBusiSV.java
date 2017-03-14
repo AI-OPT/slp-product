@@ -1,16 +1,20 @@
 package com.ai.slp.product.service.business.interfaces.comment;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
+import com.ai.slp.product.api.productcomment.param.PictureVO;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
+import com.ai.slp.product.dao.mapper.bo.ProdComment;
 
 public interface IProdCommentBusiSV {
 	/**
@@ -20,7 +24,7 @@ public interface IProdCommentBusiSV {
 	/**
 	 * 发表评论
 	 */
-	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest);
+	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest,List<ProdComment> prodComments,List<PictureVO> pictureList);
 	/**
 	 * 回复评价
 	 */

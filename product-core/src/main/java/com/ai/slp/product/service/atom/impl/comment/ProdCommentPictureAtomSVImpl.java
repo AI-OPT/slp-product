@@ -37,12 +37,8 @@ public class ProdCommentPictureAtomSVImpl implements IProdCommentPictureAtomSV {
 		prodCommentPicture.setProdCommentPicId(Long.toString(pictureDefId));
 		prodCommentPicture.setState(CommonConstants.STATE_ACTIVE);
 		prodCommentPicture.setCreateTime(DateUtil.getSysDate());
-		int insert = prodCommentPictureMapper.insert(prodCommentPicture);
-		if(insert > 0){
-			return prodCommentPicture.getProdCommentPicId();
-		}else{
-			return null;
-		}
+		prodCommentPictureMapper.insert(prodCommentPicture);
+		return prodCommentPicture.getProdCommentPicId();
 	}
 
 }
