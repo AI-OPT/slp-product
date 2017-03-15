@@ -363,8 +363,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             attrAndValMap.put(catAttrDef.getAttrId(), attrValDefList);
             attrDefMap.put(catAttrDef.getAttrId(), catAttrDef);
             // 查询销售商品非关键属性值
-            List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(
-                    tenantId,product.getProdId(),catAttrAttch.getAttrId());
+            List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(tenantId,product.getProdId(),catAttrAttch.getAttrId());
             for (ProdAttr prodAttr : prodAttrs) {
                 ProdAttrValInfo valDef = new ProdAttrValInfo();
                 BeanUtils.copyProperties(valDef, prodAttr);
@@ -375,8 +374,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                 valDef.setAttrVal2(prodAttr.getAttrValueName2());
                 //查询属性值
                 if (prodAttr.getAttrvalueDefId() != null) {
-                    ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId,
-                            prodAttr.getAttrvalueDefId());
+                    ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId,prodAttr.getAttrvalueDefId());
                     if (attrvalueDef != null){
                     	valDef.setAttrVal(attrvalueDef.getAttrValueName());
                     }

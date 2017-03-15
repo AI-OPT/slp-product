@@ -38,9 +38,10 @@ public class IExSearchProductSVImpl implements IExSearchProductSV {
     @Override
     public QueryProductResponse queryProductPage(QueryProductRequest request)
             throws BusinessException, SystemException {
+    	QueryProductResponse response = new QueryProductResponse();
+    	try{
         //有效性校验
         ExProductValidata.validateSearch(request);
-        QueryProductResponse response = new QueryProductResponse();
         PageInfo<ProductDataResponse> pageinfo = new PageInfo<ProductDataResponse>();
         List<ProductDataResponse> results = new ArrayList<ProductDataResponse>();
         IExProductSearch exProductSearch = new ExProductSearchImpl();
@@ -159,11 +160,12 @@ public class IExSearchProductSVImpl implements IExSearchProductSV {
         pageinfo.setResult(results);
         pageinfo.setCount(getProductCount(request));
         response.setPageInfo(pageinfo);
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setResultCode(ExceptCodeConstants.Special.SUCCESS);
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultMessage(ProductExceptCode.SUCCESS_INFO);
+        ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,ProductExceptCode.SUCCESS_INFO);
         response.setResponseHeader(responseHeader);
+    	}catch(Exception e){
+    		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SYSTEM_ERROR,"查询失败");
+    		response.setResponseHeader(responseHeader);
+    	}
         return response;
     }
 

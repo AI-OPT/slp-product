@@ -29,8 +29,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest skuReq) throws BusinessException, SystemException {
 		logger.info("---= queryProducSKUById start time:"+System.currentTimeMillis());
 		CommonUtils.checkTenantId(skuReq.getTenantId(),"");
-		if (StringUtils.isBlank(skuReq.getSkuId())
-				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
+		if (StringUtils.isBlank(skuReq.getSkuId())&& StringUtils.isBlank(skuReq.getSkuAttrs())){
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
 		ProductSKUResponse skuDetail = prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
@@ -47,8 +46,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest skuReq)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(skuReq.getTenantId(),"");
-		if (StringUtils.isBlank(skuReq.getSkuId())
-				&& StringUtils.isBlank(skuReq.getSkuAttrs())){
+		if (StringUtils.isBlank(skuReq.getSkuId())&& StringUtils.isBlank(skuReq.getSkuAttrs())){
 			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
 		}
 		ProductSKUConfigResponse skuAttr = prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
@@ -59,6 +57,5 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		}
 		skuAttr.setResponseHeader(responseHeader);
 		return skuAttr;
-		//return demoConfigResponse();
 	}
 }

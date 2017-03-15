@@ -1,6 +1,16 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -18,8 +28,20 @@ import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.normproduct.param.AttrValInfo;
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
 import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
-import com.ai.slp.product.api.product.param.*;
-import com.ai.slp.product.api.webfront.param.*;
+import com.ai.slp.product.api.product.param.CatAttrInfoForProd;
+import com.ai.slp.product.api.product.param.ProdAttrMap;
+import com.ai.slp.product.api.product.param.ProdAttrValInfo;
+import com.ai.slp.product.api.product.param.SkuAttrInfo;
+import com.ai.slp.product.api.product.param.SkuAttrVal;
+import com.ai.slp.product.api.product.param.SkuAttrValInfo;
+import com.ai.slp.product.api.product.param.SkuInfo;
+import com.ai.slp.product.api.product.param.SkuInfoMultSave;
+import com.ai.slp.product.api.product.param.SkuSetForProduct;
+import com.ai.slp.product.api.webfront.param.ProductImage;
+import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
+import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
+import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
+import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
@@ -28,7 +50,11 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
-import com.ai.slp.product.dao.mapper.bo.product.*;
+import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSkuAttr;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSkuLog;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
@@ -38,12 +64,21 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSaleAllAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
-import com.ai.slp.product.service.business.interfaces.*;
+import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.vo.ProdSkuAttrStr;
 import com.ai.slp.product.vo.SkuStorageVo;
 
@@ -357,32 +392,19 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	 */
 	@Override
 	public ProductSKUResponse querySkuDetail(String tenantId, String skuId, String skuAttrs) {
-		logger.info("--== querySkuDetail start time:" + System.currentTimeMillis());
 		
-		long queryStart = System.currentTimeMillis();
-		logger.info("####loadtest#### 开始调用selectSkuBySkuIdOrAttrs,根据SkuId或属性串查询SKU信息,当前时间戳：" + queryStart);
 		ProdSku prodSku = selectSkuBySkuIdOrAttrs(tenantId, skuId, skuAttrs);
-		long queryEnd = System.currentTimeMillis();
-		logger.info("####loadtest#### 结束调用selectSkuBySkuIdOrAttrs,根据SkuId或属性串查询SKU信息,当前时间戳：" + queryEnd + ",用时:"
-				+ (queryEnd - queryStart) + "毫秒");
 		
 		// 查询商品
-		long queryProductStart = System.currentTimeMillis();
-		logger.info("####loadtest#### 开始调用productAtomSV.selectByProductId,查询指定商品,当前时间戳：" + queryProductStart);
 		Product product = productAtomSV.selectByProductId(tenantId, prodSku.getProdId());
-		long queryProductEnd = System.currentTimeMillis();
-		logger.info("####loadtest#### 结束调用productAtomSV.selectByProductId,查询指定商品,当前时间戳：" + queryProductEnd + ",用时:"
-				+ (queryProductEnd - queryProductStart) + "毫秒");
 		
 		if (product == null) {
-			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",
-					tenantId, prodSku.getSkuId(), prodSku.getProdId());
+			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",tenantId, prodSku.getSkuId(), prodSku.getProdId());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
 		//若不是有效状态,则不处理
 		if (!ACTIVE_STATUS_LIST.contains(product.getState())){
-			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",
-					tenantId, prodSku.getSkuId(), prodSku.getProdId(),product.getState());
+			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",tenantId, prodSku.getSkuId(), prodSku.getProdId(),product.getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
 		return genSkuResponse(tenantId, product, prodSku);
@@ -402,21 +424,18 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		// 查询商品
 		Product product = productAtomSV.selectByProductId(tenantId, prodSku.getProdId());
 		if (product == null) {
-			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",
-					tenantId, prodSku.getSkuId(), prodSku.getProdId());
+			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",tenantId, prodSku.getSkuId(), prodSku.getProdId());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
 		//若不是有效状态,则不处理
 		if (!ACTIVE_STATUS_LIST.contains(product.getState())){
-			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",
-					tenantId, prodSku.getSkuId(), prodSku.getProdId(),product.getState());
+			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",tenantId, prodSku.getSkuId(), prodSku.getProdId(),product.getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
 		ProductSKUConfigResponse configResponse = new ProductSKUConfigResponse();
 		configResponse.setProductAttrList(new ArrayList<ProductSKUAttr>());
 		// 查询关键属性
-		AttrMap keyAttrMap = normProductBusiSV.queryAttrOfProduct(tenantId, product.getStandedProdId(),
-				ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
+		AttrMap keyAttrMap = normProductBusiSV.queryAttrOfProduct(tenantId, product.getStandedProdId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
 		configResponse.getProductAttrList().addAll(getKeyAttr(keyAttrMap));
 		// 查询非关键属性
 		ProdAttrMap noKeyAttrMap = productBusiSV.queryNoKeyAttrOfProduct(product);
@@ -618,23 +637,14 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	}
 
 	private ProductSKUResponse genSkuResponse(String tenantId, Product product, ProdSku prodSku) {
-		logger.info("--== genSkuResponse start time:" + System.currentTimeMillis());
 		ProductSKUResponse skuResponse = new ProductSKUResponse();
 		BeanUtils.copyProperties(skuResponse, prodSku);
 		BeanUtils.copyProperties(skuResponse, product);
 		skuResponse.setProductAttrList(new ArrayList<ProductSKUAttr>());
 		skuResponse.setProductImageList(new ArrayList<ProductImage>());
 		
-		long queryAttrStart = System.currentTimeMillis();
-		logger.info("####loadtest####开始执行catAttrAttachAtomSV.queryAttrOfByIdAndType，查询指定类目下的属性信息,当前时间戳：" + queryAttrStart);
-		
 		// 查询商品对应标准品的销售属性,已按照属性属性排序
-		List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
-				product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-		
-		long queryAttrEnd = System.currentTimeMillis();
-		logger.info("####loadtest####结束调用catAttrAttachAtomSV.queryAttrOfByIdAndType，查询指定类目下的属性信息,当前时间戳：" + queryAttrEnd + ",用时:"
-				+ (queryAttrEnd - queryAttrStart) + "毫秒");
+		List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
 		
 		// SKU图片
 		String attrPic = null;
@@ -645,31 +655,16 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			productSKUAttr.setAttrName(attrAttch.getAttrName());
 			List<ProductSKUAttrValue> attrValueList = new ArrayList<>();
 			
-			long queryAttrValStart = System.currentTimeMillis();
-			logger.info("####loadtest####开始执行standedProdAttrAtomSV.queryAttrVal，查询属性对应属性值集合,当前时间戳：" + queryAttrValStart);
-			
 			// 查询属性对应属性值集合
 			List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(tenantId, product.getStandedProdId(),
 					attrAttch.getAttrId());
 			
-			long queryAttrValEnd = System.currentTimeMillis();
-			logger.info("####loadtest####结束调用standedProdAttrAtomSV.queryAttrVal，查询属性对应属性值集合,当前时间戳：" + queryAttrValEnd + ",用时:"
-					+ (queryAttrValEnd - queryAttrValStart) + "毫秒");
-			
 			for (StandedProdAttr prodAttr : prodAttrs) {
-				long queryAttrValNumStart = System.currentTimeMillis();
-				logger.info("####loadtest####开始执行prodSkuAttrAtomSV.queryAttrValNumOfSku，查询商品SKU下属性值被使用次数,当前时间戳：" + queryAttrValNumStart);
-				
-				
 				// 若SKU不包含当前属性值,则查询下一个属性值
 				if (prodSkuAttrAtomSV.queryAttrValNumOfSku(tenantId, product.getProdId(),
 						prodAttr.getAttrvalueDefId()) <= 0){
 					continue;
 				}
-				
-				long queryAttrValNumEnd = System.currentTimeMillis();
-				logger.info("####loadtest####结束调用prodSkuAttrAtomSV.queryAttrValNumOfSku，查询商品SKU下属性值被使用次数,当前时间戳：" + queryAttrValEnd + ",用时:"
-						+ (queryAttrValNumEnd - queryAttrValNumStart) + "毫秒");
 				
 				ProductSKUAttrValue skuAttrValue = new ProductSKUAttrValue();
 				skuAttrValue.setAttrvalueDefId(prodAttr.getAttrvalueDefId());
@@ -683,17 +678,9 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 				attrValueList.add(skuAttrValue);
 				// 若此属性是否包含图片
 				if (ProductCatConstants.ProductCatAttr.IsPicture.YES.equals(attrAttch.getIsPicture())) {
-					long queryPictureStart = System.currentTimeMillis();
-					logger.info("####loadtest####开始执行pictureAtomSV.queryMainOfProdIdAndAttrVal，查询主图,当前时间戳：" + queryPictureStart);
-					
 					// 查询主图
 					ProdPicture prodPicture = pictureAtomSV.queryMainOfProdIdAndAttrVal(product.getProdId(),
 							prodAttr.getAttrvalueDefId());
-					
-					long queryPictureEnd = System.currentTimeMillis();
-					logger.info("####loadtest####结束调用pictureAtomSV.queryMainOfProdIdAndAttrVal，查询主图,当前时间戳：" + queryPictureEnd + ",用时:"
-							+ (queryPictureEnd - queryPictureStart) + "毫秒");
-					
 					
 					if (prodPicture != null) {
 						ProductImage productImage = new ProductImage();
@@ -716,20 +703,11 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		// 设置商品销量
 		skuResponse.setSaleNum(prodSaleAllAtomSV.queryNumOfProduc(tenantId, product.getProdId()));
 		
-		long queryStorageStart = System.currentTimeMillis();
-		logger.info("####loadtest####开始执行storageNumBusiSV.queryStorageOfSku，获取当前库存和价格,当前时间戳：" + queryStorageStart);
-		
 		// 获取当前库存和价格
 		SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(tenantId, prodSku.getSkuId());
 		
-		long queryStorageEnd = System.currentTimeMillis();
-		logger.info("####loadtest####结束调用storageNumBusiSV.queryStorageOfSku，获取当前库存和价格,当前时间戳：" + queryStorageEnd + ",用时:"
-				+ (queryStorageEnd - queryStorageStart) + "毫秒");
-		
-		
 		skuResponse.setUsableNum(skuStorageVo.getUsableNum());
 		skuResponse.setSalePrice(skuStorageVo.getSalePrice());
-		logger.info("--== genSkuResponse end time:" + System.currentTimeMillis());
 		return skuResponse;
 	}
 
