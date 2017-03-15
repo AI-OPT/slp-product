@@ -755,88 +755,12 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
      * @return
      */
 	@Override
-	public PageInfoResponse<ProductEditUp> queryInSale(ProductQueryInfo queryReq) {
-
-        String tenantId = queryReq.getTenantId();
-        
-        long productPageStart = System.currentTimeMillis();
-		logger.info("####loadtest####开始执行productAtomSV.selectPageForInsale，查询在售商品,当前时间戳：" + productPageStart);
-        
+	public PageInfo<Product> queryInSale(ProductQueryInfo queryReq) {
         //查询所有符合条件商品
         PageInfo<Product> productPage = productAtomSV.selectPageForInsale(queryReq);
-
-        long productPageEnd = System.currentTimeMillis();
-		logger.info("####loadtest####结束调用productAtomSV.selectPageForInsale，查询在售商品,当前时间戳：" + productPageEnd + ",用时:"
-				+ (productPageEnd - productPageStart) + "毫秒");
-        
-        List<ProductEditUp> editUpList = new ArrayList<>();
-        //组装prodIdList
-        List<String> prodIdList=new ArrayList<String>();
-        for (Product product:productPage.getResult()){
-        	prodIdList.add(product.getProdId());
-        }
-        //一次查询出所有的图片
-        long queryPictureStart = System.currentTimeMillis();
-		logger.info("####loadtest####开始执行prodPictureAtomSV.queryMainOfProd，查询主预览图,当前时间戳：" + queryPictureStart);
-		List<ProdPicture> prodPictureList = prodPictureAtomSV.queryMainOfProdList(prodIdList);
-        long queryPictureEnd = System.currentTimeMillis();
-		logger.info("####loadtest####结束调用prodPictureAtomSV.queryMainOfProd，查询主预览图,当前时间戳：" + queryPictureEnd + ",用时:"
-				+ (queryPictureEnd - queryPictureStart) + "毫秒");
-        
-        for (Product product:productPage.getResult()){
-            ProductEditUp productEditUp = new ProductEditUp();
-            BeanUtils.copyProperties(productEditUp,product);
-            //设置类目名称
-            ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
-            if (cat!=null){
-    			productEditUp.setProductCatName(cat.getProductCatName());
-    		}
-            
-            
-            //改为从cache中获取cat
-            
-          /*  long queryCatNameStart = System.currentTimeMillis();
-    		logger.info("####loadtest####开始执行IPaasCatUtils.getCacheClient，从缓存中获取类目名称,当前时间戳：" + queryCatNameStart);
-            
-            String productCatStr=IPaasCatUtils.getCacheClient()
-            		.hget(IPaasCatUtils.genMcsCatInfoKey(tenantId),
-            		product.getProductCatId());
-            ProductCat cat=null;
-            if(!StringUtil.isBlank(productCatStr)){
-            	cat=JSonUtil.fromJSon(productCatStr, ProductCat.class);
-            }
-            if (cat!=null){
-            	productEditUp.setProductCatName(cat.getProductCatName());
-            }
-            
-            long queryCatNameEnd = System.currentTimeMillis();
-    		logger.info("####loadtest####结束调用IPaasCatUtils.getCacheClient，从缓存中获取类目名称,当前时间戳：" + queryCatNameEnd + ",用时:"
-    				+ (queryCatNameEnd - queryCatNameStart) + "毫秒");
-    		*/
-    		ProdPicture prodPicture=getProdPictureByProdId(product.getProdId(),prodPictureList);
-            if (prodPicture!=null){
-                productEditUp.setProPictureId(prodPicture.getProPictureId());
-                productEditUp.setVfsId(prodPicture.getVfsId());
-                productEditUp.setPicType(prodPicture.getPicType());
-            }
-             editUpList.add(productEditUp);
-        }
-        
-        PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();
-        BeanUtils.copyProperties(response,productPage);
-        response.setResult(editUpList);
-        return response;
+        return productPage;
     
 	}
-	private ProdPicture getProdPictureByProdId(String prodId,List<ProdPicture> list) {
-		if(list!=null&&list.size()>0){
-			for(ProdPicture pic:list){
-				if(pic.getProdId().equalsIgnoreCase(prodId)){
-					return pic;
-				}
-			}
-		}
-		return null;
-	}
+
 	
 }

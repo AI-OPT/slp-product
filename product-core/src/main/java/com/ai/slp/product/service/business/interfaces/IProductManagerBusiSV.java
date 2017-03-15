@@ -2,7 +2,19 @@ package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.product.param.OtherSetOfProduct;
+import com.ai.slp.product.api.product.param.ProdStateLog;
+import com.ai.slp.product.api.product.param.ProductCheckParam;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductEditUp;
+import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.ProductQueryInfo;
+import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
+import com.ai.slp.product.api.product.param.ProductStorageSale;
+import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.api.product.param.RouteGroupQuery;
+import com.ai.slp.product.api.product.param.TargetAreaForProd;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 
 /**
@@ -64,7 +76,7 @@ public interface IProductManagerBusiSV {
      * @param queryInSale
      * @return
      */
-    public PageInfoResponse<ProductEditUp> queryInSale(ProductQueryInfo queryInSale);
+    public PageInfo<Product> queryInSale(ProductQueryInfo queryInSale);
 
 
     /**

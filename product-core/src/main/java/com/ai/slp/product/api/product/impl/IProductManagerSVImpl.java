@@ -333,9 +333,48 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	 */
 	@Override
 	public PageInfoResponse<ProductEditUp> searchInSale(ProductQueryInfo queryInSale) throws BusinessException, SystemException {
+		PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();
+		ResponseHeader responseHeader = null;
+		try{
 		CommonUtils.checkTenantId(queryInSale.getTenantId());
         CommonUtils.checkSupplierId(queryInSale.getSupplierId());
-        return productManagerBusiSV.queryInSale(queryInSale);
+        String tenantId = queryInSale.getTenantId();
+        PageInfo<Product> productPage = productManagerBusiSV.queryInSale(queryInSale);
+        List<ProductEditUp> editUpList = new ArrayList<>();
+        //组装prodIdList
+        List<String> prodIdList=new ArrayList<String>();
+        for (Product product:productPage.getResult()){
+        	prodIdList.add(product.getProdId());
+        }
+        //一次查询出所有的图片
+		List<ProdPicture> prodPictureList = prodPictureAtomSV.queryMainOfProdList(prodIdList);
+        for (Product product:productPage.getResult()){
+            ProductEditUp productEditUp = new ProductEditUp();
+            BeanUtils.copyProperties(productEditUp,product);
+            //设置类目名称
+            ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
+            if (cat!=null){
+    			productEditUp.setProductCatName(cat.getProductCatName());
+    		}
+    		ProdPicture prodPicture=getProdPictureByProdId(product.getProdId(),prodPictureList);
+            if (prodPicture!=null){
+                productEditUp.setProPictureId(prodPicture.getProPictureId());
+                productEditUp.setVfsId(prodPicture.getVfsId());
+                productEditUp.setPicType(prodPicture.getPicType());
+            }
+             editUpList.add(productEditUp);
+        }
+        BeanUtils.copyProperties(response,productPage);
+        response.setResult(editUpList);
+		}catch(Exception e){
+			if(e instanceof BusinessException){
+				responseHeader = new ResponseHeader(false,((BusinessException) e).getErrorCode(),((BusinessException) e).getErrorMessage());
+			}else{
+				responseHeader = new ResponseHeader(false,CommonConstants.OPERATE_FAIL,"查询在售商品失败");
+			}
+			response.setResponseHeader(responseHeader);;
+		}
+        return response;
 	}
 
 	/**
@@ -370,5 +409,16 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		ProdStateLog stateLogRes = productManagerBusiSV.queryRefuseByProdId(queryInfo);
 		CommonUtils.addSuccessResHeader(stateLogRes, "OK");
     	return stateLogRes;
+	}
+	
+	private ProdPicture getProdPictureByProdId(String prodId,List<ProdPicture> list) {
+		if(list!=null&&list.size()>0){
+			for(ProdPicture pic:list){
+				if(pic.getProdId().equalsIgnoreCase(prodId)){
+					return pic;
+				}
+			}
+		}
+		return null;
 	}
 }
