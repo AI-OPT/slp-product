@@ -217,7 +217,11 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	}
 
 	@Override
-	public BaseResponse replyProdComment(ProdReplyComment replyComment) {
+	public void replyProdComment(ProdCommentReply commentReply) {
+		//查询是否有评论   有评论才可以回复评论
+		prodCommentAtomSV.prodCommentReply(commentReply);
+	}
+/*	public BaseResponse replyProdComment(ProdReplyComment replyComment) {
 		BaseResponse baseResponse = new BaseResponse();
 		//查询是否有评论   有评论才可以回复评论
 		ProdComment params = new ProdComment();
@@ -268,7 +272,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		}
 		return baseResponse;
 	}
-
+*/
 	@Override
 	public List<ProdComment> queryPageInfo(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd, Integer pageSize, Integer pageNo) {
 		
