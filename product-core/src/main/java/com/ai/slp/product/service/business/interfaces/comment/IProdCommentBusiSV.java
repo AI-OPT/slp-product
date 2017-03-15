@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.interfaces.comment;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.ai.opt.base.vo.BaseResponse;
@@ -8,7 +9,6 @@ import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
-import com.ai.slp.product.api.productcomment.param.PictureVO;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
@@ -20,11 +20,11 @@ public interface IProdCommentBusiSV {
 	/**
 	 * 查询评论
 	 */
-	public PageInfoResponse<ProdCommentPageResponse> queryPageBySku(ProdCommentPageRequest prodCommentPageRequest,String standedProdId);
+	public PageInfoResponse<ProdCommentPageResponse> queryPageBySku(ProdCommentPageRequest prodCommentPageRequest);
 	/**
 	 * 发表评论
 	 */
-	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest,List<ProdComment> prodComments,List<PictureVO> pictureList);
+	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest);
 	/**
 	 * 回复评价
 	 */
@@ -32,7 +32,8 @@ public interface IProdCommentBusiSV {
 	/**
 	 * 查询评论
 	 */
-	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest);
+	public List<ProdComment> queryPageInfo(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd, Integer pageSize, Integer pageNo);
+	//public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest);
 	/**
 	 * 更新评论状态
 	 */
@@ -41,4 +42,6 @@ public interface IProdCommentBusiSV {
 	 * 查看评论图片
 	 */
 	public CommentPictureQueryResponse queryPictureByCommentId(CommentPictureQueryRequset queryRequset);
+	
+	public List<CommentPageResponse> getCommentResponseList(List<ProdComment> prodCommentList);
 }

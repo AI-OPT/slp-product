@@ -36,7 +36,8 @@ public interface IStorageGroupBusiSV {
      * @param productId
      * @return
      */
-    public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId);
+    public List<StorageGroup> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId);
+//    public List<StorageGroupRes> queryGroupInfoByNormProId(String tenantId,String supplierId, String productId);
 
     /**
      * 查询单个库存组的信息
@@ -151,4 +152,6 @@ public interface IStorageGroupBusiSV {
      * @return
      */
     public StorageGroupRestwo queryGroupInfoAllByGroupId(String tenantId,String supplierId, String groupId);
+    
+    public StorageGroupRes genStorageGroupInfo(StorageGroup group);
 }

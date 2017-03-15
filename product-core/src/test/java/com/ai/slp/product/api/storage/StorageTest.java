@@ -16,9 +16,18 @@ import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseMapResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
-import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.api.storage.param.STOStorage;
+import com.ai.slp.product.api.storage.param.SkuStorageInfo;
+import com.ai.slp.product.api.storage.param.StoGroupStatus;
+import com.ai.slp.product.api.storage.param.StoNoSkuSalePrice;
+import com.ai.slp.product.api.storage.param.StoNoSkuSalePriceReq;
+import com.ai.slp.product.api.storage.param.StorageGroup4List;
+import com.ai.slp.product.api.storage.param.StorageGroupQuery;
+import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
+import com.ai.slp.product.api.storage.param.StorageGroupRes;
+import com.ai.slp.product.api.storage.param.StorageStatus;
+import com.ai.slp.product.api.storage.param.StorageUniQuery;
 import com.ai.slp.product.constants.CommonTestConstants;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -53,7 +62,7 @@ public class StorageTest {
         storageGroupQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
         storageGroupQuery.setSupplierId("-1");
 //        storageGroupQuery.setProductId("0000000000000121");
-        storageGroupQuery.setProductId("0000000000000413");
+        storageGroupQuery.setProductId("0000000000000456");
         BaseListResponse<StorageGroupRes> groupResList = storageSV.queryGroupInfoByNormProdId(storageGroupQuery);
         System.out.println(groupResList.getResult().size());
         System.out.println(groupResList.getResult().get(0).getStorageTotal());

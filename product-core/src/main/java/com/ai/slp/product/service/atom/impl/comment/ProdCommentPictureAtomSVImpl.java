@@ -25,6 +25,7 @@ public class ProdCommentPictureAtomSVImpl implements IProdCommentPictureAtomSV {
 		ProdCommentPictureCriteria example = new ProdCommentPictureCriteria();
 		
 		//example.setOrderByClause("CREATE_TIME,SERIAL_NUMBER");
+		
 		Criteria createCriteria = example.createCriteria();
 		createCriteria.andCommentIdEqualTo(commentId);
 		createCriteria.andStateEqualTo(CommonConstants.STATE_ACTIVE);
@@ -37,8 +38,12 @@ public class ProdCommentPictureAtomSVImpl implements IProdCommentPictureAtomSV {
 		prodCommentPicture.setProdCommentPicId(Long.toString(pictureDefId));
 		prodCommentPicture.setState(CommonConstants.STATE_ACTIVE);
 		prodCommentPicture.setCreateTime(DateUtil.getSysDate());
-		prodCommentPictureMapper.insert(prodCommentPicture);
-		return prodCommentPicture.getProdCommentPicId();
+		int insert = prodCommentPictureMapper.insert(prodCommentPicture);
+		if(insert > 0){
+			return prodCommentPicture.getProdCommentPicId();
+		}else{
+			return null;
+		}
 	}
 
 }

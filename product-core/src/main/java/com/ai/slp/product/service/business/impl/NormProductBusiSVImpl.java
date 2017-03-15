@@ -544,20 +544,25 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	}
 
 	@Override
-	public PageInfoResponse<NormProdResponse> queryForPage(NormProdRequest productRequest) {
+	public PageInfo<StandedProduct> queryForPage(NormProdRequest productRequest) {
 		long startTime = System.currentTimeMillis();
 		logger.info("=====开始商品查询 NormProductBusiSVImpl.queryNormForPage, 时间戳:{}",startTime);
+		
 		StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
 		BeanUtils.copyProperties(pageQueryVo, productRequest);
 		pageQueryVo.setProductId(productRequest.getStandedProdId());
 		pageQueryVo.setProductName(productRequest.getStandedProductName());
 		long atomStart = System.currentTimeMillis();
+		
 		logger.info("开始商品查询原子服务:standedProductAtomSV.queryForPage, 时间戳:{}",atomStart);
+		
 		// 查询结果
 		PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
+		
 		long atomEnd = System.currentTimeMillis();
 		logger.info("结束商品查询原子服务:standedProductAtomSV.queryForPage, 当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-		// 接口输出接口
+		
+/*		// 接口输出接口
 		PageInfoResponse<NormProdResponse> normProdPageInfo = new PageInfoResponse<NormProdResponse>();
 		BeanUtils.copyProperties(normProdPageInfo, productPageInfo);
 		// 添加结果集
@@ -581,10 +586,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			normProduct.setProductId(standedProduct.getStandedProdId());
 			normProduct.setProductName(standedProduct.getStandedProductName());
 			normProductList.add(normProduct);
-		}
+		}*/
 		long endTime = System.currentTimeMillis();
 		logger.info("=====结束商品查询 NormProductBusiSVImpl.queryNormForPage, 当前时间戳:{},用时:{}",endTime,(endTime-startTime));
-		return normProdPageInfo;
+		return productPageInfo;
 	}
 
 	@Override

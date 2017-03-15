@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.storage.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,10 +20,15 @@ import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
+import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.impl.StorageBusiSVImpl;
+import com.ai.slp.product.service.business.impl.StorageGroupBusiSVImpl;
 import com.ai.slp.product.service.business.impl.StorageNumDbBusiSVImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
@@ -49,7 +55,11 @@ public class IStorageSVImpl implements IStorageSV {
 	IProductBusiSV productBusiSV;
 	@Autowired
 	StorageNumDbBusiSVImpl storageNumDbBusiSV;
-
+	@Autowired
+	IStandedProductAtomSV standedProductAtomSV;
+	@Autowired
+	IStorageGroupAtomSV storageGroupAtomSV;
+	
 	/**
 	 * 添加标准品库存组<br>
 	 *
@@ -104,13 +114,43 @@ public class IStorageSVImpl implements IStorageSV {
 	public BaseListResponse<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(infoQuery.getTenantId());
+		
+		StandedProduct standedProduct = standedProductAtomSV.selectById(infoQuery.getTenantId(), infoQuery.getProductId());
+		if (standedProduct == null) {
+			logger.warn("未找到对应的标准品信息,租户ID:{},标准品标识:{}",infoQuery.getTenantId(), infoQuery.getProductId());
+			throw new BusinessException("", "未找到对应的标准品信息");
+		}
+		
+		
+		List<StorageGroup> groupList = storageGroupBusiSV.queryGroupInfoByNormProId(
+				infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getProductId());
+		
+		List<StorageGroupRes> groupInfoList = new ArrayList<>();
+		List<StorageGroup> groupLists = storageGroupAtomSV.queryOfStandedProd(infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getProductId());
+		if (CollectionUtil.isEmpty(groupLists)){
+			logger.warn("查询库存组列表为空,租户ID:{},销售商ID:{},标准品ID:{}",infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getProductId());
+		}
+		for(int i= groupList.size()-1;i>=0;i--){
+			groupInfoList.add(storageGroupBusiSV.genStorageGroupInfo(groupLists.get(i)));
+		}
+		
+		
+		BaseListResponse<StorageGroupRes> groupRes = new BaseListResponse<>();
+		groupRes.setResult(groupInfoList);
+		CommonUtils.addSuccessResHeader(groupRes,"Ok");
+		return groupRes;
+	}
+	
+/*	public BaseListResponse<StorageGroupRes> queryGroupInfoByNormProdId(StorageGroupQuery infoQuery)
+			throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(infoQuery.getTenantId());
 		List<StorageGroupRes> groupResList = storageGroupBusiSV.queryGroupInfoByNormProId(
 				infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getProductId());
 		BaseListResponse<StorageGroupRes> groupRes = new BaseListResponse<>();
 		groupRes.setResult(groupResList);
 		CommonUtils.addSuccessResHeader(groupRes,"Ok");
 		return groupRes;
-	}
+	}*/
 
 	/**
 	 * 更改标准品库存组状态<br>
