@@ -1,9 +1,11 @@
 package com.ai.slp.product.service.business;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +34,7 @@ public class IProductManagerBusiSVTest {
         stateList.add(ProductConstants.Product.State.UNEDIT);
         queryReq.setStateList(stateList);
         queryReq.setProductCatId("1");//
-        PageInfoResponse<ProductEditUp> response = productManagerBsuiSV.queryPageForEdit(queryReq);
+        PageInfo<Product> response = productManagerBsuiSV.queryPageForEdit(queryReq);
         System.out.println("\r"+response.getCount()+",size="+response.getResult().size());
     }
 

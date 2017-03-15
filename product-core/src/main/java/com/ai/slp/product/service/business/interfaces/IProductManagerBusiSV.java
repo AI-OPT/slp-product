@@ -1,7 +1,9 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 
 /**
  * 销售商品管理
@@ -13,7 +15,7 @@ public interface IProductManagerBusiSV {
      * @param queryReq
      * @return
      */
-    public PageInfoResponse<ProductEditUp> queryPageForEdit(ProductEditQueryReq queryReq);
+    public PageInfo<Product> queryPageForEdit(ProductEditQueryReq queryReq);
 
     /**
      * 查询商品的其他设置内容

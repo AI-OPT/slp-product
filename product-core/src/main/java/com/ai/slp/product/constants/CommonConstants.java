@@ -19,4 +19,12 @@ public class CommonConstants {
      * 全部销售商(商户)标识
      */
     public static final String ALL_SUPPLIER = "0";
+    /**
+     * 操作成功
+     */
+    public static final String OPERATE_SUCCESS = "000000";
+    /**
+     * 操作失败
+     */
+    public static final String OPERATE_FAIL = "999999";
 }

@@ -1,6 +1,9 @@
 package com.ai.slp.product.api.product.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +12,12 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
+import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
@@ -26,9 +31,14 @@ import com.ai.slp.product.api.product.param.ProductPriorityParam;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSale;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.dao.mapper.bo.ProductCat;
+import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
@@ -53,6 +63,12 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     ISKUIndexBusiSV skuIndexManage;
     @Autowired
     IProductAtomSV productAtomSV;
+    
+    @Autowired
+    IProdCatDefAtomSV catDefAtomSV;
+    
+    @Autowired
+    IProdPictureAtomSV prodPictureAtomSV;
     /**
      * 商品管理查询商品编辑状态<br>
      * 状态 1未编辑2已编辑<br>
@@ -66,9 +82,42 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
     @Override
     public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq productEditParam) throws BusinessException, SystemException {
+    	PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();
+    	ResponseHeader responseHeader = null;
+    	try{
         CommonUtils.checkTenantId(productEditParam.getTenantId());
         CommonUtils.checkSupplierId(productEditParam.getSupplierId());
-        return productManagerBusiSV.queryPageForEdit(productEditParam);
+        String tenantId = productEditParam.getTenantId();
+        PageInfo<Product> products = productManagerBusiSV.queryPageForEdit(productEditParam);
+        List<ProductEditUp> editUpList = new ArrayList<>();
+        for (Product product:products.getResult()){
+            ProductEditUp productEditUp = new ProductEditUp();
+            BeanUtils.copyProperties(productEditUp,product);
+            //设置类目名称
+            ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
+            if (cat!=null){
+            	productEditUp.setProductCatName(cat.getProductCatName());
+            }
+            //查询主预览图
+            ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
+            if (prodPicture!=null){
+                productEditUp.setProPictureId(prodPicture.getProPictureId());
+                productEditUp.setVfsId(prodPicture.getVfsId());
+                productEditUp.setPicType(prodPicture.getPicType());
+            }
+             editUpList.add(productEditUp);
+        }
+        BeanUtils.copyProperties(response,products);
+        response.setResult(editUpList);
+    	}catch(Exception e){
+    		if(e instanceof BusinessException){
+    			responseHeader = new ResponseHeader(false,((BusinessException) e).getErrorCode(),((BusinessException) e).getErrorMessage());
+    		}else{
+    			responseHeader = new ResponseHeader(false,CommonConstants.OPERATE_FAIL,"查询失败");
+    		}
+    		response.setResponseHeader(responseHeader);
+    	}
+        return response;
     }
 
     /**
