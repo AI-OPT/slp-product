@@ -24,6 +24,7 @@ import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.StringUtil;
+import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
@@ -64,47 +65,27 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	IProdCommentPictureAtomSV prodCommentPictureAtomSV;
 	
 	@Override
-	public PageInfoResponse<ProdCommentPageResponse> queryPageBySku(ProdCommentPageRequest prodCommentPageRequest) {
+	public PageInfoResponse<ProdCommentPageResponse> queryPageBySku(ProdCommentPageRequest prodCommentPageRequest,String standedProdId) {
 		PageInfoResponse<ProdCommentPageResponse> result = new PageInfoResponse<ProdCommentPageResponse>();
-		//查询评论信息
-		String tenantId = prodCommentPageRequest.getTenantId();
-		ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, prodCommentPageRequest.getSkuId());
-		if(prodSku == null){
-			/*result.setCount(0);
-			result.setResult(null);
-			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到sku信息。"));
-			return result;*/
-			throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
-                    "未查询到指定商品,租户ID:"+tenantId+",销售商品id:"+prodCommentPageRequest.getSkuId());
-		}
-		String prodId = prodSku.getProdId();
-		Product product = productAtomSV.selectByProductId(tenantId, prodId);
-		if(product == null){
-			result.setCount(0);
-			result.setResult(null);
-			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到商品信息。"));
-			return result;
-		}
 		ProdComment params = new ProdComment();
 		BeanUtils.copyProperties(params, prodCommentPageRequest);
 		params.setSkuId(null);
-		params.setStandedProdId(product.getStandedProdId());
+		params.setStandedProdId(standedProdId);
 		Integer pageSize = prodCommentPageRequest.getPageSize();
 		Integer pageNo = prodCommentPageRequest.getPageNo();
-		List<ProdComment> queryPageList = prodCommentAtomSV.queryPageListByProductId(params, pageSize, pageNo);
+		//查询条数
+		Integer count = prodCommentAtomSV.queryCountByProductId(params);
 		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
 		result.setResponseHeader(responseHeader );
 		result.setPageNo(pageNo);
 		result.setPageSize(pageSize);
-		if(queryPageList == null || queryPageList.size() == 0){
-			result.setCount(0);
+		result.setCount(count);
+		if(count==0){
 			result.setResult(null);
 			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"该商品没有评论信息。"));
 			return result;
 		}else{
-			//查询条数
-			Integer count = prodCommentAtomSV.queryCountByProductId(params);
-			result.setCount(count);
+			List<ProdComment> queryPageList = prodCommentAtomSV.queryPageListByProductId(params, pageSize, pageNo);
 			List<ProdCommentPageResponse> prodCommentList = getProdCommentResponseList(queryPageList);
 			result.setResult(prodCommentList);
 			return result;
@@ -158,45 +139,14 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		}
 		return prodCommentList;
 	}
-
 	@Override
-	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) {
+	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest,List<ProdComment> prodComments,List<PictureVO> pictureList) {
 		BaseResponse baseResponse = new BaseResponse();
-		String tenantId = prodCommentCreateRequest.getTenantId();
-		String userId = prodCommentCreateRequest.getUserId();
-		List<ProdCommentVO> commentList = prodCommentCreateRequest.getCommentList();
-		if(commentList != null && commentList.size() >0){
-			for(ProdCommentVO prodCommentVO : commentList){
-				ProdComment params = new ProdComment();
-				params.setUserId(userId);
-				BeanUtils.copyProperties(params, prodCommentVO);
-				String skuId = prodCommentVO.getSkuId();
-				ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, skuId);
-				if(prodSku == null){
-					throw new BusinessException("skuId 数据错误，找不到对应的销售商品");
-				}
-				String prodId = prodSku.getProdId();
-				Product product = productAtomSV.selectByProductId(tenantId, prodId);
-				if(product == null){
-					throw new BusinessException("skuId 数据错误，找不到对应的标准商品");
-				}
-				params.setProdId(prodId);
-				params.setStandedProdId(product.getStandedProdId());
-				params.setSupplierId(product.getSupplierId());
-				//添加评论
-				params.setTenantId(prodCommentCreateRequest.getTenantId());
-				params.setOrderId(prodCommentCreateRequest.getOrderId());
-				List<PictureVO> pictureList = prodCommentVO.getPictureList();
-				//判断是否有图片
-				boolean isHasPicture = pictureList != null && pictureList.size() >0;
-				if(isHasPicture){
-					params.setIsPicture(ProductCommentConstants.HasPicture.YSE);
-				}else{
-					params.setIsPicture(ProductCommentConstants.HasPicture.NO);
-				}
-				String prodCommentId = prodCommentAtomSV.createProdComment(params);
+		if(!CollectionUtil.isEmpty(prodComments)){
+			for(ProdComment prodComment : prodComments){
+				String prodCommentId = prodCommentAtomSV.createProdComment(prodComment);
 				//添加商品图片
-				if(!StringUtil.isBlank(prodCommentId) && isHasPicture){
+				if(!StringUtil.isBlank(prodCommentId) && ProductCommentConstants.HasPicture.YSE.equals(prodComment.getIsPicture())){
 					if (CollectionUtil.isEmpty(pictureList)) {
 						for(PictureVO pictureVO : pictureList){
 							ProdCommentPicture prodCommentPicture = new ProdCommentPicture();
@@ -273,6 +223,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		return baseResponse;
 	}
 */
+	
 	@Override
 	public List<ProdComment> queryPageInfo(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd, Integer pageSize, Integer pageNo) {
 		

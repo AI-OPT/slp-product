@@ -5,14 +5,13 @@ import java.util.List;
 
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
+import com.ai.slp.product.api.productcomment.param.PictureVO;
 import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
-import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
@@ -21,11 +20,11 @@ public interface IProdCommentBusiSV {
 	/**
 	 * 查询评论
 	 */
-	public PageInfoResponse<ProdCommentPageResponse> queryPageBySku(ProdCommentPageRequest prodCommentPageRequest);
+	public PageInfoResponse<ProdCommentPageResponse> queryPageBySku(ProdCommentPageRequest prodCommentPageRequest,String standedProdId);
 	/**
 	 * 发表评论
 	 */
-	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest);
+	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest,List<ProdComment> prodComments,List<PictureVO> pictureList);
 	/**
 	 * 回复评价
 	 */
@@ -35,6 +34,8 @@ public interface IProdCommentBusiSV {
 	 * 查询评论
 	 */
 	public List<ProdComment> queryPageInfo(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd, Integer pageSize, Integer pageNo);
+	
+	
 	//public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest);
 	/**
 	 * 更新评论状态
