@@ -15,6 +15,7 @@ import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
+import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
 
 public interface IProdCommentBusiSV {
 	/**
@@ -28,7 +29,8 @@ public interface IProdCommentBusiSV {
 	/**
 	 * 回复评价
 	 */
-	public BaseResponse replyProdComment(ProdReplyComment replyComment);
+	public void replyProdComment(ProdCommentReply commentReply);
+	//public BaseResponse replyProdComment(ProdReplyComment replyComment);
 	/**
 	 * 查询评论
 	 */

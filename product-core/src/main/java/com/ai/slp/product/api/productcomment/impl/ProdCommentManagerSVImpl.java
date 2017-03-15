@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +26,9 @@ import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
+import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
 import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
@@ -34,7 +38,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 @Service(validation = "true")
 @Component
 public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
-
+	private static final Logger logger = LoggerFactory.getLogger(ProdCommentManagerSVImpl.class);
 	@Autowired
 	IProdCommentBusiSV prodCommentBusiSV;
 	@Autowired
@@ -57,9 +61,66 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 	public BaseResponse replyComment(ProdReplyComment replyComment) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(replyComment.getTenantId());
 		CommonUtils.checkSupplierId(replyComment.getSupplierId());
+		//return prodCommentBusiSV.replyProdComment(replyComment);
+		
+		BaseResponse baseResponse = new BaseResponse();
+		//查询是否有评论   有评论才可以回复评论
+		ProdComment params = new ProdComment();
+		params.setTenantId(replyComment.getTenantId());
+		params.setSupplierId(replyComment.getSupplierId());
+		params.setCommentId(replyComment.getCommentId());
+		params.setState(CommonConstants.STATE_ACTIVE);
+		
+		long queryCommenStart = System.currentTimeMillis();
+		logger.info("####loadtest####开始执行prodCommentAtomSV.queryByCommentId，根据评论编码查询评论,当前时间戳：" + queryCommenStart);
+		
+		ProdComment comment = prodCommentAtomSV.queryByCommentId(replyComment.getCommentId());
+		Integer queryCountByParams =0;
+		if(comment!=null){
+			queryCountByParams=1;
+		}
+		long queryCommenEnd = System.currentTimeMillis();
+		logger.info("####loadtest####结束调用prodCommentAtomSV.queryByCommentId，根据评论编码查询评论，查询评论条数,当前时间戳：" + queryCommenEnd + ",用时:"
+				+ (queryCommenEnd - queryCommenStart) + "毫秒");
+		
+		//判断评论条数
+		if (queryCountByParams>0) {
+			//对评论进行回复
+			ProdCommentReply commentReply = new ProdCommentReply();
+			commentReply.setCommentId(replyComment.getCommentId());
+			commentReply.setReplyComment(replyComment.getReplyComment());
+			commentReply.setSupplierId(replyComment.getSupplierId());
+			commentReply.setReplierId(replyComment.getReplierId());
+			commentReply.setProdId(comment.getProdId());
+			commentReply.setSkuId(comment.getSkuId());
+			commentReply.setStandedProdId(comment.getStandedProdId());
+			
+			long queryCommenReplyStart = System.currentTimeMillis();
+			logger.info("####loadtest####开始执行prodCommentAtomSV.queryByCommentId，进行商品评论回复,当前时间戳：" + queryCommenReplyStart);
+			
+			prodCommentBusiSV.replyProdComment(commentReply);
+			
+			long queryCommenReplyEnd = System.currentTimeMillis();
+			logger.info("####loadtest####结束调用prodCommentAtomSV.queryByCommentId，进行商品评论回复，查询评论条数,当前时间戳：" + queryCommenReplyEnd + ",用时:"
+					+ (queryCommenReplyEnd - queryCommenReplyStart) + "毫秒");
+			
+			
+			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
+			baseResponse.setResponseHeader(responseHeader );
+		}else{
+			ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.NO_DATA_OR_CACAE_ERROR,"没有评论");
+			baseResponse.setResponseHeader(responseHeader );
+		}
+		return baseResponse;
+		
+		
+	}
+/*	public BaseResponse replyComment(ProdReplyComment replyComment) throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(replyComment.getTenantId());
+		CommonUtils.checkSupplierId(replyComment.getSupplierId());
 		return prodCommentBusiSV.replyProdComment(replyComment);
 	}
-	/**
+*/	/**
 	 * 检查新增评论入参
 	 * @param prodCommentCreateRequest
 	 * @author jiaxs
