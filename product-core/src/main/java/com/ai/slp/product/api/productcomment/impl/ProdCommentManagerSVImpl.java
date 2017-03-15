@@ -69,9 +69,11 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 	
 	@Override
 	public PageInfoResponse<ProdCommentPageResponse> queryPageInfoBySku(ProdCommentPageRequest prodCommentPageRequest)throws BusinessException, SystemException {
+		PageInfoResponse<ProdCommentPageResponse> result = new PageInfoResponse<ProdCommentPageResponse>();
+		ResponseHeader responseHeader = null;
+		try{
 		CommonUtils.checkTenantId(prodCommentPageRequest.getTenantId());
 		//查询商品信息
-		PageInfoResponse<ProdCommentPageResponse> result = new PageInfoResponse<ProdCommentPageResponse>();
 		String tenantId = prodCommentPageRequest.getTenantId();
 		ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId, prodCommentPageRequest.getSkuId());
 		if(prodSku == null){
@@ -85,11 +87,25 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"没有查询到商品信息。"));
 			return result;
 		}
-		return prodCommentBusiSV.queryPageBySku(prodCommentPageRequest,product.getStandedProdId());
+		result = prodCommentBusiSV.queryPageBySku(prodCommentPageRequest,product.getStandedProdId());
+		}catch(Exception e){
+			logger.error("查询商品评价失败",e);
+			if(e instanceof BusinessException){
+				responseHeader = new ResponseHeader(false,((BusinessException) e).getErrorCode(),((BusinessException) e).getErrorMessage());
+			}else{
+			responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.SYSTEM_ERROR,"查询商品评价失败");
+			}
+			result.setResponseHeader(responseHeader);
+		}
+		result.setResponseHeader(responseHeader );
+		return result;
 	}
 
 	@Override
 	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest) throws BusinessException, SystemException {
+		BaseResponse createProdComment = new BaseResponse();
+		ResponseHeader responseHeader = null;
+		try{
 		CommonUtils.checkTenantId(prodCommentCreateRequest.getTenantId());
 		checkCreateCommentParams(prodCommentCreateRequest);
 		String tenantId = prodCommentCreateRequest.getTenantId();
@@ -124,7 +140,17 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				prodComments.add(params);
 			}
 		}
-		return prodCommentBusiSV.createProdComment(prodCommentCreateRequest,prodComments, pictureList);
+		createProdComment = prodCommentBusiSV.createProdComment(prodCommentCreateRequest,prodComments, pictureList);
+		}catch(Exception e){
+			logger.error("创建商品评价失败",e);
+			if(e instanceof BusinessException){
+				responseHeader = new ResponseHeader(false,((BusinessException) e).getErrorCode(),((BusinessException) e).getErrorMessage());
+			}else{
+			responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SYSTEM_ERROR,"");
+			}
+			createProdComment.setResponseHeader(responseHeader);
+		}
+		return createProdComment;
 	}
 
 	@Override
