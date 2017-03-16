@@ -46,9 +46,6 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 	public ProductSKUConfigResponse queryProductSKUConfig(ProductSKURequest skuReq)
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(skuReq.getTenantId(),"");
-		/*if (StringUtils.isBlank(skuReq.getSkuId())&& StringUtils.isBlank(skuReq.getSkuAttrs())){
-			throw new BusinessException("","SKU标识和SKU属性为空,无法处理");
-		}*/
 		if (StringUtils.isBlank(skuReq.getSkuId())){
 			throw new BusinessException("","SKU标识,无法处理");
 		}

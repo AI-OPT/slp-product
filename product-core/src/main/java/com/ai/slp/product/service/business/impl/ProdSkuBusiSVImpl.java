@@ -1,7 +1,6 @@
 package com.ai.slp.product.service.business.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +24,7 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.opt.sdk.util.StringUtil;
-import com.ai.slp.product.api.normproduct.param.AttrMap;
-import com.ai.slp.product.api.normproduct.param.AttrValInfo;
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
-import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
-import com.ai.slp.product.api.product.param.CatAttrInfoForProd;
-import com.ai.slp.product.api.product.param.ProdAttrMap;
-import com.ai.slp.product.api.product.param.ProdAttrValInfo;
 import com.ai.slp.product.api.product.param.SkuAttrInfo;
 import com.ai.slp.product.api.product.param.SkuAttrVal;
 import com.ai.slp.product.api.product.param.SkuAttrValInfo;
@@ -62,6 +56,7 @@ import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
+import com.ai.slp.product.search.bo.AttrInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
@@ -424,7 +419,6 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	 */
 	@Override
 	public ProductSKUConfigResponse querySkuAttr(String tenantId, String skuId, String skuAttrs) {
-		/*ProdSku prodSku = selectSkuBySkuIdOrAttrs(tenantId, skuId, skuAttrs);*/
 		// 查询商品
 		//SKUID等同于PRODID
 		Product product = productAtomSV.selectByProductId(tenantId, skuId);
@@ -438,15 +432,24 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
 		ProductSKUConfigResponse configResponse = new ProductSKUConfigResponse();
-		configResponse.setProductAttrList(new ArrayList<ProductSKUAttr>());
+		List<AttrInfo> attrInfos = prodAttrAtomSV.queryAttrOfProdId(skuId);
 		// 查询关键属性
-		AttrMap keyAttrMap = normProductBusiSV.queryAttrOfProduct(tenantId, product.getStandedProdId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
-		configResponse.getProductAttrList().addAll(getKeyAttr(keyAttrMap));
-		// 查询非关键属性
-		ProdAttrMap noKeyAttrMap = productBusiSV.queryNoKeyAttrOfProduct(product);
-		configResponse.getProductAttrList().addAll(getNoKeyAttr(noKeyAttrMap));
-		// 查询SKU对应销售属性
-		configResponse.getProductAttrList().addAll(getSkuAttr(product, skuId));
+		List<ProductSKUAttr> productSKUAttrs = new ArrayList<ProductSKUAttr>();
+		List<ProductSKUAttrValue> productSKUAttrValues = new ArrayList<>();
+		ProductSKUAttr productSKUAttr = new ProductSKUAttr();
+		if(!CollectionUtils.isEmpty(attrInfos)){
+			for (AttrInfo attrInfo : attrInfos) {
+				ProductSKUAttrValue productSKUAttrValue = new ProductSKUAttrValue();
+				BeanUtils.copyProperties(productSKUAttrValue, attrInfo);
+				productSKUAttrValues.add(productSKUAttrValue);
+			}
+			AttrInfo attrInfo = attrInfos.get(0);
+			productSKUAttr.setAttrId(Long.parseLong(attrInfo.getAttrid()));
+			productSKUAttr.setAttrName(attrInfo.getAttrname());
+			productSKUAttr.setAttrValueList(productSKUAttrValues);
+		}
+		productSKUAttrs.add(productSKUAttr);
+		configResponse.setProductAttrList(productSKUAttrs);
 		return configResponse;
 	}
 
@@ -713,97 +716,6 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			}
 		}
 		return productImageList;
-	}
-
-	/**
-	 * 获取关键属性的属性信息
-	 * 
-	 * @param attrMap
-	 * @return
-	 */
-	private List<ProductSKUAttr> getKeyAttr(AttrMap attrMap) {
-		List<ProductSKUAttr> skuAttrList = new ArrayList<>();
-		Collection<ProdCatAttrInfo> attrInfos = attrMap.getAttrDefMap().values();
-		Map<Long, AttrValInfo> attrValDefMap = attrMap.getAttrValDefMap();
-		Map<Long, List<Long>> attrAndVal = attrMap.getAttrAndVal();
-		for (ProdCatAttrInfo attrInfo : attrInfos) {
-			ProductSKUAttr productSKUAttr = new ProductSKUAttr();
-			BeanUtils.copyProperties(productSKUAttr, attrInfo);
-			List<ProductSKUAttrValue> attrValueList = new ArrayList<>();
-			productSKUAttr.setAttrValueList(attrValueList);
-			// 查询对应属性值
-			for (Long valId : attrAndVal.get(attrInfo.getAttrId())) {
-				AttrValInfo valInfo = attrValDefMap.get(valId);
-				ProductSKUAttrValue attrValue = new ProductSKUAttrValue();
-				attrValue.setAttrvalueDefId(valInfo.getAttrValId());
-				attrValue.setAttrValueName(valInfo.getAttrVal());
-				attrValue.setAttrValueName2(valInfo.getAttrVal2());
-				attrValueList.add(attrValue);
-			}
-			skuAttrList.add(productSKUAttr);
-		}
-		return skuAttrList;
-	}
-
-	/**
-	 * 获取非关键属性的属性信息
-	 * 
-	 * @param attrMap
-	 * @return
-	 */
-	private List<ProductSKUAttr> getNoKeyAttr(ProdAttrMap attrMap) {
-		List<ProductSKUAttr> skuAttrList = new ArrayList<>();
-		Collection<CatAttrInfoForProd> attrInfos = attrMap.getAttrDefMap().values();
-		Map<Long, ProdAttrValInfo> attrValDefMap = attrMap.getAttrValDefMap();
-		Map<Long, List<Long>> attrAndVal = attrMap.getAttrAndVal();
-		for (CatAttrInfoForProd attrInfo : attrInfos) {
-			ProductSKUAttr productSKUAttr = new ProductSKUAttr();
-			BeanUtils.copyProperties(productSKUAttr, attrInfo);
-			List<ProductSKUAttrValue> attrValueList = new ArrayList<>();
-			productSKUAttr.setAttrValueList(attrValueList);
-			// 查询对应属性值
-			for (Long valId : attrAndVal.get(attrInfo.getAttrId())) {
-				ProdAttrValInfo valInfo = attrValDefMap.get(valId);
-				ProductSKUAttrValue attrValue = new ProductSKUAttrValue();
-				attrValue.setAttrvalueDefId(valInfo.getAttrValId());
-				attrValue.setAttrValueName(valInfo.getAttrVal());
-				attrValue.setAttrValueName2(valInfo.getAttrVal2());
-				attrValueList.add(attrValue);
-			}
-			skuAttrList.add(productSKUAttr);
-		}
-		return skuAttrList;
-	}
-
-	/**
-	 * 获取SKU的属性信息
-	 * 
-	 * @param product
-	 * @param skuId
-	 * @return
-	 */
-	private List<ProductSKUAttr> getSkuAttr(Product product, String skuId) {
-		List<ProductSKUAttr> skuAttrList = new ArrayList<>();
-		// 查询商品对应标准品的销售属性,已按照属性属性排序
-		List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(product.getTenantId(),
-				product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-		for (ProdCatAttrAttch attrAttch : catAttrAttches) {
-			ProductSKUAttr productSKUAttr = new ProductSKUAttr();
-			BeanUtils.copyProperties(productSKUAttr, attrAttch);
-			productSKUAttr.setAttrValueList(new ArrayList<ProductSKUAttrValue>());
-			// 查询sku在当前属性对应的属性值
-			ProdSkuAttr prodSkuAttr = prodSkuAttrAtomSV.queryAttrValBySkuIdAndAttr(product.getTenantId(), skuId,
-					attrAttch.getAttrId());
-			if (prodSkuAttr != null) {
-				ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(product.getTenantId(),
-						prodSkuAttr.getAttrvalueDefId());
-				ProductSKUAttrValue attrValue = new ProductSKUAttrValue();
-				BeanUtils.copyProperties(attrValue, attrvalueDef);
-				productSKUAttr.getAttrValueList().add(attrValue);
-			}
-			skuAttrList.add(productSKUAttr);
-		}
-		return skuAttrList;
 	}
 
 	private List<SkuAttrVal> genSkuAttrVal(Product product, String skuId,
