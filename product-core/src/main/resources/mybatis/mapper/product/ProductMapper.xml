@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper" >
-  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.product.Product" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.ProductMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.Product" >
     <id column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="PRODUCT_CAT_ID" property="productCatId" jdbcType="VARCHAR" />
@@ -34,6 +34,8 @@
     <result column="SUPPLIER_ID" property="supplierId" jdbcType="VARCHAR" />
     <result column="PRESALE_BEGIN_TIME" property="presaleBeginTime" jdbcType="TIMESTAMP" />
     <result column="PRESALE_END_TIME" property="presaleEndTime" jdbcType="TIMESTAMP" />
+    <result column="PROD_CODE" property="prodCode" jdbcType="VARCHAR" />
+    <result column="MARKET_PRICE" property="marketPrice" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -98,9 +100,10 @@
     PROD_NAME, PRODUCT_SELL_POINT, ACTIVE_TYPE, ACTIVE_TIME, INACTIVE_TIME, ACTIVE_CYCLE, 
     UNIT, PRO_DETAIL_CONTENT, IS_SALE_ATTR, IS_SALE_NATIONWIDE, IS_REPLACE_SELL, IS_INVOICE, 
     INVOICE_TYPE, AFTER_SALE, UPSHELF_TYPE, UP_TIME, DOWN_TIME, CREATE_TIME, STATE, OPER_ID, 
-    OPER_TIME, RECHARGE_TYPE, BASIC_ORG_ID, SUPPLIER_ID, PRESALE_BEGIN_TIME, PRESALE_END_TIME
+    OPER_TIME, RECHARGE_TYPE, BASIC_ORG_ID, SUPPLIER_ID, PRESALE_BEGIN_TIME, PRESALE_END_TIME, 
+    PROD_CODE, MARKET_PRICE
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductCriteria" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCriteria" >
     select
     <if test="distinct" >
       distinct
@@ -128,13 +131,13 @@
     delete from product
     where PROD_ID = #{prodId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductCriteria" >
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCriteria" >
     delete from product
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.Product" >
     insert into product (PROD_ID, TENANT_ID, PRODUCT_CAT_ID, 
       STANDED_PROD_ID, STORAGE_GROUP_ID, PRODUCT_TYPE, 
       PROD_NAME, PRODUCT_SELL_POINT, ACTIVE_TYPE, 
@@ -145,8 +148,8 @@
       UP_TIME, DOWN_TIME, CREATE_TIME, 
       STATE, OPER_ID, OPER_TIME, 
       RECHARGE_TYPE, BASIC_ORG_ID, SUPPLIER_ID, 
-      PRESALE_BEGIN_TIME, PRESALE_END_TIME
-      )
+      PRESALE_BEGIN_TIME, PRESALE_END_TIME, PROD_CODE, 
+      MARKET_PRICE)
     values (#{prodId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{productCatId,jdbcType=VARCHAR}, 
       #{standedProdId,jdbcType=VARCHAR}, #{storageGroupId,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, 
       #{prodName,jdbcType=VARCHAR}, #{productSellPoint,jdbcType=VARCHAR}, #{activeType,jdbcType=CHAR}, 
@@ -157,10 +160,10 @@
       #{upTime,jdbcType=TIMESTAMP}, #{downTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
       #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}, 
       #{rechargeType,jdbcType=VARCHAR}, #{basicOrgId,jdbcType=VARCHAR}, #{supplierId,jdbcType=VARCHAR}, 
-      #{presaleBeginTime,jdbcType=TIMESTAMP}, #{presaleEndTime,jdbcType=TIMESTAMP}
-      )
+      #{presaleBeginTime,jdbcType=TIMESTAMP}, #{presaleEndTime,jdbcType=TIMESTAMP}, #{prodCode,jdbcType=VARCHAR}, 
+      #{marketPrice,jdbcType=DECIMAL})
   </insert>
-  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.Product" >
     insert into product
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="prodId != null" >
@@ -258,6 +261,12 @@
       </if>
       <if test="presaleEndTime != null" >
         PRESALE_END_TIME,
+      </if>
+      <if test="prodCode != null" >
+        PROD_CODE,
+      </if>
+      <if test="marketPrice != null" >
+        MARKET_PRICE,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -357,9 +366,15 @@
       <if test="presaleEndTime != null" >
         #{presaleEndTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="prodCode != null" >
+        #{prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="marketPrice != null" >
+        #{marketPrice,jdbcType=DECIMAL},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductCriteria" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCriteria" resultType="java.lang.Integer" >
     select count(*) from product
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -464,6 +479,12 @@
       <if test="record.presaleEndTime != null" >
         PRESALE_END_TIME = #{record.presaleEndTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.prodCode != null" >
+        PROD_CODE = #{record.prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.marketPrice != null" >
+        MARKET_PRICE = #{record.marketPrice,jdbcType=DECIMAL},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -502,12 +523,14 @@
       BASIC_ORG_ID = #{record.basicOrgId,jdbcType=VARCHAR},
       SUPPLIER_ID = #{record.supplierId,jdbcType=VARCHAR},
       PRESALE_BEGIN_TIME = #{record.presaleBeginTime,jdbcType=TIMESTAMP},
-      PRESALE_END_TIME = #{record.presaleEndTime,jdbcType=TIMESTAMP}
+      PRESALE_END_TIME = #{record.presaleEndTime,jdbcType=TIMESTAMP},
+      PROD_CODE = #{record.prodCode,jdbcType=VARCHAR},
+      MARKET_PRICE = #{record.marketPrice,jdbcType=DECIMAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.Product" >
     update product
     <set >
       <if test="tenantId != null" >
@@ -603,10 +626,16 @@
       <if test="presaleEndTime != null" >
         PRESALE_END_TIME = #{presaleEndTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="prodCode != null" >
+        PROD_CODE = #{prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="marketPrice != null" >
+        MARKET_PRICE = #{marketPrice,jdbcType=DECIMAL},
+      </if>
     </set>
     where PROD_ID = #{prodId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.Product" >
     update product
     set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},
@@ -638,7 +667,9 @@
       BASIC_ORG_ID = #{basicOrgId,jdbcType=VARCHAR},
       SUPPLIER_ID = #{supplierId,jdbcType=VARCHAR},
       PRESALE_BEGIN_TIME = #{presaleBeginTime,jdbcType=TIMESTAMP},
-      PRESALE_END_TIME = #{presaleEndTime,jdbcType=TIMESTAMP}
+      PRESALE_END_TIME = #{presaleEndTime,jdbcType=TIMESTAMP},
+      PROD_CODE = #{prodCode,jdbcType=VARCHAR},
+      MARKET_PRICE = #{marketPrice,jdbcType=DECIMAL}
     where PROD_ID = #{prodId,jdbcType=VARCHAR}
   </update>
 </mapper>

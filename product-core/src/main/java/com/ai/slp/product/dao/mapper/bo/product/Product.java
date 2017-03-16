@@ -67,6 +67,10 @@ public class Product {
 
     private Timestamp presaleEndTime;
 
+    private String prodCode;
+
+    private Long marketPrice;
+
     public String getProdId() {
         return prodId;
     }
@@ -321,5 +325,21 @@ public class Product {
 
     public void setPresaleEndTime(Timestamp presaleEndTime) {
         this.presaleEndTime = presaleEndTime;
+    }
+
+    public String getProdCode() {
+        return prodCode;
+    }
+
+    public void setProdCode(String prodCode) {
+        this.prodCode = prodCode == null ? null : prodCode.trim();
+    }
+
+    public Long getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(Long marketPrice) {
+        this.marketPrice = marketPrice;
     }
 }

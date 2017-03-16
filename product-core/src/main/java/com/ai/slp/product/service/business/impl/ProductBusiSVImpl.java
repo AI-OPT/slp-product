@@ -760,8 +760,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         List<ProdAttrValInfo> valInfoList = new ArrayList<>();
         String tenantId = product.getTenantId(),prodId = product.getProdId();
         //查询属性对应的属性值集合
-        List<CatAttrValAttach> valDefList = productCatBusiSV.queryAttrValOfAttrAndType(tenantId
-                ,product.getProductCatId(),attrId,ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
+        List<CatAttrValAttach> valDefList = productCatBusiSV.queryAttrValOfAttrAndType(tenantId,product.getProductCatId(),attrId,ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
         for (CatAttrValAttach valDef:valDefList){
             ProdAttrValInfo valInfo = new ProdAttrValInfo();
             valInfo.setTenantId(tenantId);

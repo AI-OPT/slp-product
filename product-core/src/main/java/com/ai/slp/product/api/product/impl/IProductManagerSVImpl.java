@@ -218,34 +218,21 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
     	boolean ccsMqFlag=false;
-    	
     	Product product = productAtomSV.selectByProductId(query.getTenantId(),query.getSupplierId(),query.getProductId());
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+query.getTenantId()+",商品标识:"+query.getProductId());
         }
-    	/*  CommonUtils.checkTenantId(query.getTenantId());
-        long  inSaleStart= System.currentTimeMillis();
-        LOGGER.info("=====执行productBusiSV.changeToInSale进行上架操作,当前时间戳:"  + inSaleStart);
-        productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
-        long inSaleEnd = System.currentTimeMillis();
-        LOGGER.info("=====执行productBusiSV.changeToInSale结束,当前时间戳:" + inSaleEnd + ", 用时:" + (inSaleEnd-inSaleStart) + "毫秒");
-        return CommonUtils.addSuccessResHeader(new BaseResponse(),"");*/
 	   	//从配置中心获取mq_enable
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
     	if (!ccsMqFlag) {
     		CommonUtils.checkTenantId(query.getTenantId());
-            long  inSaleStart= System.currentTimeMillis();
-            LOGGER.info("=====执行productBusiSV.changeToInSale进行上架操作,当前时间戳:"  + inSaleStart);
             productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
-            long inSaleEnd = System.currentTimeMillis();
-            LOGGER.info("=====执行productBusiSV.changeToInSale结束,当前时间戳:" + inSaleEnd + ", 用时:" + (inSaleEnd-inSaleStart) + "毫秒");
             return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
 		} else {
 			BaseResponse response = CommonUtils.genSuccessResponse("");
 			//发送消息
 			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_CHANGETOINSALE_TOPIC).send(JSON.toJSONString(query), 0);
-			ResponseHeader responseHeader = new ResponseHeader(true,
-					ExceptCodeConstants.Special.SUCCESS, "成功");
+			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS, "成功");
 			response.setResponseHeader(responseHeader);
 			return response;  
 		}
@@ -289,11 +276,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
 	@Override
 	public BaseResponse changeToInStore(ProductInfoQuery query) throws BusinessException, SystemException {
-		/*CommonUtils.checkTenantId(query.getTenantId());
-        productBusiSV.changeSaleToStore(
-                query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
-        return CommonUtils.genSuccessResponse("");*/
-		
 		Product product = productAtomSV.selectByProductId(query.getTenantId(), query.getSupplierId(), query.getProductId());
         if (product == null) {
             throw new SystemException("", "未找到相关的商品信息,租户ID:" + query.getTenantId() + ",商品标识:" + query.getProductId());
@@ -308,8 +290,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
 		if (!ccsMqFlag) {
 			CommonUtils.checkTenantId(query.getTenantId());
-	        productBusiSV.changeSaleToStore(
-	                query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
+	        productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
 	        return CommonUtils.genSuccessResponse("");
 		} else {
 			BaseResponse response = CommonUtils.genSuccessResponse("");
