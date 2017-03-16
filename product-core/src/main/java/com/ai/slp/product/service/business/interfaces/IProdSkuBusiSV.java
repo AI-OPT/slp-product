@@ -1,13 +1,13 @@
 package com.ai.slp.product.service.business.interfaces;
 
+import java.util.List;
+import java.util.Map;
+
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
 import com.ai.slp.product.api.product.param.SkuInfoMultSave;
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
-import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
-
-import java.util.List;
-import java.util.Map;
+import com.ai.slp.product.search.bo.AttrInfo;
 
 /**
  * 商品SKU业务操作
@@ -61,7 +61,7 @@ public interface IProdSkuBusiSV {
      * @param skuAttrs
      * @return
      */
-    public ProductSKUConfigResponse querySkuAttr(String tenantId,String skuId,String skuAttrs);
+    public List<AttrInfo> querySkuAttr(String tenantId,String skuId,String skuAttrs);
 
     /**
      * 查询库组下SKU的信息

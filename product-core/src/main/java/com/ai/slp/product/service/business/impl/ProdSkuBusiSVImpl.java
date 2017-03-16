@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +33,6 @@ import com.ai.slp.product.api.product.param.SkuSetForProduct;
 import com.ai.slp.product.api.webfront.param.ProdAttrParam;
 import com.ai.slp.product.api.webfront.param.ProdAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductImage;
-import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
-import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
-import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
@@ -418,7 +414,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	 * @return
 	 */
 	@Override
-	public ProductSKUConfigResponse querySkuAttr(String tenantId, String skuId, String skuAttrs) {
+	public List<AttrInfo> querySkuAttr(String tenantId, String skuId, String skuAttrs) {
 		// 查询商品
 		//SKUID等同于PRODID
 		Product product = productAtomSV.selectByProductId(tenantId, skuId);
@@ -431,26 +427,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",tenantId, skuId, skuId,product.getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
-		ProductSKUConfigResponse configResponse = new ProductSKUConfigResponse();
-		List<AttrInfo> attrInfos = prodAttrAtomSV.queryAttrOfProdId(skuId);
-		// 查询关键属性
-		List<ProductSKUAttr> productSKUAttrs = new ArrayList<ProductSKUAttr>();
-		List<ProductSKUAttrValue> productSKUAttrValues = new ArrayList<>();
-		ProductSKUAttr productSKUAttr = new ProductSKUAttr();
-		if(!CollectionUtils.isEmpty(attrInfos)){
-			for (AttrInfo attrInfo : attrInfos) {
-				ProductSKUAttrValue productSKUAttrValue = new ProductSKUAttrValue();
-				BeanUtils.copyProperties(productSKUAttrValue, attrInfo);
-				productSKUAttrValues.add(productSKUAttrValue);
-			}
-			AttrInfo attrInfo = attrInfos.get(0);
-			productSKUAttr.setAttrId(Long.parseLong(attrInfo.getAttrid()));
-			productSKUAttr.setAttrName(attrInfo.getAttrname());
-			productSKUAttr.setAttrValueList(productSKUAttrValues);
-		}
-		productSKUAttrs.add(productSKUAttr);
-		configResponse.setProductAttrList(productSKUAttrs);
-		return configResponse;
+		return prodAttrAtomSV.queryAttrOfProdId(skuId);
 	}
 
 	/**
