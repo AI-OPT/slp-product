@@ -1,10 +1,13 @@
 package com.ai.slp.product.service.atom.interfaces.product;
 
+import java.util.List;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 
@@ -136,4 +139,15 @@ public interface IProductAtomSV {
      * @return
      */
     public int countOfProdCodeOutProdId(String tenantId,String prodId,String prodCode,boolean hasDiscard);
+    
+    /**
+     * 查询指定标准品下某个属性的属性值
+     *
+     * @param tenantId
+     * @param standedId
+     * @param attrId
+     * @return
+     */
+    public List<ProdAttr> queryAttrVal(String tenantId,String prodId,Long attrId);
+
 }

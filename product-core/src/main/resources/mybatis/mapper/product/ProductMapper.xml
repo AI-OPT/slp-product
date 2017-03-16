@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.ProductMapper" >
-  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.Product" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.product.Product" >
     <id column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="PRODUCT_CAT_ID" property="productCatId" jdbcType="VARCHAR" />
@@ -103,7 +103,7 @@
     OPER_TIME, RECHARGE_TYPE, BASIC_ORG_ID, SUPPLIER_ID, PRESALE_BEGIN_TIME, PRESALE_END_TIME, 
     PROD_CODE, MARKET_PRICE
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCriteria" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductCriteria" >
     select
     <if test="distinct" >
       distinct
@@ -131,13 +131,13 @@
     delete from product
     where PROD_ID = #{prodId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCriteria" >
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductCriteria" >
     delete from product
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.Product" >
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
     insert into product (PROD_ID, TENANT_ID, PRODUCT_CAT_ID, 
       STANDED_PROD_ID, STORAGE_GROUP_ID, PRODUCT_TYPE, 
       PROD_NAME, PRODUCT_SELL_POINT, ACTIVE_TYPE, 
@@ -163,7 +163,7 @@
       #{presaleBeginTime,jdbcType=TIMESTAMP}, #{presaleEndTime,jdbcType=TIMESTAMP}, #{prodCode,jdbcType=VARCHAR}, 
       #{marketPrice,jdbcType=DECIMAL})
   </insert>
-  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.Product" >
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
     insert into product
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="prodId != null" >
@@ -374,7 +374,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.ProductCriteria" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.product.ProductCriteria" resultType="java.lang.Integer" >
     select count(*) from product
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -530,7 +530,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.Product" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
     update product
     <set >
       <if test="tenantId != null" >
@@ -635,7 +635,7 @@
     </set>
     where PROD_ID = #{prodId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.Product" >
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.product.Product" >
     update product
     set TENANT_ID = #{tenantId,jdbcType=VARCHAR},
       PRODUCT_CAT_ID = #{productCatId,jdbcType=VARCHAR},

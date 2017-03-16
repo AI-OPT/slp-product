@@ -11,6 +11,7 @@ import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKURequest;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.constants.CommonTestConstants;
+import com.alibaba.fastjson.JSON;
 
 /**
  * Created by jackieliu on 16/7/25.
@@ -25,10 +26,9 @@ public class IProductDetailSVTest {
     public void queryProducSKUById(){
         ProductSKURequest skuRequest = new ProductSKURequest();
         skuRequest.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
-        skuRequest.setSkuId("0000000000000154");
+        skuRequest.setSkuId("0000000000000248");
         ProductSKUResponse skuResponse = productDetailSV.queryProducSKUById(skuRequest);
-        if (skuResponse!=null)
-            System.out.println(skuResponse.getProdName());
+        System.out.println(JSON.toJSONString(skuResponse));
     }
 
     @Test
