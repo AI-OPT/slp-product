@@ -168,9 +168,9 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
      */
     @Override
     public List<ProductCatInfo> queryLinkOfCatById(String tenantId, String productCatId) {
-        List<ProductCatInfo> catInfoList = new ArrayList<ProductCatInfo>();
-        queryCatFoLinkById(catInfoList,tenantId,productCatId);
-        return catInfoList;
+    	List<ProductCatInfo> catInfoList = new ArrayList<ProductCatInfo>();
+    	queryCatFoLinkById(catInfoList,tenantId,productCatId);
+    	return catInfoList;
     }
 
     /**
