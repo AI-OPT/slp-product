@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,8 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.platform.common.api.area.param.GnAreaVo;
+import com.ai.slp.product.api.normproduct.param.AttrValRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
@@ -32,6 +35,7 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
 import com.ai.slp.product.dao.mapper.attach.ProductAttach;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
+import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.*;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
@@ -50,6 +54,7 @@ import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.MQConfigUtil;
+import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.ProductPageQueryVo;
 import com.ai.slp.product.vo.SkuStorageVo;
 import com.alibaba.fastjson.JSON;
@@ -109,31 +114,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param group
      * @return
      */
-    @Override
-    public int addProductWithStorageGroup(StorageGroup group, Long operId) {
-        long startTime = System.currentTimeMillis();
-        logger.info("===== 开始 ProductBusiSVImpl.addProductWithStorageGroup 销售商品添加,当前时间戳:{}",startTime);
+    public Product addProductWithStorageGroup(StandedProduct standedProduct, StorageGroup group, List<AttrValRequest> attrValList) {
         //查询库存组对应的标准品
         String tenantId = group.getTenantId();
         String standedProdId = group.getStandedProdId();
-        long atomStart = System.currentTimeMillis();
-        long atomEnd ;
-        logger.info("===== 开始 standedProductAtomSV.selectById 标准品查询原子,当前时间戳:{}",atomStart);
-        StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,standedProdId);
-        atomEnd = System.currentTimeMillis();
-        logger.info("===== 结束 standedProductAtomSV.selectById 标准品查询原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-        if (standedProduct==null) {
-            logger.warn("未找到对应标准品,租户ID:{},标准品标识:{}",tenantId,standedProdId);
-            throw new BusinessException("","未找到对应标准品信息,租户id:"+tenantId+",标准品标识:"+standedProdId);
-        }
-        atomStart = System.currentTimeMillis();
-        logger.info("===== 开始 catAttrAttachAtomSV.queryAttrOfByIdAndType 类目属性查询原子,当前时间戳:{}",atomStart);
-        //查询类目是否有销售属性
-        List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(
-                tenantId,standedProduct.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-        atomEnd = System.currentTimeMillis();
-        logger.info("===== 结束 catAttrAttachAtomSV.queryAttrOfByIdAndType 类目属性查询原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-        boolean isSaleAttr = CollectionUtil.isEmpty(catAttrAttches)?false:true;
         //添加商品,商品名称同标准品名称
         Product product = new Product();
         product.setSupplierId(group.getSupplierId());
@@ -143,51 +127,29 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         product.setStorageGroupId(group.getStorageGroupId());
         product.setProductType(standedProduct.getProductType());
         product.setProdName(standedProduct.getStandedProductName());//使用标准品名称设置为商品名称
-        product.setIsSaleAttr(isSaleAttr? ProductConstants.Product.IsSaleAttr.YES: ProductConstants.Product.IsSaleAttr.NO);
         product.setState(ProductConstants.Product.State.UNEDIT);//未编辑状态
         product.setOperId(group.getCreateId());
-        atomStart = System.currentTimeMillis();
-        logger.info("===== 开始 productAtomSV.installProduct 添加销售商品原子,当前时间戳:{}",atomStart);
-        int installNum = productAtomSV.installProduct(product);
-        atomEnd = System.currentTimeMillis();
-        logger.info("===== 结束 productAtomSV.installProduct 添加销售商品原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-        if (installNum > 0){
-            ProductLog productLog = new ProductLog();
-            BeanUtils.copyProperties(productLog,product);
-            atomStart = System.currentTimeMillis();
-            logger.info("===== 开始 productLogAtomSV.install 添加销售商品日志原子,当前时间戳:{}",atomStart);
-            productLogAtomSV.install(productLog);
-            atomEnd = System.currentTimeMillis();
-            logger.info("===== 结束 productLogAtomSV.install 添加销售商品日志原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-            //若没有销售属性,则添加SKU
-            if (!isSaleAttr){
-                ProdSku prodSku = new ProdSku();
-                prodSku.setTenantId(tenantId);
-                prodSku.setProdId(product.getProdId());
-                prodSku.setStorageGroupId(group.getStorageGroupId());
-                prodSku.setSkuName(product.getProdName());
-                prodSku.setIsSaleAttr(ProductConstants.ProdSku.IsSaleAttr.NO);
-                prodSku.setSerialNumber((short)0);
-                prodSku.setState(ProductConstants.ProdSku.State.ACTIVE);
-                prodSku.setOperId(operId);
-                atomStart = System.currentTimeMillis();
-                logger.info("===== 开始 prodSkuAtomSV.createObj 添加SKU原子,当前时间戳:{}",atomStart);
-                if (prodSkuAtomSV.createObj(prodSku)>0){
-                    atomEnd = System.currentTimeMillis();
-                    logger.info("===== 结束 prodSkuAtomSV.createObj 添加SKU原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-                    ProdSkuLog prodSkuLog = new ProdSkuLog();
-                    BeanUtils.copyProperties(prodSkuLog,prodSku);
-                    atomStart = System.currentTimeMillis();
-                    logger.info("===== 开始 prodSkuLogAtomSV.install 添加SKU日志原子,当前时间戳:{}",atomStart);
-                    prodSkuLogAtomSV.install(prodSkuLog);
-                    atomEnd = System.currentTimeMillis();
-                    logger.info("===== 结束 prodSkuLogAtomSV.install 添加SKU日志原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-                }
-            }
+    	product.setProdId(standedProdId);//标准品/商品/SKU 主键一致减少查询
+        productAtomSV.installProduct(product);
+        
+        //添加商品
+        if(attrValList!=null){
+        	for (AttrValRequest attrValReq : attrValList) {
+        		ProdAttr prodAttr = new ProdAttr();
+        		BeanUtils.copyProperties(prodAttr, attrValReq);
+        		prodAttr.setTenantId(product.getTenantId());
+        		prodAttr.setProdId(product.getProdId());
+        		prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
+        		prodAttr.setAttrValueName(attrValReq.getAttrVal());
+        		prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
+        		prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
+        		prodAttr.setOperId(product.getOperId());
+        		prodAttr.setOperTime(product.getOperTime());
+        		// 添加成功
+        		prodAttrAtomSV.installProdAttr(prodAttr);
+        	}
         }
-        long endTime = System.currentTimeMillis();
-        logger.info("===== 结束 ProductBusiSVImpl.addProductWithStorageGroup 销售商品添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
-        return installNum;
+        return product;
     }
 
     /**
@@ -860,5 +822,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         return areaInfoList;
     }
+
 }
 	

@@ -5,6 +5,8 @@ import com.ai.slp.product.api.product.param.SkuInfoMultSave;
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
 import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
+import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,15 @@ import java.util.Map;
  * Created by jackieliu on 16/5/12.
  */
 public interface IProdSkuBusiSV {
+	
+	/**
+	 * 保存SKU
+	 * @param product
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	public ProdSku createSkuProduct(Product product);
 
     /**
      * 产生库存组对应商品的SKU

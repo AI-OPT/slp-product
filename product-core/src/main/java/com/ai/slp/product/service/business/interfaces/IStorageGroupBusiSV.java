@@ -20,6 +20,14 @@ public interface IStorageGroupBusiSV {
      * @return
      */
     public String addGroup(STOStorageGroup storageGroup);
+    
+    /**
+     * 添加库存组
+     *
+     * @param storageGroup
+     * @return
+     */
+    public StorageGroup addGroupObj(STOStorageGroup storageGroup);
 
     /**
      * 更新库存组
