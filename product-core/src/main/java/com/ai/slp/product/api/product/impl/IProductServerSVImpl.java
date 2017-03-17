@@ -1,5 +1,10 @@
 package com.ai.slp.product.api.product.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
@@ -7,18 +12,19 @@ import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.api.product.interfaces.IProductServerSV;
-import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.ProductRoute;
+import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
+import com.ai.slp.product.api.product.param.ProductSkuInfo;
+import com.ai.slp.product.api.product.param.RouteGroupQuery;
+import com.ai.slp.product.api.product.param.RouteGroupSet;
+import com.ai.slp.product.api.product.param.SkuInfoQuery;
 import com.ai.slp.product.api.webfront.param.ProductImage;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
-import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by jackieliu on 16/5/31.
