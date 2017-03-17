@@ -819,7 +819,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		Product product = new Product();
 		product.setProdId(marketPrice.getProductId());
 		product.setMarketPrice(marketPrice.getMarketPrice());
-		productAtomSV.updateById(product);
+		productAtomSV.updateByStandedProdId(product);
 		
 		
 		
