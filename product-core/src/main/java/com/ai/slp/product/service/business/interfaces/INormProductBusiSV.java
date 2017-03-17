@@ -17,14 +17,14 @@ public interface INormProductBusiSV {
      * @param normProduct
      * @return 标准品标识
      */
-    public PageInfoResponse<String> installNormProd(NormProdSaveRequest normProduct);
+    public String installNormProd(NormProdSaveRequest normProduct);
     
     /**
      * 添加标准品,包括属性值 库存组 和 SKU
      * @param normProduct
      * @return
      */
-    public PageInfoResponse<String> installNormProdAndPtoGroup(NormProdSaveRequest normProduct);
+    public String installNormProdAndPtoGroup(NormProdSaveRequest normProduct);
 
     /**
      * 更新标准品,包括属性值

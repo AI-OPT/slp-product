@@ -39,6 +39,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
+import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.util.AttrValRequestComparator;
@@ -94,6 +95,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Autowired
 	IStorageBusiSV storageBusiSV;
 
+	@Autowired
+	IProductBusiSV productBusiSV;
+	
 	/**
 	 * 添加标准品
 	 *
@@ -101,159 +105,90 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	 * @return 添加成功后的标准品的标识
 	 */
 	@Override
-	public PageInfoResponse<String> installNormProd(NormProdSaveRequest normProduct) {
-		PageInfoResponse<String> responseHeader = new PageInfoResponse<>();
-		List<String> resultList = new ArrayList<>();
-		long startTime = System.currentTimeMillis();
-		logger.info("===== 开始NormProductBusiSVImpl.installNormProd 商品添加,当前时间戳:{}",startTime);
+	public String installNormProd(NormProdSaveRequest normProduct) {
+		StandedProduct standedProduct = saveNormProd(normProduct);
+		if(standedProduct!=null){
+			return standedProduct.getStandedProdId();
+		}
+		return null;
+	}
+
+	/**
+	 * 保存标准品
+	 * @param normProduct
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	private StandedProduct saveNormProd(NormProdSaveRequest normProduct) {
+		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct);
+		// 添加标准品属性值
+		List<AttrValRequest> attrValList = normProduct.getAttrValList();
+		Timestamp nowTime = DateUtils.currTimeStamp();
+		for (AttrValRequest attrValReq : attrValList) {
+			StandedProdAttr prodAttr = new StandedProdAttr();
+			BeanUtils.copyProperties(prodAttr, attrValReq);
+			prodAttr.setTenantId(normProduct.getTenantId());
+			prodAttr.setStandedProdId(standedProduct.getStandedProdId());
+			prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
+			prodAttr.setAttrValueName(attrValReq.getAttrVal());
+			prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
+			prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
+			prodAttr.setOperId(normProduct.getOperId());
+			prodAttr.setOperTime(nowTime);
+			prodAttr.setSerialNumber(getProductAttrSerialNo());
+			// 添加成功
+			standedProdAttrAtomSV.installObj(prodAttr);
+		}
+		return standedProduct;
+	}
+
+	/**
+	 * 保存标准品,不同时保存属性
+	 * @param normProduct
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	private StandedProduct saveNormProdWithOutAttr(NormProdSaveRequest normProduct) {
 		// 添加标准品
 		StandedProduct standedProduct = new StandedProduct();
 		BeanUtils.copyProperties(standedProduct, normProduct);
 		standedProduct.setStandedProductName(normProduct.getProductName());
-		long atomStart = System.currentTimeMillis();
-		long atomEnd;
-		logger.info("===== 开始standedProductAtomSV.installObj 商品添加原子操作,当前时间戳:{}",atomStart);
-		// 添加成功,添加标准品日志
-		if (standedProductAtomSV.installObj(standedProduct) > 0) {
-			atomEnd = System.currentTimeMillis();
-			logger.info("===== 结束standedProductAtomSV.installObj 商品添加原子操作,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-			StandedProductLog productLog = new StandedProductLog();
-			BeanUtils.copyProperties(productLog, standedProduct);
-			atomStart = System.currentTimeMillis();
-			logger.info("===== 开始 standedProductLogAtomSV.insert 商品添加日志原子操作,当前时间戳:{}",atomStart);
-			standedProductLogAtomSV.insert(productLog);
-			atomEnd = System.currentTimeMillis();
-			logger.info("===== 结束 standedProductLogAtomSV.insert 商品添加日志原子操作,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-		}
-		// 添加标准品属性值
-		List<AttrValRequest> attrValList = normProduct.getAttrValList();
-		
-		
-		//查询当前类目下的属性和属性值的集合是否和参数里的一致
-		//获取类目下的属性值
-		 List<String> AttrTypeList = new ArrayList<>();
-		 AttrTypeList.add(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
-		 AttrTypeList.add(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
-		 AttrTypeList.add(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-		 List<ProdCatAttrAttch> catAttrAllList = new ArrayList<>();
-		 
-		for (int i = 0; i < AttrTypeList.size(); i++) {
-			List<ProdCatAttrAttch> attrList = catAttrAttachAtomSV.queryAttrOfByIdAndType(normProduct.getTenantId(), normProduct.getProductCatId(), AttrTypeList.get(i));
-			catAttrAllList.addAll(attrList);
-		}
-		List<Object> catAttrValList = new ArrayList<>();
-		
-		for (int i = 0; i < catAttrAllList.size(); i++) {
-			List<CatAttrValAttach> valList = catAttrAttachAtomSV.queryValListByCatAttr(normProduct.getTenantId(),  catAttrAllList.get(i).getCatAttrId());
-			for (int j = 0; j < valList.size(); j++) {
-				catAttrValList.add(valList.get(j).getAttrvalueDefId());
-			}
-		}
-		List<Object> attrValuelist = new ArrayList<>(); 
-		if (attrValList == null && catAttrAllList != null) {
-			throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
-                    "标准品所属类目下的属性值与添加的属性值不符");
-		}else {
-			
-			for (int i = 0; i < attrValList.size(); i++) {
-				attrValuelist.add(attrValList.get(i).getAttrValId());
-			}
-		}
-		
-		if (!catAttrValList.containsAll(attrValuelist)) {
-			resultList.add("");
-			responseHeader.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"标准品所属类目下的属性值与添加的属性值不符。"));
-		}else {
-			Timestamp nowTime = DateUtils.currTimeStamp();
-			for (AttrValRequest attrValReq : attrValList) {
-				StandedProdAttr prodAttr = new StandedProdAttr();
-				BeanUtils.copyProperties(prodAttr, attrValReq);
-				prodAttr.setTenantId(normProduct.getTenantId());
-				prodAttr.setStandedProdId(standedProduct.getStandedProdId());
-				prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
-				prodAttr.setAttrValueName(attrValReq.getAttrVal());
-				prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
-				prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
-				prodAttr.setOperId(normProduct.getOperId());
-				prodAttr.setOperTime(nowTime);
-				prodAttr.setSerialNumber(getProductAttrSerialNo());
-				// 添加成功,添加日志
-				atomStart = System.currentTimeMillis();
-				logger.info("===== 开始 standedProdAttrAtomSV.installObj 商品属性添加原子操作,当前时间戳:{}",atomStart);
-				if (standedProdAttrAtomSV.installObj(prodAttr) > 0) {
-					atomEnd = System.currentTimeMillis();
-					logger.info("===== 结束 standedProdAttrAtomSV.installObj 商品属性添加原子操作,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-					StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
-					BeanUtils.copyProperties(prodAttrLog, prodAttr);
-					atomStart = System.currentTimeMillis();
-					logger.info("===== 开始 standedProdAttrLogAtomSV.installObj 商品属性日志添加原子操作,当前时间戳:{}",atomStart);
-					standedProdAttrLogAtomSV.installObj(prodAttrLog);
-					atomEnd = System.currentTimeMillis();
-					logger.info("===== 结束 standedProdAttrLogAtomSV.installObj 商品属性日志添加原子操作,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-				}
-			}
-			long endTime = System.currentTimeMillis();
-			logger.info("===== 结束 NormProductBusiSVImpl.installNormProd 商品添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
-			System.out.println(standedProduct.getStandedProdId());
-			responseHeader.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.SUCCESS_CODE,"添加标准品的属性值"));
-			resultList.add(standedProduct.getStandedProdId());
-		}
-		//return standedProduct.getStandedProdId();
-		
-		responseHeader.setResult(resultList);
-		return responseHeader;
+		// 添加标准品
+		standedProductAtomSV.installObj(standedProduct);
+		return standedProduct;
 	}
 
 	@Override
-	public PageInfoResponse<String> installNormProdAndPtoGroup(NormProdSaveRequest normProduct) {
-		PageInfoResponse<String> pageInfoResponse = new PageInfoResponse<>();
-		long startTime = System.currentTimeMillis();
-		logger.info("===== 开始 NormProductBusiSVImpl.installNormProdAndPtoGroup 商品(级联)添加,当前时间戳:{}",startTime);
-		String tenantId = normProduct.getTenantId();
-		// 添加标准品
-		PageInfoResponse<String> normProdResponse = installNormProd(normProduct);
-		String  normProdId = normProdResponse.getResult().get(0);
-		pageInfoResponse.setResponseHeader(normProdResponse.getResponseHeader());
-		List<String> resultList = new ArrayList<>();
-		if (StringUtil.isBlank(normProdId)) {
-			resultList.add("");
-			pageInfoResponse.setResult(resultList);
-			pageInfoResponse.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"标准品为空") );
-			return pageInfoResponse;
-			//return null;
-		}
-		// 自动添加一个库存组
+	public String installNormProdAndPtoGroup(NormProdSaveRequest normProduct) {
+		// 添加标准品,不需保存标准品属性
+		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct);
+
+		// 添加一个库存组
+		STOStorageGroup storageGroup = createSTOStorageGroup(normProduct, standedProduct);
+		StorageGroup group = storageGroupBusiSV.addGroupObj(storageGroup);
+		
+		// 添加商品,在商品属性表保存商品属性值
+		 List<AttrValRequest> attrValList = normProduct.getAttrValList();
+		Product product = productBusiSV.addProductWithStorageGroup(standedProduct, group,attrValList);
+		
+		// 添加SKU
+		prodSkuBusiSV.createSkuProduct(product);
+		
+		return product.getProdId();
+		
+	}
+
+	private STOStorageGroup createSTOStorageGroup(NormProdSaveRequest normProduct, StandedProduct standedProduct) {
 		STOStorageGroup storageGroup = new STOStorageGroup();
-		storageGroup.setTenantId(tenantId);
-		Long operId = normProduct.getOperId();
-		storageGroup.setCreateId(operId);
-		storageGroup.setStandedProdId(normProdId);
+		storageGroup.setTenantId(normProduct.getTenantId());
+		storageGroup.setCreateId(normProduct.getOperId());
+		storageGroup.setStandedProdId(standedProduct.getStandedProdId());
 		storageGroup.setSupplierId(normProduct.getSupplierId());
 		storageGroup.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
-		String groupId = storageGroupBusiSV.addGroup(storageGroup);
-		if (StringUtil.isBlank(groupId)) {
-			resultList.add("");
-			pageInfoResponse.setResult(resultList);
-			pageInfoResponse.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"添加库存组失败") );
-			return pageInfoResponse;
-			//return null;
-		}
-		// 添加SKU
-		List<AttrValRequest> attrValList = normProduct.getAttrValList();
-		int createCount = prodSkuBusiSV.createSkuOfProduct(tenantId, groupId, attrValList, operId);
-		if (createCount == 0) {
-			pageInfoResponse.setResult(normProdResponse.getResult());
-			pageInfoResponse.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.SUCCESS_CODE,"产生库存组对应商品的SKU， 完全使用配置到标准品的销售属性") );
-			return pageInfoResponse;
-			//return normProdId;
-		}
-		long endTime = System.currentTimeMillis();
-		logger.info("===== 结束 NormProductBusiSVImpl.installNormProdAndPtoGroup 商品(级联)添加,当前时间戳:{},用时:{}"
-				,endTime,(endTime-startTime));
-		System.out.println(normProdId);
-		pageInfoResponse.setResult(normProdResponse.getResult());
-		return normProdResponse;
-		
+//		String groupId = storageGroupBusiSV.addGroup(storageGroup);
+		return storageGroup;
 	}
 
 	/**

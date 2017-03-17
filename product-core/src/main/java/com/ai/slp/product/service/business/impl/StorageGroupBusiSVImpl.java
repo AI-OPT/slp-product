@@ -88,59 +88,29 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 */
 	@Override
 	public String addGroup(STOStorageGroup storageGroup) {
-		long startTime = System.currentTimeMillis();
-		logger.info("===== 开始 StorageGroupBusiSVImpl.addGroup 库存组添加,当前时间戳:{}",startTime);
-		// 查询标准品是否有销售属性
-		String tenantId = storageGroup.getTenantId();
-		String standedProdId = storageGroup.getStandedProdId();
-		long atomStart = System.currentTimeMillis();
-		long atomEnd ;
-		logger.info("===== 开始 standedProductAtomSV.selectById 标准品查询原子,当前时间戳:{}",atomStart);
-		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
-		atomEnd = System.currentTimeMillis();
-		logger.info("===== 结束 standedProductAtomSV.selectById 标准品查询原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-		if (standedProduct == null) {
-			logger.warn("未找到对应标准品,租户ID:{},标准品标识:{}", tenantId, standedProdId);
-			throw new BusinessException("", "未找到对应标准品信息,租户id:" + tenantId + ",标准品标识:" + standedProdId);
+		StorageGroup group = addGroupObj(storageGroup);
+		if(group!=null){
+			return group.getStorageGroupId();
 		}
-		atomStart = System.currentTimeMillis();
-		logger.info("===== 开始 prodCatAttrAtomSV.queryAttrOfCatByIdAndType 标准品属性查询原子,当前时间戳:{}",atomStart);
-		//通过标准品查询类目属性类型为销售属性的属性
-		List<ProdCatAttr> prodCatAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(
-				tenantId,standedProduct.getProductCatId(),ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-		atomEnd = System.currentTimeMillis();
-		logger.info("===== 结束 prodCatAttrAtomSV.queryAttrOfCatByIdAndType 标准品属性查询原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
+		return null;
+	}
+	
+	/**
+	 * 添加库存组
+	 * 
+	 * @param storageGroup
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	public StorageGroup addGroupObj(STOStorageGroup storageGroup) {
 		//通过是否查询到相关属性来设定库存组是否有销售属性
 		StorageGroup group = new StorageGroup();
 		BeanUtils.copyProperties(group, storageGroup);
-		//确认是否有销售属性
-		if(CollectionUtil.isEmpty(prodCatAttrList)){
-			group.setIsSaleAttr(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR);
-		}else{
-			group.setIsSaleAttr(StorageConstants.StorageGroup.isSaleAttr.HAS_SALE_ATTR);
-		}
 		// 添加库存组信息,状态默认为停用
 		group.setState(StorageConstants.StorageGroup.State.STOP);
-		// 添加库存组日志
-		atomStart = System.currentTimeMillis();
-		logger.info("===== 开始 storageGroupAtomSV.installGroup 添加库存组原子,当前时间戳:{}",atomStart);
 		int installNum = storageGroupAtomSV.installGroup(group);
-		atomEnd = System.currentTimeMillis();
-		logger.info("===== 结束 storageGroupAtomSV.installGroup 添加库存组原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-		if (installNum > 0) {
-			StorageGroupLog groupLog = new StorageGroupLog();
-			BeanUtils.copyProperties(groupLog, group);
-			atomStart = System.currentTimeMillis();
-			logger.info("===== 开始 storageGroupLogAtomSV.install 添加库存组日志原子,当前时间戳:{}",atomStart);
-			storageGroupLogAtomSV.install(groupLog);
-			atomEnd = System.currentTimeMillis();
-			logger.info("===== 结束 storageGroupLogAtomSV.install 添加库存组日志原子,当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-		}
-		// 添加商品
-		productBusiSV.addProductWithStorageGroup(group, storageGroup.getCreateId());
-		long endTime = System.currentTimeMillis();
-		logger.info("===== 结束 StorageGroupBusiSVImpl.addGroup 库存组添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
-		return group.getStorageGroupId();
+		return group;
 	}
 
 	/**

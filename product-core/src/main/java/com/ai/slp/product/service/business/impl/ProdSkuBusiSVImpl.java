@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,6 +35,7 @@ import com.ai.slp.product.api.webfront.param.ProdAttrParam;
 import com.ai.slp.product.api.webfront.param.ProdAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductImage;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
@@ -74,6 +76,7 @@ import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.ProdSkuAttrStr;
 import com.ai.slp.product.vo.SkuStorageVo;
 
@@ -219,6 +222,57 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	}
 
 	/**
+	 * 保存SKU
+	 * @param product
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	public ProdSku createSkuProduct(Product product){
+		ProdSku prodSku = new ProdSku();
+		prodSku.setTenantId(product.getTenantId());
+		prodSku.setProdId(product.getProdId());
+		prodSku.setStorageGroupId(product.getStorageGroupId());
+		prodSku.setSkuName(product.getProdName());
+		prodSku.setSerialNumber((short) 0);
+		prodSku.setState(ProductConstants.ProdSku.State.ACTIVE);
+		prodSku.setOperId(product.getOperId());
+		prodSku.setOperTime(product.getOperTime());
+		//标准品/商品/sku共用主键
+		prodSku.setSkuId(product.getProdId());
+		prodSkuAtomSV.createObj(prodSku);
+		//
+		return prodSku;
+	}
+	
+	/**
+	 * 保存SKU
+	 * @param product
+	 * @param attrValList
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	public ProdSku createSkuProduct(Product product, List<AttrValRequest> attrValList ){
+		ProdSku prodSku = createSkuProduct(product);
+		//创建属性
+		for (AttrValRequest attrValReq : attrValList) {
+			ProdSkuAttr prodAttr = new ProdSkuAttr();
+			BeanUtils.copyProperties(prodAttr, attrValReq);
+			prodAttr.setTenantId(product.getTenantId());
+			prodAttr.setProdId(product.getProdId());
+			prodAttr.setAttrvalueDefId(attrValReq.getAttrValId());
+			prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
+			prodAttr.setOperId(product.getOperId());
+			prodAttr.setOperTime(product.getOperTime());
+			// 添加成功
+			prodSkuAttrAtomSV.createAttr(prodAttr);
+		}
+		return prodSku;
+	}
+	
+	
+	/**
 	 * 根据属性集合创建sku
 	 * 
 	 * @param group
@@ -267,9 +321,6 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 							}
 						}
 					}
-					ProdSkuLog prodSkuLog = new ProdSkuLog();
-					BeanUtils.copyProperties(prodSkuLog, prodSku);
-					prodSkuLogAtomSV.install(prodSkuLog);
 				}
 			}
 		}

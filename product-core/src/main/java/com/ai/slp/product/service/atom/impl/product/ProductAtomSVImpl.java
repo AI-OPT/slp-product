@@ -44,7 +44,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	 */
 	@Override
 	public int installProduct(Product product) {
-		product.setProdId(SequenceUtil.createProductProdId());
+//		product.setProdId(SequenceUtil.createProductProdId());
 		if (product.getCreateTime() == null){
 			product.setCreateTime(DateUtils.currTimeStamp());
 		}

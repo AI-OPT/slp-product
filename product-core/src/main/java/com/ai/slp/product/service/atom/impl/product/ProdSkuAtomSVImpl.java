@@ -82,7 +82,7 @@ public class ProdSkuAtomSVImpl implements IProdSkuAtomSV {
 	 */
 	@Override
 	public int createObj(ProdSku prodSku) {
-		prodSku.setSkuId(SequenceUtil.genProdSkuId());
+		//prodSku.setSkuId(SequenceUtil.genProdSkuId());
 		prodSku.setOperTime(DateUtils.currTimeStamp());
 		return prodSkuMapper.insert(prodSku);
 	}

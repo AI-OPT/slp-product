@@ -3,9 +3,12 @@ package com.ai.slp.product.service.business.interfaces;
 import java.util.List;
 
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.normproduct.param.AttrValRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
 import com.ai.slp.product.api.product.param.*;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
@@ -17,12 +20,15 @@ import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 public interface IProductBusiSV {
 
     /**
-     * 
      * 添加商城商品
+     * @param standedProduct
      * @param group
+     * @param attrValList
      * @return
+     * @author Gavin
+     * @UCUSER
      */
-    public int addProductWithStorageGroup(StorageGroup group, Long operId);
+    public Product addProductWithStorageGroup(StandedProduct standedProduct, StorageGroup group,List<AttrValRequest> attrValList);
 
     /**
      * 对停用下架的商品进行上架处理

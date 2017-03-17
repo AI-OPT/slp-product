@@ -129,35 +129,25 @@ public class INormProductSVImpl implements INormProductSV {
         long startTime = System.currentTimeMillis();
         LOGGER.info("=====开始INormProductSVImpl.createProductInfo,商品添加,当前时间戳:"+startTime);
         CommonUtils.checkTenantId(request.getTenantId());
-        PageInfoResponse<String> normProdIdResponse = normProductBusiSV.installNormProd(request);
+        String standProdId = normProductBusiSV.installNormProd(request);
         long endTime = System.currentTimeMillis();
         LOGGER.info("=====结束INormProductSVImpl.createProductInfo,商品添加,当前时间戳:{}",endTime,(endTime-startTime));
-       // return CommonUtils.genSuccessResponse(normProdId);
-        return CommonUtils.genSuccessResponse(normProdIdResponse.getResult().get(0));
-        //return response.setResponseHeader(normProdIdResponse.getResponseHeader());
+        return CommonUtils.genSuccessResponse(standProdId);
     }
     
     /**
-     * 添加标准品信息.(同时生成标准品属性、库存组、sku) 
+     * 添加标准品信息.(同时生成库存组、商品、sku) 
      */
     @Override
 	public BaseResponse createProductAndStoGroup(NormProdSaveRequest request) throws BusinessException, SystemException {
         long startTime = System.currentTimeMillis();
-        LOGGER.info("===== 开始 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:"+startTime);
+        LOGGER.debug("===== 开始 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:"+startTime);
 		String tenantId = request.getTenantId();
 		CommonUtils.checkTenantId(tenantId);
-        PageInfoResponse<String> normProdIdResponse = normProductBusiSV.installNormProdAndPtoGroup(request);
+        String productId = normProductBusiSV.installNormProdAndPtoGroup(request);
         long endTime = System.currentTimeMillis();
-        LOGGER.info("===== 结束 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
-        if(StringUtils.isEmpty(normProdIdResponse.getResult().get(0))){
-        	/* BaseResponse baseResponse = new BaseResponse();
-             baseResponse.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SYSTEM_ERROR,"添加失败！"));*/
-             return normProdIdResponse;
-        }else{
-        	LOGGER.info("end createProduct");
-        	return CommonUtils.genSuccessResponse(normProdIdResponse.getResult().get(0));
-        	//return normProdIdResponse;
-        }
+        LOGGER.debug("===== 结束 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
+        return CommonUtils.genSuccessResponse(productId);
 	}
 
     /**
