@@ -1,6 +1,5 @@
 package com.ai.slp.product.service.atom.impl.product;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,16 +12,16 @@ import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
+import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.attach.ProductAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAttrCriteria;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductCriteria;
+import com.ai.slp.product.dao.mapper.interfaces.product.ProdAttrMapper;
 import com.ai.slp.product.dao.mapper.interfaces.product.ProductMapper;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
-import com.ai.slp.product.util.SequenceUtil;
-import com.ai.slp.product.util.StoNoSkuSalePriceComparator;
-import com.ai.slp.product.util.productsComparator;
 import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 
 /**
@@ -33,6 +32,8 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Autowired
 	ProductMapper productMapper;
 	@Autowired
+	ProdAttrMapper prodAttrMapper;
+	@Autowired
 	ProductAttachMapper productAttachMapper;
 	/**
 	 * 添加销售商品信息
@@ -42,7 +43,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	 */
 	@Override
 	public int installProduct(Product product) {
-		product.setProdId(SequenceUtil.createProductProdId());
+//		product.setProdId(SequenceUtil.createProductProdId());
 		if (product.getCreateTime() == null){
 			product.setCreateTime(DateUtils.currTimeStamp());
 		}
@@ -84,9 +85,6 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public Product selectByProductId(String tenantId, String prodId) {
 		Product product = productMapper.selectByPrimaryKey(prodId);
-		if (product==null || !product.getTenantId().equals(tenantId)){
-			product = null;
-		}
 		return product;
 	}
 
@@ -139,7 +137,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public PageInfo<Product> selectPageForEdit(ProductEditQueryReq queryReq) {
 		ProductCriteria example = new ProductCriteria();
-//		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
+		example.setOrderByClause("OPER_TIME desc");//操作时间倒序
 //		example.setOrderByClause("CREATE_TIME desc");//创建时间倒序
 		ProductCriteria.Criteria criteria = example.createCriteria();
 		if (StringUtils.isNotBlank(queryReq.getProductCatId())){
@@ -441,8 +439,13 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 
 	@Override
 	public List<ProdAttr> queryAttrVal(String tenantId, String prodId, Long attrId) {
-		// TODO Auto-generated method stub
-		return null;
+		ProdAttrCriteria example = new ProdAttrCriteria();
+        example.setDistinct(true);
+        example.createCriteria().andTenantIdEqualTo(tenantId)
+                .andProdIdEqualTo(prodId)
+                .andAttrIdEqualTo(attrId)
+                .andStateEqualTo(ProductConstants.ProdSkuAttr.State.ACTIVE);
+        return prodAttrMapper.selectByExample(example);
 	}
 
 }
