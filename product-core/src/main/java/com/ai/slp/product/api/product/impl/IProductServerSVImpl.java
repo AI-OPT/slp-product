@@ -21,6 +21,7 @@ import com.ai.slp.product.api.product.param.RouteGroupSet;
 import com.ai.slp.product.api.product.param.SkuInfoQuery;
 import com.ai.slp.product.api.webfront.param.ProductImage;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
+import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.util.CommonUtils;
