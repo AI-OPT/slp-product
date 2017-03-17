@@ -198,12 +198,12 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 			throw new BusinessException("", "未找到对应的标准品信息,租户ID:" + tenantId + ",库存组标识:" + groupId);
 		}
 		//查看标准品
-		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, storageGroup.getStandedProdId());
+		/*StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, storageGroup.getStandedProdId());
 		if (standedProduct == null) {
 			logger.warn("未找到对应的标准品信息,租户ID:" + tenantId + ",标准品标识:" + storageGroup.getStandedProdId());
 			throw new BusinessException("",
 					"未找到对应的标准品信息,租户ID:" + tenantId + ",标准品标识:" + storageGroup.getStandedProdId());
-		}
+		}*/
 		return genStorageGroupInfo(storageGroup);
 	}
 

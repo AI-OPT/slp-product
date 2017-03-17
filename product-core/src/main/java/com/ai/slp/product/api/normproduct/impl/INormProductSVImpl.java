@@ -274,19 +274,19 @@ public class INormProductSVImpl implements INormProductSV {
         baseResponse.setResponseHeader(responseHeader);
         return baseResponse;*/
     	
-    	StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
+    	/*StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
 				marketPrice.getProductId());
 		
 		// 判断此租户下是否存在次标准品
 		if (standedProduct == null){
 			throw new BusinessException("",
 					"找不到指定的租户=" + marketPrice.getTenantId() + "下的标准品=" + marketPrice.getProductId() + "信息");
-		}
+		}*/
 		// 判断商户ID是否为传入的商户ID
-		if (!marketPrice.getSupplierId().equals(standedProduct.getSupplierId())){
+		/*if (!marketPrice.getSupplierId().equals(standedProduct.getSupplierId())){
 			throw new BusinessException("",
 					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + marketPrice.getSupplierId() + "不一致!");
-		}
+		}*/
     	
     	boolean ccsMqFlag=false;
 	   	//从配置中心获取mq_enable

@@ -115,11 +115,11 @@ public class IStorageSVImpl implements IStorageSV {
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(infoQuery.getTenantId());
 		
-		StandedProduct standedProduct = standedProductAtomSV.selectById(infoQuery.getTenantId(), infoQuery.getProductId());
+		/*StandedProduct standedProduct = standedProductAtomSV.selectById(infoQuery.getTenantId(), infoQuery.getProductId());
 		if (standedProduct == null) {
 			logger.warn("未找到对应的标准品信息,租户ID:{},标准品标识:{}",infoQuery.getTenantId(), infoQuery.getProductId());
 			throw new BusinessException("", "未找到对应的标准品信息");
-		}
+		}*/
 		
 		
 		List<StorageGroup> groupList = storageGroupBusiSV.queryGroupInfoByNormProId(

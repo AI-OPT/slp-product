@@ -153,7 +153,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	public List<StorageGroup> queryOfStandedProd(String tenantId,String supplierId, String standedProdId) {
 		StorageGroupCriteria example = new StorageGroupCriteria();
 		
-		//example.setOrderByClause(" CREATE_TIME desc");
+		example.setOrderByClause(" CREATE_TIME desc");
 		
 		StorageGroupCriteria.Criteria criteria = example.createCriteria()
 				.andTenantIdEqualTo(tenantId).andStandedProdIdEqualTo(standedProdId);
