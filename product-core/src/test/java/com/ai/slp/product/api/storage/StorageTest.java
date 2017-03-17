@@ -128,7 +128,7 @@ public class StorageTest {
     	stoStorage.setTenantId("changhong");
     	stoStorage.setSupplierId("-1");
     	stoStorage.setStorageName("www");
-    	stoStorage.setStorageGroupId("0000000000366");
+    	stoStorage.setStorageGroupId("0000000000477");
     	stoStorage.setOperId(1l);
     	stoStorage.setTotalNum(12l);
     	stoStorage.setWarnNum(1l);

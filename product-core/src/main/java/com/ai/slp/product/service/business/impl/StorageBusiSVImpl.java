@@ -385,13 +385,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		storageLogAtomSV.installLog(storageLog);
 		
 		// 如果有销售属性,则添加SKU对应的库存信息
-		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)) {
+/*		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)) {
 			for (Map.Entry<String,Long> entry:stoStorage.getSkuStorageNum().entrySet()){
 				Long price = getPriceOfSku(groupId,entry.getKey(),storage.getPriorityNumber());
 				installSkuStorage(entry.getKey(),storage.getStorageId(),entry.getValue(),price,operId);
 			}
 		} else 
-		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.NO)) {
+		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.NO)) {*/
 			//通过商品id查出商品SKU信息,更新SKU库存信息
 			
 			String skuId = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId()).get(0).getSkuId();
@@ -401,9 +401,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			installSkuStorage(skuId,storage.getStorageId(),storage.getTotalNum(),price,operId);
 			
 			
-		} else {
+	/*	} else {
 			throw new BusinessException("", "不是有效的是否有销售属性状态" + isSaleAttr);
-		}
+		}*/
 		return storage.getStorageId();
 		
 	}
