@@ -50,11 +50,7 @@ public class IExSearchProductSVImpl implements IExSearchProductSV {
         //最大条数设置
         int pageNo = request.getPageNo();
         int size = request.getPageSize();
-        if (request.getPageNo() == 1) {
-            startSize = 0;
-        } else {
-            startSize = (pageNo - 1) * size;
-        }
+        startSize = request.getPageNo() == 1?0:(pageNo - 1) * size;
         maxSize = size;
         ExProductSearchCriteria exProductSearchCriteria;
         Result<Map<String, Object>> result = new Result<Map<String, Object>>();
@@ -62,40 +58,28 @@ public class IExSearchProductSVImpl implements IExSearchProductSV {
         if (StringUtils.isBlank(request.getProdRangeType())) {
             //判断充值类型
             if (StringUtil.isBlank(request.getRechargeType())) {
-                exProductSearchCriteria =
-                        new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                                .userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
+                exProductSearchCriteria = new ExProductSearchCriteria.ExProductSearchCriteriaBuilder().userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
                 result = exProductSearch.search(exProductSearchCriteria);
             } else {
-                exProductSearchCriteria =
-                        new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                                .userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
+                exProductSearchCriteria = new ExProductSearchCriteria.ExProductSearchCriteriaBuilder().userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdRange(request.getUserId()).build();
                 result = exProductSearch.search(exProductSearchCriteria);
             }
         } else if (request.getProdRangeType().equals(ExproductConstants.PROD_RANGE_TYPE)) {
             //判断充值类型
             if (StringUtil.isBlank(request.getRechargeType())) {
-                exProductSearchCriteria =
-                        new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                                .userIdMust(ExproductConstants.USER_ID).startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userTypeMust(request.getUserType()).build();
+                exProductSearchCriteria =new ExProductSearchCriteria.ExProductSearchCriteriaBuilder().userIdMust(ExproductConstants.USER_ID).startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userTypeMust(request.getUserType()).build();
                 result = exProductSearch.search(exProductSearchCriteria);
             } else {
-                exProductSearchCriteria =
-                        new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                                .userIdMust(ExproductConstants.USER_ID).startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userTypeMust(request.getUserType()).build();
+                exProductSearchCriteria =new ExProductSearchCriteria.ExProductSearchCriteriaBuilder().userIdMust(ExproductConstants.USER_ID).startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userTypeMust(request.getUserType()).build();
                 result = exProductSearch.search(exProductSearchCriteria);
             }
         } else {
             //判断充值类型
             if (StringUtil.isBlank(request.getRechargeType())) {
-                exProductSearchCriteria =
-                        new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                                .userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                exProductSearchCriteria =new ExProductSearchCriteria.ExProductSearchCriteriaBuilder().userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
                 result = exProductSearch.search(exProductSearchCriteria);
             } else {
-                exProductSearchCriteria =
-                        new ExProductSearchCriteria.ExProductSearchCriteriaBuilder()
-                                .userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
+                exProductSearchCriteria =new ExProductSearchCriteria.ExProductSearchCriteriaBuilder().userTypeMust(request.getUserType()).startSize(startSize).maxSearchSize(maxSize).rechargeTypeIs(request.getRechargeType()).categoryIdIs(request.getProductCatId()).tenantID(request.getTenantId()).userIdMust(request.getUserId()).build();
                 result = exProductSearch.search(exProductSearchCriteria);
             }
         }
@@ -163,7 +147,7 @@ public class IExSearchProductSVImpl implements IExSearchProductSV {
         ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,ProductExceptCode.SUCCESS_INFO);
         response.setResponseHeader(responseHeader);
     	}catch(Exception e){
-    		ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SYSTEM_ERROR,"查询失败");
+    		ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.SYSTEM_ERROR,"查询失败");
     		response.setResponseHeader(responseHeader);
     	}
         return response;

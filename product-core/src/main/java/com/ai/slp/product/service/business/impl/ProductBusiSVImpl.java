@@ -1,6 +1,5 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +15,6 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
@@ -24,27 +22,50 @@ import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.platform.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
-import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
-import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.product.param.CatAttrInfoForProd;
+import com.ai.slp.product.api.product.param.ProdAttrMap;
+import com.ai.slp.product.api.product.param.ProdAttrValInfo;
+import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
+import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
+import com.ai.slp.product.api.product.param.Product4List;
+import com.ai.slp.product.api.product.param.ProductInfo;
+import com.ai.slp.product.api.product.param.ProductListQuery;
+import com.ai.slp.product.api.product.param.ProductRoute;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.api.webfront.param.FastSkuProdInfo;
-import com.ai.slp.product.constants.*;
+import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.ProdAttrAndValDefConstants;
+import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.StandedProductConstants;
+import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
 import com.ai.slp.product.dao.mapper.attach.ProductAttach;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.product.*;
+import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
+import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAudiencesAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdTargetAreaAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAttachAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductStateLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
@@ -53,12 +74,8 @@ import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.DateUtils;
-import com.ai.slp.product.util.MQConfigUtil;
-import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.ProductPageQueryVo;
 import com.ai.slp.product.vo.SkuStorageVo;
-import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.dataformat.yaml.snakeyaml.events.Event.ID;
 
 /**
  * Created by jackieliu on 16/5/5.
@@ -407,8 +424,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToInSale(Product product, Long operId) {
-    	long toinSaleStart = System.currentTimeMillis();
-    	logger.info("======对符合条件的商品进行上架处理,当前时间戳:" + toinSaleStart );
         String tenantId = product.getTenantId();
         //查询标准品是否为"可使用"状态
         StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getStandedProdId());
@@ -421,14 +436,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if(ProductConstants.Product.State.STOP.equals(product.getState())
                 || ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
         	
-        	long toSaleForStopStart = System.currentTimeMillis();
-        	logger.info("======对不符合条件的商品进行下架处理,当前时间戳:" + toSaleForStopStart );
-        	
             changeToSaleForStop(product, operId);
-            
-            long toSaleForStopEnd = System.currentTimeMillis();
-            logger.info("=====对不符合条件的商品进行下架处理,当前时间戳:" + toSaleForStopEnd + ",用时:" + 
-            (toSaleForStopEnd-toSaleForStopStart) +"毫秒" );
             
             return;
         }
@@ -470,8 +478,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         //添加日志
         updateProdAndStatusLog(product);
-        long toinSaleEnd = System.currentTimeMillis();
-        logger.info("=====对商品上架操作结束,当前时间戳:" + toinSaleEnd + ",用时:" + (toinSaleEnd-toinSaleStart) +"毫秒" );
         //将商品添加至搜索引擎
         skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
     }
@@ -487,8 +493,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         String tenantId = product.getTenantId();
         //若商品状态不是"待审核",则不处理
         if(!ProductConstants.Product.State.VERIFYING.equals(product.getState())){
-            logger.warn("The state of product is not verifying. productId:{},state:{}"
-                    ,product.getProdId(),product.getState());
+            logger.warn("The state of product is not verifying. productId:{},state:{}",product.getProdId(),product.getState());
             return;
         }
         //若标准品不存在,或不是"可使用"状态,则直接转为下架
