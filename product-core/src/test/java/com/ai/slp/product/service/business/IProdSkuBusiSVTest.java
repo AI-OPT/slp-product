@@ -1,8 +1,7 @@
 package com.ai.slp.product.service.business;
 
-import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
-import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
-import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +16,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class IProdSkuBusiSVTest {
 
     @Autowired
-    IProdSkuBusiSV prodSkuBusiSV;
+   // IProdSkuBusiSV prodSkuBusiSV;
 
     @Test
     public void querySkuDetailTest(){
-        ProductSKUResponse skuResponse = prodSkuBusiSV.querySkuDetail("SLP","4",null);
-        System.out.println(skuResponse.toString());
+      //  ProductSKUResponse skuResponse = prodSkuBusiSV.querySkuDetail("SLP","4",null);
+       // System.out.println(skuResponse.toString());
     }
 
     @Test
     public void querySkuAttrTest(){
-        ProductSKUConfigResponse skuConfigResponse = prodSkuBusiSV.querySkuAttr("SLP","1000000000002401",null);
-        System.out.println(skuConfigResponse.getProductAttrList().size());
+     //   ProductSKUConfigResponse skuConfigResponse = prodSkuBusiSV.querySkuAttr("SLP","1000000000002401",null);
+      //  System.out.println(skuConfigResponse.getProductAttrList().size());
     }
 }
