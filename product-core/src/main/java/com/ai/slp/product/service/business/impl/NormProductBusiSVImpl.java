@@ -816,7 +816,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				marketPrice.getMarketPrice(), marketPrice.getOperId());
 		
 		//更改结构后--市场价 同时更新 product
-		
+		Product product = new Product();
+		product.setProdId(marketPrice.getProductId());
+		product.setMarketPrice(marketPrice.getMarketPrice());
+		productAtomSV.updateById(product);
 		
 		
 		

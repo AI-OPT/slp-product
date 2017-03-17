@@ -126,12 +126,8 @@ public class INormProductSVImpl implements INormProductSV {
     @Override
     public BaseResponse createProductInfo(NormProdSaveRequest request) throws BusinessException, SystemException {
     	BaseResponse response = new BaseResponse();
-        long startTime = System.currentTimeMillis();
-        LOGGER.info("=====开始INormProductSVImpl.createProductInfo,商品添加,当前时间戳:"+startTime);
         CommonUtils.checkTenantId(request.getTenantId());
         String standProdId = normProductBusiSV.installNormProd(request);
-        long endTime = System.currentTimeMillis();
-        LOGGER.info("=====结束INormProductSVImpl.createProductInfo,商品添加,当前时间戳:{}",endTime,(endTime-startTime));
         return CommonUtils.genSuccessResponse(standProdId);
     }
     
@@ -140,13 +136,9 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
 	public BaseResponse createProductAndStoGroup(NormProdSaveRequest request) throws BusinessException, SystemException {
-        long startTime = System.currentTimeMillis();
-        LOGGER.debug("===== 开始 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:"+startTime);
 		String tenantId = request.getTenantId();
 		CommonUtils.checkTenantId(tenantId);
         String productId = normProductBusiSV.installNormProdAndPtoGroup(request);
-        long endTime = System.currentTimeMillis();
-        LOGGER.debug("===== 结束 INormProductSVImpl.createProductAndStoGroup,商品添加,当前时间戳:{},用时:{}",endTime,(endTime-startTime));
         return CommonUtils.genSuccessResponse(productId);
 	}
 
