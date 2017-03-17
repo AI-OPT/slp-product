@@ -209,27 +209,26 @@ public class IStorageSVImpl implements IStorageSV {
 	 */
 	@Override
 	public BaseResponse saveStorage(STOStorage stoStorage) throws BusinessException, SystemException {
-		/*CommonUtils.checkTenantId(stoStorage.getTenantId());
-		String storageId = storageBusiSV.saveStorage(stoStorage);
-		return CommonUtils.addSuccessResHeader(new BaseResponse(),storageId);*/
 		
-		String tenantId = stoStorage.getTenantId();
+		
+		/*String tenantId = stoStorage.getTenantId();
 		Long operId = stoStorage.getOperId();
-		String groupId = stoStorage.getStorageGroupId();
-		
-		long queryInsaleProdStart = System.currentTimeMillis();
+		String groupId = stoStorage.getStorageGroupId();*/
 		
 //		查询指定库存组下的销售商品
-		Product product = productAtomSV.selectByGroupId(tenantId, groupId);
+	/*	Product product = productAtomSV.selectByGroupId(tenantId, groupId);
 		
-		long queryInsaleProdEnd = System.currentTimeMillis();
 		if(product == null){
 			logger.warn("未找到对应的商品信息,租户ID:{},销售商ID:{},库存组ID:{},库存ID:{}",
 					stoStorage.getTenantId());
 			throw new BusinessException("", "找不到指定标示的商品:" + groupId);
-		}
+		}*/
 		
-		boolean ccsMqFlag=false;
+		CommonUtils.checkTenantId(stoStorage.getTenantId());
+		String storageId = storageBusiSV.saveStorage(stoStorage);
+		return CommonUtils.addSuccessResHeader(new BaseResponse(),storageId);
+		
+		/*boolean ccsMqFlag=false;
 	   	//从配置中心获取mq_enable
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
 		if (!ccsMqFlag) {
@@ -244,7 +243,7 @@ public class IStorageSVImpl implements IStorageSV {
 					ExceptCodeConstants.Special.SUCCESS, "成功");
 			response.setResponseHeader(responseHeader);
 			return response; 
-		}
+		}*/
 	}
 
 	/**
