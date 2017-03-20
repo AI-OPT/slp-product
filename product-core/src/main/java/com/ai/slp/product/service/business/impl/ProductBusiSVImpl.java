@@ -694,22 +694,13 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
 	@Override
-    public void changeSaleToStore(String tenantId, String supplierId, String prodId, Long operId) {
-        Product product = productAtomSV.selectByProductId(tenantId, supplierId, prodId);
-        if (product == null) {
-            throw new SystemException("", "未找到相关的商品信息,租户ID:" + tenantId + ",商品标识:" + prodId);
-        }
-        //若商品不是在售,则直接返回
-        if (!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
-        	return;
-        }
+    public void changeSaleToStore(String tenantId, String supplierId, Product product, Long operId) {
         //修改商品"state"为IN_STORE
         product.setState(ProductConstants.Product.State.IN_STORE);
         //将商品从搜索引擎中移除
-        skuIndexManage.deleteSKUIndexByProductId(prodId);
+        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
         //添加下架时间
         product.setDownTime(DateUtils.currTimeStamp());
-
         if (operId != null) {
             product.setOperId(operId);
         }
@@ -765,6 +756,22 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         return areaInfoList;
     }
+
+	@Override
+	public void changeSaleToStore(String tenantId, String supplierId, String productId, Long operId) {
+		Product product = productAtomSV.selectByProductId(tenantId, supplierId, productId);
+		//修改商品"state"为IN_STORE
+        product.setState(ProductConstants.Product.State.IN_STORE);
+        //将商品从搜索引擎中移除
+        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
+        //添加下架时间
+        product.setDownTime(DateUtils.currTimeStamp());
+        if (operId != null) {
+            product.setOperId(operId);
+        }
+        //添加日志
+        updateProdAndStatusLog(product);
+	}
 
 }
 	

@@ -360,7 +360,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
 		if (!ccsMqFlag) {
 			CommonUtils.checkTenantId(query.getTenantId());
-	        productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),query.getProductId(),query.getOperId());
+	        productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),product,query.getOperId());
 	        return CommonUtils.genSuccessResponse("");
 		} else {
 			BaseResponse response = CommonUtils.genSuccessResponse("");
