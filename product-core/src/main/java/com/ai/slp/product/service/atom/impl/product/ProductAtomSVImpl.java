@@ -99,8 +99,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public Product selectByProductId(String tenantId, String supplierId, String prodId) {
 		Product product = productMapper.selectByPrimaryKey(prodId);
-		if (product==null || product.getTenantId()==null || product.getSupplierId()==null || !product.getTenantId().equals(tenantId)
-				|| !product.getSupplierId().equals(supplierId)){
+		if (product==null || product.getTenantId()==null || product.getSupplierId()==null || !product.getTenantId().equals(tenantId)|| !product.getSupplierId().equals(supplierId)){
 			product = null;
 		}
 		return product;
