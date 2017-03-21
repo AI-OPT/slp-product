@@ -297,6 +297,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
                 changeToStop(storageGroup,product, operId);
             }
             productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),operId);
+            //将商品添加至搜索引擎
+            skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
             return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
 		} else {
 			BaseResponse response = CommonUtils.genSuccessResponse("");
@@ -360,14 +362,15 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
 		if (!ccsMqFlag) {
 			CommonUtils.checkTenantId(query.getTenantId());
+			//将商品从搜索引擎中移除
+	        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
 	        productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),product,query.getOperId());
 	        return CommonUtils.genSuccessResponse("");
 		} else {
 			BaseResponse response = CommonUtils.genSuccessResponse("");
 			//发送消息
 			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_CHANGETOINSTORE_TOPIC).send(JSON.toJSONString(query), 0);
-			ResponseHeader responseHeader = new ResponseHeader(true,
-					ExceptCodeConstants.Special.SUCCESS, "成功");
+			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS, "成功");
 			response.setResponseHeader(responseHeader);
 			return response; 
 		}
