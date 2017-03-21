@@ -74,13 +74,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			CommonUtils.checkTenantId(prodCommentPageRequest.getTenantId());
 			// 查询商品信息
 			String tenantId = prodCommentPageRequest.getTenantId();
-			/*
-			 * ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,
-			 * prodCommentPageRequest.getSkuId()); if(prodSku == null){ throw
-			 * new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,
-			 * "未查询到指定商品,租户ID:"+tenantId+",销售商品id:"+prodCommentPageRequest.
-			 * getSkuId()); } String prodId = prodSku.getProdId();
-			 */
 			// SKUID与商品ID意义相同
 			Product product = productAtomSV.selectByProductId(tenantId, prodCommentPageRequest.getSkuId());
 			if (product == null) {
@@ -122,13 +115,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 					ProdComment params = new ProdComment();
 					params.setUserId(userId);
 					BeanUtils.copyProperties(params, prodCommentVO);
-					/*
-					 * String skuId = prodCommentVO.getSkuId(); ProdSku prodSku
-					 * = prodSkuAtomSV.querySkuById(tenantId, skuId); if(prodSku
-					 * == null){ throw new BusinessException(
-					 * "skuId 数据错误，找不到对应的销售商品"); } String prodId =
-					 * prodSku.getProdId();
-					 */
 					Product product = productAtomSV.selectByProductId(tenantId, prodCommentVO.getSkuId());
 					if (product == null) {
 						throw new BusinessException("skuId 数据错误，找不到对应的标准商品");

@@ -381,7 +381,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         }catch (NumberFormatException e){
             logger.error("Formate sale price is error,salePrice="+skuPriceCache,e);
         }
-        Long.parseLong(cacheClient.hget(priceKey,skuId));
+        //Long.parseLong(cacheClient.hget(priceKey,skuId));
         String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
         //
         String skuUsableStr = cacheClient.hget(skuUsableKey,skuId);

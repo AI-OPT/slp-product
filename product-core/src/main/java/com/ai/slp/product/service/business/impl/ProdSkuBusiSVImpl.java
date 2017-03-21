@@ -438,21 +438,12 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	 * @return
 	 */
 	@Override
-	public ProductSKUResponse querySkuDetail(String tenantId, String skuId, String skuAttrs) {
-		
-		// 查询商品
-		Product product = productAtomSV.selectByProductId(tenantId, skuId);
-		
-		if (product == null) {
-			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",tenantId, skuId, skuId);
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
-		}
-		//若不是有效状态,则不处理
-		if (!ACTIVE_STATUS_LIST.contains(product.getState())){
-			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",tenantId, skuId, skuId,product.getState());
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
-		}
-		return genSkuResponse(tenantId, product);
+	public List<ProdCatAttrAttch> querySkuDetail(String tenantId, Product product, String skuAttrs) {
+		ProductSKUResponse skuResponse = new ProductSKUResponse();
+		BeanUtils.copyProperties(skuResponse, product);
+		// 查询商品对应标准品的销售属性,已按照属性属性排序
+		List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
+		return catAttrAttches;
 	}
 
 	/**
@@ -465,18 +456,6 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	 */
 	@Override
 	public List<AttrInfo> querySkuAttr(String tenantId, String skuId, String skuAttrs) {
-		// 查询商品
-		//SKUID等同于PRODID
-		Product product = productAtomSV.selectByProductId(tenantId, skuId);
-		if (product == null) {
-			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",tenantId, skuId, skuId);
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
-		}
-		//若不是有效状态,则不处理
-		if (!ACTIVE_STATUS_LIST.contains(product.getState())){
-			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",tenantId, skuId, skuId,product.getState());
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
-		}
 		return prodAttrAtomSV.queryAttrOfProdId(skuId);
 	}
 
@@ -675,7 +654,6 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		BeanUtils.copyProperties(skuResponse, product);
 		// 查询商品对应标准品的销售属性,已按照属性属性排序
 		List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-		
 		// SKU图片
 		String attrPic = null;
 		// 查询已设置SKU的属性和属性值信息
@@ -961,5 +939,22 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		
 		
 		return skuResponse;
+	}
+
+	@Override
+	public ProductSKUResponse querySkuDetail(String tenantId, String skuId, String skuAttrs) {
+		// 查询商品
+		Product product = productAtomSV.selectByProductId(tenantId, skuId);
+		
+		if (product == null) {
+			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",tenantId, skuId, skuId);
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
+		}
+		//若不是有效状态,则不处理
+		if (!ACTIVE_STATUS_LIST.contains(product.getState())){
+			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",tenantId, skuId, skuId,product.getState());
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
+		}
+		return genSkuResponse(tenantId, product);
 	}
 }
