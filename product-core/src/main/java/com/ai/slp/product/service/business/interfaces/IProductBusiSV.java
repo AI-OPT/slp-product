@@ -4,8 +4,13 @@ import java.util.List;
 
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
-import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
-import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.product.param.ProdAttrMap;
+import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
+import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
+import com.ai.slp.product.api.product.param.Product4List;
+import com.ai.slp.product.api.product.param.ProductInfo;
+import com.ai.slp.product.api.product.param.ProductListQuery;
+import com.ai.slp.product.api.product.param.ProductRoute;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
 import com.ai.slp.product.api.webfront.param.FastProductReq;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
@@ -132,7 +137,13 @@ public interface IProductBusiSV {
      * @param tenantId
      * @param prodId
      */
-    public void changeSaleToStore(String tenantId, String supplierId, String prodId, Long operId);
+    public void changeSaleToStore(String tenantId, String supplierId,Product product, Long operId);
+    /**
+     * 手动下架
+     * @param tenantId
+     * @param prodId
+     */
+    public void changeSaleToStore(String tenantId, String supplierId,String productId, Long operId);
     
     /**
      * 查询管理界面中的非关键属性

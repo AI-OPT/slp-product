@@ -399,20 +399,11 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToInSale(String tenantId,String supplierId, String prodId, Long operId) {
-        logger.info("start changeToInSale");
-        long queryStart = System.currentTimeMillis();
-        logger.info("=====执行原子服务productAtomSV.selectByProductId 查询指定的商品,当前时间戳:"+ queryStart );
         Product product = productAtomSV.selectByProductId(tenantId,supplierId,prodId);
-        long queryEnd = System.currentTimeMillis();
-        logger.info("=====查询指定商品结束,当前时间戳:" + queryEnd + ",用时:" + (queryEnd - queryStart) + "毫秒");
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
-        long changeStart = System.currentTimeMillis();
-        logger.info("=====执行上架操作,当前时间戳:"+changeStart);
         changeToInSale(product,operId);
-        long changeEnd = System.currentTimeMillis();
-        logger.info("=====执行上架操作结束,当前时间戳:" + changeEnd + ",用时:" + (changeEnd-changeStart) + "毫秒" );
     	
     }
 
@@ -424,52 +415,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToInSale(Product product, Long operId) {
-        String tenantId = product.getTenantId();
-        //查询标准品是否为"可使用"状态
-        StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getStandedProdId());
-        if (standedProduct==null || !StandedProductConstants.STATUS_ACTIVE.equals(standedProduct.getState())){
-            logger.warn("未找到指定的标准品或标准品状态为不可用,租户ID:{},商户ID:{},标准品ID:{}"
-                    ,tenantId,product.getSupplierId(),product.getStandedProdId());
-            throw new BusinessException("","未找到相关的商品信息或商品状态为不可用");
-        }
-        //若商品状态是"停用下架"或"售罄下架"
-        if(ProductConstants.Product.State.STOP.equals(product.getState())
-                || ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
-        	
-            changeToSaleForStop(product, operId);
-            
-            return;
-        }
-        //若商品既不是"停用下架"和"售罄下架",也不是"仓库中",则不允许上架
-        else if(!ProductConstants.Product.State.IN_STORE.equals(product.getState())){
-            logger.warn("商品当前状态不允许上架,租户ID:{},商品标识:{},当前状态:{}",
-                    tenantId,product.getProdId(),product.getState());
-            throw new BusinessException("","商品当前状态不允许上架");
-        }
-
-        //1.库存组不存在,或已废弃
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(
-                tenantId,product.getSupplierId(),product.getStorageGroupId());
-        if (storageGroup==null
-                || StorageConstants.StorageGroup.State.DISCARD.equals(storageGroup.getState())
-                || StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(storageGroup.getState())){
-            throw new BusinessException("","对应库存组不存在或已废弃,无法上架,租户ID:"+tenantId
-                    +"库存组ID:"+product.getStorageGroupId());
-        }
-        //判断已启用库存下的SKU库存是否均设置价格
-        if (skuStorageAtomSV.countOfNoPrice(tenantId,storageGroup.getStorageGroupId())>0){
-        	throw new BusinessException("","启用库存下存在未设置价格的库存,无法上架");
-        }
-        //查询当前库存组可用量 
-        Long usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,storageGroup.getStorageGroupId());
-        //库存组停用或当前库存可用为零,
-        //直接切换至"售罄下架"
-        if (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())
-                ||StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())
-                ||usableNum==null || usableNum<=0){
-            changeToStop(storageGroup,product, operId);
-            return;
-        }
         //进行上架处理
         product.setUpTime(DateUtils.currTimeStamp());
         product.setState(ProductConstants.Product.State.IN_SALE);
@@ -478,8 +423,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         //添加日志
         updateProdAndStatusLog(product);
-        //将商品添加至搜索引擎
-        skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
     }
 
     /**
@@ -635,20 +578,16 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     public void changeToSaleForStop(Product product,Long operId){
         String tenantId = product.getTenantId();
         //若商品状态不是"停用下架",也不是"售罄下架",则不进行处理
-        if(!ProductConstants.Product.State.STOP.equals(product.getState())
-                && !ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
+        if(!ProductConstants.Product.State.STOP.equals(product.getState()) && !ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
             return;
         }
         //查询库存组是否为"启用"状态
-        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(
-                tenantId,product.getSupplierId(),product.getStorageGroupId());
+        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,product.getSupplierId(),product.getStorageGroupId());
         if (storageGroup==null){
-            throw new BusinessException("","对应库存组不存在,租户ID:"+tenantId
-                    +"库存组ID:"+product.getStorageGroupId());
+            throw new BusinessException("","对应库存组不存在,租户ID:"+tenantId+"库存组ID:"+product.getStorageGroupId());
         }
         //库存组为停用或自动停用
-        if (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())
-                || StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())){
+        if (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())|| StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())){
             //若商品为"停用下架"则不处理
             if (ProductConstants.Product.State.STOP.equals(product.getState())){
                 return;
@@ -658,10 +597,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
                 return;
             }
         }
-        if (!StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState())
-                && !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storageGroup.getState())){
-            throw new BusinessException("","库存组不是[启用]状态,租户ID:"+tenantId
-                    +"库存组ID:"+product.getStorageGroupId());
+        if (!StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState())&& !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storageGroup.getState())){
+            throw new BusinessException("","库存组不是[启用]状态,租户ID:"+tenantId+"库存组ID:"+product.getStorageGroupId());
         }
         //检查缓存中商品的库存是否大于零
         Long userNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,product.getStorageGroupId());
@@ -704,8 +641,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     private void changeToStop(StorageGroup group,Product product,Long operId){
         //若库存组为"停用"或"自动停用"则设置为"停用下架"
-        if (StorageConstants.StorageGroup.State.AUTO_STOP.equals(group.getState())
-                || StorageConstants.StorageGroup.State.STOP.equals(group.getState())) {
+        if (StorageConstants.StorageGroup.State.AUTO_STOP.equals(group.getState())|| StorageConstants.StorageGroup.State.STOP.equals(group.getState())) {
             product.setState(ProductConstants.Product.State.STOP);
         }
         //否则为"售罄停用"
@@ -756,22 +692,13 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
 	@Override
-    public void changeSaleToStore(String tenantId, String supplierId, String prodId, Long operId) {
-        Product product = productAtomSV.selectByProductId(tenantId, supplierId, prodId);
-        if (product == null) {
-            throw new SystemException("", "未找到相关的商品信息,租户ID:" + tenantId + ",商品标识:" + prodId);
-        }
-        //若商品不是在售,则直接返回
-        if (!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
-        	return;
-        }
+    public void changeSaleToStore(String tenantId, String supplierId, Product product, Long operId) {
         //修改商品"state"为IN_STORE
         product.setState(ProductConstants.Product.State.IN_STORE);
         //将商品从搜索引擎中移除
-        skuIndexManage.deleteSKUIndexByProductId(prodId);
+        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
         //添加下架时间
         product.setDownTime(DateUtils.currTimeStamp());
-
         if (operId != null) {
             product.setOperId(operId);
         }
@@ -827,6 +754,22 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         return areaInfoList;
     }
+
+	@Override
+	public void changeSaleToStore(String tenantId, String supplierId, String productId, Long operId) {
+		Product product = productAtomSV.selectByProductId(tenantId, supplierId, productId);
+		//修改商品"state"为IN_STORE
+        product.setState(ProductConstants.Product.State.IN_STORE);
+        //将商品从搜索引擎中移除
+        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
+        //添加下架时间
+        product.setDownTime(DateUtils.currTimeStamp());
+        if (operId != null) {
+            product.setOperId(operId);
+        }
+        //添加日志
+        updateProdAndStatusLog(product);
+	}
 
 }
 	

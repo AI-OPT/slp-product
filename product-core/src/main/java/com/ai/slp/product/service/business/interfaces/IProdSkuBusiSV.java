@@ -7,6 +7,7 @@ import com.ai.slp.product.api.normproduct.param.AttrValRequest;
 import com.ai.slp.product.api.product.param.SkuInfoMultSave;
 import com.ai.slp.product.api.product.param.SkuSetForProduct;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
+import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.AttrInfo;
@@ -56,6 +57,14 @@ public interface IProdSkuBusiSV {
      */
     public SkuSetForProduct querySkuByProdId(String tenantId,String supplierId, String prodId);
 
+    /**
+     * 根据SKU标识或SKU属性串查询SKU的信息
+     * @param tenantId
+     * @param skuId
+     * @param skuAttrs
+     * @return
+     */
+    public List<ProdCatAttrAttch> querySkuDetail(String tenantId,Product product,String skuAttrs);
     /**
      * 根据SKU标识或SKU属性串查询SKU的信息
      * @param tenantId
