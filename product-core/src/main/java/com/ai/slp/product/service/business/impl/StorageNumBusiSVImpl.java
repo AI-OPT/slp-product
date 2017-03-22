@@ -72,10 +72,22 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
      * @return
      */
     @Override
-    public StorageNumRes userStorageNum(String tenantId, String skuId, int skuNum) {
+    public StorageNumRes userStorageNum(String tenantId, String skuId, int skuNum, Long price) {
         //查询SKU所属销售商品
         Product product = getProductBySkuId(tenantId,skuId);
-        return userStorageNum(product,skuId,skuNum,null);
+        
+        // 商品校验
+        Timestamp nowTime = DateUtils.currTimeStamp();
+        //若商品为预售,且当前不在预售期内,则不进行销售
+        if(ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType()) &&
+                (nowTime.before(product.getPresaleBeginTime()) || nowTime.after(product.getPresaleEndTime()))){
+            logger.warn("商品为预售上架,不在预售期[{}]和[{}]",product.getPresaleBeginTime().toString(),
+                    product.getPresaleEndTime().toString());
+            throw new BusinessException("","不在预售期内,不允许销售");
+        }
+        
+        return userStorageNum(product,skuId,skuNum,price);
+		
     }
 
     /**
@@ -87,190 +99,210 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     @Override
     public StorageNumRes userNumWithAudiAndPrice(StorageNumUseReq useReq) {
         String tenantId = useReq.getTenantId(),skuId = useReq.getSkuId();
+        
+        return userStorageNum(tenantId, skuId, useReq.getSkuNum(),useReq.getSalePrice());
+        
         //查询SKU所属销售商品
-        Product product = getProductBySkuId(tenantId,skuId);
-        //判断受众
-        List<ProdAudiences> audiList = prodAudiencesAtomSV.queryByUserType(
-                tenantId,product.getProdId(),useReq.getUserType(),useReq.getUserId(),false);
-        if (CollectionUtil.isEmpty(audiList)){
-            logger.warn("此商品不适用于该用户,租户ID:{},skuId:{},用户类型:{},用户标识:{}",
-                    tenantId,skuId,useReq.getUserType(),useReq.getUserId());
-            throw new BusinessException(ErrorCodeConstants.ProdAudiences.UNMATCHED,"此商品不适用于该用户");
-        }
-        return userStorageNum(product,skuId,useReq.getSkuNum(),useReq.getSalePrice());
+//        Product product = getProductBySkuId(tenantId,skuId);
+//        //判断受众
+//        List<ProdAudiences> audiList = prodAudiencesAtomSV.queryByUserType(
+//                tenantId,product.getProdId(),useReq.getUserType(),useReq.getUserId(),false);
+//        if (CollectionUtil.isEmpty(audiList)){
+//            logger.warn("此商品不适用于该用户,租户ID:{},skuId:{},用户类型:{},用户标识:{}",
+//                    tenantId,skuId,useReq.getUserType(),useReq.getUserId());
+//            throw new BusinessException(ErrorCodeConstants.ProdAudiences.UNMATCHED,"此商品不适用于该用户");
+//        }
+//        return userStorageNum(product,skuId,useReq.getSkuNum(),useReq.getSalePrice());
     }
 
 
-    private StorageNumRes userStorageNum(Product product, String skuId, int skuNum,Long price){
-    	String tenantId = product.getTenantId();
-    	String groupId = product.getStorageGroupId();
-	 try {
-     	//lock.lock();
-        Timestamp nowTime = DateUtils.currTimeStamp();
-        //若商品为预售,且当前不在预售期内,则不进行销售
-        if(ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType()) &&
-                (nowTime.before(product.getPresaleBeginTime()) || nowTime.after(product.getPresaleEndTime()))){
-            logger.warn("商品为预售上架,不在预售期[{}]和[{}]",product.getPresaleBeginTime().toString(),
-                    product.getPresaleEndTime().toString());
-            throw new BusinessException("","不在预售期内,不允许销售");
-        }
-        //获取缓存客户端
-        ICacheClient cacheClient = IPaasStorageUtils.getClient();
-        //2. 检查库存组状态是否为"启用"
-        //获取库存组的cacheKey
-        String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
-        //获取当前库存组状态
-        String groupState = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE);
-        //若库存组不是启用状态,则不允许使用
-        if (!StorageConstants.StorageGroup.State.ACTIVE.equals(groupState)
-                && !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(groupState)){
-            logger.warn("库存组没有启用,无法使用,租户ID:{},库存组ID:{}",tenantId,groupId);
-            throw new BusinessException("","库存组没有启用,无法使用");
-        }
+	private StorageNumRes userStorageNum(Product product, String skuId, int skuNum, Long price) {
+		String tenantId = product.getTenantId();
+		String groupId = product.getStorageGroupId();
+		// 获取缓存客户端
+		ICacheClient cacheClient = IPaasStorageUtils.getClient();
+		// 获取库存组的cacheKey
+		String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId, groupId);
+				
+		//检查库存组状态是否为"启用"
+		assetGroupState(tenantId, groupId, cacheClient, groupKey);
 
-        //3. 确认当前使用优先级
-        //3.1 确认当前是否在促销期内
-        String priority = getPromotionPriority(cacheClient,tenantId,groupId);
-        //优先级价格对应KEY
-        String priceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority);
-        //优先级中库存可用量对应KEY
-        String priorityUsable = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
+		// 确认当前使用优先级
+		String priority = getPriority(tenantId, groupId, cacheClient, groupKey);
+		// 获取当前优先级中SKU的销售价
+		Long salePrice = getSalePrice(tenantId, groupId, skuId, price, cacheClient, priority);
 
-        /*3.2 以下情况使用正常优先级
-         *  .未找到促销优先级
-         *  .促销价格不存在,则表明促销已过期;
-         *  .促销优先级库存可用量不存在,则表明促销已过期
-         *  .促销优先级库存可用量小于1,则表明促销商品已售完,切换正常优先级.
-         */
-        if (StringUtils.isBlank(priority)
-                || !cacheClient.exists(priceKey)
-                || !cacheClient.exists(priorityUsable)
-                || Long.parseLong(cacheClient.get(priorityUsable))<1){
-            //若促销价格不存在,表明促销已过期,删除当前优先级的促销时间
-            if (StringUtils.isNotBlank(priority)
-                    && StringUtils.isNotBlank(priceKey)
-                    && !cacheClient.exists(priceKey)) {
-                String serialsKey = IPaasStorageUtils.genMcsGroupSerialStartTimeKey(tenantId,groupId);
-                //删除促销期的优先级时间 ZREM serialsKey serial
-                cacheClient.zrem(serialsKey,priority);
-            }
-            //使用库存组指定优先级
-            priority = cacheClient.hget(groupKey,StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
-            priceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId,groupId,priority);
-            //库存组当前优先级库存可用量
-            priorityUsable = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority);
-        }
+		// 6.进行减少优先级库存可用量
+		Long priorityUsableNum = decrSumStorage(tenantId, groupId, skuId, skuNum, cacheClient, priority);
 
-        //4.获取当前优先级中SKU的销售价
-        long salePrice = Long.parseLong(cacheClient.hget(priceKey,skuId));
-        //若价格不为空,则进行价格判断
-        if (price!=null && price.longValue()!=salePrice){
-            logger.warn("商品价格不符,SkuId:{},传入价格:{},当前价格:{}",skuId,price,salePrice);
-            throw new BusinessException(ErrorCodeConstants.Storage.PRICE_UN_MATCH,"商品价格不符");
-        }
-        //5.进行减sku库存
-  //      String usableNumKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
-        //若减少库存之后,剩余库存小于零,表示库存不足
-        
-        //如果当前优先级下库存量>要减的量
-        	//如果当前优先级下某个库存量小于等于要减量,   当前库存减为0   然后判断要减量是否大于0    是--进行去下一个减库存
-        	//需要当前库存的个数--一直进行减库存
-        Long decrBy = cacheClient.decrBy(priorityUsable,0);//总库存
-        
-        if (decrBy-skuNum>=0) {
-        	
-        	long start = System.currentTimeMillis();
- 		   logger.info("=====开始执行,当前优先级库存总量:"+decrBy+",当前时间戳:"+start);
-        	
-        	   int backNum = skuNum;
-        	   int incnum = skuNum;
-        	   
-        	   long startTimes = System.currentTimeMillis();
-    		   logger.info("=====开始执行,当前要减的量:"+incnum+",当前时间戳:"+startTimes);
-    		   
-        	   while(incnum>0){
-        		   String usableNumKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority);
-        		   
-        		   long startTime = System.currentTimeMillis();
-        		   logger.info("=====开始执行判断库存量,当前时间戳:"+startTime);
-        		   
-        		   Long cachemum = cacheClient.hincrBy(usableNumKey,skuId,-0);
-        		   
-        		   long startTime1 = System.currentTimeMillis();
-        		   logger.info("=====当前库存量:"+cachemum+",当前时间戳:"+startTime1);
-        		   
-        		   if (cachemum>0) {
-        			   if (incnum-cachemum>0) {
-        				   //回退
-        				   /*cacheClient.hincrBy(usableNumKey,skuId,incnum);
-        				   int backNum1 = cacheClient.hincrBy(usableNumKey,skuId,-backNum).intValue();
-        				   backNum = backNum1*(-1);
-        				   cacheClient.hincrBy(usableNumKey,skuId,backNum1);*/
-        				   //减当前库存量
-        				   cacheClient.hincrBy(usableNumKey,skuId,-cachemum);
-        				   backNum=(int) (incnum-cachemum);
-        				   incnum=backNum;
-        				   
-        				   long startTime2 = System.currentTimeMillis();
-                		   logger.info("=====下次库存要减量"+backNum+",当前时间戳:"+startTime2);
-        				   
-        			   }else{
-        				   cacheClient.hincrBy(usableNumKey,skuId,-incnum);
-        				   backNum = 0;
-        				   incnum = 0;
-        				   break;
-        			   }
-				}else {
+		//扣减分量
+		String skuStoragekey = IPaasStorageUtils.genMcsSkuStorageUsableKey(tenantId, groupId, priority, skuId);
+		Map<String,Integer> sorageNumMap = getSkuNumSource(cacheClient, skuStoragekey, new Double(skuNum));
+		
+		// 8.组装返回值
+		StorageNumRes numRes = new StorageNumRes();
+		BeanUtils.copyProperties(numRes, product);
+		numRes.setProductCatId(product.getProductCatId());
+		numRes.setSkuId(skuId);
+		numRes.setSkuName(product.getProdName());
+		numRes.setSalePrice(salePrice);
+		numRes.setBasicOrgId(product.getBasicOrgId());
+		numRes.setStorageNum(sorageNumMap);
+		
+		// 变更数据库信息
+		numDbBusiSV.storageNumChange(tenantId, skuId, sorageNumMap, true,
+				priorityUsableNum < 1 ? true : false);
+		
+		return numRes;
+		
+	}
+
+	/**
+	 * 获取当前优先级中SKU的销售价
+	 * @param tenantId
+	 * @param groupId
+	 * @param skuId
+	 * @param price
+	 * @param cacheClient
+	 * @param priority
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	private long getSalePrice(String tenantId, String groupId, String skuId, Long price, ICacheClient cacheClient,
+			String priority) {
+		// 4.获取当前优先级中SKU的销售价
+		String priceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId, groupId, priority);
+		long salePrice = Long.parseLong(cacheClient.hget(priceKey, skuId));
+		// 若价格不为空,则进行价格判断
+		if (price != null && price.longValue() != salePrice) {
+			logger.warn("商品价格不符,SkuId:{},传入价格:{},当前价格:{}", skuId, price, salePrice);
+			throw new BusinessException(ErrorCodeConstants.Storage.PRICE_UN_MATCH, "商品价格不符");
+		}
+		return salePrice;
+	}
+
+	/**
+	 * 检查库存组状态是否为"启用"
+	 * @param tenantId
+	 * @param groupId
+	 * @param cacheClient
+	 * @param groupKey
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	private void assetGroupState(String tenantId, String groupId, ICacheClient cacheClient, String groupKey) {
+		// 2. 检查库存组状态是否为"启用"
+		// 获取当前库存组状态
+		String groupState = cacheClient.hget(groupKey, StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE);
+		// 若库存组不是启用状态,则不允许使用
+		if (!StorageConstants.StorageGroup.State.ACTIVE.equals(groupState)
+				&& !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(groupState)) {
+			logger.warn("库存组没有启用,无法使用,租户ID:{},库存组ID:{}", tenantId, groupId);
+			throw new BusinessException("", "库存组没有启用,无法使用");
+		}
+	}
+
+	/**
+	 * 获取优先级
+	 * @param tenantId
+	 * @param groupId
+	 * @param cacheClient
+	 * @param groupKey
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	private String getPriority(String tenantId, String groupId, ICacheClient cacheClient, String groupKey) {
+		//3.1 确认当前是否在促销期内
+		String priority = getPromotionPriority(cacheClient, tenantId, groupId);
+		if(!isPromotion(tenantId, groupId, cacheClient, priority)){
+			// 使用库存组指定优先级
+			priority = cacheClient.hget(groupKey, StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
+		}
+		return priority;
+	}
+
+	private boolean isPromotion(String tenantId, String groupId, ICacheClient cacheClient, String promotionPriority) {
+		boolean isPromotion = true;
+		/*
+		 * 3.2 以下情况使用正常优先级 .未找到促销优先级 .促销价格不存在,则表明促销已过期;
+		 * .促销优先级库存可用量不存在,则表明促销已过期 .促销优先级库存可用量小于1,则表明促销商品已售完,切换正常优先级.
+		 */
+		// 优先级价格对应KEY
+		String priceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId, groupId, promotionPriority);
+		// 优先级中库存可用量对应KEY
+		String priorityUsable = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId, groupId, promotionPriority);
+		if (StringUtils.isBlank(promotionPriority) || !cacheClient.exists(priceKey) || !cacheClient.exists(priorityUsable)
+				|| Long.parseLong(cacheClient.get(priorityUsable)) < 1) {
+			// 若促销价格不存在,表明促销已过期,删除当前优先级的促销时间
+			if (StringUtils.isNotBlank(promotionPriority) && StringUtils.isNotBlank(priceKey)
+					&& !cacheClient.exists(priceKey)) {
+				String serialsKey = IPaasStorageUtils.genMcsGroupSerialStartTimeKey(tenantId, groupId);
+				// 删除促销期的优先级时间 ZREM serialsKey serial
+				cacheClient.zrem(serialsKey, promotionPriority);
+			}
+			
+			isPromotion = false;
+		}
+		return isPromotion;
+	}
+
+
+    /**
+     * 扣减总库存量
+     * @param tenantId
+     * @param groupId
+     * @param skuId
+     * @param skuNum
+     * @param cacheClient
+     * @param priority
+     * @param priorityUsable
+     * @author Gavin
+     * @UCUSER
+     */
+	private Long decrSumStorage(String tenantId, String groupId, String skuId, int skuNum, ICacheClient cacheClient,
+			String priority) {
+		//如果当前优先级下库存量>要减的量
+    	//如果当前优先级下某个库存量小于等于要减量,   当前库存减为0   然后判断要减量是否大于0    是--进行去下一个减库存
+    	//需要当前库存的个数--一直进行减库存
+		String priorityUsable = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId, groupId, priority);
+		Long decrBy = cacheClient.decrBy(priorityUsable,0);//总库存
+        logger.info("=====开始执行,当前优先级库存总量:"+decrBy);
+
+		if (decrBy >= skuNum) {// 库存够减
+			// 进行减sku库存
+			int incnum = skuNum;
+			logger.info("=====开始执行,当前要减的量:" + incnum);
+			while (incnum > 0) {
+				String usableNumKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId, groupId, priority);
+				Long cachemum = cacheClient.hincrBy(usableNumKey, skuId, -0);
+				logger.info("=====当前库存量:" + cachemum);
+				if (cachemum > 0) {
+					if (incnum > cachemum) {
+						// 减当前库存量
+						cacheClient.hincrBy(usableNumKey, skuId, -cachemum);
+						incnum = (int) (incnum - cachemum);
+						logger.info("=====下次库存要减量" + incnum);
+
+					} else {
+						cacheClient.hincrBy(usableNumKey, skuId, -incnum);
+						incnum = 0;
+						break;
+					}
+				} else {
 					break;
 				}
-            }
-		}else {
-			//cacheClient.decrBy(priorityUsable,-skuNum);
-			logger.warn("该商品库存不足,租户ID:{},库存组ID:{}",tenantId,groupId);
-        	throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
+			}
+		} else {
+			logger.warn("该商品库存不足,租户ID:{},库存组ID:{}", tenantId, groupId);
+			throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK, "该商品库存不足");
 		}
-        
-           long endTime = System.currentTimeMillis();
-		   logger.info("=====扣减库存结束,当前时间戳:"+endTime);
- /*       if (cacheClient.hincrBy(usableNumKey,skuId,-skuNum)<0){
-        	cacheClient.hincrBy(usableNumKey,skuId,skuNum);//需要将库存加回
-        	logger.warn("该商品库存不足,租户ID:{},库存组ID:{}",tenantId,groupId);
-        	throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK,"该商品库存不足");
-        }*/
-        //6.进行减少优先级库存可用量
-            Long priorityUsableNum = cacheClient.decrBy(priorityUsable,skuNum);
-            String skuStoragekey = IPaasStorageUtils.genMcsSkuStorageUsableKey(tenantId,groupId,priority,skuId);
-            //8.组装返回值
-            StorageNumRes numRes = new StorageNumRes();
-            BeanUtils.copyProperties(numRes,product);
-            numRes.setProductCatId(product.getProductCatId());
-            numRes.setSkuId(skuId);
-            numRes.setSkuName(product.getProdName());
-            numRes.setSalePrice(salePrice);
-            numRes.setBasicOrgId(product.getBasicOrgId());
-            numRes.setStorageNum(getSkuNumSource(cacheClient,skuStoragekey,new Double(skuNum)));
-            
-            long storageNumChangeStart = System.currentTimeMillis();
-            logger.info("####loadtest####开始执行numDbBusiSV.storageNumChange，库存量减少操作,当前时间戳：" + storageNumChangeStart);
-    		
-            //变更数据库信息
-            numDbBusiSV.storageNumChange(tenantId,skuId,numRes.getStorageNum(),true,priorityUsableNum<1?true:false);
-            
-            long storageNumChangeEnd = System.currentTimeMillis();
-    		logger.info("####loadtest####结束调用numDbBusiSV.storageNumChange，库存量减少操作，当前时间戳：" + storageNumChangeEnd + ",用时:"
-    				+ (storageNumChangeEnd - storageNumChangeStart) + "毫秒");
-    		
-            
-            return numRes;
-		} catch (Exception e) {
-			 logger.warn("库存扣减失败,租户ID:{},库存组ID:{}",tenantId,groupId);
-		}finally{
-			//lock.unlock();
-		}
-        return null;
-        
-    }
+		//扣减总库存
+		return cacheClient.decrBy(priorityUsable,skuNum);
+	}
 
+	
     /**
      * 回退库存量
      *
@@ -334,7 +366,6 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
      */
     @Override
     public SkuStorageVo queryStorageOfSku(String tenantId, String skuId) {
-        ICacheClient cacheClient = IPaasStorageUtils.getClient();
         //查询SKU所属销售商品
         ProdSku skuInfo = skuAtomSV.querySkuById(tenantId,skuId);
         if (skuInfo==null){
@@ -343,10 +374,25 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         }
         //
         Product product = productAtomSV.selectByProductId(tenantId,skuInfo.getProdId());
-        if (product==null){
-            logger.warn("销售商品不存在,租户ID:{},商品标识:{}",tenantId,skuInfo.getProdId());
+        return queryStorage(skuId, product);
+    }
+
+    /**
+     * 查询SKU的库存和价格信息
+     * 
+     * @param skuId
+     * @param product
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
+	public SkuStorageVo queryStorage(String skuId, Product product) {
+		if (product==null){
             throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"销售商品不存在,单品标识:"+skuId);
         }
+        
+        ICacheClient cacheClient = IPaasStorageUtils.getClient();
+        String tenantId = product.getTenantId();
         String groupId = product.getStorageGroupId();
         //获取库存组的cacheKey
         String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,groupId);
@@ -391,7 +437,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         skuStorageVo.setSalePrice(salePrice);
         skuStorageVo.setSkuId(skuId);
         return skuStorageVo;
-    }
+	}
 
     /**
      * 查询当前库存组的可用量
@@ -499,17 +545,17 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
      * @return
      */
     private Product getProductBySkuId(String tenantId,String skuId){
-        //查询SKU所属销售商品
-        ProdSku skuInfo = skuAtomSV.querySkuById(tenantId,skuId);
-        if (skuInfo==null){
-            logger.warn("单品信息不存在,租户ID:{},SKU标识:{}",tenantId,skuId);
-            throw new BusinessException(ErrorCodeConstants.Product.SKU_NO_EXIST,"单品信息不存在,单品标识:"+skuId);
-        }
+//        //查询SKU所属销售商品
+//        ProdSku skuInfo = skuAtomSV.querySkuById(tenantId,skuId);
+//        if (skuInfo==null){
+//            logger.warn("单品信息不存在,租户ID:{},SKU标识:{}",tenantId,skuId);
+//            throw new BusinessException(ErrorCodeConstants.Product.SKU_NO_EXIST,"单品信息不存在,单品标识:"+skuId);
+//        }
         //1. 查询商品是否为"在售"状态
-        Product product = productAtomSV.selectByProductId(tenantId,skuInfo.getProdId());
+        Product product = productAtomSV.selectByProductId(tenantId,skuId);
         if (product==null || !ProductConstants.Product.State.IN_SALE.equals(product.getState())){
             logger.warn("销售商品不存在,或已下架,租户ID:{},SKU标识:{},销售商品标识{}"
-                    ,tenantId,skuId,skuInfo.getProdId());
+                    ,tenantId,skuId,skuId);
             throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"销售商品不存在,或已下架状态");
         }
         return product;

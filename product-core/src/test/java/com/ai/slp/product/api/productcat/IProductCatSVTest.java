@@ -71,9 +71,10 @@ public class IProductCatSVTest {
     @Test
     public void queryAttrAndValIdByCatAndType(){
         AttrQueryForCat attrQuery = new AttrQueryForCat();
-        attrQuery.setTenantId("SLP");
-        attrQuery.setAttrType(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_SALE);
-        attrQuery.setProductCatId("1");
+        attrQuery.setTenantId("changhong");
+        //attrQuery.setTenantId("SLP");
+        attrQuery.setAttrType(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
+        attrQuery.setProductCatId("00000000000050");
         BaseMapResponse<Long,Set<String>> response =  productCatSV.queryAttrAndValIdByCatAndType(attrQuery);
         System.out.println(response.getResult().size());
     }

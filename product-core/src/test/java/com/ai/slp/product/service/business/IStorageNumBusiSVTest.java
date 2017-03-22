@@ -30,7 +30,7 @@ public class IStorageNumBusiSVTest {
     @Test
     public void userStorageNum(){
         StorageNumRes numRes = storageNumBusiSV.userStorageNum(
-                CommonTestConstants.COMMON_TENANT_ID,"1000000000002409",1);
+                CommonTestConstants.COMMON_TENANT_ID,"1000000000002409",1,null);
         System.out.println(numRes.toString());
     }
 

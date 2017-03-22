@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.dao.mapper.attach.ProdAttrAndValIdAttrch;
+import com.ai.slp.product.dao.mapper.attach.ProdAttrAndValIdAttrchMapper;
+import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrXmlAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrCriteria;
@@ -29,6 +32,8 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
     ProdCatAttrXmlAttachMapper attrXmlAttachMapper;
     @Autowired
     ProdCatAttrValueMapper prodCatAttrValueMapper;
+    @Autowired
+    ProdAttrAndValIdAttrchMapper prodAttrAndValIdAttrchMapper;
 
     @Override
     public ProdCatAttr selectById(String tenantId, String catAttrId) {
@@ -246,5 +251,13 @@ public class ProdCatAttrAtomSVImpl implements IProdCatAttrAtomSV{
                 .andIsPictureEqualTo(ProductCatConstants.ProductCatAttr.IsPicture.YES)
                 .andStateEqualTo(CommonConstants.STATE_ACTIVE);
         return prodCatAttrMapper.selectByExample(example);
+    }
+    
+    /**
+     * 查询类目下某个类型的属性标识和属性值标识集合
+     */
+    @Override
+    public  List<ProdAttrAndValIdAttrch> queryAttrAndValIdByCatIdAndType(String tenantId, String productCatId, String attrType) {
+        return prodAttrAndValIdAttrchMapper.queryAttrAndValIdByCatIdAndType(tenantId,productCatId,attrType);
     }
 }

@@ -1,25 +1,44 @@
 package com.ai.slp.product.api.productcat.impl;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.*;
-import com.ai.opt.sdk.constants.ExceptCodeConstants;
-import com.ai.opt.sdk.util.BeanUtils;
-import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
-import com.ai.slp.product.api.productcat.param.*;
-import com.ai.slp.product.dao.mapper.bo.ProductCat;
-import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
-import com.ai.slp.product.util.CommonUtils;
-import com.alibaba.dubbo.config.annotation.Service;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseListResponse;
+import com.ai.opt.base.vo.BaseMapResponse;
+import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfo;
+import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.constants.ExceptCodeConstants;
+import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.slp.product.api.productcat.interfaces.IProductCatSV;
+import com.ai.slp.product.api.productcat.param.AttrQueryForCat;
+import com.ai.slp.product.api.productcat.param.ProdCatAttrAddParam;
+import com.ai.slp.product.api.productcat.param.ProdCatAttrDef;
+import com.ai.slp.product.api.productcat.param.ProdCatAttrUpdateReq;
+import com.ai.slp.product.api.productcat.param.ProdCatAttrVal;
+import com.ai.slp.product.api.productcat.param.ProdCatInfo;
+import com.ai.slp.product.api.productcat.param.ProductCatInfo;
+import com.ai.slp.product.api.productcat.param.ProductCatPageQuery;
+import com.ai.slp.product.api.productcat.param.ProductCatParam;
+import com.ai.slp.product.api.productcat.param.ProductCatQuery;
+import com.ai.slp.product.api.productcat.param.ProductCatUniqueReq;
+import com.ai.slp.product.dao.mapper.attach.ProdAttrAndValIdAttrch;
+import com.ai.slp.product.dao.mapper.bo.ProductCat;
+import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
+import com.ai.slp.product.util.CommonUtils;
+import com.alibaba.dubbo.config.annotation.Service;
 
 /**
  * Created by jackieliu on 16/4/28.
@@ -141,14 +160,40 @@ public class IProductCatSVImpl implements IProductCatSV {
     @Override
     public BaseMapResponse<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(attrQuery.getTenantId(),"");
-        Map<Long, Set<String>> map= productCatBusiSV.queryAttrAndValIdByCatIdAndType(
-                attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
+        /*Map<Long, Set<String>> map= productCatBusiSV.queryAttrAndValIdByCatIdAndType(
+                attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());*/
+
+        List<ProdAttrAndValIdAttrch> list = productCatBusiSV.queryAttrAndAttrvalueDefId(attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
+        //进行遍历  并返回map
+        Map<Long,Set<String>> idMap = new HashMap<>();
+        for (ProdAttrAndValIdAttrch attr : list) {
+        	Long attrid = Long.valueOf(attr.getAttrId());
+			String attrvalueid = attr.getAttrvalueDefId();
+			if(idMap.containsKey(attrid)){
+				idMap.get(attrid).add(attrvalueid);
+			}else{
+				Set<String> tmp = new HashSet<String>();
+				tmp.add(attrvalueid);
+				idMap.put(Long.valueOf(attrid), tmp);
+			}
+		}
+        
         BaseMapResponse<Long, Set<String>> attrMapRes = new BaseMapResponse();
-        attrMapRes.setResult(map);
+        attrMapRes.setResult(idMap);
         attrMapRes.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS,"OK"));
         return attrMapRes;
     }
-
+/*    @Override
+    public BaseMapResponse<Long, Set<String>> queryAttrAndValIdByCatAndType(AttrQueryForCat attrQuery) throws BusinessException, SystemException {
+    	CommonUtils.checkTenantId(attrQuery.getTenantId(),"");
+    	Map<Long, Set<String>> map= productCatBusiSV.queryAttrAndValIdByCatIdAndType(
+    			attrQuery.getTenantId(),attrQuery.getProductCatId(),attrQuery.getAttrType());
+    	BaseMapResponse<Long, Set<String>> attrMapRes = new BaseMapResponse();
+    	attrMapRes.setResult(map);
+    	attrMapRes.setResponseHeader(new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS,"OK"));
+    	return attrMapRes;
+    }
+*/
 
 	/**
 	 * 依据商品类目和属性类型添加类目属性<br>

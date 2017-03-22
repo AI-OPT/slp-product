@@ -19,6 +19,7 @@ import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
+import com.ai.slp.product.dao.mapper.attach.ProdAttrAndValIdAttrch;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttrValue;
@@ -218,8 +219,10 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
      * @return
      */
     @Override
-    public Map<Long, Set<String>> queryAttrAndValIdByCatIdAndType(String tenantId, String productCatId, String attrType) {
-        Map<Long,Set<String>> idMap = new HashMap<>();
+    public List<ProdAttrAndValIdAttrch> queryAttrAndAttrvalueDefId(String tenantId, String productCatId, String attrType) {
+    	List<ProdAttrAndValIdAttrch> list = prodCatAttrAtomSV.queryAttrAndValIdByCatIdAndType(tenantId, productCatId, attrType);
+    	
+    	/*Map<Long,Set<String>> idMap = new HashMap<>();
         //查询类目和属性的关联关系
         List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId,productCatId,attrType);
         for (ProdCatAttr catAttr:catAttrList){
@@ -233,8 +236,35 @@ public class ProductCatBusiSVImpl implements IProductCatBusiSV {
             for (ProdCatAttrValue attrValue:attrValueList){
                 attrValIds.add(attrValue.getAttrvalueDefId());
             }
-        }
-        return idMap;
+        }*/
+        return list;
+    }
+    /**
+     * 查询类目下某个类型的属性标识和属性值标识集合
+     *
+     * @param tenantId
+     * @param productCatId
+     * @param attrType
+     * @return
+     */
+    @Override
+    public Map<Long, Set<String>> queryAttrAndValIdByCatIdAndType(String tenantId, String productCatId, String attrType) {
+    	Map<Long,Set<String>> idMap = new HashMap<>();
+    	//查询类目和属性的关联关系
+    	List<ProdCatAttr> catAttrList = prodCatAttrAtomSV.queryAttrOfCatByIdAndType(tenantId,productCatId,attrType);
+    	for (ProdCatAttr catAttr:catAttrList){
+    		Set<String> attrValIds = idMap.get(catAttr.getAttrId());
+    		if (attrValIds==null){
+    			attrValIds = new HashSet<>();
+    			idMap.put(catAttr.getAttrId(),attrValIds);
+    		}
+    		//查询关联关系对应属性值集合
+    		List<ProdCatAttrValue> attrValueList = prodCatAttrValAtomSV.queryByCatAttrId(tenantId,catAttr.getCatAttrId());
+    		for (ProdCatAttrValue attrValue:attrValueList){
+    			attrValIds.add(attrValue.getAttrvalueDefId());
+    		}
+    	}
+    	return idMap;
     }
 
     /**

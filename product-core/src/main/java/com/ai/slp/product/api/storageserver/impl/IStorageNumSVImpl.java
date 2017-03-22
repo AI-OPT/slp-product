@@ -41,7 +41,7 @@ public class IStorageNumSVImpl implements IStorageNumSV {
     @Deprecated
     public StorageNumRes useStorageNum(StorageNumUserReq numReq) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(numReq.getTenantId(),"");
-        StorageNumRes numRes = storageNumBusiSV.userStorageNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum());
+        StorageNumRes numRes = storageNumBusiSV.userStorageNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum(),null);
         numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
         return numRes;
     }

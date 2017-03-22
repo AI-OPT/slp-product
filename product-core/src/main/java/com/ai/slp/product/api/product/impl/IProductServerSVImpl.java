@@ -52,6 +52,7 @@ public class IProductServerSVImpl implements IProductServerSV {
     @Override
     public ProductSkuInfo queryProductSkuById(SkuInfoQuery skuInfoQuery) throws BusinessException, SystemException {
         ProductSKUResponse skuResponse = prodSkuBusiSV.querySkuDetail(skuInfoQuery.getTenantId(),skuInfoQuery.getSkuId(),null);
+        //
         ProductSkuInfo skuInfo = new ProductSkuInfo();
         BeanUtils.copyProperties(skuInfo,skuResponse);
         if(skuInfo.getUsableNum()==null){

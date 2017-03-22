@@ -58,131 +58,236 @@ public class StorageNumDbBusiSVImpl {
      */
     @Async
     public void storageNumChange(
-            String tenantId,String skuId,Map<String,Integer> skuNumMap, boolean isUser, boolean priorityChange) {
-        if (skuNumMap==null || skuNumMap.isEmpty()){
-        	return;
-        }
-		long prodSkuStart = System.currentTimeMillis();
-		logger.info("####loadtest####开始执行prodSkuAtomSV.querySkuById，通过SKU标识查询SKU信息,当前时间戳：" + prodSkuStart);
-        
-        ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
-        
-        long prodSkuEnd = System.currentTimeMillis();
-		logger.info("####loadtest####结束调用prodSkuAtomSV.querySkuById，通过SKU标识查询SKU信息,当前时间戳：" + prodSkuEnd + ",用时:"
-				+ (prodSkuEnd - prodSkuStart) + "毫秒");
-        
-        logger.info("tenantId={},skuId={},isUser={},priorityChange={}",tenantId,skuId,isUser,priorityChange);
-        Product product = null;
-        if (prodSku!=null){
-        	long productStart = System.currentTimeMillis();
-    		logger.info("####loadtest####开始执行productAtomSV.selectByProductId，查询指定商品,当前时间戳：" + productStart);
-        	
-            product = productAtomSV.selectByProductId(tenantId,prodSku.getProdId());
-            
-            long productEnd = System.currentTimeMillis();
-    		logger.info("####loadtest####结束调用productAtomSV.selectByProductId，查询指定商品,当前时间戳：" + productEnd + ",用时:"
-    				+ (productEnd - productStart) + "毫秒");
-            
-            logger.info("\r\nthe product[{}] is {} null,status is [{}]",
-                    prodSku.getProdId(),product==null?"":"not",product==null?"null":product.getState());
-        }
-
-        boolean checkToSale = false;
-        //对库存ID进行排序
-        List<String> skuStorageIdList = new ArrayList<String>();  
-        Iterator it = skuNumMap.keySet().iterator();  
-        while (it.hasNext()) {  
-            String key = it.next().toString();  
-            skuStorageIdList.add(key);  
-        }
-        //按skuStorageId排序
-        Collections.sort(skuStorageIdList,Collator.getInstance(Locale.CHINA));
-        
-        for(String skuStorageId:skuStorageIdList){
-            int skuNum = skuNumMap.get(skuStorageId);
-            //若为使用量,则为减少量
-            if (isUser){
-            	skuNum = 0-skuNum;
-            }
-            
-            long queryskuStorageStart = System.currentTimeMillis();
-    		logger.info("####loadtest####开始执行skuStorageAtomSV.queryById，查询指定标识的SKU库存,当前时间戳：" + queryskuStorageStart);
-            
-            SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);
-            
-            long queryskuStorageEnd = System.currentTimeMillis();
-    		logger.info("####loadtest####结束调用skuStorageAtomSV.queryById，查询指定标识的SKU库存,当前时间戳：" + queryskuStorageEnd + ",用时:"
-    				+ (queryskuStorageEnd - queryskuStorageStart) + "毫秒");
+    		String tenantId,String skuId,Map<String,Integer> skuNumMap, boolean isUser, boolean priorityChange) {
+    	if (skuNumMap==null || skuNumMap.isEmpty()){
+    		return;
+    	}
+    	
+//    	ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
+//    	
+//    	logger.info("tenantId={},skuId={},isUser={},priorityChange={}",tenantId,skuId,isUser,priorityChange);
+//    	Product product = null;
+//    	if (prodSku!=null){
+//    		
+//    		product = productAtomSV.selectByProductId(tenantId,prodSku.getProdId());
+//    		
+//    		logger.info("\r\nthe product[{}] is {} null,status is [{}]",
+//    				prodSku.getProdId(),product==null?"":"not",product==null?"null":product.getState());
+//    	}
+    	
+    	String productId = skuId;
+    	Product product = productAtomSV.selectByProductId(tenantId,productId);
+    	
+    	
+    	boolean checkToSale = false;
+    	//对库存ID进行排序
+    	List<String> skuStorageIdList = new ArrayList<String>();  
+    	Iterator it = skuNumMap.keySet().iterator();  
+    	while (it.hasNext()) {  
+    		String key = it.next().toString();  
+    		skuStorageIdList.add(key);  
+    	}
+    	//按skuStorageId排序
+    	Collections.sort(skuStorageIdList,Collator.getInstance(Locale.CHINA));
+    	
+    	for(String skuStorageId:skuStorageIdList){
+    		int skuNum = skuNumMap.get(skuStorageId);
+    		//若为使用量,则为减少量
+    		if (isUser){
+    			skuNum = 0-skuNum;
+    		}
     		
-            
-            if (skuStorage ==null){
-            	continue;
-            }
-            SkuStorage condSkuStorage=new SkuStorage();
-            BeanUtils.copyProperties(condSkuStorage, skuStorage);
-            
-            skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
-            
-            long updateStart = System.currentTimeMillis();
-    		logger.info("####loadtest####开始执行skuStorageAtomSV.updateByCondtion，根据条件修改SKU库存,当前时间戳：" + updateStart);
+    		SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);
     		
-            int updateSkuCnt=skuStorageAtomSV.updateByCondtion(skuStorage, condSkuStorage);
-            
-            long updateEnd = System.currentTimeMillis();
-    		logger.info("####loadtest####结束调用skuStorageAtomSV.updateByCondtion，根据条件修改SKU库存,当前时间戳：" + updateEnd + ",用时:"
-    				+ (updateEnd - updateStart) + "毫秒");
+    		if (skuStorage ==null){
+    			continue;
+    		}
+    		SkuStorage condSkuStorage=new SkuStorage();
+    		BeanUtils.copyProperties(condSkuStorage, skuStorage);
     		
-            //若未更新任何SKU库存,或sku库存不是"启用",则不进行处理
-            if (updateSkuCnt<1
-                    ||!StorageConstants.SkuStorage.State.ACTIVE.equals(skuStorage.getState())){
-                continue;
-            }
-
-            long queryNoDiscardStart = System.currentTimeMillis();
-    		logger.info("####loadtest####开始执行storageAtomSV.queryNoDiscardById，查询指定标识的库存(不包括废弃的),当前时间戳：" + queryNoDiscardStart);
+    		skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
     		
-            //更新库存信息
-            Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
-            
-            long queryNoDiscardEnd = System.currentTimeMillis();
-    		logger.info("####loadtest####结束调用storageAtomSV.queryNoDiscardById，查询指定标识的库存(不包括废弃的),当前时间戳：" + queryNoDiscardEnd + ",用时:"
-    				+ (queryNoDiscardEnd - queryNoDiscardStart) + "毫秒");
+    		int updateSkuCnt=skuStorageAtomSV.updateByCondtion(skuStorage, condSkuStorage);
     		
-            
-            if (storage==null){
-            	continue;
-            }
-            Storage condStorage=new Storage();
-            BeanUtils.copyProperties(condStorage, storage);
-            
-            logger.info("\r\nThe usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
-            storage.setUsableNum(storage.getUsableNum()+skuNum);
-            logger.info("\r\nNow,the usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
-            if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())
-                    && storage.getUsableNum()>0){
-            	checkToSale = true;
-            }
-            if (storageAtomSV.updateByCondtion(storage,condStorage)>0){
-                StorageLog storageLog = new StorageLog();
-                BeanUtils.copyProperties(storageLog,storage);
-                storageLogAtomSV.installLog(storageLog);
-            }
-        }
-
-        //若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
-        if (!isUser && product!=null
-                && ProductConstants.Product.State.SALE_OUT.equals(product.getState())
-                && checkToSale){
-            productBusiSV.changeToSaleForStop(tenantId,prodSku.getProdId(),null);
-        }
-        //若为减少,且需要优先级切换,则进行售罄下架
-        else if (isUser && product!=null && priorityChange){
-            //取消自动切换优先级,对商品进行售罄下架处理.
+    		//若未更新任何SKU库存,或sku库存不是"启用",则不进行处理
+    		if (updateSkuCnt<1
+    				||!StorageConstants.SkuStorage.State.ACTIVE.equals(skuStorage.getState())){
+    			continue;
+    		}
+    		
+    		//更新库存信息
+    		Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
+    		
+    		if (storage==null){
+    			continue;
+    		}
+    		Storage condStorage=new Storage();
+    		BeanUtils.copyProperties(condStorage, storage);
+    		
+    		logger.info("\r\nThe usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
+    		storage.setUsableNum(storage.getUsableNum()+skuNum);
+    		logger.info("\r\nNow,the usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
+    		if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())
+    				&& storage.getUsableNum()>0){
+    			checkToSale = true;
+    		}
+    		if (storageAtomSV.updateByCondtion(storage,condStorage)>0){
+    			StorageLog storageLog = new StorageLog();
+    			BeanUtils.copyProperties(storageLog,storage);
+    			storageLogAtomSV.installLog(storageLog);
+    		}
+    	}
+    	
+    	//若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
+    	if (!isUser && product!=null
+    			&& ProductConstants.Product.State.SALE_OUT.equals(product.getState())
+    			&& checkToSale){
+    		productBusiSV.changeToSaleForStop(tenantId,productId,null);
+    	}
+    	//若为减少,且需要优先级切换,则进行售罄下架
+    	else if (isUser && product!=null && priorityChange){
+    		//取消自动切换优先级,对商品进行售罄下架处理.
 //            changeGroupPriority(tenantId,product.getSupplierId(),product.getStorageGroupId(),product.getProdId());
-            //进行售罄操作
-            productBusiSV.offSale(tenantId,product.getSupplierId(),product.getProdId(),null);
-        }
+    		//进行售罄操作
+    		productBusiSV.offSale(tenantId,product.getSupplierId(),product.getProdId(),null);
+    	}
     }
+
+//    /**
+//     * 库存量减少操作
+//     * @param skuId SKU标识
+//     * @param skuNumMap
+//     * @param isUser true:库存使用量;false:库存回退量
+//     * @param priorityChange true:库存组优先级切换;
+//     * @return
+//     */
+//    @Async
+//    public void storageNumChange(
+//            String tenantId,String skuId,Map<String,Integer> skuNumMap, boolean isUser, boolean priorityChange) {
+//        if (skuNumMap==null || skuNumMap.isEmpty()){
+//        	return;
+//        }
+//		long prodSkuStart = System.currentTimeMillis();
+//		logger.info("####loadtest####开始执行prodSkuAtomSV.querySkuById，通过SKU标识查询SKU信息,当前时间戳：" + prodSkuStart);
+//        
+//        ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
+//        
+//        long prodSkuEnd = System.currentTimeMillis();
+//		logger.info("####loadtest####结束调用prodSkuAtomSV.querySkuById，通过SKU标识查询SKU信息,当前时间戳：" + prodSkuEnd + ",用时:"
+//				+ (prodSkuEnd - prodSkuStart) + "毫秒");
+//        
+//        logger.info("tenantId={},skuId={},isUser={},priorityChange={}",tenantId,skuId,isUser,priorityChange);
+//        Product product = null;
+//        if (prodSku!=null){
+//        	long productStart = System.currentTimeMillis();
+//    		logger.info("####loadtest####开始执行productAtomSV.selectByProductId，查询指定商品,当前时间戳：" + productStart);
+//        	
+//            product = productAtomSV.selectByProductId(tenantId,prodSku.getProdId());
+//            
+//            long productEnd = System.currentTimeMillis();
+//    		logger.info("####loadtest####结束调用productAtomSV.selectByProductId，查询指定商品,当前时间戳：" + productEnd + ",用时:"
+//    				+ (productEnd - productStart) + "毫秒");
+//            
+//            logger.info("\r\nthe product[{}] is {} null,status is [{}]",
+//                    prodSku.getProdId(),product==null?"":"not",product==null?"null":product.getState());
+//        }
+//
+//        boolean checkToSale = false;
+//        //对库存ID进行排序
+//        List<String> skuStorageIdList = new ArrayList<String>();  
+//        Iterator it = skuNumMap.keySet().iterator();  
+//        while (it.hasNext()) {  
+//            String key = it.next().toString();  
+//            skuStorageIdList.add(key);  
+//        }
+//        //按skuStorageId排序
+//        Collections.sort(skuStorageIdList,Collator.getInstance(Locale.CHINA));
+//        
+//        for(String skuStorageId:skuStorageIdList){
+//            int skuNum = skuNumMap.get(skuStorageId);
+//            //若为使用量,则为减少量
+//            if (isUser){
+//            	skuNum = 0-skuNum;
+//            }
+//            
+//            long queryskuStorageStart = System.currentTimeMillis();
+//    		logger.info("####loadtest####开始执行skuStorageAtomSV.queryById，查询指定标识的SKU库存,当前时间戳：" + queryskuStorageStart);
+//            
+//            SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);
+//            
+//            long queryskuStorageEnd = System.currentTimeMillis();
+//    		logger.info("####loadtest####结束调用skuStorageAtomSV.queryById，查询指定标识的SKU库存,当前时间戳：" + queryskuStorageEnd + ",用时:"
+//    				+ (queryskuStorageEnd - queryskuStorageStart) + "毫秒");
+//    		
+//            
+//            if (skuStorage ==null){
+//            	continue;
+//            }
+//            SkuStorage condSkuStorage=new SkuStorage();
+//            BeanUtils.copyProperties(condSkuStorage, skuStorage);
+//            
+//            skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
+//            
+//            long updateStart = System.currentTimeMillis();
+//    		logger.info("####loadtest####开始执行skuStorageAtomSV.updateByCondtion，根据条件修改SKU库存,当前时间戳：" + updateStart);
+//    		
+//            int updateSkuCnt=skuStorageAtomSV.updateByCondtion(skuStorage, condSkuStorage);
+//            
+//            long updateEnd = System.currentTimeMillis();
+//    		logger.info("####loadtest####结束调用skuStorageAtomSV.updateByCondtion，根据条件修改SKU库存,当前时间戳：" + updateEnd + ",用时:"
+//    				+ (updateEnd - updateStart) + "毫秒");
+//    		
+//            //若未更新任何SKU库存,或sku库存不是"启用",则不进行处理
+//            if (updateSkuCnt<1
+//                    ||!StorageConstants.SkuStorage.State.ACTIVE.equals(skuStorage.getState())){
+//                continue;
+//            }
+//
+//            long queryNoDiscardStart = System.currentTimeMillis();
+//    		logger.info("####loadtest####开始执行storageAtomSV.queryNoDiscardById，查询指定标识的库存(不包括废弃的),当前时间戳：" + queryNoDiscardStart);
+//    		
+//            //更新库存信息
+//            Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
+//            
+//            long queryNoDiscardEnd = System.currentTimeMillis();
+//    		logger.info("####loadtest####结束调用storageAtomSV.queryNoDiscardById，查询指定标识的库存(不包括废弃的),当前时间戳：" + queryNoDiscardEnd + ",用时:"
+//    				+ (queryNoDiscardEnd - queryNoDiscardStart) + "毫秒");
+//    		
+//            
+//            if (storage==null){
+//            	continue;
+//            }
+//            Storage condStorage=new Storage();
+//            BeanUtils.copyProperties(condStorage, storage);
+//            
+//            logger.info("\r\nThe usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
+//            storage.setUsableNum(storage.getUsableNum()+skuNum);
+//            logger.info("\r\nNow,the usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
+//            if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())
+//                    && storage.getUsableNum()>0){
+//            	checkToSale = true;
+//            }
+//            if (storageAtomSV.updateByCondtion(storage,condStorage)>0){
+//                StorageLog storageLog = new StorageLog();
+//                BeanUtils.copyProperties(storageLog,storage);
+//                storageLogAtomSV.installLog(storageLog);
+//            }
+//        }
+//
+//        //若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
+//        if (!isUser && product!=null
+//                && ProductConstants.Product.State.SALE_OUT.equals(product.getState())
+//                && checkToSale){
+//            productBusiSV.changeToSaleForStop(tenantId,prodSku.getProdId(),null);
+//        }
+//        //若为减少,且需要优先级切换,则进行售罄下架
+//        else if (isUser && product!=null && priorityChange){
+//            //取消自动切换优先级,对商品进行售罄下架处理.
+////            changeGroupPriority(tenantId,product.getSupplierId(),product.getStorageGroupId(),product.getProdId());
+//            //进行售罄操作
+//            productBusiSV.offSale(tenantId,product.getSupplierId(),product.getProdId(),null);
+//        }
+//    }
 
     /**
      * 切换库存组非促销优先级

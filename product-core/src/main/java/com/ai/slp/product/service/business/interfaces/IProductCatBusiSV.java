@@ -4,6 +4,7 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.param.*;
 import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
+import com.ai.slp.product.dao.mapper.attach.ProdAttrAndValIdAttrch;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 
 import java.util.List;
@@ -125,4 +126,14 @@ public interface IProductCatBusiSV {
      * @return
      */
     public List<CatAttrValAttach> queryAttrValOfAttrAndType(String tenantId, String catId, long attrId, String attrType);
+    
+    /**
+     * 查询类目下某个类型的属性标识和属性值标识集合
+     *
+     * @param tenantId
+     * @param productCatId
+     * @param attrType
+     * @return
+     */
+    public List<ProdAttrAndValIdAttrch> queryAttrAndAttrvalueDefId(String tenantId, String productCatId, String attrType);
 }

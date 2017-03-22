@@ -2,6 +2,7 @@ package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
 import com.ai.slp.product.api.storageserver.param.StorageNumUseReq;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.vo.SkuStorageVo;
 
 import java.util.Map;
@@ -18,7 +19,7 @@ public interface IStorageNumBusiSV {
      * @param skuNum 单品数量
      * @return
      */
-    public StorageNumRes userStorageNum(String tenantId,String skuId,int skuNum);
+    public StorageNumRes userStorageNum(String tenantId,String skuId,int skuNum,Long price);
 
     /**
      * 使用库存量,包含商品受众检查
@@ -42,6 +43,17 @@ public interface IStorageNumBusiSV {
      * @return
      */
     public SkuStorageVo queryStorageOfSku(String tenantId,String skuId);
+    
+    /**
+     * 查询SKU的库存和价格信息
+     * 
+     * @param skuId
+     * @param product
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
+    public SkuStorageVo queryStorage(String skuId, Product product);
 
     /**
      * 查询当前库存组的可用量
