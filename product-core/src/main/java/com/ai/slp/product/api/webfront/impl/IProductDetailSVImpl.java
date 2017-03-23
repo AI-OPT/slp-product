@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.slp.product.api.webfront.interfaces.IProductDetailSV;
 import com.ai.slp.product.api.webfront.param.ProdAttrParam;
 import com.ai.slp.product.api.webfront.param.ProdAttrValue;
@@ -21,6 +23,7 @@ import com.ai.slp.product.api.webfront.param.ProductImage;
 import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
 import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
+import com.ai.slp.product.api.webfront.param.ProductSKUData;
 import com.ai.slp.product.api.webfront.param.ProductSKURequest;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.constants.ErrorCodeConstants;
@@ -42,6 +45,8 @@ import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.vo.SkuStorageVo;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 
 @Service(validation = "true")
 @Component
@@ -89,7 +94,21 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",skuReq.getTenantId(), skuReq.getSkuId(), skuReq.getSkuId(),product.getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
-		ProductSKUResponse skuResponse = new ProductSKUResponse();
+		/**
+		 * 先查询缓存,没有的话查数据库
+		 */
+		ICacheClient cacheClient = MCSClientFactory.getCacheClient("");
+		String dataStr = cacheClient.get(skuReq.getSkuId());
+		ProductSKUResponse skuResponse = null;
+		if(StringUtils.isEmpty(dataStr)){
+			/**
+			 * 解析json数据
+			 */
+		ProductSKUData productSKUData = JSON.parseObject(dataStr, new TypeReference<ProductSKUData>(){});
+		BeanUtils.copyProperties(skuResponse, productSKUData);
+		}else
+		{
+		skuResponse = new ProductSKUResponse();
 		BeanUtils.copyProperties(skuResponse, product);
 		List<ProdCatAttrAttch> prodCatAttrAttchs = prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),product,skuReq.getSkuAttrs());
 		// SKU图片
@@ -138,6 +157,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		skuResponse.setSalePrice(skuStorageVo.getSalePrice());
 		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
 		skuResponse.setResponseHeader(responseHeader);
+		}
 		return skuResponse;
 		}
 
@@ -160,8 +180,22 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",skuReq.getTenantId(), skuReq.getSkuId(), skuReq.getSkuId(),product.getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
+		/**
+		 * 查询缓存,若不存在则查数据库
+		 */
+		ICacheClient cacheClient = MCSClientFactory.getCacheClient("");
+		String dataStr = cacheClient.get(skuReq.getSkuId());
+		ProductSKUConfigResponse configResponse = null;
+		if(StringUtils.isEmpty(dataStr)){
+			/**
+			 * 解析json数据
+			 */
+		ProductSKUData productSKUData = JSON.parseObject(dataStr, new TypeReference<ProductSKUData>(){});
+		BeanUtils.copyProperties(configResponse, productSKUData);
+		}else
+		{
 		List<AttrInfo> skuAttr = prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());
-		ProductSKUConfigResponse configResponse = new ProductSKUConfigResponse();
+		configResponse = new ProductSKUConfigResponse();
 		// 查询关键属性
 		List<AttrInfo> attrInfos = prodAttrAtomSV.queryAttrOfProdId(skuReq.getSkuId());
 		List<ProductSKUAttr> productSKUAttrs = new ArrayList<ProductSKUAttr>();
@@ -184,8 +218,9 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		if(skuAttr == null){
 			configResponse = new ProductSKUConfigResponse();
 			responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "无数据");
-		}
+			}
 		configResponse.setResponseHeader(responseHeader);
+		}
 		return configResponse;
 	}
 	

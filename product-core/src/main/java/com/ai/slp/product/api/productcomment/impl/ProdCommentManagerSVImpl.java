@@ -132,8 +132,13 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 					prodComments.add(params);
 				}
 			}
-			createProdComment = prodCommentBusiSV.createProdComment(prodCommentCreateRequest, prodComments,
-					pictureList);
+			createProdComment = prodCommentBusiSV.createProdComment(prodCommentCreateRequest, prodComments,pictureList);
+			/**
+			 * 添加ES缓存
+			 */
+			for (ProdCommentVO prodCommentVO : commentList) {
+				
+			}
 		} catch (Exception e) {
 			logger.error("创建商品评价失败", e);
 			if (e instanceof BusinessException) {
