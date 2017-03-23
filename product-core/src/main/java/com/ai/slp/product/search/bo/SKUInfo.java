@@ -94,7 +94,7 @@ public class SKUInfo {
     private long uptime;
 
     /**
-   	 * 销售价格
+   	 * 市场价格
    	 */
    @Expose
    private long marketPrice;

@@ -2,6 +2,7 @@ package com.ai.slp.product.api.webfront.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -15,17 +16,18 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.mcs.MCSClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.slp.product.api.webfront.interfaces.IProductDetailSV;
-import com.ai.slp.product.api.webfront.param.ProdAttrParam;
 import com.ai.slp.product.api.webfront.param.ProdAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductImage;
 import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
 import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
-import com.ai.slp.product.api.webfront.param.ProductSKUData;
 import com.ai.slp.product.api.webfront.param.ProductSKURequest;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
+import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
@@ -35,13 +37,17 @@ import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.AttrInfo;
+import com.ai.slp.product.search.bo.SKUInfo;
+import com.ai.slp.product.search.dto.ProductSearchCriteria;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSaleAllAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.vo.SkuStorageVo;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -98,17 +104,17 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		 * 先查询缓存,没有的话查数据库
 		 */
 		ICacheClient cacheClient = MCSClientFactory.getCacheClient("");
-		String dataStr = cacheClient.get(skuReq.getSkuId());
-		ProductSKUResponse skuResponse = null;
-		if(StringUtils.isEmpty(dataStr)){
-			/**
-			 * 解析json数据
-			 */
-		ProductSKUData productSKUData = JSON.parseObject(dataStr, new TypeReference<ProductSKUData>(){});
-		BeanUtils.copyProperties(skuResponse, productSKUData);
+		ProductSKUResponse skuResponse = new ProductSKUResponse();
+		
+		String attrStr = cacheClient.get(CommonConstants.PROD_SKU_ATTR+skuReq.getSkuId());
+		if(StringUtils.isEmpty(attrStr)){
+		/**
+		 * 解析json数据
+		 */
+		List<ProdAttrValue> prodAttrValues = JSON.parseObject(attrStr, new TypeReference<List<ProdAttrValue>>(){});
+		skuResponse.setProductAttrList(prodAttrValues);
 		}else
 		{
-		skuResponse = new ProductSKUResponse();
 		BeanUtils.copyProperties(skuResponse, product);
 		List<ProdCatAttrAttch> prodCatAttrAttchs = prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(),product,skuReq.getSkuAttrs());
 		// SKU图片
@@ -120,7 +126,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(skuReq.getTenantId(), product.getProdId(), prodCatAttrAttch.getAttrId());
 			
 			List<ProdAttrValue> attrValueList = new ArrayList<>();
-			ProdAttrParam prodAttrParam = new ProdAttrParam();
+			//ProdAttrParam prodAttrParam = new ProdAttrParam();
 			for (ProdAttr prodAttr : prodAttrs) {
 			ProdAttrValue prodAttrValue = new ProdAttrValue();
 			prodAttrValue.setAttrvalueDefId(prodAttr.getAttrvalueDefId());
@@ -139,25 +145,39 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			}
 			attrValueList.add(prodAttrValue);
 			}
-			prodAttrParam.setAttrValueList(attrValueList);
+			//prodAttrParam.setAttrValueList(attrValueList);
 			skuResponse.setProductAttrList(attrValueList);
 			}
-		}	
-		// 设置主图
+		}
+		/**
+		 * 查询ES缓存
+		 */
+		 IProductSearch productSearch = new ProductSearchImpl();
+		 ProductSearchCriteria productSearchCriteria = new ProductSearchCriteria.ProductSearchCriteriaBuilder(skuReq.getSkuId()).build();
+		 Result<Map<String, Object>> result = productSearch.search(productSearchCriteria);
+	        List<Map<String,Object>> reslist = result.getContents();
+	        String info = JSON.toJSONString(reslist);
+	        List<SKUInfo> skuList = JSON.parseObject(info,new TypeReference<List<SKUInfo>>(){}); 
+	        if(!CollectionUtil.isEmpty(skuList)){
+	        	SKUInfo skuInfo = skuList.get(0);
+	        	BeanUtils.copyProperties(skuResponse, skuInfo);
+	        }else
+	        {
+	        // 设置主图
 		skuResponse.setProductImageList(getProductSkuPic(attrPic, product));
 		// 设置评论数
-		skuResponse.setCommentNum((long)prodCommentAtomSV.countBySkuId(product.getProdId(),false));
+		//skuResponse.setCommentNum((long)prodCommentAtomSV.countBySkuId(product.getProdId(),false));
 		// 设置商品销量
 		skuResponse.setSaleNum(prodSaleAllAtomSV.queryNumOfProduc(skuReq.getTenantId(), product.getProdId()));
 		
 		// 获取当前库存和价格
-		//目前查询不到
 		SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(skuReq.getTenantId(), product.getProdId());
 		skuResponse.setUsableNum(skuStorageVo.getUsableNum());
 		skuResponse.setSalePrice(skuStorageVo.getSalePrice());
+	        }
+		}
 		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
 		skuResponse.setResponseHeader(responseHeader);
-		}
 		return skuResponse;
 		}
 
@@ -184,14 +204,14 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		 * 查询缓存,若不存在则查数据库
 		 */
 		ICacheClient cacheClient = MCSClientFactory.getCacheClient("");
-		String dataStr = cacheClient.get(skuReq.getSkuId());
+		String dataStr = cacheClient.get(CommonConstants.SKU_ATTR_CONFIG+skuReq.getSkuId());
 		ProductSKUConfigResponse configResponse = null;
 		if(StringUtils.isEmpty(dataStr)){
 			/**
 			 * 解析json数据
 			 */
-		ProductSKUData productSKUData = JSON.parseObject(dataStr, new TypeReference<ProductSKUData>(){});
-		BeanUtils.copyProperties(configResponse, productSKUData);
+			ProductSKUConfigResponse productSKUData = JSON.parseObject(dataStr, new TypeReference<ProductSKUConfigResponse>(){});
+			BeanUtils.copyProperties(configResponse, productSKUData);
 		}else
 		{
 		List<AttrInfo> skuAttr = prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(),skuReq.getSkuId(),skuReq.getSkuAttrs());

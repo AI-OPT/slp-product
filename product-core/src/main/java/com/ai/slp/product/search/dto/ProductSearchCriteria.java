@@ -56,6 +56,17 @@ public final class ProductSearchCriteria {
             productSearchCriteria.searchfieldVos.add(userTypeSubCriteria);
 
         }
+        
+        public ProductSearchCriteriaBuilder(String skuId) {
+            productSearchCriteria = new ProductSearchCriteria();
+            searchCriteria = new SearchCriteria();
+            //用户
+            SearchCriteria skuSubCriteria = new SearchCriteria(
+                    SearchFieldConfConstants.SKU_ID,skuId,
+                    new SearchOption(SearchLogic.should, SearchType.term));
+            productSearchCriteria.searchfieldVos.add(skuSubCriteria);
+
+        }
 
         // 单品名字
         public ProductSearchCriteriaBuilder skuNameLike(String skuName) {
