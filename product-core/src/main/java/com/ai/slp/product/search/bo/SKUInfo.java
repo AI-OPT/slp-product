@@ -93,6 +93,12 @@ public class SKUInfo {
     @Expose
     private long uptime;
 
+    /**
+   	 * 销售价格
+   	 */
+   @Expose
+   private long marketPrice;
+
 
     public SKUInfo() {
         super();
@@ -108,8 +114,16 @@ public class SKUInfo {
         this.saleareainfos = new ArrayList<SaleAreaInfo>();
         this.thumbnail = new ArrayList<ImageInfo>();
     }
+    
+    public long getMarketPrice() {
+		return marketPrice;
+	}
 
-    public void setProductid(String productid) {
+	public void setMarketPrice(long marketPrice) {
+		this.marketPrice = marketPrice;
+	}
+
+	public void setProductid(String productid) {
         this.productid = productid;
     }
 
