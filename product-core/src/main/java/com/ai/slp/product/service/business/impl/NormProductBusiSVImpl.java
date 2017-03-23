@@ -851,7 +851,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			
 			prodPriceLogAtomSV.insert(prodPriceLog);
 			
-			//将新增的商品添加至搜索引擎
+			//将更新市场价的商品添加至搜索引擎
 	        skuIndexManage.updateSKUIndex(product.getProdId(),product.getOperTime().getTime());
 			
 		}
