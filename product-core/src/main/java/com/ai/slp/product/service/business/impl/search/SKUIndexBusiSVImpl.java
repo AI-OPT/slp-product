@@ -27,6 +27,7 @@ import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSaleAll;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.*;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.*;
@@ -59,6 +60,8 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
     @Autowired
     private IProdPictureAtomSV prodPictureAtomSV;
 
+    @Autowired
+    private IProductAtomSV productAtomSV;
 
     /**
      * 更新搜索信息
@@ -148,6 +151,10 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             // 价格
             skuInfo.setPrice(skuStorageAtomSV.queryPriceOfSku(
                     prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid()));
+            //市场价
+            Product selectByProductId = productAtomSV.selectByProductId(prodSkuInfo.getTenantid(),prodSkuInfo.getSkuid());
+            skuInfo.setMarketPrice(selectByProductId.getMarketPrice());
+            
             // 受众
             //skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid()));
             //销售地域
