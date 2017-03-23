@@ -147,6 +147,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         product.setState(ProductConstants.Product.State.UNEDIT);//未编辑状态
         product.setOperId(group.getCreateId());
     	product.setProdId(standedProdId);//标准品/商品/SKU 主键一致减少查询
+    	product.setOperTime(DateUtils.currTimeStamp());
         productAtomSV.installProduct(product);
         
         //添加商品

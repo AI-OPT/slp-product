@@ -68,6 +68,7 @@ import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.AttrValRequestComparator;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.OldAttrValListComparator;
@@ -120,6 +121,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 	@Autowired
 	IProductBusiSV productBusiSV;
+	@Autowired
+    ISKUIndexBusiSV skuIndexManage;
 	
 	/**
 	 * 添加标准品
@@ -199,6 +202,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		// 添加SKU
 		prodSkuBusiSV.createSkuProduct(product);
 		
+		//将新增的商品添加至搜索引擎
+        skuIndexManage.updateSKUIndex(product.getProdId(),product.getOperTime().getTime());
+        
 		return product.getProdId();
 		
 	}
@@ -285,7 +291,11 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			product.setProdName(productInfoRequest.getProductName());
 			product.setProductType(productInfoRequest.getProductType());
 			productAtomSV.updateByStandedProdId(product);
+			
+			//将更新后的商品添加至搜索引擎
+			skuIndexManage.updateSKUIndex(productInfoRequest.getProductId(),DateUtils.currTimeStamp().getTime());
 		}
+		
 		return updateCount;
 	}
 
@@ -579,6 +589,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		if (standedProductAtomSV.updateObj(standedProduct) > 0) {
 			productLog.setOperTime(standedProduct.getOperTime());
 			standedProductLogAtomSV.insert(productLog);
+			//将商品从搜索引擎中移除
+	        skuIndexManage.deleteSKUIndexByProductId(standedProduct.getStandedProdId());
 		}
 	}
 
