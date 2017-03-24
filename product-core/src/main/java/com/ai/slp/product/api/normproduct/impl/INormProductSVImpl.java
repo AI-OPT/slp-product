@@ -1,7 +1,11 @@
 package com.ai.slp.product.api.normproduct.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -30,8 +34,10 @@ import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
 import com.ai.slp.product.api.normproduct.param.NormProdUniqueReq;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
+import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
+import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
@@ -57,6 +63,9 @@ public class INormProductSVImpl implements INormProductSV {
 	IStandedProductAtomSV standedProductAtomSV;
     @Autowired
 	IProdCatDefAtomSV catDefAtomSV;
+    @Autowired
+	IStandedProdAttrAtomSV standedProdAttrAtomSV;
+    
     /**
      * 标准品列表查询. <br>
      *
@@ -110,9 +119,41 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public NormProdInfoResponse queryProducById(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
-        return normProductBusiSV.queryById(invalidRequest.getTenantId(),invalidRequest.getProductId());
+        
+    	StandedProduct product = normProductBusiSV.queryById(invalidRequest.getTenantId(),invalidRequest.getProductId());
+    	
+    	NormProdInfoResponse response = new NormProdInfoResponse();
+		// 标准品信息填充返回值
+		BeanUtils.copyProperties(response, product);
+		response.setProductId(product.getStandedProdId());
+		response.setProductName(product.getStandedProductName());
+		Map<Long, Set<String>> attrAndValueIds = new HashMap<>();
+		Map<Long, String> attrAndValueMap = new HashMap<>();
+		// 查询属性信息
+		List<StandedProdAttr> attrList = standedProdAttrAtomSV.queryByNormProduct(invalidRequest.getTenantId(),invalidRequest.getProductId());
+		for (StandedProdAttr prodAttr : attrList) {
+			Set<String> attrVal = attrAndValueIds.get(prodAttr.getAttrId());
+			if (attrVal == null) {
+				attrVal = new HashSet<>();
+			}
+			attrVal.add(prodAttr.getAttrvalueDefId());
+			if (!attrAndValueIds.containsKey(prodAttr.getAttrId())){
+				attrAndValueIds.put(prodAttr.getAttrId(), attrVal);
+			}
+			if(StringUtils.isBlank(prodAttr.getAttrvalueDefId())){
+				attrAndValueMap.put(prodAttr.getAttrId(), prodAttr.getAttrValueName());
+			}
+		}
+		response.setAttrAndValueIds(attrAndValueIds);
+		response.setAttrAndValueMap(attrAndValueMap);
+    	
+    	return response;
+    	//return normProductBusiSV.queryById(invalidRequest.getTenantId(),invalidRequest.getProductId());
     }
-
+/*    public NormProdInfoResponse queryProducById(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
+    	return normProductBusiSV.queryById(invalidRequest.getTenantId(),invalidRequest.getProductId());
+    }
+*/
     /**
      * 添加标准品信息. <br>
      *
