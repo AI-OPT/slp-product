@@ -478,7 +478,16 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	 * @return
 	 */
 	@Override
-	public NormProdInfoResponse queryById(String tenantId, String productId) {
+	public StandedProduct queryById(String tenantId, String productId) {
+		StandedProduct product = standedProductAtomSV.selectById(tenantId, productId);
+		if (product == null) {
+			logger.warn("租户[{}]下不存在标识[{}]的标准品", tenantId, productId);
+			throw new BusinessException("", "未找到对应标准品信息,租户id=" + tenantId + ",标准品标识=" + productId);
+		}
+		
+		return product;
+	}
+/*	public NormProdInfoResponse queryById(String tenantId, String productId) {
 		StandedProduct product = standedProductAtomSV.selectById(tenantId, productId);
 		if (product == null) {
 			logger.warn("租户[{}]下不存在标识[{}]的标准品", tenantId, productId);
@@ -510,7 +519,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		response.setAttrAndValueMap(attrAndValueMap);
 		return response;
 	}
-
+*/
 	@Override
 	public PageInfo<StandedProduct> queryForPage(NormProdRequest productRequest) {
 		long startTime = System.currentTimeMillis();

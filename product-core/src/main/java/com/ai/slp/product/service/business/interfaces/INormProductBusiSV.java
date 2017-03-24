@@ -39,7 +39,8 @@ public interface INormProductBusiSV {
      * @param productId 标准品标识
      * @return
      */
-    public NormProdInfoResponse queryById(String tenantId, String productId);
+    public StandedProduct queryById(String tenantId, String productId);
+    //public NormProdInfoResponse queryById(String tenantId, String productId);
 
     /**
      * 分页查询
