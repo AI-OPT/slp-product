@@ -28,9 +28,19 @@ import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSaleAll;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.search.bo.*;
+import com.ai.slp.product.search.bo.CategoryInfo;
+import com.ai.slp.product.search.bo.ImageInfo;
+import com.ai.slp.product.search.bo.ProdAudiencesSes;
+import com.ai.slp.product.search.bo.SKUInfo;
+import com.ai.slp.product.search.bo.SaleAreaInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAudiencesAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSaleAllAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdTargetAreaAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 
@@ -82,7 +92,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             }
             return true;
         } catch (Exception e) {
-            logger.error("Failed to update sku info", e);
+            logger.info("Failed to update sku info", e);
             throw new SystemException("","商品加入搜索引擎失败,商品ID:"+productId);
         }
 
@@ -153,7 +163,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
                     prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid()));
             //市场价
             Product selectByProductId = productAtomSV.selectByProductId(prodSkuInfo.getTenantid(),prodSkuInfo.getSkuid());
-            skuInfo.setMarketPrice(selectByProductId.getMarketPrice());
+            skuInfo.setMarketprice(null==selectByProductId.getMarketPrice()?0:selectByProductId.getMarketPrice());
             
             // 受众
             //skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid()));

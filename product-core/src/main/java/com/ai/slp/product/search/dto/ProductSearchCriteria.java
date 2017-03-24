@@ -60,9 +60,8 @@ public final class ProductSearchCriteria {
         public ProductSearchCriteriaBuilder(String skuId) {
             productSearchCriteria = new ProductSearchCriteria();
             searchCriteria = new SearchCriteria();
-            //用户
             SearchCriteria skuSubCriteria = new SearchCriteria(
-                    SearchFieldConfConstants.SKU_ID,skuId,
+                    SearchFieldConfConstants.PRODUCT_ID,skuId,
                     new SearchOption(SearchLogic.should, SearchType.term));
             productSearchCriteria.searchfieldVos.add(skuSubCriteria);
 

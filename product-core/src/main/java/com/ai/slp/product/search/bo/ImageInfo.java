@@ -9,37 +9,50 @@ public class ImageInfo {
 	/**
 	 * 图片类型
 	 */
-    @Expose
-    private String imagetype;
-    /**
+	@Expose
+	private String imagetype;
+	/**
 	 * 文件附件模块ID
 	 */
-    @Expose
-    private String vfsid;
+	@Expose
+	private String vfsid;
+	/**
+	 * 文件附件模块ID
+	 */
+	@Expose
+	private String ismainpic;
 
-    public ImageInfo() {
-        super();
-    }
+	public ImageInfo() {
+		super();
+	}
 
-    public ImageInfo(String imagetype, String vfsid) {
-        this.imagetype = imagetype;
-        this.vfsid = vfsid;
-    }
+	public String getIsmainpic() {
+		return ismainpic;
+	}
 
-    public String getImagetype() {
-        return imagetype;
-    }
+	public void setIsmainpic(String ismainpic) {
+		this.ismainpic = ismainpic;
+	}
 
-    public void setImagetype(String imagetype) {
-        this.imagetype = imagetype;
-    }
+	public ImageInfo(String imagetype, String vfsid) {
+		this.imagetype = imagetype;
+		this.vfsid = vfsid;
+	}
 
-    public String getVfsid() {
-        return vfsid;
-    }
+	public String getImagetype() {
+		return imagetype;
+	}
 
-    public void setVfsid(String vfsid) {
-        this.vfsid = vfsid;
-    }
-    
+	public void setImagetype(String imagetype) {
+		this.imagetype = imagetype;
+	}
+
+	public String getVfsid() {
+		return vfsid;
+	}
+
+	public void setVfsid(String vfsid) {
+		this.vfsid = vfsid;
+	}
+
 }
