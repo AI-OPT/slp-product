@@ -39,6 +39,7 @@ import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.util.CommonUtils;
@@ -65,7 +66,8 @@ public class INormProductSVImpl implements INormProductSV {
 	IProdCatDefAtomSV catDefAtomSV;
     @Autowired
 	IStandedProdAttrAtomSV standedProdAttrAtomSV;
-    
+    @Autowired
+	IStorageGroupAtomSV storageGroupAtomSV;
     /**
      * 标准品列表查询. <br>
      *
@@ -280,12 +282,36 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public BaseResponse discardProduct(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
-        normProductBusiSV.discardProduct(
-                invalidRequest.getTenantId(),invalidRequest.getProductId(),
-                invalidRequest.getOperId(), invalidRequest.getSupplierId());
+    	String tenantId = invalidRequest.getTenantId();
+    	String productId = invalidRequest.getProductId();
+    	String supplierId = invalidRequest.getSupplierId();
+    	StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
+		if (standedProduct == null){
+			throw new BusinessException("", "不存在指定商品,租户ID:" + tenantId + ",商品标识:" + productId);
+		}
+
+		if (!standedProduct.getSupplierId().equals(supplierId)){
+			throw new BusinessException("",
+					"商品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + supplierId + "不一致!");
+		}
+
+		// 查询没有废弃的库存组
+		int noDiscardNum = storageGroupAtomSV.countNoDiscard(tenantId, productId);
+		if (noDiscardNum > 0){
+			throw new BusinessException("", "该商品下存在[" + noDiscardNum + "]个未废弃库存组");
+		}
+    	
+    	
+        normProductBusiSV.discardProduct(standedProduct,invalidRequest.getOperId());
         return CommonUtils.genSuccessResponse("");
     }
-
+/*    public BaseResponse discardProduct(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
+    	normProductBusiSV.discardProduct(
+    			invalidRequest.getTenantId(),invalidRequest.getProductId(),
+    			invalidRequest.getOperId(), invalidRequest.getSupplierId());
+    	return CommonUtils.genSuccessResponse("");
+    }
+*/
     /**
      * 更新标准品市场价. <br>
      *
