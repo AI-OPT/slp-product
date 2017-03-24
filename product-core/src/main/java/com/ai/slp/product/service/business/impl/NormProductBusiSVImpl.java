@@ -575,12 +575,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		if (standedProduct == null){
 			throw new BusinessException("", "不存在指定商品,租户ID:" + tenantId + ",商品标识:" + productId);
 		}
-
+		
 		if (!standedProduct.getSupplierId().equals(supplierId)){
 			throw new BusinessException("",
 					"商品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + supplierId + "不一致!");
 		}
-
+		
 		// 查询没有废弃的库存组
 		int noDiscardNum = storageGroupAtomSV.countNoDiscard(tenantId, productId);
 		if (noDiscardNum > 0){
@@ -589,7 +589,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		discardProduct(standedProduct,operId);
 	}
 
-	private void discardProduct(StandedProduct standedProduct,Long operId){
+	public void discardProduct(StandedProduct standedProduct,Long operId){
 		standedProduct.setOperId(operId);
 		standedProduct.setState(StandedProductConstants.STATUS_DISCARD);// 设置废弃
 		StandedProductLog productLog = new StandedProductLog();
