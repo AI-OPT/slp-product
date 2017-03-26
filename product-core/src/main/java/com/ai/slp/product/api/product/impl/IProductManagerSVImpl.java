@@ -67,6 +67,7 @@ import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.CommonUtils;
+import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.MQConfigUtil;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -160,8 +161,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		if (!CollectionUtil.isEmpty(result.getContents())) {
 			List<ProductEditUp> responseList = new ArrayList<>();
 			for(SKUInfo skuInfo : result.getContents()){
-				ProductEditUp productEditUp = new ProductEditUp();
-				BeanUtils.copyProperties(productEditUp, skuInfo);
+				ProductEditUp productEditUp = ConvertUtils.convertProductEditUp(skuInfo);
 				responseList.add(productEditUp);
 			}
 			response.setResult(responseList);

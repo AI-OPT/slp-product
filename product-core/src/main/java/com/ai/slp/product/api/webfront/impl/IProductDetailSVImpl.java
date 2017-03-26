@@ -2,7 +2,6 @@ package com.ai.slp.product.api.webfront.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -17,6 +16,8 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.webfront.interfaces.IProductDetailSV;
 import com.ai.slp.product.api.webfront.param.ProdAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductImage;
@@ -29,15 +30,13 @@ import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.ResultCodeConstants;
+import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.AttrInfo;
-import com.ai.slp.product.search.bo.ProductAttr;
-import com.ai.slp.product.search.bo.ProductAttrValue;
 import com.ai.slp.product.search.bo.SKUInfo;
-import com.ai.slp.product.search.dto.ProductSearchCriteria;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
@@ -48,10 +47,9 @@ import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
+import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.product.vo.SkuStorageVo;
 import com.alibaba.dubbo.config.annotation.Service;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 
 @Service(validation = "true")
 @Component
@@ -101,49 +99,23 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 					skuReq.getSkuId(), product.getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
 		}
-		ProductSKUResponse skuResponse = new ProductSKUResponse();
+		ProductSKUResponse skuResponse = null;
 		/**
 		 * 查询ES缓存
 		 */
 		IProductSearch productSearch = new ProductSearchImpl();
-		ProductSearchCriteria productSearchCriteria = new ProductSearchCriteria.ProductSearchCriteriaBuilder(
-				skuReq.getSkuId()).build();
-		Result<Map<String, Object>> result = productSearch.search(productSearchCriteria);
-		List<Map<String, Object>> reslist = result.getContents();
-		String info = JSON.toJSONString(reslist);
-		List<SKUInfo> skuList = JSON.parseObject(info, new TypeReference<List<SKUInfo>>() {});
-		if (!CollectionUtil.isEmpty(skuList)) {
-			SKUInfo skuInfo = skuList.get(0);
-			if(!CollectionUtils.isEmpty(skuInfo.getProdattrvaluelist())){
-				List<ProdAttrValue> responseList = new ArrayList<>();
+		List<SearchCriteria> criterias = new ArrayList<>();
+		criterias.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,skuReq.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		Result<SKUInfo> result = productSearch.search(criterias,1,1,null);
+		List<SKUInfo> skuInfos = result.getContents();
+		if (!CollectionUtil.isEmpty(skuInfos)) {
+			SKUInfo skuInfo = skuInfos.get(0);
 			/**
 			 * 商品属性
 			 */
-			for(ProductAttrValue productAttr:skuInfo.getProdattrvaluelist()){
-				ProdAttrValue prodAttrValue = new ProdAttrValue();
-				ProductImage productImage = new ProductImage();
-				productImage.setPicType(productAttr.getPictype());
-				productImage.setVfsId(productAttr.getVfsid());
-				prodAttrValue.setAttrvalueDefId(productAttr.getAttrvaluedefid());
-				prodAttrValue.setAttrValueName(productAttr.getAttrvaluename());
-				prodAttrValue.setAttrValueName2(productAttr.getAttrvaluename2());
-				prodAttrValue.setImage(productImage);
-				prodAttrValue.setIsOwn(productAttr.isIsown());
-				responseList.add(prodAttrValue);
-				}
-				skuResponse.setProductAttrList(responseList);
-			}
-			skuResponse.setUsableNum(skuInfo.getUsablenum());
-			skuResponse.setSupplierId(skuInfo.getSupplierid());
-			skuResponse.setState(skuInfo.getState());
-			skuResponse.setSkuName(skuInfo.getSkuname());
-			skuResponse.setSkuId(skuInfo.getSkuid());
-			skuResponse.setSalePrice(0L);
-			skuResponse.setSaleNum(skuInfo.getSalenum());
-			skuResponse.setRechargeType(skuInfo.getRechagetype());
-			skuResponse.setProdName(skuInfo.getProductname());
-			skuResponse.setCommentNum(skuInfo.getCommentnum());
+			skuResponse = ConvertUtils.convertToProductSKUResponse(skuInfo);
 		}else {
+			skuResponse = new ProductSKUResponse();
 			BeanUtils.copyProperties(skuResponse, product);
 			List<ProdCatAttrAttch> prodCatAttrAttchs = prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(), product,
 					skuReq.getSkuAttrs());
@@ -224,38 +196,15 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		 * 查询ES缓存
 		 */
 		IProductSearch productSearch = new ProductSearchImpl();
-		ProductSearchCriteria productSearchCriteria = new ProductSearchCriteria.ProductSearchCriteriaBuilder(
-				skuReq.getSkuId()).build();
-		Result<Map<String, Object>> result = productSearch.search(productSearchCriteria);
-		List<Map<String, Object>> reslist = result.getContents();
-		String info = JSON.toJSONString(reslist);
-		List<SKUInfo> skuList = JSON.parseObject(info, new TypeReference<List<SKUInfo>>() {});
-		if (!CollectionUtil.isEmpty(skuList)) {
-			SKUInfo skuInfo = skuList.get(0);
-			List<ProductAttr> prodattrlist = skuInfo.getProdattrlist();
-			List<ProductSKUAttr> responseList = new ArrayList<>();
-			for (ProductAttr productAttr : prodattrlist) {
-				ProductSKUAttr prodSkuAttr = new ProductSKUAttr();
-				prodSkuAttr.setAttrId(productAttr.getAttrid());
-				prodSkuAttr.setAttrName(productAttr.getAttrname());
-				prodSkuAttr.setAttrType(productAttr.getAttrtype());
-				for(ProductAttrValue productAttrValue :productAttr.getAttrvaluelist()){
-					ProductSKUAttrValue productSKUAttrValue = new ProductSKUAttrValue();
-					ProductImage productImage = new ProductImage();
-					productImage.setPicType(productAttrValue.getPictype());
-					productImage.setVfsId(productAttrValue.getVfsid());
-					productSKUAttrValue.setAttrvalueDefId(productAttrValue.getAttrvaluedefid());
-					productSKUAttrValue.setAttrValueName(productAttrValue.getAttrvaluename());
-					productSKUAttrValue.setAttrValueName2(productAttrValue.getAttrvaluename2());
-					productSKUAttrValue.setImage(productImage);
-					productSKUAttrValue.setIsOwn(productAttrValue.isIsown());
-				responseList.add(prodSkuAttr);
-			}
-			}
-			configResponse.setProductAttrList(responseList);
+		List<SearchCriteria> criterias = new ArrayList<>();
+		criterias.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,skuReq.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		Result<SKUInfo> result = productSearch.search(criterias,1,30,null);
+		List<SKUInfo> skuInfos = result.getContents();
+		if (!CollectionUtil.isEmpty(skuInfos)) {
+			SKUInfo skuInfo = skuInfos.get(0);
+			configResponse = ConvertUtils.convertToProductSKUConfigResponse(skuInfo);
 		} else {
-			List<AttrInfo> attrInfos = prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(), skuReq.getSkuId(),
-					skuReq.getSkuAttrs());
+			List<AttrInfo> attrInfos = prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(), skuReq.getSkuId(),skuReq.getSkuAttrs());
 			configResponse = new ProductSKUConfigResponse();
 			// 查询关键属性
 			List<ProductSKUAttr> productSKUAttrs = new ArrayList<ProductSKUAttr>();

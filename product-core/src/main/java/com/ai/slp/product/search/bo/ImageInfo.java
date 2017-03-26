@@ -16,22 +16,9 @@ public class ImageInfo {
 	 */
 	@Expose
 	private String vfsid;
-	/**
-	 * 文件附件模块ID
-	 */
-	@Expose
-	private String ismainpic;
 
 	public ImageInfo() {
 		super();
-	}
-
-	public String getIsmainpic() {
-		return ismainpic;
-	}
-
-	public void setIsmainpic(String ismainpic) {
-		this.ismainpic = ismainpic;
 	}
 
 	public ImageInfo(String imagetype, String vfsid) {

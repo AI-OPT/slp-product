@@ -39,12 +39,6 @@ public class ProdAttrValue implements Serializable{
 	public void setAttrvalueDefId(String attrvalueDefId) {
 		this.attrvalueDefId = attrvalueDefId;
 	}
-	public boolean isOwn() {
-		return isOwn;
-	}
-	public void setOwn(boolean own) {
-		isOwn = own;
-	}
 	public String getAttrValueName() {
 		return attrValueName;
 	}

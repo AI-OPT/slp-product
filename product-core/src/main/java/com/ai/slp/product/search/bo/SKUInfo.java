@@ -3,6 +3,7 @@ package com.ai.slp.product.search.bo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ai.slp.product.search.ProdAttrInfo;
 import com.google.gson.annotations.Expose;
 
 public class SKUInfo {
@@ -97,6 +98,22 @@ public class SKUInfo {
 	 */
 	@Expose
 	private long uptime;
+	/**
+	 * 操作时间
+	 */
+	@Expose
+	private long opertime;
+	/**
+	 * 下架时间
+	 */
+	@Expose
+	private long downtime;
+
+	/**
+	 * 创建时间
+	 */
+	@Expose
+	private long createtime;
 
 	/**
 	 * 市场价格
@@ -115,34 +132,93 @@ public class SKUInfo {
 	 */
 	@Expose
 	private long commentnum;
-
-	/**
-	 * 商品属性集合
-	 */
-	@Expose
-	private List<ProductAttr> prodattrlist;
-
-	/**
-	 * 商品属性值集合
-	 */
-	@Expose
-	private List<ProductAttrValue> prodattrvaluelist;
 	/**
 	 * 状态
 	 */
 	@Expose
 	private String state;
 
+	/**
+	 * 单位
+	 */
+	@Expose
+	private String unit;
+
+	/**
+	 * 类目名称
+	 */
+	@Expose
+	private String productcatname;
+
+	/**
+	 * 商品类型
+	 */
+	@Expose
+	private String producttype;
+
+	/**
+	 * 属性值集合
+	 */
+	private List<ProdAttrInfo> prodattrinfos;
+
 	public String getState() {
 		return state;
 	}
 
-	public List<ProductAttrValue> getProdattrvaluelist() {
-		return prodattrvaluelist;
+	public String getProducttype() {
+		return producttype;
 	}
 
-	public void setProdattrvaluelist(List<ProductAttrValue> prodattrvaluelist) {
-		this.prodattrvaluelist = prodattrvaluelist;
+	public void setProducttype(String producttype) {
+		this.producttype = producttype;
+	}
+
+	public String getProductcatname() {
+		return productcatname;
+	}
+
+	public void setProductcatname(String productcatname) {
+		this.productcatname = productcatname;
+	}
+
+	public long getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(long createtime) {
+		this.createtime = createtime;
+	}
+
+	public long getOpertime() {
+		return opertime;
+	}
+
+	public void setOpertime(long opertime) {
+		this.opertime = opertime;
+	}
+
+	public long getDowntime() {
+		return downtime;
+	}
+
+	public void setDowntime(long downtime) {
+		this.downtime = downtime;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public List<ProdAttrInfo> getProdattrinfos() {
+		return prodattrinfos;
+	}
+
+	public void setProdattrinfos(List<ProdAttrInfo> prodattrinfos) {
+		this.prodattrinfos = prodattrinfos;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	public void setState(String state) {
@@ -151,14 +227,6 @@ public class SKUInfo {
 
 	public SKUInfo() {
 		super();
-	}
-
-	public List<ProductAttr> getProdattrlist() {
-		return prodattrlist;
-	}
-
-	public void setProdattrlist(List<ProductAttr> prodattrlist) {
-		this.prodattrlist = prodattrlist;
 	}
 
 	public String getSupplierid() {

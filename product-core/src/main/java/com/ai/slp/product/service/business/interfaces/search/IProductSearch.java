@@ -4,6 +4,7 @@ import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.Sort;
 import com.ai.slp.product.search.bo.SKUInfo;
+import com.ai.slp.product.search.bo.comment.CommentInfo;
 import com.ai.slp.product.search.dto.ProductSearchCriteria;
 
 import java.util.List;
@@ -18,5 +19,9 @@ public interface IProductSearch {
     Result<Map<String, Long>> searchCategory(ProductSearchCriteria criteria);
     
     Result<SKUInfo> search(List<SearchCriteria> searchCriterias, int from, int offset,
+			 List<Sort> sorts);
+    
+    //商品评价查询
+    Result<CommentInfo> searchComment(List<SearchCriteria> searchCriterias, int from, int offset,
 			 List<Sort> sorts);
 }
