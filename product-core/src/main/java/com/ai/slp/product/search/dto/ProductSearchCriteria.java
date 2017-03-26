@@ -57,6 +57,31 @@ public final class ProductSearchCriteria {
 
         }
         
+        public ProductSearchCriteriaBuilder(String prodName, String prodId,String standedProdId,String productCatId,String productType,String supplierId) {
+            productSearchCriteria = new ProductSearchCriteria();
+            searchCriteria = new SearchCriteria();
+            //商品名称
+            SearchCriteria prodNameSubCriteria = new SearchCriteria(SearchFieldConfConstants.PRODUCT_NAME,prodName,
+                    new SearchOption(SearchLogic.should, SearchType.term));
+            //商品id
+            SearchCriteria prodIdSubCriteria = new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,prodId,
+                    new SearchOption(SearchLogic.should, SearchType.term));
+        //类目
+        SearchCriteria categorySubCriteria = new SearchCriteria(SearchFieldConfConstants.PRODUCT_CATEGORY_ID,productType,
+                new SearchOption(SearchLogic.should, SearchType.term));
+        //类型
+        SearchCriteria typeSubCriteria = new SearchCriteria(SearchFieldConfConstants.PRODUCT_TYPE,productCatId,
+        		new SearchOption(SearchLogic.should, SearchType.term));
+        //供应商
+        SearchCriteria supplierSubCriteria = new SearchCriteria(SearchFieldConfConstants.SUPPLIER_ID,supplierId,
+        		new SearchOption(SearchLogic.should, SearchType.term));
+            productSearchCriteria.searchfieldVos.add(prodNameSubCriteria);
+            productSearchCriteria.searchfieldVos.add(prodIdSubCriteria);
+            productSearchCriteria.searchfieldVos.add(categorySubCriteria);
+            productSearchCriteria.searchfieldVos.add(typeSubCriteria);
+            productSearchCriteria.searchfieldVos.add(supplierSubCriteria);
+        }
+        
         public ProductSearchCriteriaBuilder(String skuId) {
             productSearchCriteria = new ProductSearchCriteria();
             searchCriteria = new SearchCriteria();

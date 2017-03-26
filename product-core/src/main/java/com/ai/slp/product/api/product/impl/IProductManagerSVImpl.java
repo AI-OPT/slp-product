@@ -19,6 +19,10 @@ import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
+import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
@@ -35,6 +39,7 @@ import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
@@ -45,6 +50,7 @@ import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
@@ -54,9 +60,11 @@ import com.ai.slp.product.service.atom.interfaces.product.IProductStateLogAtomSV
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.util.DateUtils;
@@ -111,14 +119,58 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      * @author lipeng16
      */
     @Override
-    public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq productEditParam) throws BusinessException, SystemException {
+    public PageInfoResponse<ProductEditUp> queryProductEdit(ProductEditQueryReq request) throws BusinessException, SystemException {
     	PageInfoResponse<ProductEditUp> response = new PageInfoResponse<>();
     	ResponseHeader responseHeader = null;
     	try{
-        CommonUtils.checkTenantId(productEditParam.getTenantId());
-        CommonUtils.checkSupplierId(productEditParam.getSupplierId());
-        String tenantId = productEditParam.getTenantId();
-        PageInfo<Product> products = productManagerBusiSV.queryPageForEdit(productEditParam);
+        CommonUtils.checkTenantId(request.getTenantId());
+        CommonUtils.checkSupplierId(request.getSupplierId());
+        /**
+         * 查询缓存,不存在则查表 
+         */
+        IProductSearch productSearch = new ProductSearchImpl();
+        int startSize=1;
+        int maxSize=1;
+        //最大条数设置
+        int pageNo = request.getPageNo();
+        int size = request.getPageSize();
+        if(request.getPageNo()==1){
+            startSize=0;
+        }else{
+            startSize = (pageNo-1)*size;
+        }
+        maxSize=size;
+        List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
+         if(!StringUtil.isBlank(request.getProdId())){
+        	 searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID, request.getProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+         }
+         if(!StringUtil.isBlank(request.getProdName())){
+        	 searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_NAME, request.getProdName(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+         }
+         if(!StringUtil.isBlank(request.getProductCatId())){
+        	 searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_CATEGORY_ID, request.getProductCatId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+         }
+         if(!StringUtil.isBlank(request.getProductType())){
+        	 searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_TYPE, request.getProductType(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+         }
+         if(!StringUtil.isBlank(request.getSupplierId())){
+        	 searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.SUPPLIER_ID, request.getSupplierId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+         }
+		Result<SKUInfo> result = productSearch.search(searchfieldVos,startSize,maxSize,null);
+		if (!CollectionUtil.isEmpty(result.getContents())) {
+			List<ProductEditUp> responseList = new ArrayList<>();
+			for(SKUInfo skuInfo : result.getContents()){
+				ProductEditUp productEditUp = new ProductEditUp();
+				BeanUtils.copyProperties(productEditUp, skuInfo);
+				responseList.add(productEditUp);
+			}
+			response.setResult(responseList);
+			response.setCount(Long.valueOf(result.getCount()).intValue());
+			response.setPageNo(startSize);
+			response.setPageSize(maxSize);
+		}else{
+        String tenantId = request.getTenantId();
+        PageInfo<Product> products = productManagerBusiSV.queryPageForEdit(request);
         List<ProductEditUp> editUpList = new ArrayList<>();
         for (Product product:products.getResult()){
             ProductEditUp productEditUp = new ProductEditUp();
@@ -139,6 +191,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         }
         BeanUtils.copyProperties(response,products);
         response.setResult(editUpList);
+		}
     	}catch(Exception e){
     		if(e instanceof BusinessException){
     			responseHeader = new ResponseHeader(false,((BusinessException) e).getErrorCode(),((BusinessException) e).getErrorMessage());

@@ -3,10 +3,6 @@ package com.ai.slp.product.api.product.param;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
-
-import org.hibernate.validator.constraints.NotBlank;
-
-import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 /**
  * 商品编辑上架返回类
  * 

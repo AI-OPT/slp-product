@@ -16,7 +16,7 @@ public class ProductSKUAttrValue implements Serializable{
 	 */
 	private String attrValueName;
 
-	/**
+	/** 
 	 * 属性值名称2
 	 */
 	private String attrValueName2;
