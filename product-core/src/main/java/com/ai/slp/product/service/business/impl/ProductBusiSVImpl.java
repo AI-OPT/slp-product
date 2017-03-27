@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.experimental.theories.FromDataPoints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.opt.sdk.util.StringUtil;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
+import com.ai.paas.ipaas.search.vo.Sort;
 import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.platform.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
@@ -28,7 +34,6 @@ import com.ai.slp.product.api.product.param.ProdAttrValInfo;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
 import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.api.product.param.Product4List;
-import com.ai.slp.product.api.product.param.ProductInfo;
 import com.ai.slp.product.api.product.param.ProductListQuery;
 import com.ai.slp.product.api.product.param.ProductRoute;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
@@ -38,6 +43,7 @@ import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProdAttrAndValDefConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
@@ -53,6 +59,8 @@ import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.search.bo.AttrInfo;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
@@ -73,6 +81,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.vo.ProductPageQueryVo;
@@ -125,7 +134,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     ISKUIndexBusiSV skuIndexManage;
     @Autowired
     IProductStateLogAtomSV productStateLogAtomSV;
-
+    @Autowired
+    IProductSearch productSearch;
+    
     /**
      * 添加商城商品
      *
@@ -313,14 +324,47 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @return
      */
     @Override
-    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String supplierId,String productId) {
+/*    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String supplierId,String productId) {
         //查询商品信息
         Product product = productAtomSV.selectByProductId(tenantId,productId);
         if (product==null){
             logger.warn("未找到对应销售商品信息,租户ID:{},销售商品ID:{}",tenantId,productId);
             throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
         }
+		//查询es
+        ArrayList<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+        
+        if (StringUtil.isBlank(product.getTenantId())) {
+        	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID, 
+        											product.getTenantId(), 
+        											new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring))
+        											);
+		}
+        if (StringUtil.isBlank(product.getProdId())) {
+			searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
+					product.getProdId(),
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+        searchCriterias.add(new SearchCriteria("attrtype",
+        		ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY,
+        		new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		List<Sort> sorts = new ArrayList<>();
+		Result<SKUInfo> result = productSearch.search(searchCriterias, 0, 10, sorts );
+		//组装数据
+		for (SKUInfo sku : result.getContents()) {
+			List<AttrInfo> attrinfos = sku.getAttrinfos();
+			
+		}
         return queryNoKeyAttrOfProduct(product);
+    }*/
+    public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String supplierId,String productId) {
+    	//查询商品信息
+    	Product product = productAtomSV.selectByProductId(tenantId,productId);
+    	if (product==null){
+    		logger.warn("未找到对应销售商品信息,租户ID:{},销售商品ID:{}",tenantId,productId);
+    		throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
+    	}
+    	return queryNoKeyAttrOfProduct(product);
     }
 
     /**
@@ -373,7 +417,50 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         return attrMapOfNormProd;
 
     }
-
+/*    public ProdAttrMap queryNoKeyAttrOfProduct(Product product) {
+    	String tenantId = product.getTenantId();
+    	ProdAttrMap attrMapOfNormProd = new ProdAttrMap();
+    	Map<Long, List<Long>> attrAndValMap = new HashMap<>();
+    	Map<Long, CatAttrInfoForProd> attrDefMap = new HashMap<>();
+    	Map<Long, ProdAttrValInfo> attrValDefMap = new HashMap<>();
+    	// 查询对应类目非关键属性
+    	List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
+    			product.getProductCatId(), ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
+    	// 查询标准品对应属性的属性值
+    	for (ProdCatAttrAttch catAttrAttch : catAttrAttches) {
+    		CatAttrInfoForProd catAttrDef = new CatAttrInfoForProd();
+    		BeanUtils.copyProperties(catAttrDef, catAttrAttch);
+    		List<Long> attrValDefList = new ArrayList<>();
+    		attrAndValMap.put(catAttrDef.getAttrId(), attrValDefList);
+    		attrDefMap.put(catAttrDef.getAttrId(), catAttrDef);
+    		// 查询销售商品非关键属性值
+    		List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(tenantId,product.getProdId(),catAttrAttch.getAttrId());
+    		for (ProdAttr prodAttr : prodAttrs) {
+    			ProdAttrValInfo valDef = new ProdAttrValInfo();
+    			BeanUtils.copyProperties(valDef, prodAttr);
+    			valDef.setProductAttrValId(prodAttr.getProdAttrId());
+    			valDef.setProductId(prodAttr.getProdId());
+    			valDef.setAttrValId(prodAttr.getAttrvalueDefId());
+    			valDef.setAttrVal(prodAttr.getAttrValueName());
+    			valDef.setAttrVal2(prodAttr.getAttrValueName2());
+    			//查询属性值
+    			if (prodAttr.getAttrvalueDefId() != null) {
+    				ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId,prodAttr.getAttrvalueDefId());
+    				if (attrvalueDef != null){
+    					valDef.setAttrVal(attrvalueDef.getAttrValueName());
+    				}
+    			}
+    			attrValDefMap.put(valDef.getProductAttrValId(), valDef);
+    			attrValDefList.add(valDef.getProductAttrValId());
+    		}
+    	}
+    	attrMapOfNormProd.setAttrAndVal(attrAndValMap);
+    	attrMapOfNormProd.setAttrDefMap(attrDefMap);
+    	attrMapOfNormProd.setAttrValDefMap(attrValDefMap);
+    	return attrMapOfNormProd;
+    	
+    }
+*/
     @Override
     public FastProductInfoRes queryFastInfoList(FastProductReq req) {
         //话费面额

@@ -213,17 +213,12 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		params.setCommentId(replyComment.getCommentId());
 		params.setState(CommonConstants.STATE_ACTIVE);
 
-		long queryCommenStart = System.currentTimeMillis();
-		logger.info("####loadtest####开始执行prodCommentAtomSV.queryByCommentId，根据评论编码查询评论,当前时间戳：" + queryCommenStart);
 
 		ProdComment comment = prodCommentAtomSV.queryByCommentId(replyComment.getCommentId());
 		Integer queryCountByParams = 0;
 		if (comment != null) {
 			queryCountByParams = 1;
 		}
-		long queryCommenEnd = System.currentTimeMillis();
-		logger.info("####loadtest####结束调用prodCommentAtomSV.queryByCommentId，根据评论编码查询评论，查询评论条数,当前时间戳：" + queryCommenEnd
-				+ ",用时:" + (queryCommenEnd - queryCommenStart) + "毫秒");
 
 		// 判断评论条数
 		if (queryCountByParams > 0) {
@@ -237,15 +232,8 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			commentReply.setSkuId(comment.getSkuId());
 			commentReply.setStandedProdId(comment.getStandedProdId());
 
-			long queryCommenReplyStart = System.currentTimeMillis();
-			logger.info(
-					"####loadtest####开始执行prodCommentAtomSV.queryByCommentId，进行商品评论回复,当前时间戳：" + queryCommenReplyStart);
-
 			prodCommentBusiSV.replyProdComment(commentReply);
 
-			long queryCommenReplyEnd = System.currentTimeMillis();
-			logger.info("####loadtest####结束调用prodCommentAtomSV.queryByCommentId，进行商品评论回复，查询评论条数,当前时间戳："
-					+ queryCommenReplyEnd + ",用时:" + (queryCommenReplyEnd - queryCommenReplyStart) + "毫秒");
 
 			ResponseHeader responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "");
 			baseResponse.setResponseHeader(responseHeader);
