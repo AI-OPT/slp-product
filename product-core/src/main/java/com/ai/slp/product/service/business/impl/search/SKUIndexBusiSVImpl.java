@@ -237,7 +237,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
     	 ImageInfo imageInfo = prodPicture==null?null:new ImageInfo(prodPicture.getPicType(),prodPicture.getVfsId());
          
         skuInfo.setImageinfo(imageInfo);
-        //查询该商品其他属性值的主图
+        //查询该商品其他属性值的主图 
         //skuInfo.setThumbnail(prodPictureAtomSV.queryAttrValOfProd(prodId));
     }
 }

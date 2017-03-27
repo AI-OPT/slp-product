@@ -784,6 +784,76 @@ public class ProdAttrCriteria {
             addCriterion("ATTR_VALUE_NAME not between", value1, value2, "attrValueName");
             return (Criteria) this;
         }
+
+        public Criteria andAttrTypeIsNull() {
+            addCriterion("ATTR_TYPE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeIsNotNull() {
+            addCriterion("ATTR_TYPE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeEqualTo(String value) {
+            addCriterion("ATTR_TYPE =", value, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeNotEqualTo(String value) {
+            addCriterion("ATTR_TYPE <>", value, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeGreaterThan(String value) {
+            addCriterion("ATTR_TYPE >", value, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("ATTR_TYPE >=", value, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeLessThan(String value) {
+            addCriterion("ATTR_TYPE <", value, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeLessThanOrEqualTo(String value) {
+            addCriterion("ATTR_TYPE <=", value, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeLike(String value) {
+            addCriterion("ATTR_TYPE like", value, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeNotLike(String value) {
+            addCriterion("ATTR_TYPE not like", value, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeIn(List<String> values) {
+            addCriterion("ATTR_TYPE in", values, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeNotIn(List<String> values) {
+            addCriterion("ATTR_TYPE not in", values, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeBetween(String value1, String value2) {
+            addCriterion("ATTR_TYPE between", value1, value2, "attrType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttrTypeNotBetween(String value1, String value2) {
+            addCriterion("ATTR_TYPE not between", value1, value2, "attrType");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
