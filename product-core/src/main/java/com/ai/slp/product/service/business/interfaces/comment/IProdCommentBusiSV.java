@@ -9,7 +9,6 @@ import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
-import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
@@ -24,7 +23,7 @@ public interface IProdCommentBusiSV {
 	/**
 	 * 发表评论
 	 */
-	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest,List<ProdComment> prodComments,List<PictureVO> pictureList);
+	public String createProdComment(ProdComment prodComment,List<PictureVO> pictureList);
 	/**
 	 * 回复评价
 	 */

@@ -181,12 +181,8 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		params.setCommentTime(DateUtil.getSysDate());
 		params.setState(CommonConstants.STATE_ACTIVE);
 		params.setReplyState(ProductCommentConstants.ReplyState.NO);
-		int count = prodCommentMapper.insert(params);
-		if(count > 0){
-			return params.getCommentId();
-		}else{
-			return null;
-		}
+		prodCommentMapper.insert(params);
+		return params.getCommentId();
 	}
 
 	@Override
