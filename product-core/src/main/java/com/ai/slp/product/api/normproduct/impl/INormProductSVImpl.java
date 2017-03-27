@@ -22,6 +22,9 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
 import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.normproduct.param.AttrQuery;
@@ -33,16 +36,21 @@ import com.ai.slp.product.api.normproduct.param.NormProdResponse;
 import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
 import com.ai.slp.product.api.normproduct.param.NormProdUniqueReq;
 import com.ai.slp.product.constants.NormProdConstants;
+import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
+import com.ai.slp.product.dao.mapper.bo.StandedProductCriteria;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
+import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.MQConfigUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -68,6 +76,9 @@ public class INormProductSVImpl implements INormProductSV {
 	IStandedProdAttrAtomSV standedProdAttrAtomSV;
     @Autowired
 	IStorageGroupAtomSV storageGroupAtomSV;
+    @Autowired
+    IProductSearch productSearch;
+    
     /**
      * 标准品列表查询. <br>
      *
@@ -80,11 +91,9 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public PageInfoResponse<NormProdResponse> queryNormProduct(NormProdRequest productRequest) throws BusinessException, SystemException {
-        long startTime = System.nanoTime();
-        LOGGER.info("=====开始INormProductSVImpl.queryNormProduct,商品列表查询,当前时间戳:"+startTime);
        // return normProductBusiSV.queryForPage(productRequest);
         PageInfo<StandedProduct> productPageInfo = normProductBusiSV.queryForPage(productRequest);
-        
+    	
         PageInfoResponse<NormProdResponse> normProdPageInfo = new PageInfoResponse<NormProdResponse>();
 		BeanUtils.copyProperties(normProdPageInfo, productPageInfo);
 		// 添加结果集
@@ -121,8 +130,27 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public NormProdInfoResponse queryProducById(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
-        
-    	StandedProduct product = normProductBusiSV.queryById(invalidRequest.getTenantId(),invalidRequest.getProductId());
+    	//查询es
+    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
+    			invalidRequest.getTenantId(),
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	searchCriterias.add(new SearchCriteria("productid",
+    			invalidRequest.getProductId(),
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	
+    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+    	
+    	SKUInfo product = result.getContents().get(0);
+    	NormProdInfoResponse response = new NormProdInfoResponse();
+		// 标准品信息填充返回值
+		BeanUtils.copyProperties(response, product);
+		response.setProductId(product.getProductid());
+		response.setProductName(product.getProductname());
+		Map<Long, Set<String>> attrAndValueIds = new HashMap<>();
+		Map<Long, String> attrAndValueMap = new HashMap<>();
+		// 查询属性信息
+    	/*StandedProduct product = normProductBusiSV.queryById(invalidRequest.getTenantId(),invalidRequest.getProductId());
     	
     	NormProdInfoResponse response = new NormProdInfoResponse();
 		// 标准品信息填充返回值
@@ -130,7 +158,7 @@ public class INormProductSVImpl implements INormProductSV {
 		response.setProductId(product.getStandedProdId());
 		response.setProductName(product.getStandedProductName());
 		Map<Long, Set<String>> attrAndValueIds = new HashMap<>();
-		Map<Long, String> attrAndValueMap = new HashMap<>();
+		Map<Long, String> attrAndValueMap = new HashMap<>();*/
 		// 查询属性信息
 		List<StandedProdAttr> attrList = standedProdAttrAtomSV.queryByNormProduct(invalidRequest.getTenantId(),invalidRequest.getProductId());
 		for (StandedProdAttr prodAttr : attrList) {
