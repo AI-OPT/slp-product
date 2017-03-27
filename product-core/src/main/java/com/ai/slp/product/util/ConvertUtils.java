@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
@@ -68,11 +70,13 @@ public class ConvertUtils {
 		 * 商品图片
 		 */
 		List<ProductImage> productImages = new ArrayList<>();
+		if(!CollectionUtils.isEmpty(skuInfo.getThumbnail())){
 		for (ImageInfo imageInfo : skuInfo.getThumbnail()) {
 			ProductImage productImage = new ProductImage();
 			productImage.setPicType(imageInfo.getImagetype());
 			productImage.setVfsId(imageInfo.getVfsid());
 			productImages.add(productImage);
+			}
 		}
 		response.setProductImageList(productImages);
 		return response;
@@ -142,11 +146,13 @@ public class ConvertUtils {
 		 * 评论图
 		 */
 		List<PictureVO> pictureVOs = new ArrayList<>();
+		if(CollectionUtils.isEmpty(commentInfo.getCommentpictrueinfos())){
 		for(CommentPictrueInfo commentPictrueInfo : commentInfo.getCommentpictrueinfos()){
 			PictureVO pictureVO = new PictureVO();
 			pictureVO.setPicAddr(commentPictrueInfo.getPicaddr());
 			pictureVO.setVfsId(commentPictrueInfo.getVfsid());
 			pictureVOs.add(pictureVO);
+			}
 		}
 		response.setPictureList(pictureVOs);
 		return response;

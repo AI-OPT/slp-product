@@ -105,8 +105,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		 */
 		IProductSearch productSearch = new ProductSearchImpl();
 		List<SearchCriteria> criterias = new ArrayList<>();
-		criterias.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,skuReq.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-		Result<SKUInfo> result = productSearch.search(criterias,1,1,null);
+		criterias.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,skuReq.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
+		Result<SKUInfo> result = productSearch.searchByCriteria(criterias,0,30,null);
 		List<SKUInfo> skuInfos = result.getContents();
 		if (!CollectionUtil.isEmpty(skuInfos)) {
 			SKUInfo skuInfo = skuInfos.get(0);

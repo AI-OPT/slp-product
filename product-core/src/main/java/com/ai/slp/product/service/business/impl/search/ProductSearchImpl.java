@@ -1,7 +1,6 @@
 package com.ai.slp.product.service.business.impl.search;
 
 import java.util.List;
-import java.util.Map;
 
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.paas.ipaas.search.ISearchClient;
@@ -52,7 +51,7 @@ public class ProductSearchImpl implements IProductSearch {
 	}
 
 	@Override
-	public Result searchByCriteria(List<SearchCriteria> searchCriterias, int from, int offset,
+	public Result<SKUInfo> searchByCriteria(List<SearchCriteria> searchCriterias, int from, int offset,
 			List<Sort> sorts) {
 		ISearchClient searchClient = SESClientFactory
                 .getSearchClient(SearchConstants.SearchNameSpace);
