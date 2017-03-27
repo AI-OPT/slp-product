@@ -1,6 +1,5 @@
 package com.ai.slp.product.search.bo.comment;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
@@ -17,7 +16,7 @@ public class CommentInfo {
 	 * 租户id
 	 */
 	@Expose
-	private String tenantId;
+	private String tenantid;
 	/**
 	 * 评论id
 	 */
@@ -62,7 +61,7 @@ public class CommentInfo {
 	 * 评论时间
 	 */
 	@Expose
-	private Timestamp commenttime;
+	private long commenttime;
 
 	/**
 	 * 评论状态
@@ -95,12 +94,12 @@ public class CommentInfo {
 		return commentPictrueInfos;
 	}
 
-	public String getTenantId() {
-		return tenantId;
+	public String getTenantid() {
+		return tenantid;
 	}
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
+	public void setTenantid(String tenantid) {
+		this.tenantid = tenantid;
 	}
 
 	public void setCommentPictrueInfos(List<CommentPictrueInfo> commentPictrueInfos) {
@@ -159,11 +158,11 @@ public class CommentInfo {
 		this.shopscorewl = shopscorewl;
 	}
 
-	public Timestamp getCommenttime() {
+	public long getCommenttime() {
 		return commenttime;
 	}
 
-	public void setCommenttime(Timestamp commenttime) {
+	public void setCommenttime(long commenttime) {
 		this.commenttime = commenttime;
 	}
 

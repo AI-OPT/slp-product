@@ -133,10 +133,10 @@ public class ConvertUtils {
 		ProdCommentPageResponse response = new ProdCommentPageResponse();
 		response.setCommentBody(commentInfo.getCommentbody());
 		response.setCommentId(commentInfo.getCommentid());
-		response.setCommentTime(commentInfo.getCommenttime());
+		response.setCommentTime(new Timestamp(commentInfo.getCommenttime()));
 		response.setReplyState(commentInfo.getReplaystate());
 		response.setShopScoreMs(commentInfo.getShopscorems());
-		response.setTenantId(commentInfo.getTenantId());
+		response.setTenantId(commentInfo.getTenantid());
 		response.setUserId(commentInfo.getUserid());
 		/**
 		 * 评论图
@@ -158,7 +158,7 @@ public class ConvertUtils {
 			CommentInfo commentInfo = new CommentInfo();
 			commentInfo.setCommentbody(prodComment.getCommentBody());
 			commentInfo.setCommentid(prodComment.getCommentId());
-			commentInfo.setCommenttime(prodComment.getCommentTime());
+			commentInfo.setCommenttime(prodComment.getCommentTime().getTime());
 			commentInfo.setIspicture(prodComment.getIsPicture());
 			commentInfo.setProdid(prodComment.getProdId());
 			commentInfo.setReplaystate(prodComment.getReplyState());

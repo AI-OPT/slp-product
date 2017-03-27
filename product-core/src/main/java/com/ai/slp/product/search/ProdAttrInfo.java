@@ -1,5 +1,7 @@
 package com.ai.slp.product.search;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * 商品属性 Date: 2017年3月26日 <br>
  * Copyright (c) 2017 asiainfo.com <br>
@@ -38,8 +40,22 @@ public class ProdAttrInfo {
 	 */
 	private String attrvaluename2;
 
+	/**
+	 * 属性类型
+	 */
+	@Expose
+	private String attrtype;
+
 	public long getProdattrid() {
 		return prodattrid;
+	}
+
+	public String getAttrtype() {
+		return attrtype;
+	}
+
+	public void setAttrtype(String attrtype) {
+		this.attrtype = attrtype;
 	}
 
 	public void setProdattrid(long prodattrid) {
