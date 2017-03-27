@@ -7,7 +7,7 @@ package com.ai.slp.product.constants;
  */
 public class SearchFieldConfConstants {
 	//销售地域
-    public static final String SALE_AREA = "provcode";
+    public static final String SALE_AREA = "saleareainfos.provcode";
 	//    用户权限
     public static final String USER_AUTHORITY = "audiencecode";
 	//用户id
@@ -44,4 +44,6 @@ public class SearchFieldConfConstants {
     public static final String SKU_ID = "skuid";
 	//商品标识
     public static final String PRODUCT_ID = "productid";
+    //价格
+    public static final String PRICE = "price";
 }

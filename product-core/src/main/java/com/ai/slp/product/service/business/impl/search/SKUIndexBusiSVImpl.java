@@ -153,7 +153,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
                     prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid()));
             //市场价
             Product selectByProductId = productAtomSV.selectByProductId(prodSkuInfo.getTenantid(),prodSkuInfo.getSkuid());
-            skuInfo.setMarketprice(selectByProductId.getMarketPrice());
+            skuInfo.setMarketprice(selectByProductId.getMarketPrice()==null?0:selectByProductId.getMarketPrice());
             
             // 受众
             //skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid()));

@@ -28,7 +28,6 @@ import com.ai.slp.product.api.product.param.ProdAttrValInfo;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
 import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.api.product.param.Product4List;
-import com.ai.slp.product.api.product.param.ProductInfo;
 import com.ai.slp.product.api.product.param.ProductListQuery;
 import com.ai.slp.product.api.product.param.ProductRoute;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
