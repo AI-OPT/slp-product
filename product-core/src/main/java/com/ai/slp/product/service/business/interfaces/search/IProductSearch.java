@@ -18,6 +18,10 @@ public interface IProductSearch {
     //商品搜索返回map集合
     Result<Map<String, Long>> searchCategory(ProductSearchCriteria criteria);
     
+    //商品相关查询
+    Result<SKUInfo> searchByCriteria(List<SearchCriteria> searchCriterias, int from, int offset,
+			 List<Sort> sorts);
+    
     Result<SKUInfo> search(List<SearchCriteria> searchCriterias, int from, int offset,
 			 List<Sort> sorts);
     
