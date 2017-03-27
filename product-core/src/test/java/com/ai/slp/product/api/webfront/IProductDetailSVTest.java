@@ -26,7 +26,7 @@ public class IProductDetailSVTest {
     public void queryProducSKUById(){
         ProductSKURequest skuRequest = new ProductSKURequest();
         skuRequest.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
-        skuRequest.setSkuId("0000000000000264");
+        skuRequest.setSkuId("0000000000000248");
         ProductSKUResponse skuResponse = productDetailSV.queryProducSKUById(skuRequest);
         System.out.println(JSON.toJSONString(skuResponse));
     }
@@ -36,7 +36,7 @@ public class IProductDetailSVTest {
         ProductSKURequest skuRequest = new ProductSKURequest();
         skuRequest.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
 //        skuRequest.setSkuAttrs("100010:100082;100004:100015");
-        skuRequest.setSkuId("0000000000000264");
+        skuRequest.setSkuId("0000000000000248");
         ProductSKUConfigResponse skuResponse = productDetailSV.queryProductSKUConfig(skuRequest);
         if (skuResponse!=null)
             System.out.println(JSON.toJSONString(skuResponse));

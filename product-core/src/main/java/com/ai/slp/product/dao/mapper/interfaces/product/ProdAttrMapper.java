@@ -1,9 +1,11 @@
 package com.ai.slp.product.dao.mapper.interfaces.product;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttrCriteria;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface ProdAttrMapper {
     int countByExample(ProdAttrCriteria example);

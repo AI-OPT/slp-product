@@ -9,57 +9,43 @@ public class AttrInfo {
 	/**
 	 * 属性值
 	 */
-	@Expose
-	private String attrvalue;
-	/**
+    @Expose
+    private String attrvalue;
+    /**
 	 * 属性标识
 	 */
-	@Expose
-	private String attrid;
-	/**
+    @Expose
+    private String attrid;
+    /**
 	 * 属性值ID
 	 */
-	@Expose
-	private String attrvaluedefid;
-	/**
+    @Expose
+    private String attrvaluedefid;
+    /**
 	 * 属性名称
 	 */
-	@Expose
-	private String attrname;
+    @Expose
+    private String attrname;
+    
+    public String getAttrname() {
+        return attrname;
+    }
 
-	/**
-	 * 属性类型
-	 */
-	@Expose
-	private String attrtype;
+    public void setAttrname(String attrname) {
+        this.attrname = attrname;
+    }
 
-	public String getAttrtype() {
-		return attrtype;
-	}
+    public AttrInfo() {
+        super();
+    }
 
-	public void setAttrtype(String attrtype) {
-		this.attrtype = attrtype;
-	}
+    public AttrInfo(String attrID) {
+        this.attrid = attrID;
+    }
 
-	public String getAttrname() {
-		return attrname;
-	}
-
-	public void setAttrname(String attrname) {
-		this.attrname = attrname;
-	}
-
-	public AttrInfo() {
-		super();
-	}
-
-	public AttrInfo(String attrID) {
-		this.attrid = attrID;
-	}
-
-	public void setAttrvalue(String attrvalue) {
-		this.attrvalue = attrvalue;
-	}
+    public void setAttrvalue(String attrvalue) {
+        this.attrvalue = attrvalue;
+    }
 
 	public String getAttrid() {
 		return attrid;
@@ -68,6 +54,7 @@ public class AttrInfo {
 	public void setAttrid(String attrid) {
 		this.attrid = attrid;
 	}
+
 
 	public String getAttrvaluedefid() {
 		return attrvaluedefid;
@@ -80,5 +67,5 @@ public class AttrInfo {
 	public String getAttrvalue() {
 		return attrvalue;
 	}
-
+    
 }

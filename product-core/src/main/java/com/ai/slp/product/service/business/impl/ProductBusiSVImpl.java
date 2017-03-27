@@ -404,14 +404,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
-        //进行上架处理
-        product.setUpTime(DateUtils.currTimeStamp());
-        product.setState(ProductConstants.Product.State.IN_SALE);
-        if (operId!=null){
-        	product.setOperId(operId);
-        }
-        //添加日志
-        updateProdAndStatusLog(product);
+        changeToInSale(product,operId);
     	
     }
 
@@ -421,7 +414,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param product
      * @param operId
      */
-    @Deprecated
     @Override
     public void changeToInSale(Product product, Long operId) {
         //进行上架处理
@@ -705,7 +697,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //修改商品"state"为IN_STORE
         product.setState(ProductConstants.Product.State.IN_STORE);
         //将商品从搜索引擎中移除
-        // skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
+        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
         //添加下架时间
         product.setDownTime(DateUtils.currTimeStamp());
         if (operId != null) {

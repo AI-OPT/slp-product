@@ -2,9 +2,7 @@ package com.ai.slp.product.api.productcomment.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +13,9 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
-import com.ai.paas.ipaas.search.vo.Result;
-import com.ai.paas.ipaas.search.vo.SearchCriteria;
-import com.ai.paas.ipaas.search.vo.SearchOption;
-import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.productcomment.interfaces.IProdCommentManagerSV;
 import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
@@ -38,21 +31,15 @@ import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCommentConstants;
 import com.ai.slp.product.constants.ResultCodeConstants;
-import com.ai.slp.product.constants.SearchConstants;
-import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.search.bo.comment.CommentInfo;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentPictureAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
-import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
-import com.ai.slp.product.util.ConvertUtils;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -85,49 +72,17 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		ResponseHeader responseHeader = null;
 		try {
 			CommonUtils.checkTenantId(prodCommentPageRequest.getTenantId());
-			/**
-			 * 先查询ES缓存
-			 */
-			IProductSearch productSearch = new ProductSearchImpl();
-			int startSize = 1;
-			int maxSize = 1;
-			// 最大条数设置
-			int pageNo = prodCommentPageRequest.getPageNo();
-			int size = prodCommentPageRequest.getPageSize();
-			if (prodCommentPageRequest.getPageNo() == 1) {
-				startSize = 0;
-			} else {
-				startSize = (pageNo - 1) * size;
+			// 查询商品信息
+			String tenantId = prodCommentPageRequest.getTenantId();
+			// SKUID与商品ID意义相同
+			Product product = productAtomSV.selectByProductId(tenantId, prodCommentPageRequest.getSkuId());
+			if (product == null) {
+				result.setCount(0);
+				result.setResult(null);
+				result.setResponseHeader(new ResponseHeader(true, ResultCodeConstants.FAIL_CODE, "没有查询到商品信息。"));
+				return result;
 			}
-			maxSize = size;
-			List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
-			if (!StringUtil.isBlank(prodCommentPageRequest.getSkuId())) {
-				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID, prodCommentPageRequest.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-			}
-			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
-			if (CollectionUtil.isEmpty(commentResult.getContents())) {
-				List<ProdCommentPageResponse> prodCommentPageResponses = new ArrayList<>();
-				for (CommentInfo commentInfo : commentResult.getContents()) {
-					ProdCommentPageResponse response = ConvertUtils.convertProdCommentPageResponse(commentInfo);
-					prodCommentPageResponses.add(response);
-				}
-				result.setResult(prodCommentPageResponses);
-				result.setCount((int) commentResult.getCount());
-				result.setPageNo(startSize);
-				result.setPageSize(maxSize);
-			} else {
-				// 查询商品信息
-				String tenantId = prodCommentPageRequest.getTenantId();
-				// SKUID与商品ID意义相同
-				Product product = productAtomSV.selectByProductId(tenantId, prodCommentPageRequest.getSkuId());
-				if (product == null) {
-					result.setCount(0);
-					result.setResult(null);
-					result.setResponseHeader(new ResponseHeader(true, ResultCodeConstants.FAIL_CODE, "没有查询到商品信息。"));
-					return result;
-				}
-				result = prodCommentBusiSV.queryPageBySku(prodCommentPageRequest, product.getStandedProdId());
-			}
+			result = prodCommentBusiSV.queryPageBySku(prodCommentPageRequest, product.getStandedProdId());
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
 			if (e instanceof BusinessException) {
@@ -145,7 +100,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 	@Override
 	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest)
 			throws BusinessException, SystemException {
-		BaseResponse response = new BaseResponse();
+		BaseResponse createProdComment = new BaseResponse();
 		ResponseHeader responseHeader = null;
 		try {
 			CommonUtils.checkTenantId(prodCommentCreateRequest.getTenantId());
@@ -153,9 +108,8 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			String tenantId = prodCommentCreateRequest.getTenantId();
 			String userId = prodCommentCreateRequest.getUserId();
 			List<ProdCommentVO> commentList = prodCommentCreateRequest.getCommentList();
+			List<ProdComment> prodComments = new ArrayList<ProdComment>();
 			List<PictureVO> pictureList = new ArrayList<PictureVO>();
-			List<ProdComment> prodComments = new ArrayList<>();
-			Map<String,List<PictureVO>> pictureMap = new HashMap<>();
 			if (!CollectionUtil.isEmpty(commentList)) {
 				for (ProdCommentVO prodCommentVO : commentList) {
 					ProdComment params = new ProdComment();
@@ -173,19 +127,13 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 					params.setOrderId(prodCommentCreateRequest.getOrderId());
 					pictureList = prodCommentVO.getPictureList();
 					// 判断是否有图片
-					params.setIsPicture(CollectionUtil.isEmpty(pictureList) ? ProductCommentConstants.HasPicture.NO: ProductCommentConstants.HasPicture.YSE);
-					String commnentId = prodCommentBusiSV.createProdComment(params,pictureList);
-					params.setCommentId(commnentId);
+					params.setIsPicture(CollectionUtil.isEmpty(pictureList) ? ProductCommentConstants.HasPicture.NO
+							: ProductCommentConstants.HasPicture.YSE);
 					prodComments.add(params);
-					pictureMap.put(commnentId, pictureList);
 				}
 			}
-			/**
-			 * 加缓存
-			 */
-			List<CommentInfo> commentInfos = ConvertUtils.convertCommentInfo(prodComments,pictureMap);
-			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_comment).bulkInsert(commentInfos);
-			responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "");
+			createProdComment = prodCommentBusiSV.createProdComment(prodCommentCreateRequest, prodComments,
+					pictureList);
 		} catch (Exception e) {
 			logger.error("创建商品评价失败", e);
 			if (e instanceof BusinessException) {
@@ -194,9 +142,9 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			} else {
 				responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SYSTEM_ERROR, "");
 			}
-			response.setResponseHeader(responseHeader);
+			createProdComment.setResponseHeader(responseHeader);
 		}
-		return response;
+		return createProdComment;
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
+import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageRequest;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
@@ -72,7 +73,6 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		result.setPageNo(pageNo);
 		result.setPageSize(pageSize);
 		result.setCount(count);
-		logger.debug(JSON.toJSONString(result));
 		if(count==0){
 			result.setResult(null);
 			result.setResponseHeader(new ResponseHeader(true,ResultCodeConstants.FAIL_CODE,"该商品没有评论信息。"));
@@ -133,21 +133,31 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		return prodCommentList;
 	}
 	@Override
-	public String createProdComment(ProdComment prodComment, List<PictureVO> pictureList) {
-		String prodCommentId = prodCommentAtomSV.createProdComment(prodComment);
-		// 添加商品图片
-		if (!StringUtil.isBlank(prodCommentId)
-				&& ProductCommentConstants.HasPicture.YSE.equals(prodComment.getIsPicture())) {
-			if (CollectionUtil.isEmpty(pictureList)) {
-				for (PictureVO pictureVO : pictureList) {
-					ProdCommentPicture prodCommentPicture = new ProdCommentPicture();
-					BeanUtils.copyProperties(prodCommentPicture, pictureVO);
-					prodCommentPicture.setCommentId(prodCommentId);
-					prodCommentPictureAtomSV.createPicture(prodCommentPicture);
+	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest,List<ProdComment> prodComments,List<PictureVO> pictureList) {
+		BaseResponse baseResponse = new BaseResponse();
+		if(!CollectionUtil.isEmpty(prodComments)){
+			for(ProdComment prodComment : prodComments){
+				String prodCommentId = prodCommentAtomSV.createProdComment(prodComment);
+				//添加商品图片
+				if(!StringUtil.isBlank(prodCommentId) && ProductCommentConstants.HasPicture.YSE.equals(prodComment.getIsPicture())){
+					if (CollectionUtil.isEmpty(pictureList)) {
+						for(PictureVO pictureVO : pictureList){
+							ProdCommentPicture prodCommentPicture = new ProdCommentPicture();
+							BeanUtils.copyProperties(prodCommentPicture, pictureVO);
+							prodCommentPicture.setCommentId(prodCommentId);
+							prodCommentPictureAtomSV.createPicture(prodCommentPicture);
+						}
+					}
 				}
 			}
+			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"");
+			baseResponse.setResponseHeader(responseHeader );
+		}else{
+			ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.NO_DATA_OR_CACAE_ERROR,"无数据");
+			baseResponse.setResponseHeader(responseHeader );
 		}
-		return prodCommentId;
+		logger.info(JSON.toJSONString(baseResponse));
+		return baseResponse;
 	}
 
 	@Override

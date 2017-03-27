@@ -42,14 +42,6 @@ public class SearchFieldConfConstants {
     public static final String TENANT_ID = "tenantid";
 	//sku标识
     public static final String SKU_ID = "skuid";
-	//商品id
+	//商品标识
     public static final String PRODUCT_ID = "productid";
-    //标准品标识
-    public static final String STANDED_PROD_ID = "standedprodid";
-    //商品标识
-    public static final String PRODUCT_NAME = "productname";
-    //商品类型
-    public static final String PRODUCT_TYPE = "producttype";
-    //供应商
-    public static final String SUPPLIER_ID = "supplierid";
 }

@@ -27,13 +27,4 @@ public class CommonConstants {
      * 操作失败
      */
     public static final String OPERATE_FAIL = "999999";
-    
-    /**
-     * 查询Redis skuattr常量
-     */
-    public static final String PROD_SKU_ATTR = "PROD_SKU_ATTR";
-    /**
-     * 查询Redis attrconfig常量
-     */
-    public static final String SKU_ATTR_CONFIG = "SKU_ATTR_CONFIG";
 }

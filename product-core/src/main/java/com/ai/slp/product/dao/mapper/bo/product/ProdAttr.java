@@ -23,6 +23,8 @@ public class ProdAttr {
 
     private String attrValueName;
 
+    private String attrType;
+
     public Long getProdAttrId() {
         return prodAttrId;
     }
@@ -101,5 +103,13 @@ public class ProdAttr {
 
     public void setAttrValueName(String attrValueName) {
         this.attrValueName = attrValueName == null ? null : attrValueName.trim();
+    }
+
+    public String getAttrType() {
+        return attrType;
+    }
+
+    public void setAttrType(String attrType) {
+        this.attrType = attrType == null ? null : attrType.trim();
     }
 }
