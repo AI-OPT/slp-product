@@ -159,8 +159,9 @@ public interface IProductBusiSV {
      * @param productId
      * @return
      */
-    public ProductInfo queryByProdId(String tenantId,String supplierId, String productId);
-
+    public Product queryByProdId(String tenantId,String supplierId, String productId);
+/*    public ProductInfo queryByProdId(String tenantId,String supplierId, String productId);
+*/
     /**
      * 更新商品日志和状态日志
      * @param product

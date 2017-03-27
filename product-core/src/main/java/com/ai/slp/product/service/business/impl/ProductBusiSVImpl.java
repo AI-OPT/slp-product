@@ -45,6 +45,7 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
 import com.ai.slp.product.dao.mapper.attach.ProductAttach;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
+import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
@@ -163,6 +164,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         		prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
         		prodAttr.setOperId(product.getOperId());
         		prodAttr.setOperTime(product.getOperTime());
+        		//获取属性类型
+        		ProdCatAttr prodCatAttr = prodCatAttrAtomSV.selectById(tenantId, attrValReq.getAttrId().toString());
+        		prodAttr.setAttrType(prodCatAttr.getAttrType());
         		// 添加成功
         		prodAttrAtomSV.installProdAttr(prodAttr);
         	}
@@ -546,16 +550,24 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @return
      */
     @Override
-    public ProductInfo queryByProdId(String tenantId,String supplierId, String productId) {
+    public Product queryByProdId(String tenantId,String supplierId, String productId) {
         Product product = productAtomSV.selectByProductId(tenantId,supplierId,productId);
         if (product==null){
             throw new BusinessException("","未查询到指定的商品信息,租户ID:"+tenantId+",商品标识:"+productId);
         }
-        ProductInfo productInfo = new ProductInfo();
-        BeanUtils.copyProperties(productInfo,product);
-        return productInfo;
+        
+        return product;
     }
-
+/*    public ProductInfo queryByProdId(String tenantId,String supplierId, String productId) {
+    	Product product = productAtomSV.selectByProductId(tenantId,supplierId,productId);
+    	if (product==null){
+    		throw new BusinessException("","未查询到指定的商品信息,租户ID:"+tenantId+",商品标识:"+productId);
+    	}
+    	ProductInfo productInfo = new ProductInfo();
+    	BeanUtils.copyProperties(productInfo,product);
+    	return productInfo;
+    }
+*/
     public Map<String,FastSkuProdInfo> queryFastProd(String tenantId,List<ProdFastSkuAttach> skuAttachList){
         Map<String,FastSkuProdInfo> prodInfoMap = new HashMap<>();
 

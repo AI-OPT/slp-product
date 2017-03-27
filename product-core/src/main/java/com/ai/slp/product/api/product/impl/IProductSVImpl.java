@@ -5,8 +5,10 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
@@ -61,10 +63,20 @@ public class IProductSVImpl implements IProductSV {
     public ProductInfo queryProductById(ProductInfoQuery queryInfo)
             throws BusinessException, SystemException {
         CommonUtils.checkTenantId(queryInfo.getTenantId());
-        return productBusiSV.queryByProdId(
+       Product product = productBusiSV.queryByProdId(
                 queryInfo.getTenantId(),queryInfo.getSupplierId(),queryInfo.getProductId());
+       ProductInfo productInfo = new ProductInfo();
+       BeanUtils.copyProperties(productInfo,product);
+       
+       return productInfo;
     }
-
+/*    public ProductInfo queryProductById(ProductInfoQuery queryInfo)
+    		throws BusinessException, SystemException {
+    	CommonUtils.checkTenantId(queryInfo.getTenantId());
+    	return productBusiSV.queryByProdId(
+    			queryInfo.getTenantId(),queryInfo.getSupplierId(),queryInfo.getProductId());
+    }
+*/
 
     /**
      * 更新商品SKU信息<br>
