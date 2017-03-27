@@ -142,7 +142,7 @@ public class ConvertUtils {
 		 * 评论图
 		 */
 		List<PictureVO> pictureVOs = new ArrayList<>();
-		for(CommentPictrueInfo commentPictrueInfo : commentInfo.getCommentPictrueInfos()){
+		for(CommentPictrueInfo commentPictrueInfo : commentInfo.getCommentpictrueinfos()){
 			PictureVO pictureVO = new PictureVO();
 			pictureVO.setPicAddr(commentPictrueInfo.getPicaddr());
 			pictureVO.setVfsId(commentPictrueInfo.getVfsid());
@@ -159,8 +159,8 @@ public class ConvertUtils {
 			commentInfo.setCommentbody(prodComment.getCommentBody());
 			commentInfo.setCommentid(prodComment.getCommentId());
 			commentInfo.setCommenttime(prodComment.getCommentTime().getTime());
-			commentInfo.setIspicture(prodComment.getIsPicture());
-			commentInfo.setProdid(prodComment.getProdId());
+			commentInfo.setIspictrue(prodComment.getIsPicture());
+			commentInfo.setProductid(prodComment.getProdId());
 			commentInfo.setReplaystate(prodComment.getReplyState());
 			commentInfo.setShopscorefw(prodComment.getShopScoreFw());
 			commentInfo.setShopscorewl(prodComment.getShopScoreWl());
@@ -179,7 +179,7 @@ public class ConvertUtils {
 					commentPictrueInfo.setVfsid(pictureVO.getVfsId());
 					commentPictrueInfos.add(commentPictrueInfo);
 				}
-				commentInfo.setCommentPictrueInfos(commentPictrueInfos);
+				commentInfo.setCommentpictrueinfos(commentPictrueInfos);
 			}
 			commentInfos.add(commentInfo);
 		}

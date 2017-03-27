@@ -27,7 +27,7 @@ public class CommentInfo {
 	 * 商品标识
 	 */
 	@Expose
-	private String prodid;
+	private String productid;
 
 	/**
 	 * 评论人
@@ -79,19 +79,15 @@ public class CommentInfo {
 	 * 是否传图
 	 */
 	@Expose
-	private String ispicture;
+	private String ispictrue;
 
 	/**
 	 * 评论图片
 	 */
-	private List<CommentPictrueInfo> commentPictrueInfos;
+	private List<CommentPictrueInfo> commentpictrueinfos;
 
 	public String getCommentid() {
 		return commentid;
-	}
-
-	public List<CommentPictrueInfo> getCommentPictrueInfos() {
-		return commentPictrueInfos;
 	}
 
 	public String getTenantid() {
@@ -102,20 +98,24 @@ public class CommentInfo {
 		this.tenantid = tenantid;
 	}
 
-	public void setCommentPictrueInfos(List<CommentPictrueInfo> commentPictrueInfos) {
-		this.commentPictrueInfos = commentPictrueInfos;
+	public List<CommentPictrueInfo> getCommentpictrueinfos() {
+		return commentpictrueinfos;
+	}
+
+	public void setCommentpictrueinfos(List<CommentPictrueInfo> commentpictrueinfos) {
+		this.commentpictrueinfos = commentpictrueinfos;
 	}
 
 	public void setCommentid(String commentid) {
 		this.commentid = commentid;
 	}
 
-	public String getProdid() {
-		return prodid;
+	public String getProductid() {
+		return productid;
 	}
 
-	public void setProdid(String prodid) {
-		this.prodid = prodid;
+	public void setProductid(String productid) {
+		this.productid = productid;
 	}
 
 	public String getUserid() {
@@ -182,12 +182,12 @@ public class CommentInfo {
 		this.replaystate = replaystate;
 	}
 
-	public String getIspicture() {
-		return ispicture;
+	public String getIspictrue() {
+		return ispictrue;
 	}
 
-	public void setIspicture(String ispicture) {
-		this.ispicture = ispicture;
+	public void setIspictrue(String ispictrue) {
+		this.ispictrue = ispictrue;
 	}
 
 }

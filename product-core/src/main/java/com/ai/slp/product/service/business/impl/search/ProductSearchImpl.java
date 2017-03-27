@@ -46,7 +46,7 @@ public class ProductSearchImpl implements IProductSearch {
 	@Override
 	public Result<CommentInfo> searchComment(List<SearchCriteria> criteria, int from, int offset,
 			List<Sort> sorts) {
-		ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+		ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT);
 		return searchClient.search(criteria, from, offset, sorts, CommentInfo.class);
 	}
 }
