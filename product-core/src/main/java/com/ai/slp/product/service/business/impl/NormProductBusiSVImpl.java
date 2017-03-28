@@ -24,6 +24,9 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.normproduct.param.AttrMap;
 import com.ai.slp.product.api.normproduct.param.AttrValInfo;
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
@@ -37,6 +40,7 @@ import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
@@ -50,6 +54,7 @@ import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
@@ -63,11 +68,13 @@ import com.ai.slp.product.service.atom.interfaces.IStandedProductLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.AttrValRequestComparator;
 import com.ai.slp.product.util.DateUtils;
@@ -124,6 +131,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Autowired
     ISKUIndexBusiSV skuIndexManage;
 	
+	IProductSearch productSearch = new ProductSearchImpl();
 	/**
 	 * 添加标准品
 	 *
@@ -805,9 +813,20 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	public int updateMarketPrice(MarketPriceUpdate marketPrice) {
 		
 		
-		StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
-				marketPrice.getProductId());
-		
+		/*StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
+				marketPrice.getProductId());*/
+		//查询es
+    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
+    			marketPrice.getTenantId(),
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	searchCriterias.add(new SearchCriteria("productid",
+    			marketPrice.getProductId(),
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	
+    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+    	
+    	SKUInfo standedProduct = result.getContents().get(0);
 		
 		// 判断此租户下是否存在次标准品
 	/*	if (standedProduct == null){
@@ -834,7 +853,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		
 		
 		if (count > 0) {
-			standedProduct.setMarketPrice(marketPrice.getMarketPrice());
+			//standedProduct.setMarketPrice(marketPrice.getMarketPrice());
+			standedProduct.setMarketprice(marketPrice.getMarketPrice());
 			// 更行标准品日志
 			StandedProductLog standedProductLog = new StandedProductLog();
 			BeanUtils.copyProperties(standedProductLog, standedProduct);
@@ -844,8 +864,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			BeanUtils.copyProperties(prodPriceLog, standedProduct);
 			// 设置对象类型为标准品-SA
 			prodPriceLog.setObjType("SA");
-			prodPriceLog.setObjId(standedProduct.getStandedProdId());
-			prodPriceLog.setUpdatePrice(standedProduct.getMarketPrice());
+			prodPriceLog.setObjId(standedProduct.getProductid());
+			prodPriceLog.setUpdatePrice(standedProduct.getMarketprice());
 			
 			prodPriceLogAtomSV.insert(prodPriceLog);
 			
