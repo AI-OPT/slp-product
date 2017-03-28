@@ -108,7 +108,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			if (!CollectionUtil.isEmpty(commentResult.getContents())) {
 				List<ProdCommentPageResponse> prodCommentPageResponses = new ArrayList<>();
 				for (CommentInfo commentInfo : commentResult.getContents()) {
-					ProdCommentPageResponse response = ConvertUtils.convertProdCommentPageResponse(commentInfo);
+					ProdCommentPageResponse response = ConvertUtils.convertToProdCommentPageResponse(commentInfo);
 					prodCommentPageResponses.add(response);
 				}
 				result.setResult(prodCommentPageResponses);
@@ -183,7 +183,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			/**
 			 * 加缓存
 			 */
-			List<CommentInfo> commentInfos = ConvertUtils.convertCommentInfo(prodComments,pictureMap);
+			List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments,pictureMap);
 			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
 			responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "");
 		} catch (Exception e) {

@@ -114,7 +114,7 @@ public class ConvertUtils {
 		return response;
 	}
 
-	public static ProductEditUp convertProductEditUp(SKUInfo skuInfo){
+	public static ProductEditUp convertToProductEditUp(SKUInfo skuInfo){
 		ProductEditUp productEditUp = new ProductEditUp();
 		productEditUp.setOperTime(new Timestamp(skuInfo.getOpertime()));
 		productEditUp.setCreateTime(new Timestamp(skuInfo.getOpertime()));
@@ -133,7 +133,7 @@ public class ConvertUtils {
 		return productEditUp;
 	}
 
-	public static ProdCommentPageResponse convertProdCommentPageResponse(CommentInfo commentInfo){
+	public static ProdCommentPageResponse convertToProdCommentPageResponse(CommentInfo commentInfo){
 		ProdCommentPageResponse response = new ProdCommentPageResponse();
 		response.setCommentBody(commentInfo.getCommentbody());
 		response.setCommentId(commentInfo.getCommentid());
@@ -158,7 +158,7 @@ public class ConvertUtils {
 		return response;
 	}
 	
-	public static List<CommentInfo> convertCommentInfo(List<ProdComment> prodComments,Map<String,List<PictureVO>> pictureMap){
+	public static List<CommentInfo> convertToCommentInfo(List<ProdComment> prodComments,Map<String,List<PictureVO>> pictureMap){
 		List<CommentInfo> commentInfos = new ArrayList<>();
 		for (ProdComment prodComment : prodComments) {
 			CommentInfo commentInfo = new CommentInfo();

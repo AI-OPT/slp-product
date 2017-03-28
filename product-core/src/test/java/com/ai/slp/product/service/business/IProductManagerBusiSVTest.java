@@ -32,7 +32,7 @@ public class IProductManagerBusiSVTest {
         List<String> stateList = new ArrayList<>();
         stateList.add(ProductConstants.Product.State.ADD);
         stateList.add(ProductConstants.Product.State.UNEDIT);
-        queryReq.setStateList(stateList);
+        //queryReq.setStateList(stateList);
         queryReq.setProductCatId("1");//
         PageInfo<Product> response = productManagerBsuiSV.queryPageForEdit(queryReq);
         System.out.println("\r"+response.getCount()+",size="+response.getResult().size());

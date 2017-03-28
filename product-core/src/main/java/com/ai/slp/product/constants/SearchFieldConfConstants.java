@@ -46,4 +46,12 @@ public class SearchFieldConfConstants {
     public static final String PRODUCT_ID = "productid";
     //价格
     public static final String PRICE = "price";
+    //状态
+    public static final String STATE = "state";
+    //商品名称
+    public static final String PRODUCT_NAME = "productname";
+    //商品类型
+    public static final String PRODUCT_TYPE = "producttype";
+    //供应商
+    public static final String SUPPLIER = "supplier";
 }

@@ -4,6 +4,7 @@ package com.ai.slp.product.api.product.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
@@ -45,6 +48,7 @@ import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
@@ -54,11 +58,15 @@ import com.ai.slp.product.service.atom.interfaces.product.IProductStateLogAtomSV
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.CommonUtils;
+import com.ai.slp.product.util.ConvertUtils;
+import com.ai.slp.product.util.CriteriaUtils;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.MQConfigUtil;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -117,9 +125,32 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     	try{
         CommonUtils.checkTenantId(productEditParam.getTenantId());
         CommonUtils.checkSupplierId(productEditParam.getSupplierId());
+        List<ProductEditUp> productEditUps = new ArrayList<>();
+        /**
+         * 查询ES缓存
+         */
+        IProductSearch productSearch = new ProductSearchImpl();
+		int startSize = 1;
+		int maxSize = 1;
+		// 最大条数设置
+		int pageNo = productEditParam.getPageNo();
+		int size = productEditParam.getPageSize();
+		if (productEditParam.getPageNo() == 1) {
+			startSize = 0;
+		} else {
+			startSize = (pageNo - 1) * size;
+		}
+		maxSize = size;
+		List<SearchCriteria> searchfieldVos = CriteriaUtils.commonConditions(productEditParam);
+		Result<SKUInfo> result = productSearch.searchByCriteria(searchfieldVos, startSize, maxSize, null);
+        if(CollectionUtils.isEmpty(result.getContents())){
+        	for(SKUInfo skuInfo : result.getContents()){
+        		ProductEditUp productEditUp = ConvertUtils.convertToProductEditUp(skuInfo);
+        		productEditUps.add(productEditUp);
+        	}
+        }else{
         String tenantId = productEditParam.getTenantId();
         PageInfo<Product> products = productManagerBusiSV.queryPageForEdit(productEditParam);
-        List<ProductEditUp> editUpList = new ArrayList<>();
         for (Product product:products.getResult()){
             ProductEditUp productEditUp = new ProductEditUp();
             BeanUtils.copyProperties(productEditUp,product);
@@ -135,10 +166,11 @@ public class IProductManagerSVImpl implements IProductManagerSV {
                 productEditUp.setVfsId(prodPicture.getVfsId());
                 productEditUp.setPicType(prodPicture.getPicType());
             }
-             editUpList.add(productEditUp);
+             productEditUps.add(productEditUp);
         }
         BeanUtils.copyProperties(response,products);
-        response.setResult(editUpList);
+        }
+        response.setResult(productEditUps);
     	}catch(Exception e){
     		if(e instanceof BusinessException){
     			responseHeader = new ResponseHeader(false,((BusinessException) e).getErrorCode(),((BusinessException) e).getErrorMessage());
