@@ -424,9 +424,32 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		try{
 		CommonUtils.checkTenantId(queryInSale.getTenantId());
         CommonUtils.checkSupplierId(queryInSale.getSupplierId());
+        List<ProductEditUp> productEditUps = new ArrayList<>();
+        /**
+         * 查询ES缓存
+         */
+        IProductSearch productSearch = new ProductSearchImpl();
+		int startSize = 1;
+		int maxSize = 1;
+		// 最大条数设置
+		int pageNo = queryInSale.getPageNo();
+		int size = queryInSale.getPageSize();
+		if (queryInSale.getPageNo() == 1) {
+			startSize = 0;
+		} else {
+			startSize = (pageNo - 1) * size;
+		}
+		maxSize = size;
+		List<SearchCriteria> searchfieldVos = CriteriaUtils.commonConditions(queryInSale);
+		Result<SKUInfo> result = productSearch.searchByCriteria(searchfieldVos, startSize, maxSize, null);
+        if(CollectionUtils.isEmpty(result.getContents())){
+        	for(SKUInfo skuInfo : result.getContents()){
+        		ProductEditUp productEditUp = ConvertUtils.convertToProductEditUp(skuInfo);
+        		productEditUps.add(productEditUp);
+        	}
+        }else{
         String tenantId = queryInSale.getTenantId();
         PageInfo<Product> productPage = productManagerBusiSV.queryInSale(queryInSale);
-        List<ProductEditUp> editUpList = new ArrayList<>();
         //组装prodIdList
         List<String> prodIdList=new ArrayList<String>();
         for (Product product:productPage.getResult()){
@@ -448,10 +471,11 @@ public class IProductManagerSVImpl implements IProductManagerSV {
                 productEditUp.setVfsId(prodPicture.getVfsId());
                 productEditUp.setPicType(prodPicture.getPicType());
             }
-             editUpList.add(productEditUp);
-        }
+             productEditUps.add(productEditUp);
+        	}
         BeanUtils.copyProperties(response,productPage);
-        response.setResult(editUpList);
+        }
+        response.setResult(productEditUps);
 		}catch(Exception e){
 			if(e instanceof BusinessException){
 				responseHeader = new ResponseHeader(false,((BusinessException) e).getErrorCode(),((BusinessException) e).getErrorMessage());
