@@ -2,7 +2,6 @@ package com.ai.slp.product.api.product;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +15,18 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.idps.IDPSClientFactory;
-import com.ai.opt.sdk.util.DateUtil;
 import com.ai.opt.sdk.util.ImageByteUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.paas.ipaas.image.IImageClient;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
-import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.product.param.OtherSetOfProduct;
+import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
+import com.ai.slp.product.api.product.param.ProdStateLog;
+import com.ai.slp.product.api.product.param.ProductCheckParam;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductEditUp;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.constants.CommonTestConstants;
 import com.google.gson.Gson;
 

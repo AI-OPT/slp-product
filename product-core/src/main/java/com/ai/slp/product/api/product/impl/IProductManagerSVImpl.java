@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
@@ -47,7 +49,6 @@ import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
-import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
@@ -281,7 +282,23 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
     	boolean ccsMqFlag=false;
     	Long operId = query.getOperId();
-    	Product product = productAtomSV.selectByProductId(query.getTenantId(),query.getSupplierId(),query.getProductId());
+    	Product product = null;
+    	SKUInfo skuInfo = null;
+    	/**
+         * 从ES缓存中获取商品信息
+         */
+        IProductSearch productSearch = new ProductSearchImpl();
+		int startSize = 0;
+		int maxSize = 1;
+		List<SearchCriteria> searchfieldVos = new ArrayList<>();
+		searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, query.getProductId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		Result<SKUInfo> result = productSearch.searchByCriteria(searchfieldVos, startSize, maxSize, null);
+		if(CollectionUtils.isEmpty(result.getContents())){
+    	product = productAtomSV.selectByProductId(query.getTenantId(),query.getSupplierId(),query.getProductId());
+		}else{
+			skuInfo = result.getContents().get(0);
+			product = ConvertUtils.convertToProduct(skuInfo);
+		}
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+query.getTenantId()+",商品标识:"+query.getProductId());
         }
@@ -289,18 +306,24 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
     	if (!ccsMqFlag) {
     		CommonUtils.checkTenantId(query.getTenantId());
-            
             String tenantId = product.getTenantId();
             //查询标准品是否为"可使用"状态
-            StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getStandedProdId());
-            if (standedProduct==null || !StandedProductConstants.STATUS_ACTIVE.equals(standedProduct.getState())){
+            String standProdState = "";
+            if(StringUtils.isNotBlank(skuInfo.getStandprodstate())){
+            	standProdState = skuInfo.getStandprodstate();
+            }else{
+            	StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getStandedProdId());
+            	standProdState = standedProduct.getState();
+            }
+            if (!StandedProductConstants.STATUS_ACTIVE.equals(standProdState)){
                 logger.warn("未找到指定的标准品或标准品状态为不可用,租户ID:{},商户ID:{},标准品ID:{}",tenantId,product.getSupplierId(),product.getStandedProdId());
                 throw new BusinessException("","未找到相关的商品信息或商品状态为不可用");
             }
+            
             //若商品状态是"停用下架"或"售罄下架"
             if(ProductConstants.Product.State.STOP.equals(product.getState())
                     || ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
-                changeToSaleForStop(product, operId);
+                changeToSaleForStop(product,skuInfo, operId);
             }
             //若商品既不是"停用下架"和"售罄下架",也不是"仓库中",则不允许上架
             else if(!ProductConstants.Product.State.IN_STORE.equals(product.getState())){
@@ -309,26 +332,27 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             }
 
             //1.库存组不存在,或已废弃
-            StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId( tenantId,product.getSupplierId(),product.getStorageGroupId());
-            if (storageGroup==null
-                    || StorageConstants.StorageGroup.State.DISCARD.equals(storageGroup.getState())
-                    || StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(storageGroup.getState())){
+            //StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId( tenantId,product.getSupplierId(),product.getStorageGroupId());
+            String storageGroupState = skuInfo.getStoragegroupstate();
+            if ( StorageConstants.StorageGroup.State.DISCARD.equals(storageGroupState)
+                    || StorageConstants.StorageGroup.State.AUTO_DISCARD.equals(storageGroupState)){
                 throw new BusinessException("","对应库存组不存在或已废弃,无法上架,租户ID:"+tenantId +"库存组ID:"+product.getStorageGroupId());
             }
             //判断已启用库存下的SKU库存是否均设置价格
-            if (skuStorageAtomSV.countOfNoPrice(tenantId,storageGroup.getStorageGroupId())>0){
+            if (skuStorageAtomSV.countOfNoPrice(tenantId,product.getStorageGroupId())>0){
             	throw new BusinessException("","启用库存下存在未设置价格的库存,无法上架");
             }
             //查询当前库存组可用量 
-            Long usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,storageGroup.getStorageGroupId());
+            Long usableNum = skuInfo.getUsablenum();
+            //usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,storageGroup.getStorageGroupId());
             //库存组停用或当前库存可用为零,
             //直接切换至"售罄下架"
-            if (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())
-                    ||StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())
+            if (StorageConstants.StorageGroup.State.STOP.equals(storageGroupState)
+                    ||StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroupState)
                     ||usableNum==null || usableNum<=0){
-                changeToStop(storageGroup,product, operId);
+                changeToStop(storageGroupState,product, operId);
             }
-            productBusiSV.changeToInSale(query.getTenantId(),query.getSupplierId(),query.getProductId(),operId);
+            productBusiSV.changeToInSale(product,operId);
             //将商品添加至搜索引擎
             skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
             return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
@@ -380,7 +404,23 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
 	@Override
 	public BaseResponse changeToInStore(ProductInfoQuery query) throws BusinessException, SystemException {
-		Product product = productAtomSV.selectByProductId(query.getTenantId(), query.getSupplierId(), query.getProductId());
+		Product product = null;
+    	SKUInfo skuInfo = null;
+    	/**
+         * 从ES缓存中获取商品信息
+         */
+        IProductSearch productSearch = new ProductSearchImpl();
+		int startSize = 0;
+		int maxSize = 1;
+		List<SearchCriteria> searchfieldVos = new ArrayList<>();
+		searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, query.getProductId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		Result<SKUInfo> result = productSearch.searchByCriteria(searchfieldVos, startSize, maxSize, null);
+		if(CollectionUtils.isEmpty(result.getContents())){
+			product = productAtomSV.selectByProductId(query.getTenantId(),query.getSupplierId(),query.getProductId());
+		}else{
+			skuInfo = result.getContents().get(0);
+			product = ConvertUtils.convertToProduct(skuInfo);
+		}
         if (product == null) {
             throw new SystemException("", "未找到相关的商品信息,租户ID:" + query.getTenantId() + ",商品标识:" + query.getProductId());
         }
@@ -521,29 +561,29 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     	return stateLogRes;
 	}
 	
-	 public void changeToSaleForStop(Product product,Long operId){
+	 public void changeToSaleForStop(Product product,SKUInfo skuInfo,Long operId){
 	        String tenantId = product.getTenantId();
 	        //若商品状态不是"停用下架",也不是"售罄下架",则不进行处理
 	        if(!ProductConstants.Product.State.STOP.equals(product.getState()) && !ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
 	            return;
 	        }
 	        //查询库存组是否为"启用"状态
-	        StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,product.getSupplierId(),product.getStorageGroupId());
+	       /* StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId(tenantId,product.getSupplierId(),product.getStorageGroupId());
 	        if (storageGroup==null){
 	            throw new BusinessException("","对应库存组不存在,租户ID:"+tenantId+"库存组ID:"+product.getStorageGroupId());
-	        }
+	        }*/
 	        //库存组为停用或自动停用
-	        if (StorageConstants.StorageGroup.State.STOP.equals(storageGroup.getState())|| StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroup.getState())){
+	        if (StorageConstants.StorageGroup.State.STOP.equals(skuInfo.getStoragegroupstate())|| StorageConstants.StorageGroup.State.AUTO_STOP.equals(skuInfo.getStoragegroupstate())){
 	            //若商品为"停用下架"则不处理
 	            if (ProductConstants.Product.State.STOP.equals(product.getState())){
 	                return;
 	            }//若商品为"售罄下架",则变更为"停用下架"
 	            else if(ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
-	                changeToStop(storageGroup,product,operId);
+	                changeToStop(skuInfo.getStoragegroupstate(),product,operId);
 	                return;
 	            }
 	        }
-	        if (!StorageConstants.StorageGroup.State.ACTIVE.equals(storageGroup.getState())&& !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(storageGroup.getState())){
+	        if (!StorageConstants.StorageGroup.State.ACTIVE.equals(skuInfo.getStoragegroupstate())&& !StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(skuInfo.getStoragegroupstate())){
 	            throw new BusinessException("","库存组不是[启用]状态,租户ID:"+tenantId+"库存组ID:"+product.getStorageGroupId());
 	        }
 	        //检查缓存中商品的库存是否大于零
@@ -574,14 +614,14 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	        //添加日志
 	        updateProdAndStatusLog(product);
 	        if (userNum>0) {
-	            //添加搜索引擎
-	            skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
+            //添加搜索引擎
+            skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
 	        }
 	    }
 	 
-	 private void changeToStop(StorageGroup group,Product product,Long operId){
+	 private void changeToStop(String storageGroupState,Product product,Long operId){
 	        //若库存组为"停用"或"自动停用"则设置为"停用下架"
-	        if (StorageConstants.StorageGroup.State.AUTO_STOP.equals(group.getState())|| StorageConstants.StorageGroup.State.STOP.equals(group.getState())) {
+	        if (StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroupState)|| StorageConstants.StorageGroup.State.STOP.equals(storageGroupState)) {
 	            product.setState(ProductConstants.Product.State.STOP);
 	        }
 	        //否则为"售罄停用"

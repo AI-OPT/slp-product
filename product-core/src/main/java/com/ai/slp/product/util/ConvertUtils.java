@@ -17,6 +17,7 @@ import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.AttrInfo;
 import com.ai.slp.product.search.bo.ImageInfo;
 import com.ai.slp.product.search.bo.ProdAttrInfo;
@@ -192,4 +193,9 @@ public class ConvertUtils {
 		return commentInfos;
 	}
 
+	public static Product convertToProduct(SKUInfo skuInfo){
+		
+		return null;
+	}
+	
 }

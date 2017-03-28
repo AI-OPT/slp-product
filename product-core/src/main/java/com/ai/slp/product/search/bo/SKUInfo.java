@@ -157,10 +157,37 @@ public class SKUInfo {
 	/**
 	 * 属性值集合
 	 */
+	@Expose
 	private List<ProdAttrInfo> prodattrinfos;
+	/**
+	 * 标准品状态
+	 */
+	@Expose
+	private String standprodstate;
+	/**
+	 * 库存组状态
+	 */
+	@Expose
+	private String storagegroupstate;
 
 	public String getState() {
 		return state;
+	}
+
+	public String getStoragegroupstate() {
+		return storagegroupstate;
+	}
+
+	public void setStoragegroupstate(String storagegroupstate) {
+		this.storagegroupstate = storagegroupstate;
+	}
+
+	public String getStandprodstate() {
+		return standprodstate;
+	}
+
+	public void setStandprodstate(String standprodstate) {
+		this.standprodstate = standprodstate;
 	}
 
 	public String getProducttype() {
