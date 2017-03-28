@@ -651,6 +651,66 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public AttrMap queryAttrOfProduct(String tenantId, String standedProdId, String attrType) {
 		// 查询标准品信息
+		//StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
+		
+		//查询es里的标准品
+    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
+    			tenantId,
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	searchCriterias.add(new SearchCriteria("productid",
+    			standedProdId,
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+    	SKUInfo standedProduct = result.getContents().get(0);
+		
+    	
+    	
+		if (standedProduct == null){
+			throw new BusinessException("", "未找到对应标准品信息,租户ID:" + tenantId + ",标准品标识:" + standedProdId);
+		}
+		AttrMap attrMapOfNormProd = new AttrMap();
+		Map<Long, List<Long>> attrAndValMap = new LinkedMap();
+		Map<Long, ProdCatAttrInfo> attrDefMap = new HashMap<>();
+		Map<Long, AttrValInfo> attrValDefMap = new HashMap<>();
+		// 查询对应类目属性
+		List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
+				standedProduct.getProductcategoryid(), attrType);
+		// 查询标准品对应属性的属性值
+		for (ProdCatAttrAttch catAttrAttch : catAttrAttches) {
+			ProdCatAttrInfo catAttrDef = new ProdCatAttrInfo();
+			BeanUtils.copyProperties(catAttrDef, catAttrAttch);
+			List<Long> attrValDefList = new ArrayList<>();
+			attrAndValMap.put(catAttrDef.getAttrId(), attrValDefList);
+			attrDefMap.put(catAttrDef.getAttrId(), catAttrDef);
+			// 查询属性值
+			List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(tenantId, standedProdId,
+					catAttrAttch.getAttrId());
+			for (StandedProdAttr prodAttr : prodAttrs) {
+				AttrValInfo valDef = new AttrValInfo();
+				BeanUtils.copyProperties(valDef, prodAttr);
+				valDef.setProductAttrValId(prodAttr.getStandedProdAttrId());
+				valDef.setProductId(prodAttr.getStandedProdId());
+				valDef.setAttrValId(prodAttr.getAttrvalueDefId());
+				valDef.setAttrVal(prodAttr.getAttrValueName());
+				valDef.setAttrVal2(prodAttr.getAttrValueName2());
+				if (prodAttr.getAttrvalueDefId() != null) {
+					ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId, prodAttr.getAttrvalueDefId());
+					if (attrvalueDef != null){
+						valDef.setAttrVal(attrvalueDef.getAttrValueName());
+					}
+				}
+				attrValDefMap.put(valDef.getProductAttrValId(), valDef);
+				attrValDefList.add(valDef.getProductAttrValId());
+			}
+		}
+		attrMapOfNormProd.setAttrAndVal(attrAndValMap);
+		attrMapOfNormProd.setAttrDefMap(attrDefMap);
+		attrMapOfNormProd.setAttrValDefMap(attrValDefMap);
+		return attrMapOfNormProd;
+	}
+/*	public AttrMap queryAttrOfProduct(String tenantId, String standedProdId, String attrType) {
+		// 查询标准品信息
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
 		if (standedProduct == null){
 			throw new BusinessException("", "未找到对应标准品信息,租户ID:" + tenantId + ",标准品标识:" + standedProdId);
@@ -695,7 +755,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		attrMapOfNormProd.setAttrValDefMap(attrValDefMap);
 		return attrMapOfNormProd;
 	}
-
+*/
 	/**
 	 * 更新标准品的属性值
 	 */
