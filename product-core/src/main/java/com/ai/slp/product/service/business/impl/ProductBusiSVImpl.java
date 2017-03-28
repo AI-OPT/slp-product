@@ -69,6 +69,7 @@ import com.ai.slp.product.service.atom.interfaces.product.IProductStateLogAtomSV
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
@@ -125,8 +126,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     ISKUIndexBusiSV skuIndexManage;
     @Autowired
     IProductStateLogAtomSV productStateLogAtomSV;
-    @Autowired
-    IProductSearch productSearch;
+    
+    IProductSearch productSearch = new ProductSearchImpl();
     
     /**
      * 添加商城商品
