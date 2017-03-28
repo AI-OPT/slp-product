@@ -194,8 +194,24 @@ public class ConvertUtils {
 	}
 
 	public static Product convertToProduct(SKUInfo skuInfo){
-		
-		return null;
+		Product product = new Product();
+		product.setBasicOrgId(skuInfo.getBasicorgid());
+		product.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
+		product.setUpTime(new Timestamp(skuInfo.getUptime()));
+		product.setDownTime(new Timestamp(skuInfo.getDowntime()));
+		product.setOperTime(new Timestamp(skuInfo.getOpertime()));
+		product.setIsSaleNationwide(skuInfo.getSalenationwide());
+		product.setMarketPrice(skuInfo.getMarketprice());
+		product.setProdId(skuInfo.getProductid());;
+		product.setProdName(skuInfo.getProductname());
+		product.setProductSellPoint(skuInfo.getProductsellpoint());
+		product.setProductType(skuInfo.getProducttype());
+		product.setRechargeType(skuInfo.getRechagetype());
+		product.setState(skuInfo.getState());
+		product.setStorageGroupId(skuInfo.getProductcategoryid());
+		product.setTenantId(skuInfo.getTenantid());
+		product.setUnit(skuInfo.getUnit());
+		return product;
 	}
 	
 }
