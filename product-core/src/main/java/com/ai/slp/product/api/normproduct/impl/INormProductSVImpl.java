@@ -46,6 +46,7 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
@@ -76,9 +77,7 @@ public class INormProductSVImpl implements INormProductSV {
 	IStandedProdAttrAtomSV standedProdAttrAtomSV;
     @Autowired
 	IStorageGroupAtomSV storageGroupAtomSV;
-    @Autowired
-    IProductSearch productSearch;
-    
+    IProductSearch productSearch = new ProductSearchImpl();
     /**
      * 标准品列表查询. <br>
      *
@@ -130,6 +129,7 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public NormProdInfoResponse queryProducById(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
+    	
     	//查询es
     	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
     	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
@@ -313,24 +313,36 @@ public class INormProductSVImpl implements INormProductSV {
     	String tenantId = invalidRequest.getTenantId();
     	String productId = invalidRequest.getProductId();
     	String supplierId = invalidRequest.getSupplierId();
-    	StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
+    	//StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
+    	//查询es
+    	
+    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
+    			invalidRequest.getTenantId(),
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	searchCriterias.add(new SearchCriteria("productid",
+    			invalidRequest.getProductId(),
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	
+    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+    	
+    	SKUInfo standedProduct = result.getContents().get(0);
+    	
+    	
 		if (standedProduct == null){
 			throw new BusinessException("", "不存在指定商品,租户ID:" + tenantId + ",商品标识:" + productId);
 		}
 
-		if (!standedProduct.getSupplierId().equals(supplierId)){
-			throw new BusinessException("",
-					"商品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + supplierId + "不一致!");
-		}
 
 		// 查询没有废弃的库存组
 		int noDiscardNum = storageGroupAtomSV.countNoDiscard(tenantId, productId);
 		if (noDiscardNum > 0){
 			throw new BusinessException("", "该商品下存在[" + noDiscardNum + "]个未废弃库存组");
 		}
+    	StandedProduct standedProduct2 = new StandedProduct();
     	
-    	
-        normProductBusiSV.discardProduct(standedProduct,invalidRequest.getOperId());
+    	BeanUtils.copyProperties(standedProduct2, standedProduct);
+        normProductBusiSV.discardProduct(standedProduct2,invalidRequest.getOperId());
         return CommonUtils.genSuccessResponse("");
     }
 /*    public BaseResponse discardProduct(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
