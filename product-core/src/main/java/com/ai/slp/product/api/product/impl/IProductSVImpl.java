@@ -6,17 +6,25 @@ import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.search.bo.SKUInfo;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +39,8 @@ public class IProductSVImpl implements IProductSV {
     IProdSkuBusiSV prodSkuBusiSV;
     @Autowired
     IProductManagerBusiSV productManagerBsuiSV;
+    
+    IProductSearch productSearch = new ProductSearchImpl();
 
     /**
      * 分页查询非废弃的销售商品列表<br>
@@ -63,8 +73,24 @@ public class IProductSVImpl implements IProductSV {
     public ProductInfo queryProductById(ProductInfoQuery queryInfo)
             throws BusinessException, SystemException {
         CommonUtils.checkTenantId(queryInfo.getTenantId());
-       Product product = productBusiSV.queryByProdId(
+     /*  Product product = productBusiSV.queryByProdId(
                 queryInfo.getTenantId(),queryInfo.getSupplierId(),queryInfo.getProductId());
+       */
+      //查询es里的标准品
+    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
+    			queryInfo.getTenantId(),
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	searchCriterias.add(new SearchCriteria("supplierid",
+    			queryInfo.getSupplierId(),
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	searchCriterias.add(new SearchCriteria("productid",
+    			queryInfo.getProductId(),
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+    	SKUInfo product = result.getContents().get(0);
+       
+       
        ProductInfo productInfo = new ProductInfo();
        BeanUtils.copyProperties(productInfo,product);
        
