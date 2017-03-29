@@ -19,6 +19,9 @@ import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.platform.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
@@ -37,6 +40,7 @@ import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProdAttrAndValDefConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.CatAttrValAttach;
@@ -52,6 +56,7 @@ import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
@@ -351,11 +356,34 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     }*/
     public ProdAttrMap queryNoKeyAttrOfProduct(String tenantId, String supplierId,String productId) {
     	//查询商品信息
-    	Product product = productAtomSV.selectByProductId(tenantId,productId);
-    	if (product==null){
+    	//Product product = productAtomSV.selectByProductId(tenantId,productId);
+    	//查询es
+    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
+    			tenantId,
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	searchCriterias.add(new SearchCriteria("productid",
+    			productId,
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+    	if (CollectionUtil.isEmpty(result.getContents())) {
+    		logger.error("查询商品失败");
+    		return null;
+		}
+    	SKUInfo standedProduct = result.getContents().get(0);
+    	
+    	
+    	if (standedProduct==null){
     		logger.warn("未找到对应销售商品信息,租户ID:{},销售商品ID:{}",tenantId,productId);
     		throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
     	}
+    	
+    	Product product = new Product();
+    	product.setTenantId(standedProduct.getTenantid());
+    	product.setProductCatId(standedProduct.getProductcategoryid());
+    	product.setProdId(standedProduct.getProductid());
+    	
+    	
     	return queryNoKeyAttrOfProduct(product);
     }
 
