@@ -147,11 +147,15 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		maxSize = size;
 		List<SearchCriteria> searchfieldVos = CriteriaUtils.commonConditions(productEditParam);
 		Result<SKUInfo> result = productSearch.searchByCriteria(searchfieldVos, startSize, maxSize, null);
-        if(CollectionUtils.isEmpty(result.getContents())){
+        if(!CollectionUtils.isEmpty(result.getContents())){
         	for(SKUInfo skuInfo : result.getContents()){
         		ProductEditUp productEditUp = ConvertUtils.convertToProductEditUp(skuInfo);
         		productEditUps.add(productEditUp);
         	}
+        	response.setCount((int)result.getCount());
+        	response.setPageNo(startSize);
+        	response.setPageSize(maxSize);
+        	response.setPageCount((int)result.getCount()/startSize+((int)result.getCount()%maxSize>0 ? 1 : 0));
         }else{
         String tenantId = productEditParam.getTenantId();
         PageInfo<Product> products = productManagerBusiSV.queryPageForEdit(productEditParam);
@@ -502,6 +506,10 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         		ProductEditUp productEditUp = ConvertUtils.convertToProductEditUp(skuInfo);
         		productEditUps.add(productEditUp);
         	}
+        	response.setCount((int)result.getCount());
+        	response.setPageNo(startSize);
+        	response.setPageSize(maxSize);
+        	response.setPageCount((int)result.getCount()/startSize+((int)result.getCount()%maxSize>0 ? 1 : 0));
         }else{
         String tenantId = queryInSale.getTenantId();
         PageInfo<Product> productPage = productManagerBusiSV.queryInSale(queryInSale);
