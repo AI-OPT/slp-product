@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.normproduct.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -40,7 +42,6 @@ import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
-import com.ai.slp.product.dao.mapper.bo.StandedProductCriteria;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
@@ -51,7 +52,6 @@ import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
-import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.MQConfigUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -129,7 +129,7 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public NormProdInfoResponse queryProducById(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
-    	
+    	NormProdInfoResponse response = new NormProdInfoResponse();
     	//查询es
     	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
     	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
@@ -140,13 +140,26 @@ public class INormProductSVImpl implements INormProductSV {
     			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
     	
     	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
-    	
+    	if (CollectionUtil.isEmpty(result.getContents())) {
+    		response.setResponseHeader(new ResponseHeader(false, ExceptCodeConstants.Special.SYSTEM_ERROR, "查询商品失败"));
+    		return response;
+		}
     	SKUInfo product = result.getContents().get(0);
-    	NormProdInfoResponse response = new NormProdInfoResponse();
+    	
 		// 标准品信息填充返回值
-		BeanUtils.copyProperties(response, product);
-		response.setProductId(product.getProductid());
-		response.setProductName(product.getProductname());
+		//BeanUtils.copyProperties(response, product);
+    	response.setTenantId(product.getTenantid());
+    	response.setProductCatId(product.getProductcategoryid());
+    	response.setProductId(product.getProductid());
+    	response.setProductName(product.getProductname());
+    	response.setState(product.getStandprodstate());
+    	response.setProductType(product.getProducttype());
+    	response.setMarketPrice(product.getMarketprice());
+    	response.setCreateTime(new Timestamp(product.getCreatetime()));
+    	response.setOperTime(new Timestamp(product.getOpertime()));
+    	response.setSupplierId(product.getSupplierid());
+    	
+    	
 		Map<Long, Set<String>> attrAndValueIds = new HashMap<>();
 		Map<Long, String> attrAndValueMap = new HashMap<>();
 		// 查询属性信息
