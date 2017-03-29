@@ -2,6 +2,7 @@ package com.ai.slp.product.api.productcomment.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -214,7 +215,35 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		params.setState(CommonConstants.STATE_ACTIVE);
 
 
-		ProdComment comment = prodCommentAtomSV.queryByCommentId(replyComment.getCommentId());
+		//ProdComment comment = prodCommentAtomSV.queryByCommentId(replyComment.getCommentId());
+		//先查询ES缓存
+		IProductSearch productSearch = new ProductSearchImpl();
+		List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
+		if (!StringUtil.isBlank(replyComment.getCommentId())) {
+			searchfieldVos.add(new SearchCriteria("commentid", replyComment.getCommentId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		ProdComment comment = new ProdComment(); 
+		Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, 0, 10, null);
+		if (!CollectionUtil.isEmpty(commentResult.getContents())) {
+			CommentInfo commentInfo = commentResult.getContents().get(0);
+			comment.setTenantId(commentInfo.getTenantid());
+			comment.setCommentId(commentInfo.getCommentid());
+			comment.setProdId(commentInfo.getProductid());
+			comment.setUserId(commentInfo.getUserid());
+			comment.setCommentBody(commentInfo.getCommentbody());
+			comment.setShopScoreMs(commentInfo.getShopscorems());
+			comment.setShopScoreFw(commentInfo.getShopscorefw());
+			comment.setShopScoreWl(commentInfo.getShopscorewl());
+			//comment.setCommentTime(new Date(commentInfo.getCommenttime()));
+			comment.setState(commentInfo.getState());
+			comment.setReplyState(commentInfo.getReplaystate());
+			comment.setIsPicture(commentInfo.getIspictrue());
+			
+		} else {
+			logger.error("查询商品评价失败");
+		}
+		
+		
 		Integer queryCountByParams = 0;
 		if (comment != null) {
 			queryCountByParams = 1;
