@@ -118,7 +118,7 @@ public class ConvertUtils {
 	public static ProductEditUp convertToProductEditUp(SKUInfo skuInfo){
 		ProductEditUp productEditUp = new ProductEditUp();
 		productEditUp.setOperTime(new Timestamp(skuInfo.getOpertime()));
-		productEditUp.setCreateTime(new Timestamp(skuInfo.getOpertime()));
+		productEditUp.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
 		productEditUp.setDownTime(new Timestamp(skuInfo.getDowntime()));
 		productEditUp.setPicType(skuInfo.getImageinfo().getImagetype());
 		productEditUp.setProdId(skuInfo.getSkuid());
@@ -126,7 +126,7 @@ public class ConvertUtils {
 		productEditUp.setProductCatId(skuInfo.getProductcategoryid());
 		productEditUp.setProductCatName(skuInfo.getProductcatname());
 		productEditUp.setProductType(skuInfo.getProducttype());
-		productEditUp.setProPictureId(Long.valueOf(skuInfo.getImageinfo().getVfsid()));
+		//productEditUp.setProPictureId(Long.valueOf(skuInfo.getImageinfo().getVfsid()));
 		productEditUp.setState(skuInfo.getState());
 		productEditUp.setVfsId(skuInfo.getImageinfo().getVfsid());
 		productEditUp.setTotalNum(skuInfo.getUsablenum());
