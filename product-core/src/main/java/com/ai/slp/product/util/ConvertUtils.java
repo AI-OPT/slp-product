@@ -118,7 +118,7 @@ public class ConvertUtils {
 	public static ProductEditUp convertToProductEditUp(SKUInfo skuInfo){
 		ProductEditUp productEditUp = new ProductEditUp();
 		productEditUp.setOperTime(new Timestamp(skuInfo.getOpertime()));
-		productEditUp.setCreateTime(new Timestamp(skuInfo.getOpertime()));
+		productEditUp.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
 		productEditUp.setDownTime(new Timestamp(skuInfo.getDowntime()));
 		productEditUp.setPicType(skuInfo.getImageinfo().getImagetype());
 		productEditUp.setProdId(skuInfo.getSkuid());
@@ -126,7 +126,7 @@ public class ConvertUtils {
 		productEditUp.setProductCatId(skuInfo.getProductcategoryid());
 		productEditUp.setProductCatName(skuInfo.getProductcatname());
 		productEditUp.setProductType(skuInfo.getProducttype());
-		productEditUp.setProPictureId(Long.valueOf(skuInfo.getImageinfo().getVfsid()));
+		//productEditUp.setProPictureId(Long.valueOf(skuInfo.getImageinfo().getVfsid()));
 		productEditUp.setState(skuInfo.getState());
 		productEditUp.setVfsId(skuInfo.getImageinfo().getVfsid());
 		productEditUp.setTotalNum(skuInfo.getUsablenum());
@@ -194,8 +194,24 @@ public class ConvertUtils {
 	}
 
 	public static Product convertToProduct(SKUInfo skuInfo){
-		
-		return null;
+		Product product = new Product();
+		product.setBasicOrgId(skuInfo.getBasicorgid());
+		product.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
+		product.setUpTime(new Timestamp(skuInfo.getUptime()));
+		product.setDownTime(new Timestamp(skuInfo.getDowntime()));
+		product.setOperTime(new Timestamp(skuInfo.getOpertime()));
+		product.setIsSaleNationwide(skuInfo.getSalenationwide());
+		product.setMarketPrice(skuInfo.getMarketprice());
+		product.setProdId(skuInfo.getProductid());;
+		product.setProdName(skuInfo.getProductname());
+		product.setProductSellPoint(skuInfo.getProductsellpoint());
+		product.setProductType(skuInfo.getProducttype());
+		product.setRechargeType(skuInfo.getRechagetype());
+		product.setState(skuInfo.getState());
+		product.setStorageGroupId(skuInfo.getProductcategoryid());
+		product.setTenantId(skuInfo.getTenantid());
+		product.setUnit(skuInfo.getUnit());
+		return product;
 	}
 	
 }
