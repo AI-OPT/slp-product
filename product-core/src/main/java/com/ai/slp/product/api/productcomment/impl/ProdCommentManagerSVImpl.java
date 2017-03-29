@@ -234,7 +234,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			comment.setShopScoreMs(commentInfo.getShopscorems());
 			comment.setShopScoreFw(commentInfo.getShopscorefw());
 			comment.setShopScoreWl(commentInfo.getShopscorewl());
-			//comment.setCommentTime(new Date(commentInfo.getCommenttime()));
+			comment.setCommentTime(new Timestamp(commentInfo.getCommenttime()));
 			comment.setState(commentInfo.getState());
 			comment.setReplyState(commentInfo.getReplaystate());
 			comment.setIsPicture(commentInfo.getIspictrue());
