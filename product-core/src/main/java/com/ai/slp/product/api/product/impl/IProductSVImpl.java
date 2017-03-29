@@ -6,11 +6,13 @@ import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
 import com.ai.slp.product.api.product.param.*;
+import com.ai.slp.product.api.productcomment.impl.ProdCommentManagerSVImpl;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.SKUInfo;
@@ -20,10 +22,13 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
+import com.alibaba.dubbo.common.logger.Logger;
+import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +38,7 @@ import java.util.List;
 @Service(validation = "true")
 @Component
 public class IProductSVImpl implements IProductSV {
+	private static final Logger logger = LoggerFactory.getLogger(IProductSVImpl.class);
     @Autowired
     IProductBusiSV productBusiSV;
     @Autowired
@@ -88,11 +94,27 @@ public class IProductSVImpl implements IProductSV {
     			queryInfo.getProductId(),
     			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
     	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+    	if (CollectionUtil.isEmpty(result.getContents())) {
+    		logger.error("查询商品失败");
+    		return null;
+		}
     	SKUInfo product = result.getContents().get(0);
        
-       
        ProductInfo productInfo = new ProductInfo();
-       BeanUtils.copyProperties(productInfo,product);
+       //BeanUtils.copyProperties(productInfo,product);
+       productInfo.setProdId(product.getProductid());
+       productInfo.setProductCatId(product.getProductcategoryid());
+       productInfo.setStandedProdId(product.getProductid());
+       //productInfo.setStorageGroupId(product.get);
+       productInfo.setProductType(product.getProducttype());
+       productInfo.setProdName(product.getProductname());
+       productInfo.setProductSellPoint(product.getProductsellpoint());
+      // productInfo.setActiveTime();
+       //productInfo.setActiveType();
+       //productInfo.setProDetailContent();
+       productInfo.setState(product.getState());
+       productInfo.setCreateTime(new Timestamp(product.getCreatetime()));
+       
        
        return productInfo;
     }

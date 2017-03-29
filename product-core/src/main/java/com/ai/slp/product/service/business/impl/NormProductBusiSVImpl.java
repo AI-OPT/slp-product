@@ -745,9 +745,11 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     			standedProdId,
     			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
     	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+    	if (CollectionUtil.isEmpty(result.getContents())) {
+    		logger.error("查询商品失败");
+    		return null;
+		}
     	SKUInfo standedProduct = result.getContents().get(0);
-		
-    	
     	
 		if (standedProduct == null){
 			throw new BusinessException("", "未找到对应标准品信息,租户ID:" + tenantId + ",标准品标识:" + standedProdId);
