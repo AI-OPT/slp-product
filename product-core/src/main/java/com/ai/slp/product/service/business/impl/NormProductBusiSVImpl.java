@@ -536,7 +536,90 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		pageQueryVo.setProductId(productRequest.getStandedProdId());
 		pageQueryVo.setProductName(productRequest.getStandedProductName());
 		// 查询结果
-		PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
+		//PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
+		//查询es
+		IProductSearch productSearch = new ProductSearchImpl();
+		
+		List<SearchCriteria> criteria = new ArrayList<SearchCriteria>();
+		
+		// 类目id
+		if (StringUtils.isNotBlank(productRequest.getProductCatId())){
+			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_CATEGORY_ID,
+					productRequest.getProductCatId(),
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+			
+		}
+		// 商品标识
+		if (StringUtils.isNotBlank(productRequest.getStandedProdId())){
+			//精确查询
+			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
+					productRequest.getStandedProdId(),
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		// 商品名称
+		if (StringUtils.isNotBlank(productRequest.getStandedProductName())){
+			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_NAME,
+					productRequest.getStandedProductName(),
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		// 商品状态
+		if (StringUtils.isNotBlank(productRequest.getState())){
+			criteria.add(new SearchCriteria(SearchFieldConfConstants.STATE,
+					productRequest.getState(),
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		// 商品类型
+		if (StringUtils.isNotBlank(productRequest.getProductType())){
+			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_TYPE,
+					productRequest.getProductType(),
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+	/*	// 添加时间 开始时间
+		if (productRequest.getCreateStartTime() != null){
+			criteria.andCreateTimeGreaterThanOrEqualTo(DateUtils.toTimeStamp(request.getCreateStartTime()));
+		}
+		// 添加时间 截止时间
+		if (productRequest.getCreateEndTime() != null){
+			criteria.andCreateTimeLessThanOrEqualTo(DateUtils.toTimeStamp(request.getCreateEndTime()));
+		}
+		// 操作时间 开始时间
+		if (productRequest.getOperStartTime() != null){
+			criteria.andOperTimeGreaterThanOrEqualTo(DateUtils.toTimeStamp(request.getOperStartTime()));
+		}
+		// 操作时间 截止时间
+		if (productRequest.getOperEndTime() != null){
+			criteria.andOperTimeLessThanOrEqualTo(DateUtils.toTimeStamp(request.getOperEndTime()));
+		}*/
+		
+		PageInfo<StandedProduct> pageInfo = new PageInfo<StandedProduct>();
+		List<StandedProduct> standedProductList = new ArrayList<StandedProduct>();
+		
+		Result<SKUInfo> search = productSearch.search(criteria, productRequest.getPageNo(), productRequest.getPageSize(), null);
+		if (!CollectionUtil.isEmpty(search.getContents())) {
+			for (SKUInfo skuInfo : search.getContents()) {
+				StandedProduct standedProduct = new StandedProduct();
+				standedProduct.setStandedProdId(skuInfo.getProductid());
+				standedProduct.setTenantId(skuInfo.getTenantid());
+				standedProduct.setProductCatId(skuInfo.getProductcategoryid());
+				standedProduct.setStandedProductName(skuInfo.getProductname());
+				standedProduct.setProductType(skuInfo.getProducttype());
+				standedProduct.setMarketPrice(skuInfo.getMarketprice());
+				//standedProduct.setActiveType(skuInfo.geta);
+				standedProduct.setState(skuInfo.getState());
+				//standedProduct.setCreateTime(skuInfo.get);
+				standedProduct.setOperTime(new Timestamp(skuInfo.getOpertime()));
+				standedProduct.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
+				standedProduct.setSupplierId(skuInfo.getSupplierid());
+				
+				standedProductList.add(standedProduct);
+			}
+			pageInfo.setResult(standedProductList);
+			Long count = search.getCount();
+			pageInfo.setPageCount(count.intValue());
+			pageInfo.setPageNo(productRequest.getPageNo());
+			pageInfo.setPageSize(productRequest.getPageSize());
+		}
+		
 		
 /*		// 接口输出接口
 		PageInfoResponse<NormProdResponse> normProdPageInfo = new PageInfoResponse<NormProdResponse>();
@@ -563,7 +646,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			normProduct.setProductName(standedProduct.getStandedProductName());
 			normProductList.add(normProduct);
 		}*/
-		return productPageInfo;
+		return pageInfo;
 	}
 
 	@Override
