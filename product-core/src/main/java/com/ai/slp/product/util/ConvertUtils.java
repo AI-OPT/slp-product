@@ -173,6 +173,7 @@ public class ConvertUtils {
 			commentInfo.setShopscorewl(prodComment.getShopScoreWl());
 			commentInfo.setShopscorems(prodComment.getShopScoreMs());
 			commentInfo.setState(prodComment.getState());
+			commentInfo.setTenantid(prodComment.getTenantId());
 			commentInfo.setUserid(prodComment.getUserId());
 			/**
 			 * 评论图片
