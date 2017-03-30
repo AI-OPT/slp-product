@@ -174,7 +174,12 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         		prodAttr.setOperTime(product.getOperTime());
         		//获取属性类型
         		ProdCatAttr prodCatAttr = prodCatAttrAtomSV.selectById(tenantId, attrValReq.getAttrId().toString());
-        		prodAttr.setAttrType(prodCatAttr.getAttrType());
+        		if (prodCatAttr!=null) {
+        			prodAttr.setAttrType(prodCatAttr.getAttrType());
+				}else {
+					logger.error("获取属性类型失败");
+					return null;
+				}
         		// 添加成功
         		prodAttrAtomSV.installProdAttr(prodAttr);
         	}

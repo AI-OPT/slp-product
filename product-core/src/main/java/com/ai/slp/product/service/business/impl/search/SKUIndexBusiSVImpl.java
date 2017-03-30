@@ -149,8 +149,14 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             // 图片
             fillSKUImageInfo(skuInfo,prodSkuInfo.getProductcategoryid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid());
             // 价格
-            skuInfo.setPrice(skuStorageAtomSV.queryPriceOfSku(
-                    prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid()));
+            /*skuInfo.setPrice(skuStorageAtomSV.queryPriceOfSku(
+                    prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid()));*/
+            Long priceOfSku = skuStorageAtomSV.queryPriceOfSku(
+                    prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid());
+            if (priceOfSku!=null) {
+				
+            	skuInfo.setPrice(priceOfSku);
+			}
             //市场价
             Product selectByProductId = productAtomSV.selectByProductId(prodSkuInfo.getTenantid(),prodSkuInfo.getSkuid());
             skuInfo.setMarketprice(selectByProductId.getMarketPrice()==null?0:selectByProductId.getMarketPrice());

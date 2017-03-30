@@ -242,10 +242,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
 		}
 		// 判断商户ID是否传入的商户ID
-		if (!normProdct.getSupplierId().equals(standedProduct.getSupplierId())){
+	/*	if (!normProdct.getSupplierId().equals(standedProduct.getSupplierId())){
 			throw new BusinessException("",
 					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + normProdct.getSupplierId() + "不一致!");
-		}
+		}*/
 
 		/*
 		 * 总共有6种状态变化, 1.不允许变更为废弃状态;2.已废弃标准品不允许变更状态;3.可用变为不可用,需要检查.
@@ -282,7 +282,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			standedProductLogAtomSV.insert(productLog);
 		}
 		// 变更属性值. 1.将原来属性值设置为不可用;2,启用新的属性值.
-		updateStandedProdAttr(normProdct);
+		if (normProdct.getAttrValList()!=null) {
+			
+			updateStandedProdAttr(normProdct);
+		}
 		return updateCount;
 	}
 
@@ -594,7 +597,20 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		PageInfo<StandedProduct> pageInfo = new PageInfo<StandedProduct>();
 		List<StandedProduct> standedProductList = new ArrayList<StandedProduct>();
 		
-		Result<SKUInfo> search = productSearch.search(criteria, productRequest.getPageNo(), productRequest.getPageSize(), null);
+		
+		int startSize = 1;
+		int maxSize = 1;
+		// 最大条数设置
+		int pageNo = productRequest.getPageNo();
+		int size = productRequest.getPageSize();
+		if (productRequest.getPageNo() == 1) {
+			startSize = 0;
+		} else {
+			startSize = (pageNo - 1) * size;
+		}
+		maxSize = size;
+		
+		Result<SKUInfo> search = productSearch.search(criteria, startSize, maxSize, null);
 		if (!CollectionUtil.isEmpty(search.getContents())) {
 			for (SKUInfo skuInfo : search.getContents()) {
 				StandedProduct standedProduct = new StandedProduct();

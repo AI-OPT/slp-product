@@ -264,11 +264,11 @@ public class INormProductSVImpl implements INormProductSV {
 			throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
 		}
 		// 判断商户ID是否传入的商户ID
-		if (!productInfoRequest.getSupplierId().equals(standedProduct.getSupplierId())){
+		/*if (!productInfoRequest.getSupplierId().equals(standedProduct.getSupplierId())){
 			throw new BusinessException("",
 					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + productInfoRequest.getSupplierId() + "不一致!");
 		}
-    	
+    	*/
     	boolean ccsMqFlag=false;
 	   	//从配置中心获取mq_enable
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
