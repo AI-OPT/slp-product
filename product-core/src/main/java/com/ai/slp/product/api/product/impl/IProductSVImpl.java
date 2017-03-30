@@ -84,19 +84,32 @@ public class IProductSVImpl implements IProductSV {
        */
       //查询es里的标准品
     	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
-    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
+    	searchCriterias.add(new SearchCriteria("tenantid",
     			queryInfo.getTenantId(),
     			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-    	searchCriterias.add(new SearchCriteria("supplierid",
+    	/*searchCriterias.add(new SearchCriteria("supplierid",
     			queryInfo.getSupplierId(),
-    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));*/
     	searchCriterias.add(new SearchCriteria("productid",
     			queryInfo.getProductId(),
     			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+    	
+    	int startSize = 1;
+		int maxSize = 1;
+		// 最大条数设置
+		int pageNo = 1;
+		int size = 20;
+		if (pageNo == 1) {
+			startSize = 0;
+		} else {
+			startSize = (pageNo - 1) * size;
+		}
+		maxSize = size;
+    	
+    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, startSize, maxSize, null);
     	if (CollectionUtil.isEmpty(result.getContents())) {
     		logger.error("查询商品失败");
-    		return null;
+    		throw new BusinessException("查询es中的商品信息失败");
 		}
     	SKUInfo product = result.getContents().get(0);
        

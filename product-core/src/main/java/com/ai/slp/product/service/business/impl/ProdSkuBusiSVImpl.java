@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,10 +20,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.opt.sdk.util.StringUtil;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 //github.com/AI-OPT/slp-product.git
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
 import com.ai.slp.product.api.product.param.SkuAttrInfo;
@@ -39,11 +44,13 @@ import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
@@ -55,6 +62,7 @@ import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
 import com.ai.slp.product.search.bo.AttrInfo;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAttachAtomSV;
@@ -71,11 +79,13 @@ import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.vo.ProdSkuAttrStr;
 import com.ai.slp.product.vo.SkuStorageVo;
 
@@ -1057,7 +1067,59 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	@Override
 	public ProductSKUResponse querySkuDetail(String tenantId, String skuId, String skuAttrs) {
 		// 查询商品
-		Product product = productAtomSV.selectByProductId(tenantId, skuId);
+		//Product product = productAtomSV.selectByProductId(tenantId, skuId);
+		//查询es
+		IProductSearch productSearch = new ProductSearchImpl();
+		
+		List<SearchCriteria> criteria = new ArrayList<SearchCriteria>();
+		
+		// 商品标识
+		if (StringUtils.isNotBlank(skuId)){
+			//精确查询
+			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
+					skuId,
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		// 商品类型
+		if (StringUtils.isNotBlank(tenantId)){
+			criteria.add(new SearchCriteria("tenantid",
+					tenantId,
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		
+		
+		int startSize = 1;
+		int maxSize = 1;
+		// 最大条数设置
+		int pageNo = 1;
+		int size = 20;
+		if (pageNo == 1) {
+			startSize = 0;
+		} else {
+			startSize = (pageNo - 1) * size;
+		}
+		maxSize = size;
+		Result<SKUInfo> search = productSearch.search(criteria, startSize, maxSize, null);
+		Product product = new Product();
+		
+		if (!CollectionUtil.isEmpty(search.getContents())) {
+			for (SKUInfo skuInfo : search.getContents()) {
+				product.setStandedProdId(skuInfo.getProductid());
+				product.setProdId(skuInfo.getProductid());
+				product.setTenantId(skuInfo.getTenantid());
+				product.setProductCatId(skuInfo.getProductcategoryid());
+				product.setProdName(skuInfo.getProductname());
+				product.setProductType(skuInfo.getProducttype());
+				product.setMarketPrice(skuInfo.getMarketprice());
+				//product.setActiveType(skuInfo.geta);
+				product.setState(skuInfo.getState());
+				//product.setCreateTime(skuInfo.get);
+				product.setOperTime(new Timestamp(skuInfo.getOpertime()));
+				product.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
+				product.setSupplierId(skuInfo.getSupplierid());
+				
+			}
+		}
 		
 		if (product == null) {
 			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",tenantId, skuId, skuId);
