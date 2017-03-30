@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -24,6 +25,7 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -763,7 +765,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
     	if (CollectionUtil.isEmpty(result.getContents())) {
     		logger.error("查询商品失败");
-    		return null;
+    		throw new BusinessException("查询es中的商品失败");
 		}
     	SKUInfo standedProduct = result.getContents().get(0);
     	
@@ -986,7 +988,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
     	
     	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
-    	
+    	if (result.getContents()==null) {
+			throw new BusinessException("查询es信息失败");
+		}
     	SKUInfo standedProduct = result.getContents().get(0);
 		
 		// 判断此租户下是否存在次标准品
@@ -1017,12 +1021,17 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			//standedProduct.setMarketPrice(marketPrice.getMarketPrice());
 			standedProduct.setMarketprice(marketPrice.getMarketPrice());
 			// 更行标准品日志
-			StandedProductLog standedProductLog = new StandedProductLog();
-			BeanUtils.copyProperties(standedProductLog, standedProduct);
+			/*StandedProductLog standedProductLog = new StandedProductLog();
+			BeanUtils.copyProperties(standedProductLog, standedProduct);*/
 			//standedProductLogAtomSV.insert(standedProductLog);
 			// 更新价格类日志
 			ProdPriceLog prodPriceLog = new ProdPriceLog();
-			BeanUtils.copyProperties(prodPriceLog, standedProduct);
+			prodPriceLog.setUpdatePrice(marketPrice.getMarketPrice());
+			prodPriceLog.setOperId(marketPrice.getOperId());
+			prodPriceLog.setOperTime(DateUtil.getSysDate());
+			
+			
+//			BeanUtils.copyProperties(prodPriceLog, standedProduct);
 			// 设置对象类型为标准品-SA
 			prodPriceLog.setObjType("SA");
 			prodPriceLog.setObjId(standedProduct.getProductid());

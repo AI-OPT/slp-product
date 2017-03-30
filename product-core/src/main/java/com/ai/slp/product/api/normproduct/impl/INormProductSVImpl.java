@@ -338,11 +338,13 @@ public class INormProductSVImpl implements INormProductSV {
     			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
     	
     	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+    	if (result.getContents()==null) {
+			throw new BusinessException("查询信息失败");
+		}
+    	SKUInfo product = result.getContents().get(0);
     	
-    	SKUInfo standedProduct = result.getContents().get(0);
     	
-    	
-		if (standedProduct == null){
+		if (product == null){
 			throw new BusinessException("", "不存在指定商品,租户ID:" + tenantId + ",商品标识:" + productId);
 		}
 
@@ -352,10 +354,15 @@ public class INormProductSVImpl implements INormProductSV {
 		if (noDiscardNum > 0){
 			throw new BusinessException("", "该商品下存在[" + noDiscardNum + "]个未废弃库存组");
 		}
-    	StandedProduct standedProduct2 = new StandedProduct();
+    	StandedProduct standedProduct = new StandedProduct();
+    	//BeanUtils.copyProperties(standedProduct2, standedProduct);
+    	standedProduct.setTenantId(product.getTenantid());
+    	standedProduct.setStandedProdId(product.getProductid());
+    	standedProduct.setOperTime(new Timestamp(product.getOpertime()));
+    	standedProduct.setCreateTime(new Timestamp(product.getCreatetime()));
     	
-    	BeanUtils.copyProperties(standedProduct2, standedProduct);
-        normProductBusiSV.discardProduct(standedProduct2,invalidRequest.getOperId());
+    	
+        normProductBusiSV.discardProduct(standedProduct,invalidRequest.getOperId());
         return CommonUtils.genSuccessResponse("");
     }
 /*    public BaseResponse discardProduct(NormProdUniqueReq invalidRequest) throws BusinessException, SystemException {
