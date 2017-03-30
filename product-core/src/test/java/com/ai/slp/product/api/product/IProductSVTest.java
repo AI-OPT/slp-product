@@ -25,7 +25,7 @@ public class IProductSVTest {
     public void queryProductByIdTest(){
         ProductInfoQuery infoQuery = new ProductInfoQuery();
         infoQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
-        infoQuery.setProductId("1000000000000001");
+        infoQuery.setProductId("0000000000000623");
         ProductInfo productInfo = productSV.queryProductById(infoQuery);
         System.out.println(productInfo.getState());
     }
@@ -85,4 +85,14 @@ public class IProductSVTest {
         System.out.println("======\r\n----"+listResponse.getResponseHeader().isSuccess());
     }
     
+    @Test
+    public void queryNoKeyAttrInfoTest(){
+    	ProductInfoQuery query = new ProductInfoQuery();
+    	query.setTenantId("changhong");
+    	query.setProductId("0000000000000264");
+    	query.setSupplierId("-1");
+    	query.setOperId(1l);
+    	ProdAttrMap attrMap = productSV.queryNoKeyAttrInfo(query);
+    	System.out.println(attrMap.toString());
+    }
 }

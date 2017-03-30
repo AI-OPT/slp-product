@@ -28,7 +28,7 @@ public class IProductServerSVTest {
     public void queryProductSkuById(){
         SkuInfoQuery skuInfoQuery = new SkuInfoQuery();
         skuInfoQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
-        skuInfoQuery.setSkuId("1000000000002405");
+        skuInfoQuery.setSkuId("0000000000000264");
         ProductSkuInfo skuById = productServerSV.queryProductSkuById(skuInfoQuery);
         
         Gson gson = new Gson();
