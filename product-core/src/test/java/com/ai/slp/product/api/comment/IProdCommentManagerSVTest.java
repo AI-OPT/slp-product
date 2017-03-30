@@ -100,7 +100,7 @@ public class IProdCommentManagerSVTest {
 		ProdReplyComment replyComment = new ProdReplyComment();
 		replyComment.setTenantId("changhong");
 		replyComment.setSupplierId("-1");
-		replyComment.setCommentId("22");
+		replyComment.setCommentId("371");
 		replyComment.setReplierId("01");
 		replyComment.setReplyComment("哇咔咔...");
 		BaseResponse baseResponse = prodCommentManagerSV.replyComment(replyComment);
