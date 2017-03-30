@@ -104,7 +104,7 @@ public class INormProductSVTest {
     	req.setTenantId("changhong");
     	req.setOperId(1l);
     	req.setSupplierId("-1");
-    	req.setProductId("9000000000000360");
+    	req.setProductId("0000000000000603");
 		BaseResponse discardProduct = normProductSV.discardProduct(req);
     	System.out.print(discardProduct.getResponseHeader().isSuccess());
     	
@@ -115,11 +115,22 @@ public class INormProductSVTest {
     	MarketPriceUpdate priceUpdate = new MarketPriceUpdate();
     	priceUpdate.setTenantId("changhong");
     	priceUpdate.setSupplierId("-1");
-    	priceUpdate.setProductId("0000000000000368");
+    	priceUpdate.setProductId("0000000000000623");
     	priceUpdate.setOperId(1l);
-    	priceUpdate.setMarketPrice(210);
+    	priceUpdate.setMarketPrice(2222);
     	BaseResponse price = normProductSV.updateMarketPrice(priceUpdate);
     	System.out.println(price.getResponseHeader().isSuccess());
     }
     
+    @Test
+    public void queryAttrByNormProductTest(){
+    	AttrQuery query = new AttrQuery();
+    	query.setTenantId("changhong");
+    	query.setProductId("0000000000000613");
+    	query.setAttrType("1");
+    	
+    	AttrMap attrMap = normProductSV.queryAttrByNormProduct(query);
+    	
+    	System.out.println(attrMap.toString());
+    }
 }
