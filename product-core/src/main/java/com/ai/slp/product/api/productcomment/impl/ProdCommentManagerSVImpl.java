@@ -2,7 +2,6 @@ package com.ai.slp.product.api.productcomment.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,7 +114,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				result.setResult(prodCommentPageResponses);
 				result.setCount((int) commentResult.getCount());
 				result.setPageNo(prodCommentPageRequest.getPageNo());
-				result.setPageSize(maxSize);
+				result.setPageSize(prodCommentPageRequest.getPageSize());
 			} else {
 				// 查询商品信息
 				String tenantId = prodCommentPageRequest.getTenantId();

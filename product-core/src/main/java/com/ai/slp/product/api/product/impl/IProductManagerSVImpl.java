@@ -153,8 +153,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         		productEditUps.add(productEditUp);
         	}
         	response.setCount((int)result.getCount());
-        	response.setPageNo(startSize);
-        	response.setPageSize(maxSize);
+        	response.setPageNo(productEditParam.getPageNo());
+        	response.setPageSize(productEditParam.getPageSize());
         }else{
         String tenantId = productEditParam.getTenantId();
         PageInfo<Product> products = productManagerBusiSV.queryPageForEdit(productEditParam);
@@ -510,8 +510,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         		productEditUps.add(productEditUp);
         	}
         	response.setCount((int)result.getCount());
-        	response.setPageNo(startSize);
-        	response.setPageSize(maxSize);
+        	response.setPageNo(queryInSale.getPageNo());
+        	response.setPageSize(queryInSale.getPageSize());
         }else{
         String tenantId = queryInSale.getTenantId();
         PageInfo<Product> productPage = productManagerBusiSV.queryInSale(queryInSale);
@@ -538,7 +538,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             }
              productEditUps.add(productEditUp);
         	}
-        BeanUtils.copyProperties(response,productPage);
+        	BeanUtils.copyProperties(response,productPage);
         }
         response.setResult(productEditUps);
 		}catch(Exception e){
