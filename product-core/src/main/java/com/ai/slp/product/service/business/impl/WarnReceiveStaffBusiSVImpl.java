@@ -27,7 +27,7 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
     @Autowired
     IStorageAtomSV storageAtomSV;
 
-    @Override
+    @Override 
     public List<WarnReceStaff> queryByObjectId(WarnReceStafForQuery warnReceStafForQuery) {
         List<WarnReceiveStaff> warnReceiveStaffList = 
                 warnReceiveStaffAtomSV.selectWarnRecList(warnReceStafForQuery.getTenantId(), 
