@@ -250,7 +250,6 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		//标准品/商品/sku共用主键
 		prodSku.setSkuId(product.getProdId());
 		prodSkuAtomSV.createObj(prodSku);
-		//
 		return prodSku;
 	}
 	
