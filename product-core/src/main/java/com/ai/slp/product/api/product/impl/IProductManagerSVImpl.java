@@ -158,6 +158,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         }else{
         String tenantId = productEditParam.getTenantId();
         PageInfo<Product> products = productManagerBusiSV.queryPageForEdit(productEditParam);
+        if(!CollectionUtils.isEmpty(products.getResult())){
         for (Product product:products.getResult()){
             ProductEditUp productEditUp = new ProductEditUp();
             BeanUtils.copyProperties(productEditUp,product);
@@ -174,6 +175,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
                 productEditUp.setPicType(prodPicture.getPicType());
             }
              productEditUps.add(productEditUp);
+        	}
         }
         BeanUtils.copyProperties(response,products);
         }
@@ -320,7 +322,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             	standProdState = skuInfo.getStandprodstate();
             }else{
             	StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getProdId());
-            	standProdState = standedProduct.getState();
+            	if(null!=standedProduct){
+            		standProdState = standedProduct.getState();
+            	}
             }
             if (!StandedProductConstants.STATUS_ACTIVE.equals(standProdState)){
                 logger.warn("未找到指定的标准品或标准品状态为不可用,租户ID:{},商户ID:{},标准品ID:{}",tenantId,product.getSupplierId(),product.getStandedProdId());
