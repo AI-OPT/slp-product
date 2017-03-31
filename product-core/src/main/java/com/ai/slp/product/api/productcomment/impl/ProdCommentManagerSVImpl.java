@@ -101,6 +101,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			}
 			maxSize = size;
 			List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
+			searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STATE, "1",new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			if (!StringUtil.isBlank(prodCommentPageRequest.getSkuId())) {
 				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID, prodCommentPageRequest.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			}
