@@ -210,6 +210,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		Product product = productBusiSV.addProductWithStorageGroup(standedProduct, group,attrValList);
 		
 		// 添加SKU
+		product.setTenantId(normProduct.getTenantId());
 		prodSkuBusiSV.createSkuProduct(product);
 		
 		//将新增的商品添加至搜索引擎
