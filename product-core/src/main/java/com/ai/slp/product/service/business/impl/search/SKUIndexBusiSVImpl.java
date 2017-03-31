@@ -18,20 +18,34 @@ import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
+import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
+import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdSkuInfoSes;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSaleAll;
 import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.search.bo.*;
+import com.ai.slp.product.search.bo.CategoryInfo;
+import com.ai.slp.product.search.bo.ImageInfo;
+import com.ai.slp.product.search.bo.ProdAudiencesSes;
+import com.ai.slp.product.search.bo.SKUInfo;
+import com.ai.slp.product.search.bo.SaleAreaInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdAudiencesAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdPictureAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSaleAllAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdTargetAreaAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
+import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 
 /**
@@ -62,7 +76,10 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
 
     @Autowired
     private IProductAtomSV productAtomSV;
-
+    @Autowired
+    INormProductBusiSV normProductBusiSV;
+    
+    
     /**
      * 更新搜索信息
      * @param productId 商品标识
@@ -154,12 +171,20 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             Long priceOfSku = skuStorageAtomSV.queryPriceOfSku(
                     prodSkuInfo.getTenantid(),prodSkuInfo.getProductid(),prodSkuInfo.getSkuid());
             if (priceOfSku!=null) {
-				
             	skuInfo.setPrice(priceOfSku);
 			}
             //市场价
             Product selectByProductId = productAtomSV.selectByProductId(prodSkuInfo.getTenantid(),prodSkuInfo.getSkuid());
             skuInfo.setMarketprice(selectByProductId.getMarketPrice()==null?0:selectByProductId.getMarketPrice());
+            //商品状态
+            if (selectByProductId.getState() != null) {
+            	skuInfo.setState(selectByProductId.getState());
+			}
+			//标准品状态
+            StandedProduct standedProduct = normProductBusiSV.queryById(prodSkuInfo.getTenantid(), prodSkuInfo.getProductid());
+            if (standedProduct.getState() != null) {
+            	skuInfo.setStandprodstate(standedProduct.getState());
+			}
             
             // 受众
             //skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid()));
