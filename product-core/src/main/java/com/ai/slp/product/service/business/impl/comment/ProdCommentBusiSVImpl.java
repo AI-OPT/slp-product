@@ -60,6 +60,9 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	IProdSkuAtomSV prodSkuAtomSV;
 	@Autowired
 	IProductAtomSV productAtomSV;
+	
+	@Autowired
+	IProdCommentBusiSV prodCommentBusiSV;
 	@Autowired
 	IProdCommentPictureAtomSV prodCommentPictureAtomSV;
 	
@@ -243,17 +246,10 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 						params.getSkuId(),
 						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			}
-			if (!StringUtil.isBlank(params.getSkuId())) {
-				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
-						params.getSkuId(),
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-			}
-			
 			String tenantId = params.getTenantId();
 			if(!StringUtil.isBlank(tenantId)){
 				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
-						tenantId,
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+						tenantId,new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 				
 			}
 			String commentId = params.getCommentId();
@@ -266,25 +262,21 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 			String supplierId = params.getSupplierId();
 			if(!StringUtil.isBlank(supplierId)){
 				searchfieldVos.add(new SearchCriteria("supplierid",
-						supplierId,
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+						supplierId,new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 				
 			}
 			String orderId = params.getOrderId();
 			if(!StringUtil.isBlank(orderId)){
 				searchfieldVos.add(new SearchCriteria("orderid",
-						orderId,
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+						orderId,new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 				
 			}
 			String standedProdId = params.getStandedProdId();
 			if(!StringUtil.isBlank(standedProdId)){
 				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
-						standedProdId,
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-					
+						standedProdId,new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			}
-			
+			searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STATE, "1",new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			
 			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
 			if (!CollectionUtil.isEmpty(commentResult.getContents())) {

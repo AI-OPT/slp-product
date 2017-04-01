@@ -360,10 +360,9 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			BaseResponse baseResponse = new BaseResponse();
 			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"更新成功");
 			baseResponse.setResponseHeader(responseHeader );
-			List<CommentInfo> commentInfos = new ArrayList<>();
 			for(String commentId : updateCommentStateRequest.getCommentIdList()){
 				SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).
-					upsert(commentId, new JsonBuilder().startObject().field(SearchFieldConfConstants.STATE, updateCommentStateRequest.getState()).endObject());
+					upsert(commentId, new JsonBuilder().startObject().field(SearchFieldConfConstants.STATE, updateCommentStateRequest.getState()).field(SearchFieldConfConstants.COMMENT_ID, commentId).endObject());
 			}
 			return baseResponse;
 		}else{

@@ -54,4 +54,9 @@ public class SearchFieldConfConstants {
     public static final String PRODUCT_TYPE = "producttype";
     //供应商
     public static final String SUPPLIER = "supplier";
+    
+    
+    
+    //商品评论
+    public static final String COMMENT_ID = "commentid";
 }
