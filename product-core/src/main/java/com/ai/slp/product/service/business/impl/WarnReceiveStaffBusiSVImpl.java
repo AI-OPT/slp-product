@@ -56,7 +56,7 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
         int count = 0;
         for(WarnReceiveStaffOper warnReceiveStaffOper :operList){
             if(warnReceiveStaffOper.getObjectId() == null || warnReceiveStaffOper.getOperId() == 0){
-                throw new BusinessException("", "找不到指定的预警对象="+warnReceiveStaffOper.getObjectId()+
+                throw new  BusinessException("", "找不到指定的预警对象="+warnReceiveStaffOper.getObjectId()+
                         ",找不到操作人="+warnReceiveStaffOper.getOperId());
             }
             //根据操作类型查询是否存在-现只有仓库-通过预警对象标识查库存是否存在
