@@ -61,8 +61,10 @@ public class ConvertUtils {
 			 * 商品主图
 			 */
 			ProductImage productImage = new ProductImage();
-			productImage.setPicType(skuInfo.getImageinfo().getImagetype());
-			productImage.setVfsId(skuInfo.getImageinfo().getVfsid());
+			if(null!=skuInfo.getImageinfo()){
+				productImage.setPicType(skuInfo.getImageinfo().getImagetype());
+				productImage.setVfsId(skuInfo.getImageinfo().getVfsid());
+			}
 			prodAttrValue.setImage(productImage);
 			prodAttrValues.add(prodAttrValue);
 		}
@@ -101,10 +103,12 @@ public class ConvertUtils {
 					productSKUAttrValue.setAttrvalueDefId(prodAttrInfo.getAttrvaluedefid().toString());
 					productSKUAttrValue.setAttrValueName(prodAttrInfo.getAttrvaluename());
 					productSKUAttrValue.setAttrValueName2(prodAttrInfo.getAttrvaluename2());
-					ProductImage productImage = new ProductImage();
-					productImage.setPicType(skuInfo.getImageinfo().getImagetype());
-					productImage.setVfsId(skuInfo.getImageinfo().getVfsid());
-					productSKUAttrValue.setImage(productImage);
+					if(null!=skuInfo.getImageinfo()){
+						ProductImage productImage = new ProductImage();
+						productImage.setPicType(skuInfo.getImageinfo().getImagetype());
+						productImage.setVfsId(skuInfo.getImageinfo().getVfsid());
+						productSKUAttrValue.setImage(productImage);
+					}
 					productSKUAttrValues.add(productSKUAttrValue);
 				}
 				productSKUAttr.setAttrValueList(productSKUAttrValues);
@@ -120,7 +124,10 @@ public class ConvertUtils {
 		productEditUp.setOperTime(new Timestamp(skuInfo.getOpertime()));
 		productEditUp.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
 		productEditUp.setDownTime(new Timestamp(skuInfo.getDowntime()));
-		productEditUp.setPicType(skuInfo.getImageinfo().getImagetype());
+		if(null!=skuInfo.getImageinfo()){
+			productEditUp.setPicType(skuInfo.getImageinfo().getImagetype());
+			productEditUp.setVfsId(skuInfo.getImageinfo().getVfsid());
+		}
 		productEditUp.setProdId(skuInfo.getSkuid());
 		productEditUp.setProdName(skuInfo.getProductname());
 		productEditUp.setProductCatId(skuInfo.getProductcategoryid());
@@ -128,7 +135,6 @@ public class ConvertUtils {
 		productEditUp.setProductType(skuInfo.getProducttype());
 		//productEditUp.setProPictureId(Long.valueOf(skuInfo.getImageinfo().getVfsid()));
 		productEditUp.setState(skuInfo.getState());
-		productEditUp.setVfsId(skuInfo.getImageinfo().getVfsid());
 		productEditUp.setTotalNum(skuInfo.getUsablenum());
 		productEditUp.setSupplierId(skuInfo.getSupplierid());
 		return productEditUp;

@@ -153,11 +153,12 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         		productEditUps.add(productEditUp);
         	}
         	response.setCount((int)result.getCount());
-        	response.setPageNo(startSize);
-        	response.setPageSize(maxSize);
+        	response.setPageNo(productEditParam.getPageNo());
+        	response.setPageSize(productEditParam.getPageSize());
         }else{
         String tenantId = productEditParam.getTenantId();
         PageInfo<Product> products = productManagerBusiSV.queryPageForEdit(productEditParam);
+        if(!CollectionUtils.isEmpty(products.getResult())){
         for (Product product:products.getResult()){
             ProductEditUp productEditUp = new ProductEditUp();
             BeanUtils.copyProperties(productEditUp,product);
@@ -174,6 +175,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
                 productEditUp.setPicType(prodPicture.getPicType());
             }
              productEditUps.add(productEditUp);
+        	}
         }
         BeanUtils.copyProperties(response,products);
         }
@@ -320,7 +322,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             	standProdState = skuInfo.getStandprodstate();
             }else{
             	StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId,product.getProdId());
-            	standProdState = standedProduct.getState();
+            	if(null!=standedProduct){
+            		standProdState = standedProduct.getState();
+            	}
             }
             if (!StandedProductConstants.STATUS_ACTIVE.equals(standProdState)){
                 logger.warn("未找到指定的标准品或标准品状态为不可用,租户ID:{},商户ID:{},标准品ID:{}",tenantId,product.getSupplierId(),product.getStandedProdId());
@@ -506,8 +510,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         		productEditUps.add(productEditUp);
         	}
         	response.setCount((int)result.getCount());
-        	response.setPageNo(startSize);
-        	response.setPageSize(maxSize);
+        	response.setPageNo(queryInSale.getPageNo());
+        	response.setPageSize(queryInSale.getPageSize());
         }else{
         String tenantId = queryInSale.getTenantId();
         PageInfo<Product> productPage = productManagerBusiSV.queryInSale(queryInSale);
@@ -534,7 +538,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             }
              productEditUps.add(productEditUp);
         	}
-        BeanUtils.copyProperties(response,productPage);
+        	BeanUtils.copyProperties(response,productPage);
         }
         response.setResult(productEditUps);
 		}catch(Exception e){

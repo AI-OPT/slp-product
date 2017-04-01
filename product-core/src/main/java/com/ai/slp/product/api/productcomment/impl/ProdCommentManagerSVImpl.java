@@ -2,7 +2,6 @@ package com.ai.slp.product.api.productcomment.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +101,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			}
 			maxSize = size;
 			List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
+			searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STATE, "1",new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			if (!StringUtil.isBlank(prodCommentPageRequest.getSkuId())) {
 				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID, prodCommentPageRequest.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			}
@@ -115,7 +115,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				result.setResult(prodCommentPageResponses);
 				result.setCount((int) commentResult.getCount());
 				result.setPageNo(prodCommentPageRequest.getPageNo());
-				result.setPageSize(maxSize);
+				result.setPageSize(prodCommentPageRequest.getPageSize());
 			} else {
 				// 查询商品信息
 				String tenantId = prodCommentPageRequest.getTenantId();
