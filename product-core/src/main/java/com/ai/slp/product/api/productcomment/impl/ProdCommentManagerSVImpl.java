@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.productcomment.impl;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.search.common.JsonBuilder;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -350,10 +352,26 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 	}
 
 	@Override
-	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest)
-			throws BusinessException, SystemException {
+	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) throws IOException, Exception
+ {
 		CommonUtils.checkTenantId(updateCommentStateRequest.getTenantId());
-		return prodCommentBusiSV.updateCommentState(updateCommentStateRequest);
+		int count = prodCommentBusiSV.updateCommentState(updateCommentStateRequest);
+		if(count>0){
+			BaseResponse baseResponse = new BaseResponse();
+			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"更新成功");
+			baseResponse.setResponseHeader(responseHeader );
+			List<CommentInfo> commentInfos = new ArrayList<>();
+			for(String commentId : updateCommentStateRequest.getCommentIdList()){
+				SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).
+					upsert(commentId, new JsonBuilder().startObject().field(SearchFieldConfConstants.STATE, updateCommentStateRequest.getState()).endObject());
+			}
+			return baseResponse;
+		}else{
+			BaseResponse baseResponse = new BaseResponse();
+			ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.SUCCESS,"更新失败");
+			baseResponse.setResponseHeader(responseHeader );
+			return baseResponse;
+		}
 	}
 
 	@Override

@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
@@ -48,7 +46,6 @@ import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
-import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.util.ConvertUtils;
 import com.alibaba.fastjson.JSON;
 
@@ -363,23 +360,12 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	}
 
 	@Override
-	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) {
+	public int updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) {
 		String state = updateCommentStateRequest.getState();
 		String operId = updateCommentStateRequest.getOperId();
 		String tenantId = updateCommentStateRequest.getTenantId();
 		List<String> commentIdList = updateCommentStateRequest.getCommentIdList();
-		int count = prodCommentAtomSV.updateStateByIds(state,operId,tenantId,commentIdList);
-		if(count>0){
-			BaseResponse baseResponse = new BaseResponse();
-			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"更新成功");
-			baseResponse.setResponseHeader(responseHeader );
-			return baseResponse;
-		}else{
-			BaseResponse baseResponse = new BaseResponse();
-			ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.SUCCESS,"更新失败");
-			baseResponse.setResponseHeader(responseHeader );
-			return baseResponse;
-		}
+		return prodCommentAtomSV.updateStateByIds(state,operId,tenantId,commentIdList);
 	}
 
 	@Override

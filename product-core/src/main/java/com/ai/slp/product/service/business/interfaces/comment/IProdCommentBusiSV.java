@@ -3,7 +3,6 @@ package com.ai.slp.product.service.business.interfaces.comment;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
@@ -39,7 +38,7 @@ public interface IProdCommentBusiSV {
 	/**
 	 * 更新评论状态
 	 */
-	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest);
+	public int updateCommentState(UpdateCommentStateRequest updateCommentStateRequest);
 	/**
 	 * 查看评论图片
 	 */

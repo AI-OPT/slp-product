@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.comment;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.paas.ipaas.util.JSonUtil;
@@ -73,7 +76,7 @@ public class IProdCommentManagerSVTest {
 	}
 	
 	@Test
-	public void updateCommentStateTest(){
+	public void updateCommentStateTest() throws BusinessException, SystemException, IOException, Exception{
 		UpdateCommentStateRequest updateCommentStateRequest = new UpdateCommentStateRequest();
 		updateCommentStateRequest.setOperId("001");
 		updateCommentStateRequest.setState("0");

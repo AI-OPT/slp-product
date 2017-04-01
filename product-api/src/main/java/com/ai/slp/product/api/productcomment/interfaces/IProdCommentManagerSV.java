@@ -1,5 +1,7 @@
 package com.ai.slp.product.api.productcomment.interfaces;
 
+import java.io.IOException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -94,13 +96,15 @@ public interface IProdCommentManagerSV {
 	 * @throws BusinessException
 	 * @throws SystemException
 	 * @author jiaxs
+	 * @throws Exception 
+	 * @throws IOException 
 	 * @ApiDocMethod
 	 * @ApiCode PROD_COMM_0005
 	 * @RestRelativeURL prodCommentManager/updateCommentState
 	 */
 	@POST
 	@Path("/updateCommentState")
-	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) throws BusinessException, SystemException;
+	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) throws BusinessException, SystemException, IOException, Exception;
 	@interface UpdateCommentState{}
 	
 	/**
