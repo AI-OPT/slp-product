@@ -37,7 +37,7 @@ public interface IProductDetailSV {
 	@POST
 	@Path("/searchsku")
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest productSKURequest) throws BusinessException,SystemException;
-	@interface QueryProducSKUById{}
+	@interface QueryProducSKUById{ }
 	
 	/**
 	 * 查询商品SKU配置参数
