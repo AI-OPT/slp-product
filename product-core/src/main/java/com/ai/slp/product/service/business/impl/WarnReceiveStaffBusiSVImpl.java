@@ -53,7 +53,6 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
         if(operList == null || operList.isEmpty() ){
         	return 0;
         }
-        
         int count = 0;
         for(WarnReceiveStaffOper warnReceiveStaffOper :operList){
             if(warnReceiveStaffOper.getObjectId() == null || warnReceiveStaffOper.getOperId() == 0){
