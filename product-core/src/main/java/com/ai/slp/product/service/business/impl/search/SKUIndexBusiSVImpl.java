@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
@@ -47,6 +48,8 @@ import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
+
+import kafka.utils.threadsafe;
 
 /**
  * 搜索信息管理
@@ -185,6 +188,11 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             if (standedProduct.getState() != null) {
             	skuInfo.setStandprodstate(standedProduct.getState());
 			}
+            //标准品的producttype(实物 虚拟)
+            if (standedProduct.getProductType() == null) {
+            	throw new BusinessException("标准品的ProductType 为null");
+			}
+            skuInfo.setProducttype(standedProduct.getProductType());
             
             // 受众
             //skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid()));
