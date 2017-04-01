@@ -199,7 +199,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public String installNormProdAndPtoGroup(NormProdSaveRequest normProduct) {
 		// 添加标准品,不需保存标准品属性
-		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct);
+//		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct);
+		StandedProduct standedProduct = saveNormProd(normProduct);
 
 		// 添加一个库存组
 		STOStorageGroup storageGroup = createSTOStorageGroup(normProduct, standedProduct);
