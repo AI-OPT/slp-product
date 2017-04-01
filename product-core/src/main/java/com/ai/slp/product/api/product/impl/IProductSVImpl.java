@@ -128,7 +128,6 @@ public class IProductSVImpl implements IProductSV {
        productInfo.setState(product.getState());
        productInfo.setCreateTime(new Timestamp(product.getCreatetime()));
        
-       
        return productInfo;
     }
 /*    public ProductInfo queryProductById(ProductInfoQuery queryInfo)

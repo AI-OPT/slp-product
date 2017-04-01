@@ -129,8 +129,10 @@ public class ConvertUtils {
 			productEditUp.setVfsId(skuInfo.getImageinfo().getVfsid());
 		}
 		productEditUp.setProdId(skuInfo.getSkuid());
+		productEditUp.setStandedProdId(skuInfo.getSkuid());
 		productEditUp.setProdName(skuInfo.getProductname());
 		productEditUp.setProductCatId(skuInfo.getProductcategoryid());
+		productEditUp.setProductCatName(skuInfo.getProductcatname());
 		productEditUp.setProductCatName(skuInfo.getProductcatname());
 		productEditUp.setProductType(skuInfo.getProducttype());
 		//productEditUp.setProPictureId(Long.valueOf(skuInfo.getImageinfo().getVfsid()));
