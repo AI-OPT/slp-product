@@ -62,8 +62,6 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	IProductAtomSV productAtomSV;
 	
 	@Autowired
-	IProdCommentBusiSV prodCommentBusiSV;
-	@Autowired
 	IProdCommentPictureAtomSV prodCommentPictureAtomSV;
 	
 	@Override
