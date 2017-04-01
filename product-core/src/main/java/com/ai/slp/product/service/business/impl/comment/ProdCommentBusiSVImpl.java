@@ -15,17 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.StringUtil;
-import com.ai.paas.ipaas.search.vo.Result;
-import com.ai.paas.ipaas.search.vo.SearchCriteria;
-import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryRequset;
 import com.ai.slp.product.api.productcomment.param.CommentPictureQueryResponse;
@@ -35,21 +30,15 @@ import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.constants.ProductCommentConstants;
 import com.ai.slp.product.constants.ResultCodeConstants;
-import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentPicture;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.search.bo.comment.CommentInfo;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentPictureAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
-import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
-import com.ai.slp.product.util.CommonUtils;
-import com.ai.slp.product.util.ConvertUtils;
 import com.alibaba.fastjson.JSON;
 
 
@@ -63,6 +52,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	IProdSkuAtomSV prodSkuAtomSV;
 	@Autowired
 	IProductAtomSV productAtomSV;
+	
 	@Autowired
 	IProdCommentPictureAtomSV prodCommentPictureAtomSV;
 	
@@ -219,94 +209,14 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 */
 	
 	@Override
-	public List<ProdComment> queryPageInfo(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd, Integer pageSize, Integer pageNos) {
+	public List<CommentPageResponse> queryPageInfo(ProdComment params, Timestamp commentTimeBegin, Timestamp commentTimeEnd, Integer pageSize, Integer pageNos) {
 		
 		//List<ProdComment> queryPageList = prodCommentAtomSV.queryPageList(params,commentTimeBegin, commentTimeEnd, pageSize, pageNo);
-		List<ProdComment> prodCommentPage = new ArrayList<>();
+		List<CommentPageResponse> prodCommentPage = null;
 		try {
-			//CommonUtils.checkTenantId(prodCommentPageRequest.getTenantId());
-			/**
-			 * 先查询ES缓存
-			 */
-			IProductSearch productSearch = new ProductSearchImpl();
-			int startSize = 1;
-			int maxSize = 1;
-			int pageNo = pageNos;
-			int size = pageSize;
-			// 最大条数设置
-			if (pageNo == 1) {
-				startSize = 0;
-			} else {
-				startSize = (pageNo - 1) * size;
-			}
-			maxSize = size;
-			List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
-			if (!StringUtil.isBlank(params.getSkuId())) {
-				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
-						params.getSkuId(),
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-			}
-			if (!StringUtil.isBlank(params.getSkuId())) {
-				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
-						params.getSkuId(),
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-			}
-			
-			String tenantId = params.getTenantId();
-			if(!StringUtil.isBlank(tenantId)){
-				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
-						tenantId,
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-				
-			}
-			String commentId = params.getCommentId();
-			if(!StringUtil.isBlank(commentId)){
-				searchfieldVos.add(new SearchCriteria("commentid",
-						commentId,
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-				
-			}
-			String supplierId = params.getSupplierId();
-			if(!StringUtil.isBlank(supplierId)){
-				searchfieldVos.add(new SearchCriteria("supplierid",
-						supplierId,
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-				
-			}
-			String orderId = params.getOrderId();
-			if(!StringUtil.isBlank(orderId)){
-				searchfieldVos.add(new SearchCriteria("orderid",
-						orderId,
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-				
-			}
-			String standedProdId = params.getStandedProdId();
-			if(!StringUtil.isBlank(standedProdId)){
-				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
-						standedProdId,
-						new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-					
-			}
-			
-			
-			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
-			if (!CollectionUtil.isEmpty(commentResult.getContents())) {
-				
-				for (CommentInfo commentInfo : commentResult.getContents()) {
-					ProdComment comment = new ProdComment();
-					
-					ProdCommentPageResponse response = ConvertUtils.convertToProdCommentPageResponse(commentInfo);
-					BeanUtils.copyProperties(comment, response);
-					prodCommentPage.add(comment);
-				}
-				return prodCommentPage;
-			} else {
-				// SKUID与商品ID意义相同
-				Product product = productAtomSV.selectByProductId(tenantId, params.getSkuId());
-				if (product == null) {
-					return null;
-				}
-			}
+			params.setSkuId(null);
+			List<ProdComment> queryPageList = prodCommentAtomSV.queryPageListByProductId(params, pageSize, pageNos);
+			prodCommentPage = getCommentResponseList(queryPageList);
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
 		}
@@ -363,23 +273,12 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 	}
 
 	@Override
-	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) {
+	public int updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) {
 		String state = updateCommentStateRequest.getState();
 		String operId = updateCommentStateRequest.getOperId();
 		String tenantId = updateCommentStateRequest.getTenantId();
 		List<String> commentIdList = updateCommentStateRequest.getCommentIdList();
-		int count = prodCommentAtomSV.updateStateByIds(state,operId,tenantId,commentIdList);
-		if(count>0){
-			BaseResponse baseResponse = new BaseResponse();
-			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"更新成功");
-			baseResponse.setResponseHeader(responseHeader );
-			return baseResponse;
-		}else{
-			BaseResponse baseResponse = new BaseResponse();
-			ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.SUCCESS,"更新失败");
-			baseResponse.setResponseHeader(responseHeader );
-			return baseResponse;
-		}
+		return prodCommentAtomSV.updateStateByIds(state,operId,tenantId,commentIdList);
 	}
 
 	@Override

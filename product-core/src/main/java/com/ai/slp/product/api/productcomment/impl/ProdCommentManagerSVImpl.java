@@ -1,5 +1,6 @@
 package com.ai.slp.product.api.productcomment.impl;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.search.common.JsonBuilder;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -317,6 +319,69 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest)
 			throws BusinessException, SystemException {
 
+		PageInfoResponse<CommentPageResponse> result = new PageInfoResponse<CommentPageResponse>();
+		ResponseHeader responseHeader = null;
+		try {
+			CommonUtils.checkTenantId(commentPageRequest.getTenantId());
+			/**
+			 * 先查询ES缓存
+			 */
+			IProductSearch productSearch = new ProductSearchImpl();
+			int startSize = 1;
+			int maxSize = 1;
+			// 最大条数设置
+			int pageNo = commentPageRequest.getPageNo();
+			int size = commentPageRequest.getPageSize();
+			if (commentPageRequest.getPageNo() == 1) {
+				startSize = 0;
+			} else {
+				startSize = (pageNo - 1) * size;
+			}
+			maxSize = size;
+			List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
+			searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STATE, "1",new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
+			if (!CollectionUtil.isEmpty(commentResult.getContents())) {
+				List<CommentPageResponse> prodCommentPageResponses = new ArrayList<>();
+				for (CommentInfo commentInfo : commentResult.getContents()) {
+					CommentPageResponse response = ConvertUtils.convertToCommentPageResponse(commentInfo);
+					prodCommentPageResponses.add(response);
+				}
+				result.setResult(prodCommentPageResponses);
+				result.setCount((int) commentResult.getCount());
+				result.setPageNo(commentPageRequest.getPageNo());
+				result.setPageSize(commentPageRequest.getPageSize());
+			} else {
+				Integer pageSize = commentPageRequest.getPageSize();
+				Timestamp commentTimeBegin = commentPageRequest.getCommentTimeBegin();
+				Timestamp commentTimeEnd = commentPageRequest.getCommentTimeEnd();
+				ProdComment params = new ProdComment();
+				// 查询条数
+				Integer count = prodCommentAtomSV.queryCountByParams(params, commentTimeBegin, commentTimeEnd);
+				result.setCount(count);
+				List<CommentPageResponse> commentPageResponses = prodCommentBusiSV.queryPageInfo(params, commentTimeBegin, commentTimeEnd, pageSize, commentPageRequest.getPageNo());
+				result.setResult(commentPageResponses);
+				result.setPageNo(commentPageRequest.getPageNo());
+				result.setPageSize(commentPageRequest.getPageSize());
+				return result;
+			}
+		} catch (Exception e) {
+			logger.error("查询商品评价失败", e);
+			if (e instanceof BusinessException) {
+				responseHeader = new ResponseHeader(false, ((BusinessException) e).getErrorCode(),
+						((BusinessException) e).getErrorMessage());
+			} else {
+				responseHeader = new ResponseHeader(false, ExceptCodeConstants.Special.SYSTEM_ERROR, "查询商品评价失败");
+			}
+			result.setResponseHeader(responseHeader);
+		}
+		result.setResponseHeader(responseHeader);
+		return result;
+	}
+/*	@Override
+	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest)
+			throws BusinessException, SystemException {
+		
 		ProdComment params = new ProdComment();
 		BeanUtils.copyProperties(params, commentPageRequest);
 		Integer pageSize = commentPageRequest.getPageSize();
@@ -327,7 +392,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		CommonUtils.checkTenantId(commentPageRequest.getTenantId());
 		List<ProdComment> queryPageList = prodCommentBusiSV.queryPageInfo(params, commentTimeBegin, commentTimeEnd,
 				pageSize, pageNo);
-
+		
 		ResponseHeader responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "");
 		result.setResponseHeader(responseHeader);
 		result.setPageNo(pageNo);
@@ -344,16 +409,31 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			result.setResult(prodCommentList);
 			return result;
 		}
-
+		
 		// ruturn null;
-
+		
 	}
-
+*/
 	@Override
-	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest)
-			throws BusinessException, SystemException {
+	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) throws IOException, Exception
+ {
 		CommonUtils.checkTenantId(updateCommentStateRequest.getTenantId());
-		return prodCommentBusiSV.updateCommentState(updateCommentStateRequest);
+		int count = prodCommentBusiSV.updateCommentState(updateCommentStateRequest);
+		if(count>0){
+			BaseResponse baseResponse = new BaseResponse();
+			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"更新成功");
+			baseResponse.setResponseHeader(responseHeader );
+			for(String commentId : updateCommentStateRequest.getCommentIdList()){
+				SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).
+					upsert(commentId, new JsonBuilder().startObject().field(SearchFieldConfConstants.STATE, updateCommentStateRequest.getState()).field(SearchFieldConfConstants.COMMENT_ID, commentId).endObject());
+			}
+			return baseResponse;
+		}else{
+			BaseResponse baseResponse = new BaseResponse();
+			ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.SUCCESS,"更新失败");
+			baseResponse.setResponseHeader(responseHeader );
+			return baseResponse;
+		}
 	}
 
 	@Override
