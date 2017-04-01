@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.ai.slp.product.api.product.param.ProductEditUp;
+import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
 import com.ai.slp.product.api.webfront.param.ProdAttrValue;
@@ -162,6 +163,16 @@ public class ConvertUtils {
 			}
 		}
 		response.setPictureList(pictureVOs);
+		return response;
+	}
+	public static CommentPageResponse convertToCommentPageResponse(CommentInfo commentInfo){
+		CommentPageResponse response = new CommentPageResponse();
+		response.setCommentBody(commentInfo.getCommentbody());
+		response.setCommentId(commentInfo.getCommentid());
+		response.setCommentTime(new Timestamp(commentInfo.getCommenttime()));
+		response.setShopScoreMs(commentInfo.getShopscorems());
+		response.setTenantId(commentInfo.getTenantid());
+		response.setUserId(commentInfo.getUserid());
 		return response;
 	}
 	
