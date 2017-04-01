@@ -29,7 +29,7 @@ public class INormProductSVTest {
     public void queryNormProductTest(){
         NormProdRequest infoQuery = new NormProdRequest();
         infoQuery.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
-        infoQuery.setProductCatId("00000000000091");
+        //infoQuery.setProductCatId("00000000000091");
         //infoQuery.setProductId("100000000100");
         PageInfoResponse<NormProdResponse> productInfo = normProductSV.queryNormProduct(infoQuery);
         
