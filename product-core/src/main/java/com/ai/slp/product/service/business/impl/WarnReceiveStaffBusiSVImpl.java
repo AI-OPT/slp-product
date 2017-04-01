@@ -50,7 +50,7 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
 
     @Override
     public int addWarnReceStafList(List<WarnReceiveStaffOper> operList) {
-        if(operList == null || operList.isEmpty()){
+        if(operList == null || operList.isEmpty() ){
         	return 0;
         }
         int count = 0;
