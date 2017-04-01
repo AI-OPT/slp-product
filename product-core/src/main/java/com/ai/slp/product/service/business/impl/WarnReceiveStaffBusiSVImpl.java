@@ -54,7 +54,7 @@ public class WarnReceiveStaffBusiSVImpl implements IWarnReceiveStaffBusiSV{
         	return 0;
         }
         int count = 0;
-        for(WarnReceiveStaffOper warnReceiveStaffOper : operList){
+        for(WarnReceiveStaffOper warnReceiveStaffOper :operList){
             if(warnReceiveStaffOper.getObjectId() == null || warnReceiveStaffOper.getOperId() == 0){
                 throw new BusinessException("", "找不到指定的预警对象="+warnReceiveStaffOper.getObjectId()+
                         ",找不到操作人="+warnReceiveStaffOper.getOperId());
