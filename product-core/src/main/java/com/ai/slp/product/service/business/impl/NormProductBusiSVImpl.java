@@ -634,8 +634,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				standedProductList.add(standedProduct);
 			}
 			pageInfo.setResult(standedProductList);
-			Long count = search.getCount();
-			pageInfo.setPageCount(count.intValue());
+			long count = search.getCount();
+			pageInfo.setPageCount((int)count);
 			pageInfo.setPageNo(productRequest.getPageNo());
 			pageInfo.setPageSize(productRequest.getPageSize());
 		}
