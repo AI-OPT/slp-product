@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.product.param;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -128,7 +129,14 @@ public class ProductInfo extends BaseResponse {
      * 预售结束时间
      */
     private Timestamp presaleEndTime;
-
+    /**
+     * 商品销售地域
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
+    private List<SaleAreaInfo> saleAreaInfos;
+    
     public String getIsInvoice() {
 		return isInvoice;
 	}
