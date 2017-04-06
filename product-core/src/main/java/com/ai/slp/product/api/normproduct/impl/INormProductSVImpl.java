@@ -95,8 +95,6 @@ public class INormProductSVImpl implements INormProductSV {
     	
         PageInfoResponse<NormProdResponse> normProdPageInfo = new PageInfoResponse<NormProdResponse>();
 		BeanUtils.copyProperties(normProdPageInfo, productPageInfo);
-		
-		normProdPageInfo.setPageCount(0);
 		// 添加结果集
 		List<StandedProduct> productList = productPageInfo.getResult();
 		List<NormProdResponse> normProductList = new ArrayList<NormProdResponse>();

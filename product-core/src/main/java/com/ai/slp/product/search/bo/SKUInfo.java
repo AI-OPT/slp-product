@@ -176,16 +176,19 @@ public class SKUInfo {
 	 * @author Gavin
 	 * @UCUSER
 	 */
+	@Expose
 	private String isinvoice;
 	
 	/**
 	 * 上架类型
 	 */
+	@Expose
 	private String upshelftype;
 	
 	/**
 	 * 图文描述
 	 */
+	@Expose
 	 private String prodetailcontent;
 	
 	 
