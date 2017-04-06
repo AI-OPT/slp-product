@@ -638,9 +638,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			pageInfo.setCount((int)count);
 			pageInfo.setPageNo(productRequest.getPageNo());
 			pageInfo.setPageSize(productRequest.getPageSize());
-			
-			pageInfo.setPageCount(0);
-			
 		}
 		
 		
