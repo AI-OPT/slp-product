@@ -124,7 +124,10 @@ public class IProductSVImpl implements IProductSV {
        productInfo.setProductSellPoint(product.getProductsellpoint());
       // productInfo.setActiveTime();
        //productInfo.setActiveType();
-       //productInfo.setProDetailContent();
+       productInfo.setIsSaleNationwide(product.getSalenationwide());
+       productInfo.setIsInvoice(product.getIsinvoice());
+       productInfo.setUpshelfType(product.getUpshelftype());
+       productInfo.setProDetailContent(product.getProdetailcontent());
        productInfo.setState(product.getState());
        productInfo.setCreateTime(new Timestamp(product.getCreatetime()));
        

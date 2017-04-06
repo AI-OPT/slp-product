@@ -21,10 +21,12 @@ import com.ai.paas.ipaas.image.IImageClient;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
+import com.ai.slp.product.api.product.param.ProdPicInfo;
 import com.ai.slp.product.api.product.param.ProdStateLog;
 import com.ai.slp.product.api.product.param.ProductCheckParam;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductEditUp;
+import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
 import com.ai.slp.product.api.product.param.ProductInfoQuery;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.constants.CommonTestConstants;
@@ -137,6 +139,42 @@ public class IProductManagerSVTest {
     	PageInfoResponse<ProductEditUp> inSale = productManagerSV.searchInSale(queryInSale);
     	Gson gson = new Gson();
     	System.out.println(gson.toJson(inSale));
+    	
+    }
+    /**
+     * 商品updateProduct
+     * jiawen
+     */
+    @Test
+    public void updateProductTest(){
+    	ProductInfoForUpdate update = new ProductInfoForUpdate();
+    	update.setTenantId("changhong");
+    	update.setSupplierId("-1");
+    	update.setProdId("0000000000000803");
+    	update.setProdName("11-11");
+    	update.setActiveType("1");
+    	update.setProDetailContent("11111");
+    	update.setIsInvoice("N");
+    	update.setIsSaleNationwide("N");
+    	update.setUpshelfType("1");
+    	update.setAudiencesEnterprise("1");
+    	update.setAudiencesPerson("-1");
+    	update.setAudiencesAgents("1");
+    	List<ProdPicInfo> piclist = new ArrayList<>();
+    	ProdPicInfo picInfo = new ProdPicInfo();
+    	picInfo.setPicType("1");
+    	picInfo.setVfsId("111");
+    	piclist.add(picInfo);
+    	update.setProdPics(piclist);
+    	update.setOperId(1l);
+    	
+    	List<Long> provCodes = new ArrayList<>();
+    	provCodes.add(11l);
+    	update.setProvCodes(provCodes);
+    	
+        BaseResponse product = productManagerSV.updateProduct(update);
+    	Gson gson = new Gson();
+    	System.out.println(gson.toJson(product));
     	
     }
 

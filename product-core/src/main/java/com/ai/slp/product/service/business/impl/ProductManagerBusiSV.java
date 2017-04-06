@@ -410,7 +410,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         //* 个人受众
         String perAudi = productInfo.getAudiencesPerson();
         //全部可见
-        if (ProductConstants.ProdAudiences.userId.USER_TYPE.equals(perAudi)) {
+  /*      if (ProductConstants.ProdAudiences.userId.USER_TYPE.equals(perAudi)) {
             List<ProdAudiences> personAudiList = prodAudiencesAtomSV.queryByUserType(tenantId, productId,
                     ProductConstants.ProdAudiences.userType.PERSON, false);
             //为空,且全部可见
@@ -429,13 +429,13 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             //设置此类型为无效
             prodAudiencesAtomSV.updateNoUser(tenantId,productId,
                     ProductConstants.ProdAudiences.userType.PERSON,operId);
-        }
+        }*/
         //* 企业受众
-        updateGroupAudiences(tenantId,productId,ProductConstants.ProdAudiences.userType.ENTERPRISE,
-                productInfo.getAudiencesEnterprise(),productInfo.getEnterpriseIds(),operId);
+/*        updateGroupAudiences(tenantId,productId,ProductConstants.ProdAudiences.userType.ENTERPRISE,
+                productInfo.getAudiencesEnterprise(),productInfo.getEnterpriseIds(),operId);*/
         //* 代理商受众
-        updateGroupAudiences(tenantId,productId,ProductConstants.ProdAudiences.userType.AGENT,
-                productInfo.getAudiencesAgents(),productInfo.getAgentIds(),operId);
+ /*       updateGroupAudiences(tenantId,productId,ProductConstants.ProdAudiences.userType.AGENT,
+                productInfo.getAudiencesAgents(),productInfo.getAgentIds(),operId);*/
         //更新商品图片信息
         updateProdPic(tenantId,productId,"0",productInfo.getProdPics(),operId);
         //更新属性值图片信息
