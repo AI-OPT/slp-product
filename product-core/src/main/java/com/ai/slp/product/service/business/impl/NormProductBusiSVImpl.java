@@ -49,6 +49,7 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
+import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
@@ -638,6 +639,11 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			pageInfo.setCount((int)count);
 			pageInfo.setPageNo(productRequest.getPageNo());
 			pageInfo.setPageSize(productRequest.getPageSize());
+		}else{
+			pageInfo.setResult(null);
+			pageInfo.setCount(0);
+			pageInfo.setPageNo(1);
+			pageInfo.setPageSize(20);
 		}
 		
 		
