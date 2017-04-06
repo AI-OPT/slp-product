@@ -187,6 +187,15 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             //市场价
             Product selectByProductId = productAtomSV.selectByProductId(prodSkuInfo.getTenantid(),prodSkuInfo.getSkuid());
             skuInfo.setMarketprice(selectByProductId.getMarketPrice()==null?0:selectByProductId.getMarketPrice());
+            //是否全国销售
+            skuInfo.setSalenationwide(selectByProductId.getIsSaleNationwide());
+            //发票
+            skuInfo.setIsinvoice(selectByProductId.getIsInvoice());
+            //上架类型
+            skuInfo.setUpshelftype(selectByProductId.getUpshelfType());
+            //图文描述
+            skuInfo.setProdetailcontent(selectByProductId.getProDetailContent());
+            
             //商品状态
             if (selectByProductId.getState() != null) {
             	skuInfo.setState(selectByProductId.getState());
