@@ -82,6 +82,8 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
     @Autowired
     INormProductBusiSV normProductBusiSV;
     
+    @Autowired
+    IProdCatDefAtomSV catDefAtomSV;
     
     /**
      * 更新搜索信息
@@ -159,6 +161,12 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             skuInfo.setUptime(upTime==null? DateUtil.getCurrentTimeMillis():upTime.getTime());
             //类目
             skuInfo.setCategoryinfos(new ArrayList<CategoryInfo>());
+           //设置类目名称
+            ProductCat cat = catDefAtomSV.selectById(prodSkuInfo.getTenantid(),prodSkuInfo.getProductcategoryid());
+            if (cat!=null){
+            	skuInfo.setProductcatname(cat.getProductCatName());
+            }
+            
             fetchCategory(skuInfo,prodSkuInfo.getProductcategoryid());
             //属性
             skuInfo.setAttrinfos(prodAttrAtomSV.queryAttrOfProdId(prodSkuInfo.getProductid()));
