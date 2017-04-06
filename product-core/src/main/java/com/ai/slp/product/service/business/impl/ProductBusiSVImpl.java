@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
@@ -40,6 +42,7 @@ import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProdAttrAndValDefConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -56,6 +59,7 @@ import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.search.bo.AttrInfo;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
@@ -842,6 +846,35 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             ProductStateLog productStateLog = new ProductStateLog();
             BeanUtils.copyProperties(productStateLog, product);
             productStateLogAtomSV.insert(productStateLog);
+            
+            //查询es
+            IProductSearch productSearch = new ProductSearchImpl();
+    		List<SearchCriteria> criteria = new ArrayList<SearchCriteria>();
+    		// 商品标识
+    		if (StringUtils.isNotBlank(product.getProdId())){
+    			//精确查询
+    			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
+    					product.getProdId(),
+    					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    		}
+    		Result<SKUInfo> search = productSearch.search(criteria, 0, 20, null);
+            
+            //更新 es 
+    		List<SKUInfo> skuInfoList = new ArrayList<>();
+    		if (!CollectionUtil.isEmpty(search.getContents())) {
+    			for (SKUInfo skuInfo : search.getContents()) {
+    				SKUInfo info = new SKUInfo();
+    				BeanUtils.copyProperties(info, skuInfo);
+    				info.setProductsellpoint(product.getProductSellPoint());
+    				info.setIsinvoice(product.getIsInvoice());
+    				info.setUpshelftype(product.getUpshelfType());
+    				info.setProdetailcontent(product.getProDetailContent());
+    				skuInfoList.add(info);
+    			}
+    		}
+    		
+    		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+            
         }
     }
 

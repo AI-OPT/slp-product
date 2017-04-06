@@ -67,6 +67,7 @@ import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.search.bo.AttrInfo;
+import com.ai.slp.product.search.bo.ImageInfo;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
@@ -722,6 +723,37 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                 ProdPictureLog pictureLog = new ProdPictureLog();
                 BeanUtils.copyProperties(pictureLog,prodPicture);
                 prodPictureLogAtomSV.installLog(pictureLog);
+                
+                //查询es
+                IProductSearch productSearch = new ProductSearchImpl();
+        		List<SearchCriteria> criteria = new ArrayList<SearchCriteria>();
+        		// 商品标识
+        		if (StringUtils.isNotBlank(picInfo.getProdId())){
+        			//精确查询
+        			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
+        					picInfo.getProdId(),
+        					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+        		}
+        		Result<SKUInfo> search = productSearch.search(criteria, 0, 20, null);
+                
+                //更新 es 
+        		List<SKUInfo> skuInfoList = new ArrayList<>();
+        		List<ImageInfo> ImageInfoList = new ArrayList<>(); 
+        		if (!CollectionUtil.isEmpty(search.getContents())) {
+        			for (SKUInfo skuInfo : search.getContents()) {
+        				SKUInfo info = new SKUInfo();
+        				BeanUtils.copyProperties(info, skuInfo);
+        				ImageInfo imageInfo = new ImageInfo();
+        				imageInfo.setVfsid(picInfo.getVfsId());
+        				imageInfo.setImagetype(picInfo.getPicType());
+        				ImageInfoList.add(imageInfo);
+        				info.setThumbnail(ImageInfoList);
+        				skuInfoList.add(info);
+        			}
+        		}
+        		
+        		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+                
             }
         }
     }

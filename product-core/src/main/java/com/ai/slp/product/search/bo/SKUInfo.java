@@ -170,6 +170,49 @@ public class SKUInfo {
 	@Expose
 	private String storagegroupstate;
 
+	/**
+	 * 是否提供发票
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	private String isinvoice;
+	
+	/**
+	 * 上架类型
+	 */
+	private String upshelftype;
+	
+	/**
+	 * 图文描述
+	 */
+	 private String prodetailcontent;
+	
+	 
+	public String getIsinvoice() {
+		return isinvoice;
+	}
+
+	public void setIsinvoice(String isinvoice) {
+		this.isinvoice = isinvoice;
+	}
+
+	public String getUpshelftype() {
+		return upshelftype;
+	}
+
+	public void setUpshelftype(String upshelftype) {
+		this.upshelftype = upshelftype;
+	}
+
+	public String getProdetailcontent() {
+		return prodetailcontent;
+	}
+
+	public void setProdetailcontent(String prodetailcontent) {
+		this.prodetailcontent = prodetailcontent;
+	}
+
 	public String getState() {
 		return state;
 	}
