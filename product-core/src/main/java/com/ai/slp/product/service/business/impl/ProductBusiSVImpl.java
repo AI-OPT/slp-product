@@ -847,34 +847,6 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             BeanUtils.copyProperties(productStateLog, product);
             productStateLogAtomSV.insert(productStateLog);
             
-            //查询es
-            IProductSearch productSearch = new ProductSearchImpl();
-    		List<SearchCriteria> criteria = new ArrayList<SearchCriteria>();
-    		// 商品标识
-    		if (StringUtils.isNotBlank(product.getProdId())){
-    			//精确查询
-    			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
-    					product.getProdId(),
-    					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-    		}
-    		Result<SKUInfo> search = productSearch.search(criteria, 0, 20, null);
-            
-            //更新 es 
-    		List<SKUInfo> skuInfoList = new ArrayList<>();
-    		if (!CollectionUtil.isEmpty(search.getContents())) {
-    			for (SKUInfo skuInfo : search.getContents()) {
-    				SKUInfo info = new SKUInfo();
-    				BeanUtils.copyProperties(info, skuInfo);
-    				info.setProductsellpoint(product.getProductSellPoint());
-    				info.setIsinvoice(product.getIsInvoice());
-    				info.setUpshelftype(product.getUpshelfType());
-    				info.setProdetailcontent(product.getProDetailContent());
-    				skuInfoList.add(info);
-    			}
-    		}
-    		
-    		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
-            
         }
     }
 

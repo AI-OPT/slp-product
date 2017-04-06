@@ -453,6 +453,34 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         product.setState(ProductConstants.Product.State.VERIFYING);
         //添加日志
         productBusiSV.updateProdAndStatusLog(product);
+        
+        //查询es
+        IProductSearch productSearch = new ProductSearchImpl();
+		List<SearchCriteria> criteria = new ArrayList<SearchCriteria>();
+		// 商品标识
+		if (StringUtils.isNotBlank(productInfo.getProdId())){
+			//精确查询
+			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
+					productInfo.getProdId(),
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		Result<SKUInfo> search = productSearch.search(criteria, 0, 20, null);
+        
+        //更新 es 
+		List<SKUInfo> skuInfoList = new ArrayList<>();
+		if (!CollectionUtil.isEmpty(search.getContents())) {
+			for (SKUInfo skuInfo : search.getContents()) {
+				SKUInfo info = new SKUInfo();
+				BeanUtils.copyProperties(info, skuInfo);
+				info.setProductsellpoint(productInfo.getProductSellPoint());
+				info.setIsinvoice(productInfo.getIsInvoice());
+				info.setUpshelftype(productInfo.getUpshelfType());
+				info.setProdetailcontent(productInfo.getProDetailContent());
+				skuInfoList.add(info);
+			}
+		}
+		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+        
     }
 
     private Map<String,ProdAudiencesInfo> getAudiencesInfo(String tenantId,String prodId,String userType){
