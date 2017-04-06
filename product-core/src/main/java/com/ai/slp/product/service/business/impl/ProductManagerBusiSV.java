@@ -69,6 +69,7 @@ import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.search.bo.AttrInfo;
 import com.ai.slp.product.search.bo.ImageInfo;
 import com.ai.slp.product.search.bo.SKUInfo;
+import com.ai.slp.product.search.bo.SaleAreaInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
@@ -477,6 +478,15 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
 				info.setUpshelftype(productInfo.getUpshelfType());
 				info.setProdetailcontent(productInfo.getProDetailContent());
 				info.setState(ProductConstants.Product.State.VERIFYING);
+				List<Long> provCodes = productInfo.getProvCodes();
+				List<SaleAreaInfo> areaInfolist = new ArrayList<>();
+				for (Long prov : provCodes) {
+					SaleAreaInfo areaInfo = new SaleAreaInfo();
+					areaInfo.setProvcode(prov.toString());
+					areaInfolist.add(areaInfo);
+				}
+				info.setSaleareainfos(areaInfolist);
+				
 				skuInfoList.add(info);
 			}
 		}
