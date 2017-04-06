@@ -3,17 +3,17 @@ package com.ai.slp.product.api.product.param;
 /**
  * Created by xin on 16-5-20.
  */
-public class SaleAreaInfo {
+public class SaleAreaInfoNew {
 	/**
 	 * 省份编码
 	 */
     private String provcode;
 
-    public SaleAreaInfo() {
+    public SaleAreaInfoNew() {
         super();
     }
 
-    public SaleAreaInfo(String provcode) {
+    public SaleAreaInfoNew(String provcode) {
         this.provcode = provcode;
     }
 

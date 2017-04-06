@@ -16,6 +16,7 @@ import com.ai.slp.product.api.productcomment.impl.ProdCommentManagerSVImpl;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.SKUInfo;
+import com.ai.slp.product.search.bo.SaleAreaInfo;
 import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
@@ -130,6 +131,15 @@ public class IProductSVImpl implements IProductSV {
        productInfo.setProDetailContent(product.getProdetailcontent());
        productInfo.setState(product.getState());
        productInfo.setCreateTime(new Timestamp(product.getCreatetime()));
+       List<SaleAreaInfo> saleareainfos = product.getSaleareainfos();
+       List<SaleAreaInfoNew> list = new ArrayList<>();
+       for (SaleAreaInfo areaInfo : saleareainfos) {
+    	   SaleAreaInfoNew infoNew = new SaleAreaInfoNew();
+    	   infoNew.setProvcode(areaInfo.getProvcode());
+    	   list.add(infoNew);
+	   }
+       
+       productInfo.setSaleAreaInfos(list);
        
        return productInfo;
     }

@@ -135,9 +135,19 @@ public class ProductInfo extends BaseResponse {
      * @author Gavin
      * @UCUSER
      */
-    private List<SaleAreaInfo> saleAreaInfos;
+    private List<SaleAreaInfoNew> saleAreaInfos;
     
-    public String getIsInvoice() {
+    
+
+	public List<SaleAreaInfoNew> getSaleAreaInfos() {
+		return saleAreaInfos;
+	}
+
+	public void setSaleAreaInfos(List<SaleAreaInfoNew> saleAreaInfos) {
+		this.saleAreaInfos = saleAreaInfos;
+	}
+
+	public String getIsInvoice() {
 		return isInvoice;
 	}
 
