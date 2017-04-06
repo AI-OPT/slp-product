@@ -476,6 +476,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
 				info.setIsinvoice(productInfo.getIsInvoice());
 				info.setUpshelftype(productInfo.getUpshelfType());
 				info.setProdetailcontent(productInfo.getProDetailContent());
+				info.setState(ProductConstants.Product.State.VERIFYING);
 				skuInfoList.add(info);
 			}
 		}
