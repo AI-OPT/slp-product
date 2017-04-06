@@ -614,7 +614,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			startSize = (pageNo - 1) * size;
 		}
 		maxSize = size;
-		
+		long count =0;
 		Result<SKUInfo> search = productSearch.search(criteria, startSize, maxSize, null);
 		if (!CollectionUtil.isEmpty(search.getContents())) {
 			for (SKUInfo skuInfo : search.getContents()) {
@@ -635,17 +635,11 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				standedProductList.add(standedProduct);
 			}
 			pageInfo.setResult(standedProductList);
-			long count = search.getCount();
-			pageInfo.setCount((int)count);
-			pageInfo.setPageNo(productRequest.getPageNo());
-			pageInfo.setPageSize(productRequest.getPageSize());
-		}else{
-			pageInfo.setResult(null);
-			pageInfo.setCount(0);
-			pageInfo.setPageNo(1);
-			pageInfo.setPageSize(20);
+			count = search.getCount();
 		}
-		
+		pageInfo.setCount((int)count);
+		pageInfo.setPageNo(productRequest.getPageNo());
+		pageInfo.setPageSize(productRequest.getPageSize());
 		
 /*		// 接口输出接口
 		PageInfoResponse<NormProdResponse> normProdPageInfo = new PageInfoResponse<NormProdResponse>();

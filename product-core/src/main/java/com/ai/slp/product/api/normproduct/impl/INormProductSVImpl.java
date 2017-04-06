@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +101,7 @@ public class INormProductSVImpl implements INormProductSV {
 		List<NormProdResponse> normProductList = new ArrayList<NormProdResponse>();
 		normProdPageInfo.setResult(normProductList);
 
+		if(!CollectionUtils.isEmpty(productList)){
 		for (StandedProduct standedProduct : productList) {
 			NormProdResponse normProduct = new NormProdResponse();
 			BeanUtils.copyProperties(normProduct, standedProduct);
@@ -112,6 +114,7 @@ public class INormProductSVImpl implements INormProductSV {
 			normProduct.setProductId(standedProduct.getStandedProdId());
 			normProduct.setProductName(standedProduct.getStandedProductName());
 			normProductList.add(normProduct);
+		}
 		}
         
 		return normProdPageInfo;

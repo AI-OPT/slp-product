@@ -83,7 +83,7 @@ public class CriteriaUtils {
 			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_TYPE, productQueryInfo.getProductType(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		/**
-		 * 商品类型
+		 * 供应商
 		 */
 		if (!StringUtil.isBlank(productQueryInfo.getSupplierId())) {
 			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.SUPPLIER, productQueryInfo.getSupplierId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
