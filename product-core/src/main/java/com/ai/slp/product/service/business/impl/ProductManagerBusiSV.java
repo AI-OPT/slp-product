@@ -43,6 +43,7 @@ import com.ai.slp.product.api.product.param.TargetArea;
 import com.ai.slp.product.api.product.param.TargetAreaForProd;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
+import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
@@ -574,6 +575,8 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                 prodAttr.setAttrValueName2(valInfo.getAttrVal2());
                 prodAttr.setState(CommonConstants.STATE_ACTIVE);
                 prodAttr.setOperId(operId);
+                
+                prodAttr.setAttrType(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
                 //添加日志
                 if (prodAttrAtomSV.installProdAttr(prodAttr)>0){
                     ProdAttrLog prodAttrLog = new ProdAttrLog();
