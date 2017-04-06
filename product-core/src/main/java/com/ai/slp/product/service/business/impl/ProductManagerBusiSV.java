@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +20,13 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.platform.common.api.area.interfaces.IGnAreaQuerySV;
 import com.ai.platform.common.api.area.param.GnAreaVo;
 import com.ai.slp.product.api.product.param.OtherSetOfProduct;
@@ -45,9 +51,12 @@ import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.SearchConstants;
+import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttrLog;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
@@ -57,6 +66,8 @@ import com.ai.slp.product.dao.mapper.bo.product.ProdTargetArea;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
 import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
+import com.ai.slp.product.search.bo.AttrInfo;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
@@ -70,9 +81,11 @@ import com.ai.slp.product.service.atom.interfaces.product.IProdTargetAreaAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductStateLogAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 import com.ai.slp.user.api.keyinfo.interfaces.IUcKeyInfoSV;
@@ -582,6 +595,43 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                     ProdAttrLog prodAttrLog = new ProdAttrLog();
                     BeanUtils.copyProperties(prodAttrLog,prodAttr);
                     prodAttrLogAtomSV.installLog(prodAttrLog);
+                    
+                    //查询es
+                    IProductSearch productSearch = new ProductSearchImpl();
+            		List<SearchCriteria> criteria = new ArrayList<SearchCriteria>();
+            		// 商品标识
+            		if (StringUtils.isNotBlank(productId)){
+            			//精确查询
+            			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
+            					productId,
+            					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+            		}
+
+            		
+            		Result<SKUInfo> search = productSearch.search(criteria, 0, 20, null);
+            		
+            		List<SKUInfo> skuInfoList = new ArrayList<>();
+            		if (!CollectionUtil.isEmpty(search.getContents())) {
+            			for (SKUInfo skuInfo : search.getContents()) {
+            				SKUInfo info = new SKUInfo();
+            				BeanUtils.copyProperties(info, skuInfo);
+            				
+            				AttrInfo attr = new AttrInfo();
+            				attr.setAttrvalue(valInfo.getAttrVal());
+            				attr.setAttrvaluedefid(valInfo.getAttrValId());
+            				attr.setAttrid(attrId.toString());
+            				attr.setAttrtype(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_NONKEY);
+            				
+            				info.getAttrinfos().add(attr);
+            				skuInfoList.add(info);
+            			}
+            		}
+            		
+                    
+                    //更新es 
+            		
+            		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+                    
                 }
             }
         }
