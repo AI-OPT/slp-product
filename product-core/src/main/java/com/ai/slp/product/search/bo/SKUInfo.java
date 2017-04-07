@@ -190,8 +190,22 @@ public class SKUInfo {
 	 */
 	@Expose
 	 private String prodetailcontent;
+	/**
+	 * 路由组id
+	 */
+	@Expose
+	private String routegroupid;
+	
 	
 	 
+	public String getRoutegroupid() {
+		return routegroupid;
+	}
+
+	public void setRoutegroupid(String routegroupid) {
+		this.routegroupid = routegroupid;
+	}
+
 	public String getIsinvoice() {
 		return isinvoice;
 	}

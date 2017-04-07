@@ -195,7 +195,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             skuInfo.setUpshelftype(selectByProductId.getUpshelfType());
             //图文描述
             skuInfo.setProdetailcontent(selectByProductId.getProDetailContent());
-            
+            skuInfo.setRoutegroupid(selectByProductId.getStorageGroupId());
             //商品状态
             if (selectByProductId.getState() != null) {
             	skuInfo.setState(selectByProductId.getState());
