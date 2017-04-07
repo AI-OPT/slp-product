@@ -292,9 +292,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                 productBusiSV.changeToInSaleFromAudit(product,productCheckParam.getOperId());
                 
                 //将商品添加至搜索引擎
-                if(ProductConstants.Product.State.IN_SALE.equals(product.getState())){
+                /*if(ProductConstants.Product.State.IN_SALE.equals(product.getState())){
                 	skuIndexManage.updateSKUIndex(prodId,product.getUpTime().getTime());
-                }
+                }*/
                
                 
                 //查询es
@@ -324,6 +324,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                 //更新es
             	List<SKUInfo> skuInfoList = new ArrayList<>();
             	skuInfo.setState(ProductConstants.Product.State.IN_SALE);
+            	skuInfoList.add(skuInfo);
             	if (!CollectionUtil.isEmpty(skuInfoList)){
                 	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
                 }
@@ -360,6 +361,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                 //更新es
             	List<SKUInfo> skuInfoList = new ArrayList<>();
             	skuInfo.setState(ProductConstants.Product.State.IN_STORE);
+            	skuInfoList.add(skuInfo);
             	if (!CollectionUtil.isEmpty(skuInfoList)){
                 	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
                 }
