@@ -451,4 +451,9 @@ public class ProductAtomSVImpl implements IProductAtomSV {
         return prodAttrMapper.selectByExample(example);
 	}
 
+	@Override
+	public int updateProdState(Product record) {
+		return productAttachMapper.updateProdState(record);
+	}
+
 }

@@ -1,14 +1,17 @@
 package com.ai.slp.product.dao.mapper.attach;
 
-import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
-import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.type.JdbcType;
 
-import java.util.List;
+import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 
 /**
  * 商品属性扩展
@@ -63,4 +66,13 @@ public interface ProductAttachMapper {
 			@Result(property = "state", column = "state", javaType = String.class, jdbcType = JdbcType.VARCHAR)
 	})
 	public List<ProductRouteGroupInfo> queryProductAndRouteGroupPage(ProdRouteGroupQueryVo queryVo);
+	
+	/**
+     * 修改商品状态
+     * @param record
+     * @return
+     * @ApiDocMethod
+     */
+    @Update("update product set STATE=#{state} where prod_id = #{prodId} ")
+	public int updateProdState(Product record);
 }
