@@ -626,7 +626,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				standedProduct.setProductType(skuInfo.getProducttype());
 				standedProduct.setMarketPrice(skuInfo.getMarketprice());
 				//standedProduct.setActiveType(skuInfo.geta);
-				standedProduct.setState(skuInfo.getState());
+				standedProduct.setState(skuInfo.getStandprodstate());
 				//standedProduct.setCreateTime(skuInfo.get);
 				standedProduct.setOperTime(new Timestamp(skuInfo.getOpertime()));
 				standedProduct.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
