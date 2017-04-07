@@ -19,10 +19,21 @@ import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
-import com.ai.slp.product.api.storage.param.*;
-import com.ai.slp.product.constants.*;
+import com.ai.slp.product.api.storage.param.NameUpReq;
+import com.ai.slp.product.api.storage.param.STOStorageGroup;
+import com.ai.slp.product.api.storage.param.StorageGroup4List;
+import com.ai.slp.product.api.storage.param.StorageGroupOfNormProdPage;
+import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
+import com.ai.slp.product.api.storage.param.StorageGroupRes;
+import com.ai.slp.product.api.storage.param.StorageGroupRestwo;
+import com.ai.slp.product.api.storage.param.StorageGroupSalePrice;
+import com.ai.slp.product.api.storage.param.StorageRes;
+import com.ai.slp.product.constants.ProdPriceLogConstants;
+import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.RouteConstants;
+import com.ai.slp.product.constants.StandedProductConstants;
+import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.StorageGroupAttach4List;
-import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
@@ -36,7 +47,11 @@ import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.*;
+import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
@@ -259,13 +274,13 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 				storageTotal += storage.getUsableNum();
 			}
 			//若没有销售属性,则填充销售价
-			if(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR.equals(group.getIsSaleAttr())){
+			//if(StorageConstants.StorageGroup.isSaleAttr.NO_SALE_ATTR.equals(group.getIsSaleAttr())){
 				//查询库存对应SKU库存的信息.
 				List<SkuStorage> skuStoList = skuStorageAtomSV.queryByStorageId(storage.getStorageId(),true);
 				if (!CollectionUtil.isEmpty(skuStoList)){
 					stoStorage.setSalePrice(skuStoList.get(0).getSalePrice());
 				}
-			}
+			//}
 		}
 		groupInfo.setStorageTotal(storageTotal);
 		groupInfo.setStorageList(storageMap);
