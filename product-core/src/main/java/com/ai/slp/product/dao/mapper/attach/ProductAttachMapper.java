@@ -73,6 +73,6 @@ public interface ProductAttachMapper {
      * @return
      * @ApiDocMethod
      */
-    @Update("update product set STATE=#{state} where prod_id = #{prod_id} ")
+    @Update("update product set STATE=#{state} where prod_id = #{prodId} ")
 	public int updateProdState(Product record);
 }
