@@ -487,6 +487,16 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
 				}
 				info.setSaleareainfos(areaInfolist);
 				
+				
+				//主预览图
+	            ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(productInfo.getProdId());
+	            if (prodPicture!=null){
+	            	ImageInfo imageInfo = new ImageInfo();
+	            	imageInfo.setVfsid(prodPicture.getVfsId());
+	            	imageInfo.setImagetype(prodPicture.getPicType());
+	            }
+				
+				
 				skuInfoList.add(info);
 			}
 		}
