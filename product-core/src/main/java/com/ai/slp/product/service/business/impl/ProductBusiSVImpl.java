@@ -839,13 +839,13 @@ public class ProductBusiSVImpl implements IProductBusiSV {
 
     public void updateProdAndStatusLog(Product product){
         if (productAtomSV.updateById(product)>0){
-            ProductLog log = new ProductLog();
+          /*  ProductLog log = new ProductLog();
             BeanUtils.copyProperties(log,product);
             productLogAtomSV.install(log);
             //商品状态日志表
             ProductStateLog productStateLog = new ProductStateLog();
             BeanUtils.copyProperties(productStateLog, product);
-            productStateLogAtomSV.insert(productStateLog);
+            productStateLogAtomSV.insert(productStateLog);*/
             
         }
     }
