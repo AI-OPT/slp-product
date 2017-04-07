@@ -231,7 +231,7 @@ public class ConvertUtils {
 		product.setRechargeType(skuInfo.getRechagetype());
 		product.setState(skuInfo.getState());
 		
-		product.setStorageGroupId(skuInfo.getRoutegroupid());
+		product.setStorageGroupId(skuInfo.getStoragegroupid());
 		product.setTenantId(skuInfo.getTenantid());
 		product.setUnit(skuInfo.getUnit());
 		return product;

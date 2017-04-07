@@ -119,7 +119,7 @@ public class IProductSVImpl implements IProductSV {
        productInfo.setProdId(product.getProductid());
        productInfo.setProductCatId(product.getProductcategoryid());
        productInfo.setStandedProdId(product.getProductid());
-       productInfo.setStorageGroupId(product.getRoutegroupid());
+       productInfo.setStorageGroupId(product.getStoragegroupid());
        productInfo.setProductType(product.getProducttype());
        productInfo.setProdName(product.getProductname());
        productInfo.setProductSellPoint(product.getProductsellpoint());

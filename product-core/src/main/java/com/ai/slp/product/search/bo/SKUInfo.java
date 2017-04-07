@@ -194,17 +194,32 @@ public class SKUInfo {
 	 * 路由组id
 	 */
 	@Expose
-	private String routegroupid;
+	private String storagegroupid;
+	
+	/**
+	 * 操作人id
+	 */
+	@Expose
+	private String operid;
 	
 	
 	 
-	public String getRoutegroupid() {
-		return routegroupid;
+	public String getStoragegroupid() {
+		return storagegroupid;
 	}
 
-	public void setRoutegroupid(String routegroupid) {
-		this.routegroupid = routegroupid;
+	public void setStoragegroupid(String storagegroupid) {
+		this.storagegroupid = storagegroupid;
 	}
+
+	public String getOperid() {
+		return operid;
+	}
+
+	public void setOperid(String operid) {
+		this.operid = operid;
+	}
+
 
 	public String getIsinvoice() {
 		return isinvoice;

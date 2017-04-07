@@ -162,6 +162,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		// 添加标准品属性值
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
 		Timestamp nowTime = DateUtils.currTimeStamp();
+		
+		
 		for (AttrValRequest attrValReq : attrValList) {
 			StandedProdAttr prodAttr = new StandedProdAttr();
 			BeanUtils.copyProperties(prodAttr, attrValReq);

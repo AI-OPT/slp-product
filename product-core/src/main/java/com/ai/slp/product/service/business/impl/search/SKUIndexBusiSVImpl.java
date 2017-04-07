@@ -195,7 +195,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             skuInfo.setUpshelftype(selectByProductId.getUpshelfType());
             //图文描述
             skuInfo.setProdetailcontent(selectByProductId.getProDetailContent());
-            skuInfo.setRoutegroupid(selectByProductId.getStorageGroupId());
+            skuInfo.setStoragegroupid(selectByProductId.getStorageGroupId());
             //商品状态
             if (selectByProductId.getState() != null) {
             	skuInfo.setState(selectByProductId.getState());
@@ -210,7 +210,8 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             	throw new BusinessException("标准品的ProductType 为null");
 			}
             skuInfo.setProducttype(standedProduct.getProductType());
-            
+            //標準品创建时间
+            skuInfo.setCreatetime(standedProduct.getCreateTime().getTime());
             // 受众
             //skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid()));
             //销售地域
