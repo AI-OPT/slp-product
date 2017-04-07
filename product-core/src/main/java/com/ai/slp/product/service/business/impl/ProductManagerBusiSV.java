@@ -322,12 +322,11 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         		}
             	SKUInfo skuInfo = result.getContents().get(0);
                 //更新es
-            	 List<SKUInfo> skuInfoList = new ArrayList<>();
+            	List<SKUInfo> skuInfoList = new ArrayList<>();
             	skuInfo.setState(ProductConstants.Product.State.IN_STORE);
             	if (!CollectionUtil.isEmpty(skuInfoList)){
                 	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
                 }
-                
                 
             }else {
                 product.setState(ProductConstants.Product.State.IN_STORE);
