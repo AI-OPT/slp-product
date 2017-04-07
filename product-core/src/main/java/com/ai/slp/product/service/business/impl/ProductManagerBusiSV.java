@@ -323,7 +323,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             	SKUInfo skuInfo = result.getContents().get(0);
                 //更新es
             	List<SKUInfo> skuInfoList = new ArrayList<>();
-            	skuInfo.setState(ProductConstants.Product.State.IN_STORE);
+            	skuInfo.setState(ProductConstants.Product.State.IN_SALE);
             	if (!CollectionUtil.isEmpty(skuInfoList)){
                 	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
                 }
@@ -332,6 +332,37 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                 product.setState(ProductConstants.Product.State.IN_STORE);
                 product.setOperId(productCheckParam.getOperId());
                 updateProductStatusLog(product,stateLog);
+                
+                //查询es
+            	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+            	searchCriterias.add(new SearchCriteria("productid",
+            			prodId,
+            			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+            	
+            	int startSize = 1;
+        		int maxSize = 1;
+        		// 最大条数设置
+        		int pageNo = 1;
+        		int size = 20;
+        		if (pageNo == 1) {
+        			startSize = 0;
+        		} else {
+        			startSize = (pageNo - 1) * size;
+        		}
+        		maxSize = size;
+        		IProductSearch productSearch = new ProductSearchImpl();
+            	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, startSize, maxSize, null);
+            	if (CollectionUtil.isEmpty(result.getContents())) {
+            		logger.error("查询商品失败");
+            		throw new BusinessException("查询es中的商品信息失败");
+        		}
+            	SKUInfo skuInfo = result.getContents().get(0);
+                //更新es
+            	List<SKUInfo> skuInfoList = new ArrayList<>();
+            	skuInfo.setState(ProductConstants.Product.State.IN_STORE);
+            	if (!CollectionUtil.isEmpty(skuInfoList)){
+                	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+                }
             }
         }
     }
