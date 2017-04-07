@@ -125,6 +125,7 @@ public class ConvertUtils {
 		productEditUp.setOperTime(new Timestamp(skuInfo.getOpertime()));
 		productEditUp.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
 		productEditUp.setDownTime(new Timestamp(skuInfo.getDowntime()));
+		productEditUp.setUpTime(new Timestamp(skuInfo.getUptime()));
 		if(null!=skuInfo.getImageinfo()){
 			productEditUp.setPicType(skuInfo.getImageinfo().getImagetype());
 			productEditUp.setVfsId(skuInfo.getImageinfo().getVfsid());
