@@ -457,7 +457,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		if (!ccsMqFlag) {
 			CommonUtils.checkTenantId(query.getTenantId());
 			//将商品从搜索引擎中移除
-	        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
+			skuIndexManage.updateSKUIndex(product.getProdId(),product.getDownTime().getTime());
+			skuIndexManage.updateSKUIndex(product.getState(),Long.valueOf(ProductConstants.Product.State.IN_STORE ));
+	        //skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
 	        productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),product,query.getOperId());
 	        return CommonUtils.genSuccessResponse("");
 		} else {
