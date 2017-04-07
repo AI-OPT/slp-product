@@ -13,13 +13,18 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.components.mds.MDSClientFactory;
+import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.storage.param.*;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.constants.ProdPriceLogConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.SkuStorageConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
@@ -29,6 +34,7 @@ import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
@@ -38,7 +44,9 @@ import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.MQConfigUtil;
 import com.ai.slp.product.util.SkuStorageListComparator;
@@ -214,7 +222,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		
 		//对salePriceList进行排序   
 		Collections.sort(salePriceList, new StoNoSkuSalePriceComparator());
-		
+		List<SKUInfo> list = new ArrayList<>();
 		for(StoNoSkuSalePrice salePrice:salePriceList){
 			// 库存标识为空,库存对应价格为空,库存销售价小于等于0,均不处理
 			if (salePrice.getPriorityNumber()==null
@@ -223,7 +231,36 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 				continue;
 			}
 			count += updateSkuPrice(salePrice.getGroupId(),null,salePrice.getPriorityNumber(),salePrice.getSalePrice(),operId);
+			
+			//查询es里的标准品
+	    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+	    	searchCriterias.add(new SearchCriteria("routegroupid",
+	    			salePrice.getGroupId(),
+	    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+	    	
+	    	int startSize = 1;
+			int maxSize = 1;
+			// 最大条数设置
+			int pageNo = 1;
+			int size = 20;
+			if (pageNo == 1) {
+				startSize = 0;
+			} else {
+				startSize = (pageNo - 1) * size;
+			}
+			maxSize = size;
+			IProductSearch productSearch = new ProductSearchImpl();
+	    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, startSize, maxSize, null);
+	    	if (CollectionUtil.isEmpty(result.getContents())) {
+	    		logger.error("查询商品失败");
+	    		throw new BusinessException("查询es中的商品信息失败");
+			}
+	    	SKUInfo product = result.getContents().get(0);
+	    	product.setPrice(salePrice.getSalePrice());
+	    	list.add(product);
+	    	
 		}
+		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(list);
 		return count;
 	}
 
