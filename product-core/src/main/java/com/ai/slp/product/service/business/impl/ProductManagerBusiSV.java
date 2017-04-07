@@ -524,11 +524,13 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
 				
 				
 				//主预览图
-	            ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(productInfo.getProdId());
-	            if (prodPicture!=null){
+	           // ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(productInfo.getProdId());
+	            if (productInfo.getProdPics()!=null && productInfo.getProdPics().get(0) != null){
+	            	
 	            	ImageInfo imageInfo = new ImageInfo();
-	            	imageInfo.setVfsid(prodPicture.getVfsId());
-	            	imageInfo.setImagetype(prodPicture.getPicType());
+	            	imageInfo.setVfsid(productInfo.getProdPics().get(0).getVfsId());
+	            	imageInfo.setImagetype(productInfo.getProdPics().get(0).getPicType());
+	            	info.setImageinfo(imageInfo);
 	            }
 				
 				
