@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
@@ -42,6 +43,7 @@ import com.ai.slp.product.api.normproduct.param.ProdCatAttrInfo;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
+import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -629,9 +631,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				standedProduct.setMarketPrice(skuInfo.getMarketprice());
 				//standedProduct.setActiveType(skuInfo.geta);
 				standedProduct.setState(skuInfo.getStandprodstate());
-				//standedProduct.setCreateTime(skuInfo.get);
-				standedProduct.setOperTime(new Timestamp(skuInfo.getOpertime()));
 				standedProduct.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
+				standedProduct.setOperTime(new Timestamp(skuInfo.getOpertime()));
+				//standedProduct.setOperTime(new Timestamp(skuInfo.getOpertime()));
+				//standedProduct.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
 				standedProduct.setSupplierId(skuInfo.getSupplierid());
 				
 				standedProductList.add(standedProduct);
@@ -1044,7 +1047,35 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			prodPriceLogAtomSV.insert(prodPriceLog);
 			
 			//将更新市场价的商品添加至搜索引擎
-	        skuIndexManage.updateSKUIndex(product.getProdId(),product.getOperTime().getTime());
+	        //skuIndexManage.updateSKUIndex(product.getProdId(),product.getOperTime().getTime());
+			//查询es
+        	List<SearchCriteria> searchCriteria = new ArrayList<SearchCriteria>();
+        	searchCriteria.add(new SearchCriteria("productid",
+        			marketPrice.getProductId(),
+        			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+        	
+        	int startSize = 1;
+    		int maxSize = 1;
+    		// 最大条数设置
+    		int pageNo = 1;
+    		int size = 20;
+    		if (pageNo == 1) {
+    			startSize = 0;
+    		} else {
+    			startSize = (pageNo - 1) * size;
+    		}
+    		maxSize = size;
+    		IProductSearch search = new ProductSearchImpl();
+        	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriterias, startSize, maxSize, null);
+        	if (CollectionUtil.isEmpty(infoResult.getContents())) {
+        		logger.error("查询商品失败");
+        		throw new BusinessException("查询es中的商品信息失败");
+    		}
+        	SKUInfo skuInfos = infoResult.getContents().get(0);
+        	List<SKUInfo> skuInfoList = new ArrayList<>();
+        	skuInfoList.add(skuInfos);
+        	
+        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
 			
 		}
 
