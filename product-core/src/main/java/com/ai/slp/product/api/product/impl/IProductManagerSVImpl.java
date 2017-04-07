@@ -18,6 +18,7 @@ import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.mds.MDSClientFactory;
+import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
@@ -41,6 +42,7 @@ import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.constants.ProductConstants;
+import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
@@ -376,7 +378,34 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             }
             productBusiSV.changeToInSale(product,operId);
             //将商品添加至搜索引擎
-            skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
+            //skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
+            //查询es
+        	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+        	searchCriterias.add(new SearchCriteria("productid",
+        			product.getProdId(),
+        			new SearchOption(SearchOption.SearchLogic.must,  SearchOption.SearchType.querystring)));
+        	
+    		// 最大条数设置
+    		int pageNo = 1;
+    		int size = 20;
+    		if (pageNo == 1) {
+    			startSize = 0;
+    		} else {
+    			startSize = (pageNo - 1) * size;
+    		}
+    		maxSize = size;
+    		IProductSearch search = new ProductSearchImpl();
+        	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriterias, startSize,  maxSize, null);
+        	if (CollectionUtil.isEmpty(infoResult.getContents())) {
+        		logger.error("查询商品失败");
+        		throw new BusinessException("查询es中的商品信息失败");
+    		}
+        	SKUInfo skuInfos = infoResult.getContents().get(0);
+        	skuInfos.setState(ProductConstants.Product.State.IN_SALE);
+        	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
+        	List<SKUInfo> skuInfoList = new ArrayList<>();
+        	skuInfoList.add(skuInfos);
+        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
             return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
 		} else {
 			BaseResponse response = CommonUtils.genSuccessResponse("");
@@ -457,9 +486,34 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		if (!ccsMqFlag) {
 			CommonUtils.checkTenantId(query.getTenantId());
 			//将商品从搜索引擎中移除
-			skuIndexManage.updateSKUIndex(product.getProdId(),product.getDownTime().getTime());
-			skuIndexManage.updateSKUIndex(product.getState(),Long.valueOf(ProductConstants.Product.State.IN_STORE ));
 	        //skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
+			//查询es
+        	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+        	searchCriterias.add(new SearchCriteria("productid",
+        			product.getProdId(),
+        			new SearchOption(SearchOption.SearchLogic.must,  SearchOption.SearchType.querystring)));
+        	
+    		// 最大条数设置
+    		int pageNo = 1;
+    		int size = 20;
+    		if (pageNo == 1) {
+    			startSize = 0;
+    		} else {
+    			startSize = (pageNo - 1) * size;
+    		}
+    		maxSize = size;
+    		IProductSearch search = new ProductSearchImpl();
+        	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriterias, startSize,  maxSize, null);
+        	if (CollectionUtil.isEmpty(infoResult.getContents())) {
+        		logger.error("查询商品失败");
+        		throw new BusinessException("查询es中的商品信息失败");
+    		}
+        	SKUInfo skuInfos = infoResult.getContents().get(0);
+        	skuInfos.setState(ProductConstants.Product.State.IN_SALE);
+        	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
+        	List<SKUInfo> skuInfoList = new ArrayList<>();
+        	skuInfoList.add(skuInfos);
+        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
 	        productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),product,query.getOperId());
 	        return CommonUtils.genSuccessResponse("");
 		} else {
