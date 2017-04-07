@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
@@ -42,7 +40,6 @@ import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProdAttrAndValDefConstants;
 import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
-import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -51,15 +48,11 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.attach.ProdFastSkuAttach;
 import com.ai.slp.product.dao.mapper.attach.ProductAttach;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
-import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
-import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
-import com.ai.slp.product.search.bo.AttrInfo;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
@@ -838,7 +831,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     }
 
     public void updateProdAndStatusLog(Product product){
-        if (productAtomSV.updateById(product)>0){
+        if (productAtomSV.updateProdState(product)>0){
           /*  ProductLog log = new ProductLog();
             BeanUtils.copyProperties(log,product);
             productLogAtomSV.install(log);

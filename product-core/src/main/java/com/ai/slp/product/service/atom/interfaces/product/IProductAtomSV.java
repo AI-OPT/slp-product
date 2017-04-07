@@ -149,5 +149,14 @@ public interface IProductAtomSV {
      * @return
      */
     public List<ProdAttr> queryAttrVal(String tenantId,String prodId,Long attrId);
+    
+    
+	/**
+     * 修改商品状态
+     * @param record
+     * @return
+     * @ApiDocMethod
+     */
+	public int updateProdState(Product record);
 
 }
