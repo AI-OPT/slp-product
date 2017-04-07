@@ -129,7 +129,7 @@ public class IProductSVImpl implements IProductSV {
        productInfo.setIsInvoice(product.getIsinvoice());
        productInfo.setUpshelfType(product.getUpshelftype());
        productInfo.setProDetailContent(product.getProdetailcontent());
-       productInfo.setState(product.getState());
+       productInfo.setState(product.getStandprodstate());
        productInfo.setCreateTime(new Timestamp(product.getCreatetime()));
        List<SaleAreaInfo> saleareainfos = product.getSaleareainfos();
        List<SaleAreaInfoNew> list = new ArrayList<>();
