@@ -191,7 +191,7 @@ public class SKUInfo {
 	@Expose
 	 private String prodetailcontent;
 	/**
-	 * 路由组id
+	 * 库存组id
 	 */
 	@Expose
 	private String storagegroupid;

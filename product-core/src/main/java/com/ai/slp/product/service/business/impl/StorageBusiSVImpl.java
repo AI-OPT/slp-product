@@ -234,7 +234,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			
 			//查询es里的标准品
 	    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
-	    	searchCriterias.add(new SearchCriteria("routegroupid",
+	    	searchCriterias.add(new SearchCriteria("storagegroupid",
 	    			salePrice.getGroupId(),
 	    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 	    	
