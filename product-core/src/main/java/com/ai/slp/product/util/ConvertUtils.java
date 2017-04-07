@@ -141,6 +141,7 @@ public class ConvertUtils {
 		productEditUp.setTotalNum(skuInfo.getUsablenum());
 		productEditUp.setSupplierId(skuInfo.getSupplierid());
 		
+		
 		return productEditUp;
 	}
 
