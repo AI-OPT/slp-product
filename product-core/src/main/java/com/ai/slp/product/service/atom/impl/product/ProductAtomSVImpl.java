@@ -114,7 +114,11 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	@Override
 	public int updateById(Product product) {
 		product.setOperTime(DateUtils.currTimeStamp());
-		return productMapper.updateByPrimaryKey(product);
+		Product record = new Product();
+		record.setOperTime(DateUtils.currTimeStamp());
+		record.setState(product.getState());
+		record.setProdId(product.getProdId());
+		return productMapper.updateByPrimaryKeySelective(record);
 	}
 	
 
