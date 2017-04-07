@@ -141,6 +141,7 @@ public class ConvertUtils {
 		productEditUp.setTotalNum(skuInfo.getUsablenum());
 		productEditUp.setSupplierId(skuInfo.getSupplierid());
 		
+		
 		return productEditUp;
 	}
 
@@ -229,7 +230,8 @@ public class ConvertUtils {
 		product.setProductType(skuInfo.getProducttype());
 		product.setRechargeType(skuInfo.getRechagetype());
 		product.setState(skuInfo.getState());
-		product.setStorageGroupId(skuInfo.getProductcategoryid());
+		
+		product.setStorageGroupId(skuInfo.getRoutegroupid());
 		product.setTenantId(skuInfo.getTenantid());
 		product.setUnit(skuInfo.getUnit());
 		return product;
