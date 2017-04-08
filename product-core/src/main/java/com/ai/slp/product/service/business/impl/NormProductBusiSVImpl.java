@@ -574,9 +574,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 					productRequest.getStandedProductName(),
 					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
-	/*	// 商品状态
+		// 商品状态
 		if (StringUtils.isNotBlank(productRequest.getState())){
-			criteria.add(new SearchCriteria(SearchFieldConfConstants.STATE,
+			criteria.add(new SearchCriteria("standprodstate",
 					productRequest.getState(),
 					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
@@ -585,7 +585,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_TYPE,
 					productRequest.getProductType(),
 					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-		}*/
+		}
 	/*	// 添加时间 开始时间
 		if (productRequest.getCreateStartTime() != null){
 			criteria.andCreateTimeGreaterThanOrEqualTo(DateUtils.toTimeStamp(request.getCreateStartTime()));
