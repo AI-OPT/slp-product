@@ -70,7 +70,7 @@ public class IProdCommentManagerSVTest {
 		commentPageRequest.setPageNo(1);
 		commentPageRequest.setPageSize(5);
 		commentPageRequest.setTenantId("changhong");
-		//commentPageRequest.setShopScoreMs(1L);
+		commentPageRequest.setShopScoreMs(1L);
 		PageInfoResponse<CommentPageResponse> queryPageInfoBySku = prodCommentManagerSV.queryPageInfo(commentPageRequest);
 		System.out.println(JSonUtil.toJSon(queryPageInfoBySku));
 	}

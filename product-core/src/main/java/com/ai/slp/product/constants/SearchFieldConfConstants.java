@@ -44,6 +44,8 @@ public class SearchFieldConfConstants {
     public static final String SKU_ID = "skuid";
 	//商品标识
     public static final String PRODUCT_ID = "productid";
+    //标准品标识
+    public static final String STAND_PRODUCT_ID = "standprodid";
     //价格
     public static final String PRICE = "price";
     //状态
@@ -54,9 +56,13 @@ public class SearchFieldConfConstants {
     public static final String PRODUCT_TYPE = "producttype";
     //供应商
     public static final String SUPPLIER = "supplier";
+    //供应商
+    public static final String CREATETIME = "createtime";
     
     
     
     //商品评论
     public static final String COMMENT_ID = "commentid";
+    //商品评论
+    public static final String SHOPSCORE_MS = "shopscorems";
 }

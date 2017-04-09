@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.paas.ipaas.util.StringUtil;
@@ -20,6 +21,13 @@ public class CriteriaUtils {
 		 */
 		if (!StringUtil.isBlank(productEditParam.getProdId())) {
 			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, productEditParam.getProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		
+		/**
+		 * 标准品标识
+		 */
+		if (!StringUtil.isBlank(productEditParam.getStandedProdId())) {
+			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.STAND_PRODUCT_ID, productEditParam.getStandedProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		/**
 		 * 商品名称
@@ -38,6 +46,12 @@ public class CriteriaUtils {
 		 */
 		if (!StringUtil.isBlank(productEditParam.getSupplierId())) {
 			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.SUPPLIER, productEditParam.getSupplierId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		/**
+		 * 商品类目
+		 */
+		if (!StringUtil.isBlank(productEditParam.getProductCatId())) {
+			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_CATEGORY_ID, productEditParam.getProductCatId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		/**
 		 * 商品状态
@@ -71,6 +85,12 @@ public class CriteriaUtils {
 			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, productQueryInfo.getProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		/**
+		 * 标准品标识
+		 */
+		if (!StringUtil.isBlank(productQueryInfo.getStandedProdId())) {
+			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.STAND_PRODUCT_ID, productQueryInfo.getStandedProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		/**
 		 * 商品名称
 		 */
 		if (!StringUtil.isBlank(productQueryInfo.getProdName())) {
@@ -81,6 +101,12 @@ public class CriteriaUtils {
 		 */
 		if (!StringUtil.isBlank(productQueryInfo.getProductType())) {
 			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_TYPE, productQueryInfo.getProductType(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
+		/**
+		 * 商品类目
+		 */
+		if (!StringUtil.isBlank(productQueryInfo.getProductType())) {
+			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_CATEGORY_ID, productQueryInfo.getProductCatId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		/**
 		 * 供应商
@@ -106,6 +132,33 @@ public class CriteriaUtils {
 			searchCriteria.setFieldValue( objects );
 			searchCriteria.setField(SearchFieldConfConstants.STATE);
 			searchCriteria.setOption(option);
+			searchfieldVos.add(searchCriteria);
+		}
+		/**
+		 * 时间
+		 */
+		if(null!=productQueryInfo.getCreateStartTime()&&null==productQueryInfo.getCreateEndTime()){
+			SearchCriteria searchCriteria = new SearchCriteria();
+			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
+			searchCriteria.setField(SearchFieldConfConstants.CREATETIME);
+			searchCriteria.addFieldValue(productQueryInfo.getCreateStartTime().toString());
+			searchCriteria.addFieldValue(DateUtil.getCurrentTime());
+			searchfieldVos.add(searchCriteria);
+		}
+		if(null==productQueryInfo.getCreateStartTime()&&null!=productQueryInfo.getCreateEndTime()){
+			SearchCriteria searchCriteria = new SearchCriteria();
+			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
+			searchCriteria.setField(SearchFieldConfConstants.CREATETIME);
+			searchCriteria.addFieldValue("1970-01-01");
+			searchCriteria.addFieldValue(productQueryInfo.getCreateEndTime().toString());
+			searchfieldVos.add(searchCriteria);
+		}
+		if(null!=productQueryInfo.getCreateStartTime()&&null==productQueryInfo.getCreateEndTime()){
+			SearchCriteria searchCriteria = new SearchCriteria();
+			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
+			searchCriteria.setField(SearchFieldConfConstants.CREATETIME);
+			searchCriteria.addFieldValue(productQueryInfo.getCreateStartTime().toString());
+			searchCriteria.addFieldValue(productQueryInfo.getCreateEndTime().toString());
 			searchfieldVos.add(searchCriteria);
 		}
 		return searchfieldVos;
