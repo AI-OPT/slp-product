@@ -114,16 +114,16 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 					//criteria.andShopScoreMsLessThan(3L);
 					searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
 					searchCriteria.addFieldValue("0");
-					searchCriteria.addFieldValue("3L");
+					searchCriteria.addFieldValue("3");
 				}else if(prodCommentPageRequest.getShopScoreMs() == 3){
 					//criteria.andShopScoreMsEqualTo(3L);
 					searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring));
-					searchCriteria.addFieldValue("3L");
+					searchCriteria.addFieldValue("3");
 				}else{
 					//criteria.andShopScoreMsGreaterThan(3L);
 					searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
-					searchCriteria.addFieldValue("3L");
-					searchCriteria.addFieldValue("10L");
+					searchCriteria.addFieldValue("3");
+					searchCriteria.addFieldValue("10");
 				}
 				searchfieldVos.add(searchCriteria);
 			}
@@ -360,6 +360,26 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			maxSize = size;
 			List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
 			searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STATE, "1",new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+			if(null!=commentPageRequest.getShopScoreMs()){
+				SearchCriteria searchCriteria = new SearchCriteria();
+				searchCriteria.setField(SearchFieldConfConstants.SHOPSCORE_MS);
+				if(commentPageRequest.getShopScoreMs() == 1){
+					//criteria.andShopScoreMsLessThan(3L);
+					searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
+					searchCriteria.addFieldValue("0");
+					searchCriteria.addFieldValue("3");
+				}else if(commentPageRequest.getShopScoreMs() == 3){
+					//criteria.andShopScoreMsEqualTo(3L);
+					searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring));
+					searchCriteria.addFieldValue("3");
+				}else{
+					//criteria.andShopScoreMsGreaterThan(3L);
+					searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
+					searchCriteria.addFieldValue("3");
+					searchCriteria.addFieldValue("10");
+				}
+				searchfieldVos.add(searchCriteria);
+			}
 			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
 			if (!CollectionUtil.isEmpty(commentResult.getContents())) {
 				List<CommentPageResponse> prodCommentPageResponses = new ArrayList<>();
