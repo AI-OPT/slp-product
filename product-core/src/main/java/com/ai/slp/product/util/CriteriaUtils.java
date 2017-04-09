@@ -141,7 +141,7 @@ public class CriteriaUtils {
 			SearchCriteria searchCriteria = new SearchCriteria();
 			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
 			searchCriteria.setField(SearchFieldConfConstants.UP_TIME);
-			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().toString());
+			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().getTime()+"");
 			searchCriteria.addFieldValue(DateUtil.getCurrentTime());
 			searchfieldVos.add(searchCriteria);
 		}
@@ -149,16 +149,16 @@ public class CriteriaUtils {
 			SearchCriteria searchCriteria = new SearchCriteria();
 			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
 			searchCriteria.setField(SearchFieldConfConstants.UP_TIME);
-			searchCriteria.addFieldValue("1970-01-01");
-			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().toString());
+			searchCriteria.addFieldValue(DateUtil.getTimestamp("1970-01-01").getTime()+"");
+			searchCriteria.addFieldValue(productQueryInfo.getUpEndTime().getTime()+"");
 			searchfieldVos.add(searchCriteria);
 		}
 		if(null!=productQueryInfo.getUpStartTime()&&null!=productQueryInfo.getUpStartTime()){
 			SearchCriteria searchCriteria = new SearchCriteria();
 			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
 			searchCriteria.setField(SearchFieldConfConstants.UP_TIME);
-			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().toString());
-			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().toString());
+			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().getTime()+"");
+			searchCriteria.addFieldValue(productQueryInfo.getUpEndTime().getTime()+"");
 			searchfieldVos.add(searchCriteria);
 		}
 		return searchfieldVos;
