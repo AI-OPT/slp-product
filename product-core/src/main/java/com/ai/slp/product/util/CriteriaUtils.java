@@ -137,28 +137,28 @@ public class CriteriaUtils {
 		/**
 		 * 时间
 		 */
-		if(null!=productQueryInfo.getCreateStartTime()&&null==productQueryInfo.getCreateEndTime()){
+		if(null!=productQueryInfo.getUpStartTime()&&null==productQueryInfo.getUpStartTime()){
 			SearchCriteria searchCriteria = new SearchCriteria();
 			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
-			searchCriteria.setField(SearchFieldConfConstants.CREATETIME);
-			searchCriteria.addFieldValue(productQueryInfo.getCreateStartTime().toString());
+			searchCriteria.setField(SearchFieldConfConstants.UP_TIME);
+			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().toString());
 			searchCriteria.addFieldValue(DateUtil.getCurrentTime());
 			searchfieldVos.add(searchCriteria);
 		}
-		if(null==productQueryInfo.getCreateStartTime()&&null!=productQueryInfo.getCreateEndTime()){
+		if(null==productQueryInfo.getUpStartTime()&&null!=productQueryInfo.getUpStartTime()){
 			SearchCriteria searchCriteria = new SearchCriteria();
 			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
-			searchCriteria.setField(SearchFieldConfConstants.CREATETIME);
+			searchCriteria.setField(SearchFieldConfConstants.UP_TIME);
 			searchCriteria.addFieldValue("1970-01-01");
-			searchCriteria.addFieldValue(productQueryInfo.getCreateEndTime().toString());
+			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().toString());
 			searchfieldVos.add(searchCriteria);
 		}
-		if(null!=productQueryInfo.getCreateStartTime()&&null==productQueryInfo.getCreateEndTime()){
+		if(null!=productQueryInfo.getUpStartTime()&&null!=productQueryInfo.getUpStartTime()){
 			SearchCriteria searchCriteria = new SearchCriteria();
 			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
-			searchCriteria.setField(SearchFieldConfConstants.CREATETIME);
-			searchCriteria.addFieldValue(productQueryInfo.getCreateStartTime().toString());
-			searchCriteria.addFieldValue(productQueryInfo.getCreateEndTime().toString());
+			searchCriteria.setField(SearchFieldConfConstants.UP_TIME);
+			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().toString());
+			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().toString());
 			searchfieldVos.add(searchCriteria);
 		}
 		return searchfieldVos;
