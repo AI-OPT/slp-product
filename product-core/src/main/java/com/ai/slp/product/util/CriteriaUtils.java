@@ -229,7 +229,7 @@ public class CriteriaUtils {
 		 * 商品Id
 		 */
 		if(StringUtils.isNoneBlank(commentPageRequest.getStandedProdId())){
-		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STAND_PRODUCT_ID, commentPageRequest.getStandedProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID, commentPageRequest.getStandedProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		/**
 		 * 服务态度
