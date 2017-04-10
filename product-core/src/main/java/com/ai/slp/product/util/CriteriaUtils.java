@@ -3,6 +3,8 @@ package com.ai.slp.product.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
@@ -225,19 +227,27 @@ public class CriteriaUtils {
 		/**
 		 * 商品Id
 		 */
+		if(StringUtils.isNoneBlank(commentPageRequest.getStandedProdId())){
 		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STAND_PRODUCT_ID, commentPageRequest.getStandedProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
 		/**
 		 * 服务态度
 		 */
+		if(null!=commentPageRequest.getShopScoreFw()){
 		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.SHOPSCORE_FW, commentPageRequest.getShopScoreFw().toString(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
 		/**
 		 * 物流
 		 */
+		if(null!=commentPageRequest.getShopScoreWl()){
 		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.SHOPSCORE_WL, commentPageRequest.getShopScoreWl().toString(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
 		/**
 		 * 订单号
 		 */
+		if(StringUtils.isNoneBlank(commentPageRequest.getOrderId())){
 		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.ORDER_ID, commentPageRequest.getOrderId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		}
 		return searchfieldVos;
 	}
 }
