@@ -357,6 +357,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				Timestamp commentTimeEnd = commentPageRequest.getCommentTimeEnd();
 				ProdComment params = new ProdComment();
 				Long shopScoreMs = commentPageRequest.getShopScoreMs();
+				BeanUtils.copyProperties(params, commentPageRequest);
 				if(shopScoreMs != null){
 					params.setShopScoreMs(shopScoreMs);
 				}
