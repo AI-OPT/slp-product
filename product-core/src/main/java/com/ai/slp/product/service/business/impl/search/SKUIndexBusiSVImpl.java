@@ -212,6 +212,7 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             skuInfo.setProducttype(standedProduct.getProductType());
             //標準品创建时间
             skuInfo.setCreatetime(standedProduct.getCreateTime().getTime());
+            skuInfo.setSupplierid(standedProduct.getSupplierId());
             // 受众
             //skuInfo.setAudiences(fillSKUAudiences(prodSkuInfo.getTenantid(),prodSkuInfo.getProductid()));
             //销售地域
