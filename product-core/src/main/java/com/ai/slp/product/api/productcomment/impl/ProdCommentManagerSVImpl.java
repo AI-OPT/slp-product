@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -56,8 +58,6 @@ import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.product.util.CriteriaUtils;
-import com.alibaba.dubbo.common.logger.Logger;
-import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.config.annotation.Service;
 
 @Service(validation = "true")
@@ -357,7 +357,18 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				Timestamp commentTimeEnd = commentPageRequest.getCommentTimeEnd();
 				ProdComment params = new ProdComment();
 				Long shopScoreMs = commentPageRequest.getShopScoreMs();
-				BeanUtils.copyProperties(params, commentPageRequest);
+				if(StringUtils.isNoneBlank(commentPageRequest.getStandedProdId())){
+					params.setStandedProdId(commentPageRequest.getStandedProdId());
+				}
+				if(StringUtils.isNoneBlank(commentPageRequest.getOrderId())){
+					params.setOrderId(commentPageRequest.getOrderId());
+				}
+				if(null!=commentPageRequest.getShopScoreFw()){
+					params.setShopScoreFw(commentPageRequest.getShopScoreFw());
+				}
+				if(null!=commentPageRequest.getShopScoreWl()){
+					params.setShopScoreWl(commentPageRequest.getShopScoreWl());
+				}
 				if(shopScoreMs != null){
 					params.setShopScoreMs(shopScoreMs);
 				}
