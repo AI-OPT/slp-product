@@ -65,4 +65,17 @@ public class SearchFieldConfConstants {
     public static final String COMMENT_ID = "commentid";
     //商品评论
     public static final String SHOPSCORE_MS = "shopscorems";
+    //服务
+    public static final String SHOPSCORE_FW = "shopscorefw";
+    //物流
+    public static final String SHOPSCORE_WL = "shopscorewl";
+    /**
+     * 时间
+     */
+    public static final String COMMENT_TIME = "commenttime";
+    
+    /**
+     * 订单号
+     */
+    public static final String ORDER_ID = "orderid";
 }

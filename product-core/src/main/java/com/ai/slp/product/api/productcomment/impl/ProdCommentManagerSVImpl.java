@@ -55,6 +55,7 @@ import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.util.ConvertUtils;
+import com.ai.slp.product.util.CriteriaUtils;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -338,28 +339,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				startSize = (pageNo - 1) * size;
 			}
 			maxSize = size;
-			List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
-			searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STATE, "1",new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-			if(null!=commentPageRequest.getShopScoreMs()){
-				SearchCriteria searchCriteria = new SearchCriteria();
-				searchCriteria.setField(SearchFieldConfConstants.SHOPSCORE_MS);
-				if(commentPageRequest.getShopScoreMs() == 1){
-					//criteria.andShopScoreMsLessThan(3L);
-					searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
-					searchCriteria.addFieldValue("0");
-					searchCriteria.addFieldValue("3");
-				}else if(commentPageRequest.getShopScoreMs() == 3){
-					//criteria.andShopScoreMsEqualTo(3L);
-					searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring));
-					searchCriteria.addFieldValue("3");
-				}else{
-					//criteria.andShopScoreMsGreaterThan(3L);
-					searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
-					searchCriteria.addFieldValue("3");
-					searchCriteria.addFieldValue("10");
-				}
-				searchfieldVos.add(searchCriteria);
-			}
+			List<SearchCriteria> searchfieldVos = CriteriaUtils.commonConditions(commentPageRequest);
 			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
 			if (!CollectionUtil.isEmpty(commentResult.getContents())) {
 				List<CommentPageResponse> prodCommentPageResponses = new ArrayList<>();

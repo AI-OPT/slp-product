@@ -86,6 +86,19 @@ public class CommentInfo {
 	 */
 	private List<CommentPictrueInfo> commentpictrueinfos;
 
+	/**
+	 * 订单号
+	 */
+	private String orderId;
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
 	public String getCommentid() {
 		return commentid;
 	}

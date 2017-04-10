@@ -10,6 +10,7 @@ import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.slp.product.api.product.param.ProductEditQueryReq;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
+import com.ai.slp.product.api.productcomment.param.CommentPageRequest;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 
 public class CriteriaUtils {
@@ -161,6 +162,82 @@ public class CriteriaUtils {
 			searchCriteria.addFieldValue(productQueryInfo.getUpEndTime().getTime()+"");
 			searchfieldVos.add(searchCriteria);
 		}
+		return searchfieldVos;
+	}
+	
+	
+	public static List<SearchCriteria> commonConditions(CommentPageRequest commentPageRequest){
+		List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
+		/**
+		 * 状态
+		 */
+		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STATE, "1",new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		/**
+		 * 好评
+		 */
+		if(null!=commentPageRequest.getShopScoreMs()){
+			SearchCriteria searchCriteria = new SearchCriteria();
+			searchCriteria.setField(SearchFieldConfConstants.SHOPSCORE_MS);
+			if(commentPageRequest.getShopScoreMs() == 1){
+				//criteria.andShopScoreMsLessThan(3L);
+				searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
+				searchCriteria.addFieldValue("0");
+				searchCriteria.addFieldValue("3");
+			}else if(commentPageRequest.getShopScoreMs() == 3){
+				//criteria.andShopScoreMsEqualTo(3L);
+				searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring));
+				searchCriteria.addFieldValue("3");
+			}else{
+				//criteria.andShopScoreMsGreaterThan(3L);
+				searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
+				searchCriteria.addFieldValue("3");
+				searchCriteria.addFieldValue("10");
+			}
+			searchfieldVos.add(searchCriteria);
+		}
+		/**
+		 * 时间
+		 */
+		if(null!=commentPageRequest.getCommentTimeBegin()&&null==commentPageRequest.getCommentTimeEnd()){
+			SearchCriteria searchCriteria = new SearchCriteria();
+			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
+			searchCriteria.setField(SearchFieldConfConstants.COMMENT_TIME);
+			searchCriteria.addFieldValue(commentPageRequest.getCommentTimeBegin().getTime()+"");
+			searchCriteria.addFieldValue(DateUtil.getCurrentTime());
+			searchfieldVos.add(searchCriteria);
+		}
+		if(null==commentPageRequest.getCommentTimeBegin()&&null!=commentPageRequest.getCommentTimeEnd()){
+			SearchCriteria searchCriteria = new SearchCriteria();
+			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
+			searchCriteria.setField(SearchFieldConfConstants.COMMENT_TIME);
+			searchCriteria.addFieldValue(DateUtil.getTimestamp("1970-01-01").getTime()+"");
+			searchCriteria.addFieldValue(commentPageRequest.getCommentTimeEnd().getTime()+"");
+			searchfieldVos.add(searchCriteria);
+		}
+		if(null!=commentPageRequest.getCommentTimeBegin()&&null!=commentPageRequest.getCommentTimeEnd()){
+			SearchCriteria searchCriteria = new SearchCriteria();
+			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
+			searchCriteria.setField(SearchFieldConfConstants.COMMENT_TIME);
+			searchCriteria.addFieldValue(commentPageRequest.getCommentTimeBegin().getTime()+"");
+			searchCriteria.addFieldValue(commentPageRequest.getCommentTimeEnd().getTime()+"");
+			searchfieldVos.add(searchCriteria);
+		}
+		/**
+		 * 商品Id
+		 */
+		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STAND_PRODUCT_ID, commentPageRequest.getStandedProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		/**
+		 * 服务态度
+		 */
+		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.SHOPSCORE_FW, commentPageRequest.getShopScoreFw().toString(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		/**
+		 * 物流
+		 */
+		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.SHOPSCORE_WL, commentPageRequest.getShopScoreWl().toString(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		/**
+		 * 订单号
+		 */
+		searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.ORDER_ID, commentPageRequest.getOrderId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		return searchfieldVos;
 	}
 }
