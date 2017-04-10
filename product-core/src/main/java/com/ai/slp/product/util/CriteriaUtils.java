@@ -3,6 +3,7 @@ package com.ai.slp.product.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ai.opt.sdk.util.CollectionUtil;
@@ -145,7 +146,7 @@ public class CriteriaUtils {
 			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
 			searchCriteria.setField(SearchFieldConfConstants.UP_TIME);
 			searchCriteria.addFieldValue(productQueryInfo.getUpStartTime().getTime()+"");
-			searchCriteria.addFieldValue(DateUtil.getCurrentTime());
+			searchCriteria.addFieldValue(DateUtil.getSysDate().getTime()+"");
 			searchfieldVos.add(searchCriteria);
 		}
 		if(null==productQueryInfo.getUpStartTime()&&null!=productQueryInfo.getUpStartTime()){
@@ -205,7 +206,7 @@ public class CriteriaUtils {
 			searchCriteria.setOption(new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.range));
 			searchCriteria.setField(SearchFieldConfConstants.COMMENT_TIME);
 			searchCriteria.addFieldValue(commentPageRequest.getCommentTimeBegin().getTime()+"");
-			searchCriteria.addFieldValue(DateUtil.getCurrentTime());
+			searchCriteria.addFieldValue(DateUtil.getSysDate().getTime()+"");
 			searchfieldVos.add(searchCriteria);
 		}
 		if(null==commentPageRequest.getCommentTimeBegin()&&null!=commentPageRequest.getCommentTimeEnd()){
