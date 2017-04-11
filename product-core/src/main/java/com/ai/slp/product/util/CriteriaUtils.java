@@ -108,7 +108,7 @@ public class CriteriaUtils {
 		/**
 		 * 商品类目
 		 */
-		if (!StringUtil.isBlank(productQueryInfo.getProductType())) {
+		if (!StringUtil.isBlank(productQueryInfo.getProductCatId())) {
 			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_CATEGORY_ID, productQueryInfo.getProductCatId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		/**
