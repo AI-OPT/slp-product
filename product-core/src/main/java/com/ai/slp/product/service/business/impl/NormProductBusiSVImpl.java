@@ -1072,6 +1072,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         		throw new BusinessException("查询es中的商品信息失败");
     		}
         	SKUInfo skuInfos = infoResult.getContents().get(0);
+        	skuInfos.setMarketprice(marketPrice.getMarketPrice());
         	List<SKUInfo> skuInfoList = new ArrayList<>();
         	skuInfoList.add(skuInfos);
         	
