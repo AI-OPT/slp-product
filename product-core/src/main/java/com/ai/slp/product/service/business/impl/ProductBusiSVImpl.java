@@ -819,7 +819,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         //修改商品"state"为IN_STORE
         product.setState(ProductConstants.Product.State.IN_STORE);
         //将商品从搜索引擎中移除
-        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
+        //skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
         //添加下架时间
         product.setDownTime(DateUtils.currTimeStamp());
         if (operId != null) {
