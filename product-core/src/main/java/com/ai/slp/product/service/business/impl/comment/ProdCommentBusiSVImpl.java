@@ -215,7 +215,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		List<CommentPageResponse> prodCommentPage = null;
 		try {
 			params.setSkuId(null);
-			List<ProdComment> queryPageList = prodCommentAtomSV.queryPageListByProductId(params, pageSize, pageNos);
+			List<ProdComment> queryPageList = prodCommentAtomSV.queryPageList(params,commentTimeBegin, commentTimeEnd, pageSize, pageNos);
 			prodCommentPage = getCommentResponseList(queryPageList);
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
