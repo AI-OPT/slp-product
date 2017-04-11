@@ -509,7 +509,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         		throw new BusinessException("查询es中的商品信息失败");
     		}
         	SKUInfo skuInfos = infoResult.getContents().get(0);
-        	skuInfos.setState(ProductConstants.Product.State.IN_SALE);
+        	skuInfos.setState(ProductConstants.Product.State.IN_STORE);
         	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
         	List<SKUInfo> skuInfoList = new ArrayList<>();
         	skuInfoList.add(skuInfos);
