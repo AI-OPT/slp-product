@@ -705,7 +705,25 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	        updateProdAndStatusLog(product);
 	        if (userNum>0) {
             //添加搜索引擎
-            skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
+            //skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
+        	//查询es
+        	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+        	searchCriterias.add(new SearchCriteria("productid",
+        			product.getProdId(),
+        			new SearchOption(SearchOption.SearchLogic.must,  SearchOption.SearchType.querystring)));
+        	
+    		IProductSearch search = new ProductSearchImpl();
+        	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriterias, 0,  1, null);
+        	if (CollectionUtil.isEmpty(infoResult.getContents())) {
+        		logger.error("查询商品失败");
+        		throw new BusinessException("查询es中的商品信息失败");
+    		}
+        	SKUInfo skuInfos = infoResult.getContents().get(0);
+        	skuInfos.setState(product.getState());
+        	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
+        	List<SKUInfo> skuInfoList = new ArrayList<>();
+        	skuInfoList.add(skuInfos);
+        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
 	        }
 	    }
 	 
@@ -725,7 +743,26 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	        //添加日志
 	        updateProdAndStatusLog(product);
 	        //搜索中删除商品数据
-	        skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
+	        //skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
+	        //查询es
+        	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+        	searchCriterias.add(new SearchCriteria("productid",
+        			product.getProdId(),
+        			new SearchOption(SearchOption.SearchLogic.must,  SearchOption.SearchType.querystring)));
+        	
+    		IProductSearch search = new ProductSearchImpl();
+        	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriterias, 0,  1, null);
+        	if (CollectionUtil.isEmpty(infoResult.getContents())) {
+        		logger.error("查询商品失败");
+        		throw new BusinessException("查询es中的商品信息失败");
+    		}
+        	SKUInfo skuInfos = infoResult.getContents().get(0);
+        	skuInfos.setState(product.getState());
+        	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
+        	List<SKUInfo> skuInfoList = new ArrayList<>();
+        	skuInfoList.add(skuInfos);
+        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
+	        
 	    }
 	 
 	 public void updateProdAndStatusLog(Product product){
