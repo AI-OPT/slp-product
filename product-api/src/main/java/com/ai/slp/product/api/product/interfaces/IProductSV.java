@@ -1,17 +1,30 @@
 package com.ai.slp.product.api.product.interfaces;
 
-import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.BaseListResponse;
-import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.slp.product.api.product.param.*;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.base.vo.BaseListResponse;
+import com.ai.opt.base.vo.BaseResponse;
+import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.product.param.ProdAttrMap;
+import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
+import com.ai.slp.product.api.product.param.Product4List;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductInfo;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.ProductListQuery;
+import com.ai.slp.product.api.product.param.SkuInfoMultSave;
+import com.ai.slp.product.api.product.param.SkuSetForProduct;
+import com.ai.slp.product.api.product.param.StoGroupInfoQuery;
+import com.ai.slp.product.api.product.param.StorageInfoQuery;
+import com.ai.slp.product.api.product.param.TargetAreaForProd;
 
 /**
  * 商城商品操作<br>
@@ -182,5 +195,14 @@ public interface IProductSV {
     @POST
     @Path("/queryAreaInfosOfProduct")
     public BaseListResponse<ProdTargetAreaInfo> queryAreaInfosOfProduct(ProductInfoQuery query)
+            throws BusinessException,SystemException;
+    
+    /**
+     * 填充ES数据接口
+     * @RestRelativeURL product/fillESData
+     */
+    @POST
+    @Path("/fillESData")
+    public BaseResponse fillESData(List<String> idList)
             throws BusinessException,SystemException;
 }

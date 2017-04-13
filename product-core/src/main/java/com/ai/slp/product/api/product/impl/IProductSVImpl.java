@@ -1,20 +1,35 @@
 package com.ai.slp.product.api.product.impl;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
-import com.ai.slp.product.api.product.param.*;
-import com.ai.slp.product.api.productcomment.impl.ProdCommentManagerSVImpl;
-import com.ai.slp.product.constants.SearchFieldConfConstants;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.api.product.param.ProdAttrMap;
+import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
+import com.ai.slp.product.api.product.param.Product4List;
+import com.ai.slp.product.api.product.param.ProductEditQueryReq;
+import com.ai.slp.product.api.product.param.ProductInfo;
+import com.ai.slp.product.api.product.param.ProductInfoQuery;
+import com.ai.slp.product.api.product.param.ProductListQuery;
+import com.ai.slp.product.api.product.param.SaleAreaInfoNew;
+import com.ai.slp.product.api.product.param.SkuInfoMultSave;
+import com.ai.slp.product.api.product.param.SkuSetForProduct;
+import com.ai.slp.product.api.product.param.StoGroupInfoQuery;
+import com.ai.slp.product.api.product.param.StorageInfoQuery;
+import com.ai.slp.product.api.product.param.TargetAreaForProd;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.search.bo.SaleAreaInfo;
 import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
@@ -23,15 +38,10 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
+import com.ai.slp.product.util.FIllESDataUtil;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.config.annotation.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jackieliu on 16/4/27.
@@ -291,6 +301,14 @@ public class IProductSVImpl implements IProductSV {
         CommonUtils.addSuccessResHeader(response,"OK");
         return response;
     }
+
+	@Override
+	public BaseResponse fillESData(List<String> idList) throws BusinessException, SystemException {
+		FIllESDataUtil fIllESDataUtil = new FIllESDataUtil();
+		fIllESDataUtil.fillESData(idList);
+		BaseResponse response = new BaseResponse();
+		return  CommonUtils.addSuccessResHeader(response,"OK");
+	}
 
 
 }
