@@ -98,6 +98,7 @@ public class FlushDataImpl implements IFlushDataSV{
 	@Autowired
 	ProdCommentMapper prodCommentMapper;
 
+	@Override
 	public BaseResponse flushProductData(FlushDataRequest request) {
 		//查询所有符合条件商品
 		ProductQueryInfo productQueryInfo = new ProductQueryInfo();
@@ -125,6 +126,7 @@ public class FlushDataImpl implements IFlushDataSV{
 		return null;
 	}
 
+	@Override
 	public BaseResponse flushCommentData(FlushDataRequest request) {
 		ProdCommentCriteria example = new ProdCommentCriteria();
 		example.setLimitStart((request.getPageNo()-1)*request.getPageSize());
