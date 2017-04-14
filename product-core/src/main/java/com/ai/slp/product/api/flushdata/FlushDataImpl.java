@@ -59,6 +59,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.impl.StorageNumDbBusiSVImpl;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
+import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.product.util.IPaasStorageUtils;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -123,7 +124,7 @@ public class FlushDataImpl implements IFlushDataSV{
 				}
 			}
 		}
-		return null;
+		return CommonUtils.genSuccessResponse("success");
 	}
 
 	@Override
@@ -150,7 +151,7 @@ public class FlushDataImpl implements IFlushDataSV{
 		 */
 		List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments, pictureMap);
 		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
-		return null;
+		return CommonUtils.genSuccessResponse("success");
 	}
 	
 	public List<SKUInfo> fillSkuInfo(List<ProdSkuInfoSes> skuInfoSesList) {
