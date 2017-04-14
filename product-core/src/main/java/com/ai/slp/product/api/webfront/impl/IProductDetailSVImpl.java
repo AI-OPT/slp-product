@@ -225,6 +225,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			}
 			configResponse.setResponseHeader(responseHeader);
 		}*/
+		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
+		configResponse.setResponseHeader(responseHeader);
 		return configResponse;
 	}
 

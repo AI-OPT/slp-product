@@ -180,6 +180,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         BeanUtils.copyProperties(response,products);
         }*/
         response.setResult(productEditUps);
+        responseHeader = new ResponseHeader(true,CommonConstants.OPERATE_SUCCESS,"success");
     	}catch(Exception e){
     		logger.error("查询商品审核状态发生异常:",e);
     		if(e instanceof BusinessException){
@@ -595,6 +596,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         	BeanUtils.copyProperties(response,productPage);
         }*/
         response.setResult(productEditUps);
+        responseHeader = new ResponseHeader(true,CommonConstants.OPERATE_SUCCESS,"success");
 		}catch(Exception e){
 			logger.error("查询在售商品发生异常:",e);
 			if(e instanceof BusinessException){

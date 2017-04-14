@@ -353,6 +353,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				result.setPageNo(commentPageRequest.getPageNo());
 				result.setPageSize(commentPageRequest.getPageSize());
 			}
+			responseHeader = new ResponseHeader(true,CommonConstants.OPERATE_SUCCESS,"success");
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
 			if (e instanceof BusinessException) {
