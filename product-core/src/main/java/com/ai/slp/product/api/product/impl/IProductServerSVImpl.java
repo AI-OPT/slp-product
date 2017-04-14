@@ -28,6 +28,7 @@ import com.ai.slp.product.api.product.param.SkuInfoQuery;
 import com.ai.slp.product.api.webfront.param.ProductImage;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
+import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
@@ -173,9 +174,14 @@ public class IProductServerSVImpl implements IProductServerSV {
 	    		throw new BusinessException("在es中查询商品失败");
 			}
 	    	SKUInfo product = result.getContents().get(0);
-		
+	    	
+	    	
+	    	Product prod = new Product();
+	    	prod.setTenantId(product.getTenantid());
+	    	prod.setStorageGroupId(product.getStoragegroupid());
 			// 获取当前库存和价格
-			SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(skuInfoQuery.getTenantId(), skuInfoQuery.getSkuId());
+//			SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(skuInfoQuery.getTenantId(), skuInfoQuery.getSkuId());
+			SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku4ShopCart(skuInfoQuery.getSkuId(),prod);
 			//数据组装	
 	        ProductSkuInfo skuInfo = new ProductSkuInfo();
 //	        BeanUtils.copyProperties(skuInfo,skuResponse);

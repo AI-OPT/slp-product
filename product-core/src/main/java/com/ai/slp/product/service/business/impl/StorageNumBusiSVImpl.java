@@ -378,6 +378,18 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     }
 
     /**
+     * 查询SKU的库存和价格信息   专为订单使用
+     *
+     * @param tenantId
+     * @param skuId
+     * @return
+     */
+    @Override
+	public SkuStorageVo queryStorageOfSku4ShopCart(String skuId, Product product) {
+    	 return queryStorage(skuId, product);
+	}
+    
+    /**
      * 查询SKU的库存和价格信息
      * 
      * @param skuId
@@ -560,5 +572,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         }
         return product;
     }
+
+	
 
 }
