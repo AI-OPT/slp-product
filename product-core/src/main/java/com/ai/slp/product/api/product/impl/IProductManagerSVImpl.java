@@ -560,14 +560,15 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		maxSize = size;
 		List<SearchCriteria> searchfieldVos = CriteriaUtils.commonConditions(queryInSale);
 		Result<SKUInfo> result = productSearch.searchByCriteria(searchfieldVos, startSize, maxSize, null);
+		response.setCount(0);
+    	response.setPageNo(queryInSale.getPageNo());
+    	response.setPageSize(queryInSale.getPageSize());
         if(!CollectionUtils.isEmpty(result.getContents())){
         	for(SKUInfo skuInfo : result.getContents()){
         		ProductEditUp productEditUp = ConvertUtils.convertToProductEditUp(skuInfo);
         		productEditUps.add(productEditUp);
         	}
         	response.setCount((int)result.getCount());
-        	response.setPageNo(queryInSale.getPageNo());
-        	response.setPageSize(queryInSale.getPageSize());
         }/*else{
         String tenantId = queryInSale.getTenantId();
         PageInfo<Product> productPage = productManagerBusiSV.queryInSale(queryInSale);
