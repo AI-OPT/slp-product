@@ -104,9 +104,12 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			}
 			maxSize = size;
 			List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
-			searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STATE, "1",new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+			searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.STATE, "1",
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			if (!StringUtil.isBlank(prodCommentPageRequest.getSkuId())) {
-				searchfieldVos.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID, prodCommentPageRequest.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+				searchfieldVos
+						.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID, prodCommentPageRequest.getSkuId(),
+								new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			}
 			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
 			if (!CollectionUtil.isEmpty(commentResult.getContents())) {
@@ -119,19 +122,18 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				result.setCount((int) commentResult.getCount());
 				result.setPageNo(prodCommentPageRequest.getPageNo());
 				result.setPageSize(prodCommentPageRequest.getPageSize());
-			} else {
-				// 查询商品信息
-				String tenantId = prodCommentPageRequest.getTenantId();
-				// SKUID与商品ID意义相同
-				Product product = productAtomSV.selectByProductId(tenantId, prodCommentPageRequest.getSkuId());
-				if (product == null) {
-					result.setCount(0);
-					result.setResult(null);
-					result.setResponseHeader(new ResponseHeader(true, ResultCodeConstants.FAIL_CODE, "没有查询到商品信息。"));
-					return result;
-				}
-				result = prodCommentBusiSV.queryPageBySku(prodCommentPageRequest, product.getStandedProdId());
-			}
+			} /*
+				 * else { // 查询商品信息 String tenantId =
+				 * prodCommentPageRequest.getTenantId(); // SKUID与商品ID意义相同
+				 * Product product = productAtomSV.selectByProductId(tenantId,
+				 * prodCommentPageRequest.getSkuId()); if (product == null) {
+				 * result.setCount(0); result.setResult(null);
+				 * result.setResponseHeader(new ResponseHeader(true,
+				 * ResultCodeConstants.FAIL_CODE, "没有查询到商品信息。")); return result;
+				 * } result =
+				 * prodCommentBusiSV.queryPageBySku(prodCommentPageRequest,
+				 * product.getStandedProdId()); }
+				 */
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
 			if (e instanceof BusinessException) {
@@ -159,7 +161,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			List<ProdCommentVO> commentList = prodCommentCreateRequest.getCommentList();
 			List<PictureVO> pictureList = new ArrayList<PictureVO>();
 			List<ProdComment> prodComments = new ArrayList<>();
-			Map<String,List<PictureVO>> pictureMap = new HashMap<>();
+			Map<String, List<PictureVO>> pictureMap = new HashMap<>();
 			if (!CollectionUtil.isEmpty(commentList)) {
 				for (ProdCommentVO prodCommentVO : commentList) {
 					ProdComment params = new ProdComment();
@@ -177,8 +179,9 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 					params.setOrderId(prodCommentCreateRequest.getOrderId());
 					pictureList = prodCommentVO.getPictureList();
 					// 判断是否有图片
-					params.setIsPicture(CollectionUtil.isEmpty(pictureList) ? ProductCommentConstants.HasPicture.NO: ProductCommentConstants.HasPicture.YSE);
-					String commnentId = prodCommentBusiSV.createProdComment(params,pictureList);
+					params.setIsPicture(CollectionUtil.isEmpty(pictureList) ? ProductCommentConstants.HasPicture.NO
+							: ProductCommentConstants.HasPicture.YSE);
+					String commnentId = prodCommentBusiSV.createProdComment(params, pictureList);
 					params.setCommentId(commnentId);
 					prodComments.add(params);
 					pictureMap.put(commnentId, pictureList);
@@ -187,7 +190,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			/**
 			 * 加缓存
 			 */
-			List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments,pictureMap);
+			List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments, pictureMap);
 			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
 			responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "");
 		} catch (Exception e) {
@@ -217,15 +220,16 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		params.setCommentId(replyComment.getCommentId());
 		params.setState(CommonConstants.STATE_ACTIVE);
 
-
-		//ProdComment comment = prodCommentAtomSV.queryByCommentId(replyComment.getCommentId());
-		//先查询ES缓存
+		// ProdComment comment =
+		// prodCommentAtomSV.queryByCommentId(replyComment.getCommentId());
+		// 先查询ES缓存
 		IProductSearch productSearch = new ProductSearchImpl();
 		List<SearchCriteria> searchfieldVos = new ArrayList<SearchCriteria>();
 		if (!StringUtil.isBlank(replyComment.getCommentId())) {
-			searchfieldVos.add(new SearchCriteria("commentid", replyComment.getCommentId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+			searchfieldVos.add(new SearchCriteria("commentid", replyComment.getCommentId(),
+					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
-		ProdComment comment = new ProdComment(); 
+		ProdComment comment = new ProdComment();
 		Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, 0, 10, null);
 		if (!CollectionUtil.isEmpty(commentResult.getContents())) {
 			CommentInfo commentInfo = commentResult.getContents().get(0);
@@ -241,12 +245,11 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			comment.setState(commentInfo.getState());
 			comment.setReplyState(commentInfo.getReplaystate());
 			comment.setIsPicture(commentInfo.getIspictrue());
-			
+
 		} else {
 			logger.error("查询商品评价失败");
 		}
-		
-		
+
 		Integer queryCountByParams = 0;
 		if (comment != null) {
 			queryCountByParams = 1;
@@ -265,7 +268,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			commentReply.setStandedProdId(comment.getStandedProdId());
 
 			prodCommentBusiSV.replyProdComment(commentReply);
-
 
 			ResponseHeader responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "");
 			baseResponse.setResponseHeader(responseHeader);
@@ -365,60 +367,59 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		result.setResponseHeader(responseHeader);
 		return result;
 	}
-/*	@Override
-	public PageInfoResponse<CommentPageResponse> queryPageInfo(CommentPageRequest commentPageRequest)
-			throws BusinessException, SystemException {
-		
-		ProdComment params = new ProdComment();
-		BeanUtils.copyProperties(params, commentPageRequest);
-		Integer pageSize = commentPageRequest.getPageSize();
-		Integer pageNo = commentPageRequest.getPageNo();
-		Timestamp commentTimeBegin = commentPageRequest.getCommentTimeBegin();
-		Timestamp commentTimeEnd = commentPageRequest.getCommentTimeEnd();
-		PageInfoResponse<CommentPageResponse> result = new PageInfoResponse<CommentPageResponse>();
-		CommonUtils.checkTenantId(commentPageRequest.getTenantId());
-		List<ProdComment> queryPageList = prodCommentBusiSV.queryPageInfo(params, commentTimeBegin, commentTimeEnd,
-				pageSize, pageNo);
-		
-		ResponseHeader responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "");
-		result.setResponseHeader(responseHeader);
-		result.setPageNo(pageNo);
-		result.setPageSize(pageSize);
-		if (queryPageList == null || queryPageList.size() == 0) {
-			result.setCount(0);
-			result.setResult(null);
-			return result;
-		} else {
-			// 查询条数
-			Integer count = prodCommentAtomSV.queryCountByParams(params, commentTimeBegin, commentTimeEnd);
-			result.setCount(count);
-			List<CommentPageResponse> prodCommentList = prodCommentBusiSV.getCommentResponseList(queryPageList);
-			result.setResult(prodCommentList);
-			return result;
-		}
-		
-		// ruturn null;
-		
-	}
-*/
+
+	/*
+	 * @Override public PageInfoResponse<CommentPageResponse>
+	 * queryPageInfo(CommentPageRequest commentPageRequest) throws
+	 * BusinessException, SystemException {
+	 * 
+	 * ProdComment params = new ProdComment(); BeanUtils.copyProperties(params,
+	 * commentPageRequest); Integer pageSize = commentPageRequest.getPageSize();
+	 * Integer pageNo = commentPageRequest.getPageNo(); Timestamp
+	 * commentTimeBegin = commentPageRequest.getCommentTimeBegin(); Timestamp
+	 * commentTimeEnd = commentPageRequest.getCommentTimeEnd();
+	 * PageInfoResponse<CommentPageResponse> result = new
+	 * PageInfoResponse<CommentPageResponse>();
+	 * CommonUtils.checkTenantId(commentPageRequest.getTenantId());
+	 * List<ProdComment> queryPageList = prodCommentBusiSV.queryPageInfo(params,
+	 * commentTimeBegin, commentTimeEnd, pageSize, pageNo);
+	 * 
+	 * ResponseHeader responseHeader = new ResponseHeader(true,
+	 * ExceptCodeConstants.Special.SUCCESS, "");
+	 * result.setResponseHeader(responseHeader); result.setPageNo(pageNo);
+	 * result.setPageSize(pageSize); if (queryPageList == null ||
+	 * queryPageList.size() == 0) { result.setCount(0); result.setResult(null);
+	 * return result; } else { // 查询条数 Integer count =
+	 * prodCommentAtomSV.queryCountByParams(params, commentTimeBegin,
+	 * commentTimeEnd); result.setCount(count); List<CommentPageResponse>
+	 * prodCommentList =
+	 * prodCommentBusiSV.getCommentResponseList(queryPageList);
+	 * result.setResult(prodCommentList); return result; }
+	 * 
+	 * // ruturn null;
+	 * 
+	 * }
+	 */
 	@Override
-	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest) throws IOException, Exception
- {
+	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest)
+			throws IOException, Exception {
 		CommonUtils.checkTenantId(updateCommentStateRequest.getTenantId());
 		int count = prodCommentBusiSV.updateCommentState(updateCommentStateRequest);
-		if(count>0){
+		if (count > 0) {
 			BaseResponse baseResponse = new BaseResponse();
-			ResponseHeader responseHeader = new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"更新成功");
-			baseResponse.setResponseHeader(responseHeader );
-			for(String commentId : updateCommentStateRequest.getCommentIdList()){
-				SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).
-					upsert(commentId, new JsonBuilder().startObject().field(SearchFieldConfConstants.STATE, updateCommentStateRequest.getState()).field(SearchFieldConfConstants.COMMENT_ID, commentId).endObject());
+			ResponseHeader responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "更新成功");
+			baseResponse.setResponseHeader(responseHeader);
+			for (String commentId : updateCommentStateRequest.getCommentIdList()) {
+				SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).upsert(commentId,
+						new JsonBuilder().startObject()
+								.field(SearchFieldConfConstants.STATE, updateCommentStateRequest.getState())
+								.field(SearchFieldConfConstants.COMMENT_ID, commentId).endObject());
 			}
 			return baseResponse;
-		}else{
+		} else {
 			BaseResponse baseResponse = new BaseResponse();
-			ResponseHeader responseHeader = new ResponseHeader(false,ExceptCodeConstants.Special.SUCCESS,"更新失败");
-			baseResponse.setResponseHeader(responseHeader );
+			ResponseHeader responseHeader = new ResponseHeader(false, ExceptCodeConstants.Special.SUCCESS, "更新失败");
+			baseResponse.setResponseHeader(responseHeader);
 			return baseResponse;
 		}
 	}

@@ -19,7 +19,6 @@ import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.webfront.interfaces.IProductDetailSV;
-import com.ai.slp.product.api.webfront.param.ProdAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductImage;
 import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
 import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
@@ -27,12 +26,9 @@ import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKURequest;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
 import com.ai.slp.product.constants.ErrorCodeConstants;
-import com.ai.slp.product.constants.ProductCatConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
-import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
-import com.ai.slp.product.dao.mapper.bo.product.ProdAttr;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.AttrInfo;
@@ -48,7 +44,6 @@ import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.util.ConvertUtils;
-import com.ai.slp.product.vo.SkuStorageVo;
 import com.alibaba.dubbo.config.annotation.Service;
 
 @Service(validation = "true")
@@ -114,7 +109,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			 * 商品属性
 			 */
 			skuResponse = ConvertUtils.convertToProductSKUResponse(skuInfo);
-		}else {
+		}/*else {
 			skuResponse = new ProductSKUResponse();
 			BeanUtils.copyProperties(skuResponse, product);
 			List<ProdCatAttrAttch> prodCatAttrAttchs = prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(), product,
@@ -164,7 +159,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(skuReq.getTenantId(), product.getProdId());
 			skuResponse.setUsableNum(skuStorageVo.getUsableNum());
 			skuResponse.setSalePrice(skuStorageVo.getSalePrice());
-		}
+		}*/
 		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
 		skuResponse.setResponseHeader(responseHeader);
 		return skuResponse;
@@ -203,7 +198,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		if (!CollectionUtil.isEmpty(skuInfos)) {
 			SKUInfo skuInfo = skuInfos.get(0);
 			configResponse = ConvertUtils.convertToProductSKUConfigResponse(skuInfo);
-		} else {
+		} /*else {
 			List<AttrInfo> attrInfos = prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(), skuReq.getSkuId(),skuReq.getSkuAttrs());
 			configResponse = new ProductSKUConfigResponse();
 			// 查询关键属性
@@ -229,7 +224,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 				responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "无数据");
 			}
 			configResponse.setResponseHeader(responseHeader);
-		}
+		}*/
 		return configResponse;
 	}
 
