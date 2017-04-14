@@ -17,7 +17,6 @@ import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
-import com.ai.slp.product.api.product.param.FlushDataRequest;
 import com.ai.slp.product.api.product.param.ProdAttrMap;
 import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.api.product.param.Product4List;
@@ -39,7 +38,6 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductManagerBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
-import com.ai.slp.product.util.FIllESDataUtil;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -302,19 +300,5 @@ public class IProductSVImpl implements IProductSV {
         CommonUtils.addSuccessResHeader(response,"OK");
         return response;
     }
-
-	@Override
-	public BaseResponse flushProductData(FlushDataRequest request) throws BusinessException, SystemException {
-		FIllESDataUtil fIllESDataUtil = new FIllESDataUtil();
-		fIllESDataUtil.fillProductESData(request);
-		BaseResponse response = new BaseResponse();
-		return  CommonUtils.addSuccessResHeader(response,"OK");
-	}
-
-	@Override
-	public BaseResponse flushCommentData(FlushDataRequest request) throws BusinessException, SystemException {
-		return null;
-	}
-
 
 }

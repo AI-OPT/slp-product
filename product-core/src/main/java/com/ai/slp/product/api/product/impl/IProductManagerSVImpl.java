@@ -181,7 +181,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         }*/
         response.setResult(productEditUps);
     	}catch(Exception e){
-    		logger.info("查询商品审核状态发生异常:",e);
+    		logger.error("查询商品审核状态发生异常:",e);
     		if(e instanceof BusinessException){
     			responseHeader = new ResponseHeader(false,((BusinessException) e).getErrorCode(),((BusinessException) e).getErrorMessage());
     		}else{
@@ -596,7 +596,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         }*/
         response.setResult(productEditUps);
 		}catch(Exception e){
-			logger.info("查询在售商品发生异常:",e);
+			logger.error("查询在售商品发生异常:",e);
 			if(e instanceof BusinessException){
 				responseHeader = new ResponseHeader(false,((BusinessException) e).getErrorCode(),((BusinessException) e).getErrorMessage());
 			}else{

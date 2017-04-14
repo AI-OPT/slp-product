@@ -191,9 +191,15 @@ public class ConvertUtils {
 			commentInfo.setIspictrue(prodComment.getIsPicture());
 			commentInfo.setProductid(prodComment.getProdId());
 			commentInfo.setReplaystate(prodComment.getReplyState());
+			if(null!=prodComment.getShopScoreFw()){
 			commentInfo.setShopscorefw(prodComment.getShopScoreFw());
+			}
+			if(null!=prodComment.getShopScoreWl()){
 			commentInfo.setShopscorewl(prodComment.getShopScoreWl());
+			}
+			if(null!=prodComment.getShopScoreMs()){
 			commentInfo.setShopscorems(prodComment.getShopScoreMs());
+			}
 			commentInfo.setState(prodComment.getState());
 			commentInfo.setTenantid(prodComment.getTenantId());
 			commentInfo.setUserid(prodComment.getUserId());

@@ -41,7 +41,6 @@ import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCommentConstants;
-import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;

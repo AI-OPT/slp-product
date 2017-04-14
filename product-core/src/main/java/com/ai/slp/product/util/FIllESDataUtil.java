@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.slp.product.api.product.interfaces.IFlushDataSV;
 import com.ai.slp.product.api.product.param.FlushDataRequest;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
@@ -59,7 +61,7 @@ import com.ai.slp.product.service.business.impl.StorageNumDbBusiSVImpl;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 
 @Service
-public class FIllESDataUtil {
+public class FIllESDataUtil implements IFlushDataSV{
 
 	@Autowired
 	IProdSkuAtomSV prodSkuAtomSV;
@@ -91,7 +93,7 @@ public class FIllESDataUtil {
 	@Autowired
 	ProdCommentMapper prodCommentMapper;
 
-	public void fillProductESData(FlushDataRequest request) {
+	public BaseResponse flushProductData(FlushDataRequest request) {
 		//查询所有符合条件商品
 		ProductQueryInfo productQueryInfo = new ProductQueryInfo();
 		productQueryInfo.setPageNo(request.getPageNo());
@@ -99,12 +101,12 @@ public class FIllESDataUtil {
 		List<String> states = new ArrayList<>();
 		states.add("5");
 		productQueryInfo.setStateList(states);
-        PageInfo<Product> productPage = productAtomSV.selectPageForInsale(productQueryInfo);
-		if (!CollectionUtils.isEmpty(productPage.getResult())) {
+        PageInfo<Product> products = productAtomSV.selectPageForInsale(productQueryInfo);
+		if (!CollectionUtils.isEmpty(products.getResult())) {
 			/**
 			 * 查询数据库组装信息
 			 */
-			for (Product product : productPage.getResult()) {
+			for (Product product : products.getResult()) {
 				List<ProdSkuInfoSes> skuInfoSesList = prodSkuAtomSV.queryOfProdForSearch(product.getProdId());
 				if (CollectionUtil.isEmpty(skuInfoSesList)) {
 					continue;
@@ -115,9 +117,10 @@ public class FIllESDataUtil {
 				}
 			}
 		}
+		return null;
 	}
 
-	public void fillCommentESData(FlushDataRequest request) {
+	public BaseResponse flushCommentData(FlushDataRequest request) {
 		ProdCommentCriteria example = new ProdCommentCriteria();
 		example.setLimitStart((request.getPageNo()-1)*request.getPageSize());
 		example.setLimitEnd(request.getPageSize());
@@ -140,6 +143,7 @@ public class FIllESDataUtil {
 		 */
 		List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments, pictureMap);
 		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
+		return null;
 	}
 	
 	public List<SKUInfo> fillSkuInfo(List<ProdSkuInfoSes> skuInfoSesList) {
@@ -198,7 +202,10 @@ public class FIllESDataUtil {
 			// 标准品状态
 			StandedProduct standedProduct = normProductBusiSV.queryById(prodSkuInfo.getTenantid(),
 					prodSkuInfo.getProductid());
-			if (standedProduct.getState() != null) {
+			if(null==standedProduct){
+				continue;
+			}
+			if (null!=standedProduct.getState()) {
 				skuInfo.setStandprodstate(standedProduct.getState());
 			}
 			// 标准品的producttype(实物 虚拟)
@@ -233,24 +240,24 @@ public class FIllESDataUtil {
 			SkuStorage skuStorage = new SkuStorage();
 			if(!CollectionUtils.isEmpty(storages)){
 				BeanUtils.copyProperties(storage, storages.get(0));
-			}
-			List<SkuStorage> skuStorages = skuStorageAtomSV.queryByStorageId(storage.getStorageId());
-			if(!CollectionUtils.isEmpty(skuStorages)){
-				BeanUtils.copyProperties(skuStorage, skuStorages.get(0));
+				List<SkuStorage> skuStorages = skuStorageAtomSV.queryByStorageId(storage.getStorageId());
+				if(!CollectionUtils.isEmpty(skuStorages)){
+					BeanUtils.copyProperties(skuStorage, skuStorages.get(0));
+				}
+				Short priority = storage.getPriorityNumber();
+				//优先级总可用量(F)
+		        String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
+		        String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
+				 //设库存
+	            String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(
+	                    tenantId,groupId,storage.getPriorityNumber().toString(),skuStorage.getSkuId());
+	            cacheClient.zadd(skuStorageKey,1000,skuStorage.getSkuStorageId());
+	            //设置SKU库存可用量
+	            cacheClient.hincrBy(skuUsableKey,skuStorage.getSkuId(),skuStorage.getUsableNum());
+	            //设置优先级可用量
+	            cacheClient.incrBy(priorityUsableKey,skuStorage.getUsableNum());
 			}
 			
-			Short priority = storage.getPriorityNumber();
-			//优先级总可用量(F)
-	        String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
-	        String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
-			 //设置SKU库存
-            String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(
-                    tenantId,groupId,storage.getPriorityNumber().toString(),skuStorage.getSkuId());
-            cacheClient.zadd(skuStorageKey,skuInfo.getUsablenum(),skuStorage.getSkuStorageId());
-            //设置SKU库存可用量
-            cacheClient.hincrBy(skuUsableKey,skuStorage.getSkuId(),skuStorage.getUsableNum());
-            //设置优先级可用量
-            cacheClient.incrBy(priorityUsableKey,skuStorage.getUsableNum());
 			skuInfoList.add(skuInfo);
 		}
 		return skuInfoList;
@@ -302,7 +309,8 @@ public class FIllESDataUtil {
 	 * @param skuIds
 	 * @author
 	 */
-	   private void flushStorageCache(Storage storage,Set<String> skuIds){
+	@SuppressWarnings("unused")
+	private void flushStorageCache(Storage storage,Set<String> skuIds){
 		   String tenantId = CommonConstants.TENANT_ID;
 		   ICacheClient cacheClient = IPaasStorageUtils.getClient();
 	        Short priority = storage.getPriorityNumber();

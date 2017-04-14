@@ -4,9 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +33,6 @@ import com.ai.slp.product.api.normproduct.param.AttrValInfo;
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
 import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
 import com.ai.slp.product.api.normproduct.param.NormProdAndKeyAttrRes;
-import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
 import com.ai.slp.product.api.normproduct.param.NormProdRequest;
 import com.ai.slp.product.api.normproduct.param.NormProdResponse;
 import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
@@ -51,7 +48,6 @@ import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
 import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
-import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
@@ -500,11 +496,11 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public StandedProduct queryById(String tenantId, String productId) {
 		StandedProduct product = standedProductAtomSV.selectById(tenantId, productId);
-		if (product == null) {
+		/*if (product == null) {
 			logger.warn("租户[{}]下不存在标识[{}]的标准品", tenantId, productId);
 			throw new BusinessException("", "未找到对应标准品信息,租户id=" + tenantId + ",标准品标识=" + productId);
 		}
-		
+		*/
 		return product;
 	}
 /*	public NormProdInfoResponse queryById(String tenantId, String productId) {
