@@ -23,6 +23,7 @@ public interface IFlushDataSV {
     @Path("/flushProductData")
     public BaseResponse flushProductData(FlushDataRequest request)
             throws BusinessException,SystemException;
+    @interface flushProductData {}
     
     
     /**
@@ -33,4 +34,5 @@ public interface IFlushDataSV {
     @Path("/flushCommentData")
     public BaseResponse flushCommentData(FlushDataRequest request)
     		throws BusinessException,SystemException;
+    @interface flushCommentData {}
 }
