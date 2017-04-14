@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.mds.MDSClientFactory;
@@ -45,7 +44,6 @@ import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
-import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
@@ -157,29 +155,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         	response.setCount((int)result.getCount());
         	response.setPageNo(productEditParam.getPageNo());
         	response.setPageSize(productEditParam.getPageSize());
-        }else{
-        String tenantId = productEditParam.getTenantId();
-        PageInfo<Product> products = productManagerBusiSV.queryPageForEdit(productEditParam);
-        if(!CollectionUtils.isEmpty(products.getResult())){
-        for (Product product:products.getResult()){
-            ProductEditUp productEditUp = new ProductEditUp();
-            BeanUtils.copyProperties(productEditUp,product);
-            //设置类目名称
-            ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
-            if (cat!=null){
-            	productEditUp.setProductCatName(cat.getProductCatName());
-            }
-            //查询主预览图
-            ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(product.getProdId());
-            if (prodPicture!=null){
-                productEditUp.setProPictureId(prodPicture.getProPictureId());
-                productEditUp.setVfsId(prodPicture.getVfsId());
-                productEditUp.setPicType(prodPicture.getPicType());
-            }
-             productEditUps.add(productEditUp);
-        	}
-        }
-        BeanUtils.copyProperties(response,products);
         }
         response.setResult(productEditUps);
     	}catch(Exception e){
@@ -568,33 +543,6 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         	response.setCount((int)result.getCount());
         	response.setPageNo(queryInSale.getPageNo());
         	response.setPageSize(queryInSale.getPageSize());
-        }else{
-        String tenantId = queryInSale.getTenantId();
-        PageInfo<Product> productPage = productManagerBusiSV.queryInSale(queryInSale);
-        //组装prodIdList
-        List<String> prodIdList=new ArrayList<String>();
-        for (Product product:productPage.getResult()){
-        	prodIdList.add(product.getProdId());
-        }
-        //一次查询出所有的图片
-		List<ProdPicture> prodPictureList = prodPictureAtomSV.queryMainOfProdList(prodIdList);
-        for (Product product:productPage.getResult()){
-            ProductEditUp productEditUp = new ProductEditUp();
-            BeanUtils.copyProperties(productEditUp,product);
-            //设置类目名称
-            ProductCat cat = catDefAtomSV.selectById(tenantId,product.getProductCatId());
-            if (cat!=null){
-    			productEditUp.setProductCatName(cat.getProductCatName());
-    		}
-    		ProdPicture prodPicture=getProdPictureByProdId(product.getProdId(),prodPictureList);
-            if (prodPicture!=null){
-                productEditUp.setProPictureId(prodPicture.getProPictureId());
-                productEditUp.setVfsId(prodPicture.getVfsId());
-                productEditUp.setPicType(prodPicture.getPicType());
-            }
-             productEditUps.add(productEditUp);
-        	}
-        	BeanUtils.copyProperties(response,productPage);
         }
         response.setResult(productEditUps);
 		}catch(Exception e){

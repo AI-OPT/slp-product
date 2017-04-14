@@ -1,6 +1,7 @@
 package com.ai.slp.product.api.comment;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class IProdCommentManagerSVTest {
 		prodComment.setShopScoreFw(3L);
 		prodComment.setShopScoreMs(2L);
 		prodComment.setShopScoreWl(3L);
-		prodComment.setSkuId("0000000000000153");
+		prodComment.setSkuId("0000000000000934");
 		prodComment.setSubOrderId("00001");
 		List<PictureVO> pictureList=new LinkedList<PictureVO>();
 		PictureVO pictureVO=new PictureVO();
@@ -70,7 +71,8 @@ public class IProdCommentManagerSVTest {
 		commentPageRequest.setPageNo(1);
 		commentPageRequest.setPageSize(5);
 		commentPageRequest.setTenantId("changhong");
-		commentPageRequest.setShopScoreMs(1L);
+		//commentPageRequest.setShopScoreMs(1L);
+		commentPageRequest.setCommentTimeBegin(Timestamp.valueOf("2017-04-18 10:41:11"));
 		PageInfoResponse<CommentPageResponse> queryPageInfoBySku = prodCommentManagerSV.queryPageInfo(commentPageRequest);
 		System.out.println(JSonUtil.toJSon(queryPageInfoBySku));
 	}

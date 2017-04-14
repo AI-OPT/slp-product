@@ -351,35 +351,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				result.setCount((int) commentResult.getCount());
 				result.setPageNo(commentPageRequest.getPageNo());
 				result.setPageSize(commentPageRequest.getPageSize());
-			} else {
-				Integer pageSize = commentPageRequest.getPageSize();
-				Timestamp commentTimeBegin = commentPageRequest.getCommentTimeBegin();
-				Timestamp commentTimeEnd = commentPageRequest.getCommentTimeEnd();
-				ProdComment params = new ProdComment();
-				Long shopScoreMs = commentPageRequest.getShopScoreMs();
-				if(StringUtils.isNoneBlank(commentPageRequest.getStandedProdId())){
-					params.setStandedProdId(commentPageRequest.getStandedProdId());
-				}
-				if(StringUtils.isNoneBlank(commentPageRequest.getOrderId())){
-					params.setOrderId(commentPageRequest.getOrderId());
-				}
-				if(null!=commentPageRequest.getShopScoreFw()){
-					params.setShopScoreFw(commentPageRequest.getShopScoreFw());
-				}
-				if(null!=commentPageRequest.getShopScoreWl()){
-					params.setShopScoreWl(commentPageRequest.getShopScoreWl());
-				}
-				if(shopScoreMs != null){
-					params.setShopScoreMs(shopScoreMs);
-				}
-				// 查询条数
-				Integer count = prodCommentAtomSV.queryCountByParams(params, commentTimeBegin, commentTimeEnd);
-				result.setCount(count);
-				List<CommentPageResponse> commentPageResponses = prodCommentBusiSV.queryPageInfo(params, commentTimeBegin, commentTimeEnd, pageSize, commentPageRequest.getPageNo());
-				result.setResult(commentPageResponses);
-				result.setPageNo(commentPageRequest.getPageNo());
-				result.setPageSize(commentPageRequest.getPageSize());
-				return result;
 			}
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
