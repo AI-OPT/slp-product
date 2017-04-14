@@ -111,6 +111,9 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 								new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			}
 			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
+			result.setCount(0);
+			result.setPageNo(prodCommentPageRequest.getPageNo());
+			result.setPageSize(prodCommentPageRequest.getPageSize());
 			if (!CollectionUtil.isEmpty(commentResult.getContents())) {
 				List<ProdCommentPageResponse> prodCommentPageResponses = new ArrayList<>();
 				for (CommentInfo commentInfo : commentResult.getContents()) {
@@ -119,8 +122,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				}
 				result.setResult(prodCommentPageResponses);
 				result.setCount((int) commentResult.getCount());
-				result.setPageNo(prodCommentPageRequest.getPageNo());
-				result.setPageSize(prodCommentPageRequest.getPageSize());
 			} /*
 				 * else { // 查询商品信息 String tenantId =
 				 * prodCommentPageRequest.getTenantId(); // SKUID与商品ID意义相同
@@ -353,8 +354,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				}
 				result.setResult(prodCommentPageResponses);
 				result.setCount((int) commentResult.getCount());
-				result.setPageNo(commentPageRequest.getPageNo());
-				result.setPageSize(commentPageRequest.getPageSize());
 			}
 			responseHeader = new ResponseHeader(true,CommonConstants.OPERATE_SUCCESS,"success");
 		} catch (Exception e) {

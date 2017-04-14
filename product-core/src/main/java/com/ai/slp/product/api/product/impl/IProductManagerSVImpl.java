@@ -147,14 +147,15 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		maxSize = size;
 		List<SearchCriteria> searchfieldVos = CriteriaUtils.commonConditions(productEditParam);
 		Result<SKUInfo> result = productSearch.searchByCriteria(searchfieldVos, startSize, maxSize, null);
+		response.setCount(0);
+		response.setPageNo(productEditParam.getPageNo());
+    	response.setPageSize(productEditParam.getPageSize());
         if(!CollectionUtils.isEmpty(result.getContents())){
         	for(SKUInfo skuInfo : result.getContents()){
         		ProductEditUp productEditUp = ConvertUtils.convertToProductEditUp(skuInfo);
         		productEditUps.add(productEditUp);
         	}
         	response.setCount((int)result.getCount());
-        	response.setPageNo(productEditParam.getPageNo());
-        	response.setPageSize(productEditParam.getPageSize());
         }/*else{
         String tenantId = productEditParam.getTenantId();
         PageInfo<Product> products = productManagerBusiSV.queryPageForEdit(productEditParam);
@@ -188,8 +189,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     		}else{
     			responseHeader = new ResponseHeader(false,CommonConstants.OPERATE_FAIL,"查询失败");
     		}
-    		response.setResponseHeader(responseHeader);
     	}
+    	response.setResponseHeader(responseHeader);
         return response;
     }
 
@@ -604,8 +605,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 			}else{
 				responseHeader = new ResponseHeader(false,CommonConstants.OPERATE_FAIL,"查询在售商品失败");
 			}
-			response.setResponseHeader(responseHeader);;
 		}
+		response.setResponseHeader(responseHeader);;
         return response;
 	}
 
