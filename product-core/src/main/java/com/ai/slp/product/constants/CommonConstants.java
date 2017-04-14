@@ -27,4 +27,8 @@ public class CommonConstants {
      * 操作失败
      */
     public static final String OPERATE_FAIL = "999999";
+    /**
+     * 租户
+     */
+    public static final String TENANT_ID = "changhong";
 }

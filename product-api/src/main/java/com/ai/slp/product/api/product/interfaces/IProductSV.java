@@ -13,6 +13,7 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
+import com.ai.slp.product.api.product.param.FlushDataRequest;
 import com.ai.slp.product.api.product.param.ProdAttrMap;
 import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.api.product.param.Product4List;
@@ -199,10 +200,20 @@ public interface IProductSV {
     
     /**
      * 填充ES数据接口
-     * @RestRelativeURL product/fillESData
+     * @RestRelativeURL product/flushProductData
      */
     @POST
-    @Path("/fillESData")
-    public BaseResponse fillESData(List<String> idList)
+    @Path("/flushProductData")
+    public BaseResponse flushProductData(FlushDataRequest request)
             throws BusinessException,SystemException;
+    
+    
+    /**
+     * 填充ES数据接口
+     * @RestRelativeURL product/flushCommentData
+     */
+    @POST
+    @Path("/flushCommentData")
+    public BaseResponse flushCommentData(FlushDataRequest request)
+    		throws BusinessException,SystemException;
 }

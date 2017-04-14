@@ -17,6 +17,7 @@ import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.product.interfaces.IProductSV;
+import com.ai.slp.product.api.product.param.FlushDataRequest;
 import com.ai.slp.product.api.product.param.ProdAttrMap;
 import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.api.product.param.Product4List;
@@ -303,11 +304,16 @@ public class IProductSVImpl implements IProductSV {
     }
 
 	@Override
-	public BaseResponse fillESData(List<String> idList) throws BusinessException, SystemException {
+	public BaseResponse flushProductData(FlushDataRequest request) throws BusinessException, SystemException {
 		FIllESDataUtil fIllESDataUtil = new FIllESDataUtil();
-		fIllESDataUtil.fillESData(idList);
+		fIllESDataUtil.fillProductESData(request);
 		BaseResponse response = new BaseResponse();
 		return  CommonUtils.addSuccessResHeader(response,"OK");
+	}
+
+	@Override
+	public BaseResponse flushCommentData(FlushDataRequest request) throws BusinessException, SystemException {
+		return null;
 	}
 
 
