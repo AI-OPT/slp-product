@@ -133,6 +133,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				 * prodCommentBusiSV.queryPageBySku(prodCommentPageRequest,
 				 * product.getStandedProdId()); }
 				 */
+			responseHeader = new ResponseHeader(true, CommonConstants.OPERATE_SUCCESS, "success");
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
 			if (e instanceof BusinessException) {
@@ -141,7 +142,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			} else {
 				responseHeader = new ResponseHeader(false, ExceptCodeConstants.Special.SYSTEM_ERROR, "查询商品评价失败");
 			}
-			result.setResponseHeader(responseHeader);
 		}
 		result.setResponseHeader(responseHeader);
 		return result;
@@ -342,6 +342,9 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			maxSize = size;
 			List<SearchCriteria> searchfieldVos = CriteriaUtils.commonConditions(commentPageRequest);
 			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
+			result.setCount(0);
+			result.setPageNo(commentPageRequest.getPageNo());
+			result.setPageSize(commentPageRequest.getPageSize());
 			if (!CollectionUtil.isEmpty(commentResult.getContents())) {
 				List<CommentPageResponse> prodCommentPageResponses = new ArrayList<>();
 				for (CommentInfo commentInfo : commentResult.getContents()) {
@@ -362,7 +365,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			} else {
 				responseHeader = new ResponseHeader(false, ExceptCodeConstants.Special.SYSTEM_ERROR, "查询商品评价失败");
 			}
-			result.setResponseHeader(responseHeader);
 		}
 		result.setResponseHeader(responseHeader);
 		return result;
