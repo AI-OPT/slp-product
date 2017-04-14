@@ -1,4 +1,4 @@
-package com.ai.slp.product.api.product.param;
+package com.ai.slp.product.api.flushdata.params;
 
 import java.io.Serializable;
 
