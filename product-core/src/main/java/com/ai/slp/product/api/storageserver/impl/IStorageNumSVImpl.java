@@ -4,16 +4,21 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.ResponseHeader;
+import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.slp.product.api.storageserver.interfaces.IStorageNumSV;
 import com.ai.slp.product.api.storageserver.param.StorageNumBackReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
 import com.ai.slp.product.api.storageserver.param.StorageNumUseReq;
 import com.ai.slp.product.api.storageserver.param.StorageNumUserReq;
+import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.service.business.interfaces.IProdSaleAllBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.util.CommonUtils;
+import com.ai.slp.product.util.MQConfigUtil;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,13 +42,36 @@ public class IStorageNumSVImpl implements IStorageNumSV {
      * @author liutong5
      * @ApiDocMethod
      */
-    @Override
+/*    @Override
     @Deprecated
     public StorageNumRes useStorageNum(StorageNumUserReq numReq) throws BusinessException, SystemException {
         CommonUtils.checkTenantId(numReq.getTenantId(),"");
         StorageNumRes numRes = storageNumBusiSV.userStorageNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum(),null);
         numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
         return numRes;
+    }*/
+    @Override
+    @Deprecated
+    public StorageNumRes useStorageNum(StorageNumUserReq numReq) throws BusinessException, SystemException {
+    	boolean ccsMqFlag=false;
+	   	//从配置中心获取mq_enable
+	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+    	if (!ccsMqFlag) {
+    		CommonUtils.checkTenantId(numReq.getTenantId(),"");
+        	StorageNumRes numRes = storageNumBusiSV.userStorageNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum(),null);
+        	numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
+        	return numRes;
+		} else {
+			CommonUtils.checkTenantId(numReq.getTenantId(),"");
+			StorageNumRes numRes = new StorageNumRes();
+			//发送消息
+			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_MARKETPRICE_TOPIC).send(JSON.toJSONString(numReq), 0);
+			
+	    	numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
+	    	return numRes;
+			
+		}
+    	
     }
 
     /**

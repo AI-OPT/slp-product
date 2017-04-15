@@ -410,10 +410,6 @@ public class INormProductSVImpl implements INormProductSV {
 					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + marketPrice.getSupplierId() + "不一致!");
 		}*/
     	
-    	boolean ccsMqFlag=false;
-	   	//从配置中心获取mq_enable
-	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
-    	if (!ccsMqFlag) {
     		CommonUtils.checkTenantId(marketPrice.getTenantId());
 	        normProductBusiSV.updateMarketPrice(marketPrice);
 	        BaseResponse baseResponse = new BaseResponse();
@@ -422,17 +418,55 @@ public class INormProductSVImpl implements INormProductSV {
 	        responseHeader.setResultCode("");
 	        baseResponse.setResponseHeader(responseHeader);
 	        return baseResponse;
-		} else {
-			BaseResponse response = new BaseResponse();
-			//发送消息
-			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_MARKETPRICE_TOPIC).send(JSON.toJSONString(marketPrice), 0);
-			ResponseHeader responseHeader = new ResponseHeader(true,
-					ExceptCodeConstants.Special.SUCCESS, "成功");
-			response.setResponseHeader(responseHeader);
-			return response; 
-		}
     }
-    
+/*    @Override
+    public BaseResponse updateMarketPrice(MarketPriceUpdate marketPrice) throws BusinessException, SystemException {
+    	       CommonUtils.checkTenantId(marketPrice.getTenantId());
+        normProductBusiSV.updateMarketPrice(marketPrice);
+        BaseResponse baseResponse = new BaseResponse();
+        ResponseHeader responseHeader = new ResponseHeader();
+        responseHeader.setIsSuccess(true);
+        responseHeader.setResultCode("");
+        baseResponse.setResponseHeader(responseHeader);
+        return baseResponse;
+    	
+    	StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
+				marketPrice.getProductId());
+		
+		// 判断此租户下是否存在次标准品
+		if (standedProduct == null){
+			throw new BusinessException("",
+					"找不到指定的租户=" + marketPrice.getTenantId() + "下的标准品=" + marketPrice.getProductId() + "信息");
+		}
+    	// 判断商户ID是否为传入的商户ID
+    	if (!marketPrice.getSupplierId().equals(standedProduct.getSupplierId())){
+			throw new BusinessException("",
+					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + marketPrice.getSupplierId() + "不一致!");
+		}
+    	
+    	boolean ccsMqFlag=false;
+    	//从配置中心获取mq_enable
+    	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+    	if (!ccsMqFlag) {
+    		CommonUtils.checkTenantId(marketPrice.getTenantId());
+    		normProductBusiSV.updateMarketPrice(marketPrice);
+    		BaseResponse baseResponse = new BaseResponse();
+    		ResponseHeader responseHeader = new ResponseHeader();
+    		responseHeader.setIsSuccess(true);
+    		responseHeader.setResultCode("");
+    		baseResponse.setResponseHeader(responseHeader);
+    		return baseResponse;
+    	} else {
+    		BaseResponse response = new BaseResponse();
+    		//发送消息
+    		MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_MARKETPRICE_TOPIC).send(JSON.toJSONString(marketPrice), 0);
+    		ResponseHeader responseHeader = new ResponseHeader(true,
+    				ExceptCodeConstants.Special.SUCCESS, "成功");
+    		response.setResponseHeader(responseHeader);
+    		return response; 
+    	}
+    }
+*/    
     /**
      * 查询指定标准品下某种类型的属性集合<br>
      * 类型分为:关键属性,销售属性
