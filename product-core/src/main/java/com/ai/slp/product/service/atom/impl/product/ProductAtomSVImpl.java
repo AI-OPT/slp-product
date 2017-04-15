@@ -78,6 +78,18 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	/**
 	 * 查询指定商品
 	 *
+	 * @param prodId
+	 * @return
+	 */
+	@Override
+	public Product selectByProductId(String prodId) {
+		Product product = productMapper.selectByPrimaryKey(prodId);
+		return product;
+	}
+	
+	/**
+	 * 查询指定商品
+	 *
 	 * @param tenantId
 	 * @param prodId
 	 * @return
@@ -88,6 +100,8 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		return product;
 	}
 
+	
+	
 	/**
 	 * 查询指定商品
 	 *
@@ -456,4 +470,11 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		return productAttachMapper.updateProdState(record);
 	}
 
+	@Override
+	public int updateProdStatus(String prodId, String state, String operId) {
+		return productAttachMapper.updateProdState(prodId, state, operId);
+	}
+
+	
+	
 }

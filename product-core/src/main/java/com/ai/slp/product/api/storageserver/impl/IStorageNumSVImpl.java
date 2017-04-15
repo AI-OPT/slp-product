@@ -53,24 +53,23 @@ public class IStorageNumSVImpl implements IStorageNumSV {
     @Override
     @Deprecated
     public StorageNumRes useStorageNum(StorageNumUserReq numReq) throws BusinessException, SystemException {
-    	boolean ccsMqFlag=false;
 	   	//从配置中心获取mq_enable
-	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
-    	if (!ccsMqFlag) {
+//	  	boolean ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+//    	if (!ccsMqFlag) {
     		CommonUtils.checkTenantId(numReq.getTenantId(),"");
         	StorageNumRes numRes = storageNumBusiSV.userStorageNum(numReq.getTenantId(),numReq.getSkuId(),numReq.getSkuNum(),null);
         	numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
         	return numRes;
-		} else {
-			CommonUtils.checkTenantId(numReq.getTenantId(),"");
-			StorageNumRes numRes = new StorageNumRes();
-			//发送消息
-			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_MARKETPRICE_TOPIC).send(JSON.toJSONString(numReq), 0);
-			
-	    	numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
-	    	return numRes;
-			
-		}
+//		} else {
+//			CommonUtils.checkTenantId(numReq.getTenantId(),"");
+//			StorageNumRes numRes = new StorageNumRes();
+//			//发送消息
+//			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_MARKETPRICE_TOPIC).send(JSON.toJSONString(numReq), 0);
+//			
+//	    	numRes.setResponseHeader(new ResponseHeader(true,ExceptCodeConstants.Special.SUCCESS,"OK"));
+//	    	return numRes;
+//			
+//		}
     	
     }
 

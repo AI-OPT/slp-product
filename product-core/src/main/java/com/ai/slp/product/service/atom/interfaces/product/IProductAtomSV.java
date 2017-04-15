@@ -37,6 +37,14 @@ public interface IProductAtomSV {
     /**
      * 查询指定商品
      *
+     * @param prodId
+     * @return
+     */
+    public Product selectByProductId(String prodId);
+    
+    /**
+     * 查询指定商品
+     *
      * @param tenantId
      * @param prodId
      * @return
@@ -158,5 +166,16 @@ public interface IProductAtomSV {
      * @ApiDocMethod
      */
 	public int updateProdState(Product record);
+	
+	/**
+	 * 修改商品状态
+	 * @param productId
+	 * @param state
+	 * @param operId
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	public int updateProdStatus(String productId,String state, String operId);
+	
 
 }

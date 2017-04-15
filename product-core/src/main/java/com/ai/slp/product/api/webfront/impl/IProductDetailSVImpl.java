@@ -3,7 +3,6 @@ package com.ai.slp.product.api.webfront.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +19,6 @@ import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.webfront.interfaces.IProductDetailSV;
 import com.ai.slp.product.api.webfront.param.ProductImage;
-import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
-import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKURequest;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
@@ -31,7 +28,6 @@ import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.search.bo.AttrInfo;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
@@ -81,7 +77,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			throw new BusinessException("", "SKU标识和SKU属性为空,无法处理");
 		}
 		// 查询商品
-		Product product = productAtomSV.selectByProductId(skuReq.getTenantId(), skuReq.getSkuId());
+		Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
 
 		if (product == null) {
 			logger.warn("未查询到指定 的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
@@ -174,7 +170,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		}
 		// 查询商品
 		// SKUID等同于PRODID
-		Product product = productAtomSV.selectByProductId(skuReq.getTenantId(), skuReq.getSkuId());
+		Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
 		if (product == null) {
 			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
 					skuReq.getSkuId());
@@ -225,6 +221,8 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			}
 			configResponse.setResponseHeader(responseHeader);
 		}*/
+		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
+		configResponse.setResponseHeader(responseHeader);
 		return configResponse;
 	}
 

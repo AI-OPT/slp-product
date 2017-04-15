@@ -2,7 +2,14 @@ package com.ai.slp.product.service.business.impl;
 
 import java.sql.Timestamp;
 import java.text.Collator;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,18 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
-import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
-import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
-import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
-import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
+import com.ai.slp.product.service.atom.impl.product.ProdSkuAtomSVImpl;
+import com.ai.slp.product.service.atom.impl.product.ProductAtomSVImpl;
+import com.ai.slp.product.service.atom.impl.storage.SkuStorageAtomSVImpl;
+import com.ai.slp.product.service.atom.impl.storage.StorageAtomSVImpl;
+import com.ai.slp.product.service.atom.impl.storage.StorageLogAtomSVImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.util.IPaasStorageUtils;
 
@@ -37,15 +41,15 @@ import com.ai.slp.product.util.IPaasStorageUtils;
 public class StorageNumDbBusiSVImpl {
     private static final Logger logger = LoggerFactory.getLogger(StorageNumDbBusiSVImpl.class);
     @Autowired
-    ISkuStorageAtomSV skuStorageAtomSV;
+    SkuStorageAtomSVImpl skuStorageAtomSV;
     @Autowired
-    IStorageAtomSV storageAtomSV;
+    StorageAtomSVImpl storageAtomSV;
     @Autowired
-    IStorageLogAtomSV storageLogAtomSV;
+    StorageLogAtomSVImpl storageLogAtomSV;
     @Autowired
-    IProductAtomSV productAtomSV;
+    ProductAtomSVImpl productAtomSV;
     @Autowired
-    IProdSkuAtomSV prodSkuAtomSV;
+    ProdSkuAtomSVImpl prodSkuAtomSV;
     @Autowired
     IProductBusiSV productBusiSV;
     /**
@@ -58,29 +62,30 @@ public class StorageNumDbBusiSVImpl {
      */
     @Async
     public void storageNumChange(
-    		String tenantId,String skuId,Map<String,Integer> skuNumMap, boolean isUser, boolean priorityChange) {
+    		String tenantId,String skuId,String priority,Map<String,Integer> skuNumMap, boolean isUser, boolean priorityChange) {
     	if (skuNumMap==null || skuNumMap.isEmpty()){
     		return;
     	}
     	
-//    	ProdSku prodSku = prodSkuAtomSV.querySkuById(tenantId,skuId);
-//    	
-//    	logger.info("tenantId={},skuId={},isUser={},priorityChange={}",tenantId,skuId,isUser,priorityChange);
-//    	Product product = null;
-//    	if (prodSku!=null){
-//    		
-//    		product = productAtomSV.selectByProductId(tenantId,prodSku.getProdId());
-//    		
-//    		logger.info("\r\nthe product[{}] is {} null,status is [{}]",
-//    				prodSku.getProdId(),product==null?"":"not",product==null?"null":product.getState());
-//    	}
+    	//库存扣减
+    	storageNumChange(skuNumMap, isUser);
     	
-    	String productId = skuId;
-    	Product product = productAtomSV.selectByProductId(tenantId,productId);
+    	//更新商品状态
+    	changeProductState(tenantId, isUser, priorityChange,skuId,priority);
     	
-    	
-    	boolean checkToSale = false;
-    	//对库存ID进行排序
+    }
+
+
+	/**
+	 * 库存扣减
+	 * @param skuNumMap
+	 * @param isUser
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	private void storageNumChange(Map<String, Integer> skuNumMap, boolean isUser) {
+		//对库存ID进行排序
     	List<String> skuStorageIdList = new ArrayList<String>();  
     	Iterator it = skuNumMap.keySet().iterator();  
     	while (it.hasNext()) {  
@@ -89,69 +94,83 @@ public class StorageNumDbBusiSVImpl {
     	}
     	//按skuStorageId排序
     	Collections.sort(skuStorageIdList,Collator.getInstance(Locale.CHINA));
-    	
-    	for(String skuStorageId:skuStorageIdList){
+		//
+		for(String skuStorageId:skuStorageIdList){
     		int skuNum = skuNumMap.get(skuStorageId);
     		//若为使用量,则为减少量
     		if (isUser){
     			skuNum = 0-skuNum;
     		}
+    		//更新skustorage
+    		updateSkuStorageNum(skuStorageId, skuNum);
     		
-    		SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);
-    		
-    		if (skuStorage ==null){
-    			continue;
-    		}
-    		SkuStorage condSkuStorage=new SkuStorage();
-    		BeanUtils.copyProperties(condSkuStorage, skuStorage);
-    		
-    		skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
-    		
-    		int updateSkuCnt=skuStorageAtomSV.updateByCondtion(skuStorage, condSkuStorage);
-    		
-    		//若未更新任何SKU库存,或sku库存不是"启用",则不进行处理
-    		if (updateSkuCnt<1
-    				||!StorageConstants.SkuStorage.State.ACTIVE.equals(skuStorage.getState())){
-    			continue;
-    		}
-    		
-    		//更新库存信息
-    		Storage storage = storageAtomSV.queryNoDiscardById(skuStorage.getStorageId());
-    		
-    		if (storage==null){
-    			continue;
-    		}
-    		Storage condStorage=new Storage();
-    		BeanUtils.copyProperties(condStorage, storage);
-    		
-    		logger.info("\r\nThe usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
-    		storage.setUsableNum(storage.getUsableNum()+skuNum);
-    		logger.info("\r\nNow,the usable num of storage[{}]is {}.",storage.getStorageId(),storage.getUsableNum());
-    		if (StorageConstants.Storage.State.ACTIVE.equals(storage.getState())
-    				&& storage.getUsableNum()>0){
-    			checkToSale = true;
-    		}
-    		if (storageAtomSV.updateByCondtion(storage,condStorage)>0){
-    			StorageLog storageLog = new StorageLog();
-    			BeanUtils.copyProperties(storageLog,storage);
-    			storageLogAtomSV.installLog(storageLog);
-    		}
+    		//更新storage库存信息
+    		updateStorageNum(skuStorageId, skuNum);
     	}
-    	
-    	//若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
-    	if (!isUser && product!=null
-    			&& ProductConstants.Product.State.SALE_OUT.equals(product.getState())
-    			&& checkToSale){
-    		productBusiSV.changeToSaleForStop(tenantId,productId,null);
-    	}
-    	//若为减少,且需要优先级切换,则进行售罄下架
-    	else if (isUser && product!=null && priorityChange){
-    		//取消自动切换优先级,对商品进行售罄下架处理.
-//            changeGroupPriority(tenantId,product.getSupplierId(),product.getStorageGroupId(),product.getProdId());
+	}
+
+	
+	private void updateStorageNum(String skuStorageId, int skuNum) {
+		
+//		SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);
+//		String storageId = skuStorage.getSkuStorageId();
+//		Storage storage = storageAtomSV.queryNoDiscardById(storageId);
+//		Storage condStorage=new Storage();
+//		BeanUtils.copyProperties(condStorage, storage);
+//		storage.setUsableNum(storage.getUsableNum()+skuNum);
+//		if (storageAtomSV.updateByCondtion(storage,condStorage)>0){
+//			StorageLog storageLog = new StorageLog();
+//			BeanUtils.copyProperties(storageLog,storage);
+//			storageLogAtomSV.installLog(storageLog);
+//		}
+		
+		//update `storage` t set t.USABLE_NUM = (t.USABLE_NUM+?) where t.STORAGE_ID = (select k.STORAGE_ID from sku_storage k where k.SKU_STORAGE_ID = ?)
+		storageAtomSV.updateStorageUsableNumBySQL(skuStorageId,skuNum);
+		
+	}
+	
+	private void updateSkuStorageNum(String skuStorageId, int skuNum) {
+		// TODO
+		
+//		SkuStorage skuStorage = skuStorageAtomSV.queryById(skuStorageId,true);
+//		SkuStorage condSkuStorage=new SkuStorage();
+//		BeanUtils.copyProperties(condSkuStorage, skuStorage);
+//		skuStorage.setUsableNum(skuStorage.getUsableNum()+skuNum);
+//    	skuStorageAtomSV.updateByCondtion(skuStorage, condSkuStorage);
+		
+		//update sku_storage t set t.USABLE_NUM = (t.USABLE_NUM+?) where t.SKU_STORAGE_ID = ?
+		skuStorageAtomSV.updateSkuStorageUsableNumBySQL(skuStorageId,skuNum);
+		
+	}
+	
+	/**
+	 * 商品状态更新
+	 * @param checkToSale
+	 * @param isUser
+	 * @param priorityChange
+	 * @param product
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	
+	public void changeProductState(String tenantId,boolean isUser, boolean priorityChange,String prodId,String priority) {
+		
+		String supplierId = "-1";
+		if(!isUser){//若为回退,且为售罄下架,且库存为启用,则需要进行上架处理
+			int prodUsableNum = storageAtomSV.getProdUsableNumSum(prodId,priority,
+					StorageConstants.Storage.State.ACTIVE);
+			if(prodUsableNum>0){
+				productBusiSV.changeToSaleForStop(tenantId,prodId,null);//上架
+			}
+		}else if (priorityChange){
+			//取消自动切换优先级,对商品进行售罄下架处理.
+//	            changeGroupPriority(tenantId,product.getSupplierId(),product.getStorageGroupId(),product.getProdId());
     		//进行售罄操作
-    		productBusiSV.offSale(tenantId,product.getSupplierId(),product.getProdId(),null);
-    	}
-    }
+    		productBusiSV.offSale(tenantId,supplierId,prodId,null);//下架
+		}
+		
+	}
+	
 
 //    /**
 //     * 库存量减少操作

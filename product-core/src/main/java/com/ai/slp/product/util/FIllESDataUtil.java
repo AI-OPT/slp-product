@@ -114,8 +114,7 @@ public class FIllESDataUtil {
 				skuInfo.setPrice(priceOfSku);
 			}
 			// 市场价
-			Product selectByProductId = productAtomSV.selectByProductId(prodSkuInfo.getTenantid(),
-					prodSkuInfo.getSkuid());
+			Product selectByProductId = productAtomSV.selectByProductId(prodSkuInfo.getSkuid());
 			skuInfo.setMarketprice(selectByProductId.getMarketPrice() == null ? 0 : selectByProductId.getMarketPrice());
 			// 是否全国销售
 			skuInfo.setSalenationwide(selectByProductId.getIsSaleNationwide());

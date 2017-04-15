@@ -234,7 +234,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         stateLog.setPriorityNumber(ProductConstants.ProdStatusLog.PriorityNumber.USUAL);
         Set<String> prodIdSet = new HashSet(productCheckParam.getProdIdList());
         for (String prodId:prodIdSet){
-            Product product = productAtomSV.selectByProductId(productCheckParam.getTenantId(),prodId);
+            Product product = productAtomSV.selectByProductId(prodId);
             //若未找到对应商品或商品状态不是"待审核",则不处理
             if (product==null || !ProductConstants.Product.State.VERIFYING.equals(product.getState())){
             	continue;
@@ -490,7 +490,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
     public void updateProdEdit(ProductInfoForUpdate productInfo) {
         String tenantId = productInfo.getTenantId(),
                 productId = productInfo.getProdId();
-        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        Product product = productAtomSV.selectByProductId(productId);
         if (product == null){
             logger.warn("未找到对应销售商品,租户ID:{},商品标识:{}",tenantId,productId);
             throw new SystemException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,

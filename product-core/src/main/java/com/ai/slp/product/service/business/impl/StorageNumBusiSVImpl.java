@@ -150,7 +150,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 		numRes.setStorageNum(sorageNumMap);
 		
 		// 变更数据库信息
-		numDbBusiSV.storageNumChange(tenantId, skuId, sorageNumMap, true,
+		numDbBusiSV.storageNumChange(tenantId, skuId,priority, sorageNumMap, true,
 				priorityUsableNum < 1 ? true : false);
 		
 		return numRes;
@@ -317,6 +317,8 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
         }
         //检查SKU是否存在
         ICacheClient cacheClient = IPaasStorageUtils.getClient();
+        
+        String priority = null;
         for (Map.Entry<String, Integer> entry:storageNum.entrySet()){
             String skuStorageId = entry.getKey();
             Integer skuNum = entry.getValue();
@@ -336,6 +338,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             }
             String groupId = storage.getStorageGroupId(),
                     priorityNum = storage.getPriorityNumber().toString();
+            priority = priorityNum;
             //2. 回退缓存中库存所用量
             //2.1 回退优先级中,SKU可用量
             String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priorityNum);
@@ -354,7 +357,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             }
         }
         //调用数据库异步处理方法
-        numDbBusiSV.storageNumChange(tenantId,skuId,storageNum,false,false);
+        numDbBusiSV.storageNumChange(tenantId,skuId,priority,storageNum,false,false);
     }
 
     /**
@@ -373,7 +376,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
             throw new BusinessException(ErrorCodeConstants.Product.SKU_NO_EXIST,"单品信息不存在,单品标识:"+skuId);
         }
         //
-        Product product = productAtomSV.selectByProductId(tenantId,skuInfo.getProdId());
+        Product product = productAtomSV.selectByProductId(skuInfo.getProdId());
         return queryStorage(skuId, product);
     }
 
@@ -564,7 +567,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 //            throw new BusinessException(ErrorCodeConstants.Product.SKU_NO_EXIST,"单品信息不存在,单品标识:"+skuId);
 //        }
         //1. 查询商品是否为"在售"状态
-        Product product = productAtomSV.selectByProductId(tenantId,skuId);
+        Product product = productAtomSV.selectByProductId(skuId);
         if (product==null || !ProductConstants.Product.State.IN_SALE.equals(product.getState())){
             logger.warn("销售商品不存在,或已下架,租户ID:{},SKU标识:{},销售商品标识{}"
                     ,tenantId,skuId,skuId);

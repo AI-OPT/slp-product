@@ -267,4 +267,16 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 		
 		return skuStorageMapper.updateByExampleSelective(skuStorage, example);
 	}
+
+	/**
+	 * 根据条件修改SKU库存
+	 * @param skuStorageId
+	 * @param skuNum
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	public int updateSkuStorageUsableNumBySQL(String skuStorageId, int skuNum) {
+		return skuStorageAttachMapper.updateBySQL(skuStorageId,skuNum);
+	}
+	
 }

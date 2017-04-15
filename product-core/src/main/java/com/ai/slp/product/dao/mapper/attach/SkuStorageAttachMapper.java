@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 
@@ -41,4 +42,17 @@ public interface SkuStorageAttachMapper {
      * @return
      */
     public Long selectPriceOfSku(Map<String,Object> params);
+
+    /**
+     * 更新sku库存
+     * @param skuStorageId
+     * @param skuNum
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
+    @Update("update sku_storage t set t.USABLE_NUM = (t.USABLE_NUM + (#{skuNum})) where t.SKU_STORAGE_ID = #{skuStorageId}")
+	public int updateBySQL(@Param("skuStorageId") String skuStorageId,@Param("skuNum") int skuNum);
+    
+    
 }

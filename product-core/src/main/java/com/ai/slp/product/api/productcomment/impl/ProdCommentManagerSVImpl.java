@@ -41,7 +41,6 @@ import com.ai.slp.product.api.productcomment.param.ProdReplyComment;
 import com.ai.slp.product.api.productcomment.param.UpdateCommentStateRequest;
 import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.ProductCommentConstants;
-import com.ai.slp.product.constants.ResultCodeConstants;
 import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
@@ -112,6 +111,9 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 								new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 			}
 			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
+			result.setCount(0);
+			result.setPageNo(prodCommentPageRequest.getPageNo());
+			result.setPageSize(prodCommentPageRequest.getPageSize());
 			if (!CollectionUtil.isEmpty(commentResult.getContents())) {
 				List<ProdCommentPageResponse> prodCommentPageResponses = new ArrayList<>();
 				for (CommentInfo commentInfo : commentResult.getContents()) {
@@ -120,8 +122,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				}
 				result.setResult(prodCommentPageResponses);
 				result.setCount((int) commentResult.getCount());
-				result.setPageNo(prodCommentPageRequest.getPageNo());
-				result.setPageSize(prodCommentPageRequest.getPageSize());
 			} /*
 				 * else { // 查询商品信息 String tenantId =
 				 * prodCommentPageRequest.getTenantId(); // SKUID与商品ID意义相同
@@ -134,6 +134,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				 * prodCommentBusiSV.queryPageBySku(prodCommentPageRequest,
 				 * product.getStandedProdId()); }
 				 */
+			responseHeader = new ResponseHeader(true, CommonConstants.OPERATE_SUCCESS, "success");
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
 			if (e instanceof BusinessException) {
@@ -142,7 +143,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			} else {
 				responseHeader = new ResponseHeader(false, ExceptCodeConstants.Special.SYSTEM_ERROR, "查询商品评价失败");
 			}
-			result.setResponseHeader(responseHeader);
 		}
 		result.setResponseHeader(responseHeader);
 		return result;
@@ -167,7 +167,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 					ProdComment params = new ProdComment();
 					params.setUserId(userId);
 					BeanUtils.copyProperties(params, prodCommentVO);
-					Product product = productAtomSV.selectByProductId(tenantId, prodCommentVO.getSkuId());
+					Product product = productAtomSV.selectByProductId(prodCommentVO.getSkuId());
 					if (product == null) {
 						throw new BusinessException("skuId 数据错误，找不到对应的标准商品");
 					}
@@ -343,6 +343,9 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			maxSize = size;
 			List<SearchCriteria> searchfieldVos = CriteriaUtils.commonConditions(commentPageRequest);
 			Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, startSize, maxSize, null);
+			result.setCount(0);
+			result.setPageNo(commentPageRequest.getPageNo());
+			result.setPageSize(commentPageRequest.getPageSize());
 			if (!CollectionUtil.isEmpty(commentResult.getContents())) {
 				List<CommentPageResponse> prodCommentPageResponses = new ArrayList<>();
 				for (CommentInfo commentInfo : commentResult.getContents()) {
@@ -351,9 +354,8 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				}
 				result.setResult(prodCommentPageResponses);
 				result.setCount((int) commentResult.getCount());
-				result.setPageNo(commentPageRequest.getPageNo());
-				result.setPageSize(commentPageRequest.getPageSize());
 			}
+			responseHeader = new ResponseHeader(true,CommonConstants.OPERATE_SUCCESS,"success");
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
 			if (e instanceof BusinessException) {
@@ -362,7 +364,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 			} else {
 				responseHeader = new ResponseHeader(false, ExceptCodeConstants.Special.SYSTEM_ERROR, "查询商品评价失败");
 			}
-			result.setResponseHeader(responseHeader);
 		}
 		result.setResponseHeader(responseHeader);
 		return result;
