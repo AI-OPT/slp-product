@@ -472,7 +472,7 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 
 	@Override
 	public int updateProdStatus(String prodId, String state, String operId) {
-		return productAttachMapper.updateProdState(prodId, state, operId);
+		return productAttachMapper.updateProdStateNew(prodId, state, operId);
 	}
 
 	
