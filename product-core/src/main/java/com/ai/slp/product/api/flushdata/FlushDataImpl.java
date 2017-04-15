@@ -45,7 +45,6 @@ import com.ai.slp.product.search.bo.CategoryInfo;
 import com.ai.slp.product.search.bo.ImageInfo;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.search.bo.SaleAreaInfo;
-import com.ai.slp.product.search.bo.comment.CommentInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdCatDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentPictureAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdAttrAtomSV;
@@ -109,6 +108,7 @@ public class FlushDataImpl implements IFlushDataSV{
 		states.add("5");
 		productQueryInfo.setStateList(states);
         PageInfo<Product> products = productAtomSV.selectPageForInsale(productQueryInfo);
+        Integer count = 0;
 		if (!CollectionUtils.isEmpty(products.getResult())) {
 			/**
 			 * 查询数据库组装信息
@@ -119,12 +119,14 @@ public class FlushDataImpl implements IFlushDataSV{
 					continue;
 				}
 				List<SKUInfo> skuInfoList = fillSkuInfo(skuInfoSesList);
-				if (!CollectionUtil.isEmpty(skuInfoList)) {
-					SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+				if(CollectionUtils.isEmpty(skuInfoList)){
+					continue;
 				}
+				SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+				count++;
 			}
 		}
-		return CommonUtils.genSuccessResponse("success");
+		return CommonUtils.genSuccessResponse("共刷入:"+count.toString()+"条商品数据");
 	}
 
 	@Override
@@ -149,9 +151,8 @@ public class FlushDataImpl implements IFlushDataSV{
 		/**
 		 * 加缓存
 		 */
-		List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments, pictureMap);
-		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
-		return CommonUtils.genSuccessResponse("success");
+		Integer count = ConvertUtils.flushCommentInfo(prodComments, pictureMap);
+		return CommonUtils.genSuccessResponse("共刷入:"+count.toString()+"条商品评论数据");
 	}
 	
 	public List<SKUInfo> fillSkuInfo(List<ProdSkuInfoSes> skuInfoSesList) {
@@ -193,7 +194,10 @@ public class FlushDataImpl implements IFlushDataSV{
 			// 市场价
 			Product product = productAtomSV.selectByProductId(prodSkuInfo.getTenantid(),
 					prodSkuInfo.getSkuid());
-			skuInfo.setMarketprice(product.getMarketPrice() == null ? 0 : product.getMarketPrice());
+			if(null==product){
+				continue;
+			}
+			skuInfo.setMarketprice(null==product.getMarketPrice() ? 0 : product.getMarketPrice());
 			// 是否全国销售
 			skuInfo.setSalenationwide(product.getIsSaleNationwide());
 			// 发票
@@ -259,13 +263,16 @@ public class FlushDataImpl implements IFlushDataSV{
 				 //设库存
 	            String skuStorageKey = IPaasStorageUtils.genMcsSkuStorageUsableKey(
 	                    tenantId,groupId,storage.getPriorityNumber().toString(),skuStorage.getSkuId());
-	            cacheClient.zadd(skuStorageKey,1000,skuStorage.getSkuStorageId());
+	            if(null!=skuStorage.getSkuStorageId()){
+	            	cacheClient.zadd(skuStorageKey,1000,skuStorage.getSkuStorageId());
+	            }
 	            //设置SKU库存可用量
-	            cacheClient.hincrBy(skuUsableKey,skuStorage.getSkuId(),skuStorage.getUsableNum());
-	            //设置优先级可用量
-	            cacheClient.incrBy(priorityUsableKey,skuStorage.getUsableNum());
+	            if(null!=skuStorage.getUsableNum()){
+	            	cacheClient.hincrBy(skuUsableKey,skuStorage.getSkuId(),skuStorage.getUsableNum());
+	            	//设置优先级可用量
+	            	cacheClient.incrBy(priorityUsableKey,skuStorage.getUsableNum());
+	            }
 			}
-			
 			skuInfoList.add(skuInfo);
 		}
 		return skuInfoList;

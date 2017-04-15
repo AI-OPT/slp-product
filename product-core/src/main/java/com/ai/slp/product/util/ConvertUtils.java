@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 
+import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
@@ -17,6 +18,7 @@ import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
 import com.ai.slp.product.api.webfront.param.ProductSKUAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductSKUConfigResponse;
 import com.ai.slp.product.api.webfront.param.ProductSKUResponse;
+import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.AttrInfo;
@@ -241,6 +243,50 @@ public class ConvertUtils {
 		product.setTenantId(skuInfo.getTenantid());
 		product.setUnit(skuInfo.getUnit());
 		return product;
+	}
+	
+	public static Integer flushCommentInfo(List<ProdComment> prodComments,Map<String,List<PictureVO>> pictureMap){
+		Integer count=0;
+		for (ProdComment prodComment : prodComments) {
+			List<CommentInfo> commentInfos = new ArrayList<>();
+			CommentInfo commentInfo = new CommentInfo();
+			commentInfo.setCommentbody(prodComment.getCommentBody());
+			commentInfo.setCommentid(prodComment.getCommentId());
+			commentInfo.setCommenttime(prodComment.getCommentTime().getTime());
+			commentInfo.setIspictrue(prodComment.getIsPicture());
+			commentInfo.setProductid(prodComment.getProdId());
+			commentInfo.setReplaystate(prodComment.getReplyState());
+			if(null!=prodComment.getShopScoreFw()){
+			commentInfo.setShopscorefw(prodComment.getShopScoreFw());
+			}
+			if(null!=prodComment.getShopScoreWl()){
+			commentInfo.setShopscorewl(prodComment.getShopScoreWl());
+			}
+			if(null!=prodComment.getShopScoreMs()){
+			commentInfo.setShopscorems(prodComment.getShopScoreMs());
+			}
+			commentInfo.setState(prodComment.getState());
+			commentInfo.setTenantid(prodComment.getTenantId());
+			commentInfo.setUserid(prodComment.getUserId());
+			/**
+			 * 评论图片
+			 */
+			List<CommentPictrueInfo> commentPictrueInfos = new ArrayList<>();
+			if(pictureMap.containsKey(commentInfo.getCommentid())){
+				for(PictureVO pictureVO : pictureMap.get(commentInfo.getCommentid())){
+					CommentPictrueInfo commentPictrueInfo = new CommentPictrueInfo();
+					commentPictrueInfo.setCommentid(commentInfo.getCommentid());
+					commentPictrueInfo.setPicaddr(pictureVO.getPicAddr());
+					commentPictrueInfo.setVfsid(pictureVO.getVfsId());
+					commentPictrueInfos.add(commentPictrueInfo);
+				}
+				commentInfo.setCommentpictrueinfos(commentPictrueInfos);
+			}
+			commentInfos.add(commentInfo);
+			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
+			count++;
+		}
+		return count;
 	}
 	
 }
