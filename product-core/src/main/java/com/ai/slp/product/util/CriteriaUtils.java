@@ -30,7 +30,7 @@ public class CriteriaUtils {
 		 * 标准品标识
 		 */
 		if (!StringUtil.isBlank(productEditParam.getStandedProdId())) {
-			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.STAND_PRODUCT_ID, productEditParam.getStandedProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, productEditParam.getStandedProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		/**
 		 * 商品名称
@@ -91,7 +91,8 @@ public class CriteriaUtils {
 		 * 标准品标识
 		 */
 		if (!StringUtil.isBlank(productQueryInfo.getStandedProdId())) {
-			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.STAND_PRODUCT_ID, productQueryInfo.getStandedProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+			searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, productQueryInfo.getStandedProdId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+			
 		}
 		/**
 		 * 商品名称
