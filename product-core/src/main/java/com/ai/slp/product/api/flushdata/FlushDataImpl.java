@@ -61,6 +61,7 @@ import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.product.util.IPaasStorageUtils;
+import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 
@@ -103,6 +104,9 @@ public class FlushDataImpl implements IFlushDataSV{
 	public BaseResponse flushProductData(FlushDataRequest request) {
 		//查询所有符合条件商品
 		ProductQueryInfo productQueryInfo = new ProductQueryInfo();
+		if(!StringUtils.isBlank(request.getProdName())){
+			productQueryInfo.setProdName(request.getProdName());
+		}
 		productQueryInfo.setPageNo(request.getPageNo());
 		productQueryInfo.setPageSize(request.getPageSize());
 		List<String> states = new ArrayList<>();

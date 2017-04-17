@@ -10,8 +10,18 @@ public class FlushDataRequest implements Serializable {
 
 	private Integer pageSize;
 
+	private String prodName;
+
 	public Integer getPageNo() {
 		return pageNo;
+	}
+
+	public String getProdName() {
+		return prodName;
+	}
+
+	public void setProdName(String prodName) {
+		this.prodName = prodName;
 	}
 
 	public void setPageNo(Integer pageNo) {
