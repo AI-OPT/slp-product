@@ -133,7 +133,7 @@ public class FlushDataImpl implements IFlushDataSV{
 				idList.add(skuInfoList.get(0).getProductid());
 			}
 		}
-		return CommonUtils.genSuccessResponse("共刷入:"+count.toString()+"条商品数据");
+		return CommonUtils.genSuccessResponse("共刷入:"+count.toString()+"条商品数据;/n"+"商品ID有:"+JSON.toJSONString(idList));
 	}
 
 	@Override
