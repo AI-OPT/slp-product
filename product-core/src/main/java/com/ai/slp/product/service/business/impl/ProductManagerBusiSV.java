@@ -582,14 +582,14 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
 				info.setState(ProductConstants.Product.State.VERIFYING);
 				List<Long> provCodes = productInfo.getProvCodes();
 				List<SaleAreaInfo> areaInfolist = new ArrayList<>();
-				for (Long prov : provCodes) {
-					SaleAreaInfo areaInfo = new SaleAreaInfo();
-					areaInfo.setProvcode(prov.toString());
-					areaInfolist.add(areaInfo);
+				if (productInfo.getProvCodes() != null) {
+					for (Long prov : provCodes) {
+						SaleAreaInfo areaInfo = new SaleAreaInfo();
+						areaInfo.setProvcode(prov.toString());
+						areaInfolist.add(areaInfo);
+					}
+					info.setSaleareainfos(areaInfolist);
 				}
-				info.setSaleareainfos(areaInfolist);
-				
-				
 				//主预览图
 	           // ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(productInfo.getProdId());
 	            if (productInfo.getProdPics()!=null && productInfo.getProdPics().get(0) != null){
