@@ -167,7 +167,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 					ProdComment params = new ProdComment();
 					params.setUserId(userId);
 					BeanUtils.copyProperties(params, prodCommentVO);
-					Product product = productAtomSV.selectByProductId(tenantId, prodCommentVO.getSkuId());
+					Product product = productAtomSV.selectByProductId(prodCommentVO.getSkuId());
 					if (product == null) {
 						throw new BusinessException("skuId 数据错误，找不到对应的标准商品");
 					}

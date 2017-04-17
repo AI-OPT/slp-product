@@ -376,5 +376,28 @@ public class StorageAtomSVImpl implements IStorageAtomSV {
 		
 		return storageMapper.updateByExampleSelective(storage,storageCriteria);
 	}
+	
+	/**
+	 * 获取商品可用库存
+	 * @param prodId
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	public int getProdUsableNumSum(String prodId,String priority,String state){
+		return storageAttachMapper.getProdUsableNumSum(prodId,priority,state);
+	}
+
+	
+	/**
+	 * 根据skuSorageId更新storage库存
+	 * @param skuStorageId
+	 * @param skuNum
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	public void updateStorageUsableNumBySQL(String skuStorageId, int skuNum) {
+		storageAttachMapper.updateStorageUsableNumSQL(skuStorageId,skuNum);
+	}
 
 }

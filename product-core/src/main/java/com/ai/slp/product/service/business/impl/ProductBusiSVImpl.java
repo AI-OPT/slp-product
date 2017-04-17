@@ -193,9 +193,12 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void changeToSaleForStop(String tenantId, String prodId,Long operId) {
-        Product product = productAtomSV.selectByProductId(tenantId,prodId);
+        Product product = productAtomSV.selectByProductId(prodId);
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
+        }
+        if (!ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
+        	return;
         }
         changeToSaleForStop(product,operId);
     }
@@ -209,10 +212,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void offSale(String tenantId,String supplierId, String prodId, Long operId) {
-        Product product = productAtomSV.selectByProductId(tenantId,prodId);
+        Product product = productAtomSV.selectByProductId(prodId);
         if (product == null
                 || !ProductConstants.Product.State.IN_SALE.equals(product.getState())){
-            logger.warn("未找到对应商品信息,租户ID:{},商品ID:{}",tenantId,prodId);
+            logger.warn("未找到对应商品信息,租户ID:{},商品ID:{}",product.getTenantId(),product.getProdId());
             throw new BusinessException("","未找到相关的商品信息或商品非[在售]状态");
         }
         //只处理在售商品
@@ -221,6 +224,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         changeToStop(storageGroup,product,operId);
     }
 
+    
     /**
      * 进行停用下架
      *
@@ -244,7 +248,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public void discardProduct(String tenantId, String prodId,Long operId) {
-        Product product = productAtomSV.selectByProductId(tenantId,prodId);
+        Product product = productAtomSV.selectByProductId(prodId);
         if (product == null){
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+tenantId+",商品标识:"+prodId);
         }
@@ -295,7 +299,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      */
     @Override
     public ProductRoute queryRouteGroupOfProd(String tenantId, String supplierId,String productId) {
-        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        Product product = productAtomSV.selectByProductId(productId);
         if (product==null) {
             logger.warn("未查询到对应销售商品,租户ID:{},商品标识:{}",tenantId,productId);
             throw new BusinessException("", "未查询到对应销售商品,租户ID:" + tenantId + ",商品标识:" + productId);
@@ -610,7 +614,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     @Override
     public ProdNoKeyAttr queryNoKeyAttrForEdit(String tenantId, String productId) {
         //查询商品信息
-        Product product = productAtomSV.selectByProductId(tenantId,productId);
+        Product product = productAtomSV.selectByProductId(productId);
         if (product==null){
             logger.warn("未找到对应销售商品信息,租户ID:{},销售商品ID:{}",tenantId,productId);
             throw new BusinessException("","未找到对应销售商品信息,租户ID:"+tenantId+",销售商品ID:"+productId);
@@ -830,6 +834,10 @@ public class ProductBusiSVImpl implements IProductBusiSV {
 		
     }
 
+	public void updateProdStatus(String productId,String state, String operId){
+		productAtomSV.updateProdStatus(productId,state,operId);
+	}
+	
     public void updateProdAndStatusLog(Product product){
         if (productAtomSV.updateProdState(product)>0){
           /*  ProductLog log = new ProductLog();

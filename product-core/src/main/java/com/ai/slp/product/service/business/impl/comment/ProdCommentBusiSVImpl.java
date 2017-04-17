@@ -263,7 +263,7 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 			//转换返回对象
 			CommentPageResponse commentPageResponse = new CommentPageResponse();
 			BeanUtils.copyProperties(commentPageResponse, prodComment);
-			Product product = productAtomSV.selectByProductId(prodComment.getTenantId(), prodComment.getProdId());
+			Product product = productAtomSV.selectByProductId(prodComment.getProdId());
 			if(product != null){
 				commentPageResponse.setProdName(product.getProdName());
 			}

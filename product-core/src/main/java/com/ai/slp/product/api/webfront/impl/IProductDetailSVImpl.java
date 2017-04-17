@@ -77,7 +77,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			throw new BusinessException("", "SKU标识和SKU属性为空,无法处理");
 		}
 		// 查询商品
-		Product product = productAtomSV.selectByProductId(skuReq.getTenantId(), skuReq.getSkuId());
+		Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
 
 		if (product == null) {
 			logger.warn("未查询到指定 的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
@@ -170,7 +170,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		}
 		// 查询商品
 		// SKUID等同于PRODID
-		Product product = productAtomSV.selectByProductId(skuReq.getTenantId(), skuReq.getSkuId());
+		Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
 		if (product == null) {
 			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
 					skuReq.getSkuId());

@@ -62,6 +62,7 @@ import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.product.util.IPaasStorageUtils;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 
 
 @Service
@@ -109,6 +110,7 @@ public class FlushDataImpl implements IFlushDataSV{
 		productQueryInfo.setStateList(states);
         PageInfo<Product> products = productAtomSV.selectPageForInsale(productQueryInfo);
         Integer count = 0;
+        List<String> idList = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(products.getResult())) {
 			/**
 			 * 查询数据库组装信息
@@ -124,9 +126,10 @@ public class FlushDataImpl implements IFlushDataSV{
 				}
 				SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
 				count++;
+				idList.add(skuInfoList.get(0).getProductid());
 			}
 		}
-		return CommonUtils.genSuccessResponse("共刷入:"+count.toString()+"条商品数据");
+		return CommonUtils.genSuccessResponse("共刷入:"+count.toString()+"条商品数据\n;商品ID有:"+JSON.toJSONString(idList));
 	}
 
 	@Override

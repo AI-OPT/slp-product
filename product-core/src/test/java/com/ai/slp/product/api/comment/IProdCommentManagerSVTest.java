@@ -69,10 +69,10 @@ public class IProdCommentManagerSVTest {
 	public void queryPageInfoTest(){
 		CommentPageRequest commentPageRequest = new CommentPageRequest();
 		commentPageRequest.setPageNo(1);
-		commentPageRequest.setPageSize(5);
+		commentPageRequest.setPageSize(10);
 		commentPageRequest.setTenantId("changhong");
 		//commentPageRequest.setShopScoreMs(1L);
-		commentPageRequest.setCommentTimeBegin(Timestamp.valueOf("2017-04-18 10:41:11"));
+		//commentPageRequest.setCommentTimeBegin(Timestamp.valueOf("2017-04-18 10:41:11"));
 		PageInfoResponse<CommentPageResponse> queryPageInfoBySku = prodCommentManagerSV.queryPageInfo(commentPageRequest);
 		System.out.println(JSonUtil.toJSon(queryPageInfoBySku));
 	}

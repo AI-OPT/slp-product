@@ -371,7 +371,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 	@Override
 	public void updateSkuOfProduct(SkuInfoMultSave saveInfo) {
 		String tenantId = saveInfo.getTenantId(), productId = saveInfo.getProdId();
-		Product product = productAtomSV.selectByProductId(tenantId, productId);
+		Product product = productAtomSV.selectByProductId(productId);
 		if (product == null) {
 			logger.warn("未找到指定商品,租户ID{},商品标识{}:" + tenantId + "," + productId);
 			throw new BusinessException("", "未找到指定商品,租户ID:" + tenantId + ",商品标识:" + productId);
@@ -1013,7 +1013,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		ProdSku prodSku = selectSkuBySkuIdOrAttrs(tenantId, skuId, skuAttrs);
 
 		// 查询商品
-		Product product = productAtomSV.selectByProductId(tenantId, prodSku.getProdId());
+		Product product = productAtomSV.selectByProductId(prodSku.getProdId());
 		if (product == null) {
 			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",
 					tenantId, prodSku.getSkuId(), prodSku.getProdId());

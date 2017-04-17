@@ -2,11 +2,14 @@ package com.ai.slp.product.api.product;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,10 +18,12 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.idps.IDPSClientFactory;
-import com.ai.opt.sdk.util.DateUtil;
 import com.ai.opt.sdk.util.ImageByteUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.paas.ipaas.image.IImageClient;
+import com.ai.slp.product.api.flushdata.interfaces.IFlushDataSV;
+import com.ai.slp.product.api.flushdata.params.FlushDataRequest;
+import com.ai.slp.product.api.product.impl.IProductManagerSVImpl;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.OtherSetOfProduct;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
@@ -31,6 +36,7 @@ import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
 import com.ai.slp.product.api.product.param.ProductInfoQuery;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.constants.CommonTestConstants;
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 
 /**
@@ -39,9 +45,31 @@ import com.google.gson.Gson;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:context/core-context.xml")
 public class IProductManagerSVTest {
+	private static final Logger logger = LoggerFactory.getLogger(IProductManagerSVImpl.class);
     @Autowired
     IProductManagerSV productManagerSV;
+    @Autowired
+    IFlushDataSV ifDataSV;
 
+    
+
+    @Test
+    public void testFlushProduct(){
+    	FlushDataRequest request = new FlushDataRequest();
+    	request.setPageNo(1);
+    	request.setPageSize(200);
+    	BaseResponse response = ifDataSV.flushProductData(request);
+    	logger.info(JSON.toJSONString(response));
+    }
+    @Test
+    public void testFlushComment(){
+    	FlushDataRequest request = new FlushDataRequest();
+    	request.setPageNo(1);
+    	request.setPageSize(3);
+    	BaseResponse response = ifDataSV.flushCommentData(request);
+    	logger.info(JSON.toJSONString(response));
+    }
+    
     @Test
     public void queryOtherSetOfProductTest(){
         ProductInfoQuery infoQuery = new ProductInfoQuery();
@@ -114,12 +142,12 @@ public class IProductManagerSVTest {
     	ProductQueryInfo queryInSale = new ProductQueryInfo();
     	queryInSale.setTenantId("changhong");
     	queryInSale.setSupplierId("-1");
-    	List<String> stateList = new ArrayList<>();
-		stateList.add("5");
-		queryInSale.setUpStartTime(DateUtil.getTimestamp("2016-11-01 13:18:04", "yyyy-MM-dd HH:mm:ss"));
-		DateUtil.getTimestamp("2016-11-01 13:18:04", "yyyy-MM-dd HH:mm:ss");
-		queryInSale.setUpEndTime(DateUtil.getTimestamp("2016-11-11 13:18:04", "yyyy-MM-dd HH:mm:ss"));
-		queryInSale.setStateList(stateList);
+    	//List<String> stateList = new ArrayList<>();
+		//stateList.add("5");
+		//queryInSale.setUpStartTime(DateUtil.getTimestamp("2017-04-12 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+		//DateUtil.getTimestamp("2017-04-01 13:18:04", "yyyy-MM-dd HH:mm:ss");
+		//queryInSale.setUpEndTime(DateUtil.getTimestamp("2017-04-11 13:18:04", "yyyy-MM-dd HH:mm:ss"));
+		//queryInSale.setStateList(stateList);
     	PageInfoResponse<ProductEditUp> inSale = productManagerSV.searchInSale(queryInSale);
     	Gson gson = new Gson();
     	System.out.println(gson.toJson(inSale));
