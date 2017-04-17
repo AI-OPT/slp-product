@@ -177,5 +177,13 @@ public interface IProductAtomSV {
 	 */
 	public int updateProdStatus(String productId,String state, String operId);
 	
+	/**
+	 * 更新商品信息 --编辑商品
+	 * @param record
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	public int updateProdInfo(Product record);
 
 }

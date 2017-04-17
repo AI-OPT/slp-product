@@ -555,7 +555,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         //设置为待审核
         product.setState(ProductConstants.Product.State.VERIFYING);
         //添加日志
-        productBusiSV.updateProdAndStatusLog(product);
+        //productBusiSV.updateProdAndStatusLog(product);
+        //更新商品信息
+        productAtomSV.updateProdInfo(product);
         
         //查询es
         IProductSearch productSearch = new ProductSearchImpl();

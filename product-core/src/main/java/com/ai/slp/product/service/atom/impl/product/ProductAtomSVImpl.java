@@ -475,6 +475,12 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		return productAttachMapper.updateProdStateNew(prodId, state, operId);
 	}
 
+	@Override
+	public int updateProdInfo(Product record) {
+		
+		return productMapper.updateByPrimaryKey(record);
+	}
+
 	
 	
 }
