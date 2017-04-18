@@ -73,17 +73,17 @@ public class NormProdSaveRequest extends BaseInfo {
     /**
      * 创建人ID,添加时必填<br>
      */
-    @NotNull(message = "创建人ID不能为空",
+ /*   @NotNull(message = "创建人ID不能为空",
             groups = { INormProductSV.SaveProductInfo.class
-            		,INormProductSV.CreateProductAndStoGroup.class})
+            		,INormProductSV.CreateProductAndStoGroup.class})*/
     private Long createId;
 
     /**
      * 操作人ID,更新时必填<br>
      */
-    @NotNull(message = "创建人ID不能为空",
+/*    @NotNull(message = "创建人ID不能为空",
             groups = { INormProductSV.UpdateProductInfo.class
-            		,INormProductSV.UpdateProductAndStoGroup.class})
+            		,INormProductSV.UpdateProductAndStoGroup.class})*/
     private Long operId;
     /**
      * 标准品属性值集合
@@ -93,11 +93,11 @@ public class NormProdSaveRequest extends BaseInfo {
      * (新增字段)
      * 商户ID--(-1:自运营)
      */
-    @NotBlank(message = "商户ID不能为空",
+/*    @NotBlank(message = "商户ID不能为空",
             groups = { INormProductSV.SaveProductInfo.class,
                     INormProductSV.UpdateProductInfo.class
                     ,INormProductSV.UpdateProductAndStoGroup.class
-                    ,INormProductSV.CreateProductAndStoGroup.class})
+                    ,INormProductSV.CreateProductAndStoGroup.class})*/
     private String supplierId;
     
 
