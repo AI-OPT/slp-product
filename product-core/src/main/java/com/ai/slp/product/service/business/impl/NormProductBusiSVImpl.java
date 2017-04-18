@@ -161,7 +161,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct);
 		// 添加标准品属性值
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
-		Timestamp nowTime = DateUtils.currTimeStamp();
+		//Timestamp nowTime = DateUtils.currTimeStamp();
 		
 		
 		for (AttrValRequest attrValReq : attrValList) {
@@ -174,7 +174,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			prodAttr.setAttrValueName2(attrValReq.getAttrVal2());
 			prodAttr.setState(CommonConstants.STATE_ACTIVE);// 设置为有效
 			prodAttr.setOperId(normProduct.getOperId());
-			prodAttr.setOperTime(nowTime);
+			prodAttr.setOperTime(DateUtil.getSysDate());
 			prodAttr.setSerialNumber(getProductAttrSerialNo());
 			// 添加成功
 			standedProdAttrAtomSV.installObj(prodAttr);
