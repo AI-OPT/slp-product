@@ -55,6 +55,8 @@ import com.ai.slp.product.dao.mapper.bo.StandedProductLog;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.search.bo.AttrInfo;
+import com.ai.slp.product.search.bo.ProdAttrInfo;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
@@ -242,8 +244,34 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	public int updateNormProd(NormProdSaveRequest normProdct) {
 		String tenantId = normProdct.getTenantId(), productId = normProdct.getProductId();
 		// 查询是否存在
-		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
-		if (standedProduct == null){
+		//StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
+		
+		//查询es
+    	List<SearchCriteria> searchCriteria = new ArrayList<SearchCriteria>();
+    	searchCriteria.add(new SearchCriteria("productid",
+    			productId,
+    			new SearchOption(SearchOption.SearchLogic.must,SearchOption.SearchType.querystring)));
+    	
+    	int startSize = 1;
+		int maxSize = 1;
+		// 最大条数设置
+		int pageNo = 1;
+		int size = 20;
+		if (pageNo == 1) {
+			startSize = 0;
+		} else {
+			startSize = (pageNo - 1) * size;
+		}
+		maxSize = size;
+		IProductSearch search = new ProductSearchImpl();
+    	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriteria,startSize,maxSize, null);
+    	if (CollectionUtil.isEmpty(infoResult.getContents())) {
+    		logger.error("查询商品失败");
+    		throw new BusinessException("查询es中的商品信息失败");
+		}
+    	SKUInfo standedProdInfo = infoResult.getContents().get(0);
+    	
+		if (standedProdInfo == null){
 			throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
 		}
 		// 判断商户ID是否传入的商户ID
@@ -256,17 +284,17 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		 * 总共有6种状态变化, 1.不允许变更为废弃状态;2.已废弃标准品不允许变更状态;3.可用变为不可用,需要检查.
 		 */
 		// 状态变更
-		if (!standedProduct.getState().equals(normProdct.getState())) {
+		if (!standedProdInfo.getStandprodstate().equals(normProdct.getState())) {
 			// 变更为废弃
 			if (StandedProductConstants.STATUS_DISCARD.equals(normProdct.getState())){
 				throw new BusinessException("", "不允许变更为[废弃]状态,请使用废弃接口");
 			}
 			// 废弃状态下不允许变更为其他状态
-			else if (StandedProductConstants.STATUS_DISCARD.equals(standedProduct.getState())){
+			else if (StandedProductConstants.STATUS_DISCARD.equals(standedProdInfo.getStandprodstate())){
 				throw new BusinessException("", "不允许将[废弃]状态变更为其他状态");
 			}
 			// 将可用变为不可用
-			else if (StandedProductConstants.STATUS_ACTIVE.equals(standedProduct.getState())
+			else if (StandedProductConstants.STATUS_ACTIVE.equals(standedProdInfo.getStandprodstate())
 					&& StandedProductConstants.STATUS_INACTIVE.equals(normProdct.getState())) {
 				// 检查是否有启用状态库存组
 				int groupNum = storageGroupAtomSV.countActive(tenantId, productId);
@@ -276,20 +304,53 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			}
 		}
 		// 变更信息
+/*		standedProduct.setStandedProductName(normProdct.getProductName());
+		standedProduct.setProductType(normProdct.getProductType());
+		standedProduct.setState(normProdct.getState());
+		standedProduct.setOperTime(DateUtil.getSysDate());
+		StandedProductLog productLog = new StandedProductLog();
+		BeanUtils.copyProperties(productLog, standedProduct);*/
+		//int updateCount = standedProductAtomSV.updateObj(standedProduct);
+		
+		StandedProduct standedProduct = new StandedProduct();
 		standedProduct.setStandedProductName(normProdct.getProductName());
 		standedProduct.setProductType(normProdct.getProductType());
 		standedProduct.setState(normProdct.getState());
-		StandedProductLog productLog = new StandedProductLog();
-		BeanUtils.copyProperties(productLog, standedProduct);
-		int updateCount = standedProductAtomSV.updateObj(standedProduct);
-		if (updateCount > 0) {
+		standedProduct.setOperTime(DateUtil.getSysDate());
+		int updateCount = standedProductAtomSV.updateStandedProductInfo(standedProduct);
+		
+
+		
+/*		if (updateCount > 0) {
 			productLog.setOperTime(standedProduct.getOperTime());
 			standedProductLogAtomSV.insert(productLog);
-		}
+		}*/
 		// 变更属性值. 1.将原来属性值设置为不可用;2,启用新的属性值.
 		if (normProdct.getAttrValList()!=null) {
-			
 			updateStandedProdAttr(normProdct);
+			
+			List<SKUInfo> skuInfoList = new ArrayList<>();
+			List<AttrInfo> attrInfoList = new ArrayList<>();
+			
+			for (AttrValRequest attr : normProdct.getAttrValList()) {
+				AttrInfo attrInfo = new AttrInfo();
+				attrInfo.setAttrid(attr.getAttrId().toString());
+				attrInfo.setAttrvaluedefid(attr.getProductAttrValId().toString());
+				attrInfo.setAttrtype(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
+				attrInfoList.add(attrInfo);
+				
+			}
+			
+			//添加到es
+			standedProdInfo.setSkuname(normProdct.getProductName());
+			standedProdInfo.setProductname(normProdct.getProductName());
+			standedProdInfo.setProducttype(normProdct.getProductType());
+			standedProdInfo.setStandprodstate(normProdct.getState());
+			standedProdInfo.setOpertime(DateUtil.getSysDate().getTime());
+			standedProdInfo.setAttrinfos(attrInfoList);
+			
+			skuInfoList.add(standedProdInfo);
+			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
 		}
 		return updateCount;
 	}
@@ -297,7 +358,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public int updateNormProdAndStoGroup(NormProdSaveRequest productInfoRequest) {
 		// 更新库存组相关信息
-		updateStoGroupInfo(productInfoRequest);
+		//updateStoGroupInfo(productInfoRequest);
 		// 更新标准品及属性
 		int updateCount = updateNormProd(productInfoRequest);
 		// 更新销售品
@@ -309,7 +370,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			productAtomSV.updateByStandedProdId(product);
 			
 			//将更新后的商品添加至搜索引擎
-			skuIndexManage.updateSKUIndex(productInfoRequest.getProductId(),DateUtils.currTimeStamp().getTime());
+			//skuIndexManage.updateSKUIndex(productInfoRequest.getProductId(),DateUtils.currTimeStamp().getTime());
 		}
 		
 		return updateCount;

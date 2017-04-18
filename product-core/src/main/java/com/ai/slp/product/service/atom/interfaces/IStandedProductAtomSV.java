@@ -27,6 +27,13 @@ public interface IStandedProductAtomSV {
      * @return
      */
     public int updateObj(StandedProduct standedProduct);
+    /**
+     * 更新标准品信息--更新部分
+     *
+     * @param standedProduct
+     * @return
+     */
+    public int updateStandedProductInfo(StandedProduct standedProduct);
 
     /**
      * 查询租户下的某个标准品

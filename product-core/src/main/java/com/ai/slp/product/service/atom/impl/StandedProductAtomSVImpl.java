@@ -1,9 +1,17 @@
 package com.ai.slp.product.service.atom.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.constants.StandedProductConstants;
+import com.ai.slp.product.dao.mapper.attach.StandedProdAttachMapper;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.StandedProductCriteria;
 import com.ai.slp.product.dao.mapper.interfaces.StandedProductMapper;
@@ -12,12 +20,6 @@ import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.product.vo.StandedProdPageQueryVo;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 标准品原子操作 Created by jackieliu on 16/4/28.
@@ -27,6 +29,7 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 	@Autowired
 	StandedProductMapper standedProductMapper;
 	ProductMapper productMapper;
+	StandedProdAttachMapper standedProdAttachMapper;
 	@Override
 	public int installObj(StandedProduct standedProduct) {
 		if (standedProduct == null){
@@ -59,6 +62,15 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		return standedProductMapper.updateByExampleSelective(standedProduct, example);
 	}
 
+	@Override
+	public int updateStandedProductInfo(StandedProduct standedProduct) {
+		return standedProdAttachMapper.updateStandedProductInfo(standedProduct.getStandedProdId(),
+				standedProduct.getStandedProductName(),
+				standedProduct.getProductType(),
+				standedProduct.getState(),
+				standedProduct.getOperTime());
+	}
+	
 	@Override
 	public StandedProduct selectById(String tenantId, String standedProdId) {
 		if (StringUtils.isBlank(tenantId) || StringUtils.isBlank(standedProdId)){
@@ -180,4 +192,6 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		}
 		return standedProductIdList;
 	}
+
+
 }

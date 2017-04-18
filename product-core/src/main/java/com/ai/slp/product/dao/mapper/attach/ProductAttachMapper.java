@@ -85,6 +85,6 @@ public interface ProductAttachMapper {
     @Update("update product set STATE=#{state},OPER_ID=#{operId} where prod_id = #{prodId} ")
 	public int updateProdStateNew(@Param("prodId") String prodId,
 			@Param("state") String state,
-			@Param("state") String operId);
+			@Param("operId") String operId);
     
 }
