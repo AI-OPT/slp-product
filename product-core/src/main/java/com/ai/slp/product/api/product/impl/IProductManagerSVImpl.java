@@ -16,9 +16,7 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
-import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
@@ -39,7 +37,6 @@ import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSale;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.constants.CommonConstants;
-import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -70,9 +67,7 @@ import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.product.util.CriteriaUtils;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.IPaasStorageUtils;
-import com.ai.slp.product.util.MQConfigUtil;
 import com.alibaba.dubbo.config.annotation.Service;
-import com.alibaba.fastjson.JSON;
 
 /**
  * Created by jackieliu on 16/6/6.
@@ -289,7 +284,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
-    	boolean ccsMqFlag=false;
+    	//boolean ccsMqFlag=false;
     	Long operId = query.getOperId();
     	Product product = null;
     	SKUInfo skuInfo = null;
@@ -302,9 +297,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		List<SearchCriteria> searchfieldVos = new ArrayList<>();
 		searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, query.getProductId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		Result<SKUInfo> result = productSearch.searchByCriteria(searchfieldVos, startSize, maxSize, null);
-		if(CollectionUtils.isEmpty(result.getContents())){
-			product = productAtomSV.selectByProductId(query.getTenantId(),query.getSupplierId(),query.getProductId());
-		}else{
+		if(!CollectionUtils.isEmpty(result.getContents())){
 			skuInfo = result.getContents().get(0);
 			product = ConvertUtils.convertToProduct(skuInfo);
 		}
@@ -312,8 +305,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             throw new BusinessException("","未找到相关的商品信息,租户ID:"+query.getTenantId()+",商品标识:"+query.getProductId());
         }
 	   	//从配置中心获取mq_enable
-	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
-    	if (!ccsMqFlag) {
+        //去除异步操作
+	  	//ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+    	//if (!ccsMqFlag) {
     		CommonUtils.checkTenantId(query.getTenantId());
             String tenantId = product.getTenantId();
             //查询标准品是否为"可使用"状态
@@ -405,7 +399,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         	skuInfoList.add(skuInfos);
         	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
             return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
-		} else {
+		} /*else {
 			BaseResponse response = CommonUtils.genSuccessResponse("");
 			//发送消息
 			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_CHANGETOINSALE_TOPIC).send(JSON.toJSONString(query), 0);
@@ -413,7 +407,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 			response.setResponseHeader(responseHeader);
 			return response;  
 		}
-    }
+    }*/
 
     /**
      * 为编辑页面查询商品非关键属性
@@ -476,11 +470,11 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         if (!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
         	return null;
         }
-		*/
+		
 		boolean ccsMqFlag=false;
 	   	//从配置中心获取mq_enable
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
-		if (!ccsMqFlag) {
+		if (!ccsMqFlag) {*/
 			CommonUtils.checkTenantId(query.getTenantId());
 			//将商品从搜索引擎中移除
 	        //skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
@@ -512,7 +506,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
 	        productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),product,query.getOperId());
 	        return CommonUtils.genSuccessResponse("");
-		} else {
+		} /*else {
 			BaseResponse response = CommonUtils.genSuccessResponse("");
 			//发送消息
 			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_CHANGETOINSTORE_TOPIC).send(JSON.toJSONString(query), 0);
@@ -520,7 +514,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 			response.setResponseHeader(responseHeader);
 			return response; 
 		}
-	}
+	}*/
 
 	/**
 	 * 查询在售商品 -- 按上架时间排序
