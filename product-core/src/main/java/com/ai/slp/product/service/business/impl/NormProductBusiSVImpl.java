@@ -313,6 +313,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		//int updateCount = standedProductAtomSV.updateObj(standedProduct);
 		
 		StandedProduct standedProduct = new StandedProduct();
+		standedProduct.setStandedProdId(normProdct.getProductId());
 		standedProduct.setStandedProductName(normProdct.getProductName());
 		standedProduct.setProductType(normProdct.getProductType());
 		standedProduct.setState(normProdct.getState());
