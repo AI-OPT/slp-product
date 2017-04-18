@@ -447,7 +447,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
 	@Override
 	public BaseResponse changeToInStore(ProductInfoQuery query) throws BusinessException, SystemException {
-		Product product = null;
+		Product product = new Product();
     	int startSize = 0;
     	int maxSize = 1;
     	/**
@@ -476,6 +476,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
 		if (!ccsMqFlag) {*/
 			CommonUtils.checkTenantId(query.getTenantId());
+			product.setProdId(query.getProductId());
+			productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),product,query.getOperId());
 			//将商品从搜索引擎中移除
 	        //skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
 			//查询es
@@ -498,13 +500,13 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         		logger.error("查询商品失败");
         		throw new BusinessException("查询es中的商品信息失败");
     		}
+        	
         	SKUInfo skuInfos = infoResult.getContents().get(0);
         	skuInfos.setState(ProductConstants.Product.State.IN_STORE);
         	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
         	List<SKUInfo> skuInfoList = new ArrayList<>();
         	skuInfoList.add(skuInfos);
         	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
-	        productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),product,query.getOperId());
 	        return CommonUtils.genSuccessResponse("");
 		} /*else {
 			BaseResponse response = CommonUtils.genSuccessResponse("");
