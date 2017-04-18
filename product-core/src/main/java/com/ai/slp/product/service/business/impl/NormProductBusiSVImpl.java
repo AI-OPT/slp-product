@@ -337,7 +337,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			for (AttrValRequest attr : normProdct.getAttrValList()) {
 				AttrInfo attrInfo = new AttrInfo();
 				attrInfo.setAttrid(attr.getAttrId().toString());
-				attrInfo.setAttrvaluedefid(attr.getProductAttrValId().toString());
+				attrInfo.setAttrvaluedefid(attr.getAttrValId().toString());
 				attrInfo.setAttrtype(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
 				attrInfoList.add(attrInfo);
 				
