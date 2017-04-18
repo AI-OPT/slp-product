@@ -74,12 +74,28 @@ public class INormProductSVTest {
     
     @Test
     public void updateNormProduct(){
-    	Gson gson = new Gson();
     	//String data = "{'productCatId':'1','productId':'1','productName':'测试销售属性商品 20160603无限额超级商品','state':'1','productType':'2','createId':1,'operId':1,'attrValList':[{'attrId':100001,'attrValId':'','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100013','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100014','attrVal':'','attrVal2':''},{'attrId':100004,'attrValId':'100015','attrVal':'','attrVal2':''},{'attrId':100010,'attrValId':'100082','attrVal':'','attrVal2':''},{'attrId':100010,'attrValId':'100084','attrVal':'','attrVal2':''}],'supplierId':'-1','tenantId':'changhong'}";
-    	String data = "{'productCatId':'000000000160','productId':'0000000000000603','productName':'w1-w12测试数据','state':'1','productType':'2','createId':1,'operId':1,'supplierId':'-1','tenantId':'changhong'}";
+    	//String data = "{'productCatId':'000000000160','productId':'0000000000000603','productName':'w1-w12测试数据','state':'1','productType':'2','createId':1,'operId':1,'supplierId':'-1','tenantId':'changhong'}";
     	
+   /* 	String data = "{'productCatId':'00000000000142','productId':'0000000000001113','productName':'w1-w12测试数据','state':'1','productType':'2','createId':1,'operId':1,'attrValList':[{'attrId':'41','attrValId':'000000000022','attrVal':'','attrVal2':''},{'attrId':'100007','attrValId':'100070','attrVal':'','attrVal2':''}]'supplierId':'-1','tenantId':'changhong'}";
+    	
+    	Gson gson = new Gson();
     	NormProdSaveRequest request = gson.fromJson(data, new TypeToken<NormProdSaveRequest>() {
 		}.getType());
+    	*/
+    	NormProdSaveRequest request = new NormProdSaveRequest();
+    	request.setProductCatId("00000000000142");
+    	request.setProductId("0000000000001113");
+    	request.setProductName("121212121");
+    	request.setState("1");
+    	request.setProductType("2");
+    	request.setCreateId(1l);
+    	request.setOperId(1l);
+    	//request.getAttrValList();
+    	request.setSupplierId("-1");
+    	request.setTenantId("changhong");
+    	
+    	
     	BaseResponse baseResponse = normProductSV.updateProductAndStoGroup(request);
   
     	System.out.println(JSonUtil.toJSon(baseResponse));

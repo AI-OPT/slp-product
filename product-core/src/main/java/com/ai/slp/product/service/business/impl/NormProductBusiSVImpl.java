@@ -326,12 +326,13 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			productLog.setOperTime(standedProduct.getOperTime());
 			standedProductLogAtomSV.insert(productLog);
 		}*/
+		
+		List<SKUInfo> skuInfoList = new ArrayList<>();
+		List<AttrInfo> attrInfoList = new ArrayList<>();
+		
 		// 变更属性值. 1.将原来属性值设置为不可用;2,启用新的属性值.
 		if (normProdct.getAttrValList()!=null) {
 			updateStandedProdAttr(normProdct);
-			
-			List<SKUInfo> skuInfoList = new ArrayList<>();
-			List<AttrInfo> attrInfoList = new ArrayList<>();
 			
 			for (AttrValRequest attr : normProdct.getAttrValList()) {
 				AttrInfo attrInfo = new AttrInfo();
@@ -341,18 +342,18 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				attrInfoList.add(attrInfo);
 				
 			}
-			
-			//添加到es
-			standedProdInfo.setSkuname(normProdct.getProductName());
-			standedProdInfo.setProductname(normProdct.getProductName());
-			standedProdInfo.setProducttype(normProdct.getProductType());
-			standedProdInfo.setStandprodstate(normProdct.getState());
-			standedProdInfo.setOpertime(DateUtil.getSysDate().getTime());
-			standedProdInfo.setAttrinfos(attrInfoList);
-			
-			skuInfoList.add(standedProdInfo);
-			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
 		}
+		
+		//添加到es
+		standedProdInfo.setSkuname(normProdct.getProductName());
+		standedProdInfo.setProductname(normProdct.getProductName());
+		standedProdInfo.setProducttype(normProdct.getProductType());
+		standedProdInfo.setStandprodstate(normProdct.getState());
+		standedProdInfo.setOpertime(DateUtil.getSysDate().getTime());
+		standedProdInfo.setAttrinfos(attrInfoList);
+		
+		skuInfoList.add(standedProdInfo);
+		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
 		return updateCount;
 	}
 

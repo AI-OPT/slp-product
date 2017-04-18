@@ -28,7 +28,9 @@ import com.ai.slp.product.vo.StandedProdPageQueryVo;
 public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 	@Autowired
 	StandedProductMapper standedProductMapper;
+	@Autowired
 	ProductMapper productMapper;
+	@Autowired
 	StandedProdAttachMapper standedProdAttachMapper;
 	@Override
 	public int installObj(StandedProduct standedProduct) {
