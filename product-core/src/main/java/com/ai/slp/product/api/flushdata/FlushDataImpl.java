@@ -63,7 +63,7 @@ import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.product.util.IPaasStorageUtils;
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.config.annotation.Service;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 
 
 @Service
@@ -133,7 +133,7 @@ public class FlushDataImpl implements IFlushDataSV{
 				idList.add(skuInfoList.get(0).getProductid());
 			}
 		}
-		return CommonUtils.genSuccessResponse("共刷入:"+count.toString()+"条商品数据;/n"+"商品ID有:"+JSON.toJSONString(idList));
+		return CommonUtils.genSuccessResponse("共刷入:"+count.toString()+"条商品数据;/n"+"商品ID有:"+JSONArray.toJSONString(idList));
 	}
 
 	@Override

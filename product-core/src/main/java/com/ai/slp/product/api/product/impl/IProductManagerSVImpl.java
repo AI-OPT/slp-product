@@ -42,9 +42,7 @@ import com.ai.slp.product.constants.CommonConstants;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SearchConstants;
-import com.ai.slp.product.constants.StandedProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
-import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
@@ -319,7 +317,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     		CommonUtils.checkTenantId(query.getTenantId());
             String tenantId = product.getTenantId();
             //查询标准品是否为"可使用"状态
-            String standProdState = "";
+           /* String standProdState = "";
             if(null!=skuInfo&&!StringUtils.isEmpty(skuInfo.getStandprodstate())){
             	standProdState = skuInfo.getStandprodstate();
             }else{
@@ -331,18 +329,18 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             if (!StandedProductConstants.STATUS_ACTIVE.equals(standProdState)){
                 logger.warn("未找到指定的标准品或标准品状态为不可用,租户ID:{},商户ID:{},标准品ID:{}",tenantId,product.getSupplierId(),product.getStandedProdId());
                 throw new BusinessException("","未找到相关的商品信息或商品状态为不可用");
-            }
+            }*/
             
             //若商品状态是"停用下架"或"售罄下架"
             if(ProductConstants.Product.State.STOP.equals(product.getState())
                     || ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
                 changeToSaleForStop(product, operId);
             }
-            //若商品既不是"停用下架"和"售罄下架",也不是"仓库中",则不允许上架
+/*            //若商品既不是"停用下架"和"售罄下架",也不是"仓库中",则不允许上架
             else if(!ProductConstants.Product.State.IN_STORE.equals(product.getState())){
                 logger.warn("商品当前状态不允许上架,租户ID:{},商品标识:{},当前状态:{}", tenantId,product.getProdId(),product.getState());
                 throw new BusinessException("","商品当前状态不允许上架");
-            }
+            }*/
 
             //1.库存组不存在,或已废弃
             //StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId( tenantId,product.getSupplierId(),product.getStorageGroupId());
@@ -456,13 +454,12 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	@Override
 	public BaseResponse changeToInStore(ProductInfoQuery query) throws BusinessException, SystemException {
 		Product product = null;
-    	SKUInfo skuInfo = null;
+    	int startSize = 0;
+    	int maxSize = 1;
     	/**
          * 从ES缓存中获取商品信息
          */
-        IProductSearch productSearch = new ProductSearchImpl();
-		int startSize = 0;
-		int maxSize = 1;
+        /**IProductSearch productSearch = new ProductSearchImpl();
 		List<SearchCriteria> searchfieldVos = new ArrayList<>();
 		searchfieldVos.add(new SearchCriteria(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, query.getProductId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		Result<SKUInfo> result = productSearch.searchByCriteria(searchfieldVos, startSize, maxSize, null);
@@ -479,7 +476,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         if (!ProductConstants.Product.State.IN_SALE.equals(product.getState())){
         	return null;
         }
-		
+		*/
 		boolean ccsMqFlag=false;
 	   	//从配置中心获取mq_enable
 	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
@@ -490,8 +487,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 			//查询es
         	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
         	searchCriterias.add(new SearchCriteria("productid",
-        			product.getProdId(),
-        			new SearchOption(SearchOption.SearchLogic.must,  SearchOption.SearchType.querystring)));
+        			query.getProductId(),new SearchOption(SearchOption.SearchLogic.must,  SearchOption.SearchType.querystring)));
         	
     		// 最大条数设置
     		int pageNo = 1;
@@ -779,6 +775,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	        }
 	    }
 	
+	@SuppressWarnings("unused")
 	private ProdPicture getProdPictureByProdId(String prodId,List<ProdPicture> list) {
 		if(list!=null&&list.size()>0){
 			for(ProdPicture pic:list){
