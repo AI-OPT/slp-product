@@ -38,6 +38,7 @@ import com.ai.slp.product.dao.mapper.attach.ProdAttrAndValIdAttrch;
 import com.ai.slp.product.dao.mapper.bo.ProductCat;
 import com.ai.slp.product.service.business.interfaces.IProductCatBusiSV;
 import com.ai.slp.product.util.CommonUtils;
+import com.ai.slp.product.util.DataUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 
 /**
@@ -167,7 +168,7 @@ public class IProductCatSVImpl implements IProductCatSV {
         //进行遍历  并返回map
         Map<Long,Set<String>> idMap = new HashMap<>();
         for (ProdAttrAndValIdAttrch attr : list) {
-        	Long attrid = Long.valueOf(attr.getAttrId());
+        	Long attrid = DataUtils.getLongVal(attr.getAttrId());
 			String attrvalueid = attr.getAttrvalueDefId();
 			if(idMap.containsKey(attrid)){
 				idMap.get(attrid).add(attrvalueid);

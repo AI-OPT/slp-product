@@ -5,6 +5,7 @@ import com.ai.opt.base.vo.BaseListResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.productcat.interfaces.IAttrAndValDefSV;
 import com.ai.slp.product.api.productcat.param.*;
+import com.ai.slp.product.util.DataUtils;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,7 @@ public class IAttrAndValDefSVTest {
 	public void queryPageAttrsTest(){
 		AttrDefParam attrDefParam = new AttrDefParam();
 		attrDefParam.setTenantId("SLP");
-		//Long longValue = Long.valueOf("18").longValue();
+		//Long longValue = DataUtils.getLongVal("18").longValue();
 		//attrDefParam.setAttrId(longValue);
 		
 		attrDefParam.setValueWay("1");

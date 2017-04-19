@@ -86,6 +86,7 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
+import com.ai.slp.product.util.DataUtils;
 import com.ai.slp.product.vo.ProdSkuAttrStr;
 import com.ai.slp.product.vo.SkuStorageVo;
 
@@ -316,7 +317,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 							String[] attrValueArray = salAttrValue
 									.split(ProductConstants.ProdSku.SaleAttrs.ATTRVAL_SPLIT);
 							ProdSkuAttr prodSkuAttr = new ProdSkuAttr();
-							prodSkuAttr.setAttrId(Long.valueOf(attrValueArray[0]));
+							prodSkuAttr.setAttrId(DataUtils.getLongVal(attrValueArray[0]));
 							prodSkuAttr.setAttrvalueDefId(attrValueArray[1]);
 							prodSkuAttr.setState(ProductConstants.ProdSkuAttr.State.ACTIVE);
 							prodSkuAttr.setOperId(prodSku.getOperId());
