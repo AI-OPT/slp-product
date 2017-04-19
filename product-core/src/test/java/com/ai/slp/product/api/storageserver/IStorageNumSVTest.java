@@ -32,8 +32,8 @@ public class IStorageNumSVTest {
         StorageNumUserReq userReq = new StorageNumUserReq();
         userReq.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
 //        userReq.setSkuId("0000000000000194");
-        userReq.setSkuId("0000000000001043");
-        userReq.setSkuNum(6);
+        userReq.setSkuId("0000000000001143");
+        userReq.setSkuNum(1);
         StorageNumRes numRes = storageNumSV.useStorageNum(userReq);
         System.out.println(numRes.toString());
        /* Map<String,Integer> skuMap = numRes.getStorageNum();
