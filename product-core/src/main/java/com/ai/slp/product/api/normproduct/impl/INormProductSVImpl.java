@@ -160,6 +160,7 @@ public class INormProductSVImpl implements INormProductSV {
     	response.setMarketPrice(product.getMarketprice());
     	response.setCreateTime(new Timestamp(product.getCreatetime()));
     	response.setOperTime(new Timestamp(product.getOpertime()));
+    	response.setOperId(Long.valueOf(product.getOperid()));
     	response.setSupplierId(product.getSupplierid());
     	
     	
