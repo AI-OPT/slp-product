@@ -31,7 +31,8 @@ public interface StorageAttachMapper {
      * @author Gavin
      * @UCUSER
      */
-    @Update("update `storage` t set t.USABLE_NUM = (t.USABLE_NUM + (#{skuNum})) where t.STORAGE_ID = (select k.STORAGE_ID from sku_storage k where k.SKU_STORAGE_ID = #{skuStorageId})")
+    //@Update("update `storage` t set t.USABLE_NUM = (t.USABLE_NUM + (#{skuNum})) where t.STORAGE_ID = (select k.STORAGE_ID from sku_storage k where k.SKU_STORAGE_ID = #{skuStorageId})")
+    @Update("update `storage` t set t.USABLE_NUM = (t.USABLE_NUM + (#{skuNum})) where t.STORAGE_ID = #{skuStorageId}")
     public void updateStorageUsableNumSQL(@Param("skuStorageId") String skuStorageId, @Param("skuNum")  int skuNum);
 
 }

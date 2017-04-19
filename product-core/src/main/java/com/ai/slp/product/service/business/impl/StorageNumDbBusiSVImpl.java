@@ -30,6 +30,8 @@ import com.ai.slp.product.service.atom.impl.product.ProductAtomSVImpl;
 import com.ai.slp.product.service.atom.impl.storage.SkuStorageAtomSVImpl;
 import com.ai.slp.product.service.atom.impl.storage.StorageAtomSVImpl;
 import com.ai.slp.product.service.atom.impl.storage.StorageLogAtomSVImpl;
+import com.ai.slp.product.service.aync.AyncTask;
+import com.ai.slp.product.service.aync.StorageAyncExector;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.util.IPaasStorageUtils;
 
@@ -60,18 +62,31 @@ public class StorageNumDbBusiSVImpl {
      * @param priorityChange true:库存组优先级切换;
      * @return
      */
-    @Async
     public void storageNumChange(
-    		String tenantId,String skuId,String priority,Map<String,Integer> skuNumMap, boolean isUser, boolean priorityChange) {
+    		final String tenantId,final String skuId,
+    		final String priority,final Map<String,Integer> skuNumMap,
+    		final boolean isUser,final boolean priorityChange) {
     	if (skuNumMap==null || skuNumMap.isEmpty()){
     		return;
     	}
     	
     	//库存扣减
-    	storageNumChange(skuNumMap, isUser);
+    	StorageAyncExector.submitStorage(new AyncTask() {
+			
+			@Override
+			public void run() {
+				storageNumChange(skuNumMap, isUser);
+			}
+		});
     	
     	//更新商品状态
-    	changeProductState(tenantId, isUser, priorityChange,skuId,priority);
+    	StorageAyncExector.submitProduct(new AyncTask() {
+			
+			@Override
+			public void run() {
+				changeProductState(tenantId, isUser, priorityChange,skuId,priority);
+			}
+		});
     	
     }
 

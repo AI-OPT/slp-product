@@ -83,7 +83,9 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	 */
 	@Override
 	public int install(SkuStorage skuStorage) {
-		skuStorage.setSkuStorageId(SequenceUtil.genskuStorageId());
+//		skuStorage.setSkuStorageId(SequenceUtil.genskuStorageId());
+		//skuStorage与Storage共享id,且一一对应
+		skuStorage.setSkuStorageId(skuStorage.getStorageId());
 		skuStorage.setOperTime(DateUtils.currTimeStamp());
 		return skuStorageMapper.insert(skuStorage);
 	}

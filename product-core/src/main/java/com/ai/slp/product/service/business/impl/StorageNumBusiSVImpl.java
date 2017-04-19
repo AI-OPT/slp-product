@@ -267,10 +267,18 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     	//如果当前优先级下某个库存量小于等于要减量,   当前库存减为0   然后判断要减量是否大于0    是--进行去下一个减库存
     	//需要当前库存的个数--一直进行减库存
 		String priorityUsable = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId, groupId, priority);
-		Long decrBy = cacheClient.decrBy(priorityUsable,0);//总库存
-        logger.info("=====开始执行,当前优先级库存总量:"+decrBy);
-
-		if (decrBy >= skuNum) {// 库存够减
+		//判断库存是否足够
+		assetTotalSkuNumEnable(tenantId, groupId, skuNum, cacheClient, priorityUsable);
+		//库存扣减
+		Long totalSkuNum = cacheClient.decrBy(priorityUsable,skuNum);
+        if (totalSkuNum < 0) {//库存不够
+        	//返库存
+        	cacheClient.decrBy(priorityUsable,(0-skuNum));
+			logger.warn("该商品库存不足,租户ID:{},库存组ID:{}", tenantId, groupId);
+			throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK, "该商品库存不足");
+        }
+        
+		if (totalSkuNum >= 0) {// 库存够减
 			// 进行减sku库存
 			int incnum = skuNum;
 			logger.info("=====开始执行,当前要减的量:" + incnum);
@@ -294,12 +302,31 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 					break;
 				}
 			}
-		} else {
-			logger.warn("该商品库存不足,租户ID:{},库存组ID:{}", tenantId, groupId);
-			throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK, "该商品库存不足");
-		}
+		} 
 		//扣减总库存
-		return cacheClient.decrBy(priorityUsable,skuNum);
+		return totalSkuNum;
+	}
+
+	/**
+	 * 判断库存是否足够
+	 * @param tenantId
+	 * @param groupId
+	 * @param skuNum
+	 * @param cacheClient
+	 * @param priorityUsable
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	private void assetTotalSkuNumEnable(String tenantId, String groupId, int skuNum, ICacheClient cacheClient,
+			String priorityUsable) {
+		//		Long totalSkuNum = cacheClient.decrBy(priorityUsable,0);//总库存
+			String totalNum = cacheClient.get(priorityUsable);
+			Long totalSkuNum = totalNum!=null?Long.valueOf(totalNum):0;//总库存
+			logger.info("=====开始执行,当前优先级库存总量:"+totalSkuNum);
+			if(totalSkuNum < skuNum){
+				logger.warn("该商品库存不足,租户ID:{},库存组ID:{}", tenantId, groupId);
+				throw new BusinessException(ErrorCodeConstants.Storage.UNDER_STOCK, "该商品库存不足");
+			}
 	}
 
 	

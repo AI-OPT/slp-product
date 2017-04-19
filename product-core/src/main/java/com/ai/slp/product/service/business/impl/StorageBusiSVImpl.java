@@ -431,8 +431,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.NO)) {*/
 			//通过商品id查出商品SKU信息,更新SKU库存信息
 			
-			String skuId = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId()).get(0).getSkuId();
-			
+//			String skuId = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId()).get(0).getSkuId();
+			String skuId = product.getProdId();
+		
 			Long price = getPriceOfSku(groupId,skuId,storage.getPriorityNumber());
 			
 			installSkuStorage(skuId,storage.getStorageId(),storage.getTotalNum(),price,operId);
