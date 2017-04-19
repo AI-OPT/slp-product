@@ -3,6 +3,7 @@ package com.ai.slp.product.api.flushdata;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -264,6 +265,10 @@ public class FlushDataImpl implements IFlushDataSV{
 					BeanUtils.copyProperties(skuStorage, skuStorages.get(0));
 				}
 				Short priority = storage.getPriorityNumber();
+				flushStorageCache(groupId);
+	            Set<String> skuIds = new HashSet<>();
+	            skuIds.add(skuInfo.getSkuid());
+	            flushStorageCache(storage, skuIds);
 				//优先级总可用量(F)
 		        String priorityUsableKey = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId,groupId,priority.toString());
 		        String skuUsableKey = IPaasStorageUtils.genMcsSerialSkuUsableKey(tenantId,groupId,priority.toString());
@@ -279,8 +284,10 @@ public class FlushDataImpl implements IFlushDataSV{
 	            	//设置优先级可用量
 	            	cacheClient.incrBy(priorityUsableKey,skuStorage.getUsableNum());
 	            }
+	            String priceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId, groupId, priority.toString());
+	            cacheClient.hset(priceKey, skuInfo.getSkuid(), String.valueOf(skuInfo.getPrice()));
+	            skuInfoList.add(skuInfo);
 			}
-			skuInfoList.add(skuInfo);
 		}
 		return skuInfoList;
 	}

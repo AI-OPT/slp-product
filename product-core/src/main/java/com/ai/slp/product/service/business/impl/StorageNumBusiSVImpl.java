@@ -173,7 +173,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 			String priority) {
 		// 4.获取当前优先级中SKU的销售价
 		String priceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId, groupId, priority);
-		long salePrice = Long.parseLong(cacheClient.hget(priceKey, skuId));
+		long salePrice = null==cacheClient.hget(priceKey, skuId)?0:Long.parseLong(cacheClient.hget(priceKey, skuId));
 		// 若价格不为空,则进行价格判断
 		if (price != null && price.longValue() != salePrice) {
 			logger.warn("商品价格不符,SkuId:{},传入价格:{},当前价格:{}", skuId, price, salePrice);
