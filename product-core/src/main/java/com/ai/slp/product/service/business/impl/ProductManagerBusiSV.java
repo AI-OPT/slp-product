@@ -580,6 +580,7 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
 				info.setProductsellpoint(productInfo.getProductSellPoint());
 				info.setIsinvoice(productInfo.getIsInvoice());
 				info.setUpshelftype(productInfo.getUpshelfType());
+				info.setSalenationwide(productInfo.getIsSaleNationwide());
 				info.setProdetailcontent(productInfo.getProDetailContent());
 				info.setState(ProductConstants.Product.State.VERIFYING);
 				List<Long> provCodes = productInfo.getProvCodes();
