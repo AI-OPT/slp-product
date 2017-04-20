@@ -329,6 +329,8 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             if(ProductConstants.Product.State.STOP.equals(product.getState())
                     || ProductConstants.Product.State.SALE_OUT.equals(product.getState())){
                 changeToSaleForStop(product, operId);
+                logger.error("商品"+product.getProdId()+"状态不支持上架,状态是:"+product.getState());
+                return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
             }
 /*            //若商品既不是"停用下架"和"售罄下架",也不是"仓库中",则不允许上架
             else if(!ProductConstants.Product.State.IN_STORE.equals(product.getState())){
@@ -367,6 +369,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
                     ||StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroupState)
                     ||usableNum==null || usableNum<=0){
                 changeToStop(storageGroupState,product, operId);
+                logger.error("商品"+product.getProdId()+"状态不支持上架,状态是:"+product.getState());
             }
             productBusiSV.changeToInSale(product,operId);
             //将商品添加至搜索引擎
@@ -393,7 +396,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         		throw new BusinessException("查询es中的商品信息失败");
     		}
         	SKUInfo skuInfos = infoResult.getContents().get(0);
-        	skuInfos.setState(ProductConstants.Product.State.IN_SALE);
+        	skuInfos.setState(product.getState());
         	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
         	List<SKUInfo> skuInfoList = new ArrayList<>();
         	skuInfoList.add(skuInfos);
@@ -761,13 +764,13 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 	 
 	 public void updateProdAndStatusLog(Product product){
 	        if (productAtomSV.updateById(product)>0){
-	            ProductLog log = new ProductLog();
+	            /*ProductLog log = new ProductLog();
 	            BeanUtils.copyProperties(log,product);
 	            productLogAtomSV.install(log);
 	            //商品状态日志表
 	            ProductStateLog productStateLog = new ProductStateLog();
 	            BeanUtils.copyProperties(productStateLog, product);
-	            productStateLogAtomSV.insert(productStateLog);
+	            productStateLogAtomSV.insert(productStateLog);*/
 	        }
 	    }
 	

@@ -205,6 +205,7 @@ public class FlushDataImpl implements IFlushDataSV{
 			if(null==product){
 				continue;
 			}
+			skuInfo.setOperid(null==product.getOperId()?"0":product.getOperId()+"");
 			skuInfo.setMarketprice(null==product.getMarketPrice() ? 0 : product.getMarketPrice());
 			// 是否全国销售
 			skuInfo.setSalenationwide(product.getIsSaleNationwide());
@@ -256,9 +257,9 @@ public class FlushDataImpl implements IFlushDataSV{
 			
 			//skustorage
 			List<Storage> storages = storageAtomSV.queryOfGroup(CommonConstants.TENANT_ID, storageGroup.getStorageGroupId());
-			Storage storage = new Storage();
-			SkuStorage skuStorage = new SkuStorage();
 			if(!CollectionUtils.isEmpty(storages)){
+				Storage storage = new Storage();
+				SkuStorage skuStorage = new SkuStorage();
 				BeanUtils.copyProperties(storage, storages.get(0));
 				List<SkuStorage> skuStorages = skuStorageAtomSV.queryByStorageId(storage.getStorageId());
 				if(!CollectionUtils.isEmpty(skuStorages)){

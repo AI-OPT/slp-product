@@ -105,11 +105,11 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	@Override
 	public StorageGroup queryByGroupIdAndSupplierId(String tenantId, String supplierId, String groupId) {
 		StorageGroup group = storageGroupMapper.selectByPrimaryKey(groupId);
-		if (group==null
+		/*if (group==null
 				|| !group.getTenantId().equals(tenantId)
 				|| !group.getSupplierId().equals(supplierId)){
 			group = null;
-		}
+		}*/
 		return group;
 	}
 
