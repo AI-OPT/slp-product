@@ -36,6 +36,7 @@ import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.util.DataUtils;
 import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.IPaasStorageUtils;
 import com.ai.slp.product.vo.SkuStorageVo;
@@ -321,7 +322,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 			String priorityUsable) {
 		//		Long totalSkuNum = cacheClient.decrBy(priorityUsable,0);//总库存
 			String totalNum = cacheClient.get(priorityUsable);
-			Long totalSkuNum = totalNum!=null?Long.valueOf(totalNum):0;//总库存
+			Long totalSkuNum = totalNum!=null?DataUtils.getLongVal(totalNum):0;//总库存
 			logger.info("=====开始执行,当前优先级库存总量:"+totalSkuNum);
 			if(totalSkuNum < skuNum){
 				logger.warn("该商品库存不足,租户ID:{},库存组ID:{}", tenantId, groupId);

@@ -94,7 +94,7 @@ public class ConvertUtils {
 		List<ProductSKUAttrValue> productSKUAttrValues = new ArrayList<>();
 		for (AttrInfo attrInfo : skuInfo.getAttrinfos()) {
 			ProductSKUAttr productSKUAttr = new ProductSKUAttr();
-			productSKUAttr.setAttrId(Long.valueOf(attrInfo.getAttrid()));
+			productSKUAttr.setAttrId(DataUtils.getLongVal(attrInfo.getAttrid()));
 			productSKUAttr.setAttrName(attrInfo.getAttrname());
 			productSKUAttr.setAttrType(attrInfo.getAttrtype());
 			/**
@@ -139,7 +139,7 @@ public class ConvertUtils {
 		productEditUp.setProductCatName(skuInfo.getProductcatname());
 		productEditUp.setProductCatName(skuInfo.getProductcatname());
 		productEditUp.setProductType(skuInfo.getProducttype());
-		//productEditUp.setProPictureId(Long.valueOf(skuInfo.getImageinfo().getVfsid()));
+		//productEditUp.setProPictureId(DataUtils.getLongVal(skuInfo.getImageinfo().getVfsid()));
 		productEditUp.setState(skuInfo.getState());
 		productEditUp.setTotalNum(skuInfo.getUsablenum());
 		productEditUp.setSupplierId(skuInfo.getSupplierid());
