@@ -22,12 +22,12 @@ public class NormProdSaveRequest extends BaseInfo {
 	/**
      * 类目ID,必填.
      */
-    @NotBlank(message = "类目ID不能为空",
+/*    @NotBlank(message = "类目ID不能为空",
             groups = {INormProductSV.SaveProductInfo.class
                     ,INormProductSV.UpdateProductInfo.class
                     ,INormProductSV.UpdateProductAndStoGroup.class
                     ,INormProductSV.CreateProductAndStoGroup.class
-            })
+            })*/
     private String productCatId;
 
     /**
