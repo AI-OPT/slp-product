@@ -1,6 +1,10 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -12,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
-import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
@@ -20,8 +23,16 @@ import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
-import com.ai.slp.product.api.storage.param.*;
-import com.ai.slp.product.constants.NormProdConstants;
+import com.ai.slp.product.api.storage.param.STOStorage;
+import com.ai.slp.product.api.storage.param.SkuStorageAdd;
+import com.ai.slp.product.api.storage.param.SkuStorageInfo;
+import com.ai.slp.product.api.storage.param.StoNoSkuSalePrice;
+import com.ai.slp.product.api.storage.param.StoNoSkuSalePriceReq;
+import com.ai.slp.product.api.storage.param.StoSkuSalePrice;
+import com.ai.slp.product.api.storage.param.StorageGroup4SaleList;
+import com.ai.slp.product.api.storage.param.StorageGroupQueryPage;
+import com.ai.slp.product.api.storage.param.StoragePriorityCharge;
+import com.ai.slp.product.api.storage.param.StorageRes;
 import com.ai.slp.product.constants.ProdPriceLogConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SearchConstants;
@@ -39,7 +50,11 @@ import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
-import com.ai.slp.product.service.atom.interfaces.product.*;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProdSkuLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductLogAtomSV;
+import com.ai.slp.product.service.atom.interfaces.product.IProductStateLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
@@ -48,12 +63,9 @@ import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
-import com.ai.slp.product.util.MQConfigUtil;
 import com.ai.slp.product.util.SkuStorageListComparator;
 import com.ai.slp.product.util.StoNoSkuSalePriceComparator;
-import com.ai.slp.product.util.StorageComparator;
 import com.ai.slp.product.vo.StorageGroupPageQueryVo;
-import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 
 /**
@@ -252,8 +264,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			IProductSearch productSearch = new ProductSearchImpl();
 	    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, startSize, maxSize, null);
 	    	if (CollectionUtil.isEmpty(result.getContents())) {
-	    		logger.error("查询商品失败");
-	    		throw new BusinessException("查询es中的商品信息失败");
+	    		logger.error("查询商品失败,groupID是"+salePrice.getGroupId());
+	    		throw new BusinessException("查询es中的商品信息失败groupID是"+salePrice.getGroupId());
 			}
 	    	SKUInfo product = result.getContents().get(0);
 	    	product.setPrice(salePrice.getSalePrice());

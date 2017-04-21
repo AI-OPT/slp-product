@@ -88,7 +88,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	IProductManagerSV productManagerSV;
 	@Autowired
 	IStorageGroupAtomSV storageGroupAtomSV;
-
+	
 	private static String productNameInit = "商品测试";
 	private static String TENANT_ID = "changhong";
 	private static int DEFAULTLENGTH = 14;
@@ -96,9 +96,9 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	@Override
 	public void createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
 		if (null == request.getNumber()) {
-			request.setNumber(50);
+			request.setNumber(20);
 		}
-		if(StringUtils.isEmpty(request.getProductName())){
+		if (StringUtils.isEmpty(request.getProductName())) {
 			request.setProductName(productNameInit);
 		}
 		/**
@@ -109,8 +109,9 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			logger.error("类目不能为空");
 			return;
 		}
-		for (Long productCatId = Long.valueOf(request.getProductCatIdStartNum()); productCatId <= Long.valueOf(request.getProductCatIdEndNum()); productCatId++) {
-			int zeroFill = DEFAULTLENGTH-String.valueOf(productCatId).length();
+		for (Long productCatId = Long.valueOf(request.getProductCatIdStartNum()); productCatId <= Long
+				.valueOf(request.getProductCatIdEndNum()); productCatId++) {
+			int zeroFill = DEFAULTLENGTH - String.valueOf(productCatId).length();
 			StringBuffer productCat = new StringBuffer();
 			for (int i = 0; i < zeroFill; i++) {
 				productCat.append("0");
@@ -119,24 +120,28 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			for (int i = 0; i < request.getNumber(); i++) {
 				try {
 					// 保存标准品
-					StorageGroup group = addNormProduct(productCat.toString(),request.getProductName());
+					StorageGroup group = addNormProduct(productCat.toString(), request.getProductName());
+					if (null == group) {
+						continue;
+					}
 					String productId = group.getStandedProdId();
 					// 新建库存
 					String storageId = saveStorage(group);
 					// 编辑商品
-					updateProduct(productId,request.getProductName());
+					updateProduct(productId, request.getProductName());
 					// 仓库
-					String supplyId = addRouteProdSupplyList(productId,request.getProductName());
+					String supplyId = addRouteProdSupplyList(productId, request.getProductName());
 					// 路由组
-					RouteGroupAddResponse routeGroup = insertRouteGroup(productId,request.getProductName());
+					RouteGroupAddResponse routeGroup = insertRouteGroup(productId, request.getProductName());
 					if (null == routeGroup.getRouteGroupId()) {
 						continue;
 					}
 					// 地域
 					addTargetAreaToList();
+					Thread.sleep(1000);
 					// 价格
 					// 市场价
-					updateMarketPriceTest(productId);
+					updateMarketPrice(productId);
 					// 成本价
 					updateCostPrice(productId, supplyId);
 					// 销售价
@@ -148,13 +153,14 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					productCheck(productId);
 				} catch (Exception e) {
 					logger.error("批量制造商品发生点问题,原因是:" + JSON.toJSONString(e.getStackTrace()));
+					continue;
 				}
 			}
 		}
 	}
 
 	// 保存标准品
-	public StorageGroup addNormProduct(String productCatId,String productName) {
+	public StorageGroup addNormProduct(String productCatId, String productName) {
 		NormProdSaveRequest request = new NormProdSaveRequest();
 		request.setProductCatId(productCatId);
 		request.setProductName(productName);
@@ -205,7 +211,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 编辑商品
-	public void updateProduct(String productId,String productName) {
+	public void updateProduct(String productId, String productName) {
 		ProductInfoForUpdate update = new ProductInfoForUpdate();
 		update.setTenantId(TENANT_ID);
 		update.setSupplierId("-1");
@@ -233,7 +239,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 仓库
-	public String addRouteProdSupplyList(String productId,String productName) {
+	public String addRouteProdSupplyList(String productId, String productName) {
 		IRouteProdSupplyManageSV routeProdSupplyManageSV = DubboConsumerFactory
 				.getService(IRouteProdSupplyManageSV.class);
 		RouteProdSupplyAddListRequest request = new RouteProdSupplyAddListRequest();
@@ -252,7 +258,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 路由组
-	public RouteGroupAddResponse insertRouteGroup(String productId,String productName) {
+	public RouteGroupAddResponse insertRouteGroup(String productId, String productName) {
 		IRouteGroupManageSV routeGroupManageSV = DubboConsumerFactory.getService(IRouteGroupManageSV.class);
 		RouteGroupAddRequest request = new RouteGroupAddRequest();
 		request.setOperId(1L);
@@ -292,7 +298,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 市场价
-	public void updateMarketPriceTest(String productId) {
+	public void updateMarketPrice(String productId) {
 		MarketPriceUpdate priceUpdate = new MarketPriceUpdate();
 		priceUpdate.setTenantId(TENANT_ID);
 		priceUpdate.setSupplierId("-1");
@@ -416,4 +422,5 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		// String groupId = storageGroupBusiSV.addGroup(storageGroup);
 		return storageGroup;
 	}
+
 }
