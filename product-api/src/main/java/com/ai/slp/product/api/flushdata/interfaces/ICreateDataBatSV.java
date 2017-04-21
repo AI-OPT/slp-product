@@ -11,7 +11,7 @@ import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.flushdata.params.CreateDataRequest;
 
-@Path("createproduct")
+@Path("/createproduct")
 @Consumes({ MediaType.APPLICATION_JSON })
 @Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
 public interface ICreateDataBatSV {
