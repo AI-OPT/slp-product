@@ -11,9 +11,6 @@ import org.springframework.stereotype.Component;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.BaseResponse;
-import com.ai.opt.base.vo.ResponseHeader;
-import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.DateUtil;
@@ -48,7 +45,6 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
-import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.route.api.routegroupmanage.interfaces.IRouteGroupManageSV;
 import com.ai.slp.route.api.routegroupmanage.param.RouteGroupAddRequest;
 import com.ai.slp.route.api.routegroupmanage.param.RouteGroupAddResponse;
@@ -98,21 +94,20 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	private static int DEFAULTLENGTH = 14;
 
 	@Override
-	public BaseResponse createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
+	public void createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
 		if (null == request.getNumber()) {
 			request.setNumber(50);
 		}
 		if(StringUtils.isEmpty(request.getProductName())){
 			request.setProductName(productNameInit);
 		}
-		BaseResponse response = new BaseResponse();
 		/**
 		 * 每条类目下有一定商品
 		 */
 		if (StringUtils.isEmpty(request.getProductCatIdStartNum())
 				|| StringUtils.isEmpty(request.getProductCatIdEndNum())) {
-			response.setResponseHeader(new ResponseHeader(false, ExceptCodeConstants.Special.PARAM_IS_NULL, "类目不能为空"));
-			return response;
+			logger.error("类目不能为空");
+			return;
 		}
 		for (Long productCatId = Long.valueOf(request.getProductCatIdStartNum()); productCatId <= Long.valueOf(request.getProductCatIdEndNum()); productCatId++) {
 			int zeroFill = DEFAULTLENGTH-String.valueOf(productCatId).length();
@@ -153,13 +148,9 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					productCheck(productId);
 				} catch (Exception e) {
 					logger.error("批量制造商品发生点问题,原因是:" + JSON.toJSONString(e.getStackTrace()));
-					response.setResponseHeader(
-							new ResponseHeader(false, ExceptCodeConstants.Special.SYSTEM_ERROR, "批量制造商品发生点问题"));
 				}
 			}
 		}
-		response = CommonUtils.genSuccessResponse("操作成功");
-		return response;
 	}
 
 	// 保存标准品

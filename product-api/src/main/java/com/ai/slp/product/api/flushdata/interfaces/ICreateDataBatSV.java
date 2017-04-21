@@ -8,7 +8,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
-import com.ai.opt.base.vo.BaseResponse;
 import com.ai.slp.product.api.flushdata.params.CreateDataRequest;
 
 @Path("/createproduct")
@@ -21,7 +20,7 @@ public interface ICreateDataBatSV {
      */
     @POST
     @Path("/createProductBat")
-    public BaseResponse createProductBat(CreateDataRequest request)
+    public void createProductBat(CreateDataRequest request)
             throws BusinessException,SystemException;
     @interface flushProductData {}
     
