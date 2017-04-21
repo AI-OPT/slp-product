@@ -111,6 +111,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		if (StringUtils.isEmpty(request.getProductCatIdStartNum())
 				|| StringUtils.isEmpty(request.getProductCatIdEndNum())) {
 			response.setResponseHeader(new ResponseHeader(false, ExceptCodeConstants.Special.PARAM_IS_NULL, "类目不能为空"));
+			return response;
 		}
 		for (Long productCatId = Long.valueOf(request.getProductCatIdStartNum()); productCatId <= Long.valueOf(request.getProductCatIdEndNum()); productCatId++) {
 			for (int i = 0; i < request.getNumber(); i++) {
