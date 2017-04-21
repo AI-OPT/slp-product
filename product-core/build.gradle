@@ -14,7 +14,10 @@ dependencies {
     compile 'com.ai:ipaas-ses:0.3'
     //地区
     compile 'com.ai.platform.common:area:1.0-SNAPSHOT'
-    //路由相关查询
+    //仓库管理
+    compile 'com.ai.slp.route:routeprodsupplymanage:1.1-SNAPSHOT'
+    compile 'com.ai.slp.route:routeitemmanage:1.0.1-SNAPSHOT'
+    compile 'com.ai.slp.route:routetargetarea:1.0-SNAPSHOT'
     compile 'com.ai.slp.route:routegroupmanage:1.0-SNAPSHOT'
     //用户
     compile 'com.ai.slp.user:ucuser:1.0.1-SNAPSHOT'

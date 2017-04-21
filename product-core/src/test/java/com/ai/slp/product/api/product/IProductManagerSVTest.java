@@ -2,7 +2,6 @@ package com.ai.slp.product.api.product;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,9 @@ import com.ai.opt.sdk.components.idps.IDPSClientFactory;
 import com.ai.opt.sdk.util.ImageByteUtil;
 import com.ai.opt.sdk.util.StringUtil;
 import com.ai.paas.ipaas.image.IImageClient;
+import com.ai.slp.product.api.flushdata.interfaces.ICreateDataBatSV;
 import com.ai.slp.product.api.flushdata.interfaces.IFlushDataSV;
+import com.ai.slp.product.api.flushdata.params.CreateDataRequest;
 import com.ai.slp.product.api.flushdata.params.FlushDataRequest;
 import com.ai.slp.product.api.product.impl.IProductManagerSVImpl;
 import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
@@ -50,9 +51,19 @@ public class IProductManagerSVTest {
     IProductManagerSV productManagerSV;
     @Autowired
     IFlushDataSV ifDataSV;
+    @Autowired
+    ICreateDataBatSV createDataBatSV;
 
+    @Test
+    public void createProductBat(){
+    	CreateDataRequest request = new CreateDataRequest();
+    	request.setNumber(10);
+    	request.setProductCatIdStartNum("00000000000160");
+    	request.setProductCatIdEndNum("00000000000161");
+    	logger.error(JSON.toJSONString(createDataBatSV.createProductBat(request)));
+    }
     
-
+    
     @Test
     public void testFlushProduct(){
     	FlushDataRequest request = new FlushDataRequest();

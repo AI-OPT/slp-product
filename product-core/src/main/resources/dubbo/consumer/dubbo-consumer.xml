@@ -36,4 +36,11 @@
 	<!-- 路由服务 -->
 	<dubbo:reference id="iRouteGroupManageSV" loadbalance="roundrobin" 
 					 interface="com.ai.slp.route.api.routegroupmanage.interfaces.IRouteGroupManageSV"/>
+	<!-- 路由服务 -->
+	<dubbo:reference id="iRouteProdSupplyManageSV" loadbalance="roundrobin" 
+					 interface="com.ai.slp.route.api.routeprodsupplymanage.interfaces.IRouteProdSupplyManageSV"/>
+	<!-- 仓库服务 -->
+	<dubbo:reference id="iRouteItemManageSV" loadbalance="roundrobin" interface="com.ai.slp.route.api.routeitemmanage.interfaces.IRouteItemManageSV"/>
+	<!-- 仓库服务 -->
+	<dubbo:reference id="iRouteTargetAreaSV" loadbalance="roundrobin" interface="com.ai.slp.route.api.routetargetarea.interfaces.IRouteTargetAreaSV"/>
 </beans>
