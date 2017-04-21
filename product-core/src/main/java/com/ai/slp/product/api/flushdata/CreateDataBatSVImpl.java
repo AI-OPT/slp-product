@@ -62,6 +62,7 @@ import com.ai.slp.route.api.routetargetarea.interfaces.IRouteTargetAreaSV;
 import com.ai.slp.route.api.routetargetarea.param.AreaAddListRequest;
 import com.ai.slp.route.api.routetargetarea.param.AreaAddVo;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 
 @Service
 @Component
@@ -151,7 +152,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					// 审核
 					productCheck(productId);
 				} catch (Exception e) {
-					logger.error("批量制造商品发生点问题,原因是:" + e.getStackTrace().toString());
+					logger.error("批量制造商品发生点问题,原因是:" + JSON.toJSONString(e.getStackTrace()));
 					response.setResponseHeader(
 							new ResponseHeader(false, ExceptCodeConstants.Special.SYSTEM_ERROR, "批量制造商品发生点问题"));
 				}
