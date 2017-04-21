@@ -34,7 +34,6 @@ import com.ai.slp.product.api.storage.param.StoNoSkuSalePrice;
 import com.ai.slp.product.api.storage.param.StoNoSkuSalePriceReq;
 import com.ai.slp.product.api.storage.param.StorageStatus;
 import com.ai.slp.product.constants.CommonConstants;
-import com.ai.slp.product.constants.CommonTestConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
@@ -95,6 +94,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	IStorageGroupAtomSV storageGroupAtomSV;
 
 	private static String productNameInit = "商品测试";
+	private static String TENANT_ID = "changhong";
 
 	@Override
 	public BaseResponse createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
@@ -173,7 +173,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		attrValRequest2.setAttrValId("100003");
 		attrValRequests.add(attrValRequest2);
 		request.setAttrValList(attrValRequests);
-		request.setTenantId(CommonConstants.TENANT_ID);
+		request.setTenantId(TENANT_ID);
 		request.setSupplierId("-1");
 		StandedProduct standedProduct = saveNormProd(request);
 		// 添加一个库存组
@@ -193,7 +193,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	// 保存库存
 	public String saveStorage(StorageGroup group) {
 		STOStorage stoStorage = new STOStorage();
-		stoStorage.setTenantId(CommonConstants.TENANT_ID);
+		stoStorage.setTenantId(TENANT_ID);
 		stoStorage.setSupplierId("-1");
 		stoStorage.setStorageName("商品测试库存");
 		stoStorage.setStorageGroupId(group.getStorageGroupId());
@@ -208,7 +208,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	// 编辑商品
 	public void updateProduct(String productId,String productName) {
 		ProductInfoForUpdate update = new ProductInfoForUpdate();
-		update.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+		update.setTenantId(TENANT_ID);
 		update.setSupplierId("-1");
 		update.setProdId(productId);
 		update.setProdName(productName);
@@ -240,7 +240,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		RouteProdSupplyAddListRequest request = new RouteProdSupplyAddListRequest();
 		List<RouteProdSupplyAddRequest> voList = new ArrayList<RouteProdSupplyAddRequest>();
 		RouteProdSupplyAddRequest vo = new RouteProdSupplyAddRequest();
-		vo.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+		vo.setTenantId(TENANT_ID);
 		vo.setProdId(productId);
 		vo.setOperId("1");
 		vo.setRouteId("0000000000000513");
@@ -259,7 +259,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		request.setOperId(1L);
 		request.setProductId(productId);
 		request.setStandedProdId(productId);
-		request.setTenantId(CommonConstants.TENANT_ID);
+		request.setTenantId(TENANT_ID);
 		request.setStandedProdName(productName);
 		return routeGroupManageSV.insertRouteGroup(request);
 	}
@@ -274,7 +274,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		vo.setProvCode("11");
 		vo.setRouteItemId("0000000000001237");
 		vo.setState("1");
-		vo.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+		vo.setTenantId(TENANT_ID);
 		voList.add(vo);
 		request.setVoList(voList);
 		routeTargetAreaSV.addTargetAreaToList(request);
@@ -283,7 +283,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	// 审核
 	public void productCheck(String productId) {
 		ProductCheckParam checkParam = new ProductCheckParam();
-		checkParam.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+		checkParam.setTenantId(TENANT_ID);
 		checkParam.setState("6");
 		checkParam.setOperId(1L);
 		List<String> prodIdList = new ArrayList<>();
@@ -295,7 +295,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	// 市场价
 	public void updateMarketPriceTest(String productId) {
 		MarketPriceUpdate priceUpdate = new MarketPriceUpdate();
-		priceUpdate.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+		priceUpdate.setTenantId(TENANT_ID);
 		priceUpdate.setSupplierId("-1");
 		priceUpdate.setProductId(productId);
 		priceUpdate.setOperId(1L);
@@ -313,7 +313,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		vo.setRouteId("0000000000000513");
 		vo.setStandedProdId(productId);
 		vo.setSupplyId(supplyId);
-		vo.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+		vo.setTenantId(TENANT_ID);
 		vo.setCostPrice(1L);
 		voList.add(vo);
 		request.setVoList(voList);
@@ -323,7 +323,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	// 销售价
 	public void updateNoSkuStoSalePrice(StorageGroup group) {
 		StoNoSkuSalePriceReq priceReq = new StoNoSkuSalePriceReq();
-		priceReq.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+		priceReq.setTenantId(TENANT_ID);
 		priceReq.setSupplierId("-1");
 		priceReq.setOperId((long) 1);
 		List<StoNoSkuSalePrice> salePrice = new ArrayList<>();
@@ -339,7 +339,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	// 启用库存
 	public void chargeStorageStatus(String storageId) {
 		StorageStatus status = new StorageStatus();
-		status.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+		status.setTenantId(TENANT_ID);
 		status.setSupplierId("-1");
 		status.setOperId(1L);
 		status.setStorageId(storageId);
@@ -350,7 +350,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	// 启用库存组
 	public void chargeStorageGroupStatus(String groupId) {
 		StoGroupStatus groupStatus = new StoGroupStatus();
-		groupStatus.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
+		groupStatus.setTenantId(TENANT_ID);
 		groupStatus.setSupplierId("-1");
 		groupStatus.setOperId(1L);
 		groupStatus.setGroupId(groupId);
