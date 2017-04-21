@@ -62,7 +62,6 @@ import com.ai.slp.route.api.routetargetarea.interfaces.IRouteTargetAreaSV;
 import com.ai.slp.route.api.routetargetarea.param.AreaAddListRequest;
 import com.ai.slp.route.api.routetargetarea.param.AreaAddVo;
 import com.alibaba.dubbo.config.annotation.Service;
-import com.alibaba.fastjson.JSON;
 
 @Service
 @Component
@@ -95,6 +94,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 
 	private static String productNameInit = "商品测试";
 	private static String TENANT_ID = "changhong";
+	private static int DEFAULTLENGTH = 14;
 
 	@Override
 	public BaseResponse createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
@@ -114,10 +114,16 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			return response;
 		}
 		for (Long productCatId = Long.valueOf(request.getProductCatIdStartNum()); productCatId <= Long.valueOf(request.getProductCatIdEndNum()); productCatId++) {
+			int zeroFill = DEFAULTLENGTH-String.valueOf(productCatId).length();
+			StringBuffer productCat = new StringBuffer();
+			for (int i = 0; i < zeroFill; i++) {
+				productCat.append("0");
+			}
+			productCat.append(String.valueOf(productCatId));
 			for (int i = 0; i < request.getNumber(); i++) {
 				try {
 					// 保存标准品
-					StorageGroup group = addNormProduct(productCatId.toString());
+					StorageGroup group = addNormProduct(productCat.toString(),request.getProductName());
 					String productId = group.getStandedProdId();
 					// 新建库存
 					String storageId = saveStorage(group);
@@ -145,7 +151,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					// 审核
 					productCheck(productId);
 				} catch (Exception e) {
-					logger.error("批量制造商品发生点问题,原因是:" + JSON.toJSONString(e));
+					logger.error("批量制造商品发生点问题,原因是:" + e.getStackTrace().toString());
 					response.setResponseHeader(
 							new ResponseHeader(false, ExceptCodeConstants.Special.SYSTEM_ERROR, "批量制造商品发生点问题"));
 				}
@@ -156,10 +162,10 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 保存标准品
-	public StorageGroup addNormProduct(String productCatId) {
+	public StorageGroup addNormProduct(String productCatId,String productName) {
 		NormProdSaveRequest request = new NormProdSaveRequest();
 		request.setProductCatId(productCatId);
-		request.setProductName(request.getProductName());
+		request.setProductName(productName);
 		request.setState("1");
 		request.setProductType("2");
 		request.setCreateId(1L);
