@@ -370,6 +370,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
                     ||usableNum==null || usableNum<=0){
                 changeToStop(storageGroupState,product, operId);
                 logger.error("商品"+product.getProdId()+"状态不支持上架,状态是:"+product.getState());
+                return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
             }
             productBusiSV.changeToInSale(product,operId);
             //将商品添加至搜索引擎
