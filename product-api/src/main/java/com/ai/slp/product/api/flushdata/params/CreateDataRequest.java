@@ -25,8 +25,21 @@ public class CreateDataRequest implements Serializable {
 	 */
 	private String productCatIdEndNum;
 
+	/**
+	 * 商品名称
+	 */
+	private String productName;
+
 	public String getProductCatIdStartNum() {
 		return productCatIdStartNum;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
 	public void setProductCatIdStartNum(String productCatIdStartNum) {

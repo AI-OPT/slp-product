@@ -94,12 +94,15 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	@Autowired
 	IStorageGroupAtomSV storageGroupAtomSV;
 
-	private static String productName = "商品测试345";
+	private static String productNameInit = "商品测试";
 
 	@Override
 	public BaseResponse createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
 		if (null == request.getNumber()) {
 			request.setNumber(50);
+		}
+		if(StringUtils.isEmpty(request.getProductName())){
+			request.setProductName(productNameInit);
 		}
 		BaseResponse response = new BaseResponse();
 		/**
@@ -118,11 +121,11 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					// 新建库存
 					String storageId = saveStorage(group);
 					// 编辑商品
-					updateProduct(productId);
+					updateProduct(productId,request.getProductName());
 					// 仓库
-					String supplyId = addRouteProdSupplyList(productId);
+					String supplyId = addRouteProdSupplyList(productId,request.getProductName());
 					// 路由组
-					RouteGroupAddResponse routeGroup = insertRouteGroup(productId);
+					RouteGroupAddResponse routeGroup = insertRouteGroup(productId,request.getProductName());
 					if (null == routeGroup.getRouteGroupId()) {
 						continue;
 					}
@@ -155,7 +158,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	public StorageGroup addNormProduct(String productCatId) {
 		NormProdSaveRequest request = new NormProdSaveRequest();
 		request.setProductCatId(productCatId);
-		request.setProductName(productName);
+		request.setProductName(request.getProductName());
 		request.setState("1");
 		request.setProductType("2");
 		request.setCreateId(1L);
@@ -203,7 +206,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 编辑商品
-	public void updateProduct(String productId) {
+	public void updateProduct(String productId,String productName) {
 		ProductInfoForUpdate update = new ProductInfoForUpdate();
 		update.setTenantId(CommonTestConstants.COMMON_TENANT_ID);
 		update.setSupplierId("-1");
@@ -231,7 +234,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 仓库
-	public String addRouteProdSupplyList(String productId) {
+	public String addRouteProdSupplyList(String productId,String productName) {
 		IRouteProdSupplyManageSV routeProdSupplyManageSV = DubboConsumerFactory
 				.getService(IRouteProdSupplyManageSV.class);
 		RouteProdSupplyAddListRequest request = new RouteProdSupplyAddListRequest();
@@ -250,7 +253,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 路由组
-	public RouteGroupAddResponse insertRouteGroup(String productId) {
+	public RouteGroupAddResponse insertRouteGroup(String productId,String productName) {
 		IRouteGroupManageSV routeGroupManageSV = DubboConsumerFactory.getService(IRouteGroupManageSV.class);
 		RouteGroupAddRequest request = new RouteGroupAddRequest();
 		request.setOperId(1L);
