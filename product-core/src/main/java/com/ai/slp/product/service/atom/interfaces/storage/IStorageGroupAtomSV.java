@@ -152,4 +152,6 @@ public interface IStorageGroupAtomSV {
      * @return
      */
     public boolean isDiscard(StorageGroup group);
+
+	int installGroup(StorageGroup group, String storageGroupId);
 }

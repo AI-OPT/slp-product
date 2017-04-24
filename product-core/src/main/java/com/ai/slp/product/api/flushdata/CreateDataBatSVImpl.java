@@ -88,19 +88,25 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	IProductManagerSV productManagerSV;
 	@Autowired
 	IStorageGroupAtomSV storageGroupAtomSV;
-	
+
 	private static String productNameInit = "商品测试";
 	private static String TENANT_ID = "changhong";
 	private static int DEFAULTLENGTH = 14;
+	//groupId与productId一致
+	private static String productIdStart = "70000000000";
 
 	@Override
 	public void createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
 		if (null == request.getNumber()) {
 			request.setNumber(20);
 		}
+		if (StringUtils.isEmpty(request.getProductIdStart())) {
+			request.setProductIdStart(productIdStart);
+		}
 		if (StringUtils.isEmpty(request.getProductName())) {
 			request.setProductName(productNameInit);
 		}
+		Long productId = Long.valueOf(request.getProductIdStart());
 		/**
 		 * 每条类目下有一定商品
 		 */
@@ -119,20 +125,22 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			productCat.append(String.valueOf(productCatId));
 			for (int i = 0; i < request.getNumber(); i++) {
 				try {
+					productId++;
+					String groupId = productId.toString();
+					String standedProdAttrId = groupId;
 					// 保存标准品
-					StorageGroup group = addNormProduct(productCat.toString(), request.getProductName());
+					StorageGroup group = addNormProduct(productCat.toString(), request.getProductName(),groupId,standedProdAttrId,productId.toString());
 					if (null == group) {
 						continue;
 					}
-					String productId = group.getStandedProdId();
 					// 新建库存
 					String storageId = saveStorage(group);
 					// 编辑商品
-					updateProduct(productId, request.getProductName());
+					updateProduct(productId.toString(), request.getProductName());
 					// 仓库
-					String supplyId = addRouteProdSupplyList(productId, request.getProductName());
+					String supplyId = addRouteProdSupplyList(productId.toString(), request.getProductName());
 					// 路由组
-					RouteGroupAddResponse routeGroup = insertRouteGroup(productId, request.getProductName());
+					RouteGroupAddResponse routeGroup = insertRouteGroup(productId.toString(), request.getProductName());
 					if (null == routeGroup.getRouteGroupId()) {
 						continue;
 					}
@@ -141,16 +149,16 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					Thread.sleep(1000);
 					// 价格
 					// 市场价
-					updateMarketPrice(productId);
+					updateMarketPrice(productId.toString());
 					// 成本价
-					updateCostPrice(productId, supplyId);
+					updateCostPrice(productId.toString(), supplyId);
 					// 销售价
 					updateNoSkuStoSalePrice(group);
 					// 启用库存
 					chargeStorageStatus(storageId);
 					chargeStorageGroupStatus(group.getStorageGroupId());
 					// 审核
-					productCheck(productId);
+					productCheck(productId.toString());
 				} catch (Exception e) {
 					logger.error("批量制造商品发生点问题,原因是:" + JSON.toJSONString(e.getStackTrace()));
 					continue;
@@ -160,7 +168,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 保存标准品
-	public StorageGroup addNormProduct(String productCatId, String productName) {
+	public StorageGroup addNormProduct(String productCatId, String productName,String groupId,String standedProdAttrId,String productId) {
 		NormProdSaveRequest request = new NormProdSaveRequest();
 		request.setProductCatId(productCatId);
 		request.setProductName(productName);
@@ -173,17 +181,19 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		attrValRequest.setAttrId(100001L);
 		attrValRequest.setAttrValId("100003");
 		attrValRequests.add(attrValRequest);
-		AttrValRequest attrValRequest2 = new AttrValRequest();
+		/*AttrValRequest attrValRequest2 = new AttrValRequest();
 		attrValRequest2.setAttrId(100001L);
 		attrValRequest2.setAttrValId("100003");
-		attrValRequests.add(attrValRequest2);
+		attrValRequests.add(attrValRequest2);*/
 		request.setAttrValList(attrValRequests);
 		request.setTenantId(TENANT_ID);
 		request.setSupplierId("-1");
-		StandedProduct standedProduct = saveNormProd(request);
+		
+		//standedProdAttrId
+		StandedProduct standedProduct = saveNormProd(request,Long.valueOf(standedProdAttrId),productId);
 		// 添加一个库存组
 		STOStorageGroup storageGroup = createSTOStorageGroup(request, standedProduct);
-		StorageGroup group = storageGroupBusiSV.addGroupObj(storageGroup);
+		StorageGroup group = storageGroupBusiSV.addGroupObj(storageGroup,groupId);
 		// 添加商品,在商品属性表保存商品属性值
 		List<AttrValRequest> attrValList = request.getAttrValList();
 		Product product = productBusiSV.addProductWithStorageGroup(standedProduct, group, attrValList);
@@ -364,8 +374,8 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 保存标准品
-	private StandedProduct saveNormProd(NormProdSaveRequest normProduct) {
-		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct);
+	private StandedProduct saveNormProd(NormProdSaveRequest normProduct,long standedProdAttrId,String productId) {
+		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct,productId);
 		// 添加标准品属性值
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
 		for (AttrValRequest attrValReq : attrValList) {
@@ -381,26 +391,18 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			prodAttr.setOperTime(DateUtil.getSysDate());
 			prodAttr.setSerialNumber(getProductAttrSerialNo());
 			// 添加成功
-			standedProdAttrAtomSV.installObj(prodAttr);
+			standedProdAttrAtomSV.installObj(prodAttr,standedProdAttrId);
 		}
 		return standedProduct;
 	}
 
-	/**
-	 * 保存标准品,不同时保存属性
-	 * 
-	 * @param normProduct
-	 * @return
-	 * @author Gavin
-	 * @UCUSER
-	 */
-	private StandedProduct saveNormProdWithOutAttr(NormProdSaveRequest normProduct) {
+	private StandedProduct saveNormProdWithOutAttr(NormProdSaveRequest normProduct,String productId) {
 		// 添加标准品
 		StandedProduct standedProduct = new StandedProduct();
 		BeanUtils.copyProperties(standedProduct, normProduct);
 		standedProduct.setStandedProductName(normProduct.getProductName());
 		// 添加标准品
-		standedProductAtomSV.installObj(standedProduct);
+		standedProductAtomSV.installObj(standedProduct,productId);
 		return standedProduct;
 	}
 

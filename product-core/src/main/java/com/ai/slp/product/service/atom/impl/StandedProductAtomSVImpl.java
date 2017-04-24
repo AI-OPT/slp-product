@@ -47,6 +47,22 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		standedProduct.setOperId(standedProduct.getCreateId());
 		return standedProductMapper.insertSelective(standedProduct);
 	}
+	
+	@Override
+	public int installObj(StandedProduct standedProduct,String productId) {
+		if (standedProduct == null){
+			return 0;
+		}
+		// 设置标准品标识
+		standedProduct.setStandedProdId(productId);
+		// 设置添加时间
+		if (standedProduct.getCreateTime() == null){
+			standedProduct.setCreateTime(DateUtil.getSysDate());
+		}
+		standedProduct.setOperTime(standedProduct.getCreateTime());
+		standedProduct.setOperId(standedProduct.getCreateId());
+		return standedProductMapper.insertSelective(standedProduct);
+	}
 
 	@Override
 	public int updateObj(StandedProduct standedProduct) {

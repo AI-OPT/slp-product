@@ -80,4 +80,6 @@ public interface IStandedProductAtomSV {
      * @author lipeng16
      */
     public List<String> queryIdByName(String standedProductName);
+
+	int installObj(StandedProduct standedProduct, String productId);
 }

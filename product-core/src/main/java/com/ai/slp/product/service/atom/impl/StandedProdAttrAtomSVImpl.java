@@ -46,6 +46,25 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
         }
         return standedProdAttrMapper.insert(prodAttr);
     }
+    
+    /**
+     * 添加标准品属性值
+     *
+     * @param prodAttr
+     * @return
+     */
+    @Override
+    public int installObj(StandedProdAttr prodAttr,long standedProdAttrId) {
+        if (prodAttr==null){
+        	return 0;
+        }
+        //设置序列号
+        prodAttr.setStandedProdAttrId(standedProdAttrId);
+        if (prodAttr.getOperTime()==null){
+        	prodAttr.setOperTime(DateUtils.currTimeStamp());
+        }
+        return standedProdAttrMapper.insert(prodAttr);
+    }
 
     @Override
     public int updateObj(StandedProdAttr prodAttr) {

@@ -30,6 +30,19 @@ public class CreateDataRequest implements Serializable {
 	 */
 	private String productName;
 
+	/**
+	 * 商品ID
+	 */
+	private String productIdStart;
+
+	public String getProductIdStart() {
+		return productIdStart;
+	}
+
+	public void setProductIdStart(String productIdStart) {
+		this.productIdStart = productIdStart;
+	}
+
 	public String getProductCatIdStartNum() {
 		return productCatIdStartNum;
 	}

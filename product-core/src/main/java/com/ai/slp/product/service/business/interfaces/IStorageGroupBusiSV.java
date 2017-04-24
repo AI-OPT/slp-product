@@ -162,4 +162,6 @@ public interface IStorageGroupBusiSV {
     public StorageGroupRestwo queryGroupInfoAllByGroupId(String tenantId,String supplierId, String groupId);
     
     public StorageGroupRes genStorageGroupInfo(StorageGroup group);
+
+	StorageGroup addGroupObj(STOStorageGroup storageGroup, String storageGroupId);
 }

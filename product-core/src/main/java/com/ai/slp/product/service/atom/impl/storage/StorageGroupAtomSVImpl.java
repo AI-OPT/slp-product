@@ -96,6 +96,23 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	}
 
 	/**
+	 * 添加库存组信息
+	 *
+	 * @param group
+	 * @return
+	 */
+	@Override
+	public int installGroup(StorageGroup group,String storageGroupId) {
+		group.setStorageGroupId(storageGroupId);
+		if (group.getCreateTime() == null){
+			group.setCreateTime(DateUtils.currTimeStamp());
+		}
+		group.setOperTime(group.getCreateTime());
+		group.setOperId(group.getCreateId());
+		return storageGroupMapper.insert(group);
+	}
+	
+	/**
 	 * 查询指定标识的库存组
 	 *
 	 * @param tenantId

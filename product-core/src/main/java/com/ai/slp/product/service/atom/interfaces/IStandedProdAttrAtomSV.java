@@ -96,4 +96,6 @@ public interface IStandedProdAttrAtomSV {
      * @return
      */
     public StandedProdAttr queryByProdIdAndAttrValId(String tenantId,String standedId,String attrValId);
+
+	int installObj(StandedProdAttr prodAttr, long productId);
 }

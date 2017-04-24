@@ -127,6 +127,17 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		int installNum = storageGroupAtomSV.installGroup(group);
 		return group;
 	}
+	
+	@Override
+	public StorageGroup addGroupObj(STOStorageGroup storageGroup,String storageGroupId) {
+		//通过是否查询到相关属性来设定库存组是否有销售属性
+		StorageGroup group = new StorageGroup();
+		BeanUtils.copyProperties(group, storageGroup);
+		// 添加库存组信息,状态默认为停用
+		group.setState(StorageConstants.StorageGroup.State.STOP);
+		int installNum = storageGroupAtomSV.installGroup(group,storageGroupId);
+		return group;
+	}
 
 	/**
 	 * 更新库存组
