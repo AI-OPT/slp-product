@@ -131,7 +131,7 @@ public class INormProductSVTest {
     	MarketPriceUpdate priceUpdate = new MarketPriceUpdate();
     	priceUpdate.setTenantId("changhong");
     	priceUpdate.setSupplierId("-1");
-    	priceUpdate.setProductId("0000000000000623");
+    	priceUpdate.setProductId("0000000000001614");
     	priceUpdate.setOperId(1l);
     	priceUpdate.setMarketPrice(2222);
     	BaseResponse price = normProductSV.updateMarketPrice(priceUpdate);

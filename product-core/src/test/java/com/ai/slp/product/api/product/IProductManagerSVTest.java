@@ -57,10 +57,11 @@ public class IProductManagerSVTest {
     @Test
     public void createProductBat(){
     	CreateDataRequest request = new CreateDataRequest();
-    	request.setNumber(10);
+    	request.setNumber(5);
     	request.setProductCatIdStartNum("00000000000160");
     	request.setProductCatIdEndNum("00000000000161");
-    	logger.error(JSON.toJSONString(createDataBatSV.createProductBat(request)));
+    	request.setProductName("法国是多少费");
+    	createDataBatSV.createProductBat(request);
     }
     
     

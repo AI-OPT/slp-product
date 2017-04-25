@@ -56,4 +56,13 @@ public class DataUtils {
 		return defval;
 	}
 	
+	
+	public static String toStr(Object num){
+		try{
+			return num.toString();
+		}catch(Exception e){
+		}
+		return null;
+	}
+	
 }

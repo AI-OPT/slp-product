@@ -25,6 +25,7 @@ import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
+import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -81,6 +82,7 @@ import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
 import com.ai.slp.product.util.AttrValRequestComparator;
 import com.ai.slp.product.util.DateUtils;
+import com.ai.slp.product.util.IPaasStorageUtils;
 import com.ai.slp.product.util.OldAttrValListComparator;
 import com.ai.slp.product.util.StorageComparator;
 import com.ai.slp.product.util.StorageGroupComparator;
@@ -241,7 +243,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	 * @param normProdct
 	 */
 	@Override
-	public int updateNormProd(NormProdSaveRequest normProdct) {
+	public void updateNormProd(NormProdSaveRequest normProdct) {
 		String tenantId = normProdct.getTenantId(), productId = normProdct.getProductId();
 		// 查询是否存在
 		//StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
@@ -297,29 +299,25 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			else if (StandedProductConstants.STATUS_ACTIVE.equals(standedProdInfo.getStandprodstate())
 					&& StandedProductConstants.STATUS_INACTIVE.equals(normProdct.getState())) {
 				// 检查是否有启用状态库存组
-				int groupNum = storageGroupAtomSV.countActive(tenantId, productId);
-				if (groupNum > 0){
-					throw new BusinessException("", "该标准品下存在[" + groupNum + "]个启用的库存组,不允许变更为不可用");
+//				int groupNum = storageGroupAtomSV.countActive(tenantId, productId);
+//				if (groupNum > 0){
+//					throw new BusinessException("", "该标准品下存在[" + groupNum + "]个启用的库存组,不允许变更为不可用");
+//				}
+				
+				// 获取库存组的cacheKey
+				String groupId = standedProdInfo.getStoragegroupid();
+				String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId, groupId);
+				// 2. 检查库存组状态是否为"启用"
+				// 获取当前库存组状态
+				ICacheClient cacheClient = IPaasStorageUtils.getClient();
+				String groupState = cacheClient.hget(groupKey, StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE);
+				// 若库存组是启用状态,则不允许更改
+				if (StorageConstants.StorageGroup.State.ACTIVE.equals(groupState)
+						|| StorageConstants.StorageGroup.State.AUTO_ACTIVE.equals(groupState)) {
+					throw new BusinessException("", "该标准品下存在启用的库存组,不允许变更为不可用");
 				}
 			}
 		}
-		// 变更信息
-/*		standedProduct.setStandedProductName(normProdct.getProductName());
-		standedProduct.setProductType(normProdct.getProductType());
-		standedProduct.setState(normProdct.getState());
-		standedProduct.setOperTime(DateUtil.getSysDate());
-		StandedProductLog productLog = new StandedProductLog();
-		BeanUtils.copyProperties(productLog, standedProduct);*/
-		//int updateCount = standedProductAtomSV.updateObj(standedProduct);
-		
-		StandedProduct standedProduct = new StandedProduct();
-		standedProduct.setStandedProdId(normProdct.getProductId());
-		standedProduct.setStandedProductName(normProdct.getProductName());
-		standedProduct.setProductType(normProdct.getProductType());
-		standedProduct.setState(normProdct.getState());
-		standedProduct.setOperTime(DateUtil.getSysDate());
-		int updateCount = standedProductAtomSV.updateStandedProductInfo(standedProduct);
-		
 
 		
 /*		if (updateCount > 0) {
@@ -354,6 +352,18 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		
 		skuInfoList.add(standedProdInfo);
 		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+		return ;
+	}
+
+	
+	private int updateStandProductInfo(NormProdSaveRequest normProdct) {
+		StandedProduct standedProduct = new StandedProduct();
+		standedProduct.setStandedProdId(normProdct.getProductId());
+		standedProduct.setStandedProductName(normProdct.getProductName());
+		standedProduct.setProductType(normProdct.getProductType());
+		standedProduct.setState(normProdct.getState());
+		standedProduct.setOperTime(DateUtil.getSysDate());
+		int updateCount = standedProductAtomSV.updateStandedProductInfo(standedProduct);
 		return updateCount;
 	}
 
@@ -361,8 +371,17 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	public int updateNormProdAndStoGroup(NormProdSaveRequest productInfoRequest) {
 		// 更新库存组相关信息
 		//updateStoGroupInfo(productInfoRequest);
-		// 更新标准品及属性
-		int updateCount = updateNormProd(productInfoRequest);
+		// ES更新商品及属性
+		updateNormProd(productInfoRequest);
+		//更新数据库信息
+		int updateCount = updateNormProdDb(productInfoRequest);
+		
+		return updateCount;
+	}
+
+	private int updateNormProdDb(NormProdSaveRequest productInfoRequest) {
+		// 数据库变更信息
+		int updateCount = updateStandProductInfo(productInfoRequest);
 		// 更新销售品
 		if(updateCount>0){
 			Product product = new Product();
@@ -374,7 +393,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			//将更新后的商品添加至搜索引擎
 			//skuIndexManage.updateSKUIndex(productInfoRequest.getProductId(),DateUtils.currTimeStamp().getTime());
 		}
-		
 		return updateCount;
 	}
 

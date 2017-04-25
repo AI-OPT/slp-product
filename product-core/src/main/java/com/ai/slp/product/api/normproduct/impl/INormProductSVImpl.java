@@ -264,36 +264,36 @@ public class INormProductSVImpl implements INormProductSV {
         return CommonUtils.genSuccessResponse("");*/
     	String tenantId = productInfoRequest.getTenantId(), productId = productInfoRequest.getProductId();
 		// 查询是否存在
-		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
-		if (standedProduct == null){
-			throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
-		}
+//		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
+//		if (standedProduct == null){
+//			throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
+//		}
 		// 判断商户ID是否传入的商户ID
 		/*if (!productInfoRequest.getSupplierId().equals(standedProduct.getSupplierId())){
 			throw new BusinessException("",
 					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + productInfoRequest.getSupplierId() + "不一致!");
 		}
     	*/
-    	boolean ccsMqFlag=false;
-	   	//从配置中心获取mq_enable
-	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
-	  	if (!ccsMqFlag) {
+//    	boolean ccsMqFlag=false;
+//	   	//从配置中心获取mq_enable
+//	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
+//	  	if (!ccsMqFlag) {
 	  		if (StringUtils.isBlank(productInfoRequest.getTenantId())
 	                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
 	    		throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
 	    	}
 	        normProductBusiSV.updateNormProdAndStoGroup(productInfoRequest);
 	        return CommonUtils.genSuccessResponse("");
-		} else {
-			//消息模式下，异步调用服务
-			BaseResponse response = CommonUtils.genSuccessResponse("");
-			//发送消息
-			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(productInfoRequest), 0);
-			ResponseHeader responseHeader = new ResponseHeader(true,
-					ExceptCodeConstants.Special.SUCCESS, "成功");
-			response.setResponseHeader(responseHeader);
-			return response; 
-		}
+//		} else {
+//			//消息模式下，异步调用服务
+//			BaseResponse response = CommonUtils.genSuccessResponse("");
+//			//发送消息
+//			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(productInfoRequest), 0);
+//			ResponseHeader responseHeader = new ResponseHeader(true,
+//					ExceptCodeConstants.Special.SUCCESS, "成功");
+//			response.setResponseHeader(responseHeader);
+//			return response; 
+//		}
     	
 	}
 
