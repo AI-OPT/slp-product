@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.paas.ipaas.mds.IMessageProcessor;
 import com.ai.paas.ipaas.mds.vo.MessageAndMetadata;
-import com.ai.slp.product.api.storage.impl.IStorageSVImpl;
 import com.ai.slp.product.api.storage.param.STOStorage;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.alibaba.fastjson.JSON;

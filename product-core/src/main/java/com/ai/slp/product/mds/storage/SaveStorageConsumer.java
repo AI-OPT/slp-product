@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.ai.opt.sdk.components.mds.MDSClientFactory;
 import com.ai.opt.sdk.components.mds.base.AbstractMdsConsumer;
 import com.ai.paas.ipaas.mds.IMessageConsumer;
 import com.ai.paas.ipaas.mds.IMessageProcessor;
 import com.ai.paas.ipaas.mds.IMsgProcessorHandler;
-import com.ai.slp.product.api.storage.impl.IStorageSVImpl;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.alibaba.dubbo.common.logger.Logger;

@@ -1068,11 +1068,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     			marketPrice.getTenantId(),
     			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
     	searchCriterias.add(new SearchCriteria("productid",
-    			marketPrice.getProductId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+    			marketPrice.getProductId(),
+    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
     	
     	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
-    	if (CollectionUtil.isEmpty(result.getContents())) {
-			throw new BusinessException("查询es信息失败:商品ID是"+marketPrice.getProductId());
+    	if (result.getContents()==null) {
+			throw new BusinessException("查询es信息失败");
 		}
     	SKUInfo standedProduct = result.getContents().get(0);
 		
@@ -1144,8 +1145,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     		IProductSearch search = new ProductSearchImpl();
         	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriterias, startSize, maxSize, null);
         	if (CollectionUtil.isEmpty(infoResult.getContents())) {
-        		logger.error("查询商品失败,商品ID"+marketPrice.getProductId());
-        		throw new BusinessException("查询es中的商品信息失败,商品ID"+marketPrice.getProductId());
+        		logger.error("查询商品失败");
+        		throw new BusinessException("查询es中的商品信息失败");
     		}
         	SKUInfo skuInfos = infoResult.getContents().get(0);
         	skuInfos.setMarketprice(marketPrice.getMarketPrice());
