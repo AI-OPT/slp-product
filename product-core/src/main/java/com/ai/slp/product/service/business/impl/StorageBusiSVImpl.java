@@ -474,7 +474,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 //			Long salePrice = getSalePrice(tenantId, groupId, skuId, price, cacheClient, priority);
 		// 4.获取当前优先级中SKU的销售价
 		String priceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId, groupId, priority);
-		long salePrice = Long.parseLong(cacheClient.hget(priceKey, skuId));
+		long salePrice = Long.parseLong(null==cacheClient.hget(priceKey, skuId)?"0":cacheClient.hget(priceKey, skuId));
 		return salePrice;
 	}
 

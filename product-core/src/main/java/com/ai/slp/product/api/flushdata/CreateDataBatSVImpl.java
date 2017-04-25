@@ -94,7 +94,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	private static String TENANT_ID = "changhong";
 	private static int DEFAULTLENGTH = 14;
 	//groupId与productId一致
-	private static String productIdStart = "268669325";
+	private static String productIdStart = "900000000";
 
 	@Override
 	public void createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
