@@ -1,5 +1,6 @@
 package com.ai.slp.product.dao.mapper.attach;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -54,5 +55,16 @@ public interface SkuStorageAttachMapper {
     @Update("update sku_storage t set t.USABLE_NUM = (t.USABLE_NUM + (#{skuNum})) where t.SKU_STORAGE_ID = #{skuStorageId}")
 	public int updateBySQL(@Param("skuStorageId") String skuStorageId,@Param("skuNum") int skuNum);
     
-    
+    /**
+     * 更新sku销售价库存
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
+    @Update("update sku_storage set SALE_PRICE = #{salePrice}, OPER_ID = #{operId}, OPER_TIME = #{operTime}"
+    		+ " where SKU_STORAGE_ID = #{skuStorageId}")
+    public int updateSalePriceBySQL(@Param("salePrice") Long salePrice,
+    		@Param("skuStorageId") String skuStorageId,
+    		@Param("operId") Long operId,
+    		@Param("operTime") Timestamp operTime);
 }

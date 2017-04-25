@@ -186,7 +186,9 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 	@Override
 	public int updateById(SkuStorage skuStorage) {
 		skuStorage.setOperTime(DateUtils.currTimeStamp());
-		return skuStorageMapper.updateByPrimaryKey(skuStorage);
+		//return skuStorageMapper.updateByPrimaryKey(skuStorage);
+		return skuStorageAttachMapper.updateSalePriceBySQL(skuStorage.getSalePrice(),
+				skuStorage.getSkuStorageId(),skuStorage.getOperId(),skuStorage.getOperTime());
 	}
 
 	/**

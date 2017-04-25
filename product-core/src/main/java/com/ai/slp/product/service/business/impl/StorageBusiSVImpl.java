@@ -307,7 +307,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		for (SkuStorage skuStorage:skuStorageList){
 			skuStorage.setSalePrice(price);
 			skuStorage.setOperId(operId);
-			skuStorage.setOperTime(DateUtil.getSysDate());
+			//skuStorage.setOperTime(DateUtil.getSysDate());
 			if(skuStorageAtomSV.updateById(skuStorage)>0){
 //				ProdPriceLog priceLog = new ProdPriceLog();
 //				priceLog.setObjId(skuStorage.getSkuStorageId());
