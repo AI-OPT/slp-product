@@ -52,6 +52,7 @@ public class ConvertUtils {
 		response.setProductCatId(skuInfo.getProductcategoryid());
 		response.setProdId(skuInfo.getProductid());
 		response.setCommentNum(skuInfo.getCommentnum());
+		response.setProDetailContent(skuInfo.getProdetailcontent());
 		/**
 		 * 商品属性
 		 */
@@ -239,6 +240,7 @@ public class ConvertUtils {
 		product.setProductType(skuInfo.getProducttype());
 		product.setRechargeType(skuInfo.getRechagetype());
 		product.setState(skuInfo.getState());
+		product.setProDetailContent(skuInfo.getProdetailcontent());
 		product.setStorageGroupId(skuInfo.getStoragegroupid());
 		product.setTenantId(skuInfo.getTenantid());
 		product.setUnit(skuInfo.getUnit());

@@ -46,6 +46,7 @@ import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.search.bo.comment.CommentInfo;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentPictureAtomSV;
@@ -57,6 +58,7 @@ import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.CommonUtils;
 import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.product.util.CriteriaUtils;
+import com.ai.slp.product.util.DateUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 
 @Service(validation = "true")
@@ -134,7 +136,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				 * prodCommentBusiSV.queryPageBySku(prodCommentPageRequest,
 				 * product.getStandedProdId()); }
 				 */
-			responseHeader = new ResponseHeader(true, CommonConstants.OPERATE_SUCCESS, "success");
+		
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
 			if (e instanceof BusinessException) {
@@ -156,7 +158,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		try {
 			CommonUtils.checkTenantId(prodCommentCreateRequest.getTenantId());
 			checkCreateCommentParams(prodCommentCreateRequest);
-			String tenantId = prodCommentCreateRequest.getTenantId();
 			String userId = prodCommentCreateRequest.getUserId();
 			List<ProdCommentVO> commentList = prodCommentCreateRequest.getCommentList();
 			List<PictureVO> pictureList = new ArrayList<PictureVO>();
@@ -185,14 +186,37 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 					params.setCommentId(commnentId);
 					prodComments.add(params);
 					pictureMap.put(commnentId, pictureList);
+					
+					/**
+					 * 加缓存
+					 */
+					List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments, pictureMap);
+					SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
+					/**
+					 * 查询SKU信息
+					 */
+					List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+		        	searchCriterias.add(new SearchCriteria("productid",prodCommentVO.getSkuId(),new SearchOption(SearchOption.SearchLogic.must,  SearchOption.SearchType.querystring)));
+		        	
+		    		// 最大条数设置
+		    		IProductSearch search = new ProductSearchImpl();
+		        	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriterias, 0,  1, null);
+		        	if (CollectionUtil.isEmpty(infoResult.getContents())) {
+		        		logger.error("查询商品失败");
+		        		throw new BusinessException("查询es中的商品信息失败");
+		    		}
+		        	SKUInfo skuInfos = infoResult.getContents().get(0);
+		        	//评论数+1
+		        	Long commentNum = skuInfos.getCommentnum()+1;
+		        	skuInfos.setCommentnum(commentNum);
+		        	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
+		        	List<SKUInfo> skuInfoList = new ArrayList<>();
+		        	skuInfoList.add(skuInfos);
+		        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
 				}
 			}
-			/**
-			 * 加缓存
-			 */
-			List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments, pictureMap);
-			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
-			responseHeader = new ResponseHeader(true, ExceptCodeConstants.Special.SUCCESS, "");
+			
+			responseHeader = new ResponseHeader(true, CommonConstants.OPERATE_SUCCESS, "success");
 		} catch (Exception e) {
 			logger.info("创建商品评价失败", e);
 			if (e instanceof BusinessException) {
