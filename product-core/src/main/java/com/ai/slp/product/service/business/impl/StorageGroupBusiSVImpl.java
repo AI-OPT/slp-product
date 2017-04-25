@@ -118,6 +118,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @author Gavin
 	 * @UCUSER
 	 */
+	@Override
 	public StorageGroup addGroupObj(STOStorageGroup storageGroup) {
 		//通过是否查询到相关属性来设定库存组是否有销售属性
 		StorageGroup group = new StorageGroup();
@@ -240,6 +241,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 	 * @return
 	 */
 //	private StorageGroupRes genStorageGroupInfo(StorageGroup group) {
+	@Override
 	public StorageGroupRes genStorageGroupInfo(StorageGroup group) {
 		StorageGroupRes groupInfo = new StorageGroupRes();
 		BeanUtils.copyProperties(groupInfo, group);

@@ -137,6 +137,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param group
      * @return
      */
+    @Override
     public Product addProductWithStorageGroup(StandedProduct standedProduct, StorageGroup group, List<AttrValRequest> attrValList) {
         //查询库存组对应的标准品
         String tenantId = group.getTenantId();
