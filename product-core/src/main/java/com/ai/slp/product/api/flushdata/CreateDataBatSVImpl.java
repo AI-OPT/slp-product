@@ -13,6 +13,7 @@ import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
+import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.api.flushdata.interfaces.ICreateDataBatSV;
 import com.ai.slp.product.api.flushdata.params.CreateDataRequest;
@@ -93,7 +94,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	private static String TENANT_ID = "changhong";
 	private static int DEFAULTLENGTH = 14;
 	//groupId与productId一致
-	private static String productIdStart = "70000000000";
+	private static String productIdStart = "268669325";
 
 	@Override
 	public void createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
@@ -141,11 +142,13 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					String supplyId = addRouteProdSupplyList(productId.toString(), request.getProductName());
 					// 路由组
 					RouteGroupAddResponse routeGroup = insertRouteGroup(productId.toString(), request.getProductName());
-					if (null == routeGroup.getRouteGroupId()) {
+					if (CommonConstants.OPERATE_FAIL.equals(routeGroup.getResponseHeader().getResultCode())) {
 						continue;
 					}
+					//RouteItem
+					List<String> routeItems =  routeGroup.getRouteItemIds();
 					// 地域
-					addTargetAreaToList();
+					addTargetAreaToList(routeItems);
 					Thread.sleep(1000);
 					// 价格
 					// 市场价
@@ -280,14 +283,16 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 地域
-	public void addTargetAreaToList() {
+	public void addTargetAreaToList(List<String> routeItems) {
 		IRouteTargetAreaSV routeTargetAreaSV = DubboConsumerFactory.getService(IRouteTargetAreaSV.class);
 		AreaAddListRequest request = new AreaAddListRequest();
 		List<AreaAddVo> voList = new ArrayList<AreaAddVo>();
 		AreaAddVo vo = new AreaAddVo();
 		vo.setOperId("1");
 		vo.setProvCode("11");
-		vo.setRouteItemId("0000000000001237");
+		if(!CollectionUtil.isEmpty(routeItems)){
+			vo.setRouteItemId(routeItems.get(0));
+		}
 		vo.setState("1");
 		vo.setTenantId(TENANT_ID);
 		voList.add(vo);
