@@ -31,7 +31,7 @@ public interface INormProductBusiSV {
      *
      * @param normProduct
      */
-    public int updateNormProd(NormProdSaveRequest normProduct);
+    public void updateNormProd(NormProdSaveRequest normProduct);
     
     /**
      * 查询指定的标准品嘻嘻

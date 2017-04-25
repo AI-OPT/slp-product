@@ -17,10 +17,12 @@ import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
+import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.NormProdConstants;
 import com.ai.slp.product.constants.ProdPriceLogConstants;
 import com.ai.slp.product.constants.ProductConstants;
@@ -48,6 +50,8 @@ import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
+import com.ai.slp.product.util.DataUtils;
+import com.ai.slp.product.util.IPaasStorageUtils;
 import com.ai.slp.product.util.MQConfigUtil;
 import com.ai.slp.product.util.SkuStorageListComparator;
 import com.ai.slp.product.util.StoNoSkuSalePriceComparator;
@@ -305,13 +309,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			skuStorage.setOperId(operId);
 			skuStorage.setOperTime(DateUtil.getSysDate());
 			if(skuStorageAtomSV.updateById(skuStorage)>0){
-				ProdPriceLog priceLog = new ProdPriceLog();
-				priceLog.setObjId(skuStorage.getSkuStorageId());
-				priceLog.setObjType(ProdPriceLogConstants.ProdPriceLog.ObjType.SKU_STORAGE);
-				priceLog.setUpdatePrice(skuStorage.getSalePrice());
-				priceLog.setOperId(operId);
-				priceLog.setOperTime(skuStorage.getOperTime());
-				prodPriceLogAtomSV.insert(priceLog);
+//				ProdPriceLog priceLog = new ProdPriceLog();
+//				priceLog.setObjId(skuStorage.getSkuStorageId());
+//				priceLog.setObjType(ProdPriceLogConstants.ProdPriceLog.ObjType.SKU_STORAGE);
+//				priceLog.setUpdatePrice(skuStorage.getSalePrice());
+//				priceLog.setOperId(operId);
+//				priceLog.setOperTime(skuStorage.getOperTime());
+//				prodPriceLogAtomSV.insert(priceLog);
 				count++;
 			}
 		}
@@ -416,10 +420,10 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			throw new BusinessException("","添加库存失败");
 		}
 		// 添加库存日志
-		StorageLog storageLog = new StorageLog();
-		BeanUtils.copyProperties(storageLog, storage);
+//		StorageLog storageLog = new StorageLog();
+//		BeanUtils.copyProperties(storageLog, storage);
 		
-		storageLogAtomSV.installLog(storageLog);
+//		storageLogAtomSV.installLog(storageLog);
 		
 		// 如果有销售属性,则添加SKU对应的库存信息
 /*		if (isSaleAttr.equals(ProductConstants.Product.IsSaleAttr.YES)) {
@@ -433,10 +437,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			
 //			String skuId = prodSkuAtomSV.querySkuOfProd(tenantId, product.getProdId()).get(0).getSkuId();
 			String skuId = product.getProdId();
-		
-			Long price = getPriceOfSku(groupId,skuId,storage.getPriorityNumber());
+
+			////////////
+			long salePrice = getSalePrice(tenantId, groupId, storage, skuId);
+			/////////////
+//			Long salePrice = getPriceOfSku(groupId,skuId,storage.getPriorityNumber());
 			
-			installSkuStorage(skuId,storage.getStorageId(),storage.getTotalNum(),price,operId);
+			installSkuStorage(skuId,storage.getStorageId(),storage.getTotalNum(),salePrice,operId);
 			
 			
 	/*	} else {
@@ -444,6 +451,22 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		}*/
 		return storage.getStorageId();
 		
+	}
+
+	private long getSalePrice(String tenantId, String groupId, Storage storage, String skuId) {
+		// 获取缓存客户端
+		ICacheClient cacheClient = IPaasStorageUtils.getClient();
+		// 获取库存组的cacheKey
+		String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId, groupId);
+
+		// 确认当前使用优先级
+		String priority = DataUtils.toStr(storage.getPriorityNumber());
+		// 获取当前优先级中SKU的销售价
+//			Long salePrice = getSalePrice(tenantId, groupId, skuId, price, cacheClient, priority);
+		// 4.获取当前优先级中SKU的销售价
+		String priceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId, groupId, priority);
+		long salePrice = Long.parseLong(cacheClient.hget(priceKey, skuId));
+		return salePrice;
 	}
 
 	/**
