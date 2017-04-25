@@ -104,6 +104,7 @@ public class StorageTest {
     	skuSalePrice.setSalePrice((long) 89);
     	salePrice.add(skuSalePrice);
     	priceReq.setStorageSalePrice(salePrice);
+//    	priceReq.setStorageSalePrice(salePrice);
     	storageSV.updateMultiStorageSalePrice(priceReq);
     }
     
