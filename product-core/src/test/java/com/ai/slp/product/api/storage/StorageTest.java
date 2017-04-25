@@ -99,8 +99,8 @@ public class StorageTest {
     	priceReq.setOperId((long) 1);
     	List<StoNoSkuSalePrice> salePrice = new ArrayList<>();
     	StoNoSkuSalePrice skuSalePrice = new StoNoSkuSalePrice();
-    	skuSalePrice.setGroupId("0000000000243");
-    	skuSalePrice.setPriorityNumber((short) 2);
+    	skuSalePrice.setGroupId("0000000000877");
+    	skuSalePrice.setPriorityNumber((short) 1);
     	skuSalePrice.setSalePrice((long) 89);
     	salePrice.add(skuSalePrice);
     	priceReq.setStorageSalePrice(salePrice);
@@ -128,7 +128,8 @@ public class StorageTest {
     	stoStorage.setTenantId("changhong");
     	stoStorage.setSupplierId("-1");
     	stoStorage.setStorageName("www");
-    	stoStorage.setStorageGroupId("0000000000477");
+    	stoStorage.setStorageGroupId("1111112319");
+//    	stoStorage.setStorageGroupId("0000000000477");
     	stoStorage.setOperId(1l);
     	stoStorage.setTotalNum(12l);
     	stoStorage.setWarnNum(1l);
