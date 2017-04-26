@@ -84,11 +84,11 @@ public class INormProductSVTest {
 		}.getType());
     	*/
     	NormProdSaveRequest request = new NormProdSaveRequest();
-    	request.setProductCatId("00000000000006");
-    	request.setProductId("1111112319");
+    	request.setProductCatId("00000000000160");
+    	request.setProductId("000001883");
 /*    	request.setProductCatId("00000000000142");
     	request.setProductId("0000000000001113");
-*/    	request.setProductName("121212121");
+*/    	request.setProductName("顺丰到付1");
     	request.setState("1");
     	request.setProductType("2");
     	request.setCreateId(1l);

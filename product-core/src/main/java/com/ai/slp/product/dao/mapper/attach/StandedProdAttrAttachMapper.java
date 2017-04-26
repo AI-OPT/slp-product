@@ -1,7 +1,10 @@
 package com.ai.slp.product.dao.mapper.attach;
 
+import java.sql.Timestamp;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 标准品属性扩展
@@ -18,4 +21,17 @@ public interface StandedProdAttrAttachMapper {
             "AND spa.ATTRVALUE_DEF_ID = #{attrValDefId} AND sp.state = '1' AND spa.state='1' ")
     public int countOfAttrValOfCat(
             @Param("tenantId")String tenantId, @Param("catId") String catId, @Param("attrValDefId") String attrValDefId);
+    
+    
+    @Update("update standed_prod_attr "
+    		+ "set  ATTR_VALUE_NAME = #{attrValueName},ATTR_VALUE_NAME2 = #{attrValueName2},SERIAL_NUMBER = #{serialNumber},  OPER_ID = #{operId},OPER_TIME = #{operTime} "
+    		+ "where STANDED_PROD_ATTR_ID = #{standedProdAttrId} ")
+	public int updateStandedProdAttrBySQL(@Param("standedProdAttrId") Long standedProdAttrId,
+			@Param("attrValueName") String attrValueName,
+			@Param("attrValueName2") String attrValueName2,
+			@Param("serialNumber") Short serialNumber,
+			@Param("operId") Long operId,
+			@Param("operTime") Timestamp operTime);
+    
+    
 }
