@@ -140,15 +140,15 @@ public class IStorageSVImpl implements IStorageSV {
 		}*/
 		
 		
-		List<StorageGroup> groupList = storageGroupBusiSV.queryGroupInfoByNormProId(
-				infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getProductId());
+	/*	List<StorageGroup> groupList = storageGroupBusiSV.queryGroupInfoByNormProId(
+				infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getProductId());*/
 		
 		List<StorageGroupRes> groupInfoList = new ArrayList<>();
 		List<StorageGroup> groupLists = storageGroupAtomSV.queryOfStandedProd(infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getProductId());
 		if (CollectionUtil.isEmpty(groupLists)){
 			logger.warn("查询库存组列表为空,租户ID:{},销售商ID:{},标准品ID:{}",infoQuery.getTenantId(),infoQuery.getSupplierId(), infoQuery.getProductId());
 		}
-		for(int i= groupList.size()-1;i>=0;i--){
+		for(int i= groupLists.size()-1;i>=0;i--){
 			groupInfoList.add(storageGroupBusiSV.genStorageGroupInfo(groupLists.get(i)));
 		}
 		

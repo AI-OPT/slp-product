@@ -19,6 +19,9 @@ import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.storage.param.NameUpReq;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
 import com.ai.slp.product.api.storage.param.StorageGroup4List;
@@ -42,6 +45,7 @@ import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroupLog;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdPriceLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
@@ -52,9 +56,11 @@ import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupLogAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageLogAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
 import com.ai.slp.product.util.IPaasStorageUtils;
 import com.ai.slp.product.vo.StoGroupPageQueryVo;
 import com.ai.slp.route.api.routegroupmanage.interfaces.IRouteGroupManageSV;
@@ -247,9 +253,35 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		BeanUtils.copyProperties(groupInfo, group);
 		// 填充库存组信息
 		// 查询对应商品信息
-		Product product = productAtomSV.selectByGroupId(group.getTenantId(), group.getStorageGroupId());
+		//Product product = productAtomSV.selectByGroupId(group.getTenantId(), group.getStorageGroupId());
+		//查询es
+    	List<SearchCriteria> searchCriteria = new ArrayList<SearchCriteria>();
+    	searchCriteria.add(new SearchCriteria("storagegroupid",
+    			group.getStorageGroupId(),
+    			new SearchOption(SearchOption.SearchLogic.must,SearchOption.SearchType.querystring)));
+    	
+    	int startSize = 1;
+		int maxSize = 1;
+		// 最大条数设置
+		int pageNo = 1;
+		int size = 20;
+		if (pageNo == 1) {
+			startSize = 0;
+		} else {
+			startSize = (pageNo - 1) * size;
+		}
+		maxSize = size;
+		IProductSearch search = new ProductSearchImpl();
+		Result<SKUInfo> infoResult = search.searchByCriteria(searchCriteria,startSize,maxSize, null);
+    	if (CollectionUtil.isEmpty(infoResult.getContents())) {
+    		logger.error("查询商品失败");
+    		throw new BusinessException("查询es中的商品信息失败");
+		}
+    	SKUInfo product = infoResult.getContents().get(0);
+		
+		
 		if (product != null){
-			groupInfo.setProdId(product.getProdId());
+			groupInfo.setProdId(product.getProductid());
 		}
 		// 库存总量
 		Map<Short, List<StorageRes>> storageMap = new HashMap<>();
