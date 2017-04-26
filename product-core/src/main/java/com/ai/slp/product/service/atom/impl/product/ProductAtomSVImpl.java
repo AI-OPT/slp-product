@@ -3,6 +3,7 @@ package com.ai.slp.product.service.atom.impl.product;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -466,8 +467,8 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 	}
 
 	@Override
-	public int updateProdState(Product record) {
-		return productAttachMapper.updateProdState(record);
+	public int updateProdState(String state, String prodId) {
+		return productAttachMapper.updateProdState(state, prodId);
 	}
 
 	@Override

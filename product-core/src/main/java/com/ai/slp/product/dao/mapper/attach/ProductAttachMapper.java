@@ -67,14 +67,14 @@ public interface ProductAttachMapper {
 	})
 	public List<ProductRouteGroupInfo> queryProductAndRouteGroupPage(ProdRouteGroupQueryVo queryVo);
 	
-	/**
+    /**
      * 修改商品状态
      * @param record
      * @return
      * @ApiDocMethod
      */
     @Update("update product set STATE=#{state} where prod_id = #{prodId} ")
-	public int updateProdState(Product record);
+	public int updateProdState(@Param("state") String state,@Param("prodId") String prodId);
     
 	/**
      * 修改商品状态

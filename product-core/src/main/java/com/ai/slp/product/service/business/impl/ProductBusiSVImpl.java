@@ -257,7 +257,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         product.setState(ProductConstants.Product.State.DISCARD);
         product.setOperId(operId);
         //添加日志
-        updateProdAndStatusLog(product);
+        updateProdAndStatus(product);
         //搜索中删除商品数据
         skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
     }
@@ -536,13 +536,9 @@ public class ProductBusiSVImpl implements IProductBusiSV {
     @Override
     public void changeToInSale(Product product, Long operId) {
         //进行上架处理
-        product.setUpTime(DateUtils.currTimeStamp());
         product.setState(ProductConstants.Product.State.IN_SALE);
-        if (operId!=null){
-        	product.setOperId(operId);
-        }
         //添加日志
-        updateProdAndStatusLog(product);
+        updateProdAndStatus(product);
     }
 
     /**
@@ -602,7 +598,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         }
         product.setUpTime(DateUtils.currTimeStamp());
         //添加日志
-        updateProdAndStatusLog(product);
+        updateProdAndStatus(product);
     }
 
     /**
@@ -754,7 +750,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         	product.setOperId(operId);
         }
         //添加日志
-        updateProdAndStatusLog(product);
+        updateProdAndStatus(product);
         if (userNum>0) {
             //添加搜索引擎
             //skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
@@ -781,7 +777,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
         	product.setOperId(operId);
         }
         //添加日志
-        updateProdAndStatusLog(product);
+        updateProdAndStatus(product);
         //搜索中删除商品数据
         //skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
     }
@@ -831,7 +827,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             product.setOperId(operId);
         }
         //添加日志
-        updateProdAndStatusLog(product);
+        updateProdAndStatus(product);
 		
     }
 
@@ -839,17 +835,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
 		productAtomSV.updateProdStatus(productId,state,operId);
 	}
 	
-    public void updateProdAndStatusLog(Product product){
-        if (productAtomSV.updateProdState(product)>0){
-          /*  ProductLog log = new ProductLog();
-            BeanUtils.copyProperties(log,product);
-            productLogAtomSV.install(log);
-            //商品状态日志表
-            ProductStateLog productStateLog = new ProductStateLog();
-            BeanUtils.copyProperties(productStateLog, product);
-            productStateLogAtomSV.insert(productStateLog);*/
-            
-        }
+    public void updateProdAndStatus(Product product){
+    	productAtomSV.updateProdState(product.getState(),product.getProdId());
     }
 
     /**
@@ -901,7 +888,7 @@ public class ProductBusiSVImpl implements IProductBusiSV {
             product.setOperId(operId);
         }
         //添加日志
-        updateProdAndStatusLog(product);
+        updateProdAndStatus(product);
 	}
 
 }

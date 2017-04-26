@@ -168,20 +168,16 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 					ProdComment params = new ProdComment();
 					params.setUserId(userId);
 					BeanUtils.copyProperties(params, prodCommentVO);
-					Product product = productAtomSV.selectByProductId(prodCommentVO.getSkuId());
-					if (product == null) {
-						throw new BusinessException("skuId 数据错误，找不到对应的标准商品");
-					}
 					params.setProdId(prodCommentVO.getSkuId());
-					params.setStandedProdId(product.getStandedProdId());
-					params.setSupplierId(product.getSupplierId());
+					params.setStandedProdId(prodCommentVO.getSkuId());
+					params.setSupplierId("-1");
+					
 					// 封装图片评论
 					params.setTenantId(prodCommentCreateRequest.getTenantId());
 					params.setOrderId(prodCommentCreateRequest.getOrderId());
 					pictureList = prodCommentVO.getPictureList();
 					// 判断是否有图片
-					params.setIsPicture(CollectionUtil.isEmpty(pictureList) ? ProductCommentConstants.HasPicture.NO
-							: ProductCommentConstants.HasPicture.YSE);
+					params.setIsPicture(CollectionUtil.isEmpty(pictureList) ? ProductCommentConstants.HasPicture.NO: ProductCommentConstants.HasPicture.YSE);
 					String commnentId = prodCommentBusiSV.createProdComment(params, pictureList);
 					params.setCommentId(commnentId);
 					prodComments.add(params);

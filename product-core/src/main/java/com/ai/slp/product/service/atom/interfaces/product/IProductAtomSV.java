@@ -160,12 +160,13 @@ public interface IProductAtomSV {
     
     
 	/**
-     * 修改商品状态
-     * @param record
-     * @return
-     * @ApiDocMethod
-     */
-	public int updateProdState(Product record);
+	 * 修改商品状态
+	 * @param state
+	 * @param prodId
+	 * @return
+	 * @author
+	 */
+	public int updateProdState(String state, String prodId);
 	
 	/**
 	 * 修改商品状态

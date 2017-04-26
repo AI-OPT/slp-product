@@ -166,7 +166,7 @@ public interface IProductBusiSV {
      * 更新商品日志和状态日志
      * @param product
      */
-    public void updateProdAndStatusLog(Product product);
+    public void updateProdAndStatus(Product product);
 
     /**
      * 查询商品的省级目标地域
