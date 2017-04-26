@@ -73,9 +73,9 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 	@Override
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest skuReq) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(skuReq.getTenantId(), "");
-		if (StringUtils.isBlank(skuReq.getSkuId()) && StringUtils.isBlank(skuReq.getSkuAttrs())) {
+		/*if (StringUtils.isBlank(skuReq.getSkuId()) && StringUtils.isBlank(skuReq.getSkuAttrs())) {
 			throw new BusinessException("", "SKU标识和SKU属性为空,无法处理");
-		}
+		}*/
 		// 查询商品
 		//Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
 
@@ -212,11 +212,11 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
 		}
 		// 若不是有效状态,则不处理
-		if (!ACTIVE_STATUS_LIST.contains(skuInfos.get(0).getState())) {
+/*		if (!ACTIVE_STATUS_LIST.contains(skuInfos.get(0).getState())) {
 			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}", skuReq.getTenantId(), skuReq.getSkuId(),
 					skuReq.getSkuId(), skuInfos.get(0).getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
-		}
+		}*/
 		
 		if (!CollectionUtil.isEmpty(skuInfos)) {
 			SKUInfo skuInfo = skuInfos.get(0);

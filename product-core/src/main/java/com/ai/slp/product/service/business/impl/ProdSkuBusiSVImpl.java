@@ -1121,7 +1121,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			}
 		}
 		
-		if (product == null) {
+		/**if (product == null) {
 			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",tenantId, skuId, skuId);
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}
@@ -1129,7 +1129,7 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 		if (!ACTIVE_STATUS_LIST.contains(product.getState())){
 			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",tenantId, skuId, skuId,product.getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
-		}
+		}*/
 		return genSkuResponse(tenantId, product);
 	}
 }
