@@ -46,7 +46,6 @@ import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
-import com.ai.slp.product.util.SequenceUtil;
 import com.ai.slp.route.api.routegroupmanage.interfaces.IRouteGroupManageSV;
 import com.ai.slp.route.api.routegroupmanage.param.RouteGroupAddRequest;
 import com.ai.slp.route.api.routegroupmanage.param.RouteGroupAddResponse;
@@ -94,21 +93,21 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	private static String productNameInit = "商品测试";
 	private static String TENANT_ID = "changhong";
 	private static int DEFAULTLENGTH = 14;
+	//groupId与productId一致
+	private static String productIdStart = "900000000";
 
 	@Override
 	public void createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
 		if (null == request.getNumber()) {
 			request.setNumber(20);
 		}
+		if (StringUtils.isEmpty(request.getProductIdStart())) {
+			request.setProductIdStart(productIdStart);
+		}
 		if (StringUtils.isEmpty(request.getProductName())) {
 			request.setProductName(productNameInit);
 		}
-		Long productId = null;
-		if (StringUtils.isEmpty(request.getProductIdStart())) {
-			productId =  Long.valueOf(SequenceUtil.genStandedProductId());
-		}else{
-			productId = Long.valueOf(request.getProductIdStart());
-		}
+		Long productId = Long.valueOf(request.getProductIdStart());
 		/**
 		 * 每条类目下有一定商品
 		 */
@@ -127,6 +126,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			productCat.append(String.valueOf(productCatId));
 			for (int i = 0; i < request.getNumber(); i++) {
 				try {
+					productId++;
 					String groupId = productId.toString();
 					String standedProdAttrId = groupId;
 					// 保存标准品
@@ -162,7 +162,6 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					chargeStorageGroupStatus(group.getStorageGroupId());
 					// 审核
 					productCheck(productId.toString());
-					productId++;
 				} catch (Exception e) {
 					logger.error("批量制造商品发生点问题,原因是:" + JSON.toJSONString(e.getStackTrace()));
 					continue;
