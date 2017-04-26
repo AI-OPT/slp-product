@@ -77,9 +77,9 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			throw new BusinessException("", "SKU标识和SKU属性为空,无法处理");
 		}
 		// 查询商品
-		Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
+		//Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
 
-		if (product == null) {
+		/*if (product == null) {
 			logger.warn("未查询到指定 的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
 					skuReq.getSkuId());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
@@ -89,7 +89,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}", skuReq.getTenantId(), skuReq.getSkuId(),
 					skuReq.getSkuId(), product.getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
-		}
+		}*/
 		ProductSKUResponse skuResponse = null;
 		/**
 		 * 查询ES缓存
@@ -99,8 +99,23 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		criterias.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,skuReq.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.term)));
 		Result<SKUInfo> result = productSearch.searchByCriteria(criterias,0,30,null);
 		List<SKUInfo> skuInfos = result.getContents();
+		
+		
 		if (!CollectionUtil.isEmpty(skuInfos)) {
 			SKUInfo skuInfo = skuInfos.get(0);
+			if (skuInfo == null) {
+				logger.warn("未查询到指定 的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
+						skuReq.getSkuId());
+				throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
+			}
+			// 若不是有效状态,则不处理
+			if (!ACTIVE_STATUS_LIST.contains(skuInfo.getState())) {
+				logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}", skuReq.getTenantId(), skuReq.getSkuId(),
+						skuReq.getSkuId(), skuInfo.getState());
+				throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
+			}
+			
+			
 			/**
 			 * 商品属性
 			 */
