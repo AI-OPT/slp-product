@@ -17,7 +17,6 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
-import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
 import com.ai.paas.ipaas.search.vo.Result;
@@ -42,8 +41,6 @@ import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.bo.product.ProdPicture;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
-import com.ai.slp.product.dao.mapper.bo.product.ProductLog;
-import com.ai.slp.product.dao.mapper.bo.product.ProductStateLog;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.search.bo.SKUInfo;
@@ -315,12 +312,13 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         //库存组可用量 
         //Long usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,product.getStorageGroupId());
         String priority = cacheClient.hget(groupKey, StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
-        Long priorityUsable = Long.valueOf(null==IPaasStorageUtils.genMcsPriorityUsableKey(tenantId, product.getStorageGroupId(), priority)?"0":IPaasStorageUtils.genMcsPriorityUsableKey(tenantId, product.getStorageGroupId(), priority));
+        String priorityUsable = IPaasStorageUtils.genMcsPriorityUsableKey(tenantId, product.getStorageGroupId(), priority);
+        Long totalNum = Long.valueOf(null==cacheClient.get(priorityUsable)?"0":cacheClient.get(priorityUsable));
         //库存组停用或当前库存可用为零,
         //直接切换至"售罄下架"
         if (StorageConstants.StorageGroup.State.STOP.equals(storageGroupState)
                 ||StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroupState)
-                ||priorityUsable==null || priorityUsable<=0){
+                ||totalNum==null || totalNum<=0){
             changeToStop(storageGroupState,product, operId);
             logger.error("商品"+product.getProdId()+"状态不支持上架,状态是:"+product.getState());
             return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
