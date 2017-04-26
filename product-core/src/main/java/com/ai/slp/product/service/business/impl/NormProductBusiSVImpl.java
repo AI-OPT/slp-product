@@ -1050,11 +1050,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			prodAttr.setOperId(operId);
 			prodAttr.setOperTime(DateUtils.currTimeStamp());
 			prodAttr.setState(CommonConstants.STATE_INACTIVE);
-			if (standedProdAttrAtomSV.updateObj(prodAttr) > 0) {
+			standedProdAttrAtomSV.updateSateBySQL(prodAttr);
+			/*if (standedProdAttrAtomSV.updateObj(prodAttr) > 0) {
 				StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
 				BeanUtils.copyProperties(prodAttrLog, prodAttr);
 				standedProdAttrLogAtomSV.installObj(prodAttrLog);
-			}
+			}*/
 		}
 	}
 

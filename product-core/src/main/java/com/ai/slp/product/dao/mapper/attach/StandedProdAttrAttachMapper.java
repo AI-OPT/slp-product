@@ -32,6 +32,15 @@ public interface StandedProdAttrAttachMapper {
 			@Param("serialNumber") Short serialNumber,
 			@Param("operId") Long operId,
 			@Param("operTime") Timestamp operTime);
+
+
+    @Update("update standed_prod_attr "
+    		+ "set STATE = #{state},  OPER_ID = #{operId},OPER_TIME = #{operTime} "
+    		+ "where STANDED_PROD_ATTR_ID = #{standedProdAttrId} ")
+	public int updateSateBySQL(@Param("standedProdAttrId") Long standedProdAttrId, 
+			@Param("state") String state, 
+			@Param("operId") Long operId, 
+			@Param("operTime") Timestamp operTime);
     
     
 }

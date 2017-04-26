@@ -115,4 +115,13 @@ public interface IStandedProdAttrAtomSV {
 	 * @UCUSER
 	 */
 	public int updateStandedProdAttrBySQL(StandedProdAttr prodAttr);
+
+	/**
+	 * 
+	 * @param prodAttr
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	int updateSateBySQL(StandedProdAttr prodAttr);
 }
