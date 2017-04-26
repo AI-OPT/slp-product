@@ -93,21 +93,15 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	private static String productNameInit = "商品测试";
 	private static String TENANT_ID = "changhong";
 	private static int DEFAULTLENGTH = 14;
-	//groupId与productId一致
-	private static String productIdStart = "900000000";
 
 	@Override
 	public void createProductBat(CreateDataRequest request) throws BusinessException, SystemException {
 		if (null == request.getNumber()) {
 			request.setNumber(20);
 		}
-		if (StringUtils.isEmpty(request.getProductIdStart())) {
-			request.setProductIdStart(productIdStart);
-		}
 		if (StringUtils.isEmpty(request.getProductName())) {
 			request.setProductName(productNameInit);
 		}
-		Long productId = Long.valueOf(request.getProductIdStart());
 		/**
 		 * 每条类目下有一定商品
 		 */
@@ -116,6 +110,26 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			logger.error("类目不能为空");
 			return;
 		}
+		if (!StringUtils.isEmpty(request.getProductIdStart())) {
+			/**
+			 * 自定义商品ID
+			 */
+			createCustom(request);
+		} else {
+			/**
+			 * Sequnce维护商品ID
+			 */
+			createSequnce(request);
+		}
+
+	}
+
+	public void createCustom(CreateDataRequest request) {
+		Long productId = null;
+		if (!StringUtils.isEmpty(request.getProductIdStart())) {
+			productId = Long.valueOf(request.getProductIdStart());
+		}
+
 		for (Long productCatId = Long.valueOf(request.getProductCatIdStartNum()); productCatId <= Long
 				.valueOf(request.getProductCatIdEndNum()); productCatId++) {
 			int zeroFill = DEFAULTLENGTH - String.valueOf(productCatId).length();
@@ -130,7 +144,8 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					String groupId = productId.toString();
 					String standedProdAttrId = groupId;
 					// 保存标准品
-					StorageGroup group = addNormProduct(productCat.toString(), request.getProductName(),groupId,standedProdAttrId,productId.toString());
+					StorageGroup group = addNormProduct(productCat.toString(), request.getProductName(), groupId,
+							standedProdAttrId, productId.toString());
 					if (null == group) {
 						continue;
 					}
@@ -145,8 +160,8 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					if (CommonConstants.OPERATE_FAIL.equals(routeGroup.getResponseHeader().getResultCode())) {
 						continue;
 					}
-					//RouteItem
-					List<String> routeItems =  routeGroup.getRouteItemIds();
+					// RouteItem
+					List<String> routeItems = routeGroup.getRouteItemIds();
 					// 地域
 					addTargetAreaToList(routeItems);
 					Thread.sleep(1000);
@@ -164,14 +179,70 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					productCheck(productId.toString());
 				} catch (Exception e) {
 					logger.error("批量制造商品发生点问题,原因是:" + JSON.toJSONString(e.getStackTrace()));
-					continue;
+					return;
+				}
+			}
+		}
+	}
+
+	public void createSequnce(CreateDataRequest request) {
+		
+		for (Long productCatId = Long.valueOf(request.getProductCatIdStartNum()); productCatId <= Long
+				.valueOf(request.getProductCatIdEndNum()); productCatId++) {
+			int zeroFill = DEFAULTLENGTH - String.valueOf(productCatId).length();
+			StringBuffer productCat = new StringBuffer();
+			for (int i = 0; i < zeroFill; i++) {
+				productCat.append("0");
+			}
+			productCat.append(String.valueOf(productCatId));
+			for (int i = 0; i < request.getNumber(); i++) {
+				try {
+					// 保存标准品
+					StorageGroup group = addNormProduct(productCat.toString(), request.getProductName(), null,
+							null, null);
+					if (null == group) {
+						continue;
+					}
+					// 新建库存
+					String productId = group.getStandedProdId();
+					String storageId = saveStorage(group);
+					// 编辑商品
+					updateProduct(productId, request.getProductName());
+					// 仓库
+					String supplyId = addRouteProdSupplyList(productId.toString(), request.getProductName());
+					// 路由组
+					RouteGroupAddResponse routeGroup = insertRouteGroup(productId.toString(), request.getProductName());
+					if (CommonConstants.OPERATE_FAIL.equals(routeGroup.getResponseHeader().getResultCode())) {
+						continue;
+					}
+					// RouteItem
+					List<String> routeItems = routeGroup.getRouteItemIds();
+					// 地域
+					addTargetAreaToList(routeItems);
+					Thread.sleep(1000);
+					// 价格
+					// 市场价
+					updateMarketPrice(productId.toString());
+					// 成本价
+					updateCostPrice(productId.toString(), supplyId);
+					// 销售价
+					updateNoSkuStoSalePrice(group);
+					// 启用库存
+					chargeStorageStatus(storageId);
+					chargeStorageGroupStatus(group.getStorageGroupId());
+					// 审核
+					productCheck(productId.toString());
+				} catch (Exception e) {
+					logger.error("批量制造商品发生点问题,原因是:" + JSON.toJSONString(e.getStackTrace()));
+					return;
 				}
 			}
 		}
 	}
 
 	// 保存标准品
-	public StorageGroup addNormProduct(String productCatId, String productName,String groupId,String standedProdAttrId,String productId) {
+	public StorageGroup addNormProduct(String productCatId, String productName, String groupId,
+			String standedProdAttrId, String productId) {
 		NormProdSaveRequest request = new NormProdSaveRequest();
 		request.setProductCatId(productCatId);
 		request.setProductName(productName);
@@ -184,19 +255,21 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		attrValRequest.setAttrId(100001L);
 		attrValRequest.setAttrValId("100003");
 		attrValRequests.add(attrValRequest);
-		/*AttrValRequest attrValRequest2 = new AttrValRequest();
-		attrValRequest2.setAttrId(100001L);
-		attrValRequest2.setAttrValId("100003");
-		attrValRequests.add(attrValRequest2);*/
+		/*
+		 * AttrValRequest attrValRequest2 = new AttrValRequest();
+		 * attrValRequest2.setAttrId(100001L);
+		 * attrValRequest2.setAttrValId("100003");
+		 * attrValRequests.add(attrValRequest2);
+		 */
 		request.setAttrValList(attrValRequests);
 		request.setTenantId(TENANT_ID);
 		request.setSupplierId("-1");
-		
-		//standedProdAttrId
-		StandedProduct standedProduct = saveNormProd(request,Long.valueOf(standedProdAttrId),productId);
+
+		// standedProdAttrId
+		StandedProduct standedProduct = saveNormProd(request, standedProdAttrId, productId);
 		// 添加一个库存组
 		STOStorageGroup storageGroup = createSTOStorageGroup(request, standedProduct);
-		StorageGroup group = storageGroupBusiSV.addGroupObj(storageGroup,groupId);
+		StorageGroup group = storageGroupBusiSV.addGroupObj(storageGroup, groupId);
 		// 添加商品,在商品属性表保存商品属性值
 		List<AttrValRequest> attrValList = request.getAttrValList();
 		Product product = productBusiSV.addProductWithStorageGroup(standedProduct, group, attrValList);
@@ -290,7 +363,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		AreaAddVo vo = new AreaAddVo();
 		vo.setOperId("1");
 		vo.setProvCode("11");
-		if(!CollectionUtil.isEmpty(routeItems)){
+		if (!CollectionUtil.isEmpty(routeItems)) {
 			vo.setRouteItemId(routeItems.get(0));
 		}
 		vo.setState("1");
@@ -379,8 +452,8 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	// 保存标准品
-	private StandedProduct saveNormProd(NormProdSaveRequest normProduct,long standedProdAttrId,String productId) {
-		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct,productId);
+	private StandedProduct saveNormProd(NormProdSaveRequest normProduct, String standedProdAttrId, String productId) {
+		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct, productId);
 		// 添加标准品属性值
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
 		for (AttrValRequest attrValReq : attrValList) {
@@ -396,18 +469,26 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			prodAttr.setOperTime(DateUtil.getSysDate());
 			prodAttr.setSerialNumber(getProductAttrSerialNo());
 			// 添加成功
-			standedProdAttrAtomSV.installObj(prodAttr,standedProdAttrId);
+			if(null==standedProdAttrId){
+				standedProdAttrAtomSV.installObj(prodAttr);
+			}else{
+				standedProdAttrAtomSV.installObj(prodAttr, Long.valueOf(standedProdAttrId));
+			}
 		}
 		return standedProduct;
 	}
 
-	private StandedProduct saveNormProdWithOutAttr(NormProdSaveRequest normProduct,String productId) {
+	private StandedProduct saveNormProdWithOutAttr(NormProdSaveRequest normProduct, String productId) {
 		// 添加标准品
 		StandedProduct standedProduct = new StandedProduct();
 		BeanUtils.copyProperties(standedProduct, normProduct);
 		standedProduct.setStandedProductName(normProduct.getProductName());
 		// 添加标准品
-		standedProductAtomSV.installObj(standedProduct,productId);
+		if(null==productId){
+			standedProductAtomSV.installObj(standedProduct);
+		}else{
+			standedProductAtomSV.installObj(standedProduct, productId);
+		}
 		return standedProduct;
 	}
 
