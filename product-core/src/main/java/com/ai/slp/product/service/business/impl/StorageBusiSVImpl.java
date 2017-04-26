@@ -439,7 +439,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			String skuId = product.getProdId();
 
 			////////////
-			long salePrice = getSalePrice(tenantId, groupId, storage, skuId);
+			Long salePrice = getSalePrice(tenantId, groupId, storage, skuId);
 			/////////////
 //			Long salePrice = getPriceOfSku(groupId,skuId,storage.getPriorityNumber());
 			
@@ -453,7 +453,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		
 	}
 
-	private long getSalePrice(String tenantId, String groupId, Storage storage, String skuId) {
+	private Long getSalePrice(String tenantId, String groupId, Storage storage, String skuId) {
 		// 获取缓存客户端
 		ICacheClient cacheClient = IPaasStorageUtils.getClient();
 		// 获取库存组的cacheKey
@@ -465,7 +465,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 //			Long salePrice = getSalePrice(tenantId, groupId, skuId, price, cacheClient, priority);
 		// 4.获取当前优先级中SKU的销售价
 		String priceKey = IPaasStorageUtils.genMcsGroupSerialPriceKey(tenantId, groupId, priority);
-		long salePrice = 0; 
+		Long salePrice = null; 
 		if (cacheClient.hget(priceKey, skuId) != null) {
 			salePrice = Long.parseLong(cacheClient.hget(priceKey, skuId));
 		}
