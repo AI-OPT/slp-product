@@ -970,7 +970,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				// prodAttr.setSerialNumber(attrValReq.getSerialNumber());
 				prodAttr.setSerialNumber(getProductAttrSerialNo());
 				prodAttr.setOperId(operId);
-				upNum = standedProdAttrAtomSV.updateObj(prodAttr);
+				//upNum = standedProdAttrAtomSV.updateObj(prodAttr);
+				upNum = standedProdAttrAtomSV.updateStandedProdAttrBySQL(prodAttr);
+				
 			} else {
 				prodAttr = new StandedProdAttr();
 				BeanUtils.copyProperties(prodAttr, attrValReq);

@@ -96,6 +96,23 @@ public interface IStandedProdAttrAtomSV {
      * @return
      */
     public StandedProdAttr queryByProdIdAndAttrValId(String tenantId,String standedId,String attrValId);
-
+    
+    
+    /**
+     * 
+     * @param prodAttr
+     * @param productId
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
 	int installObj(StandedProdAttr prodAttr, long productId);
+
+	/**
+	 * 
+	 * @param prodAttr
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	public int updateStandedProdAttrBySQL(StandedProdAttr prodAttr);
 }
