@@ -170,7 +170,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		}
 		// 查询商品
 		// SKUID等同于PRODID
-		Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
+		/*Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
 		if (product == null) {
 			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
 					skuReq.getSkuId());
@@ -181,7 +181,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}", skuReq.getTenantId(), skuReq.getSkuId(),
 					skuReq.getSkuId(), product.getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
-		}
+		}*/
 		ProductSKUConfigResponse configResponse = new ProductSKUConfigResponse();
 		/**
 		 * 查询ES缓存
@@ -191,6 +191,18 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		criterias.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,skuReq.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		Result<SKUInfo> result = productSearch.search(criterias,1,30,null);
 		List<SKUInfo> skuInfos = result.getContents();
+		if (skuInfos.get(0) == null) {
+			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
+					skuReq.getSkuId());
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
+		}
+		// 若不是有效状态,则不处理
+		if (!ACTIVE_STATUS_LIST.contains(skuInfos.get(0).getState())) {
+			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}", skuReq.getTenantId(), skuReq.getSkuId(),
+					skuReq.getSkuId(), skuInfos.get(0).getState());
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
+		}
+		
 		if (!CollectionUtil.isEmpty(skuInfos)) {
 			SKUInfo skuInfo = skuInfos.get(0);
 			configResponse = ConvertUtils.convertToProductSKUConfigResponse(skuInfo);
