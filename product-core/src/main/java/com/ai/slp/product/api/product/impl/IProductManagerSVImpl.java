@@ -344,7 +344,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             ICacheClient cacheClient = IPaasStorageUtils.getClient();
     		String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId,product.getProdId());
     		//设置库存组状态
-    		String storageGroupState = cacheClient.hget(groupKey, StorageConstants.IPass.McsParams.GROUP_SERIAL_HTAGE);
+    		String storageGroupState = cacheClient.hget(groupKey, StorageConstants.IPass.McsParams.GROUP_STATE_HTAGE);
             /*if(null!=skuInfo){
             	storageGroupState = skuInfo.getStoragegroupstate();
             }*/
@@ -357,12 +357,13 @@ public class IProductManagerSVImpl implements IProductManagerSV {
             	throw new BusinessException("","启用库存下存在未设置价格的库存,无法上架");
             }
             //查询当前库存组可用量 
-            Long usableNum  = null;
+            Long usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,product.getStorageGroupId());
+            /*Long usableNum  = null;
             if(null==skuInfo){
             	usableNum = storageNumBusiSV.queryNowUsableNumOfGroup(tenantId,product.getStorageGroupId());
             }else{
             	usableNum = skuInfo.getUsablenum();
-            }
+            }*/
             //库存组停用或当前库存可用为零,
             //直接切换至"售罄下架"
             if (StorageConstants.StorageGroup.State.STOP.equals(storageGroupState)
