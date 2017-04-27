@@ -362,7 +362,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		standedProduct.setStandedProductName(normProdct.getProductName());
 		standedProduct.setProductType(normProdct.getProductType());
 		standedProduct.setState(normProdct.getState());
-		standedProduct.setOperTime(DateUtil.getSysDate());
+		//standedProduct.setOperTime(DateUtil.getSysDate());
 		int updateCount = standedProductAtomSV.updateStandedProductInfo(standedProduct);
 		return updateCount;
 	}

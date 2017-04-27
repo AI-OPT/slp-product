@@ -82,13 +82,14 @@ public class StandedProdAttrAtomSVImpl implements IStandedProdAttrAtomSV {
 
     @Override
     public int updateStandedProdAttrBySQL(StandedProdAttr prodAttr) {
-    	prodAttr.setOperTime(DateUtils.currTimeStamp());
+    	//prodAttr.setOperTime(DateUtils.currTimeStamp());
+    	if (prodAttr.getAttrValueName() == null && prodAttr.getAttrValueName2() == null) {
+			return 1;
+		}
     	return prodAttrAttachMapper.updateStandedProdAttrBySQL(prodAttr.getStandedProdAttrId(),
     			prodAttr.getAttrValueName(),
-    			prodAttr.getAttrValueName2(),
-    			prodAttr.getSerialNumber(),
-    			prodAttr.getOperId(),
-    			prodAttr.getOperTime());
+    			prodAttr.getAttrValueName2()
+    			);
     }
     
 

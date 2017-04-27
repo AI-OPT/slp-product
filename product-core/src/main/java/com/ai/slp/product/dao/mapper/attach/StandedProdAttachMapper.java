@@ -17,11 +17,10 @@ public interface StandedProdAttachMapper {
 	/**
 	 * 根据更新标准品部分属性
 	 */
-	@Update("update standed_product set STANDED_PRODUCT_NAME=#{standedProductName},PRODUCT_TYPE=#{productType},STATE=#{state},OPER_TIME=#{operTime} "
+	@Update("update standed_product set STANDED_PRODUCT_NAME=#{standedProductName},PRODUCT_TYPE=#{productType},STATE=#{state} "
 			+ "where STANDED_PROD_ID = #{standedProdId} ")
 	public int updateStandedProductInfo(@Param("standedProdId") String standedProdId,
 			@Param("standedProductName") String standedProductName,
 			@Param("productType") String productType,
-			@Param("state") String state,
-			@Param("operTime") Timestamp operTime);
+			@Param("state") String state);
 }

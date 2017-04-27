@@ -85,8 +85,7 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 		return standedProdAttachMapper.updateStandedProductInfo(standedProduct.getStandedProdId(),
 				standedProduct.getStandedProductName(),
 				standedProduct.getProductType(),
-				standedProduct.getState(),
-				standedProduct.getOperTime());
+				standedProduct.getState());
 	}
 	
 	@Override
