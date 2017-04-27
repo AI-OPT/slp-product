@@ -704,6 +704,136 @@ public class SkuStorageCriteria {
             addCriterion("OPER_TIME not between", value1, value2, "operTime");
             return (Criteria) this;
         }
+
+        public Criteria andStorageGroupIdIsNull() {
+            addCriterion("STORAGE_GROUP_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdIsNotNull() {
+            addCriterion("STORAGE_GROUP_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdEqualTo(String value) {
+            addCriterion("STORAGE_GROUP_ID =", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdNotEqualTo(String value) {
+            addCriterion("STORAGE_GROUP_ID <>", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdGreaterThan(String value) {
+            addCriterion("STORAGE_GROUP_ID >", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdGreaterThanOrEqualTo(String value) {
+            addCriterion("STORAGE_GROUP_ID >=", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdLessThan(String value) {
+            addCriterion("STORAGE_GROUP_ID <", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdLessThanOrEqualTo(String value) {
+            addCriterion("STORAGE_GROUP_ID <=", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdLike(String value) {
+            addCriterion("STORAGE_GROUP_ID like", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdNotLike(String value) {
+            addCriterion("STORAGE_GROUP_ID not like", value, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdIn(List<String> values) {
+            addCriterion("STORAGE_GROUP_ID in", values, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdNotIn(List<String> values) {
+            addCriterion("STORAGE_GROUP_ID not in", values, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdBetween(String value1, String value2) {
+            addCriterion("STORAGE_GROUP_ID between", value1, value2, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStorageGroupIdNotBetween(String value1, String value2) {
+            addCriterion("STORAGE_GROUP_ID not between", value1, value2, "storageGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberIsNull() {
+            addCriterion("PRIORITY_NUMBER is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberIsNotNull() {
+            addCriterion("PRIORITY_NUMBER is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberEqualTo(Short value) {
+            addCriterion("PRIORITY_NUMBER =", value, "priorityNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberNotEqualTo(Short value) {
+            addCriterion("PRIORITY_NUMBER <>", value, "priorityNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberGreaterThan(Short value) {
+            addCriterion("PRIORITY_NUMBER >", value, "priorityNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberGreaterThanOrEqualTo(Short value) {
+            addCriterion("PRIORITY_NUMBER >=", value, "priorityNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberLessThan(Short value) {
+            addCriterion("PRIORITY_NUMBER <", value, "priorityNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberLessThanOrEqualTo(Short value) {
+            addCriterion("PRIORITY_NUMBER <=", value, "priorityNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberIn(List<Short> values) {
+            addCriterion("PRIORITY_NUMBER in", values, "priorityNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberNotIn(List<Short> values) {
+            addCriterion("PRIORITY_NUMBER not in", values, "priorityNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberBetween(Short value1, Short value2) {
+            addCriterion("PRIORITY_NUMBER between", value1, value2, "priorityNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriorityNumberNotBetween(Short value1, Short value2) {
+            addCriterion("PRIORITY_NUMBER not between", value1, value2, "priorityNumber");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

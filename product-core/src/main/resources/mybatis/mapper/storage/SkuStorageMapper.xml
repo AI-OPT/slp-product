@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.storage.SkuStorageMapper" >
-  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.SkuStorageMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.SkuStorage" >
     <id column="SKU_STORAGE_ID" property="skuStorageId" jdbcType="VARCHAR" />
     <result column="SKU_ID" property="skuId" jdbcType="VARCHAR" />
     <result column="STORAGE_ID" property="storageId" jdbcType="VARCHAR" />
@@ -74,9 +74,9 @@
   </sql>
   <sql id="Base_Column_List" >
     SKU_STORAGE_ID, SKU_ID, STORAGE_ID, SALE_PRICE, TOTAL_NUM, USABLE_NUM, STATE, OPER_ID, 
-    OPER_TIME
+    OPER_TIME, STORAGE_GROUP_ID, PRIORITY_NUMBER
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorageCriteria" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorageCriteria" >
     select
     <if test="distinct" >
       distinct
@@ -104,23 +104,23 @@
     delete from sku_storage
     where SKU_STORAGE_ID = #{skuStorageId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorageCriteria" >
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorageCriteria" >
     delete from sku_storage
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorage" >
     insert into sku_storage (SKU_STORAGE_ID, SKU_ID, STORAGE_ID, 
       SALE_PRICE, TOTAL_NUM, USABLE_NUM, 
-      STATE, OPER_ID, OPER_TIME
-      )
+      STATE, OPER_ID, OPER_TIME, 
+      STORAGE_GROUP_ID, PRIORITY_NUMBER)
     values (#{skuStorageId,jdbcType=VARCHAR}, #{skuId,jdbcType=VARCHAR}, #{storageId,jdbcType=VARCHAR}, 
       #{salePrice,jdbcType=DECIMAL}, #{totalNum,jdbcType=DECIMAL}, #{usableNum,jdbcType=DECIMAL}, 
-      #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}
-      )
+      #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}, 
+      #{storageGroupId,jdbcType=VARCHAR}, #{priorityNumber,jdbcType=DECIMAL})
   </insert>
-  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorage" >
     insert into sku_storage
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="skuStorageId != null" >
@@ -149,6 +149,12 @@
       </if>
       <if test="operTime != null" >
         OPER_TIME,
+      </if>
+      <if test="storageGroupId != null" >
+        STORAGE_GROUP_ID,
+      </if>
+      <if test="priorityNumber != null" >
+        PRIORITY_NUMBER,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -179,9 +185,15 @@
       <if test="operTime != null" >
         #{operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="storageGroupId != null" >
+        #{storageGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="priorityNumber != null" >
+        #{priorityNumber,jdbcType=DECIMAL},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorageCriteria" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorageCriteria" resultType="java.lang.Integer" >
     select count(*) from sku_storage
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -217,6 +229,12 @@
       <if test="record.operTime != null" >
         OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.storageGroupId != null" >
+        STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priorityNumber != null" >
+        PRIORITY_NUMBER = #{record.priorityNumber,jdbcType=DECIMAL},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -232,12 +250,14 @@
       USABLE_NUM = #{record.usableNum,jdbcType=DECIMAL},
       STATE = #{record.state,jdbcType=VARCHAR},
       OPER_ID = #{record.operId,jdbcType=DECIMAL},
-      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      STORAGE_GROUP_ID = #{record.storageGroupId,jdbcType=VARCHAR},
+      PRIORITY_NUMBER = #{record.priorityNumber,jdbcType=DECIMAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorage" >
     update sku_storage
     <set >
       <if test="skuId != null" >
@@ -264,10 +284,16 @@
       <if test="operTime != null" >
         OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="storageGroupId != null" >
+        STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="priorityNumber != null" >
+        PRIORITY_NUMBER = #{priorityNumber,jdbcType=DECIMAL},
+      </if>
     </set>
     where SKU_STORAGE_ID = #{skuStorageId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorage" >
     update sku_storage
     set SKU_ID = #{skuId,jdbcType=VARCHAR},
       STORAGE_ID = #{storageId,jdbcType=VARCHAR},
@@ -276,7 +302,9 @@
       USABLE_NUM = #{usableNum,jdbcType=DECIMAL},
       STATE = #{state,jdbcType=VARCHAR},
       OPER_ID = #{operId,jdbcType=DECIMAL},
-      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      STORAGE_GROUP_ID = #{storageGroupId,jdbcType=VARCHAR},
+      PRIORITY_NUMBER = #{priorityNumber,jdbcType=DECIMAL}
     where SKU_STORAGE_ID = #{skuStorageId,jdbcType=VARCHAR}
   </update>
 </mapper>
