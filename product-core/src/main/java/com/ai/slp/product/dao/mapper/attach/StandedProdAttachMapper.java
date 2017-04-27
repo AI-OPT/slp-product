@@ -23,4 +23,12 @@ public interface StandedProdAttachMapper {
 			@Param("standedProductName") String standedProductName,
 			@Param("productType") String productType,
 			@Param("state") String state);
+	
+	/**
+	 * 根据更新市场价
+	 */
+	@Update("update standed_product set MARKET_PRICE=#{marketPrice} "
+			+ "where STANDED_PROD_ID = #{standedProdId} ")
+	public int updateStandedProductMarketPrice(@Param("standedProdId") String standedProdId,
+			@Param("marketPrice") String marketPrice);
 }
