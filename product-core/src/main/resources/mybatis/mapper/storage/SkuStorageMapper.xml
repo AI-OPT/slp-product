@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ai.slp.product.dao.mapper.interfaces.SkuStorageMapper" >
-  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.SkuStorage" >
+  <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
     <id column="SKU_STORAGE_ID" property="skuStorageId" jdbcType="VARCHAR" />
     <result column="SKU_ID" property="skuId" jdbcType="VARCHAR" />
     <result column="STORAGE_ID" property="storageId" jdbcType="VARCHAR" />
@@ -76,7 +76,7 @@
     SKU_STORAGE_ID, SKU_ID, STORAGE_ID, SALE_PRICE, TOTAL_NUM, USABLE_NUM, STATE, OPER_ID, 
     OPER_TIME, STORAGE_GROUP_ID, PRIORITY_NUMBER
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorageCriteria" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorageCriteria" >
     select
     <if test="distinct" >
       distinct
@@ -104,13 +104,13 @@
     delete from sku_storage
     where SKU_STORAGE_ID = #{skuStorageId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorageCriteria" >
+  <delete id="deleteByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorageCriteria" >
     delete from sku_storage
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorage" >
+  <insert id="insert" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
     insert into sku_storage (SKU_STORAGE_ID, SKU_ID, STORAGE_ID, 
       SALE_PRICE, TOTAL_NUM, USABLE_NUM, 
       STATE, OPER_ID, OPER_TIME, 
@@ -120,7 +120,7 @@
       #{state,jdbcType=VARCHAR}, #{operId,jdbcType=DECIMAL}, #{operTime,jdbcType=TIMESTAMP}, 
       #{storageGroupId,jdbcType=VARCHAR}, #{priorityNumber,jdbcType=DECIMAL})
   </insert>
-  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorage" >
+  <insert id="insertSelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
     insert into sku_storage
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="skuStorageId != null" >
@@ -193,7 +193,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorageCriteria" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorageCriteria" resultType="java.lang.Integer" >
     select count(*) from sku_storage
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -257,7 +257,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorage" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
     update sku_storage
     <set >
       <if test="skuId != null" >
@@ -293,7 +293,7 @@
     </set>
     where SKU_STORAGE_ID = #{skuStorageId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.SkuStorage" >
+  <update id="updateByPrimaryKey" parameterType="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
     update sku_storage
     set SKU_ID = #{skuId,jdbcType=VARCHAR},
       STORAGE_ID = #{storageId,jdbcType=VARCHAR},
