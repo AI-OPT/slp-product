@@ -45,7 +45,6 @@ import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
 import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.ProdCommentReply;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.search.bo.comment.CommentInfo;
 import com.ai.slp.product.service.atom.interfaces.comment.IProdCommentAtomSV;
@@ -124,19 +123,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 				}
 				result.setResult(prodCommentPageResponses);
 				result.setCount((int) commentResult.getCount());
-			} /*
-				 * else { // 查询商品信息 String tenantId =
-				 * prodCommentPageRequest.getTenantId(); // SKUID与商品ID意义相同
-				 * Product product = productAtomSV.selectByProductId(tenantId,
-				 * prodCommentPageRequest.getSkuId()); if (product == null) {
-				 * result.setCount(0); result.setResult(null);
-				 * result.setResponseHeader(new ResponseHeader(true,
-				 * ResultCodeConstants.FAIL_CODE, "没有查询到商品信息。")); return result;
-				 * } result =
-				 * prodCommentBusiSV.queryPageBySku(prodCommentPageRequest,
-				 * product.getStandedProdId()); }
-				 */
-		
+			} 
 		} catch (Exception e) {
 			logger.error("查询商品评价失败", e);
 			if (e instanceof BusinessException) {
@@ -156,7 +143,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		BaseResponse response = new BaseResponse();
 		ResponseHeader responseHeader = null;
 		try {
-			CommonUtils.checkTenantId(prodCommentCreateRequest.getTenantId());
 			checkCreateCommentParams(prodCommentCreateRequest);
 			String userId = prodCommentCreateRequest.getUserId();
 			List<ProdCommentVO> commentList = prodCommentCreateRequest.getCommentList();

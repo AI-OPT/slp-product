@@ -1,7 +1,10 @@
 package com.ai.slp.product.api.flushdata;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -11,11 +14,13 @@ import org.springframework.stereotype.Component;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.slp.product.api.flushdata.interfaces.ICreateDataBatSV;
+import com.ai.slp.product.api.flushdata.params.CreateCommentRequest;
 import com.ai.slp.product.api.flushdata.params.CreateDataRequest;
 import com.ai.slp.product.api.normproduct.param.AttrValRequest;
 import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
@@ -24,6 +29,9 @@ import com.ai.slp.product.api.product.interfaces.IProductManagerSV;
 import com.ai.slp.product.api.product.param.ProdPicInfo;
 import com.ai.slp.product.api.product.param.ProductCheckParam;
 import com.ai.slp.product.api.product.param.ProductInfoForUpdate;
+import com.ai.slp.product.api.productcomment.param.PictureVO;
+import com.ai.slp.product.api.productcomment.param.ProdCommentCreateRequest;
+import com.ai.slp.product.api.productcomment.param.ProdCommentVO;
 import com.ai.slp.product.api.storage.interfaces.IStorageSV;
 import com.ai.slp.product.api.storage.param.STOStorage;
 import com.ai.slp.product.api.storage.param.STOStorageGroup;
@@ -32,11 +40,15 @@ import com.ai.slp.product.api.storage.param.StoNoSkuSalePrice;
 import com.ai.slp.product.api.storage.param.StoNoSkuSalePriceReq;
 import com.ai.slp.product.api.storage.param.StorageStatus;
 import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.ProductCommentConstants;
+import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.StorageConstants;
+import com.ai.slp.product.dao.mapper.bo.ProdComment;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
+import com.ai.slp.product.search.bo.comment.CommentInfo;
 import com.ai.slp.product.service.atom.interfaces.IStandedProdAttrAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IStandedProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
@@ -45,7 +57,9 @@ import com.ai.slp.product.service.business.interfaces.IProdSkuBusiSV;
 import com.ai.slp.product.service.business.interfaces.IProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageBusiSV;
 import com.ai.slp.product.service.business.interfaces.IStorageGroupBusiSV;
+import com.ai.slp.product.service.business.interfaces.comment.IProdCommentBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
+import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.route.api.routegroupmanage.interfaces.IRouteGroupManageSV;
 import com.ai.slp.route.api.routegroupmanage.param.RouteGroupAddRequest;
 import com.ai.slp.route.api.routegroupmanage.param.RouteGroupAddResponse;
@@ -86,6 +100,8 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	@Autowired
 	IStorageSV storageSV;
 	@Autowired
+	IProdCommentBusiSV prodCommentBusiSV;
+	@Autowired
 	IProductManagerSV productManagerSV;
 	@Autowired
 	IStorageGroupAtomSV storageGroupAtomSV;
@@ -122,6 +138,91 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			createSequnce(request);
 		}
 
+	}
+
+	@Override
+	public void createCommentBat(CreateCommentRequest request) throws BusinessException, SystemException {
+		final String COMMENTID = "700000000";
+		if (StringUtils.isEmpty(request.getProductIdStartNum()) || StringUtils.isEmpty(request.getProductIdEndNum())) {
+			logger.error("商品ID不能为空");
+			return;
+		}
+		if(StringUtils.isEmpty(request.getCommentIdStartNum())){
+			request.setCommentIdStartNum(COMMENTID);
+		}
+		Long commentId = Long.valueOf(request.getCommentIdStartNum());
+		for (Long productId = Long.valueOf(request.getProductIdStartNum()); productId <= Long.valueOf(request.getProductIdEndNum()); productId++) {
+			for (int i = 0; i < request.getNumber(); i++) {
+				ProdCommentCreateRequest prodCommentCreateRequest = new ProdCommentCreateRequest();
+				prodCommentCreateRequest.setOrderId("0001");
+				prodCommentCreateRequest.setUserId("3da3109cdb3f4d9e");
+				prodCommentCreateRequest.setTenantId("changhong");
+				List<ProdCommentVO> commentList=new LinkedList<ProdCommentVO>();
+				ProdCommentVO prodComment = new ProdCommentVO();
+				prodComment.setCommentBody("测试商品评价：商品太好了!!");
+				prodComment.setShopScoreFw(3L);
+				prodComment.setShopScoreMs(2L);
+				prodComment.setShopScoreWl(3L);
+				prodComment.setSkuId(productId.toString());
+				prodComment.setSubOrderId("0001");
+				List<PictureVO> pictureList=new LinkedList<PictureVO>();
+				PictureVO pictureVO=new PictureVO();
+				pictureVO.setPicAddr("https://54.223.119.228:24000/iPaas-IDPS/image/58edcb61effa640007bb7e80_80x80.png");
+				pictureVO.setPicName("测试图片");
+				pictureVO.setSerialNumber(1L);
+				pictureVO.setVfsId("57514007d601800009c0b0f4");
+				pictureList.add(pictureVO);
+				prodComment.setPictureList(pictureList);
+				commentList.add(prodComment);
+				prodCommentCreateRequest.setCommentList(commentList);
+				createProdComment(prodCommentCreateRequest,commentId.toString());
+				commentId++;
+			}
+		}
+	}
+
+	/**
+	 * 发表评价
+	 */
+	public void createProdComment(ProdCommentCreateRequest prodCommentCreateRequest,String commentId)
+			throws BusinessException, SystemException {
+		try {
+			String userId = prodCommentCreateRequest.getUserId();
+			List<ProdCommentVO> commentList = prodCommentCreateRequest.getCommentList();
+			List<PictureVO> pictureList = new ArrayList<PictureVO>();
+			List<ProdComment> prodComments = new ArrayList<>();
+			Map<String, List<PictureVO>> pictureMap = new HashMap<>();
+			if (!CollectionUtil.isEmpty(commentList)) {
+				for (ProdCommentVO prodCommentVO : commentList) {
+					ProdComment params = new ProdComment();
+					params.setUserId(userId);
+					BeanUtils.copyProperties(params, prodCommentVO);
+					params.setProdId(prodCommentVO.getSkuId());
+					params.setStandedProdId(prodCommentVO.getSkuId());
+					params.setSupplierId("-1");
+
+					// 封装图片评论
+					params.setTenantId(prodCommentCreateRequest.getTenantId());
+					params.setOrderId(prodCommentCreateRequest.getOrderId());
+					pictureList = prodCommentVO.getPictureList();
+					// 判断是否有图片
+					params.setIsPicture(CollectionUtil.isEmpty(pictureList) ? ProductCommentConstants.HasPicture.NO
+							: ProductCommentConstants.HasPicture.YSE);
+					String commnentId = prodCommentBusiSV.createProdComment(params, pictureList,commentId);
+					params.setCommentId(commnentId);
+					prodComments.add(params);
+					pictureMap.put(commnentId, pictureList);
+					/**
+					 * 加缓存
+					 */
+					List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments, pictureMap);
+					SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("创建商品评价失败", e);
+			return;
+		}
 	}
 
 	public void createCustom(CreateDataRequest request) {
@@ -186,7 +287,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 	}
 
 	public void createSequnce(CreateDataRequest request) {
-		
+
 		for (Long productCatId = Long.valueOf(request.getProductCatIdStartNum()); productCatId <= Long
 				.valueOf(request.getProductCatIdEndNum()); productCatId++) {
 			int zeroFill = DEFAULTLENGTH - String.valueOf(productCatId).length();
@@ -198,8 +299,8 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			for (int i = 0; i < request.getNumber(); i++) {
 				try {
 					// 保存标准品
-					StorageGroup group = addNormProduct(productCat.toString(), request.getProductName(), null,
-							null, null);
+					StorageGroup group = addNormProduct(productCat.toString(), request.getProductName(), null, null,
+							null);
 					if (null == group) {
 						continue;
 					}
@@ -469,9 +570,9 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 			prodAttr.setOperTime(DateUtil.getSysDate());
 			prodAttr.setSerialNumber(getProductAttrSerialNo());
 			// 添加成功
-			if(null==standedProdAttrId){
+			if (null == standedProdAttrId) {
 				standedProdAttrAtomSV.installObj(prodAttr);
-			}else{
+			} else {
 				standedProdAttrAtomSV.installObj(prodAttr, Long.valueOf(standedProdAttrId));
 			}
 		}
@@ -484,9 +585,9 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		BeanUtils.copyProperties(standedProduct, normProduct);
 		standedProduct.setStandedProductName(normProduct.getProductName());
 		// 添加标准品
-		if(null==productId){
+		if (null == productId) {
 			standedProductAtomSV.installObj(standedProduct);
-		}else{
+		} else {
 			standedProductAtomSV.installObj(standedProduct, productId);
 		}
 		return standedProduct;

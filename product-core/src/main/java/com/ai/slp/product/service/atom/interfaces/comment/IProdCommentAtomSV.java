@@ -88,4 +88,6 @@ public interface IProdCommentAtomSV {
 	 */
 	public int updateStateByIds(String state, String operId, String tenantId, List<String> commentIdList);
 
+	String createProdComment(ProdComment params, String commentId);
+
 }

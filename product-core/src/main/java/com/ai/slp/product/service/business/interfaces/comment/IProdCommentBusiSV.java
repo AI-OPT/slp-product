@@ -45,4 +45,5 @@ public interface IProdCommentBusiSV {
 	public CommentPictureQueryResponse queryPictureByCommentId(CommentPictureQueryRequset queryRequset);
 	
 	public List<CommentPageResponse> getCommentResponseList(List<ProdComment> prodCommentList);
+	String createProdComment(ProdComment prodComment, List<PictureVO> pictureList, String commentId);
 }

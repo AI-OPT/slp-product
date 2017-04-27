@@ -89,14 +89,29 @@ public class CommentInfo {
 	/**
 	 * 订单号
 	 */
-	private String orderId;
+	private String orderid;
 
-	public String getOrderId() {
-		return orderId;
+	/**
+	 * 商品名称
+	 */
+	private String productname;
+
+
+
+	public String getOrderid() {
+		return orderid;
 	}
 
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
+	public void setOrderid(String orderid) {
+		this.orderid = orderid;
+	}
+
+	public String getProductname() {
+		return productname;
+	}
+
+	public void setProductname(String productname) {
+		this.productname = productname;
 	}
 
 	public String getCommentid() {

@@ -179,8 +179,13 @@ public class ConvertUtils {
 		response.setCommentId(commentInfo.getCommentid());
 		response.setCommentTime(new Timestamp(commentInfo.getCommenttime()));
 		response.setShopScoreMs(commentInfo.getShopscorems());
+		response.setStandedProdId(commentInfo.getProductid());
+		response.setShopScoreWl(commentInfo.getShopscorewl());
+		response.setShopScoreFw(commentInfo.getShopscorefw());
 		response.setTenantId(commentInfo.getTenantid());
 		response.setUserId(commentInfo.getUserid());
+		response.setProdName(commentInfo.getProductname());
+		response.setOrderId(commentInfo.getOrderid());
 		return response;
 	}
 	

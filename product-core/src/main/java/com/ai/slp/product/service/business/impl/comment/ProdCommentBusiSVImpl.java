@@ -149,6 +149,24 @@ public class ProdCommentBusiSVImpl implements IProdCommentBusiSV {
 		}
 		return prodCommentId;
 	}
+	
+	@Override
+	public String createProdComment(ProdComment prodComment, List<PictureVO> pictureList,String commentId) {
+		String prodCommentId = prodCommentAtomSV.createProdComment(prodComment,commentId);
+		// 添加商品图片
+		if (!StringUtil.isBlank(prodCommentId)
+				&& ProductCommentConstants.HasPicture.YSE.equals(prodComment.getIsPicture())) {
+			if (CollectionUtil.isEmpty(pictureList)) {
+				for (PictureVO pictureVO : pictureList) {
+					ProdCommentPicture prodCommentPicture = new ProdCommentPicture();
+					BeanUtils.copyProperties(prodCommentPicture, pictureVO);
+					prodCommentPicture.setCommentId(prodCommentId);
+					prodCommentPictureAtomSV.createPicture(prodCommentPicture);
+				}
+			}
+		}
+		return prodCommentId;
+	}
 
 	@Override
 	public void replyProdComment(ProdCommentReply commentReply) {

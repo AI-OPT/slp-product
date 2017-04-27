@@ -8,6 +8,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ai.opt.base.exception.BusinessException;
 import com.ai.opt.base.exception.SystemException;
+import com.ai.slp.product.api.flushdata.params.CreateCommentRequest;
 import com.ai.slp.product.api.flushdata.params.CreateDataRequest;
 
 @Path("/createproduct")
@@ -22,6 +23,15 @@ public interface ICreateDataBatSV {
     @Path("/createProductBat")
     public void createProductBat(CreateDataRequest request)
             throws BusinessException,SystemException;
-    @interface flushProductData {}
+    @interface createProductBat {}
     
+    
+    /**
+     * 批量制造评论
+     * @RestRelativeURL createproduct/createCommentBat
+     */
+    @POST
+    @Path("/createCommentBat")
+	void createCommentBat(CreateCommentRequest request) throws BusinessException, SystemException;
+	 @interface createCommentBat {}
 }

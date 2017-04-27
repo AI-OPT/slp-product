@@ -184,6 +184,16 @@ public class ProdCommentAtomSVImpl implements IProdCommentAtomSV {
 		prodCommentMapper.insert(params);
 		return params.getCommentId();
 	}
+	
+	@Override
+	public String createProdComment(ProdComment params,String commentId) {
+		params.setCommentId(commentId);
+		params.setCommentTime(DateUtil.getSysDate());
+		params.setState(CommonConstants.STATE_ACTIVE);
+		params.setReplyState(ProductCommentConstants.ReplyState.NO);
+		prodCommentMapper.insert(params);
+		return params.getCommentId();
+	}
 
 	@Override
 	public String prodCommentReply(ProdCommentReply commentReply) {
