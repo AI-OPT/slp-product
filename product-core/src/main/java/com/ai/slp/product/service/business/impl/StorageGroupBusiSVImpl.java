@@ -150,7 +150,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		StorageGroup group = new StorageGroup();
 		//BeanUtils.copyProperties(group, storageGroup);
 		//与,商品共享主建
-		group.setStorageGroupId(standedProduct.getStandedProdId());
+		//group.setStorageGroupId(standedProduct.getStandedProdId());
 		group.setTenantId(standedProduct.getTenantId());
 		group.setCreateId(standedProduct.getOperId());
 		group.setStandedProdId(standedProduct.getStandedProdId());
@@ -158,7 +158,7 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		group.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
 		// 添加库存组信息,状态默认为停用
 		group.setState(StorageConstants.StorageGroup.State.STOP);
-		int installNum = storageGroupAtomSV.installGroup(group);
+		int installNum = storageGroupAtomSV.installGroup(group,standedProduct.getStandedProdId());
 		return group;
 	}
 
