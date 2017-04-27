@@ -450,7 +450,7 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			/////////////
 //			Long salePrice = getPriceOfSku(groupId,skuId,storage.getPriorityNumber());
 			
-			installSkuStorage(skuId,storage.getStorageId(),storage.getTotalNum(),salePrice,operId);
+			installSkuStorage(skuId,storage.getStorageId(),storage.getTotalNum(),salePrice,operId,stoStorage.getPriorityNumber(),stoStorage.getStorageGroupId());
 			
 			
 	/*	} else {
@@ -650,12 +650,14 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	 * 添加SKU库存
 	 * @return sku库存标识
 	 */
-	private String installSkuStorage(String skuId,String storageId,Long totalNum,Long price,Long operId){
+	private String installSkuStorage(String skuId,String storageId,Long totalNum,Long price,Long operId,Short priorityNumber,String storageGroupId){
 		// 新增SKU虚拟库存,数据来自虚拟库存和单品SKU
 		SkuStorage skuStorage = new SkuStorage();
 		skuStorage.setSkuId(skuId);
 		skuStorage.setStorageId(storageId);
 		skuStorage.setTotalNum(totalNum);
+		skuStorage.setPriorityNumber(priorityNumber);
+		skuStorage.setStorageGroupId(storageGroupId);
 		if (price != null) {
 			skuStorage.setSalePrice(price);
 		}
