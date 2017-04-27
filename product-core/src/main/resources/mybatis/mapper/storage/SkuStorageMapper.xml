@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.SkuStorageMapper" >
+<mapper namespace="com.ai.slp.product.dao.mapper.interfaces.storage.SkuStorageMapper" >
   <resultMap id="BaseResultMap" type="com.ai.slp.product.dao.mapper.bo.storage.SkuStorage" >
     <id column="SKU_STORAGE_ID" property="skuStorageId" jdbcType="VARCHAR" />
     <result column="SKU_ID" property="skuId" jdbcType="VARCHAR" />
