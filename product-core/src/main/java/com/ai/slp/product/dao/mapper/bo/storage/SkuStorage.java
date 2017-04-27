@@ -3,93 +3,113 @@ package com.ai.slp.product.dao.mapper.bo.storage;
 import java.sql.Timestamp;
 
 public class SkuStorage {
-    private String skuStorageId;
+	private String skuStorageId;
 
-    private String skuId;
+	private String skuId;
 
-    private String storageId;
+	private String storageId;
 
-    private Long salePrice;
+	private Long salePrice;
 
-    private Long totalNum;
+	private Long totalNum;
 
-    private Long usableNum;
+	private Long usableNum;
 
-    private String state;
+	private String state;
 
-    private Long operId;
+	private Long operId;
 
-    private Timestamp operTime;
+	private Timestamp operTime;
 
-    public String getSkuStorageId() {
-        return skuStorageId;
-    }
+	private String storageGroupId;
 
-    public void setSkuStorageId(String skuStorageId) {
-        this.skuStorageId = skuStorageId == null ? null : skuStorageId.trim();
-    }
+	private Short priorityNumber;
 
-    public String getSkuId() {
-        return skuId;
-    }
+	public String getSkuStorageId() {
+		return skuStorageId;
+	}
 
-    public void setSkuId(String skuId) {
-        this.skuId = skuId == null ? null : skuId.trim();
-    }
+	public void setSkuStorageId(String skuStorageId) {
+		this.skuStorageId = skuStorageId == null ? null : skuStorageId.trim();
+	}
 
-    public String getStorageId() {
-        return storageId;
-    }
+	public String getStorageGroupId() {
+		return storageGroupId;
+	}
 
-    public void setStorageId(String storageId) {
-        this.storageId = storageId == null ? null : storageId.trim();
-    }
+	public void setStorageGroupId(String storageGroupId) {
+		this.storageGroupId = storageGroupId;
+	}
 
-    public Long getSalePrice() {
-        return salePrice;
-    }
+	public Short getPriorityNumber() {
+		return priorityNumber;
+	}
 
-    public void setSalePrice(Long salePrice) {
-        this.salePrice = salePrice;
-    }
+	public void setPriorityNumber(Short priorityNumber) {
+		this.priorityNumber = priorityNumber;
+	}
 
-    public Long getTotalNum() {
-        return totalNum;
-    }
+	public String getSkuId() {
+		return skuId;
+	}
 
-    public void setTotalNum(Long totalNum) {
-        this.totalNum = totalNum;
-    }
+	public void setSkuId(String skuId) {
+		this.skuId = skuId == null ? null : skuId.trim();
+	}
 
-    public Long getUsableNum() {
-        return usableNum;
-    }
+	public String getStorageId() {
+		return storageId;
+	}
 
-    public void setUsableNum(Long usableNum) {
-        this.usableNum = usableNum;
-    }
+	public void setStorageId(String storageId) {
+		this.storageId = storageId == null ? null : storageId.trim();
+	}
 
-    public String getState() {
-        return state;
-    }
+	public Long getSalePrice() {
+		return salePrice;
+	}
 
-    public void setState(String state) {
-        this.state = state == null ? null : state.trim();
-    }
+	public void setSalePrice(Long salePrice) {
+		this.salePrice = salePrice;
+	}
 
-    public Long getOperId() {
-        return operId;
-    }
+	public Long getTotalNum() {
+		return totalNum;
+	}
 
-    public void setOperId(Long operId) {
-        this.operId = operId;
-    }
+	public void setTotalNum(Long totalNum) {
+		this.totalNum = totalNum;
+	}
 
-    public Timestamp getOperTime() {
-        return operTime;
-    }
+	public Long getUsableNum() {
+		return usableNum;
+	}
 
-    public void setOperTime(Timestamp operTime) {
-        this.operTime = operTime;
-    }
+	public void setUsableNum(Long usableNum) {
+		this.usableNum = usableNum;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state == null ? null : state.trim();
+	}
+
+	public Long getOperId() {
+		return operId;
+	}
+
+	public void setOperId(Long operId) {
+		this.operId = operId;
+	}
+
+	public Timestamp getOperTime() {
+		return operTime;
+	}
+
+	public void setOperTime(Timestamp operTime) {
+		this.operTime = operTime;
+	}
 }
