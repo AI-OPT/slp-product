@@ -86,7 +86,7 @@ public class StorageGroupAtomSVImpl implements IStorageGroupAtomSV {
 	 */
 	@Override
 	public int installGroup(StorageGroup group) {
-		group.setStorageGroupId(SequenceUtil.genStorageGroupId());
+		//group.setStorageGroupId(SequenceUtil.genStorageGroupId());
 		if (group.getCreateTime() == null){
 			group.setCreateTime(DateUtils.currTimeStamp());
 		}

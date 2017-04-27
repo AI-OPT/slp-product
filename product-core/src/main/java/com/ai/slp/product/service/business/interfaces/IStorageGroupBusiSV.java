@@ -2,6 +2,7 @@ package com.ai.slp.product.service.business.interfaces;
 
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.slp.product.api.storage.param.*;
+import com.ai.slp.product.dao.mapper.bo.StandedProduct;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 
 import java.util.List;
@@ -28,6 +29,14 @@ public interface IStorageGroupBusiSV {
      * @return
      */
     public StorageGroup addGroupObj(STOStorageGroup storageGroup);
+    
+    /**
+     * 添加库存组
+     *
+     * @param storageGroup
+     * @return
+     */
+    public StorageGroup addGroupObj4Service(StandedProduct standedProduct);
 
     /**
      * 更新库存组

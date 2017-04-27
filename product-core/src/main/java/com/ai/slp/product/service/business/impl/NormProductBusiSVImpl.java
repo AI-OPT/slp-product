@@ -208,8 +208,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		StandedProduct standedProduct = saveNormProd(normProduct);
 
 		// 添加一个库存组
-		STOStorageGroup storageGroup = createSTOStorageGroup(normProduct, standedProduct);
-		StorageGroup group = storageGroupBusiSV.addGroupObj(storageGroup);
+		//STOStorageGroup storageGroup = createSTOStorageGroup(normProduct, standedProduct);
+		StorageGroup group = storageGroupBusiSV.addGroupObj4Service(standedProduct);
 		
 		// 添加商品,在商品属性表保存商品属性值
 		 List<AttrValRequest> attrValList = normProduct.getAttrValList();
@@ -228,6 +228,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 	private STOStorageGroup createSTOStorageGroup(NormProdSaveRequest normProduct, StandedProduct standedProduct) {
 		STOStorageGroup storageGroup = new STOStorageGroup();
+		//与商品共享主建
 		storageGroup.setTenantId(normProduct.getTenantId());
 		storageGroup.setCreateId(normProduct.getOperId());
 		storageGroup.setStandedProdId(standedProduct.getStandedProdId());

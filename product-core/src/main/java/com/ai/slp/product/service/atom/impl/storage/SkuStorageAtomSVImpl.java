@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.atom.impl.storage;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -189,6 +190,19 @@ public class SkuStorageAtomSVImpl implements ISkuStorageAtomSV {
 		//return skuStorageMapper.updateByPrimaryKey(skuStorage);
 		return skuStorageAttachMapper.updateSalePriceBySQL(skuStorage.getSalePrice(),
 				skuStorage.getSkuStorageId(),skuStorage.getOperId(),skuStorage.getOperTime());
+	}
+	/**
+	 * 根据标识符更新SKU库存
+	 *
+	 * @param skuStorage
+	 * @return
+	 */
+	@Override
+	public int updateById4Service(String groupId,Short priorityNum,Long price,Long operId) {
+		Timestamp operTime = DateUtils.currTimeStamp();
+		//return skuStorageMapper.updateByPrimaryKey(skuStorage);
+		
+		return skuStorageAttachMapper.updateSalePriceBySQL4Service(groupId, priorityNum,price,operId,operTime);
 	}
 
 	/**

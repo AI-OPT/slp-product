@@ -299,12 +299,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	private int updateSkuPrice(String groupId,String skuId,Short priorityNum,Long price,Long operId){
 		int count = 0;
 		//查看对应优先级是否已经有库存信息
-		List<SkuStorage> skuStorageList = skuStorageAtomSV.queryPriorityOfGroup(groupId,skuId,priorityNum);
+		//List<SkuStorage> skuStorageList = skuStorageAtomSV.queryPriorityOfGroup(groupId,skuId,priorityNum);
 		
 		//排序
-		Collections.sort(skuStorageList, new SkuStorageListComparator());
+		//Collections.sort(skuStorageList, new SkuStorageListComparator());
+
 		
-		for (SkuStorage skuStorage:skuStorageList){
+		/*		for (SkuStorage skuStorage:skuStorageList){
 			skuStorage.setSalePrice(price);
 			skuStorage.setOperId(operId);
 			//skuStorage.setOperTime(DateUtil.getSysDate());
@@ -318,7 +319,13 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 //				prodPriceLogAtomSV.insert(priceLog);
 				count++;
 			}
-		}
+		}*/
+		
+		//更新销售价 skuid  根 groupid 共享主建
+		
+		count = skuStorageAtomSV.updateById4Service(groupId, priorityNum, price, operId);
+		
+		
 		return count;
 	}
 	/**

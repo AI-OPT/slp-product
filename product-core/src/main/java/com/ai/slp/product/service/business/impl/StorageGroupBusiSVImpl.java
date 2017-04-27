@@ -135,6 +135,33 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		return group;
 	}
 	
+	
+	/**
+	 * 添加库存组
+	 * 
+	 * @param storageGroup
+	 * @return
+	 * @author Gavin
+	 * @UCUSER
+	 */
+	@Override
+	public StorageGroup addGroupObj4Service(StandedProduct standedProduct) {
+		//通过是否查询到相关属性来设定库存组是否有销售属性
+		StorageGroup group = new StorageGroup();
+		//BeanUtils.copyProperties(group, storageGroup);
+		//与,商品共享主建
+		group.setStorageGroupId(standedProduct.getStandedProdId());
+		group.setTenantId(standedProduct.getTenantId());
+		group.setCreateId(standedProduct.getOperId());
+		group.setStandedProdId(standedProduct.getStandedProdId());
+		group.setSupplierId(standedProduct.getSupplierId());
+		group.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
+		// 添加库存组信息,状态默认为停用
+		group.setState(StorageConstants.StorageGroup.State.STOP);
+		int installNum = storageGroupAtomSV.installGroup(group);
+		return group;
+	}
+
 	@Override
 	public StorageGroup addGroupObj(STOStorageGroup storageGroup,String storageGroupId) {
 		//通过是否查询到相关属性来设定库存组是否有销售属性
@@ -973,4 +1000,5 @@ public class StorageGroupBusiSVImpl implements IStorageGroupBusiSV {
 		groupInfo.setStorageList(storageMap);
 		return groupInfo;
 	}
+
 }

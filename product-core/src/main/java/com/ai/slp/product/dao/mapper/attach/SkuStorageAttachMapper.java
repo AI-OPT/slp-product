@@ -67,4 +67,19 @@ public interface SkuStorageAttachMapper {
     		@Param("skuStorageId") String skuStorageId,
     		@Param("operId") Long operId,
     		@Param("operTime") Timestamp operTime);
+    
+    /**
+     * 更新sku销售价库存
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
+    @Update("update sku_storage set SALE_PRICE = #{salePrice}, OPER_ID = #{operId}, OPER_TIME = #{operTime}"
+    		+ " where SKU_ID = #{groupId} and ")
+    public int updateSalePriceBySQL4Service(
+    		@Param("groupId") String groupId,
+    		@Param("priorityNum") Short priorityNum,
+    		@Param("salePrice") Long salePrice,
+    		@Param("operId") Long operId,
+    		@Param("operTime") Timestamp operTime);
 }
