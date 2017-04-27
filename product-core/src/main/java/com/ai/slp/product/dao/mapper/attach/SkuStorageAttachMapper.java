@@ -75,7 +75,7 @@ public interface SkuStorageAttachMapper {
      * @UCUSER
      */
     @Update("update sku_storage set SALE_PRICE = #{salePrice}, OPER_ID = #{operId}, OPER_TIME = #{operTime}"
-    		+ " where SKU_ID = #{groupId} and ")
+    		+ " where STORAGE_GROUP_ID = #{groupId} and PRIORITY_NUMBER = #{priorityNum} ")
     public int updateSalePriceBySQL4Service(
     		@Param("groupId") String groupId,
     		@Param("priorityNum") Short priorityNum,
