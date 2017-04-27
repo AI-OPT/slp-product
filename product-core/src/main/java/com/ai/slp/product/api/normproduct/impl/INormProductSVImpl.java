@@ -256,45 +256,12 @@ public class INormProductSVImpl implements INormProductSV {
     @Override
 	public BaseResponse updateProductAndStoGroup(NormProdSaveRequest productInfoRequest)
 			throws BusinessException, SystemException {
-    	/*if (StringUtils.isBlank(productInfoRequest.getTenantId())
-                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
-    		throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
-    	}
-        normProductBusiSV.updateNormProdAndStoGroup(productInfoRequest);
-        return CommonUtils.genSuccessResponse("");*/
-    	String tenantId = productInfoRequest.getTenantId(), productId = productInfoRequest.getProductId();
-		// 查询是否存在
-//		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
-//		if (standedProduct == null){
-//			throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
-//		}
-		// 判断商户ID是否传入的商户ID
-		/*if (!productInfoRequest.getSupplierId().equals(standedProduct.getSupplierId())){
-			throw new BusinessException("",
-					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + productInfoRequest.getSupplierId() + "不一致!");
-		}
-    	*/
-//    	boolean ccsMqFlag=false;
-//	   	//从配置中心获取mq_enable
-//	  	ccsMqFlag=MQConfigUtil.getCCSMqFlag();
-//	  	if (!ccsMqFlag) {
 	  		if (StringUtils.isBlank(productInfoRequest.getTenantId())
 	                || StringUtils.isBlank(productInfoRequest.getProductId()) || StringUtils.isBlank(productInfoRequest.getSupplierId())){
 	    		throw new BusinessException("","租户标识标和准品标识,商户标识均不能为空");
 	    	}
 	        normProductBusiSV.updateNormProdAndStoGroup(productInfoRequest);
 	        return CommonUtils.genSuccessResponse("");
-//		} else {
-//			//消息模式下，异步调用服务
-//			BaseResponse response = CommonUtils.genSuccessResponse("");
-//			//发送消息
-//			MDSClientFactory.getSenderClient(NormProdConstants.MDSNS.MDS_NS_PRODUCT_TOPIC).send(JSON.toJSONString(productInfoRequest), 0);
-//			ResponseHeader responseHeader = new ResponseHeader(true,
-//					ExceptCodeConstants.Special.SUCCESS, "成功");
-//			response.setResponseHeader(responseHeader);
-//			return response; 
-//		}
-    	
 	}
 
     /**
@@ -389,29 +356,6 @@ public class INormProductSVImpl implements INormProductSV {
      */
     @Override
     public BaseResponse updateMarketPrice(MarketPriceUpdate marketPrice) throws BusinessException, SystemException {
- /*       CommonUtils.checkTenantId(marketPrice.getTenantId());
-        normProductBusiSV.updateMarketPrice(marketPrice);
-        BaseResponse baseResponse = new BaseResponse();
-        ResponseHeader responseHeader = new ResponseHeader();
-        responseHeader.setIsSuccess(true);
-        responseHeader.setResultCode("");
-        baseResponse.setResponseHeader(responseHeader);
-        return baseResponse;*/
-    	
-    	/*StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
-				marketPrice.getProductId());
-		
-		// 判断此租户下是否存在次标准品
-		if (standedProduct == null){
-			throw new BusinessException("",
-					"找不到指定的租户=" + marketPrice.getTenantId() + "下的标准品=" + marketPrice.getProductId() + "信息");
-		}*/
-		// 判断商户ID是否为传入的商户ID
-		/*if (!marketPrice.getSupplierId().equals(standedProduct.getSupplierId())){
-			throw new BusinessException("",
-					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + marketPrice.getSupplierId() + "不一致!");
-		}*/
-    	
     		CommonUtils.checkTenantId(marketPrice.getTenantId());
 	        normProductBusiSV.updateMarketPrice(marketPrice);
 	        BaseResponse baseResponse = new BaseResponse();

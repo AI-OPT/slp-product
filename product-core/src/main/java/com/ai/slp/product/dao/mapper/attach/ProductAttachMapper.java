@@ -10,7 +10,6 @@ import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.type.JdbcType;
 
 import com.ai.slp.product.api.product.param.ProductRouteGroupInfo;
-import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.vo.ProdRouteGroupQueryVo;
 
 /**
@@ -86,5 +85,17 @@ public interface ProductAttachMapper {
 	public int updateProdStateNew(@Param("prodId") String prodId,
 			@Param("state") String state,
 			@Param("operId") String operId);
+    
+    
+    /**
+     * 修改商品信息
+     * @param record
+     * @return
+     * @ApiDocMethod
+     */
+    @Update("update product set PROD_NAME=#{prodName},PRODUCT_TYPE=#{productType} where PROD_ID = #{prodId} ")
+	public int updateProdInfo(@Param("prodId") String prodId,
+			@Param("prodName") String prodName,
+			@Param("productType") String productType);
     
 }

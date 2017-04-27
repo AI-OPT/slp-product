@@ -187,4 +187,6 @@ public interface IProductAtomSV {
 	 */
 	public int updateProdInfo(Product record);
 
+	int updateProdInfo(String prodId, String prodName, String productType);
+
 }

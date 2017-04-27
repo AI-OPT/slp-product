@@ -3,7 +3,6 @@ package com.ai.slp.product.service.atom.impl.product;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -143,6 +142,10 @@ public class ProductAtomSVImpl implements IProductAtomSV {
 		ProductCriteria example = new ProductCriteria();
 		example.createCriteria().andStandedProdIdEqualTo(product.getStandedProdId());
 		return productMapper.updateByExampleSelective(product, example);
+	}
+	@Override
+	public int updateProdInfo(String prodId,String prodName,String productType) {
+		return productAttachMapper.updateProdInfo(prodId, prodName, productType);
 	}
 
 	/**

@@ -36,7 +36,7 @@ public class IProdCommentManagerSVTest {
 		prodComment.setShopScoreFw(3L);
 		prodComment.setShopScoreMs(2L);
 		prodComment.setShopScoreWl(3L);
-		prodComment.setSkuId("0000000000000934");
+		prodComment.setSkuId("268669326");
 		prodComment.setSubOrderId("00001");
 		List<PictureVO> pictureList=new LinkedList<PictureVO>();
 		PictureVO pictureVO=new PictureVO();

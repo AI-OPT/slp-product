@@ -48,7 +48,6 @@ import com.ai.slp.product.constants.StorageConstants;
 import com.ai.slp.product.dao.mapper.attach.ProdCatAttrAttch;
 import com.ai.slp.product.dao.mapper.bo.ProdAttrvalueDef;
 import com.ai.slp.product.dao.mapper.bo.ProdCatAttr;
-import com.ai.slp.product.dao.mapper.bo.ProdPriceLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttr;
 import com.ai.slp.product.dao.mapper.bo.StandedProdAttrLog;
 import com.ai.slp.product.dao.mapper.bo.StandedProduct;
@@ -57,7 +56,6 @@ import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.search.bo.AttrInfo;
-import com.ai.slp.product.search.bo.ProdAttrInfo;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
@@ -389,10 +387,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			product.setStandedProdId(productInfoRequest.getProductId());
 			product.setProdName(productInfoRequest.getProductName());
 			product.setProductType(productInfoRequest.getProductType());
-			productAtomSV.updateByStandedProdId(product);
-			
-			//将更新后的商品添加至搜索引擎
-			//skuIndexManage.updateSKUIndex(productInfoRequest.getProductId(),DateUtils.currTimeStamp().getTime());
+			productAtomSV.updateProdInfo(product.getProdId(), product.getProdName(), product.getProductType());
 		}
 		return updateCount;
 	}
@@ -1062,10 +1057,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 	@Override
 	public int updateMarketPrice(MarketPriceUpdate marketPrice) {
-		
-		
-		/*StandedProduct standedProduct = standedProductAtomSV.selectById(marketPrice.getTenantId(),
-				marketPrice.getProductId());*/
 		//查询es
     	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
     	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
@@ -1076,83 +1067,23 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
     			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
     	
     	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
-    	if (result.getContents()==null) {
+    	if (CollectionUtil.isEmpty(result.getContents())) {
 			throw new BusinessException("查询es信息失败");
 		}
     	SKUInfo standedProduct = result.getContents().get(0);
-		
-		// 判断此租户下是否存在次标准品
-	/*	if (standedProduct == null){
-			throw new BusinessException("",
-					"找不到指定的租户=" + marketPrice.getTenantId() + "下的标准品=" + marketPrice.getProductId() + "信息");
-		}
-		// 判断商户ID是否为传入的商户ID
-		if (!marketPrice.getSupplierId().equals(standedProduct.getSupplierId())){
-			throw new BusinessException("",
-					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + marketPrice.getSupplierId() + "不一致!");
-		}*/
-
-		
 		// 更新市场价格信息
 		int count = standedProductAtomSV.updateMarketPrice(marketPrice.getTenantId(), marketPrice.getProductId(),
 				marketPrice.getMarketPrice(), marketPrice.getOperId());
-		
 		//更改结构后--市场价 同时更新 product
 		Product product = new Product();
 		product.setProdId(marketPrice.getProductId());
 		product.setStandedProdId(marketPrice.getProductId());
 		product.setMarketPrice(marketPrice.getMarketPrice());
 		productAtomSV.updateByStandedProdId(product);
-		
-		
 		if (count > 0) {
-			//standedProduct.setMarketPrice(marketPrice.getMarketPrice());
 			standedProduct.setMarketprice(marketPrice.getMarketPrice());
-			// 更行标准品日志
-			/*StandedProductLog standedProductLog = new StandedProductLog();
-			BeanUtils.copyProperties(standedProductLog, standedProduct);*/
-			//standedProductLogAtomSV.insert(standedProductLog);
-			// 更新价格类日志
-			ProdPriceLog prodPriceLog = new ProdPriceLog();
-			prodPriceLog.setUpdatePrice(marketPrice.getMarketPrice());
-			prodPriceLog.setOperId(marketPrice.getOperId());
-			prodPriceLog.setOperTime(DateUtil.getSysDate());
-			
-			
-//			BeanUtils.copyProperties(prodPriceLog, standedProduct);
-			// 设置对象类型为标准品-SA
-			prodPriceLog.setObjType("SA");
-			prodPriceLog.setObjId(standedProduct.getProductid());
-			prodPriceLog.setUpdatePrice(standedProduct.getMarketprice());
-			
-			prodPriceLogAtomSV.insert(prodPriceLog);
-			
 			//将更新市场价的商品添加至搜索引擎
-	        //skuIndexManage.updateSKUIndex(product.getProdId(),product.getOperTime().getTime());
-			//查询es
-        	List<SearchCriteria> searchCriteria = new ArrayList<SearchCriteria>();
-        	searchCriteria.add(new SearchCriteria("productid",
-        			marketPrice.getProductId(),
-        			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-        	
-        	int startSize = 1;
-    		int maxSize = 1;
-    		// 最大条数设置
-    		int pageNo = 1;
-    		int size = 20;
-    		if (pageNo == 1) {
-    			startSize = 0;
-    		} else {
-    			startSize = (pageNo - 1) * size;
-    		}
-    		maxSize = size;
-    		IProductSearch search = new ProductSearchImpl();
-        	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriterias, startSize, maxSize, null);
-        	if (CollectionUtil.isEmpty(infoResult.getContents())) {
-        		logger.error("查询商品失败");
-        		throw new BusinessException("查询es中的商品信息失败");
-    		}
-        	SKUInfo skuInfos = infoResult.getContents().get(0);
+        	SKUInfo skuInfos = result.getContents().get(0);
         	skuInfos.setMarketprice(marketPrice.getMarketPrice());
         	List<SKUInfo> skuInfoList = new ArrayList<>();
         	skuInfoList.add(skuInfos);

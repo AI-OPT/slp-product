@@ -182,12 +182,6 @@ public class StandedProductAtomSVImpl implements IStandedProductAtomSV {
 
 	@Override
 	public int updateMarketPrice(String tenantId, String standedProductId, long marketPrice, Long operId) {
-		/*StandedProductCriteria example = new StandedProductCriteria();
-		example.createCriteria().andStandedProdIdEqualTo(standedProductId);
-		StandedProduct standedProduct = new StandedProduct();
-		standedProduct.setMarketPrice(marketPrice);
-		standedProduct.setOperId(operId);
-		standedProduct.setOperTime(DateUtils.currTimeStamp());*/
 		return standedProdAttachMapper.updateStandedProductMarketPrice(standedProductId, marketPrice+"");
 	}
 
