@@ -524,7 +524,7 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 		StoNoSkuSalePrice skuSalePrice = new StoNoSkuSalePrice();
 		skuSalePrice.setGroupId(group.getStorageGroupId());
 		skuSalePrice.setPriorityNumber((short) 1);
-		skuSalePrice.setSalePrice((long) 100000);
+		skuSalePrice.setSalePrice((long) 5000);
 		salePrice.add(skuSalePrice);
 		priceReq.setStorageSalePrice(salePrice);
 		storageBusiSV.updateNoSkuStoSalePrice(priceReq);
