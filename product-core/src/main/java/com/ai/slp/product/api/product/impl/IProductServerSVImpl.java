@@ -169,7 +169,7 @@ public class IProductServerSVImpl implements IProductServerSV {
 	    			skuInfoQuery.getSkuId(),
 	    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 	    	
-	    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+	    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 1, null);
 	    	if (CollectionUtil.isEmpty(result.getContents())) {
 	    		throw new BusinessException("在es中查询商品失败");
 			}
