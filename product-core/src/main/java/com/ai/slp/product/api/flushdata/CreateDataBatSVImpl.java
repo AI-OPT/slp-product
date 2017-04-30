@@ -320,7 +320,6 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					List<String> routeItems = routeGroup.getRouteItemIds();
 					// 地域
 					addTargetAreaToList(routeItems);
-					Thread.sleep(1000);
 					// 价格
 					// 市场价
 					updateMarketPrice(productId.toString());

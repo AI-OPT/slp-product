@@ -19,8 +19,6 @@ import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
-import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.SearchFieldConfConstants;
@@ -48,8 +46,6 @@ import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.business.interfaces.INormProductBusiSV;
 import com.ai.slp.product.service.business.interfaces.search.ISKUIndexBusiSV;
-
-import kafka.utils.threadsafe;
 
 /**
  * 搜索信息管理
@@ -100,7 +96,9 @@ public class SKUIndexBusiSVImpl implements ISKUIndexBusiSV {
             }
             List<SKUInfo> skuInfoList = fillSkuInfo(skuInfoSesList);
             if (!CollectionUtil.isEmpty(skuInfoList)){
-            	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+            	ISearchClient client = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+            	client.bulkInsert(skuInfoList);
+            	client.refresh();
             }
             return true;
         } catch (Exception e) {
