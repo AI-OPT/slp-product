@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +63,7 @@ import com.ai.slp.product.dao.mapper.bo.storage.Storage;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageGroup;
 import com.ai.slp.product.dao.mapper.bo.storage.StorageLog;
 import com.ai.slp.product.search.bo.AttrInfo;
+import com.ai.slp.product.search.bo.ImageInfo;
 import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.IProdAttrValDefAtomSV;
 import com.ai.slp.product.service.atom.interfaces.IProdCatAttrAtomSV;
@@ -1099,10 +1101,68 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			startSize = (pageNo - 1) * size;
 		}
 		maxSize = size;
-		Result<SKUInfo> search = productSearch.search(criteria, startSize, maxSize, null);
-		Product product = new Product();
+		Result<SKUInfo> infoResult = productSearch.search(criteria, startSize, maxSize, null);
+		if (CollectionUtil.isEmpty(infoResult.getContents())) {
+    		logger.error("查询商品失败");
+    		throw new BusinessException("查询es中的商品信息失败");
+		}
+    	SKUInfo skuInfo = infoResult.getContents().get(0);
+
+		ProductSKUResponse response = new ProductSKUResponse();
+		response.setUsableNum(skuInfo.getUsablenum());
+		response.setUnit(skuInfo.getUnit());
+		response.setSupplierId(skuInfo.getSupplierid());
+		response.setState(skuInfo.getState());
+		response.setSkuName(skuInfo.getSkuname());
+		response.setSkuId(skuInfo.getSkuid());
+		response.setSalePrice(skuInfo.getPrice());
+		response.setSaleNum(skuInfo.getSalenum());
+		response.setRechargeType(skuInfo.getRechagetype());
+		response.setProductSellPoint(skuInfo.getProductsellpoint());
+		response.setProdName(skuInfo.getProductname());
+		response.setProductCatId(skuInfo.getProductcategoryid());
+		response.setProdId(skuInfo.getProductid());
+		response.setCommentNum(skuInfo.getCommentnum());
+		response.setProDetailContent(skuInfo.getProdetailcontent());
+		/**
+		 * 商品属性
+		 */
+		List<ProdAttrValue> prodAttrValues = new ArrayList<>();
+		for (AttrInfo attrInfo : skuInfo.getAttrinfos()) {
+			ProdAttrValue prodAttrValue = new ProdAttrValue();
+			prodAttrValue.setAttrvalueDefId(attrInfo.getAttrvaluedefid());
+			prodAttrValue.setAttrValueName(attrInfo.getAttrvalue());
+			/**
+			 * 商品主图
+			 */
+			ProductImage productImage = new ProductImage();
+			if(null!=skuInfo.getImageinfo()){
+				productImage.setPicType(skuInfo.getImageinfo().getImagetype());
+				productImage.setVfsId(skuInfo.getImageinfo().getVfsid());
+			}
+			prodAttrValue.setImage(productImage);
+			prodAttrValues.add(prodAttrValue);
+		}
+		response.setProductAttrList(prodAttrValues);
+		/**
+		 * 商品图片
+		 */
+		List<ProductImage> productImages = new ArrayList<>();
+		if(!CollectionUtils.isEmpty(skuInfo.getThumbnail())){
+		for (ImageInfo imageInfo : skuInfo.getThumbnail()) {
+			ProductImage productImage = new ProductImage();
+			productImage.setPicType(imageInfo.getImagetype());
+			productImage.setVfsId(imageInfo.getVfsid());
+			productImages.add(productImage);
+			}
+		}
+		response.setProductImageList(productImages);
+		return response;
+	
 		
-		if (!CollectionUtil.isEmpty(search.getContents())) {
+		//Product product = new Product();
+		
+/*		if (!CollectionUtil.isEmpty(search.getContents())) {
 			for (SKUInfo skuInfo : search.getContents()) {
 				product.setStandedProdId(skuInfo.getProductid());
 				product.setProdId(skuInfo.getProductid());
@@ -1118,8 +1178,21 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 				product.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
 				product.setSupplierId(skuInfo.getSupplierid());
 				
+				*//**
+				 * 商品图片
+				 *//*
+				List<ProductImage> productImages = new ArrayList<>();
+				if(!CollectionUtils.isEmpty(skuInfo.getThumbnail())){
+				for (ImageInfo imageInfo : skuInfo.getThumbnail()) {
+					ProductImage productImage = new ProductImage();
+					productImage.setPicType(imageInfo.getImagetype());
+					productImage.setVfsId(imageInfo.getVfsid());
+					productImages.add(productImage);
+					}
+				}
+				product.setProductImageList(productImages);
 			}
-		}
+		}*/
 		
 		/**if (product == null) {
 			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}",tenantId, skuId, skuId);
@@ -1130,6 +1203,6 @@ public class ProdSkuBusiSVImpl implements IProdSkuBusiSV {
 			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}",tenantId, skuId, skuId,product.getState());
 			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"未查询到指定的SKU信息");
 		}*/
-		return genSkuResponse(tenantId, product);
+		//return genSkuResponse(tenantId, product);
 	}
 }
