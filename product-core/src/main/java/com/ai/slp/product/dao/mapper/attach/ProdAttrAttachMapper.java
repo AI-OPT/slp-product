@@ -26,6 +26,9 @@ public interface ProdAttrAttachMapper {
     public int countOfAttrValOfCat(
             @Param("tenantId")String tenantId, @Param("catId") String catId, @Param("attrValDefId") String attrValDefId);
 
+    /**
+     * 查询sku属性
+     */
     @Results({
             @Result(property ="attrvaluedefid",column = "attrValueDefId",javaType=String.class,jdbcType= JdbcType.VARCHAR),
             @Result(property ="attrid",column = "attrID",javaType = String.class,jdbcType = JdbcType.VARCHAR),

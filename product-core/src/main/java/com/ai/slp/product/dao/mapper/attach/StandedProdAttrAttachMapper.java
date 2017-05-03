@@ -22,7 +22,15 @@ public interface StandedProdAttrAttachMapper {
     public int countOfAttrValOfCat(
             @Param("tenantId")String tenantId, @Param("catId") String catId, @Param("attrValDefId") String attrValDefId);
     
-    
+    /**标准品信息
+     * 更新
+     * @param standedProdAttrId
+     * @param attrValueName
+     * @param attrValueName2
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
     @Update("update standed_prod_attr "
     		+ "set  ATTR_VALUE_NAME = #{attrValueName},ATTR_VALUE_NAME2 = #{attrValueName2} "
     		+ "where STANDED_PROD_ATTR_ID = #{standedProdAttrId} ")
@@ -31,6 +39,16 @@ public interface StandedProdAttrAttachMapper {
 			@Param("attrValueName2") String attrValueName2);
 
 
+    /**
+     * 更新标准品状态
+     * @param standedProdAttrId
+     * @param state
+     * @param operId
+     * @param operTime
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
     @Update("update standed_prod_attr "
     		+ "set STATE = #{state},  OPER_ID = #{operId},OPER_TIME = #{operTime} "
     		+ "where STANDED_PROD_ATTR_ID = #{standedProdAttrId} ")
