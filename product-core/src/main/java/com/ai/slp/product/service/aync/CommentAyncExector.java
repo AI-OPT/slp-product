@@ -9,10 +9,22 @@ import org.slf4j.LoggerFactory;
 import com.ai.slp.product.api.flushdata.CreateDataBatSVImpl;
 import com.alibaba.fastjson.JSON;
 
+/**
+ * 评论异步提交服务
+ * Date: 2017年5月3日 <br>
+ * Copyright (c) 2017 asiainfo.com <br>
+ * 
+ * @author
+ */
 public class CommentAyncExector {
 	private static final Logger logger = LoggerFactory.getLogger(CreateDataBatSVImpl.class);
 	private static ExecutorService pool = Executors.newFixedThreadPool(20);
 	
+	/**
+	 * 提交
+	 * @param task
+	 * @author
+	 */
 	public static void submit(AyncTask task){
 		try{
 			pool.execute(task);

@@ -11,12 +11,24 @@ import com.alibaba.fastjson.JSON;
 
 import sun.util.logging.resources.logging;
 
+/**
+ * 仓库异步提交服务
+ * Date: 2017年5月3日 <br>
+ * Copyright (c) 2017 asiainfo.com <br>
+ * 
+ * @author
+ */
 public class StorageAyncExector {
 	private static final Logger logger = LoggerFactory.getLogger(CreateDataBatSVImpl.class);
 	
 	private static ExecutorService storagePool = Executors.newFixedThreadPool(50);
 	private static ExecutorService productPool = Executors.newFixedThreadPool(30);
 	
+	/**
+	 * 提交
+	 * @param task
+	 * @author
+	 */
 	public static void submitStorage(AyncTask task){
 		try{
 			storagePool.execute(task);

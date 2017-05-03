@@ -36,6 +36,12 @@ import com.ai.slp.product.search.bo.comment.CommentPictrueInfo;
  */
 public class ConvertUtils {
 
+	/**
+	 * 转换SKUINfo信息
+	 * @param skuInfo
+	 * @return
+	 * @author
+	 */
 	public static ProductSKUResponse convertToProductSKUResponse(SKUInfo skuInfo) {
 		ProductSKUResponse response = new ProductSKUResponse();
 		response.setUsableNum(skuInfo.getUsablenum());
@@ -89,6 +95,12 @@ public class ConvertUtils {
 		return response;
 	}
 
+	/**
+	 * 转换ProductSKUConfigResponse
+	 * @param skuInfo
+	 * @return
+	 * @author
+	 */
 	public static ProductSKUConfigResponse convertToProductSKUConfigResponse(SKUInfo skuInfo) {
 		ProductSKUConfigResponse response = new ProductSKUConfigResponse();
 		List<ProductSKUAttr> productSKUAttrs = new ArrayList<>();
@@ -123,6 +135,12 @@ public class ConvertUtils {
 		return response;
 	}
 
+	/**
+	 * 转换ProductEditUp
+	 * @param skuInfo
+	 * @return
+	 * @author
+	 */
 	public static ProductEditUp convertToProductEditUp(SKUInfo skuInfo){
 		ProductEditUp productEditUp = new ProductEditUp();
 		productEditUp.setOperTime(new Timestamp(skuInfo.getOpertime()));
@@ -149,6 +167,12 @@ public class ConvertUtils {
 		return productEditUp;
 	}
 
+	/**
+	 * 转换ProdCommentPageResponse
+	 * @param commentInfo
+	 * @return
+	 * @author
+	 */
 	public static ProdCommentPageResponse convertToProdCommentPageResponse(CommentInfo commentInfo){
 		ProdCommentPageResponse response = new ProdCommentPageResponse();
 		response.setCommentBody(commentInfo.getCommentbody());
@@ -173,6 +197,12 @@ public class ConvertUtils {
 		response.setPictureList(pictureVOs);
 		return response;
 	}
+	/**
+	 * 转换CommentPageResponse
+	 * @param commentInfo
+	 * @return
+	 * @author
+	 */
 	public static CommentPageResponse convertToCommentPageResponse(CommentInfo commentInfo){
 		CommentPageResponse response = new CommentPageResponse();
 		response.setCommentBody(commentInfo.getCommentbody());
@@ -189,6 +219,13 @@ public class ConvertUtils {
 		return response;
 	}
 	
+	/**
+	 * 转换评论信息
+	 * @param prodComments
+	 * @param pictureMap
+	 * @return
+	 * @author
+	 */
 	public static List<CommentInfo> convertToCommentInfo(List<ProdComment> prodComments,Map<String,List<PictureVO>> pictureMap){
 		List<CommentInfo> commentInfos = new ArrayList<>();
 		for (ProdComment prodComment : prodComments) {
@@ -230,6 +267,12 @@ public class ConvertUtils {
 		return commentInfos;
 	}
 
+	/**
+	 * 转化商品信息
+	 * @param skuInfo
+	 * @return
+	 * @author
+	 */
 	public static Product convertToProduct(SKUInfo skuInfo){
 		Product product = new Product();
 		product.setBasicOrgId(skuInfo.getBasicorgid());
@@ -252,6 +295,13 @@ public class ConvertUtils {
 		return product;
 	}
 	
+	/**
+	 * 刷新评论信息
+	 * @param prodComments
+	 * @param pictureMap
+	 * @return
+	 * @author
+	 */
 	public static Integer flushCommentInfo(List<ProdComment> prodComments,Map<String,List<PictureVO>> pictureMap){
 		Integer count=0;
 		for (ProdComment prodComment : prodComments) {
