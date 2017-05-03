@@ -44,6 +44,15 @@ public interface IProdCommentBusiSV {
 	 */
 	public CommentPictureQueryResponse queryPictureByCommentId(CommentPictureQueryRequset queryRequset);
 	
+	/**
+	 * 获取评论返回信息
+	 */
 	public List<CommentPageResponse> getCommentResponseList(List<ProdComment> prodCommentList);
+	
+	/**
+	 * 创建商品评论
+	 * @param prodComment
+	 * @UCUSER
+	 */
 	String createProdComment(ProdComment prodComment, List<PictureVO> pictureList, String commentId);
 }

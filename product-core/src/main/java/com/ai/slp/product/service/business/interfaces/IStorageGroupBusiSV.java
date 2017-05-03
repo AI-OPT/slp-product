@@ -170,7 +170,22 @@ public interface IStorageGroupBusiSV {
      */
     public StorageGroupRestwo queryGroupInfoAllByGroupId(String tenantId,String supplierId, String groupId);
     
+    /**
+     * 获取库存组信息
+     * @param group
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
     public StorageGroupRes genStorageGroupInfo(StorageGroup group);
 
+    /**
+     * 添加库存组
+     * @param storageGroup
+     * @param storageGroupId
+     * @return
+     * @author Gavin
+     * @UCUSER
+     */
 	StorageGroup addGroupObj(STOStorageGroup storageGroup, String storageGroupId);
 }

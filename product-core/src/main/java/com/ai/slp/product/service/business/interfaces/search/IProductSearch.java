@@ -21,7 +21,7 @@ public interface IProductSearch {
     //商品相关查询
     Result<SKUInfo> searchByCriteria(List<SearchCriteria> searchCriterias, int from, int offset,
 			 List<Sort> sorts);
-    
+    //商品搜索
     Result<SKUInfo> search(List<SearchCriteria> searchCriterias, int from, int offset,
 			 List<Sort> sorts);
     
