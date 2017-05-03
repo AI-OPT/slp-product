@@ -67,6 +67,13 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSONArray;
 
 
+/**
+ * 批量刷新商品缓存信息服务
+ * Date: 2017年5月3日 <br>
+ * Copyright (c) 2017 asiainfo.com <br>
+ * 
+ * @author
+ */
 @Service
 @Component
 public class FlushDataImpl implements IFlushDataSV{
@@ -101,6 +108,9 @@ public class FlushDataImpl implements IFlushDataSV{
 	@Autowired
 	ProdCommentMapper prodCommentMapper;
 
+	/**
+	 * 刷新商品数据
+	 */
 	@Override
 	public BaseResponse flushProductData(FlushDataRequest request) {
 		//查询所有符合条件商品
@@ -137,6 +147,9 @@ public class FlushDataImpl implements IFlushDataSV{
 		return CommonUtils.genSuccessResponse("共刷入:"+count.toString()+"条商品数据;/n"+"商品ID有:"+JSONArray.toJSONString(idList));
 	}
 
+	/**
+	 * 刷新商品评论
+	 */
 	@Override
 	public BaseResponse flushCommentData(FlushDataRequest request) {
 		ProdCommentCriteria example = new ProdCommentCriteria();
@@ -163,6 +176,12 @@ public class FlushDataImpl implements IFlushDataSV{
 		return CommonUtils.genSuccessResponse("共刷入:"+count.toString()+"条商品评论数据");
 	}
 	
+	/**
+	 * 填充商品数据
+	 * @param skuInfoSesList
+	 * @return
+	 * @author
+	 */
 	public List<SKUInfo> fillSkuInfo(List<ProdSkuInfoSes> skuInfoSesList) {
 		List<SKUInfo> skuInfoList = new ArrayList<>();
 		for (ProdSkuInfoSes prodSkuInfo : skuInfoSesList) {
@@ -294,6 +313,14 @@ public class FlushDataImpl implements IFlushDataSV{
 	}
 	
 	
+	/**
+	 * 填充图片信息
+	 * @param skuInfo
+	 * @param prodCatId
+	 * @param prodId
+	 * @param skuId
+	 * @author
+	 */
 	public void fillSKUImageInfo(SKUInfo skuInfo, String prodCatId, String prodId, String skuId) {
 		ProdPicture prodPicture = prodPictureAtomSV.queryMainOfProd(prodId);
 		ImageInfo imageInfo = prodPicture == null ? null
@@ -304,6 +331,13 @@ public class FlushDataImpl implements IFlushDataSV{
 		// skuInfo.setThumbnail(prodPictureAtomSV.queryAttrValOfProd(prodId));
 	}
 
+	/**
+	 * 填充商品地域信息
+	 * @param tenantId
+	 * @param productId
+	 * @return
+	 * @author
+	 */
 	public List<SaleAreaInfo> fillSKUSaleArea(String tenantId, String productId) {
 		List<ProdTargetArea> targetAreaList = prodTargetAreaAtomSV.searchProdTargetArea(tenantId, productId);
 		List<SaleAreaInfo> saleAreaInfoList = new ArrayList<>();
@@ -316,6 +350,12 @@ public class FlushDataImpl implements IFlushDataSV{
 		return saleAreaInfoList;
 	}
 
+	/**
+	 * 获取类目信息
+	 * @param skuInfo
+	 * @param prodCatId
+	 * @author
+	 */
 	private void fetchCategory(SKUInfo skuInfo, String prodCatId) {
 		ProductCat productCat = prodCatDefAtomSV.selectById(prodCatId);
 		if (productCat == null) {
@@ -339,7 +379,6 @@ public class FlushDataImpl implements IFlushDataSV{
 	 * @param skuIds
 	 * @author
 	 */
-	@SuppressWarnings("unused")
 	private void flushStorageCache(Storage storage,Set<String> skuIds){
 		   String tenantId = CommonConstants.TENANT_ID;
 		   ICacheClient cacheClient = IPaasStorageUtils.getClient();

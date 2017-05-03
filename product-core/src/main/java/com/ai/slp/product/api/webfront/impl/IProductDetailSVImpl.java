@@ -73,23 +73,6 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 	@Override
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest skuReq) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(skuReq.getTenantId(), "");
-		/*if (StringUtils.isBlank(skuReq.getSkuId()) && StringUtils.isBlank(skuReq.getSkuAttrs())) {
-			throw new BusinessException("", "SKU标识和SKU属性为空,无法处理");
-		}*/
-		// 查询商品
-		//Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
-
-		/*if (product == null) {
-			logger.warn("未查询到指定 的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
-					skuReq.getSkuId());
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
-		}
-		// 若不是有效状态,则不处理
-		if (!ACTIVE_STATUS_LIST.contains(product.getState())) {
-			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}", skuReq.getTenantId(), skuReq.getSkuId(),
-					skuReq.getSkuId(), product.getState());
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
-		}*/
 		ProductSKUResponse skuResponse = null;
 		/**
 		 * 查询ES缓存
@@ -120,57 +103,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			 * 商品属性
 			 */
 			skuResponse = ConvertUtils.convertToProductSKUResponse(skuInfo);
-		}/*else {
-			skuResponse = new ProductSKUResponse();
-			BeanUtils.copyProperties(skuResponse, product);
-			List<ProdCatAttrAttch> prodCatAttrAttchs = prodSkuBusiSV.querySkuDetail(skuReq.getTenantId(), product,
-					skuReq.getSkuAttrs());
-			// SKU图片
-			String attrPic = null;
-			// 查询已设置SKU的属性和属性值信息
-			if (!CollectionUtils.isEmpty(prodCatAttrAttchs)) {
-				for (ProdCatAttrAttch prodCatAttrAttch : prodCatAttrAttchs) {
-					// 查询属性对应属性值集合
-					List<ProdAttr> prodAttrs = prodAttrAtomSV.queryOfProdAndAttr(skuReq.getTenantId(),
-							product.getProdId(), prodCatAttrAttch.getAttrId());
-
-					List<ProdAttrValue> attrValueList = new ArrayList<>();
-					// ProdAttrParam prodAttrParam = new ProdAttrParam();
-					for (ProdAttr prodAttr : prodAttrs) {
-						ProdAttrValue prodAttrValue = new ProdAttrValue();
-						prodAttrValue.setAttrvalueDefId(prodAttr.getAttrvalueDefId());
-						prodAttrValue.setAttrValueName(prodAttr.getAttrValueName());
-						attrValueList.add(prodAttrValue);
-						// 若此属性是否包含图片
-						if (ProductCatConstants.ProductCatAttr.IsPicture.YES.equals(prodCatAttrAttch.getIsPicture())) {
-							// 查询主图
-							ProdPicture prodPicture = pictureAtomSV.queryMainOfProdIdAndAttrVal(product.getProdId(),
-									prodAttr.getAttrvalueDefId());
-
-							if (prodPicture != null) {
-								ProductImage productImage = new ProductImage();
-								BeanUtils.copyProperties(productImage, prodPicture);
-								prodAttrValue.setImage(productImage);
-							}
-						}
-						attrValueList.add(prodAttrValue);
-					}
-					// prodAttrParam.setAttrValueList(attrValueList);
-					skuResponse.setProductAttrList(attrValueList);
-				}
-			}
-			// 设置主图
-			skuResponse.setProductImageList(getProductSkuPic(attrPic, product));
-			// 设置评论数
-			// skuResponse.setCommentNum((long)prodCommentAtomSV.countBySkuId(product.getProdId(),false));
-			// 设置商品销量
-			skuResponse.setSaleNum(prodSaleAllAtomSV.queryNumOfProduc(skuReq.getTenantId(), product.getProdId()));
-
-			// 获取当前库存和价格
-			SkuStorageVo skuStorageVo = storageNumBusiSV.queryStorageOfSku(skuReq.getTenantId(), product.getProdId());
-			skuResponse.setUsableNum(skuStorageVo.getUsableNum());
-			skuResponse.setSalePrice(skuStorageVo.getSalePrice());
-		}*/
+		}
 		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
 		skuResponse.setResponseHeader(responseHeader);
 		return skuResponse;

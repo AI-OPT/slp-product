@@ -659,22 +659,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 					productRequest.getProductType(),
 					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
-	/*	// 添加时间 开始时间
-		if (productRequest.getCreateStartTime() != null){
-			criteria.andCreateTimeGreaterThanOrEqualTo(DateUtils.toTimeStamp(request.getCreateStartTime()));
-		}
-		// 添加时间 截止时间
-		if (productRequest.getCreateEndTime() != null){
-			criteria.andCreateTimeLessThanOrEqualTo(DateUtils.toTimeStamp(request.getCreateEndTime()));
-		}
-		// 操作时间 开始时间
-		if (productRequest.getOperStartTime() != null){
-			criteria.andOperTimeGreaterThanOrEqualTo(DateUtils.toTimeStamp(request.getOperStartTime()));
-		}
-		// 操作时间 截止时间
-		if (productRequest.getOperEndTime() != null){
-			criteria.andOperTimeLessThanOrEqualTo(DateUtils.toTimeStamp(request.getOperEndTime()));
-		}*/
 		
 		PageInfo<StandedProduct> pageInfo = new PageInfo<StandedProduct>();
 		List<StandedProduct> standedProductList = new ArrayList<StandedProduct>();
@@ -719,31 +703,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		pageInfo.setPageNo(productRequest.getPageNo());
 		pageInfo.setPageSize(productRequest.getPageSize());
 		
-/*		// 接口输出接口
-		PageInfoResponse<NormProdResponse> normProdPageInfo = new PageInfoResponse<NormProdResponse>();
-		BeanUtils.copyProperties(normProdPageInfo, productPageInfo);
-		// 添加结果集
-		List<StandedProduct> productList = productPageInfo.getResult();
-		List<NormProdResponse> normProductList = new ArrayList<NormProdResponse>();
-		normProdPageInfo.setResult(normProductList);
-
-		for (StandedProduct standedProduct : productList) {
-			NormProdResponse normProduct = new NormProdResponse();
-			BeanUtils.copyProperties(normProduct, standedProduct);
-			atomStart = System.currentTimeMillis();
-			logger.info("开始商品类目查询原子服务:catDefAtomSV.selectAllStateById, 类目ID:{},时间戳:{}",standedProduct.getProductCatId(),atomStart);
-			ProductCat productCat = catDefAtomSV.selectAllStateById(standedProduct.getTenantId(),
-					standedProduct.getProductCatId());
-			atomEnd = System.currentTimeMillis();
-			logger.info("结束商品类目查询原子服务:catDefAtomSV.selectAllStateById, 当前时间戳:{},用时:{}",atomEnd,(atomEnd-atomStart));
-			if (productCat != null){
-				normProduct.setCatName(productCat.getProductCatName());
-			}
-			normProduct.setCatId(standedProduct.getProductCatId());
-			normProduct.setProductId(standedProduct.getStandedProdId());
-			normProduct.setProductName(standedProduct.getStandedProductName());
-			normProductList.add(normProduct);
-		}*/
 		return pageInfo;
 	}
 
@@ -892,53 +851,6 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		attrMapOfNormProd.setAttrValDefMap(attrValDefMap);
 		return attrMapOfNormProd;
 	}
-/*	public AttrMap queryAttrOfProduct(String tenantId, String standedProdId, String attrType) {
-		// 查询标准品信息
-		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
-		if (standedProduct == null){
-			throw new BusinessException("", "未找到对应标准品信息,租户ID:" + tenantId + ",标准品标识:" + standedProdId);
-		}
-		AttrMap attrMapOfNormProd = new AttrMap();
-		Map<Long, List<Long>> attrAndValMap = new LinkedMap();
-		Map<Long, ProdCatAttrInfo> attrDefMap = new HashMap<>();
-		Map<Long, AttrValInfo> attrValDefMap = new HashMap<>();
-		// 查询对应类目属性
-		List<ProdCatAttrAttch> catAttrAttches = catAttrAttachAtomSV.queryAttrOfByIdAndType(tenantId,
-				standedProduct.getProductCatId(), attrType);
-		// 查询标准品对应属性的属性值
-		for (ProdCatAttrAttch catAttrAttch : catAttrAttches) {
-			ProdCatAttrInfo catAttrDef = new ProdCatAttrInfo();
-			BeanUtils.copyProperties(catAttrDef, catAttrAttch);
-			List<Long> attrValDefList = new ArrayList<>();
-			attrAndValMap.put(catAttrDef.getAttrId(), attrValDefList);
-			attrDefMap.put(catAttrDef.getAttrId(), catAttrDef);
-			// 查询属性值
-			List<StandedProdAttr> prodAttrs = standedProdAttrAtomSV.queryAttrVal(tenantId, standedProdId,
-					catAttrAttch.getAttrId());
-			for (StandedProdAttr prodAttr : prodAttrs) {
-				AttrValInfo valDef = new AttrValInfo();
-				BeanUtils.copyProperties(valDef, prodAttr);
-				valDef.setProductAttrValId(prodAttr.getStandedProdAttrId());
-				valDef.setProductId(prodAttr.getStandedProdId());
-				valDef.setAttrValId(prodAttr.getAttrvalueDefId());
-				valDef.setAttrVal(prodAttr.getAttrValueName());
-				valDef.setAttrVal2(prodAttr.getAttrValueName2());
-				if (prodAttr.getAttrvalueDefId() != null) {
-					ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId, prodAttr.getAttrvalueDefId());
-					if (attrvalueDef != null){
-						valDef.setAttrVal(attrvalueDef.getAttrValueName());
-					}
-				}
-				attrValDefMap.put(valDef.getProductAttrValId(), valDef);
-				attrValDefList.add(valDef.getProductAttrValId());
-			}
-		}
-		attrMapOfNormProd.setAttrAndVal(attrAndValMap);
-		attrMapOfNormProd.setAttrDefMap(attrDefMap);
-		attrMapOfNormProd.setAttrValDefMap(attrValDefMap);
-		return attrMapOfNormProd;
-	}
-*/
 	/**
 	 * 更新标准品的属性值
 	 */
