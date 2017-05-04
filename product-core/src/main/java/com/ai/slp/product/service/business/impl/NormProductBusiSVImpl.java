@@ -970,19 +970,19 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public int updateMarketPrice(MarketPriceUpdate marketPrice) {
 		//查询es
-    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
-    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
-    			marketPrice.getTenantId(),
-    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-    	searchCriterias.add(new SearchCriteria("productid",
-    			marketPrice.getProductId(),
-    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-    	
-    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
-    	if (CollectionUtil.isEmpty(result.getContents())) {
-			throw new BusinessException("查询es信息失败");
-		}
-    	SKUInfo standedProduct = result.getContents().get(0);
+//    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+//    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
+//    			marketPrice.getTenantId(),
+//    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+//    	searchCriterias.add(new SearchCriteria("productid",
+//    			marketPrice.getProductId(),
+//    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+//    	
+//    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+//    	if (CollectionUtil.isEmpty(result.getContents())) {
+//			throw new BusinessException("查询es信息失败");
+//		}
+//    	SKUInfo standedProduct = result.getContents().get(0);
 		// 更新市场价格信息
 		int count = standedProductAtomSV.updateMarketPrice(marketPrice.getTenantId(), marketPrice.getProductId(),
 				marketPrice.getMarketPrice(), marketPrice.getOperId());
@@ -993,15 +993,16 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		product.setMarketPrice(marketPrice.getMarketPrice());
 		productAtomSV.updateByStandedProdId(product);
 		if (count > 0) {
-			standedProduct.setMarketprice(marketPrice.getMarketPrice());
+			/*standedProduct.setMarketprice(marketPrice.getMarketPrice());
 			//将更新市场价的商品添加至搜索引擎
         	SKUInfo skuInfos = result.getContents().get(0);
         	skuInfos.setMarketprice(marketPrice.getMarketPrice());
         	List<SKUInfo> skuInfoList = new ArrayList<>();
         	skuInfoList.add(skuInfos);
         	
-        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);*/
 			
+			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update("marketprice", marketPrice.getMarketPrice());
 		}
 
 		return count;
