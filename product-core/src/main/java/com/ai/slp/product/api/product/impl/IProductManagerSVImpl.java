@@ -19,6 +19,7 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.search.common.JsonBuilder;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -248,17 +249,21 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     }
 
     /**
+     * @throws Exception 
+     * @throws IOException 
+     * @throws Exception 
+     * @throws IOException 
      * 对商品进行上架处理
      *
      * @param query
      * @return
-     * @throws BusinessException
-     * @throws SystemException
      * @author liutong5
+     * @throws Exception 
+     * @throws  
      */
     
     @Override
-    public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
+    public BaseResponse changeToInSale(ProductInfoQuery query) {
     	CommonUtils.checkTenantId(query.getTenantId());
     	CommonUtils.checkSupplierId(query.getSupplierId());
     	if(StringUtils.isBlank(query.getProductId())){
@@ -302,19 +307,19 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         if (StorageConstants.StorageGroup.State.STOP.equals(storageGroupState)
                 ||StorageConstants.StorageGroup.State.AUTO_STOP.equals(storageGroupState)
                 ||totalNum==null || totalNum<=0){
-            changeToStop(storageGroupState,product, operId);
+            //changeToStop(storageGroupState,product, operId);
             logger.error("商品"+product.getProdId()+"状态不支持上架,状态是:"+product.getState());
             return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
         }
         productBusiSV.changeToInSale(product,operId);
         //将商品添加至搜索引擎
-        //skuIndexManage.updateSKUIndex(product.getProdId(),product.getUpTime().getTime());
-    	SKUInfo skuInfos = result.getContents().get(0);
-    	skuInfos.setState(product.getState());
-    	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
-    	List<SKUInfo> skuInfoList = new ArrayList<>();
-    	skuInfoList.add(skuInfos);
-    	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
+    	try {
+			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).
+			update(product.getState(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, 
+						product.getProdId()).endObject());
+		} catch (Exception e) {
+			throw new SystemException(CommonConstants.OPERATE_FAIL ,"添加搜索失败");
+		}
         return CommonUtils.addSuccessResHeader(new BaseResponse(),"");
 	}
 
@@ -380,13 +385,13 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     		logger.error("查询商品失败");
     		throw new BusinessException("查询es中的商品信息失败");
 		}
-    	
-    	SKUInfo skuInfos = infoResult.getContents().get(0);
-    	skuInfos.setState(ProductConstants.Product.State.IN_STORE);
-    	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
-    	List<SKUInfo> skuInfoList = new ArrayList<>();
-    	skuInfoList.add(skuInfos);
-    	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
+    	try {
+			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).
+			update(product.getState(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, 
+						product.getProdId()).endObject());
+		} catch (Exception e) {
+			throw new SystemException(CommonConstants.OPERATE_FAIL ,"添加搜索失败");
+		}
         return CommonUtils.genSuccessResponse("");
 	}
 
