@@ -36,6 +36,7 @@ import com.ai.slp.product.api.product.param.ProductQueryInfo;
 import com.ai.slp.product.api.product.param.ProductStorageSale;
 import com.ai.slp.product.api.product.param.ProductStorageSaleParam;
 import com.ai.slp.product.constants.CommonConstants;
+import com.ai.slp.product.constants.ErrorCodeConstants;
 import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.SearchConstants;
 import com.ai.slp.product.constants.StorageConstants;
@@ -258,6 +259,11 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     
     @Override
     public BaseResponse changeToInSale(ProductInfoQuery query) throws BusinessException, SystemException {
+    	CommonUtils.checkTenantId(query.getTenantId());
+    	CommonUtils.checkSupplierId(query.getSupplierId());
+    	if(StringUtils.isBlank(query.getProductId())){
+    		throw new BusinessException(ErrorCodeConstants.PRODUCT_ID_NULL,"商品标识不能为空");
+    	}
     	Long operId = query.getOperId();
     	SKUInfo skuInfo = null;
     	Product product = null;
@@ -350,6 +356,11 @@ public class IProductManagerSVImpl implements IProductManagerSV {
      */
 	@Override
 	public BaseResponse changeToInStore(ProductInfoQuery query) throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(query.getTenantId());
+    	CommonUtils.checkSupplierId(query.getSupplierId());
+    	if(StringUtils.isBlank(query.getProductId())){
+    		throw new BusinessException(ErrorCodeConstants.PRODUCT_ID_NULL,"商品标识不能为空");
+    	}
 		Product product = new Product();
     	int startSize = 0;
     	int maxSize = 1;

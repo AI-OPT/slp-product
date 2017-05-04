@@ -142,6 +142,7 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 	@Override
 	public BaseResponse createProdComment(ProdCommentCreateRequest prodCommentCreateRequest)
 			throws BusinessException, SystemException {
+		CommonUtils.checkTenantId(prodCommentCreateRequest.getTenantId());
 		BaseResponse response = new BaseResponse();
 		ResponseHeader responseHeader = null;
 		try {
