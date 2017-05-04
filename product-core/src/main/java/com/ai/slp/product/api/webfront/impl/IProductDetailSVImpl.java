@@ -91,14 +91,6 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 						skuReq.getSkuId());
 				throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
 			}
-			// 若不是有效状态,则不处理
-			if (!ACTIVE_STATUS_LIST.contains(skuInfo.getState())) {
-				logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}", skuReq.getTenantId(), skuReq.getSkuId(),
-						skuReq.getSkuId(), skuInfo.getState());
-				throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
-			}
-			
-			
 			/**
 			 * 商品属性
 			 */
@@ -116,20 +108,6 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		if (StringUtils.isBlank(skuReq.getSkuId())) {
 			throw new BusinessException("", "SKU标识,无法处理");
 		}
-		// 查询商品
-		// SKUID等同于PRODID
-		/*Product product = productAtomSV.selectByProductId(skuReq.getSkuId());
-		if (product == null) {
-			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
-					skuReq.getSkuId());
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
-		}
-		// 若不是有效状态,则不处理
-		if (!ACTIVE_STATUS_LIST.contains(product.getState())) {
-			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}", skuReq.getTenantId(), skuReq.getSkuId(),
-					skuReq.getSkuId(), product.getState());
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
-		}*/
 		ProductSKUConfigResponse configResponse = new ProductSKUConfigResponse();
 		/**
 		 * 查询ES缓存
@@ -139,48 +117,10 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		criterias.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,skuReq.getSkuId(),new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		Result<SKUInfo> result = productSearch.search(criterias,1,30,null);
 		List<SKUInfo> skuInfos = result.getContents();
-		/*if (skuInfos.get(0) == null) {
-			logger.warn("未查询到指定的销售商品,租户ID:{},SKU标识:{},商品ID:{}", skuReq.getTenantId(), skuReq.getSkuId(),
-					skuReq.getSkuId());
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
-		}*/
-		// 若不是有效状态,则不处理
-/*		if (!ACTIVE_STATUS_LIST.contains(skuInfos.get(0).getState())) {
-			logger.warn("销售商品为无效状态,租户ID:{},SKU标识:{},商品ID:{},状态:{}", skuReq.getTenantId(), skuReq.getSkuId(),
-					skuReq.getSkuId(), skuInfos.get(0).getState());
-			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "未查询到指定的SKU信息");
-		}*/
-		
 		if (!CollectionUtil.isEmpty(skuInfos)) {
 			SKUInfo skuInfo = skuInfos.get(0);
 			configResponse = ConvertUtils.convertToProductSKUConfigResponse(skuInfo);
-		} /*else {
-			List<AttrInfo> attrInfos = prodSkuBusiSV.querySkuAttr(skuReq.getTenantId(), skuReq.getSkuId(),skuReq.getSkuAttrs());
-			configResponse = new ProductSKUConfigResponse();
-			// 查询关键属性
-			List<ProductSKUAttr> productSKUAttrs = new ArrayList<ProductSKUAttr>();
-			List<ProductSKUAttrValue> productSKUAttrValues = new ArrayList<>();
-			ProductSKUAttr productSKUAttr = new ProductSKUAttr();
-			if (!CollectionUtils.isEmpty(attrInfos)) {
-				for (AttrInfo attrInfo : attrInfos) {
-					ProductSKUAttrValue productSKUAttrValue = new ProductSKUAttrValue();
-					BeanUtils.copyProperties(productSKUAttrValue, attrInfo);
-					productSKUAttrValues.add(productSKUAttrValue);
-				}
-				AttrInfo attrInfo = attrInfos.get(0);
-				productSKUAttr.setAttrId(Long.parseLong(attrInfo.getAttrid()));
-				productSKUAttr.setAttrName(attrInfo.getAttrname());
-				productSKUAttr.setAttrValueList(productSKUAttrValues);
-			}
-			productSKUAttrs.add(productSKUAttr);
-			configResponse.setProductAttrList(productSKUAttrs);
-			ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
-			if (CollectionUtils.isEmpty(attrInfos)) {
-				configResponse = new ProductSKUConfigResponse();
-				responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "无数据");
-			}
-			configResponse.setResponseHeader(responseHeader);
-		}*/
+		} 
 		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
 		configResponse.setResponseHeader(responseHeader);
 		return configResponse;

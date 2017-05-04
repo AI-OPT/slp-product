@@ -389,38 +389,6 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		return result;
 	}
 
-	/*
-	 * @Override public PageInfoResponse<CommentPageResponse>
-	 * queryPageInfo(CommentPageRequest commentPageRequest) throws
-	 * BusinessException, SystemException {
-	 * 
-	 * ProdComment params = new ProdComment(); BeanUtils.copyProperties(params,
-	 * commentPageRequest); Integer pageSize = commentPageRequest.getPageSize();
-	 * Integer pageNo = commentPageRequest.getPageNo(); Timestamp
-	 * commentTimeBegin = commentPageRequest.getCommentTimeBegin(); Timestamp
-	 * commentTimeEnd = commentPageRequest.getCommentTimeEnd();
-	 * PageInfoResponse<CommentPageResponse> result = new
-	 * PageInfoResponse<CommentPageResponse>();
-	 * CommonUtils.checkTenantId(commentPageRequest.getTenantId());
-	 * List<ProdComment> queryPageList = prodCommentBusiSV.queryPageInfo(params,
-	 * commentTimeBegin, commentTimeEnd, pageSize, pageNo);
-	 * 
-	 * ResponseHeader responseHeader = new ResponseHeader(true,
-	 * ExceptCodeConstants.Special.SUCCESS, "");
-	 * result.setResponseHeader(responseHeader); result.setPageNo(pageNo);
-	 * result.setPageSize(pageSize); if (queryPageList == null ||
-	 * queryPageList.size() == 0) { result.setCount(0); result.setResult(null);
-	 * return result; } else { // 查询条数 Integer count =
-	 * prodCommentAtomSV.queryCountByParams(params, commentTimeBegin,
-	 * commentTimeEnd); result.setCount(count); List<CommentPageResponse>
-	 * prodCommentList =
-	 * prodCommentBusiSV.getCommentResponseList(queryPageList);
-	 * result.setResult(prodCommentList); return result; }
-	 * 
-	 * // ruturn null;
-	 * 
-	 * }
-	 */
 	@Override
 	public BaseResponse updateCommentState(UpdateCommentStateRequest updateCommentStateRequest)
 			throws IOException, Exception {
