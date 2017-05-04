@@ -8,7 +8,6 @@ import com.ai.slp.product.api.product.param.ProdAttrMap;
 import com.ai.slp.product.api.product.param.ProdNoKeyAttr;
 import com.ai.slp.product.api.product.param.ProdTargetAreaInfo;
 import com.ai.slp.product.api.product.param.Product4List;
-import com.ai.slp.product.api.product.param.ProductInfo;
 import com.ai.slp.product.api.product.param.ProductListQuery;
 import com.ai.slp.product.api.product.param.ProductRoute;
 import com.ai.slp.product.api.webfront.param.FastProductInfoRes;
@@ -137,7 +136,7 @@ public interface IProductBusiSV {
      * @param tenantId
      * @param prodId
      */
-    public void changeSaleToStore(String tenantId, String supplierId,Product product, Long operId);
+    public void changeSaleToStore(String tenantId, String supplierId, Long operId);
     /**
      * 手动下架
      * @param tenantId

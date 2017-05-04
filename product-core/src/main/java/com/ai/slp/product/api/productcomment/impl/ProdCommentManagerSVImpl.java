@@ -220,11 +220,13 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		SKUInfo skuInfos = infoResult.getContents().get(0);
 		//评论数+1
 		Long commentNum = skuInfos.getCommentnum()+1;
-		skuInfos.setCommentnum(commentNum);
-		skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
-		List<SKUInfo> skuInfoList = new ArrayList<>();
-		skuInfoList.add(skuInfos);
-		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
+		try {
+			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).
+			update(skuInfos.getProductid(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.COMMENTNUM, 
+					commentNum).endObject());
+		} catch (Exception e) {
+			throw new SystemException(CommonConstants.OPERATE_FAIL,"更新SKU缓存评论数失败");
+		};
 	}
 
 	@Override
