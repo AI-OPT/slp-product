@@ -101,7 +101,7 @@ public class StorageTest {
     	StoNoSkuSalePrice skuSalePrice = new StoNoSkuSalePrice();
     	skuSalePrice.setGroupId("0000000000002097");
     	skuSalePrice.setPriorityNumber((short) 1);
-    	skuSalePrice.setSalePrice((long) 3330);
+    	skuSalePrice.setSalePrice((long) 5550);
     	salePrice.add(skuSalePrice);
     	priceReq.setStorageSalePrice(salePrice);
 //    	priceReq.setStorageSalePrice(salePrice);
