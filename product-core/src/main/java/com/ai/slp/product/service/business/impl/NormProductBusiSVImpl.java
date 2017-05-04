@@ -321,19 +321,12 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				}
 			}
 		}
-
 		
-/*		if (updateCount > 0) {
-			productLog.setOperTime(standedProduct.getOperTime());
-			standedProductLogAtomSV.insert(productLog);
-		}*/
 		
-		List<SKUInfo> skuInfoList = new ArrayList<>();
 		List<AttrInfo> attrInfoList = new ArrayList<>();
 		
 		// 变更属性值. 1.将原来属性值设置为不可用;2,启用新的属性值.
 		if (normProdct.getAttrValList()!=null) {
-			updateStandedProdAttr(normProdct);
 			
 			for (AttrValRequest attr : normProdct.getAttrValList()) {
 				AttrInfo attrInfo = new AttrInfo();
@@ -346,7 +339,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		}
 		
 		//添加到es
-		standedProdInfo.setSkuname(normProdct.getProductName());
+		/*standedProdInfo.setSkuname(normProdct.getProductName());
 		standedProdInfo.setProductname(normProdct.getProductName());
 		standedProdInfo.setProducttype(normProdct.getProductType());
 		standedProdInfo.setStandprodstate(normProdct.getState());
@@ -354,7 +347,19 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		standedProdInfo.setAttrinfos(attrInfoList);
 		
 		skuInfoList.add(standedProdInfo);
-		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);*/
+		
+		
+		Map<String, Object> data = new HashMap<>();
+		data.put("skuname", normProdct.getProductName());
+		data.put("productname", normProdct.getProductName());
+		data.put("producttype", normProdct.getProductType());
+		data.put("standprodstate", normProdct.getState());
+		data.put("opertime", DateUtil.getSysDate().getTime());
+		data.put("attrinfos", attrInfoList);
+		
+		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(standedProdInfo.getProductid(), data);
+		
 		return ;
 	}
 
@@ -383,8 +388,15 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	}
 
 	private int updateNormProdDb(NormProdSaveRequest productInfoRequest) {
+		
+		// 更新标准品属性
+		if (productInfoRequest.getAttrValList()!=null) {
+			updateStandedProdAttr(productInfoRequest);
+		}
+		
 		// 数据库变更信息
 		int updateCount = updateStandProductInfo(productInfoRequest);
+		
 		// 更新销售品
 		if(updateCount>0){
 			Product product = new Product();
@@ -903,11 +915,11 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			}
 			oldAttrValMap.remove(attrKey);
 			// 添加日志
-			if (upNum > 0) {
-				StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
-				BeanUtils.copyProperties(prodAttrLog, prodAttr);
-				standedProdAttrLogAtomSV.installObj(prodAttrLog);
-			}
+//			if (upNum > 0) {
+//				StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
+//				BeanUtils.copyProperties(prodAttrLog, prodAttr);
+//				standedProdAttrLogAtomSV.installObj(prodAttrLog);
+//			}
 		}
 		// 将未更新属性值设置为无效.
 		loseActiveAttr(oldAttrValMap.values(), normProdct.getOperId());

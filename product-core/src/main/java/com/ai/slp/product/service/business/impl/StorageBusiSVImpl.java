@@ -18,6 +18,7 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.search.common.JsonBuilder;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -228,7 +229,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		Collections.sort(salePriceList, new StoNoSkuSalePriceComparator());
 		List<SKUInfo> list = new ArrayList<>();
 		Map<String, Object> data = new HashMap<String, Object>();
-		String prodId = null;
+		List<String> prodIdsList = new ArrayList<String>();
+		List<Map<String,Object>> prodDatasList = new ArrayList<Map<String,Object>>(); 
 		for(StoNoSkuSalePrice salePrice:salePriceList){
 			// 库存标识为空,库存对应价格为空,库存销售价小于等于0,均不处理
 			if (salePrice.getPriorityNumber()==null
@@ -238,38 +240,43 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			}
 			count += updateSkuPrice(salePrice.getGroupId(),null,salePrice.getPriorityNumber(),salePrice.getSalePrice(),operId);
 			
-			//查询es里的标准品
-	    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
-	    	searchCriterias.add(new SearchCriteria("storagegroupid",
-	    			salePrice.getGroupId(),
-	    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-	    	
-	    	int startSize = 1;
-			int maxSize = 1;
-			// 最大条数设置
-			int pageNo = 1;
-			int size = 20;
-			if (pageNo == 1) {
-				startSize = 0;
-			} else {
-				startSize = (pageNo - 1) * size;
-			}
-			maxSize = size;
-			IProductSearch productSearch = new ProductSearchImpl();
-	    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, startSize, maxSize, null);
-	    	if (CollectionUtil.isEmpty(result.getContents())) {
-	    		logger.error("查询商品失败");
-	    		throw new BusinessException("查询es中的商品信息失败");
-			}
-	    	SKUInfo product = result.getContents().get(0);
-	    	/*product.setPrice(salePrice.getSalePrice());
-	    	list.add(product);*/
-	    	prodId = product.getProductid();
 			
-			data.put("price", salePrice.getSalePrice());
+			//查询es里的标准品
+//	    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+//	    	searchCriterias.add(new SearchCriteria("storagegroupid",
+//	    			salePrice.getGroupId(),
+//	    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+//	    	
+//	    	int startSize = 1;
+//			int maxSize = 1;
+//			// 最大条数设置
+//			int pageNo = 1;
+//			int size = 20;
+//			if (pageNo == 1) {
+//				startSize = 0;
+//			} else {
+//				startSize = (pageNo - 1) * size;
+//			}
+//			maxSize = size;
+//			IProductSearch productSearch = new ProductSearchImpl();
+//	    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, startSize, maxSize, null);
+//	    	if (CollectionUtil.isEmpty(result.getContents())) {
+//	    		logger.error("查询商品失败");
+//	    		throw new BusinessException("查询es中的商品信息失败");
+//			}
+//	    	SKUInfo product = result.getContents().get(0);
+			
+			String prodId = salePrice.getGroupId();//groupId与prodId共享主键
+	
+			//更新ES销售价
+			prodIdsList.add(prodId);
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("price", salePrice.getSalePrice());
+			prodDatasList.add(map);
+			
 		}
 		//SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(list);
-		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(prodId, data);
+		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkUpdate(prodIdsList, prodDatasList);
 		
 		return count;
 	}
@@ -303,36 +310,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	}
 
 	private int updateSkuPrice(String groupId,String skuId,Short priorityNum,Long price,Long operId){
-		int count = 0;
-		//查看对应优先级是否已经有库存信息
-		//List<SkuStorage> skuStorageList = skuStorageAtomSV.queryPriorityOfGroup(groupId,skuId,priorityNum);
-		
-		//排序
-		//Collections.sort(skuStorageList, new SkuStorageListComparator());
-
-		
-		/*		for (SkuStorage skuStorage:skuStorageList){
-			skuStorage.setSalePrice(price);
-			skuStorage.setOperId(operId);
-			//skuStorage.setOperTime(DateUtil.getSysDate());
-			if(skuStorageAtomSV.updateById(skuStorage)>0){
-//				ProdPriceLog priceLog = new ProdPriceLog();
-//				priceLog.setObjId(skuStorage.getSkuStorageId());
-//				priceLog.setObjType(ProdPriceLogConstants.ProdPriceLog.ObjType.SKU_STORAGE);
-//				priceLog.setUpdatePrice(skuStorage.getSalePrice());
-//				priceLog.setOperId(operId);
-//				priceLog.setOperTime(skuStorage.getOperTime());
-//				prodPriceLogAtomSV.insert(priceLog);
-				count++;
-			}
-		}*/
-		
 		//更新销售价 skuid  根 groupid 共享主建
-		
-		count = skuStorageAtomSV.updateById4Service(groupId, priorityNum, price, operId);
-		
-		
-		return count;
+		return skuStorageAtomSV.updateById4Service(groupId, priorityNum, price, operId);
 	}
 	/**
 	 * 启用库存
