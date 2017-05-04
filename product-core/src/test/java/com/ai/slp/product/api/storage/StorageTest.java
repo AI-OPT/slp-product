@@ -99,9 +99,9 @@ public class StorageTest {
     	priceReq.setOperId((long) 1);
     	List<StoNoSkuSalePrice> salePrice = new ArrayList<>();
     	StoNoSkuSalePrice skuSalePrice = new StoNoSkuSalePrice();
-    	skuSalePrice.setGroupId("0000000000877");
+    	skuSalePrice.setGroupId("0000000000002097");
     	skuSalePrice.setPriorityNumber((short) 1);
-    	skuSalePrice.setSalePrice((long) 899);
+    	skuSalePrice.setSalePrice((long) 3330);
     	salePrice.add(skuSalePrice);
     	priceReq.setStorageSalePrice(salePrice);
 //    	priceReq.setStorageSalePrice(salePrice);

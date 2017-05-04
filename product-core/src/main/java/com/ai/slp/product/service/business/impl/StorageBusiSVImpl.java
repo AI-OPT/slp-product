@@ -227,6 +227,8 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 		//对salePriceList进行排序   
 		Collections.sort(salePriceList, new StoNoSkuSalePriceComparator());
 		List<SKUInfo> list = new ArrayList<>();
+		Map<String, Object> data = new HashMap<String, Object>();
+		String prodId = null;
 		for(StoNoSkuSalePrice salePrice:salePriceList){
 			// 库存标识为空,库存对应价格为空,库存销售价小于等于0,均不处理
 			if (salePrice.getPriorityNumber()==null
@@ -260,11 +262,15 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 	    		throw new BusinessException("查询es中的商品信息失败");
 			}
 	    	SKUInfo product = result.getContents().get(0);
-	    	product.setPrice(salePrice.getSalePrice());
-	    	list.add(product);
-	    	
+	    	/*product.setPrice(salePrice.getSalePrice());
+	    	list.add(product);*/
+	    	prodId = product.getProductid();
+			
+			data.put("price", salePrice.getSalePrice());
 		}
-		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(list);
+		//SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(list);
+		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(prodId, data);
+		
 		return count;
 	}
 
