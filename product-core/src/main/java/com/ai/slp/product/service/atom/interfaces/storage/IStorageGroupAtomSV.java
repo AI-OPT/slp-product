@@ -153,5 +153,12 @@ public interface IStorageGroupAtomSV {
      */
     public boolean isDiscard(StorageGroup group);
 
+    /**
+     * 保存库存组
+     * @param group
+     * @param storageGroupId
+     * @return
+     * @author
+     */
 	int installGroup(StorageGroup group, String storageGroupId);
 }

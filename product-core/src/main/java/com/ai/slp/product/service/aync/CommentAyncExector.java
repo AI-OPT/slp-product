@@ -6,7 +6,6 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ai.slp.product.api.flushdata.CreateDataBatSVImpl;
 import com.alibaba.fastjson.JSON;
 
 /**
@@ -17,7 +16,7 @@ import com.alibaba.fastjson.JSON;
  * @author
  */
 public class CommentAyncExector {
-	private static final Logger logger = LoggerFactory.getLogger(CreateDataBatSVImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(CommentAyncExector.class);
 	private static ExecutorService pool = Executors.newFixedThreadPool(20);
 	
 	/**

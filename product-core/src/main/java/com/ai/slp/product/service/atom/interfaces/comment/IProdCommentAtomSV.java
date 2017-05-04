@@ -88,6 +88,13 @@ public interface IProdCommentAtomSV {
 	 */
 	public int updateStateByIds(String state, String operId, String tenantId, List<String> commentIdList);
 
+	/**
+	 * 创建是匹配评论
+	 * @param params
+	 * @param commentId
+	 * @return
+	 * @author
+	 */
 	String createProdComment(ProdComment params, String commentId);
 
 }

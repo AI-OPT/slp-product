@@ -81,5 +81,12 @@ public interface IStandedProductAtomSV {
      */
     public List<String> queryIdByName(String standedProductName);
 
+    /**
+     * 保存标准品
+     * @param standedProduct
+     * @param productId
+     * @return
+     * @author
+     */
 	int installObj(StandedProduct standedProduct, String productId);
 }
