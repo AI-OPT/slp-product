@@ -1,5 +1,6 @@
 package com.ai.slp.product.service.business.impl;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.common.recycler.Recycler.V;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.BusinessException;
+import com.ai.opt.base.exception.SystemException;
 import com.ai.opt.base.vo.PageInfo;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
@@ -26,6 +29,7 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.search.common.JsonBuilder;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -1001,8 +1005,16 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
         	skuInfoList.add(skuInfos);
         	
         	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);*/
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("marketprice", marketPrice.getMarketPrice());
+			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(marketPrice.getProductId(), data);
 			
-			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update("marketprice", marketPrice.getMarketPrice());
+		/*	try {
+				SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(marketPrice.getProductId(), new JsonBuilder().startObject().field("marketprice", marketPrice.getMarketPrice()));
+			} catch (IOException e) {
+				throw new SystemException("更新es失败");
+			} 
+		*/
 		}
 
 		return count;
