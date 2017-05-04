@@ -73,6 +73,9 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 	@Override
 	public ProductSKUResponse queryProducSKUById(ProductSKURequest skuReq) throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(skuReq.getTenantId(), "");
+		if(StringUtils.isBlank(skuReq.getSkuId())){
+			throw new BusinessException(ErrorCodeConstants.PRODUCT_ID_NULL, "SKU标识不能为空");
+		}
 		ProductSKUResponse skuResponse = null;
 		/**
 		 * 查询ES缓存
@@ -106,7 +109,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			throws BusinessException, SystemException {
 		CommonUtils.checkTenantId(skuReq.getTenantId(), "");
 		if (StringUtils.isBlank(skuReq.getSkuId())) {
-			throw new BusinessException("", "SKU标识,无法处理");
+			throw new BusinessException(ErrorCodeConstants.PRODUCT_ID_NULL, "SKU标识不能为空");
 		}
 		ProductSKUConfigResponse configResponse = new ProductSKUConfigResponse();
 		/**
