@@ -314,9 +314,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         productBusiSV.changeToInSale(product,operId);
         //将商品添加至搜索引擎
     	try {
-			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).
-			update(product.getState(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, 
-						product.getProdId()).endObject());
+    		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).
+			update(query.getProductId(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, 
+					ProductConstants.Product.State.IN_SALE).endObject());
 		} catch (Exception e) {
 			throw new SystemException(CommonConstants.OPERATE_FAIL ,"添加搜索失败");
 		}
@@ -366,29 +366,11 @@ public class IProductManagerSVImpl implements IProductManagerSV {
     	if(StringUtils.isBlank(query.getProductId())){
     		throw new BusinessException(ErrorCodeConstants.PRODUCT_ID_NULL,"商品标识不能为空");
     	}
-		Product product = new Product();
-    	int startSize = 0;
-    	int maxSize = 1;
-    	
-		product.setProdId(query.getProductId());
-		productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),product,query.getOperId());
-		//将商品从搜索引擎中移除
-        //skuIndexManage.deleteSKUIndexByProductId(product.getProdId());
-		//查询es
-    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
-    	searchCriterias.add(new SearchCriteria("productid",
-    			query.getProductId(),new SearchOption(SearchOption.SearchLogic.must,  SearchOption.SearchType.querystring)));
-		// 最大条数设置
-		IProductSearch search = new ProductSearchImpl();
-    	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriterias, startSize,  maxSize, null);
-    	if (CollectionUtil.isEmpty(infoResult.getContents())) {
-    		logger.error("查询商品失败");
-    		throw new BusinessException("查询es中的商品信息失败");
-		}
+		productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),query.getOperId());
     	try {
 			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).
-			update(product.getState(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, 
-						product.getProdId()).endObject());
+			update(query.getProductId(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, 
+					ProductConstants.Product.State.IN_STORE).endObject());
 		} catch (Exception e) {
 			throw new SystemException(CommonConstants.OPERATE_FAIL ,"添加搜索失败");
 		}

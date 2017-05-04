@@ -816,7 +816,8 @@ public class ProductBusiSVImpl implements IProductBusiSV {
      * @param operId
      */
 	@Override
-    public void changeSaleToStore(String tenantId, String supplierId, Product product, Long operId) {
+    public void changeSaleToStore(String tenantId, String supplierId, Long operId) {
+		Product product = new Product();
         //修改商品"state"为IN_STORE
         product.setState(ProductConstants.Product.State.IN_STORE);
         //将商品从搜索引擎中移除
