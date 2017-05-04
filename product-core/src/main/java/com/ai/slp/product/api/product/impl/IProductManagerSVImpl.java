@@ -315,7 +315,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         //将商品添加至搜索引擎
     	try {
     		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).
-			update(query.getProductId(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, 
+			update(query.getProductId(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.STATE, 
 					ProductConstants.Product.State.IN_SALE).endObject());
 		} catch (Exception e) {
 			throw new SystemException(CommonConstants.OPERATE_FAIL ,"添加搜索失败");
@@ -369,7 +369,7 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 		productBusiSV.changeSaleToStore(query.getTenantId(),query.getSupplierId(),query.getOperId());
     	try {
 			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).
-			update(query.getProductId(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.PRODUCT_ID, 
+			update(query.getProductId(), new JsonBuilder().startObject().field(com.ai.slp.product.constants.SearchFieldConfConstants.STATE, 
 					ProductConstants.Product.State.IN_STORE).endObject());
 		} catch (Exception e) {
 			throw new SystemException(CommonConstants.OPERATE_FAIL ,"添加搜索失败");
