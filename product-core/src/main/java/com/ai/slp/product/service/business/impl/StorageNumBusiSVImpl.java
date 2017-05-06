@@ -1,6 +1,6 @@
 package com.ai.slp.product.service.business.impl;
 
-import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,28 +16,31 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.opt.base.exception.BusinessException;
-import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.search.vo.Result;
+import com.ai.paas.ipaas.search.vo.SearchCriteria;
+import com.ai.paas.ipaas.search.vo.SearchOption;
 import com.ai.slp.product.api.storageserver.param.StorageNumRes;
 import com.ai.slp.product.api.storageserver.param.StorageNumUseReq;
 import com.ai.slp.product.constants.ErrorCodeConstants;
-import com.ai.slp.product.constants.ProductConstants;
 import com.ai.slp.product.constants.StorageConstants;
-import com.ai.slp.product.dao.mapper.bo.product.ProdAudiences;
 import com.ai.slp.product.dao.mapper.bo.product.ProdSku;
 import com.ai.slp.product.dao.mapper.bo.product.Product;
 import com.ai.slp.product.dao.mapper.bo.storage.SkuStorage;
 import com.ai.slp.product.dao.mapper.bo.storage.Storage;
+import com.ai.slp.product.search.bo.SKUInfo;
 import com.ai.slp.product.service.atom.interfaces.product.IProdAudiencesAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProdSkuAtomSV;
 import com.ai.slp.product.service.atom.interfaces.product.IProductAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.ISkuStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageAtomSV;
 import com.ai.slp.product.service.atom.interfaces.storage.IStorageGroupAtomSV;
+import com.ai.slp.product.service.business.impl.search.ProductSearchImpl;
 import com.ai.slp.product.service.business.interfaces.IStorageNumBusiSV;
+import com.ai.slp.product.service.business.interfaces.search.IProductSearch;
+import com.ai.slp.product.util.ConvertUtils;
 import com.ai.slp.product.util.DataUtils;
-import com.ai.slp.product.util.DateUtils;
 import com.ai.slp.product.util.IPaasStorageUtils;
 import com.ai.slp.product.vo.SkuStorageVo;
 
@@ -75,19 +78,19 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     @Override
     public StorageNumRes userStorageNum(String tenantId, String skuId, int skuNum, Long price) {
         //查询SKU所属销售商品
-        Product product = getProductBySkuId(tenantId,skuId);
+        SKUInfo skuInfo = getProductBySkuId(tenantId,skuId);
         
         // 商品校验
-        Timestamp nowTime = DateUtils.currTimeStamp();
+        /*Timestamp nowTime = DateUtils.currTimeStamp();
         //若商品为预售,且当前不在预售期内,则不进行销售
-        if(ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType()) &&
+      if(ProductConstants.Product.UpShelfType.PRE_SALE.equals(product.getUpshelfType()) &&
                 (nowTime.before(product.getPresaleBeginTime()) || nowTime.after(product.getPresaleEndTime()))){
             logger.warn("商品为预售上架,不在预售期[{}]和[{}]",product.getPresaleBeginTime().toString(),
                     product.getPresaleEndTime().toString());
             throw new BusinessException("","不在预售期内,不允许销售");
-        }
+        }*/
         
-        return userStorageNum(product,skuId,skuNum,price);
+        return userStorageNum(skuInfo,skuId,skuNum,price);
 		
     }
 
@@ -117,9 +120,9 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
     }
 
 
-	private StorageNumRes userStorageNum(Product product, String skuId, int skuNum, Long price) {
-		String tenantId = product.getTenantId();
-		String groupId = product.getStorageGroupId();
+	private StorageNumRes userStorageNum(SKUInfo skuInfo, String skuId, int skuNum, Long price) {
+		String tenantId = skuInfo.getTenantid();
+		String groupId = skuInfo.getStoragegroupid();
 		// 获取缓存客户端
 		ICacheClient cacheClient = IPaasStorageUtils.getClient();
 		// 获取库存组的cacheKey
@@ -141,13 +144,8 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 		Map<String,Integer> sorageNumMap = getSkuNumSource(cacheClient, skuStoragekey, new Double(skuNum));
 		
 		// 8.组装返回值
-		StorageNumRes numRes = new StorageNumRes();
-		BeanUtils.copyProperties(numRes, product);
-		numRes.setProductCatId(product.getProductCatId());
-		numRes.setSkuId(skuId);
-		numRes.setSkuName(product.getProdName());
+		StorageNumRes numRes = ConvertUtils.convertToStorageNumRes(skuInfo);
 		numRes.setSalePrice(salePrice);
-		numRes.setBasicOrgId(product.getBasicOrgId());
 		numRes.setStorageNum(sorageNumMap);
 		
 		// 变更数据库信息
@@ -587,7 +585,7 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
      * @param skuId
      * @return
      */
-    private Product getProductBySkuId(String tenantId,String skuId){
+    private SKUInfo getProductBySkuId(String tenantId,String skuId){
 //        //查询SKU所属销售商品
 //        ProdSku skuInfo = skuAtomSV.querySkuById(tenantId,skuId);
 //        if (skuInfo==null){
@@ -595,13 +593,24 @@ public class StorageNumBusiSVImpl implements IStorageNumBusiSV {
 //            throw new BusinessException(ErrorCodeConstants.Product.SKU_NO_EXIST,"单品信息不存在,单品标识:"+skuId);
 //        }
         //1. 查询商品是否为"在售"状态
-        Product product = productAtomSV.selectByProductId(skuId);
+        //Product product = productAtomSV.selectByProductId(skuId);
+    	 //查询es
+    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+    	searchCriterias.add(new SearchCriteria("productid",skuId,
+    			new SearchOption(SearchOption.SearchLogic.must,  SearchOption.SearchType.querystring)));
+		IProductSearch search = new ProductSearchImpl();
+    	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriterias, 0,  1, null);
+    	if (CollectionUtil.isEmpty(infoResult.getContents())) {
+    		logger.error("查询商品失败");
+    		throw new BusinessException("查询es中的商品信息失败");
+		}
+        /*Product product = ConvertUtils.convertToProduct(infoResult.getContents().get(0));
         if (product==null || !ProductConstants.Product.State.IN_SALE.equals(product.getState())){
             logger.warn("销售商品不存在,或已下架,租户ID:{},SKU标识:{},销售商品标识{}"
                     ,tenantId,skuId,skuId);
             throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"销售商品不存在,或已下架状态");
-        }
-        return product;
+        }*/
+        return infoResult.getContents().get(0);
     }
 
 	

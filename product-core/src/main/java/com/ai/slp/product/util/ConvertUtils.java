@@ -12,6 +12,7 @@ import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
 import com.ai.slp.product.api.productcomment.param.ProdCommentPageResponse;
+import com.ai.slp.product.api.storageserver.param.StorageNumRes;
 import com.ai.slp.product.api.webfront.param.ProdAttrValue;
 import com.ai.slp.product.api.webfront.param.ProductImage;
 import com.ai.slp.product.api.webfront.param.ProductSKUAttr;
@@ -293,6 +294,29 @@ public class ConvertUtils {
 		product.setTenantId(skuInfo.getTenantid());
 		product.setUnit(skuInfo.getUnit());
 		return product;
+	}
+	
+	/**
+	 * 转化商品信息
+	 * @param skuInfo
+	 * @return
+	 * @author
+	 */
+	public static StorageNumRes convertToStorageNumRes(SKUInfo skuInfo){
+		StorageNumRes storageNumRes = new StorageNumRes();
+		storageNumRes.setBasicOrgId(skuInfo.getBasicorgid());
+		storageNumRes.setProdId(skuInfo.getProductid());;
+		storageNumRes.setSalePrice(skuInfo.getPrice());
+		storageNumRes.setProductCatId(skuInfo.getProductcategoryid());
+		storageNumRes.setSkuId(skuInfo.getSkuid());
+		storageNumRes.setSkuName(skuInfo.getSkuname());
+		storageNumRes.setStandedProdId(skuInfo.getProductid());
+		storageNumRes.setImagetype(skuInfo.getImageinfo().getImagetype());
+		storageNumRes.setVfsid(skuInfo.getImageinfo().getVfsid());
+		storageNumRes.setUpshelfType(skuInfo.getUpshelftype());
+		storageNumRes.setBasicOrgId(skuInfo.getBasicorgid());
+		storageNumRes.setUnit(skuInfo.getUnit());
+		return storageNumRes;
 	}
 	
 	/**
