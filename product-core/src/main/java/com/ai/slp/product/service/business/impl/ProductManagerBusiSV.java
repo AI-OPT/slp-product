@@ -24,6 +24,7 @@ import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -243,7 +244,8 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             stateLog.setProdId(prodId);
 
             //如果是拒绝
-            if (ProductConstants.Product.auditStatus.REJECT.equals(productCheckParam.getState())){
+            ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+			if (ProductConstants.Product.auditStatus.REJECT.equals(productCheckParam.getState())){
                 product.setState(ProductConstants.Product.State.REJECT);
                 product.setOperId(productCheckParam.getOperId());
                 updateProductStatusLog(product,stateLog);
@@ -278,7 +280,8 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             	//skuInfo.product.setOperId(productCheckParam.getOperId());
             	skuInfoList.add(skuInfo);
             	if (!CollectionUtil.isEmpty(skuInfoList)){
-                	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+                	searchClient.bulkInsert(skuInfoList);
+                	searchClient.refresh();
                 }
             	
                 continue;
@@ -326,7 +329,8 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             	skuInfo.setState(ProductConstants.Product.State.IN_SALE);
             	skuInfoList.add(skuInfo);
             	if (!CollectionUtil.isEmpty(skuInfoList)){
-                	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+                	searchClient.bulkInsert(skuInfoList);
+                	searchClient.refresh();
                 }
                 
             }else {
@@ -363,7 +367,8 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
             	skuInfo.setState(ProductConstants.Product.State.IN_STORE);
             	skuInfoList.add(skuInfo);
             	if (!CollectionUtil.isEmpty(skuInfoList)){
-                	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+                	searchClient.bulkInsert(skuInfoList);
+                	searchClient.refresh();
                 }
             }
         }
@@ -607,8 +612,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
 				skuInfoList.add(info);
 			}
 		}
-		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
-        
+		ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+		searchClient.bulkInsert(skuInfoList);
+        searchClient.refresh();
     }
 
     private Map<String,ProdAudiencesInfo> getAudiencesInfo(String tenantId,String prodId,String userType){
@@ -787,8 +793,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
                     
                     //更新es 
             		
-            		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
-                    
+            		ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+					searchClient.bulkInsert(skuInfoList);
+                    searchClient.refresh();
                 }
             }
         }
@@ -908,8 +915,9 @@ public class ProductManagerBusiSV implements IProductManagerBusiSV {
         			}
         		}
         		
-        		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
-                
+        		ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+				searchClient.bulkInsert(skuInfoList);
+                searchClient.refresh();
             }
         }
     }

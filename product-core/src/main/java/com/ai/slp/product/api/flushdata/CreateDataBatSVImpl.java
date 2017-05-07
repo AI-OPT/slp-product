@@ -19,6 +19,7 @@ import com.ai.opt.sdk.dubbo.util.DubboConsumerFactory;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
+import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.slp.product.api.flushdata.interfaces.ICreateDataBatSV;
 import com.ai.slp.product.api.flushdata.params.CreateCommentRequest;
 import com.ai.slp.product.api.flushdata.params.CreateDataRequest;
@@ -229,7 +230,9 @@ public class CreateDataBatSVImpl implements ICreateDataBatSV {
 					 * 加缓存
 					 */
 					List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments, pictureMap);
-					SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
+					ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT);
+					searchClient.bulkInsert(commentInfos);
+					searchClient.refresh();
 				}
 			}
 		} catch (Exception e) {

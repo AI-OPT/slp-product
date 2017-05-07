@@ -19,6 +19,7 @@ import com.ai.opt.base.vo.ResponseHeader;
 import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.paas.ipaas.search.common.JsonBuilder;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
@@ -549,7 +550,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
         	List<SKUInfo> skuInfoList = new ArrayList<>();
         	skuInfoList.add(skuInfos);
-        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
+        	ISearchClient client = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+        	client.bulkInsert(skuInfoList);
+        	client.refresh();
 	        }
 	    }
 	 
@@ -587,8 +590,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
         	skuInfos.setUptime(DateUtils.currTimeStamp().getTime());
         	List<SKUInfo> skuInfoList = new ArrayList<>();
         	skuInfoList.add(skuInfos);
-        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert (skuInfoList);
-	        
+        	ISearchClient client = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+        	client.bulkInsert(skuInfoList);
+        	client.refresh();
 	    }
 	 
 	 public void updateProdAndStatusLog(Product product){

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.ai.opt.sdk.components.ses.SESClientFactory;
+import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.slp.product.api.product.param.ProductEditUp;
 import com.ai.slp.product.api.productcomment.param.CommentPageResponse;
 import com.ai.slp.product.api.productcomment.param.PictureVO;
@@ -364,7 +365,9 @@ public class ConvertUtils {
 				commentInfo.setCommentpictrueinfos(commentPictrueInfos);
 			}
 			commentInfos.add(commentInfo);
-			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
+			ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT);
+			searchClient.bulkInsert(commentInfos);
+			searchClient.refresh();
 			count++;
 		}
 		return count;

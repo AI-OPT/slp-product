@@ -20,6 +20,7 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.slp.product.api.flushdata.interfaces.IFlushDataSV;
 import com.ai.slp.product.api.flushdata.params.FlushDataRequest;
 import com.ai.slp.product.api.product.param.ProductQueryInfo;
@@ -139,7 +140,9 @@ public class FlushDataImpl implements IFlushDataSV{
 				if(CollectionUtils.isEmpty(skuInfoList)){
 					continue;
 				}
-				SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+				ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+				searchClient.bulkInsert(skuInfoList);
+				searchClient.refresh();
 				count++;
 				idList.add(skuInfoList.get(0).getProductid());
 			}

@@ -26,6 +26,7 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
 import com.ai.paas.ipaas.search.vo.SearchOption;
@@ -339,6 +340,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 			}
 		}
+		ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
 		if (CollectionUtil.isEmpty(attrInfoList)) {
 			Map<String, Object> data = new HashMap<>();
 			data.put("skuname", normProdct.getProductName());
@@ -346,7 +348,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			data.put("producttype", normProdct.getProductType());
 			data.put("standprodstate", normProdct.getState());
 			data.put("opertime", DateUtil.getSysDate().getTime());
-			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(standedProdInfo.getProductid(),
+			searchClient.update(standedProdInfo.getProductid(),
 					data);
 		} else {
 			List<SKUInfo> skuInfoList = new ArrayList<>();
@@ -359,7 +361,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			standedProdInfo.setAttrinfos(attrInfoList);
 
 			skuInfoList.add(standedProdInfo);
-			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+			searchClient.bulkInsert(skuInfoList);
+			searchClient.refresh();
 		}
 		return;
 	}
@@ -1022,7 +1025,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			 */
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("marketprice", marketPrice.getMarketPrice());
-			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(marketPrice.getProductId(), data);
+			ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+			searchClient.update(marketPrice.getProductId(), data);
+			searchClient.refresh();
 
 			/*
 			 * try {

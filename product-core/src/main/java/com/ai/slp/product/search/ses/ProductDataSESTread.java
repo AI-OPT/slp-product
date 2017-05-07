@@ -21,6 +21,7 @@ public class ProductDataSESTread extends Thread{
     @Override
     public void run() {
     	searchClient.bulkInsert(resultList);
+    	searchClient.refresh();
     	LOG.info("【"+Thread.currentThread().getName()+"】");
     } 
 }

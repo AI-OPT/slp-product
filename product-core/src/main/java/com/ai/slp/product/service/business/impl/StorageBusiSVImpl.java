@@ -18,6 +18,7 @@ import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
 import com.ai.opt.sdk.util.DateUtil;
 import com.ai.paas.ipaas.mcs.interfaces.ICacheClient;
+import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.paas.ipaas.search.common.JsonBuilder;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
@@ -276,8 +277,9 @@ public class StorageBusiSVImpl implements IStorageBusiSV {
 			
 		}
 		//SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(list);
-		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkUpdate(prodIdsList, prodDatasList);
-		
+		ISearchClient searchClient = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace);
+		searchClient.bulkUpdate(prodIdsList, prodDatasList);
+		searchClient.refresh();
 		return count;
 	}
 

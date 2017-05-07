@@ -22,6 +22,7 @@ import com.ai.opt.sdk.components.ses.SESClientFactory;
 import com.ai.opt.sdk.constants.ExceptCodeConstants;
 import com.ai.opt.sdk.util.BeanUtils;
 import com.ai.opt.sdk.util.CollectionUtil;
+import com.ai.paas.ipaas.search.ISearchClient;
 import com.ai.paas.ipaas.search.common.JsonBuilder;
 import com.ai.paas.ipaas.search.vo.Result;
 import com.ai.paas.ipaas.search.vo.SearchCriteria;
@@ -175,7 +176,9 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 					 * 加缓存
 					 */
 					List<CommentInfo> commentInfos = ConvertUtils.convertToCommentInfo(prodComments, pictureMap);
-					SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT).bulkInsert(commentInfos);
+					ISearchClient client = SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace_COMMENT);
+	            	client.bulkInsert(commentInfos);
+	            	client.refresh();
 					//同步商品评论数量
 					final ProdCommentVO comment = prodCommentVO;
 					CommentAyncExector.submit(new AyncTask() {
