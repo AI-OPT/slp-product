@@ -1,5 +1,8 @@
 package com.ai.slp.product.api.normproduct;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +13,18 @@ import com.ai.opt.base.vo.BaseResponse;
 import com.ai.opt.base.vo.PageInfoResponse;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.slp.product.api.normproduct.interfaces.INormProductSV;
-import com.ai.slp.product.api.normproduct.param.*;
+import com.ai.slp.product.api.normproduct.param.AttrMap;
+import com.ai.slp.product.api.normproduct.param.AttrQuery;
+import com.ai.slp.product.api.normproduct.param.AttrValRequest;
+import com.ai.slp.product.api.normproduct.param.MarketPriceUpdate;
+import com.ai.slp.product.api.normproduct.param.NormProdAndKeyAttrRes;
+import com.ai.slp.product.api.normproduct.param.NormProdInfoResponse;
+import com.ai.slp.product.api.normproduct.param.NormProdRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdResponse;
+import com.ai.slp.product.api.normproduct.param.NormProdSaveRequest;
+import com.ai.slp.product.api.normproduct.param.NormProdUniqueReq;
 import com.ai.slp.product.constants.CommonTestConstants;
+import com.ai.slp.product.search.bo.AttrInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -84,8 +97,8 @@ public class INormProductSVTest {
 		}.getType());
     	*/
     	NormProdSaveRequest request = new NormProdSaveRequest();
-    	request.setProductCatId("00000000000142");
-    	request.setProductId("0000000000002097");
+    	request.setProductCatId("00000000000007");
+    	request.setProductId("0000000000001957");
 /*    	request.setProductCatId("00000000000142");
     	request.setProductId("0000000000001113");
 */    	request.setProductName("ce3-31");
@@ -96,8 +109,14 @@ public class INormProductSVTest {
     	//request.getAttrValList();
     	request.setSupplierId("-1");
     	request.setTenantId("changhong");
-    	
-    	
+    	List<AttrValRequest> attrInfos = new ArrayList<>();
+    	AttrValRequest attrInfo = new AttrValRequest();
+    	attrInfo.setAttrId(22L);
+    	attrInfo.setAttrVal("11");	
+    	attrInfo.setAttrVal2("11");
+    	attrInfo.setAttrValId("11");
+    	attrInfos.add(attrInfo);
+    	request.setAttrValList(attrInfos);
     	BaseResponse baseResponse = normProductSV.updateProductAndStoGroup(request);
   
     	System.out.println(JSonUtil.toJSon(baseResponse));

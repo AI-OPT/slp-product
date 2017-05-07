@@ -36,7 +36,7 @@ public class IProdCommentManagerSVTest {
 		prodComment.setShopScoreFw(3L);
 		prodComment.setShopScoreMs(2L);
 		prodComment.setShopScoreWl(3L);
-		prodComment.setSkuId("268669326");
+		prodComment.setSkuId("0000000000002083");
 		prodComment.setSubOrderId("00001");
 		List<PictureVO> pictureList=new LinkedList<PictureVO>();
 		PictureVO pictureVO=new PictureVO();
@@ -51,6 +51,14 @@ public class IProdCommentManagerSVTest {
 		prodCommentCreateRequest.setCommentList(commentList);
 		BaseResponse createProdComment = prodCommentManagerSV.createProdComment(prodCommentCreateRequest );
 		System.out.println(JSonUtil.toJSon(createProdComment));
+		
+		try {
+			Thread.sleep(20000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("OK");
+		
 	}
 	
 	@Test
