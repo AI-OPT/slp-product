@@ -60,6 +60,8 @@ public class SearchFieldConfConstants {
     public static final String CREATETIME = "createtime";
     //评论数
     public static final String COMMENTNUM = "commentnum";
+    //属性
+    public static final String ATTRINFOS = "attrinfos";
     
     
     

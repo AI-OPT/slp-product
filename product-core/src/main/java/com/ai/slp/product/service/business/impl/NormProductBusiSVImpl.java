@@ -131,9 +131,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Autowired
 	IProductBusiSV productBusiSV;
 	@Autowired
-    ISKUIndexBusiSV skuIndexManage;
-	
+	ISKUIndexBusiSV skuIndexManage;
+
 	IProductSearch productSearch = new ProductSearchImpl();
+
 	/**
 	 * 添加标准品
 	 *
@@ -143,7 +144,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public String installNormProd(NormProdSaveRequest normProduct) {
 		StandedProduct standedProduct = saveNormProd(normProduct);
-		if(standedProduct!=null){
+		if (standedProduct != null) {
 			return standedProduct.getStandedProdId();
 		}
 		return null;
@@ -151,6 +152,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 	/**
 	 * 保存标准品
+	 * 
 	 * @param normProduct
 	 * @return
 	 * @author Gavin
@@ -160,9 +162,8 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct);
 		// 添加标准品属性值
 		List<AttrValRequest> attrValList = normProduct.getAttrValList();
-		//Timestamp nowTime = DateUtils.currTimeStamp();
-		
-		
+		// Timestamp nowTime = DateUtils.currTimeStamp();
+
 		for (AttrValRequest attrValReq : attrValList) {
 			StandedProdAttr prodAttr = new StandedProdAttr();
 			BeanUtils.copyProperties(prodAttr, attrValReq);
@@ -183,6 +184,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 
 	/**
 	 * 保存标准品,不同时保存属性
+	 * 
 	 * @param normProduct
 	 * @return
 	 * @author Gavin
@@ -201,37 +203,38 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public String installNormProdAndPtoGroup(NormProdSaveRequest normProduct) {
 		// 添加标准品,不需保存标准品属性
-//		StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct);
+		// StandedProduct standedProduct = saveNormProdWithOutAttr(normProduct);
 		StandedProduct standedProduct = saveNormProd(normProduct);
 
 		// 添加一个库存组
-		//STOStorageGroup storageGroup = createSTOStorageGroup(normProduct, standedProduct);
+		// STOStorageGroup storageGroup = createSTOStorageGroup(normProduct,
+		// standedProduct);
 		StorageGroup group = storageGroupBusiSV.addGroupObj4Service(standedProduct);
-		
+
 		// 添加商品,在商品属性表保存商品属性值
-		 List<AttrValRequest> attrValList = normProduct.getAttrValList();
-		Product product = productBusiSV.addProductWithStorageGroup(standedProduct, group,attrValList);
-		
+		List<AttrValRequest> attrValList = normProduct.getAttrValList();
+		Product product = productBusiSV.addProductWithStorageGroup(standedProduct, group, attrValList);
+
 		// 添加SKU
 		product.setTenantId(normProduct.getTenantId());
 		prodSkuBusiSV.createSkuProduct(product);
-		
-		//将新增的商品添加至搜索引擎
-        skuIndexManage.updateSKUIndex(product.getProdId(),product.getOperTime().getTime());
-        
+
+		// 将新增的商品添加至搜索引擎
+		skuIndexManage.updateSKUIndex(product.getProdId(), product.getOperTime().getTime());
+
 		return product.getProdId();
-		
+
 	}
 
 	private STOStorageGroup createSTOStorageGroup(NormProdSaveRequest normProduct, StandedProduct standedProduct) {
 		STOStorageGroup storageGroup = new STOStorageGroup();
-		//与商品共享主建
+		// 与商品共享主建
 		storageGroup.setTenantId(normProduct.getTenantId());
 		storageGroup.setCreateId(normProduct.getOperId());
 		storageGroup.setStandedProdId(standedProduct.getStandedProdId());
 		storageGroup.setSupplierId(normProduct.getSupplierId());
 		storageGroup.setStorageGroupName(StorageConstants.StorageGroup.DEFAULT_NAME);
-//		String groupId = storageGroupBusiSV.addGroup(storageGroup);
+		// String groupId = storageGroupBusiSV.addGroup(storageGroup);
 		return storageGroup;
 	}
 
@@ -244,15 +247,15 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	public void updateNormProd(NormProdSaveRequest normProdct) {
 		String tenantId = normProdct.getTenantId(), productId = normProdct.getProductId();
 		// 查询是否存在
-		//StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
-		
-		//查询es
-    	List<SearchCriteria> searchCriteria = new ArrayList<SearchCriteria>();
-    	searchCriteria.add(new SearchCriteria("productid",
-    			productId,
-    			new SearchOption(SearchOption.SearchLogic.must,SearchOption.SearchType.querystring)));
-    	
-    	int startSize = 1;
+		// StandedProduct standedProduct =
+		// standedProductAtomSV.selectById(tenantId, productId);
+
+		// 查询es
+		List<SearchCriteria> searchCriteria = new ArrayList<SearchCriteria>();
+		searchCriteria.add(new SearchCriteria("productid", productId,
+				new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+
+		int startSize = 1;
 		int maxSize = 1;
 		// 最大条数设置
 		int pageNo = 1;
@@ -264,21 +267,24 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		}
 		maxSize = size;
 		IProductSearch search = new ProductSearchImpl();
-    	Result<SKUInfo> infoResult = search.searchByCriteria(searchCriteria,startSize,maxSize, null);
-    	if (CollectionUtil.isEmpty(infoResult.getContents())) {
-    		logger.error("查询商品失败");
-    		throw new BusinessException("查询es中的商品信息失败");
+		Result<SKUInfo> infoResult = search.searchByCriteria(searchCriteria, startSize, maxSize, null);
+		if (CollectionUtil.isEmpty(infoResult.getContents())) {
+			logger.error("查询商品失败");
+			throw new BusinessException("查询es中的商品信息失败");
 		}
-    	SKUInfo standedProdInfo = infoResult.getContents().get(0);
-    	
-		if (standedProdInfo == null){
+		SKUInfo standedProdInfo = infoResult.getContents().get(0);
+
+		if (standedProdInfo == null) {
 			throw new BusinessException("", "不存在指定标准品,租户ID:" + tenantId + ",标准品标识:" + productId);
 		}
 		// 判断商户ID是否传入的商户ID
-	/*	if (!normProdct.getSupplierId().equals(standedProduct.getSupplierId())){
-			throw new BusinessException("",
-					"标准品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + normProdct.getSupplierId() + "不一致!");
-		}*/
+		/*
+		 * if
+		 * (!normProdct.getSupplierId().equals(standedProduct.getSupplierId())){
+		 * throw new BusinessException("", "标准品所属商户ID:" +
+		 * standedProduct.getSupplierId() + "与当前商户ID:" +
+		 * normProdct.getSupplierId() + "不一致!"); }
+		 */
 
 		/*
 		 * 总共有6种状态变化, 1.不允许变更为废弃状态;2.已废弃标准品不允许变更状态;3.可用变为不可用,需要检查.
@@ -286,22 +292,24 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		// 状态变更
 		if (!standedProdInfo.getStandprodstate().equals(normProdct.getState())) {
 			// 变更为废弃
-			if (StandedProductConstants.STATUS_DISCARD.equals(normProdct.getState())){
+			if (StandedProductConstants.STATUS_DISCARD.equals(normProdct.getState())) {
 				throw new BusinessException("", "不允许变更为[废弃]状态,请使用废弃接口");
 			}
 			// 废弃状态下不允许变更为其他状态
-			else if (StandedProductConstants.STATUS_DISCARD.equals(standedProdInfo.getStandprodstate())){
+			else if (StandedProductConstants.STATUS_DISCARD.equals(standedProdInfo.getStandprodstate())) {
 				throw new BusinessException("", "不允许将[废弃]状态变更为其他状态");
 			}
 			// 将可用变为不可用
 			else if (StandedProductConstants.STATUS_ACTIVE.equals(standedProdInfo.getStandprodstate())
 					&& StandedProductConstants.STATUS_INACTIVE.equals(normProdct.getState())) {
 				// 检查是否有启用状态库存组
-//				int groupNum = storageGroupAtomSV.countActive(tenantId, productId);
-//				if (groupNum > 0){
-//					throw new BusinessException("", "该标准品下存在[" + groupNum + "]个启用的库存组,不允许变更为不可用");
-//				}
-				
+				// int groupNum = storageGroupAtomSV.countActive(tenantId,
+				// productId);
+				// if (groupNum > 0){
+				// throw new BusinessException("", "该标准品下存在[" + groupNum +
+				// "]个启用的库存组,不允许变更为不可用");
+				// }
+
 				// 获取库存组的cacheKey
 				String groupId = standedProdInfo.getStoragegroupid();
 				String groupKey = IPaasStorageUtils.genMcsStorageGroupKey(tenantId, groupId);
@@ -316,57 +324,53 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				}
 			}
 		}
-		
-		
+
 		List<AttrInfo> attrInfoList = new ArrayList<>();
-		
+
 		// 变更属性值. 1.将原来属性值设置为不可用;2,启用新的属性值.
-		if (normProdct.getAttrValList()!=null) {
-			
+		if (normProdct.getAttrValList() != null) {
+
 			for (AttrValRequest attr : normProdct.getAttrValList()) {
 				AttrInfo attrInfo = new AttrInfo();
 				attrInfo.setAttrid(attr.getAttrId().toString());
 				attrInfo.setAttrvaluedefid(attr.getAttrValId().toString());
 				attrInfo.setAttrtype(ProductCatConstants.ProductCatAttr.AttrType.ATTR_TYPE_KEY);
 				attrInfoList.add(attrInfo);
-				
+
 			}
 		}
-		
-		/*List<SKUInfo> skuInfoList = new ArrayList<>();
-		//添加到es
-		standedProdInfo.setSkuname(normProdct.getProductName());
-		standedProdInfo.setProductname(normProdct.getProductName());
-		standedProdInfo.setProducttype(normProdct.getProductType());
-		standedProdInfo.setStandprodstate(normProdct.getState());
-		standedProdInfo.setOpertime(DateUtil.getSysDate().getTime());
-		standedProdInfo.setAttrinfos(attrInfoList);
-		
-		skuInfoList.add(standedProdInfo);
-		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);*/
-		
-		
-		Map<String, Object> data = new HashMap<>();
-		data.put("skuname", normProdct.getProductName());
-		data.put("productname", normProdct.getProductName());
-		data.put("producttype", normProdct.getProductType());
-		data.put("standprodstate", normProdct.getState());
-		data.put("opertime", DateUtil.getSysDate().getTime());
-		data.put("attrinfos", attrInfoList);
-		
-		SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(standedProdInfo.getProductid(), data);
-		
-		return ;
+		if (CollectionUtil.isEmpty(attrInfoList)) {
+			Map<String, Object> data = new HashMap<>();
+			data.put("skuname", normProdct.getProductName());
+			data.put("productname", normProdct.getProductName());
+			data.put("producttype", normProdct.getProductType());
+			data.put("standprodstate", normProdct.getState());
+			data.put("opertime", DateUtil.getSysDate().getTime());
+			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(standedProdInfo.getProductid(),
+					data);
+		} else {
+			List<SKUInfo> skuInfoList = new ArrayList<>();
+			// 添加到es
+			standedProdInfo.setSkuname(normProdct.getProductName());
+			standedProdInfo.setProductname(normProdct.getProductName());
+			standedProdInfo.setProducttype(normProdct.getProductType());
+			standedProdInfo.setStandprodstate(normProdct.getState());
+			standedProdInfo.setOpertime(DateUtil.getSysDate().getTime());
+			standedProdInfo.setAttrinfos(attrInfoList);
+
+			skuInfoList.add(standedProdInfo);
+			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);
+		}
+		return;
 	}
 
-	
 	private int updateStandProductInfo(NormProdSaveRequest normProdct) {
 		StandedProduct standedProduct = new StandedProduct();
 		standedProduct.setStandedProdId(normProdct.getProductId());
 		standedProduct.setStandedProductName(normProdct.getProductName());
 		standedProduct.setProductType(normProdct.getProductType());
 		standedProduct.setState(normProdct.getState());
-		//standedProduct.setOperTime(DateUtil.getSysDate());
+		// standedProduct.setOperTime(DateUtil.getSysDate());
 		int updateCount = standedProductAtomSV.updateStandedProductInfo(standedProduct);
 		return updateCount;
 	}
@@ -374,27 +378,27 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public int updateNormProdAndStoGroup(NormProdSaveRequest productInfoRequest) {
 		// 更新库存组相关信息
-		//updateStoGroupInfo(productInfoRequest);
+		// updateStoGroupInfo(productInfoRequest);
 		// ES更新商品及属性
 		updateNormProd(productInfoRequest);
-		//更新数据库信息
+		// 更新数据库信息
 		int updateCount = updateNormProdDb(productInfoRequest);
-		
+
 		return updateCount;
 	}
 
 	private int updateNormProdDb(NormProdSaveRequest productInfoRequest) {
-		
+
 		// 更新标准品属性
-		if (productInfoRequest.getAttrValList()!=null) {
+		if (productInfoRequest.getAttrValList() != null) {
 			updateStandedProdAttr(productInfoRequest);
 		}
-		
+
 		// 数据库变更信息
 		int updateCount = updateStandProductInfo(productInfoRequest);
-		
+
 		// 更新销售品
-		if(updateCount>0){
+		if (updateCount > 0) {
 			Product product = new Product();
 			product.setStandedProdId(productInfoRequest.getProductId());
 			product.setProdName(productInfoRequest.getProductName());
@@ -426,14 +430,14 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			}
 			for (StorageGroup group : groupList) {
 				String storageGroupId = group.getStorageGroupId();
-				List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId, storageGroupId,false);
+				List<Storage> storageList = storageAtomSV.queryOfGroup(tenantId, storageGroupId, false);
 				if (CollectionUtil.isEmpty(storageList)) {
 					continue;
 				}
-				
-				//list升序排序
+
+				// list升序排序
 				Collections.sort(storageList, new StorageComparator());
-				
+
 				for (Storage storage : storageList) {
 					storageBusiSV.discardStorage(tenantId, storage, productInfoRequest.getOperId(), true);
 				}
@@ -538,7 +542,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				attrVal = new LinkedList<String>();
 			}
 			attrVal.add(prodAttr.getAttrvalueDefId());
-			if (!attrAndValueIds.containsKey(prodAttr.getAttrId())){
+			if (!attrAndValueIds.containsKey(prodAttr.getAttrId())) {
 				attrAndValueIds.put(prodAttr.getAttrId(), attrVal);
 			}
 		}
@@ -565,7 +569,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 					valueSet = new LinkedList<String>();
 				}
 				valueSet.add(attrVal.getAttrValId());
-				if (!attrAndValMap.containsKey(attrVal.getAttrId())){
+				if (!attrAndValMap.containsKey(attrVal.getAttrId())) {
 					attrAndValMap.put(attrVal.getAttrId(), valueSet);
 				}
 			}
@@ -585,97 +589,85 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public StandedProduct queryById(String tenantId, String productId) {
 		StandedProduct product = standedProductAtomSV.selectById(tenantId, productId);
-		/*if (product == null) {
-			logger.warn("租户[{}]下不存在标识[{}]的标准品", tenantId, productId);
-			throw new BusinessException("", "未找到对应标准品信息,租户id=" + tenantId + ",标准品标识=" + productId);
-		}
-		*/
+		/*
+		 * if (product == null) { logger.warn("租户[{}]下不存在标识[{}]的标准品", tenantId,
+		 * productId); throw new BusinessException("", "未找到对应标准品信息,租户id=" +
+		 * tenantId + ",标准品标识=" + productId); }
+		 */
 		return product;
 	}
-/*	public NormProdInfoResponse queryById(String tenantId, String productId) {
-		StandedProduct product = standedProductAtomSV.selectById(tenantId, productId);
-		if (product == null) {
-			logger.warn("租户[{}]下不存在标识[{}]的标准品", tenantId, productId);
-			throw new BusinessException("", "未找到对应标准品信息,租户id=" + tenantId + ",标准品标识=" + productId);
-		}
-		NormProdInfoResponse response = new NormProdInfoResponse();
-		// 标准品信息填充返回值
-		BeanUtils.copyProperties(response, product);
-		response.setProductId(product.getStandedProdId());
-		response.setProductName(product.getStandedProductName());
-		Map<Long, Set<String>> attrAndValueIds = new HashMap<>();
-		Map<Long, String> attrAndValueMap = new HashMap<>();
-		// 查询属性信息
-		List<StandedProdAttr> attrList = standedProdAttrAtomSV.queryByNormProduct(tenantId, productId);
-		for (StandedProdAttr prodAttr : attrList) {
-			Set<String> attrVal = attrAndValueIds.get(prodAttr.getAttrId());
-			if (attrVal == null) {
-				attrVal = new HashSet<>();
-			}
-			attrVal.add(prodAttr.getAttrvalueDefId());
-			if (!attrAndValueIds.containsKey(prodAttr.getAttrId())){
-				attrAndValueIds.put(prodAttr.getAttrId(), attrVal);
-			}
-			if(StringUtils.isBlank(prodAttr.getAttrvalueDefId())){
-				attrAndValueMap.put(prodAttr.getAttrId(), prodAttr.getAttrValueName());
-			}
-		}
-		response.setAttrAndValueIds(attrAndValueIds);
-		response.setAttrAndValueMap(attrAndValueMap);
-		return response;
-	}
-*/
+
+	/*
+	 * public NormProdInfoResponse queryById(String tenantId, String productId)
+	 * { StandedProduct product = standedProductAtomSV.selectById(tenantId,
+	 * productId); if (product == null) { logger.warn("租户[{}]下不存在标识[{}]的标准品",
+	 * tenantId, productId); throw new BusinessException("", "未找到对应标准品信息,租户id="
+	 * + tenantId + ",标准品标识=" + productId); } NormProdInfoResponse response =
+	 * new NormProdInfoResponse(); // 标准品信息填充返回值
+	 * BeanUtils.copyProperties(response, product);
+	 * response.setProductId(product.getStandedProdId());
+	 * response.setProductName(product.getStandedProductName()); Map<Long,
+	 * Set<String>> attrAndValueIds = new HashMap<>(); Map<Long, String>
+	 * attrAndValueMap = new HashMap<>(); // 查询属性信息 List<StandedProdAttr>
+	 * attrList = standedProdAttrAtomSV.queryByNormProduct(tenantId, productId);
+	 * for (StandedProdAttr prodAttr : attrList) { Set<String> attrVal =
+	 * attrAndValueIds.get(prodAttr.getAttrId()); if (attrVal == null) { attrVal
+	 * = new HashSet<>(); } attrVal.add(prodAttr.getAttrvalueDefId()); if
+	 * (!attrAndValueIds.containsKey(prodAttr.getAttrId())){
+	 * attrAndValueIds.put(prodAttr.getAttrId(), attrVal); }
+	 * if(StringUtils.isBlank(prodAttr.getAttrvalueDefId())){
+	 * attrAndValueMap.put(prodAttr.getAttrId(), prodAttr.getAttrValueName()); }
+	 * } response.setAttrAndValueIds(attrAndValueIds);
+	 * response.setAttrAndValueMap(attrAndValueMap); return response; }
+	 */
 	@Override
 	public PageInfo<StandedProduct> queryForPage(NormProdRequest productRequest) {
-		
+
 		StandedProdPageQueryVo pageQueryVo = new StandedProdPageQueryVo();
 		BeanUtils.copyProperties(pageQueryVo, productRequest);
 		pageQueryVo.setProductId(productRequest.getStandedProdId());
 		pageQueryVo.setProductName(productRequest.getStandedProductName());
 		// 查询结果
-		//PageInfo<StandedProduct> productPageInfo = standedProductAtomSV.queryForPage(pageQueryVo);
-		//查询es
+		// PageInfo<StandedProduct> productPageInfo =
+		// standedProductAtomSV.queryForPage(pageQueryVo);
+		// 查询es
 		IProductSearch productSearch = new ProductSearchImpl();
-		
+
 		List<SearchCriteria> criteria = new ArrayList<SearchCriteria>();
-		
+
 		// 类目id
-		if (StringUtils.isNotBlank(productRequest.getProductCatId())){
-			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_CATEGORY_ID,
-					productRequest.getProductCatId(),
-					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-			
+		if (StringUtils.isNotBlank(productRequest.getProductCatId())) {
+			criteria.add(
+					new SearchCriteria(SearchFieldConfConstants.PRODUCT_CATEGORY_ID, productRequest.getProductCatId(),
+							new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+
 		}
 		// 商品标识
-		if (StringUtils.isNotBlank(productRequest.getStandedProdId())){
-			//精确查询
-			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID,
-					productRequest.getStandedProdId(),
+		if (StringUtils.isNotBlank(productRequest.getStandedProdId())) {
+			// 精确查询
+			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_ID, productRequest.getStandedProdId(),
 					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		// 商品名称
-		if (StringUtils.isNotBlank(productRequest.getStandedProductName())){
-			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_NAME,
-					productRequest.getStandedProductName(),
-					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		if (StringUtils.isNotBlank(productRequest.getStandedProductName())) {
+			criteria.add(
+					new SearchCriteria(SearchFieldConfConstants.PRODUCT_NAME, productRequest.getStandedProductName(),
+							new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		// 商品状态
-		if (StringUtils.isNotBlank(productRequest.getState())){
-			criteria.add(new SearchCriteria("standprodstate",
-					productRequest.getState(),
+		if (StringUtils.isNotBlank(productRequest.getState())) {
+			criteria.add(new SearchCriteria("standprodstate", productRequest.getState(),
 					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
 		// 商品类型
-		if (StringUtils.isNotBlank(productRequest.getProductType())){
-			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_TYPE,
-					productRequest.getProductType(),
+		if (StringUtils.isNotBlank(productRequest.getProductType())) {
+			criteria.add(new SearchCriteria(SearchFieldConfConstants.PRODUCT_TYPE, productRequest.getProductType(),
 					new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
 		}
-		
+
 		PageInfo<StandedProduct> pageInfo = new PageInfo<StandedProduct>();
 		List<StandedProduct> standedProductList = new ArrayList<StandedProduct>();
-		
-		
+
 		int startSize = 1;
 		int maxSize = 1;
 		// 最大条数设置
@@ -687,7 +679,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			startSize = (pageNo - 1) * size;
 		}
 		maxSize = size;
-		long count =0;
+		long count = 0;
 		Result<SKUInfo> search = productSearch.search(criteria, startSize, maxSize, null);
 		if (!CollectionUtil.isEmpty(search.getContents())) {
 			for (SKUInfo skuInfo : search.getContents()) {
@@ -698,47 +690,49 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				standedProduct.setStandedProductName(skuInfo.getProductname());
 				standedProduct.setProductType(skuInfo.getProducttype());
 				standedProduct.setMarketPrice(skuInfo.getMarketprice());
-				//standedProduct.setActiveType(skuInfo.geta);
+				// standedProduct.setActiveType(skuInfo.geta);
 				standedProduct.setState(skuInfo.getStandprodstate());
 				standedProduct.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
 				standedProduct.setOperTime(new Timestamp(skuInfo.getOpertime()));
-				//standedProduct.setOperTime(new Timestamp(skuInfo.getOpertime()));
-				//standedProduct.setCreateTime(new Timestamp(skuInfo.getCreatetime()));
+				// standedProduct.setOperTime(new
+				// Timestamp(skuInfo.getOpertime()));
+				// standedProduct.setCreateTime(new
+				// Timestamp(skuInfo.getCreatetime()));
 				standedProduct.setSupplierId(skuInfo.getSupplierid());
-				
+
 				standedProductList.add(standedProduct);
 			}
 			pageInfo.setResult(standedProductList);
 			count = search.getCount();
 		}
-		pageInfo.setCount((int)count);
+		pageInfo.setCount((int) count);
 		pageInfo.setPageNo(productRequest.getPageNo());
 		pageInfo.setPageSize(productRequest.getPageSize());
-		
+
 		return pageInfo;
 	}
 
 	@Override
 	public void discardProduct(String tenantId, String productId, Long operId, String supplierId) {
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, productId);
-		if (standedProduct == null){
+		if (standedProduct == null) {
 			throw new BusinessException("", "不存在指定商品,租户ID:" + tenantId + ",商品标识:" + productId);
 		}
-		
-		if (!standedProduct.getSupplierId().equals(supplierId)){
+
+		if (!standedProduct.getSupplierId().equals(supplierId)) {
 			throw new BusinessException("",
 					"商品所属商户ID:" + standedProduct.getSupplierId() + "与当前商户ID:" + supplierId + "不一致!");
 		}
-		
+
 		// 查询没有废弃的库存组
 		int noDiscardNum = storageGroupAtomSV.countNoDiscard(tenantId, productId);
-		if (noDiscardNum > 0){
+		if (noDiscardNum > 0) {
 			throw new BusinessException("", "该商品下存在[" + noDiscardNum + "]个未废弃库存组");
 		}
-		discardProduct(standedProduct,operId);
+		discardProduct(standedProduct, operId);
 	}
 
-	public void discardProduct(StandedProduct standedProduct,Long operId){
+	public void discardProduct(StandedProduct standedProduct, Long operId) {
 		standedProduct.setOperId(operId);
 		standedProduct.setState(StandedProductConstants.STATUS_DISCARD);// 设置废弃
 		StandedProductLog productLog = new StandedProductLog();
@@ -747,49 +741,53 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		if (standedProductAtomSV.updateObj(standedProduct) > 0) {
 			productLog.setOperTime(standedProduct.getOperTime());
 			standedProductLogAtomSV.insert(productLog);
-			//将商品从搜索引擎中移除
-	        skuIndexManage.deleteSKUIndexByProductId(standedProduct.getStandedProdId());
+			// 将商品从搜索引擎中移除
+			skuIndexManage.deleteSKUIndexByProductId(standedProduct.getStandedProdId());
 		}
 	}
 
 	/**
 	 * 废弃标准品
 	 *
-	 * @param tenantId   租户id
-	 * @param standedProdId  标准品标识
-	 * @param operId     操作者id
+	 * @param tenantId
+	 *            租户id
+	 * @param standedProdId
+	 *            标准品标识
+	 * @param operId
+	 *            操作者id
 	 * @param supplierId
 	 */
 	@Override
 	public void discardProductWithProduct(String tenantId, String standedProdId, Long operId, String supplierId) {
 		StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
 		if (standedProduct == null) {
-			logger.warn("not find the product. tenantId:{},standedProdId:{}",tenantId,standedProdId);
+			logger.warn("not find the product. tenantId:{},standedProdId:{}", tenantId, standedProdId);
 			throw new BusinessException("", "未查询到指定商品");
 		}
 		if (!standedProduct.getSupplierId().equals(supplierId)) {
-			logger.warn("the supplierId of query and product is not accord.querySupplierId:{},prodSupplierId:{}"
-				,supplierId,standedProduct.getSupplierId());
-			throw new BusinessException("","未查询到商户下指定的商品");
+			logger.warn("the supplierId of query and product is not accord.querySupplierId:{},prodSupplierId:{}",
+					supplierId, standedProduct.getSupplierId());
+			throw new BusinessException("", "未查询到商户下指定的商品");
 		}
-		//查询启用状态的库组
-		int activeNum = storageGroupAtomSV.countActive(tenantId,standedProdId);
-		if (activeNum>0){
+		// 查询启用状态的库组
+		int activeNum = storageGroupAtomSV.countActive(tenantId, standedProdId);
+		if (activeNum > 0) {
 			throw new BusinessException("", "该商品下存在[" + activeNum + "]个启用库存组");
 		}
 
-		//查询标准品下所有非废弃库存组
-		List<StorageGroup> groupList = storageGroupAtomSV.queryNoDiscardOfStandProd(tenantId,supplierId,standedProdId);
-		
-		//对groupList排序,
+		// 查询标准品下所有非废弃库存组
+		List<StorageGroup> groupList = storageGroupAtomSV.queryNoDiscardOfStandProd(tenantId, supplierId,
+				standedProdId);
+
+		// 对groupList排序,
 		Collections.sort(groupList, new StorageGroupComparator());
-		
-		for (StorageGroup group:groupList){
-			storageGroupBusiSV.updateGroupState(tenantId,supplierId,group.getStorageGroupId()
-					,StorageConstants.StorageGroup.State.AUTO_DISCARD,operId);
+
+		for (StorageGroup group : groupList) {
+			storageGroupBusiSV.updateGroupState(tenantId, supplierId, group.getStorageGroupId(),
+					StorageConstants.StorageGroup.State.AUTO_DISCARD, operId);
 		}
-		//废弃标准品
-		discardProduct(standedProduct,operId);
+		// 废弃标准品
+		discardProduct(standedProduct, operId);
 	}
 
 	/**
@@ -803,24 +801,23 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	@Override
 	public AttrMap queryAttrOfProduct(String tenantId, String standedProdId, String attrType) {
 		// 查询标准品信息
-		//StandedProduct standedProduct = standedProductAtomSV.selectById(tenantId, standedProdId);
-		
-		//查询es里的标准品
-    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
-    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
-    			tenantId,
-    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-    	searchCriterias.add(new SearchCriteria("productid",
-    			standedProdId,
-    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
-    	if (CollectionUtil.isEmpty(result.getContents())) {
-    		logger.error("查询商品失败");
-    		throw new BusinessException("查询es中的商品失败");
+		// StandedProduct standedProduct =
+		// standedProductAtomSV.selectById(tenantId, standedProdId);
+
+		// 查询es里的标准品
+		List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
+		searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID, tenantId,
+				new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		searchCriterias.add(new SearchCriteria("productid", standedProdId,
+				new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
+		Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+		if (CollectionUtil.isEmpty(result.getContents())) {
+			logger.error("查询商品失败");
+			throw new BusinessException("查询es中的商品失败");
 		}
-    	SKUInfo standedProduct = result.getContents().get(0);
-    	
-		if (standedProduct == null){
+		SKUInfo standedProduct = result.getContents().get(0);
+
+		if (standedProduct == null) {
 			throw new BusinessException("", "未找到对应标准品信息,租户ID:" + tenantId + ",标准品标识:" + standedProdId);
 		}
 		AttrMap attrMapOfNormProd = new AttrMap();
@@ -850,7 +847,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				valDef.setAttrVal2(prodAttr.getAttrValueName2());
 				if (prodAttr.getAttrvalueDefId() != null) {
 					ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId, prodAttr.getAttrvalueDefId());
-					if (attrvalueDef != null){
+					if (attrvalueDef != null) {
 						valDef.setAttrVal(attrvalueDef.getAttrValueName());
 					}
 				}
@@ -863,6 +860,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 		attrMapOfNormProd.setAttrValDefMap(attrValDefMap);
 		return attrMapOfNormProd;
 	}
+
 	/**
 	 * 更新标准品的属性值
 	 */
@@ -874,10 +872,10 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				normProdct.getProductId());
 		String tenantId = normProdct.getTenantId();
 		Long operId = normProdct.getOperId();
-		
-		//把attrValList排序  -- 然后进行更新
+
+		// 把attrValList排序 -- 然后进行更新
 		Collections.sort(attrValList, new AttrValRequestComparator());
-		
+
 		for (AttrValRequest attrValReq : attrValList) {
 			// 查询属性值是否已存在
 			String attrKey = attrValReq.getAttrId() + ATTR_LINE_VAL + attrValReq.getAttrValId();
@@ -890,9 +888,9 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				// prodAttr.setSerialNumber(attrValReq.getSerialNumber());
 				prodAttr.setSerialNumber(getProductAttrSerialNo());
 				prodAttr.setOperId(operId);
-				//upNum = standedProdAttrAtomSV.updateObj(prodAttr);
+				// upNum = standedProdAttrAtomSV.updateObj(prodAttr);
 				upNum = standedProdAttrAtomSV.updateStandedProdAttrBySQL(prodAttr);
-				
+
 			} else {
 				prodAttr = new StandedProdAttr();
 				BeanUtils.copyProperties(prodAttr, attrValReq);
@@ -911,11 +909,11 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 			}
 			oldAttrValMap.remove(attrKey);
 			// 添加日志
-//			if (upNum > 0) {
-//				StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
-//				BeanUtils.copyProperties(prodAttrLog, prodAttr);
-//				standedProdAttrLogAtomSV.installObj(prodAttrLog);
-//			}
+			// if (upNum > 0) {
+			// StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
+			// BeanUtils.copyProperties(prodAttrLog, prodAttr);
+			// standedProdAttrLogAtomSV.installObj(prodAttrLog);
+			// }
 		}
 		// 将未更新属性值设置为无效.
 		loseActiveAttr(oldAttrValMap.values(), normProdct.getOperId());
@@ -956,73 +954,84 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 	 * @param oldAttrValList
 	 */
 	private void loseActiveAttr(Collection<StandedProdAttr> oldValList, Long operId) {
-		if (oldValList == null || oldValList.isEmpty()){
+		if (oldValList == null || oldValList.isEmpty()) {
 			return;
 		}
-		
+
 		ArrayList<StandedProdAttr> oldAttrValList = new ArrayList<>();
 		oldAttrValList.addAll(oldValList);
-		
-		//排序
+
+		// 排序
 		Collections.sort(oldAttrValList, new OldAttrValListComparator());
-		
+
 		for (StandedProdAttr prodAttr : oldAttrValList) {
 			prodAttr.setOperId(operId);
 			prodAttr.setOperTime(DateUtils.currTimeStamp());
 			prodAttr.setState(CommonConstants.STATE_INACTIVE);
 			standedProdAttrAtomSV.updateSateBySQL(prodAttr);
-			/*if (standedProdAttrAtomSV.updateObj(prodAttr) > 0) {
-				StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
-				BeanUtils.copyProperties(prodAttrLog, prodAttr);
-				standedProdAttrLogAtomSV.installObj(prodAttrLog);
-			}*/
+			/*
+			 * if (standedProdAttrAtomSV.updateObj(prodAttr) > 0) {
+			 * StandedProdAttrLog prodAttrLog = new StandedProdAttrLog();
+			 * BeanUtils.copyProperties(prodAttrLog, prodAttr);
+			 * standedProdAttrLogAtomSV.installObj(prodAttrLog); }
+			 */
 		}
 	}
 
 	@Override
 	public int updateMarketPrice(MarketPriceUpdate marketPrice) {
-		//查询es
-//    	List<SearchCriteria> searchCriterias = new ArrayList<SearchCriteria>();
-//    	searchCriterias.add(new SearchCriteria(SearchFieldConfConstants.TENANT_ID,
-//    			marketPrice.getTenantId(),
-//    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-//    	searchCriterias.add(new SearchCriteria("productid",
-//    			marketPrice.getProductId(),
-//    			new SearchOption(SearchOption.SearchLogic.must, SearchOption.SearchType.querystring)));
-//    	
-//    	Result<SKUInfo> result = productSearch.searchByCriteria(searchCriterias, 0, 10, null);
-//    	if (CollectionUtil.isEmpty(result.getContents())) {
-//			throw new BusinessException("查询es信息失败");
-//		}
-//    	SKUInfo standedProduct = result.getContents().get(0);
+		// 查询es
+		// List<SearchCriteria> searchCriterias = new
+		// ArrayList<SearchCriteria>();
+		// searchCriterias.add(new
+		// SearchCriteria(SearchFieldConfConstants.TENANT_ID,
+		// marketPrice.getTenantId(),
+		// new SearchOption(SearchOption.SearchLogic.must,
+		// SearchOption.SearchType.querystring)));
+		// searchCriterias.add(new SearchCriteria("productid",
+		// marketPrice.getProductId(),
+		// new SearchOption(SearchOption.SearchLogic.must,
+		// SearchOption.SearchType.querystring)));
+		//
+		// Result<SKUInfo> result =
+		// productSearch.searchByCriteria(searchCriterias, 0, 10, null);
+		// if (CollectionUtil.isEmpty(result.getContents())) {
+		// throw new BusinessException("查询es信息失败");
+		// }
+		// SKUInfo standedProduct = result.getContents().get(0);
 		// 更新市场价格信息
 		int count = standedProductAtomSV.updateMarketPrice(marketPrice.getTenantId(), marketPrice.getProductId(),
 				marketPrice.getMarketPrice(), marketPrice.getOperId());
-		//更改结构后--市场价 同时更新 product
+		// 更改结构后--市场价 同时更新 product
 		Product product = new Product();
 		product.setProdId(marketPrice.getProductId());
 		product.setStandedProdId(marketPrice.getProductId());
 		product.setMarketPrice(marketPrice.getMarketPrice());
 		productAtomSV.updateByStandedProdId(product);
 		if (count > 0) {
-			/*standedProduct.setMarketprice(marketPrice.getMarketPrice());
-			//将更新市场价的商品添加至搜索引擎
-        	SKUInfo skuInfos = result.getContents().get(0);
-        	skuInfos.setMarketprice(marketPrice.getMarketPrice());
-        	List<SKUInfo> skuInfoList = new ArrayList<>();
-        	skuInfoList.add(skuInfos);
-        	
-        	SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).bulkInsert(skuInfoList);*/
+			/*
+			 * standedProduct.setMarketprice(marketPrice.getMarketPrice());
+			 * //将更新市场价的商品添加至搜索引擎 SKUInfo skuInfos =
+			 * result.getContents().get(0);
+			 * skuInfos.setMarketprice(marketPrice.getMarketPrice());
+			 * List<SKUInfo> skuInfoList = new ArrayList<>();
+			 * skuInfoList.add(skuInfos);
+			 * 
+			 * SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace)
+			 * .bulkInsert(skuInfoList);
+			 */
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("marketprice", marketPrice.getMarketPrice());
 			SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(marketPrice.getProductId(), data);
-			
-		/*	try {
-				SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace).update(marketPrice.getProductId(), new JsonBuilder().startObject().field("marketprice", marketPrice.getMarketPrice()));
-			} catch (IOException e) {
-				throw new SystemException("更新es失败");
-			} 
-		*/
+
+			/*
+			 * try {
+			 * SESClientFactory.getSearchClient(SearchConstants.SearchNameSpace)
+			 * .update(marketPrice.getProductId(), new
+			 * JsonBuilder().startObject().field("marketprice",
+			 * marketPrice.getMarketPrice())); } catch (IOException e) { throw
+			 * new SystemException("更新es失败"); }
+			 */
 		}
 
 		return count;
@@ -1128,7 +1137,7 @@ public class NormProductBusiSVImpl implements INormProductBusiSV {
 				valDef.setAttrVal2(prodAttr.getAttrValueName2());
 				if (prodAttr.getAttrvalueDefId() != null) {
 					ProdAttrvalueDef attrvalueDef = attrValDefAtomSV.selectById(tenantId, prodAttr.getAttrvalueDefId());
-					if (attrvalueDef != null){
+					if (attrvalueDef != null) {
 						valDef.setAttrVal(attrvalueDef.getAttrValueName());
 					}
 				}
