@@ -9,21 +9,35 @@ public class CategoryInfo {
 	/**
 	 * 类目ID
 	 */
-    @Expose
-    private String categorid;
-    /**
+	@Expose
+	private String categorid;
+	/**
 	 * 类目名称
 	 */
-    private String categoryname;
+	private String categoryname;
 
+	public CategoryInfo() {
+		super();
+	}
 
-    public CategoryInfo() {
-        super();
-    }
+	public String getCategorid() {
+		return categorid;
+	}
 
+	public void setCategorid(String categorid) {
+		this.categorid = categorid;
+	}
 
-    public CategoryInfo(String categorid, String categoryname) {
-        this.categorid = categorid;
-        this.categoryname = categoryname;
-    }
+	public String getCategoryname() {
+		return categoryname;
+	}
+
+	public void setCategoryname(String categoryname) {
+		this.categoryname = categoryname;
+	}
+
+	public CategoryInfo(String categorid, String categoryname) {
+		this.categorid = categorid;
+		this.categoryname = categoryname;
+	}
 }
