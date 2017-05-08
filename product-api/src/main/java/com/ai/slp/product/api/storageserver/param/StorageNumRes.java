@@ -92,10 +92,27 @@ public class StorageNumRes extends BaseResponse {
 	 * 文件附件模块ID
 	 */
 	private String vfsid;
+	
+	/**
+	 * 库存ID
+	 */
+	private String storageGroupId;
 
 	public String getSkuId() {
 		return skuId;
 	}
+
+	public String getStorageGroupId() {
+		return storageGroupId;
+	}
+
+
+
+	public void setStorageGroupId(String storageGroupId) {
+		this.storageGroupId = storageGroupId;
+	}
+
+
 
 	public String getImagetype() {
 		return imagetype;

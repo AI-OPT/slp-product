@@ -311,6 +311,7 @@ public class ConvertUtils {
 		storageNumRes.setSkuId(skuInfo.getSkuid());
 		storageNumRes.setSkuName(skuInfo.getSkuname());
 		storageNumRes.setStandedProdId(skuInfo.getProductid());
+		storageNumRes.setStorageGroupId(skuInfo.getStoragegroupid());
 		ImageInfo imageinfo = skuInfo.getImageinfo();
 		if(null!=imageinfo){
 			storageNumRes.setImagetype(imageinfo.getImagetype());
