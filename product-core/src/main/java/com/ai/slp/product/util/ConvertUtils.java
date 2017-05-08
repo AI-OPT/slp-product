@@ -305,18 +305,29 @@ public class ConvertUtils {
 	 */
 	public static StorageNumRes convertToStorageNumRes(SKUInfo skuInfo){
 		StorageNumRes storageNumRes = new StorageNumRes();
-		storageNumRes.setBasicOrgId(skuInfo.getBasicorgid());
 		storageNumRes.setProdId(skuInfo.getProductid());;
 		storageNumRes.setSalePrice(skuInfo.getPrice());
 		storageNumRes.setProductCatId(skuInfo.getProductcategoryid());
 		storageNumRes.setSkuId(skuInfo.getSkuid());
 		storageNumRes.setSkuName(skuInfo.getSkuname());
 		storageNumRes.setStandedProdId(skuInfo.getProductid());
-		storageNumRes.setImagetype(skuInfo.getImageinfo().getImagetype());
-		storageNumRes.setVfsid(skuInfo.getImageinfo().getVfsid());
-		storageNumRes.setUpshelfType(skuInfo.getUpshelftype());
-		storageNumRes.setBasicOrgId(skuInfo.getBasicorgid());
-		storageNumRes.setUnit(skuInfo.getUnit());
+		ImageInfo imageinfo = skuInfo.getImageinfo();
+		if(null!=imageinfo){
+			storageNumRes.setImagetype(imageinfo.getImagetype());
+			storageNumRes.setVfsid(imageinfo.getVfsid());
+		}
+		if(null!=skuInfo.getBasicorgid()){
+			storageNumRes.setBasicOrgId(skuInfo.getBasicorgid());
+		}
+		if(null!=skuInfo.getUpshelftype()){
+			storageNumRes.setUpshelfType(skuInfo.getUpshelftype());
+		}
+		if(null!=skuInfo.getBasicorgid()){
+			storageNumRes.setBasicOrgId(skuInfo.getBasicorgid());
+		}
+		if(null!=skuInfo.getUnit()){
+			storageNumRes.setUnit(skuInfo.getUnit());
+		}
 		return storageNumRes;
 	}
 	
