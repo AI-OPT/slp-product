@@ -286,6 +286,9 @@ public class IProductManagerSVImpl implements IProductManagerSV {
 			skuInfo = result.getContents().get(0);
 			product = ConvertUtils.convertToProduct(skuInfo);
 		}
+		if (product == null) {
+			throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST,"商品为空");
+		}
     	String tenantId = product.getTenantId();
         //1.库存组不存在,或已废弃
         //StorageGroup storageGroup = storageGroupAtomSV.queryByGroupIdAndSupplierId( tenantId,product.getSupplierId(),product.getStorageGroupId());

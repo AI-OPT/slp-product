@@ -258,6 +258,9 @@ public class ProdCommentManagerSVImpl implements IProdCommentManagerSV {
 		Result<CommentInfo> commentResult = productSearch.searchComment(searchfieldVos, 0, 10, null);
 		if (!CollectionUtil.isEmpty(commentResult.getContents())) {
 			CommentInfo commentInfo = commentResult.getContents().get(0);
+			if (commentInfo == null) {
+				throw new BusinessException("commentInfo为空");
+			}
 			comment.setTenantId(commentInfo.getTenantid());
 			comment.setCommentId(commentInfo.getCommentid());
 			comment.setProdId(commentInfo.getProductid());

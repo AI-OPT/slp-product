@@ -76,7 +76,7 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 		if(StringUtils.isBlank(skuReq.getSkuId())){
 			throw new BusinessException(ErrorCodeConstants.PRODUCT_ID_NULL, "SKU标识不能为空");
 		}
-		ProductSKUResponse skuResponse = null;
+		ProductSKUResponse skuResponse = new ProductSKUResponse();
 		/**
 		 * 查询ES缓存
 		 */
@@ -98,6 +98,9 @@ public class IProductDetailSVImpl implements IProductDetailSV {
 			 * 商品属性
 			 */
 			skuResponse = ConvertUtils.convertToProductSKUResponse(skuInfo);
+			if (skuResponse == null) {
+				throw new BusinessException(ErrorCodeConstants.Product.PRODUCT_NO_EXIST, "SKU信息为null");
+			}
 		}
 		ResponseHeader responseHeader = new ResponseHeader(true, ResultCodeConstants.SUCCESS_CODE, "查询成功");
 		skuResponse.setResponseHeader(responseHeader);
