@@ -141,7 +141,7 @@ public class INormProductSVTest {
     	req.setTenantId("changhong");
     	req.setOperId(1l);
     	req.setSupplierId("-1");
-    	req.setProductId("0000000000000603");
+    	req.setProductId("0000000000002155");
 		BaseResponse discardProduct = normProductSV.discardProduct(req);
     	System.out.print(discardProduct.getResponseHeader().isSuccess());
     	
